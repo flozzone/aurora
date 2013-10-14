@@ -1,0 +1,38 @@
+{% block additional_headers %}
+  <script type="text/javascript" src="{{ STATIC_URL }}js/navigation.js"></script>
+{% endblock %}
+
+<div class="navbar navbar-static-top">
+  <div class="navbar-inner">
+    <a class="brand" href="/">Portfolio 3.0</a>
+
+
+    {% if user.is_authenticated %}
+
+      <ul class="nav">
+
+
+        <li id="challenges-li">
+          <a href="/challenges">Challenges</a>
+        </li>
+
+        <li id="slides-li">
+          <a href="/{{ request.session.course_short_title }}/slides">Slides</a>
+        </li>
+        {% if user.is_staff %}
+          <li id="evaluation-li">
+            <a href="/{{ request.session.course_short_title }}/evaluation">Evaluation</a>
+          </li>
+        {% endif %}
+
+
+      </ul>
+
+
+      <div class="pull-right">
+
+        <button id="button_sign_out" class="btn">Sign out</button>
+      </div>
+    {% endif %}
+  </div>
+</div>
