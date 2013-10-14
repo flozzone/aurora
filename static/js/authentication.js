@@ -40,7 +40,21 @@ function ajax_setup() {
 
 function sign_in() {
     ajax_setup();
-    $.post("signin/", { 'username': $('#username').val(), 'password': $('#password').val()}).done(function (data) {
+    var username = $('#username').val();
+    var password = $('#password').val();
+    var remember = $('#checkbox_remember').prop('checked');
+    console.log({
+            'username': username,
+            'password': password,
+            'remember': remember
+        });
+
+    $.post("signin/",
+        {
+            'username': username,
+            'password': password,
+            'remember': remember
+        }).done(function (data) {
         if (data.success === true) {
             location.reload();
         } else {

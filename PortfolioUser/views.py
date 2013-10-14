@@ -6,15 +6,12 @@ from django.contrib.auth import authenticate, login, logout
 def signin(request):
     if request.method == 'POST':
 
-        if not request.POST.get('remember', None):
-            request.session.set_expiry(0)
 
-        if 'username' in request.POST and 'password' in request.POST:
+        if 'username' in request.POST and 'password' in request.POST and 'remember' in request.POST:
+            if request.POST['remember'] == 'false':
+                request.session.set_expiry(0)
             username = request.POST['username']
             password = request.POST['password']
-            print(username)
-            print(password)
-
             user = authenticate(username=username, password=password)
 
             if user is not None:
