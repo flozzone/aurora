@@ -43,20 +43,21 @@ function sign_in() {
     var username = $('#username').val();
     var password = $('#password').val();
     var remember = $('#checkbox_remember').prop('checked');
+    console.log(next);
     console.log({
             'username': username,
             'password': password,
             'remember': remember
         });
 
-    $.post("signin/",
+    $.post("/signin/",
         {
             'username': username,
             'password': password,
             'remember': remember
         }).done(function (data) {
         if (data.success === true) {
-            location.reload();
+            location.href = next;
         } else {
             $('#password').val("")
             $('#error_message').html(data.message);
@@ -68,7 +69,7 @@ function sign_in() {
 
 function sign_out() {
     ajax_setup();
-    $.get("signout/").done(function (data) {
+    $.get("/signout/").done(function (data) {
         location.reload();
     });
     return false;

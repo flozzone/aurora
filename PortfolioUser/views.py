@@ -1,12 +1,11 @@
 import json
 from django.http import HttpResponse
-from django.contrib.auth import authenticate, login, logout
-
+from django.contrib.auth import authenticate, login as django_login, logout
+from django.template import RequestContext
+from django.shortcuts import render_to_response
 
 def signin(request):
     if request.method == 'POST':
-
-
         if 'username' in request.POST and 'password' in request.POST and 'remember' in request.POST:
             if request.POST['remember'] == 'false':
                 request.session.set_expiry(0)
@@ -16,7 +15,7 @@ def signin(request):
 
             if user is not None:
                 if user.is_active:
-                    login(request, user)
+                    django_login(request, user)
                     response_data = {'success': True}
                     return HttpResponse(json.dumps(response_data), content_type="application/json")
                 else:
@@ -34,3 +33,9 @@ def signout(request):
     logout(request)
     response_data = {'success': True}
     return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+def login(request):
+    if 'next' in request.GET:
+        return render_to_response('login.html', {'next': request.GET['next']}, context_instance=RequestContext(request))
+    else:
+        return render_to_response('login.html', {'next': '/'}, context_instance=RequestContext(request))
