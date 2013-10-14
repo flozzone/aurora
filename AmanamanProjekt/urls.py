@@ -9,6 +9,7 @@ urlpatterns = patterns('',
     url(r'^$', 'AmanamanProjekt.views.home', name='home'),
     url(r'^signin/$', 'PortfolioUser.views.signin'),
     url(r'^signout/$', 'PortfolioUser.views.signout'),
+    url(r'^challenges/$', 'Challenge.views.challenges'),
 
     # url(r'^AmanamanProjekt/', include('AmanamanProjekt.foo.urls')),
 
