@@ -10,7 +10,7 @@ urlpatterns = patterns('',
     url(r'^login/$', 'PortfolioUser.views.login'),
     url(r'^signin/$', 'PortfolioUser.views.signin'),
     url(r'^signout/$', 'PortfolioUser.views.signout'),
-    url(r'^challenges/$', 'Challenge.views.challenges'),
+    url(r'^challenges/$', 'Challenge.views.challenges_open'),
 
     # url(r'^AmanamanProjekt/', include('AmanamanProjekt.foo.urls')),
 

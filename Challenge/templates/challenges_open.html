@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+  <h1>Challenges open</h1>
+
+  <div>
+    {% for challenge in challenges %}
+        <div>{{ challenge.id }} {{ challenge.title }} {{ challenge.subtitle }} {{ challenge.description }} {{ challenge.cardImageUrl }} {{ challenge.backgroundImageUrl }}</div>
+    {% endfor %}
+  </div>
+
+{% endblock %}
