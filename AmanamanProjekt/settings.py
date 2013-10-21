@@ -125,7 +125,8 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
     'Portfolio',
     'PortfolioUser',
-    'Challenge'
+    'Challenge',
+    'Course'
 )
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
