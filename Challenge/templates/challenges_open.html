@@ -6,11 +6,12 @@
 
   <div>
     {% for challenge in challenges %}
-        <div>{{ challenge.id }}
-             {{ challenge.title }}
-             {{ challenge.subtitle }}
-             {{ challenge.description }}
-             {{ challenge.cardImageUrl }}
+        <div style="width: 400px; height: 200px; border: 1px solid">
+             {{ challenge.id }}<br/>
+             {{ challenge.title }}<br/>
+             {{ challenge.subtitle }}<br/>
+             {{ challenge.description }}<br/>
+             {{ challenge.cardImageUrl }}<br/>
              {{ challenge.backgroundImageUrl }}
         </div>
     {% endfor %}
