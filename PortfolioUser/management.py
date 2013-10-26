@@ -62,7 +62,7 @@ def init_data(app, sender, **kwargs):
 
         # create challenges
         print('adding challenges')
-        Challenge(id=1,
+        challenge_1 = Challenge(id=1,
             title='meine meinung',
             subtitle='meine meinung',
             description='posten sie ihre meinung zu irgendwas in drei sätzen. dabei müssen sie lediglich darauf achten, dass die drei sätze alle mit demselben buchstaben beginnen.',
@@ -70,31 +70,34 @@ def init_data(app, sender, **kwargs):
             backgroundImageUrl='1b.png',
         ).save()
 
-        Challenge(id=2,
+        challenge_2 = Challenge(id=2,
             title='rage-comic',
             subtitle='rage-comic',
+            prerequisite=challenge_1,
             description='finden sie einen rage-comic, den sie lustig finden, und beschreiben sie kurz, warum sie ihn lustig finden. laden sie dazu den rage-comic als bild hoch, und beschreiben sie in einem satz mit genau 5 worten, warum dieser rage-comic zum schreien komisch ist.',
             cardImageUrl='2.png',
             backgroundImageUrl='2b.png',
         ).save()
 
-        Challenge(id=3,
+        challenge_3 = Challenge(id=3,
             title='wikipedia',
             subtitle='wikipedia',
+            prerequisite=challenge_2,
             description='kopieren sie 4 absätze aus einem langweiligen wikipedia-artikel und geben sie sie ab. selbst schreiben ist verboten - das würde als plagiat gewertet!',
             cardImageUrl='3.png',
             backgroundImageUrl='3b.png',
         ).save()
 
-        Challenge(id=4,
+        challenge_4 = Challenge(id=4,
             title='wissenschaft',
             subtitle='wissenschaft',
+            prerequisite=challenge_3,
             description='finden sie einen pseudowissenschaftlichen artikel und laden sie ihn hier hoch.',
             cardImageUrl='4.png',
             backgroundImageUrl='4b.png',
         ).save()
 
-        Challenge(id=5,
+        challenge_5 = Challenge(id=5,
             title='ping',
             subtitle='ping',
             description='laden sie ein bild im png-format hoch. das bild muss allerdings genau quadratisch sein. schreiben sie nichts dazu (geht ja auch nicht).',
@@ -102,31 +105,34 @@ def init_data(app, sender, **kwargs):
             backgroundImageUrl='5b.png',
         ).save()
 
-        Challenge(id=6,
+        challenge_6 = Challenge(id=6,
             title='advice animal',
             subtitle='advice animal',
+            prerequisite=challenge_5,
             description='finden sie ein »advice animal« bild, das hier überhaupt nicht dazupasst. laden sie das bild hoch, und posten sie einen text dazu, der stattdessen auf dem bild stehen sollte. der muss auch gar nicht witzig sein.',
             cardImageUrl='6.png',
             backgroundImageUrl='6b.png',
         ).save()
 
-        Challenge(id=7,
+        challenge_7 = Challenge(id=7,
             title='animated gif',
             subtitle='animated gif',
+            prerequisite=challenge_6,
             description='suchen sie ein lustiges animated gif und posten sie es. schreiben sie als text 10 x das wort "lustig" dazu.',
             cardImageUrl='7.png',
             backgroundImageUrl='7b.png',
         ).save()
 
-        Challenge(id=8,
+        challenge_8 = Challenge(id=8,
             title='das bin ich',
             subtitle='das bin ich',
+            prerequisite=challenge_7,
             description='posten sie drei bilder von sich, und beschreiben sie kurz, wer auf den fotos zu sehen ist. die bilder von sich brauchen auch gar nicht wirklich von ihnen zu sein, sondern einfach nur von irgendwem, der ihnen ähnlich schaut. oder auch nicht.',
             cardImageUrl='8.png',
             backgroundImageUrl='8b.png',
         ).save()
 
-        Challenge(id=9,
+        challenge_9 = Challenge(id=9,
             title='sherlock',
             subtitle='sherlock',
             description='finden sie einen ausschnitt der britischen fernsehserie »sherlock« auf youtube und posten sie ihn hier. schreiben sie ausserdem dazu, dass sie sherlock saucool finden (in eigenen worten!)',
@@ -134,9 +140,10 @@ def init_data(app, sender, **kwargs):
             backgroundImageUrl='9b.png',
         ).save()
 
-        Challenge(id=10,
+        challenge_10 = Challenge(id=10,
             title='schmetterling',
             subtitle='schmetterling',
+            prerequisite=challenge_9,
             description='laden sie zwei bilder von schmetterlingen hoch, und schreiben sie eine kleine geschichte (max. 10 worte), in denen die schmetterlinge vorkommen.',
             cardImageUrl='4.png',
             backgroundImageUrl='4b.png',
