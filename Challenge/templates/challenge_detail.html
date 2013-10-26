@@ -1,0 +1,20 @@
+
+{% block additional_headers %}
+  <script type="text/javascript" src="{{ STATIC_URL }}tinymce/tinymce.min.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}tinymce/jquery.tinymce.min.js"></script>
+{% endblock %}
+
+<div>
+  {{ challenge.title }}
+</div>
+
+<div>
+  {{ challenge.description }}
+</div>
+
+<form method="post">
+    <textarea id="editor"></textarea>
+</form>
+
+<button id="submit">Submit</button>
+
