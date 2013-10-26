@@ -2,14 +2,14 @@
   <script type="text/javascript" src="{{ STATIC_URL }}js/authentication.js"></script>
 {% endblock %}
 
-<div class="navbar navbar-static-top">
-  <div class="navbar-inner">
-    <a class="brand" href="/">Portfolio 3.0</a>
+<div>
+  <div>
+    <a href="/">Portfolio 3.0</a>
 
 
     {% if user.is_authenticated %}
 
-      <ul class="nav">
+      <ul>
 
 
         <li id="challenges-li">
@@ -29,9 +29,9 @@
       </ul>
 
 
-      <div class="pull-right">
+      <div>
 
-        <button id="button_sign_out" class="btn">Sign out</button>
+        <button id="button_sign_out">Sign out</button>
       </div>
     {% endif %}
   </div>
