@@ -5,4 +5,6 @@ from django.http import HttpResponsePermanentRedirect
 urlpatterns = patterns('',
     url(r'^challenges/$', 'Challenge.views.challenges_open'),
     url(r'^challenges/challenge$', 'Challenge.views.challenge_detail'),
+    url(r'^challenges/submit$', 'Challenge.views.submit_challenge'),
+    url(r'^challenges/autosave/$', 'Elaboration.views.save_elaboration'),
 )

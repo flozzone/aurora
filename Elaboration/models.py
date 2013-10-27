@@ -4,6 +4,6 @@ from django.db import models
 
 class Elaboration(models.Model):
     challenge = models.ForeignKey('Challenge.Challenge')
-    portfolio = models.ForeignKey('Portfolio.Portfolio')
     user = models.ForeignKey('PortfolioUser.PortfolioUser')
     creationDate = models.DateTimeField(auto_now_add=True)
+    elaboration_text = models.TextField(null=True)
