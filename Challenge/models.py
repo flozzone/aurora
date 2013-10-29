@@ -9,3 +9,9 @@ class Challenge(models.Model):
     description = models.TextField()
     cardImageUrl = models.CharField('card url', max_length=100)
     backgroundImageUrl = models.CharField('background url', max_length=100)
+
+    def getParent(self):
+        return self.prerequisite
+
+    def getChild(self):
+        return Challenge.objects.filter(challenge=self.prerequisite)
