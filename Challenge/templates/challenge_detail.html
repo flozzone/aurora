@@ -5,17 +5,17 @@
   <link rel="stylesheet" href="{{ STATIC_URL }}css/challenge.css" type="text/css" media="screen"/>
 {% endblock %}
 
-<div>
-  {{ challenge.title }}
+
+<div class="challenge_detail">
+    <div>
+      <h1>{{ challenge.id }} {{ challenge.title }}</h1>
+    </div>
+
+    <div>
+      <h2>{{ challenge.description }}</h2>
+    </div>
+    <form method="post">
+        <textarea id="editor">{{ elaboration.elaboration_text }}</textarea>
+    </form>
+    <button class="submit" id="{{ challenge.id }}">Submit</button>
 </div>
-
-<div>
-  {{ challenge.description }}
-</div>
-
-<form method="post">
-    <textarea id="editor">{{ elaboration.elaboration_text }}</textarea>
-</form>
-
-<button class="submit" id="{{ challenge.id }}">Submit</button>
-

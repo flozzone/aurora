@@ -2,13 +2,14 @@
 
 {% block additional_headers %}
   <script type="text/javascript" src="{{ STATIC_URL }}js/challenge.js"></script>
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/challenge.css" type="text/css" media="screen"/>
 {% endblock %}
 
 {% block content %}
 
-  <h1>Challenges open</h1>
+  <div class="title">Challenges open</div>
 
-  <div>
+  <div class="leftcol">
     {% for challenge in challenges %}
       <div class="challenge" id="{{ challenge.id }}">
         {{ challenge.id }} {{ challenge.title }}
@@ -16,7 +17,7 @@
     {% endfor %}
   </div>
 
-  <div id="detail_area">
+  <div class="rightcol" id="detail_area">
   </div>
 
 {% endblock %}
