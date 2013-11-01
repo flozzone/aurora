@@ -7,12 +7,14 @@
 
 
 <div class="challenge_detail">
+    <h1>Details</h1>
+
     <div>
-      <h1>{{ challenge.id }} {{ challenge.title }}</h1>
+      {{ challenge.id }} {{ challenge.title }}
     </div>
 
     <div>
-      <h2>{{ challenge.description }}</h2>
+      {{ challenge.description }}
     </div>
     <form method="post">
         <textarea id="editor">{{ elaboration.elaboration_text }}</textarea>
