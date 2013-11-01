@@ -1,0 +1,17 @@
+
+{% block additional_headers %}
+  <script type="text/javascript" src="{{ STATIC_URL }}tinymce/tinymce.min.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}tinymce/jquery.tinymce.min.js"></script>
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/challenge.css" type="text/css" media="screen"/>
+{% endblock %}
+
+
+<div class="challenges_stack">
+
+     {% for challenge in challenges %}
+        <div class="challenge" id="{{ challenge.id }}">
+            {{ challenge.id }} {{ challenge.title }} {{ challenge.description }}
+        </div>
+     {% endfor %}
+
+</div>

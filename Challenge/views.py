@@ -11,6 +11,7 @@ from Course.models import Course
 from Elaboration.models import Elaboration
 from PortfolioUser.models import PortfolioUser
 from Submission.models import Submission
+from Stack.models import Stack, StackChallengeRelation
 
 
 @login_required()
@@ -19,11 +20,26 @@ def challenges(request):
 
 
 @login_required()
-def challenges_open(request):
-    course_challenges = Course.getCourseChallenges('gsi')
-    return render_to_response('challenges_open.html', {
-        'challenges': course_challenges,
-    }, context_instance=RequestContext(request))
+def challenges_stack(request):
+    data = {}
+    if 'id' in request.GET:
+        print(request.GET.get('id'))
+        stack = Stack.objects.get(pk=request.GET.get('id'))
+        stack_challenges = StackChallengeRelation.objects.all().filter(stack=stack)
+        challenges = []
+        for stack_challenge in stack_challenges:
+            challenges.append(stack_challenge.challenge)
+        data['challenges'] = challenges
+    return render_to_response('challenges_stack.html', data, context_instance=RequestContext(request))
+
+
+@login_required()
+def challenges_overview(request):
+    data = {}
+    gsi = Course.objects.get(short_title='gsi')
+    course_stacks = Stack.objects.all().filter(course=gsi)
+    data['course_stacks'] = course_stacks
+    return render_to_response('challenges_overview.html', data, context_instance=RequestContext(request))
 
 
 @login_required()

@@ -7,17 +7,14 @@
 
 {% block content %}
 
-  <div class="title">Challenges open</div>
+  <div id="detail_area">
 
-  <div class="leftcol">
-    {% for challenge in challenges %}
-      <div class="challenge" id="{{ challenge.id }}">
-        {{ challenge.id }} {{ challenge.title }}
-      </div>
-    {% endfor %}
-  </div>
+      {% for stack in course_stacks %}
+        <div class="stack" id="{{ stack.id }}">
+            {{ stack.id }} {{ stack.title }} {{ stack.description }}
+        </div>
+     {% endfor %}
 
-  <div class="rightcol" id="detail_area">
   </div>
 
 {% endblock %}
