@@ -3,6 +3,7 @@ from django.db.models import signals
 from PortfolioUser.models import PortfolioUser
 from Course.models import *
 from Challenge.models import Challenge
+from Stack.models import Stack, StackChallengeRelation
 
 
 user_map = {'s0': 's0'}
@@ -68,7 +69,8 @@ def init_data(app, sender, **kwargs):
             description='posten sie ihre meinung zu irgendwas in drei sätzen. dabei müssen sie lediglich darauf achten, dass die drei sätze alle mit demselben buchstaben beginnen.',
             cardImageUrl='1.png',
             backgroundImageUrl='1b.png',
-        ).save()
+        )
+        challenge_1.save()
 
         challenge_2 = Challenge(id=2,
             title='rage-comic',
@@ -77,7 +79,8 @@ def init_data(app, sender, **kwargs):
             description='finden sie einen rage-comic, den sie lustig finden, und beschreiben sie kurz, warum sie ihn lustig finden. laden sie dazu den rage-comic als bild hoch, und beschreiben sie in einem satz mit genau 5 worten, warum dieser rage-comic zum schreien komisch ist.',
             cardImageUrl='2.png',
             backgroundImageUrl='2b.png',
-        ).save()
+        )
+        challenge_2.save()
 
         challenge_3 = Challenge(id=3,
             title='wikipedia',
@@ -86,7 +89,8 @@ def init_data(app, sender, **kwargs):
             description='kopieren sie 4 absätze aus einem langweiligen wikipedia-artikel und geben sie sie ab. selbst schreiben ist verboten - das würde als plagiat gewertet!',
             cardImageUrl='3.png',
             backgroundImageUrl='3b.png',
-        ).save()
+        )
+        challenge_3.save()
 
         challenge_4 = Challenge(id=4,
             title='wissenschaft',
@@ -95,7 +99,8 @@ def init_data(app, sender, **kwargs):
             description='finden sie einen pseudowissenschaftlichen artikel und laden sie ihn hier hoch.',
             cardImageUrl='4.png',
             backgroundImageUrl='4b.png',
-        ).save()
+        )
+        challenge_4.save()
 
         challenge_5 = Challenge(id=5,
             title='ping',
@@ -103,7 +108,8 @@ def init_data(app, sender, **kwargs):
             description='laden sie ein bild im png-format hoch. das bild muss allerdings genau quadratisch sein. schreiben sie nichts dazu (geht ja auch nicht).',
             cardImageUrl='5.png',
             backgroundImageUrl='5b.png',
-        ).save()
+        )
+        challenge_5.save()
 
         challenge_6 = Challenge(id=6,
             title='advice animal',
@@ -112,7 +118,8 @@ def init_data(app, sender, **kwargs):
             description='finden sie ein »advice animal« bild, das hier überhaupt nicht dazupasst. laden sie das bild hoch, und posten sie einen text dazu, der stattdessen auf dem bild stehen sollte. der muss auch gar nicht witzig sein.',
             cardImageUrl='6.png',
             backgroundImageUrl='6b.png',
-        ).save()
+        )
+        challenge_6.save()
 
         challenge_7 = Challenge(id=7,
             title='animated gif',
@@ -121,7 +128,8 @@ def init_data(app, sender, **kwargs):
             description='suchen sie ein lustiges animated gif und posten sie es. schreiben sie als text 10 x das wort "lustig" dazu.',
             cardImageUrl='7.png',
             backgroundImageUrl='7b.png',
-        ).save()
+        )
+        challenge_7.save()
 
         challenge_8 = Challenge(id=8,
             title='das bin ich',
@@ -130,7 +138,8 @@ def init_data(app, sender, **kwargs):
             description='posten sie drei bilder von sich, und beschreiben sie kurz, wer auf den fotos zu sehen ist. die bilder von sich brauchen auch gar nicht wirklich von ihnen zu sein, sondern einfach nur von irgendwem, der ihnen ähnlich schaut. oder auch nicht.',
             cardImageUrl='8.png',
             backgroundImageUrl='8b.png',
-        ).save()
+        )
+        challenge_8.save()
 
         challenge_9 = Challenge(id=9,
             title='sherlock',
@@ -138,7 +147,8 @@ def init_data(app, sender, **kwargs):
             description='finden sie einen ausschnitt der britischen fernsehserie »sherlock« auf youtube und posten sie ihn hier. schreiben sie ausserdem dazu, dass sie sherlock saucool finden (in eigenen worten!)',
             cardImageUrl='9.png',
             backgroundImageUrl='9b.png',
-        ).save()
+        )
+        challenge_9.save()
 
         challenge_10 = Challenge(id=10,
             title='schmetterling',
@@ -147,7 +157,8 @@ def init_data(app, sender, **kwargs):
             description='laden sie zwei bilder von schmetterlingen hoch, und schreiben sie eine kleine geschichte (max. 10 worte), in denen die schmetterlinge vorkommen.',
             cardImageUrl='4.png',
             backgroundImageUrl='4b.png',
-        ).save()
+        )
+        challenge_10.save()
 
         # create course-challenge relations
         print('adding course-challenge relations')
@@ -166,6 +177,53 @@ def init_data(app, sender, **kwargs):
         CourseChallengeRelation(course=hci, challenge_id=6).save()
         CourseChallengeRelation(course=hci, challenge_id=7).save()
         CourseChallengeRelation(course=hci, challenge_id=8).save()
+
+        # create stacks
+        print('adding stack accessibility')
+        accessibility = Stack(
+            title='Accessibility',
+            description='Learn about Accessibility issues...',
+            course=gsi,
+        )
+        accessibility.save()
+
+        print('adding stack digital life')
+        digitallife = Stack(
+            title='Digital life',
+            description='Learn about Digital life...',
+            course=gsi,
+        )
+        digitallife.save()
+
+        print('adding stack 3d printing')
+        printing = Stack(
+            title='3D Printing',
+            description='Print some awesome things...',
+            course=gsi,
+        )
+        printing.save()
+
+        print('adding stack gtav')
+        gtav = Stack(
+            title='GTAV',
+            description='Play some GTAV...',
+            course=gsi,
+        )
+        gtav.save()
+
+
+        # create stack-challenge relations
+        print('adding stack challenge relations')
+        StackChallengeRelation(stack=accessibility, challenge=challenge_1).save()
+        StackChallengeRelation(stack=accessibility, challenge=challenge_2).save()
+        StackChallengeRelation(stack=accessibility, challenge=challenge_3).save()
+        StackChallengeRelation(stack=accessibility, challenge=challenge_4).save()
+        StackChallengeRelation(stack=accessibility, challenge=challenge_5).save()
+        StackChallengeRelation(stack=digitallife, challenge=challenge_6).save()
+        StackChallengeRelation(stack=digitallife, challenge=challenge_7).save()
+        StackChallengeRelation(stack=printing, challenge=challenge_8).save()
+        StackChallengeRelation(stack=gtav, challenge=challenge_9).save()
+        StackChallengeRelation(stack=gtav, challenge=challenge_10).save()
 
 
 signals.post_syncdb.connect(init_data)
