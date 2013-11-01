@@ -1,4 +1,18 @@
-$(challenge_loaded);
+$(stack_loaded);
+
+function stack_loaded() {
+    $(".stack").click(stack_clicked);
+}
+
+function stack_clicked(event) {
+    var stack = $(event.target);
+    var stack_id = stack.attr('id');
+    var url = './stack?id=' + stack_id;
+    $.get(url, function (data) {
+        $('#detail_area').html(data);
+        $(challenge_loaded());
+    });
+}
 
 function challenge_loaded() {
     $(".challenge").click(challenge_clicked);
