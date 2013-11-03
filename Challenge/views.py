@@ -61,7 +61,7 @@ def submit_challenge(request):
     print("here")
 
     if 'id' in request.GET:
-        # todo: remove hardcoced course
+        # TODO: remove hardcoded course
         course = Course.objects.filter(short_title='gsi')
         challenge = Challenge.objects.get(id=request.GET['id'])
         user = PortfolioUser.objects.get(id=request.user.id)
@@ -70,8 +70,6 @@ def submit_challenge(request):
 
         try:
             submission = Submission.objects.get(elaboration=elaboration)
-            submission.submissionState = Submission.SUBMISSION_STATE_WAITING_FOR_EVALUATION
-            submission.submissionDate = Submission.submission_date.now(tz=utc)
             submission.save()
 
         except ObjectDoesNotExist:

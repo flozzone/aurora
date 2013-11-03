@@ -67,8 +67,7 @@ def init_data(app, sender, **kwargs):
             title='meine meinung',
             subtitle='meine meinung',
             description='posten sie ihre meinung zu irgendwas in drei sätzen. dabei müssen sie lediglich darauf achten, dass die drei sätze alle mit demselben buchstaben beginnen.',
-            cardImageUrl='1.png',
-            backgroundImageUrl='1b.png',
+            image_url='1.png',
         )
         challenge_1.save()
 
@@ -77,8 +76,7 @@ def init_data(app, sender, **kwargs):
             subtitle='rage-comic',
             prerequisite=challenge_1,
             description='finden sie einen rage-comic, den sie lustig finden, und beschreiben sie kurz, warum sie ihn lustig finden. laden sie dazu den rage-comic als bild hoch, und beschreiben sie in einem satz mit genau 5 worten, warum dieser rage-comic zum schreien komisch ist.',
-            cardImageUrl='2.png',
-            backgroundImageUrl='2b.png',
+            image_url='2.png',
         )
         challenge_2.save()
 
@@ -87,8 +85,7 @@ def init_data(app, sender, **kwargs):
             subtitle='wikipedia',
             prerequisite=challenge_2,
             description='kopieren sie 4 absätze aus einem langweiligen wikipedia-artikel und geben sie sie ab. selbst schreiben ist verboten - das würde als plagiat gewertet!',
-            cardImageUrl='3.png',
-            backgroundImageUrl='3b.png',
+            image_url='3.png',
         )
         challenge_3.save()
 
@@ -97,8 +94,7 @@ def init_data(app, sender, **kwargs):
             subtitle='wissenschaft',
             prerequisite=challenge_3,
             description='finden sie einen pseudowissenschaftlichen artikel und laden sie ihn hier hoch.',
-            cardImageUrl='4.png',
-            backgroundImageUrl='4b.png',
+            image_url='4.png',
         )
         challenge_4.save()
 
@@ -106,8 +102,7 @@ def init_data(app, sender, **kwargs):
             title='ping',
             subtitle='ping',
             description='laden sie ein bild im png-format hoch. das bild muss allerdings genau quadratisch sein. schreiben sie nichts dazu (geht ja auch nicht).',
-            cardImageUrl='5.png',
-            backgroundImageUrl='5b.png',
+            image_url='5.png',
         )
         challenge_5.save()
 
@@ -116,8 +111,7 @@ def init_data(app, sender, **kwargs):
             subtitle='advice animal',
             prerequisite=challenge_5,
             description='finden sie ein »advice animal« bild, das hier überhaupt nicht dazupasst. laden sie das bild hoch, und posten sie einen text dazu, der stattdessen auf dem bild stehen sollte. der muss auch gar nicht witzig sein.',
-            cardImageUrl='6.png',
-            backgroundImageUrl='6b.png',
+            image_url='6.png',
         )
         challenge_6.save()
 
@@ -126,8 +120,7 @@ def init_data(app, sender, **kwargs):
             subtitle='animated gif',
             prerequisite=challenge_6,
             description='suchen sie ein lustiges animated gif und posten sie es. schreiben sie als text 10 x das wort "lustig" dazu.',
-            cardImageUrl='7.png',
-            backgroundImageUrl='7b.png',
+            image_url='7.png',
         )
         challenge_7.save()
 
@@ -136,8 +129,7 @@ def init_data(app, sender, **kwargs):
             subtitle='das bin ich',
             prerequisite=challenge_7,
             description='posten sie drei bilder von sich, und beschreiben sie kurz, wer auf den fotos zu sehen ist. die bilder von sich brauchen auch gar nicht wirklich von ihnen zu sein, sondern einfach nur von irgendwem, der ihnen ähnlich schaut. oder auch nicht.',
-            cardImageUrl='8.png',
-            backgroundImageUrl='8b.png',
+            image_url='8.png',
         )
         challenge_8.save()
 
@@ -145,8 +137,7 @@ def init_data(app, sender, **kwargs):
             title='sherlock',
             subtitle='sherlock',
             description='finden sie einen ausschnitt der britischen fernsehserie »sherlock« auf youtube und posten sie ihn hier. schreiben sie ausserdem dazu, dass sie sherlock saucool finden (in eigenen worten!)',
-            cardImageUrl='9.png',
-            backgroundImageUrl='9b.png',
+            image_url='9.png',
         )
         challenge_9.save()
 
@@ -155,8 +146,7 @@ def init_data(app, sender, **kwargs):
             subtitle='schmetterling',
             prerequisite=challenge_9,
             description='laden sie zwei bilder von schmetterlingen hoch, und schreiben sie eine kleine geschichte (max. 10 worte), in denen die schmetterlinge vorkommen.',
-            cardImageUrl='4.png',
-            backgroundImageUrl='4b.png',
+            image_url='4.png',
         )
         challenge_10.save()
 
@@ -195,14 +185,6 @@ def init_data(app, sender, **kwargs):
         )
         digitallife.save()
 
-        print('adding stack 3d printing')
-        printing = Stack(
-            title='3D Printing',
-            description='Print some awesome things...',
-            course=gsi,
-        )
-        printing.save()
-
         print('adding stack gtav')
         gtav = Stack(
             title='GTAV',
@@ -218,10 +200,12 @@ def init_data(app, sender, **kwargs):
         StackChallengeRelation(stack=accessibility, challenge=challenge_2).save()
         StackChallengeRelation(stack=accessibility, challenge=challenge_3).save()
         StackChallengeRelation(stack=accessibility, challenge=challenge_4).save()
-        StackChallengeRelation(stack=accessibility, challenge=challenge_5).save()
+
+        StackChallengeRelation(stack=digitallife, challenge=challenge_5).save()
         StackChallengeRelation(stack=digitallife, challenge=challenge_6).save()
         StackChallengeRelation(stack=digitallife, challenge=challenge_7).save()
-        StackChallengeRelation(stack=printing, challenge=challenge_8).save()
+        StackChallengeRelation(stack=digitallife, challenge=challenge_8).save()
+
         StackChallengeRelation(stack=gtav, challenge=challenge_9).save()
         StackChallengeRelation(stack=gtav, challenge=challenge_10).save()
 

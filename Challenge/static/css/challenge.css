@@ -6,6 +6,12 @@
     margin-top:20px;
 }
 
+.stack {
+    border-style:dashed;
+    border-width:1px;
+    margin-bottom: 5px;
+}
+
 /*.challenge {*/
   /*background: no-repeat scroll 50% 0px rgb(153, 217, 234);*/
   /*border-width: 1px medium 1px 1px;*/

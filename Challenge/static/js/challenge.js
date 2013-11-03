@@ -5,7 +5,7 @@ function stack_loaded() {
 }
 
 function stack_clicked(event) {
-    var stack = $(event.target);
+    var stack = $(event.target).closest(".stack");
     var stack_id = stack.attr('id');
     var url = './stack?id=' + stack_id;
     $.get(url, function (data) {
