@@ -22,4 +22,5 @@ def autocomplete(request):
 def search(request):
     query = request.GET.get('request', '')
     results = Challenge.objects.all().filter(title__icontains=query).order_by('title')
-    return render(request, 'search.html', {'results': results})
+    html = render_to_response('search.html', {'results': results})
+    return html

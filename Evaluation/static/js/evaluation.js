@@ -1,5 +1,4 @@
 $(function() {
-
     $("#search").autocomplete({
         source: "/autocomplete/",
         minLength: 2
