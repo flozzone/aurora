@@ -1,0 +1,88 @@
+$(function() {
+    $("#search_challenge").autocomplete({
+        source: "/autocomplete/",
+        minLength: 2
+//        display search results in results div
+//        open: function() {
+//            $(this).autocomplete("widget")
+//                       .appendTo("#results")
+//                       .css("position", "static");
+//
+//        }
+    });
+});
+
+$(function() {
+   $("#challenge_form").submit(function(event) {
+        $.ajax({
+           data: $(this).serialize(),
+           url: "/search",
+            success: function(response) {
+                $("#results").html(response);
+                results_loaded();
+            },
+            error: function() {
+                alert("error fetching data");
+            }
+        });
+        event.preventDefault();
+    });
+});
+
+function results_loaded() {
+    $(".result").click(function(event) {
+        var result = $(event.target);
+        var result_id = result.attr('id');
+        $("#details").html(result_id);
+    });
+}
+
+
+$(function() {
+    $("#search_stack").autocomplete({
+        source: "/autocomplete/",
+        minLength: 2
+    });
+});
+
+$(function() {
+   $("#stack_form").submit(function(event) {
+        $.ajax({
+           data: $(this).serialize(),
+           url: "/search",
+            success: function(response) {
+                $("#results").html(response);
+                results_loaded();
+            },
+            error: function() {
+                alert("error fetching data");
+            }
+        });
+        event.preventDefault();
+    });
+});
+
+
+$(function() {
+    $("#search_user").autocomplete({
+        source: "/autocomplete/",
+        minLength: 2
+    });
+});
+
+$(function() {
+   $("#user_form").submit(function(event) {
+        $.ajax({
+           data: $(this).serialize(),
+           url: "/search",
+            success: function(response) {
+                $("#results").html(response);
+                results_loaded();
+            },
+            error: function() {
+                alert("error fetching data");
+            }
+        });
+        event.preventDefault();
+    });
+});

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block additional_headers %}
+    <script>window.jQuery || document.write('<script src="{{ STATIC_URL }}js/jquery-2.0.3.min.js"><\/script>')</script>
+    <script src="{{ STATIC_URL }}js/libs/jquery-ui-1.10.3.custom.min.js"></script>
+
+    <script type="text/javascript" src="{{ STATIC_URL }}js/evaluation.js"></script>
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/evaluation.css" type="text/css" media="screen"/>
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/jquery-ui.css" type="text/css" media="screen"/>
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+  <h1>Evaluation</h1>
+    <div class="left">
+      <form id="challenge_form">
+        <div>
+          <label>Search Challenges: </label><br/>
+          <input id="search_challenge" name="challenge_request" />
+        </div>
+      </form>
+      <br/>
+      <form id="stack_form">
+        <div>
+          <label>Search Stacks: </label><br/>
+          <input id="search_stack" name="stack_request" />
+        </div>
+      </form>
+      <br/>
+      <form id="user_form">
+        <div>
+          <label>Search User: </label><br/>
+          <input id="search_user" name="user_request" />
+        </div>
+      </form>
+    </div>
+
+    <div id="results" class="results"></div>
+
+    <div id="details" class="right"></div>
+
+    <div class="clr"></div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,11 @@
+{% block content %}
+
+Results:
+
+    {% for result in results %}
+      <div class="result" id="{{ result.id }}">{{ result.title }}{{ result.nickname }}</div>
+    {% empty %}
+      No Search Results.
+    {% endfor %}
+
+{% endblock %}

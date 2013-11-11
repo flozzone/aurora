@@ -11,6 +11,7 @@ urlpatterns = patterns('',
     url(r'^signin/$', 'PortfolioUser.views.signin'),
     url(r'^signout/$', 'PortfolioUser.views.signout'),
     url(r'', include('Challenge.urls')),
+    url(r'', include('Evaluation.urls')),
 
     # url(r'^AmanamanProjekt/', include('AmanamanProjekt.foo.urls')),
 

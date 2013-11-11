@@ -1,0 +1,34 @@
+/*.ui-helper-hidden-accessible {*/
+    /*display: none;*/
+/*}*/
+
+.container {
+    margin: auto;
+    width: 100%;
+    min-height: 400px;
+}
+
+.left {
+    float: left;
+    width: 20%;
+    height: 400px;
+    background-color: cornflowerblue;
+}
+
+.results {
+    float: left;
+    width: 20%;
+    height: 400px;
+    background-color: lightskyblue;
+}
+
+.right {
+    float: right;
+    width: 60%;
+    height: 400px;
+    background-color: lightblue;
+}
+
+.clr {
+    clear: both;
+}
