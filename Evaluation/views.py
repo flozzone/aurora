@@ -4,6 +4,8 @@ from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.utils import simplejson
 from Challenge.models import Challenge
+from PortfolioUser.models import PortfolioUser
+from Stack.models import Stack
 
 
 @login_required()
@@ -20,7 +22,14 @@ def autocomplete(request):
 
 @login_required()
 def search(request):
-    query = request.GET.get('request', '')
-    results = Challenge.objects.all().filter(title__icontains=query).order_by('title')
+    if 'challenge_request' in request.GET:
+        query = request.GET.get('challenge_request', '')
+        results = Challenge.objects.all().filter(title__icontains=query).order_by('title')
+    if 'stack_request' in request.GET:
+        query = request.GET.get('stack_request', '')
+        results = Stack.objects.all().filter(title__icontains=query).order_by('title')
+    if 'user_request' in request.GET:
+        query = request.GET.get('user_request', '')
+        results = PortfolioUser.objects.all().filter(nickname__icontains=query).order_by('nickname')
     html = render_to_response('search.html', {'results': results})
     return html

@@ -1,5 +1,5 @@
 $(function() {
-    $("#search").autocomplete({
+    $("#search_challenge").autocomplete({
         source: "/autocomplete/",
         minLength: 2
 //        display search results in results div
@@ -13,7 +13,7 @@ $(function() {
 });
 
 $(function() {
-   $("#search_form").submit(function(event) {
+   $("#challenge_form").submit(function(event) {
         $.ajax({
            data: $(this).serialize(),
            url: "/search",
@@ -30,9 +30,59 @@ $(function() {
 });
 
 function results_loaded() {
-    $(".challenge").click(function(event) {
-        var challenge = $(event.target);
-        var challenge_id = challenge.attr('id');
-        $("#details").html(challenge_id);
+    $(".result").click(function(event) {
+        var result = $(event.target);
+        var result_id = result.attr('id');
+        $("#details").html(result_id);
     });
 }
+
+
+$(function() {
+    $("#search_stack").autocomplete({
+        source: "/autocomplete/",
+        minLength: 2
+    });
+});
+
+$(function() {
+   $("#stack_form").submit(function(event) {
+        $.ajax({
+           data: $(this).serialize(),
+           url: "/search",
+            success: function(response) {
+                $("#results").html(response);
+                results_loaded();
+            },
+            error: function() {
+                alert("error fetching data");
+            }
+        });
+        event.preventDefault();
+    });
+});
+
+
+$(function() {
+    $("#search_user").autocomplete({
+        source: "/autocomplete/",
+        minLength: 2
+    });
+});
+
+$(function() {
+   $("#user_form").submit(function(event) {
+        $.ajax({
+           data: $(this).serialize(),
+           url: "/search",
+            success: function(response) {
+                $("#results").html(response);
+                results_loaded();
+            },
+            error: function() {
+                alert("error fetching data");
+            }
+        });
+        event.preventDefault();
+    });
+});

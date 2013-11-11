@@ -2,8 +2,8 @@
 
 Results:
 
-    {% for challenge in results %}
-      <div class="challenge" id="{{ challenge.id }}">{{ challenge.title }}</div>
+    {% for result in results %}
+      <div class="result" id="{{ result.id }}">{{ result.title }}{{ result.nickname }}</div>
     {% empty %}
       No Search Results.
     {% endfor %}
