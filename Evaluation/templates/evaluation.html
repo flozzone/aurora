@@ -1,11 +1,10 @@
 {% block additional_headers %}
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="{{ STATIC_URL }}js/libs/jquery-1.7.1.min.js"><\/script>')</script>
+    <script>window.jQuery || document.write('<script src="{{ STATIC_URL }}js/jquery-2.0.3.min.js"><\/script>')</script>
     <script src="{{ STATIC_URL }}js/libs/jquery-ui-1.10.3.custom.min.js"></script>
 
     <script type="text/javascript" src="{{ STATIC_URL }}js/evaluation.js"></script>
     <link rel="stylesheet" href="{{ STATIC_URL }}css/evaluation.css" type="text/css" media="screen"/>
-    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/jquery-ui.css" type="text/css" media="screen"/>
 {% endblock %}
 
 
@@ -22,3 +21,4 @@
       <div id="results" class="results"></div>
     </div>
 </div>
+
