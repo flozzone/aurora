@@ -19,6 +19,7 @@ $(function() {
            url: "/search",
             success: function(response) {
                 $("#results").html(response);
+                results_loaded();
             },
             error: function() {
                 alert("error fetching data");
@@ -28,4 +29,10 @@ $(function() {
     });
 });
 
-
+function results_loaded() {
+    $(".challenge").click(function(event) {
+        var challenge = $(event.target);
+        var challenge_id = challenge.attr('id');
+        $("#details").html(challenge_id);
+    });
+}

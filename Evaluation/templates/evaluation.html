@@ -11,17 +11,36 @@
 
 {% block content %}
 
-<div id="detail_area">
+<div class="container">
   <h1>Evaluation</h1>
-    <div>
+    <div class="left">
       <form id="search_form">
         <div>
           <label>Search Challenges: </label><br/>
           <input id="search" name="request" />
         </div>
       </form>
-      <div id="results" class="results"></div>
+      <br/>
+      <form id="stack_form">
+        <div>
+          <label>Search Stacks: </label><br/>
+          <input id="search_stack" name="request" />
+        </div>
+      </form>
+      <br/>
+      <form id="user_form">
+        <div>
+          <label>Search User: </label><br/>
+          <input id="search_user" name="request" />
+        </div>
+      </form>
     </div>
+
+    <div id="results" class="results"></div>
+
+    <div id="details" class="right"></div>
+
+    <div class="clr"></div>
 </div>
 
 {% endblock %}

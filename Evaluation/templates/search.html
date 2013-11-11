@@ -1,10 +1,11 @@
 {% block content %}
-<h2>Search Results</h2>
-<ul>
+
+Results:
+
     {% for challenge in results %}
-      <li>{{ challenge.title }}</li>
+      <div class="challenge" id="{{ challenge.id }}">{{ challenge.title }}</div>
     {% empty %}
-      <li>No Search Results.</li>
+      No Search Results.
     {% endfor %}
-</ul>
+
 {% endblock %}
