@@ -7,7 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from Challenge.models import Challenge
 from Elaboration.models import Elaboration
 from PortfolioUser.models import PortfolioUser
-
+from Course.models import Course
 
 @login_required()
 def challenges(request):
@@ -24,7 +24,7 @@ def save_elaboration(request):
 
     # check if elaboration exists
     if Elaboration.objects.filter(challenge=challenge, user=user).exists():
-        elaboration = Elaboration.objects.all().filter(challenge=challenge, user=user).order_by('id').latest('creationDate')
+        elaboration = Elaboration.objects.all().filter(challenge=challenge, user=user).order_by('id').latest('creation_time')
         elaboration.elaboration_text = ''
         elaboration.elaboration_text = elaboration_text
         elaboration.save()
@@ -33,3 +33,15 @@ def save_elaboration(request):
 
     return HttpResponse()
 
+@login_required()
+def submit_elaboration(request):
+    if 'id' in request.GET:
+        course = Course.objects.filter(short_title='gsi')
+        challenge = Challenge.objects.get(id=request.GET['id'])
+        user = PortfolioUser.objects.get(id=request.user.id)
+
+        elaboration = Elaboration.objects.filter(challenge=challenge, user=user)[0] # there should only be one
+        elaboration.submission_time = datetime.now()
+        elaboration.save()
+
+    return HttpResponse()

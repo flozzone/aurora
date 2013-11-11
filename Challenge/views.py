@@ -1,16 +1,12 @@
-from django.core.exceptions import ObjectDoesNotExist
-from django.core.serializers.json import DjangoJSONEncoder
+from datetime import datetime
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
-from django.utils import simplejson
-from django.utils.timezone import utc
 from Challenge.models import Challenge
 from Course.models import Course
 from Elaboration.models import Elaboration
 from PortfolioUser.models import PortfolioUser
-from Submission.models import Submission
 from Stack.models import Stack, StackChallengeRelation
 
 
@@ -23,13 +19,23 @@ def challenges(request):
 def challenges_stack(request):
     data = {}
     if 'id' in request.GET:
-        print(request.GET.get('id'))
+
+        if 'page' in request.GET:
+
+            if request.GET.get('page') == '1':
+                return HttpResponse("this page should display stack: " + str(request.GET.get('id'))) # TODO: should display stack page
+
         stack = Stack.objects.get(pk=request.GET.get('id'))
         stack_challenges = StackChallengeRelation.objects.all().filter(stack=stack)
-        challenges = []
+        challenges_active = []
+        challenges_inactive = []
         for stack_challenge in stack_challenges:
-            challenges.append(stack_challenge.challenge)
-        data['challenges'] = challenges
+            if stack_challenge.challenge.is_available_for_user(request.user):
+                challenges_active.append(stack_challenge.challenge)
+            else:
+                challenges_inactive.append(stack_challenge.challenge)
+        data['challenges_active'] = challenges_active
+        data['challenges_inactive'] = challenges_inactive
     return render_to_response('challenges_stack.html', data, context_instance=RequestContext(request))
 
 
@@ -54,26 +60,3 @@ def challenge_detail(request):
             elaboration = Elaboration.objects.all().filter(challenge=challenge, user=user).order_by('id')[0]
             data['elaboration'] = elaboration
     return render_to_response('challenge_detail.html', data, context_instance=RequestContext(request))
-
-
-@login_required()
-def submit_challenge(request):
-    print("here")
-
-    if 'id' in request.GET:
-        # TODO: remove hardcoded course
-        course = Course.objects.filter(short_title='gsi')
-        challenge = Challenge.objects.get(id=request.GET['id'])
-        user = PortfolioUser.objects.get(id=request.user.id)
-
-        elaboration = Elaboration.objects.filter(challenge=challenge, user=user).latest('creationDate')
-
-        try:
-            submission = Submission.objects.get(elaboration=elaboration)
-            submission.save()
-
-        except ObjectDoesNotExist:
-            submission = Submission(elaboration=elaboration)
-            submission.save()
-
-    return HttpResponse()

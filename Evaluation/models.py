@@ -1,9 +1,7 @@
 from django.db import models
 
-# Create your models here.
 
 class Evaluation(models.Model):
-    submission = models.ForeignKey('Submission.Submission')
+    submission = models.ForeignKey('Elaboration.Elaboration')
     user = models.ForeignKey('PortfolioUser.PortfolioUser')
-    creationDate = models.DateTimeField(auto_now_add=True)
-    evaluationState = models.CharField(max_length=100)
+    creation_date = models.DateTimeField(auto_now_add=True)

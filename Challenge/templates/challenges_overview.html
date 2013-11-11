@@ -13,10 +13,8 @@
 
     {% for stack in course_stacks %}
       <div class="stack" id="{{ stack.id }}">
-        <div>id: {{ stack.id }}</div>
-        <div>title: {{ stack.title }}</div>
-        <div>description: {{ stack.description }}</div>
-        <div>root: {{ stack.get_root_challenge.id }}</div>
+        <div class="title">{{ stack.title }}</div>
+        <div class="description">{{ stack.description }}</div>
         {% for image_url in stack.get_challenge_image_urls %}
           <img src="{{ STATIC_URL }}img/{{ image_url }}">
         {% endfor %}
