@@ -1,6 +1,6 @@
 $(function() {
     $("#search_challenge").autocomplete({
-        source: "/autocomplete/",
+        source: "/autocomplete_challenge/",
         minLength: 2
 //        display search results in results div
 //        open: function() {
@@ -40,7 +40,7 @@ function results_loaded() {
 
 $(function() {
     $("#search_stack").autocomplete({
-        source: "/autocomplete/",
+        source: "/autocomplete_stack/",
         minLength: 2
     });
 });
@@ -65,7 +65,7 @@ $(function() {
 
 $(function() {
     $("#search_user").autocomplete({
-        source: "/autocomplete/",
+        source: "/autocomplete_user/",
         minLength: 2
     });
 });

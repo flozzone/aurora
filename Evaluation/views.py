@@ -13,10 +13,26 @@ def evaluation(request):
     return render_to_response('evaluation.html', {}, context_instance=RequestContext(request))
 
 @login_required()
-def autocomplete(request):
+def autocomplete_challenge(request):
     term = request.GET.get('term', '')
     challenges = Challenge.objects.all().filter(title__istartswith=term).order_by('title')
     titles = [challenge.title for challenge in challenges[:20]]
+    json = simplejson.dumps(titles, ensure_ascii=False)
+    return HttpResponse(json, mimetype='application/json; charset=utf-8')
+
+@login_required()
+def autocomplete_stack(request):
+    term = request.GET.get('term', '')
+    stacks = Stack.objects.all().filter(title__istartswith=term).order_by('title')
+    titles = [stack.title for stack in stacks[:20]]
+    json = simplejson.dumps(titles, ensure_ascii=False)
+    return HttpResponse(json, mimetype='application/json; charset=utf-8')
+
+@login_required()
+def autocomplete_user(request):
+    term = request.GET.get('term', '')
+    pusers = PortfolioUser.objects.all().filter(nickname__istartswith=term).order_by('nickname')
+    titles = [puser.nickname for puser in pusers[:20]]
     json = simplejson.dumps(titles, ensure_ascii=False)
     return HttpResponse(json, mimetype='application/json; charset=utf-8')
 
