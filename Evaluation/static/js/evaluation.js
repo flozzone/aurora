@@ -2,13 +2,6 @@ $(function() {
     $("#search_challenge").autocomplete({
         source: "/autocomplete_challenge/",
         minLength: 2
-//        display search results in results div
-//        open: function() {
-//            $(this).autocomplete("widget")
-//                       .appendTo("#results")
-//                       .css("position", "static");
-//
-//        }
     });
 });
 
@@ -40,7 +33,6 @@ function results_loaded() {
     });
 }
 
-
 $(function() {
     $("#search_stack").autocomplete({
         source: "/autocomplete_stack/",
@@ -65,7 +57,6 @@ $(function() {
     });
 });
 
-
 $(function() {
     $("#search_user").autocomplete({
         source: "/autocomplete_user/",
@@ -87,5 +78,17 @@ $(function() {
             }
         });
         event.preventDefault();
+    });
+});
+
+$(function() {
+   $("#tag_waiting").click(function(event) {
+        alert("wait... wait... wait...");
+    });
+});
+
+$(function() {
+   $("#tag_escalation").click(function(event) {
+        alert("aaaaaaaaaaaaaaaahhhhhhhhhhhh");
     });
 });
