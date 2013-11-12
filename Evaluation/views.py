@@ -6,6 +6,7 @@ from django.utils import simplejson
 from Challenge.models import Challenge
 from PortfolioUser.models import PortfolioUser
 from Stack.models import Stack
+from Elaboration.models import Elaboration
 
 
 @login_required()
@@ -48,4 +49,13 @@ def search(request):
         query = request.GET.get('user_request', '')
         results = PortfolioUser.objects.all().filter(nickname__icontains=query).order_by('nickname')
     html = render_to_response('search.html', {'results': results})
+    return html
+
+@login_required()
+def get_submission(request):
+    if 'id' in request.GET:
+        challenge_id = request.GET.get('id', '')
+        challenge = Challenge.objects.get(pk=challenge_id)
+        elaboration = Elaboration.objects.all().filter(challenge=challenge).order_by('id')[0]  # TODO: submission_time must be != null, check if elaboration exists
+    html = render_to_response('submission.html', {'elaboration': elaboration})
     return html
