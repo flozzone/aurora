@@ -2,10 +2,26 @@
 
 Results:
 
-    {% for result in results %}
-      <div class="result" id="{{ result.id }}">{{ result.title }}{{ result.nickname }}</div>
-    {% empty %}
-      No Search Results.
+    {% for challenge in challenges %}
+      <div class="result" id="{{ challenge.id }}">{{ challenge.title }}</div>
+    {% endfor %}
+
+    {% for stack in stacks %}
+      <div>
+        Stack: {{ stack.title }}
+            {% for challenge in stack.get_challenges %}
+                <div class="result" id="{{ challenge.id }}">{{ challenge.title }}</div>
+            {% endfor %}
+      </div>
+    {% endfor %}
+
+    {% for user in users %}
+      <div>
+        User: {{ user.username }}
+            {% for elaboration in user.get_elaboraitons %}
+                <div class="result" id="{{ elaboration.challenge.id }}">{{ elaboration.challenge.title }}</div>
+            {% endfor %}
+      </div>
     {% endfor %}
 
 {% endblock %}

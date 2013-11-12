@@ -39,16 +39,17 @@ def autocomplete_user(request):
 
 @login_required()
 def search(request):
+    users = stacks = challenges = {}
     if 'challenge_request' in request.GET:
         query = request.GET.get('challenge_request', '')
-        results = Challenge.objects.all().filter(title__icontains=query).order_by('title')
+        challenges = Challenge.objects.all().filter(title__icontains=query).order_by('title')
     if 'stack_request' in request.GET:
         query = request.GET.get('stack_request', '')
-        results = Stack.objects.all().filter(title__icontains=query).order_by('title')
+        stacks = Stack.objects.all().filter(title__icontains=query).order_by('title')
     if 'user_request' in request.GET:
         query = request.GET.get('user_request', '')
-        results = PortfolioUser.objects.all().filter(nickname__icontains=query).order_by('nickname')
-    html = render_to_response('search.html', {'results': results})
+        users = PortfolioUser.objects.all().filter(nickname__icontains=query).order_by('nickname')
+    html = render_to_response('search.html', {'challenges': challenges, 'stacks': stacks, 'users': users})
     return html
 
 @login_required()
