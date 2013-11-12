@@ -2,9 +2,9 @@
 
 Submission:
 
-    <div>
-        {{ elaboration.challenge.title }}
-        {{ elaboration.elaboration_text }}
-    </div>
+    <div>Challenge Title: {{ elaboration.challenge.title }}</div>
+    <div>Challene Description: {{ elaboration.challenge.description }}</div>
+    <div>User: {{ elaboration.user.username }}</div>
+    <div>Elaboration: {{ elaboration.elaboration_text }}</div>
 
 {% endblock %}

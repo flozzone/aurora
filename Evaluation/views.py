@@ -56,6 +56,8 @@ def get_submission(request):
     if 'id' in request.GET:
         challenge_id = request.GET.get('id', '')
         challenge = Challenge.objects.get(pk=challenge_id)
-        elaboration = Elaboration.objects.all().filter(challenge=challenge).order_by('id')[0]  # TODO: submission_time must be != null, check if elaboration exists
-    html = render_to_response('submission.html', {'elaboration': elaboration})
-    return html
+        if Elaboration.objects.all().filter(challenge=challenge).exists():
+            elaboration = Elaboration.objects.all().filter(challenge=challenge).order_by('id')[0]  # TODO: submission_time must be != null, check if elaboration exists
+            html = render_to_response('submission.html', {'elaboration': elaboration})
+            return html
+        return HttpResponse("No Submissions found.")
