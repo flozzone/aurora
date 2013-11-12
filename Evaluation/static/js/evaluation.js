@@ -33,8 +33,6 @@ function results_loaded() {
     $(".result").click(function(event) {
         var result = $(event.target).closest(".result");
         var result_id = result.attr('id');
-//        $("#details").html(result_id);
-
         var url = '/submission?id=' + result_id;
         $.get(url, function (data) {
             $('#details').html(data);
