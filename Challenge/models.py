@@ -1,6 +1,6 @@
 from django.db import models
 from Stack.models import StackChallengeRelation
-
+from ReviewQuestion.models import ReviewQuestion
 
 class Challenge(models.Model):
     title = models.CharField(max_length=100)
@@ -10,7 +10,6 @@ class Challenge(models.Model):
     image_url = models.CharField(max_length=100)
 
     def get_previous(self):
-
         return self.prerequisite
 
     def get_next(self):  # TODO: this will not work if we branch out stacks (can return multiple results)
@@ -35,3 +34,9 @@ class Challenge(models.Model):
             return False
         else:
             return True
+
+    def get_peer_review_questions(self):
+        peer_review_questions = []
+        for peer_review_question in ReviewQuestion.objects.filter(challenge=self).order_by('order'):
+            peer_review_questions.append(peer_review_question)
+        return peer_review_questions

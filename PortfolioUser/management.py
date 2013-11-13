@@ -6,6 +6,7 @@ from Course.models import *
 from Challenge.models import Challenge
 from Elaboration.models import Elaboration
 from Stack.models import Stack, StackChallengeRelation
+from ReviewQuestion.models import ReviewQuestion
 
 
 user_map = {'s0': 's0'}
@@ -94,6 +95,10 @@ def init_data(app, sender, **kwargs):
                                 image_url='1.png',
         )
         challenge_1.save()
+
+        #ReviewQuestion(challenge=challenge_1, order=1, text="Do you think the submission was funny?", boolean_answer=True).save()
+        #ReviewQuestion(challenge=challenge_1, order=2, text="Was this submission original?", boolean_answer=True).save()
+        #ReviewQuestion(challenge=challenge_1, order=3, text="Can you find any additional material not included in this submission?").save()
 
         challenge_2 = Challenge(id=2,
                                 title='rage-comic',

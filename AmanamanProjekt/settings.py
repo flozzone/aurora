@@ -128,7 +128,11 @@ INSTALLED_APPS = (
     'Course',
     'Elaboration',
     'Stack',
-    'Evaluation'
+    'Evaluation',
+    'Review',
+    'ReviewQuestion',
+    'ReviewAnswer'
+
 )
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'

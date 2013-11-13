@@ -1,10 +1,19 @@
 from django.db import models
 
-# Create your models here.
 
 class Review(models.Model):
     elaboration = models.ForeignKey('Elaboration.Elaboration')
-    user = models.ForeignKey('PortfolioUser.PortfolioUser')
-    text = models.TextField(1000)
-    reviewDate = models.DateTimeField(auto_now_add=True)
-    reviewState = models.CharField(max_length=100)
+    creation_time = models.DateTimeField(auto_now_add=True)
+
+    NOTHING = 'N'
+    FAIL = 'F'
+    SUCCESS = 'S'
+    APPRAISAL_CHOICES = (
+        (NOTHING, 'Not even trying'),
+        (FAIL, 'Fail'),
+        (SUCCESS, 'Success'),
+    )
+    appraisal = models.CharField(max_length=1,
+                                 choices=APPRAISAL_CHOICES,
+                                 default=NOTHING)
+    awesome = models.BooleanField(default=False)
