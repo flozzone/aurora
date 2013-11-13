@@ -6,6 +6,7 @@ from Course.models import *
 from Challenge.models import Challenge
 from Elaboration.models import Elaboration
 from Stack.models import Stack, StackChallengeRelation
+from Review.models import Review
 from ReviewQuestion.models import ReviewQuestion
 
 
@@ -27,6 +28,7 @@ def init_data(app, sender, **kwargs):
             password = user_map[username]
             user.set_password(password)
             user.save()
+            s0 = user
 
 
         # create the three dummy users for jumpstarting the peer review process
@@ -96,9 +98,11 @@ def init_data(app, sender, **kwargs):
         )
         challenge_1.save()
 
-        #ReviewQuestion(challenge=challenge_1, order=1, text="Do you think the submission was funny?", boolean_answer=True).save()
-        #ReviewQuestion(challenge=challenge_1, order=2, text="Was this submission original?", boolean_answer=True).save()
-        #ReviewQuestion(challenge=challenge_1, order=3, text="Can you find any additional material not included in this submission?").save()
+        ReviewQuestion(challenge=challenge_1, order=1, text="Do you think the submission was funny?",
+                       boolean_answer=True).save()
+        ReviewQuestion(challenge=challenge_1, order=2, text="Was this submission original?", boolean_answer=True).save()
+        ReviewQuestion(challenge=challenge_1, order=3,
+                       text="Can you find any additional material not included in this submission?").save()
 
         challenge_2 = Challenge(id=2,
                                 title='rage-comic',
@@ -238,8 +242,35 @@ def init_data(app, sender, **kwargs):
                           submission_time=datetime.now())
         de3.save()
 
+        # create elaboration for challenge 1 for s0
+        print('adding elaboration for challenge 1 for s0')
+        e1 = Elaboration(challenge=challenge_1, user=s0, elaboration_text="dummy elaboration 1",
+                         submission_time=datetime.now())
+        e1.save()
+
+        # create review for elaboration
+        print('adding review 1 for elaboration for challenge 1 for s0')
+        Review(elaboration=de1, reviewer=s0, appraisal='N').save()
+        print('adding review 2 for elaboration for challenge 1 for s0')
+        Review(elaboration=de2, reviewer=s0, appraisal='F').save()
+        print('adding review 3 for elaboration for challenge 1 for s0')
+        Review(elaboration=de3, reviewer=s0, appraisal='S', awesome=True).save()
 
 
+        print('adding dummy elaboration 3 for challenge 1')
+        de4 = Elaboration(challenge=challenge_2, user=d1, elaboration_text="dummy elaboration 1",
+                          submission_time=datetime.now())
+        de4.save()
+
+        # create elaboration for challenge 2 for s0
+        print('adding elaboration for challenge 2 for s0')
+        e2 = Elaboration(challenge=challenge_2, user=s0, elaboration_text="dummy elaboration 1",
+                         submission_time=datetime.now())
+        e2.save()
+
+        # create review for elaboration
+        print('adding review 1 for elaboration for challenge 2 for s0')
+        Review(elaboration=de4, reviewer=s0, appraisal='N').save()
 
         # create stack-challenge relations
         print('adding stack challenge relations')

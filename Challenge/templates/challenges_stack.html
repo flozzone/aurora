@@ -9,19 +9,21 @@
 
   <h1>Stack</h1>
 
-  {% for challenge in challenges_active %}
-    <div class="challenge" id="{{ challenge.id }}">
-      <div class="title"> {{ challenge.title }} </div>
-      <div class="description"> {{ challenge.description }} </div>
-      <img class="challenge_image" src="{{ STATIC_URL }}img/{{ challenge.image_url }}">
-
-
+  {% for challenge_dict in challenges_active %}
+    <div class="challenge" id="{{ challenge_dict.challenge.id }}">
+      <div class="title"> {{ challenge_dict.challenge.title }} </div>
+      <div class="description"> {{ challenge_dict.challenge.description }} </div>
+      <img class="challenge_image" src="{{ STATIC_URL }}img/{{ challenge_dict.challenge.image_url }}">
     </div>
-    {% if not challenge.is_final_challenge %}
+    {% if not challenge_dict.challenge.is_final_challenge %}
       <div class="peer_review_wrapper">
-        <div class="peer_review"></div>
-        <div class="peer_review inactive"></div>
-        <div class="peer_review inactive"></div>
+        {% for i in reviews_per_challenge_range %}
+          {% if i < challenge_dict.reviews %}
+            <div class="peer_review"></div>
+          {% else %}
+            <div class="peer_review inactive"></div>
+          {% endif %}
+        {% endfor %}
       </div>
     {% endif %}
   {% endfor %}

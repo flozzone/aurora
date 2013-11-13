@@ -8,6 +8,7 @@ from Course.models import Course
 from Elaboration.models import Elaboration
 from PortfolioUser.models import PortfolioUser
 from Stack.models import Stack, StackChallengeRelation
+from Review.models import Review
 
 
 @login_required()
@@ -17,25 +18,23 @@ def challenges(request):
 
 @login_required()
 def challenges_stack(request):
-    data = {}
+    data = {'reviews_per_challenge_range': range(3)}  # TODO: this should probably be defined somewhere else
     if 'id' in request.GET:
-
         if 'page' in request.GET:
-
             if request.GET.get('page') == '1':
                 return HttpResponse("this page should display stack: " + str(request.GET.get('id'))) # TODO: should display stack page
-
-        stack = Stack.objects.get(pk=request.GET.get('id'))
-        stack_challenges = StackChallengeRelation.objects.all().filter(stack=stack)
-        challenges_active = []
-        challenges_inactive = []
-        for stack_challenge in stack_challenges:
-            if stack_challenge.challenge.is_available_for_user(request.user):
-                challenges_active.append(stack_challenge.challenge)
-            else:
-                challenges_inactive.append(stack_challenge.challenge)
-        data['challenges_active'] = challenges_active
-        data['challenges_inactive'] = challenges_inactive
+        else:
+            stack = Stack.objects.get(pk=request.GET.get('id'))
+            stack_challenges = StackChallengeRelation.objects.all().filter(stack=stack)
+            challenges_active = []
+            challenges_inactive = []
+            for stack_challenge in stack_challenges:
+                if stack_challenge.challenge.is_available_for_user(request.user):
+                    challenges_active.append({'challenge': stack_challenge.challenge, 'reviews': len(stack_challenge.challenge.get_reviews_written_by_user(request.user))})
+                else:
+                    challenges_inactive.append(stack_challenge.challenge)
+            data['challenges_active'] = challenges_active
+            data['challenges_inactive'] = challenges_inactive
     return render_to_response('challenges_stack.html', data, context_instance=RequestContext(request))
 
 

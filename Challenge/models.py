@@ -1,6 +1,9 @@
 from django.db import models
 from Stack.models import StackChallengeRelation
 from ReviewQuestion.models import ReviewQuestion
+from Elaboration.models import Elaboration
+from Review.models import Review
+
 
 class Challenge(models.Model):
     title = models.CharField(max_length=100)
@@ -30,10 +33,27 @@ class Challenge(models.Model):
         return False if self.get_next() else True
 
     def is_available_for_user(self, user):
-        if self.prerequisite:
-            return False
-        else:
+        if not self.prerequisite:  # challenge has no prerequisite
             return True
+        elaboration = Elaboration.objects.filter(challenge=self.prerequisite, user=user)
+        if not elaboration:  # no elaboration for this user for this challenge
+            return False
+        elaboration = elaboration[0]
+        if not elaboration.submission_time:  # elaboration not yet submitted
+            return False
+        reviews = self.prerequisite.get_reviews_written_by_user(user)
+        if not reviews:  # user did not write any reviews yet
+            return False
+        if len(reviews) < 3:  # user did not write enough reviews yet
+            return False
+        return True
+
+    def get_reviews_written_by_user(self, user):
+        reviews = []
+        for review in Review.objects.filter(elaboration__challenge=self, reviewer=user):
+            reviews.append(review)
+        return reviews
+
 
     def get_peer_review_questions(self):
         peer_review_questions = []
