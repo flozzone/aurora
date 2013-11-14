@@ -65,3 +65,12 @@ def get_submission(request):
         return HttpResponse("No Submissions found.")
 
 
+@login_required()
+def get_submissions(request):
+    if 'challenge_id' in request.GET:
+        challenge_id = request.GET.get('challenge_id', '')
+        challenge = Challenge.objects.get(pk=challenge_id)
+
+        elaborations = challenge.get_submissions()
+        html = render_to_response('submission.html', {'elaboration': elaborations[0]})
+        return html

@@ -92,3 +92,16 @@ $(function() {
         alert("aaaaaaaaaaaaaaaahhhhhhhhhhhh");
     });
 });
+
+$(function() {
+   $(".submissions").click(function(event) {
+       var challenge = $(event.target);
+       var challenge_id = challenge.attr('id');
+       alert(challenge_id);
+
+       var url = '/submissions?challenge_id=' + challenge_id;
+       $.get(url, function (data) {
+            $('#detail_area').html(data);
+       });
+   });
+});

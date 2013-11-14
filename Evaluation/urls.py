@@ -13,4 +13,5 @@ urlpatterns = patterns('',
     url(r'^autocomplete_user/$', 'Evaluation.views.autocomplete_user', name='evaluation_autocomplete_user'),
     url(r'^search/$', 'Evaluation.views.search', name='evaluation_search'),
     url(r'^submission/$', 'Evaluation.views.get_submission'),
+    url(r'^submissions/$', 'Evaluation.views.get_submissions'),
 )
