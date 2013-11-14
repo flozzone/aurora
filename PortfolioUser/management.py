@@ -242,6 +242,21 @@ def init_data(app, sender, **kwargs):
                           submission_time=datetime.now())
         de3.save()
 
+        print('adding final elaboration 1 for challenge 10')
+        de4 = Elaboration(challenge=challenge_10, user=d1, elaboration_text="final submission user d1",
+                          submission_time=datetime.now())
+        de4.save()
+
+        print('adding final elaboration 2 for challenge 10')
+        de5 = Elaboration(challenge=challenge_10, user=d2, elaboration_text="final submission user d2",
+                          submission_time=datetime.now())
+        de5.save()
+
+        print('adding final elaboration 1 for challenge 8')
+        de6 = Elaboration(challenge=challenge_8, user=d3, elaboration_text="final submission user d3",
+                          submission_time=datetime.now())
+        de6.save()
+
         # create elaboration for challenge 1 for s0
         print('adding elaboration for challenge 1 for s0')
         e1 = Elaboration(challenge=challenge_1, user=s0, elaboration_text="dummy elaboration 1",
