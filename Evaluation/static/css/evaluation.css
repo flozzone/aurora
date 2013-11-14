@@ -1,44 +1,52 @@
-/*.ui-helper-hidden-accessible {*/
-    /*display: none;*/
-/*}*/
-
-.container {
-    margin: auto;
-    width: 100%;
-    min-height: 400px;
-}
-
-.left {
+.challenge {
     float: left;
-    width: 20%;
-    height: 400px;
-    background-color: cornflowerblue;
+    position: relative;
+    border-style: dashed;
+    border-width: 1px;
+    padding: 5px 5px 0 5px;
+    margin: 10px 10px 0 0;
+    z-index: 1;
+    overflow: hidden;
 }
 
-.results {
-    float: left;
-    width: 20%;
-    height: 400px;
-    background-color: lightskyblue;
+.title {
+    z-index: 1;
+    padding-bottom: 5px;
 }
 
-.right {
-    float: right;
-    width: 60%;
-    height: 400px;
-    background-color: lightblue;
-}
-
-.clr {
-    clear: both;
-}
-
-.tag {
-    border: 1px solid;
-    background-color: #d3d3d3;
+.challenge_image {
+    z-index: 2;
     border-radius: 3px;
-    padding:3px;
-    margin-bottom:3px;
-    width:225px;
+}
+
+.submission {
+    position: absolute;
+    z-index: 3;
+    width: 25px;
+    height: 25px;
+    background-color: indianred;
+    bottom: 4px;
+    right: 5px;
+    border-radius: 3px;
+    text-align: center;
     cursor: pointer;
 }
+
+.waiting {
+    position: absolute;
+    z-index: 3;
+    width: 25px;
+    height: 25px;
+    background-color: indianred;
+    bottom: 4px;
+    right: 5px;
+    border-radius: 3px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.detail_area {
+    float: left;
+    margin-top: 20px;
+}
+

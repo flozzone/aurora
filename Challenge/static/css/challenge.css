@@ -22,13 +22,13 @@
     opacity: 0.6;
 }
 
-.peer_review_wrapper {
+.review_wrapper {
     height: 20px;
     width: 60px;
     margin: 10px;
 }
 
-.peer_review {
+.review {
     height: 18px;
     width: 18px;
     float: left;
@@ -36,7 +36,7 @@
     border: 1px solid black;
 }
 
-.peer_review.inactive {
+.review.inactive {
     background-color: #555555;
     opacity: 0.6;
 }
