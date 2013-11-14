@@ -54,7 +54,6 @@ class Challenge(models.Model):
             reviews.append(review)
         return reviews
 
-
     def get_peer_review_questions(self):
         peer_review_questions = []
         for peer_review_question in ReviewQuestion.objects.filter(challenge=self).order_by('order'):

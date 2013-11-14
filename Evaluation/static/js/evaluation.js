@@ -9,3 +9,15 @@ $(function() {
        });
    });
 });
+
+$(function() {
+   $(".waiting").click(function(event) {
+       var challenge = $(event.target);
+       var challenge_id = challenge.attr('id');
+
+       var url = '/waiting';
+       $.get(url, function (data) {
+            $('#detail_area').html(data);
+       });
+   });
+});

@@ -229,17 +229,17 @@ def init_data(app, sender, **kwargs):
         # create dummy elaboration for challenge 1
         print('adding dummy elaboration 1 for challenge 1')
         de1 = Elaboration(challenge=challenge_1, user=d1, elaboration_text="dummy elaboration 1",
-                          submission_time=datetime.now())
+                          submission_time='2013-11-01 10:00:00')
         de1.save()
 
         print('adding dummy elaboration 2 for challenge 1')
         de2 = Elaboration(challenge=challenge_1, user=d2, elaboration_text="dummy elaboration 2",
-                          submission_time=datetime.now())
+                          submission_time='2013-11-05 10:00:00')
         de2.save()
 
         print('adding dummy elaboration 3 for challenge 1')
         de3 = Elaboration(challenge=challenge_1, user=d3, elaboration_text="dummy elaboration 3",
-                          submission_time=datetime.now())
+                          submission_time='2013-11-12 10:00:00')
         de3.save()
 
         print('adding final elaboration 1 for challenge 10')

@@ -28,6 +28,15 @@
     {% endif %}
   {% endfor %}
 
+  <div class="challenge">
+    <div class="title"> waiting... </div>
+    <img class="challenge_image" src="{{ STATIC_URL }}img/waiting.png">
+    {% if waiting_elaborations %}
+        <div class="waiting">{{ waiting_elaborations|length }}</div>
+    {% endif %}
+    </div>
+  </div>
+
   <div class="detail_area" id="detail_area"></div>
 
 {% endblock %}

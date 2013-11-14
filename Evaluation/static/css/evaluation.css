@@ -32,6 +32,19 @@
     cursor: pointer;
 }
 
+.waiting {
+    position: absolute;
+    z-index: 3;
+    width: 25px;
+    height: 25px;
+    background-color: indianred;
+    bottom: 4px;
+    right: 5px;
+    border-radius: 3px;
+    text-align: center;
+    cursor: pointer;
+}
+
 .detail_area {
     float: left;
     margin-top: 20px;
