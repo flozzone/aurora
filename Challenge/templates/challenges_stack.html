@@ -16,12 +16,12 @@
       <img class="challenge_image" src="{{ STATIC_URL }}img/{{ challenge_dict.challenge.image_url }}">
     </div>
     {% if not challenge_dict.challenge.is_final_challenge %}
-      <div class="peer_review_wrapper">
+      <div class="review_wrapper">
         {% for i in reviews_per_challenge_range %}
           {% if i < challenge_dict.reviews %}
-            <div class="peer_review"></div>
+            <div class="review"></div>
           {% else %}
-            <div class="peer_review inactive"></div>
+            <div class="review inactive"></div>
           {% endif %}
         {% endfor %}
       </div>
@@ -36,10 +36,10 @@
 
     </div>
     {% if not challenge.is_final_challenge %}
-      <div class="peer_review_wrapper">
-        <div class="peer_review inactive"></div>
-        <div class="peer_review inactive"></div>
-        <div class="peer_review inactive"></div>
+      <div class="review_wrapper">
+        <div class="review inactive"></div>
+        <div class="review inactive"></div>
+        <div class="review inactive"></div>
       </div>
     {% endif %}
   {% endfor %}
