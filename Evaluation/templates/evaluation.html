@@ -9,41 +9,62 @@
     <link rel="stylesheet" href="{{ STATIC_URL }}css/jquery-ui.css" type="text/css" media="screen"/>
 {% endblock %}
 
+
 {% block content %}
 
-<div class="container">
-  <h1>Evaluation</h1>
-    <div class="left">
-      <form id="challenge_form">
-        <div>
-          <label>Search Challenges: </label><br/>
-          <input id="search_challenge" name="challenge_request" />
-        </div>
-      </form>
-      <br/>
-      <form id="stack_form">
-        <div>
-          <label>Search Stacks: </label><br/>
-          <input id="search_stack" name="stack_request" />
-        </div>
-      </form>
-      <br/>
-      <form id="user_form">
-        <div>
-          <label>Search Users: </label><br/>
-          <input id="search_user" name="user_request" />
-        </div>
-      </form>
-      <br/>
-      <div class="tag" id="tag_waiting">+ waiting</div>
-      <div class="tag" id="tag_escalation">+ escalation</div>
-    </div>
+  <h1>Final Challenges</h1>
 
-    <div id="results" class="results"></div>
+  {% for challenge in challenges %}
+     {% if challenge.is_final_challenge %}
 
-    <div id="details" class="right"></div>
+        <div class="challenge" id="{{ challenge.id }}">
+            <div class="title"> {{ challenge.title }} </div>
+            <img class="challenge_image" src="{{ STATIC_URL }}img/{{ challenge.image_url }}">
+            {% if challenge.get_submissions %}
+                <div class="submissions" id="{{ challenge.id }}">{{ challenge.get_submissions.count }}</div>
+            {% endif %}
+        </div>
 
-    <div class="clr"></div>
-</div>
+    {% endif %}
+  {% endfor %}
 
 {% endblock %}
+
+{#{% block content %}#}
+{##}
+{#<div class="container">#}
+{#  <h1>Evaluation</h1>#}
+{#    <div class="left">#}
+{#      <form id="challenge_form">#}
+{#        <div>#}
+{#          <label>Search Challenges: </label><br/>#}
+{#          <input id="search_challenge" name="challenge_request" />#}
+{#        </div>#}
+{#      </form>#}
+{#      <br/>#}
+{#      <form id="stack_form">#}
+{#        <div>#}
+{#          <label>Search Stacks: </label><br/>#}
+{#          <input id="search_stack" name="stack_request" />#}
+{#        </div>#}
+{#      </form>#}
+{#      <br/>#}
+{#      <form id="user_form">#}
+{#        <div>#}
+{#          <label>Search Users: </label><br/>#}
+{#          <input id="search_user" name="user_request" />#}
+{#        </div>#}
+{#      </form>#}
+{#      <br/>#}
+{#      <div class="tag" id="tag_waiting">+ waiting</div>#}
+{#      <div class="tag" id="tag_escalation">+ escalation</div>#}
+{#    </div>#}
+{##}
+{#    <div id="results" class="results"></div>#}
+{##}
+{#    <div id="details" class="right"></div>#}
+{##}
+{#    <div class="clr"></div>#}
+{#</div>#}
+{##}
+{#{% endblock %}#}

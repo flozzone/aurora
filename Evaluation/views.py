@@ -11,7 +11,8 @@ from Elaboration.models import Elaboration
 
 @login_required()
 def evaluation(request):
-    return render_to_response('evaluation.html', {}, context_instance=RequestContext(request))
+    challenges = Challenge.objects.all()
+    return render_to_response('evaluation.html', {'challenges': challenges}, context_instance=RequestContext(request))
 
 @login_required()
 def autocomplete_challenge(request):
@@ -62,3 +63,5 @@ def get_submission(request):
             html = render_to_response('submission.html', {'elaboration': elaboration})
             return html
         return HttpResponse("No Submissions found.")
+
+

@@ -42,3 +42,37 @@
     width:225px;
     cursor: pointer;
 }
+
+.challenge {
+    float: left;
+    position: relative;
+    border-style: dashed;
+    border-width: 1px;
+    padding: 5px 5px 0 5px;
+    margin: 10px 10px 0 0;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.title {
+    z-index: 1;
+    padding-bottom: 5px;
+}
+
+.challenge_image {
+    z-index: 2;
+    border-radius: 3px;
+}
+
+.submissions {
+    position: absolute;
+    z-index: 3;
+    width: 25px;
+    height: 25px;
+    background-color: indianred;
+    bottom: 4px;
+    right: 5px;
+    border-radius: 3px;
+    text-align: center;
+}
+
