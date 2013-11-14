@@ -55,11 +55,11 @@ class Challenge(models.Model):
         return reviews
 
 
-    def get_peer_review_questions(self):
-        peer_review_questions = []
-        for peer_review_question in ReviewQuestion.objects.filter(challenge=self).order_by('order'):
-            peer_review_questions.append(peer_review_question)
-        return peer_review_questions
+    def get_review_questions(self):
+        review_questions = []
+        for review_question in ReviewQuestion.objects.filter(challenge=self).order_by('order'):
+            review_questions.append(review_question)
+        return review_questions
 
     def get_submissions(self):
         submissions = Elaboration.objects.filter(challenge=self)
