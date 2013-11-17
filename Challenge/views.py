@@ -13,17 +13,17 @@ from Review.models import Review
 
 @login_required()
 def stack(request):
-    data = create_stack_context(request)
+    data = create_context_stack(request)
     return render_to_response('stack.html', data, context_instance=RequestContext(request))
 
 
 @login_required()
 def stack_page(request):
-    data = create_stack_context(request)
+    data = create_context_stack(request)
     return render_to_response('stack_page.html', data, context_instance=RequestContext(request))
 
 
-def create_stack_context(request):
+def create_context_stack(request):
     data = {'reviews_per_challenge_range': range(3)}  # TODO: this should probably be defined somewhere else
     if 'id' in request.GET:
         stack = Stack.objects.get(pk=request.GET.get('id'))
@@ -49,15 +49,23 @@ def challenges_page(request):
     return render_to_response('challenges_page.html', data, context_instance=RequestContext(request))
 
 
-@login_required()
-def challenge(request):
+def create_context_challenge(request):
     data = {}
     if 'id' in request.GET:
-        print(request.GET.get('id'))
         challenge = Challenge.objects.get(pk=request.GET.get('id'))
         user = PortfolioUser.objects.get(id=request.user.id)
         data['challenge'] = challenge
         if Elaboration.objects.filter(challenge=challenge, user=user).exists():
             elaboration = Elaboration.objects.all().filter(challenge=challenge, user=user).order_by('id')[0]
             data['elaboration'] = elaboration
+    return data
+
+@login_required()
+def challenge(request):
+    data = create_context_challenge(request)
     return render_to_response('challenge.html', data, context_instance=RequestContext(request))
+
+@login_required()
+def challenge_page(request):
+    data = create_context_challenge(request)
+    return render_to_response('challenge_page.html', data, context_instance=RequestContext(request))

@@ -1,42 +1,7 @@
-$(document).ready(startup);
-
-function startup() {
-    stack_loaded();
-    challenge_loaded();
-}
-
-function stack_loaded() {
-    $(".stack").click(stack_clicked);
-}
-
-function stack_clicked(event) {
-    var stack = $(event.target).closest(".stack");
-    var stack_id = stack.attr('id');
-    var url = './get_stack?id=' + stack_id;
-    $.get(url, function (data) {
-        $('#detail_area').html(data);
-        window.history.pushState('', '', './stack?id=' + stack_id);
-    });
-}
+$(challenge_loaded);
 
 function challenge_loaded() {
-    $(".challenge").click(challenge_clicked);
-}
-
-function challenge_clicked(event) {
-    var challenge = $(event.target).closest(".challenge");
-    if (challenge.hasClass("inactive")) { // TODO: This is very insecure because you can simply add the class to the div
-        return
-    }
-    var challenge_id = challenge.attr('id');
-    var url = './challenge?id=' + challenge_id;
-    $.get(url, function (data) {
-        $('#detail_area').html(data);
-        initialize_textbox(challenge_id);
-    });
-}
-
-function initialize_textbox(challenge_id) {
+    var challenge_id = $('.challenge').attr('id');
     tinymce.init({
         selector: "textarea#editor",
         plugins: "image",
@@ -46,7 +11,6 @@ function initialize_textbox(challenge_id) {
             });
         }
     });
-
     $('.submit').click(submit_clicked);
 }
 
@@ -69,5 +33,4 @@ function submit_clicked(event) {
     var url = './submit?id=' + challenge_id;
     $.get(url, function (data) {
     });
-
 }
