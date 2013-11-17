@@ -3,7 +3,8 @@ from Challenge import views as challenge_views
 from django.http import HttpResponsePermanentRedirect
 
 urlpatterns = patterns('',
-    url(r'^challenges/$', 'Challenge.views.challenges_overview'),
-    url(r'^challenges/stack$', 'Challenge.views.challenges_stack'),
-    url(r'^challenges/challenge$', 'Challenge.views.challenge_detail'),
+    url(r'^challenges/$', 'Challenge.views.challenges_page'),
+    url(r'^challenges/stack$', 'Challenge.views.stack_page'),
+    url(r'^challenges/get_stack$', 'Challenge.views.stack'),
+    url(r'^challenges/challenge$', 'Challenge.views.challenge'),
 )

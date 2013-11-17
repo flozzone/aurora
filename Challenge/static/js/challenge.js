@@ -1,4 +1,9 @@
-$(stack_loaded);
+$(document).ready(startup);
+
+function startup() {
+    stack_loaded();
+    challenge_loaded();
+}
 
 function stack_loaded() {
     $(".stack").click(stack_clicked);
@@ -7,11 +12,10 @@ function stack_loaded() {
 function stack_clicked(event) {
     var stack = $(event.target).closest(".stack");
     var stack_id = stack.attr('id');
-    var url = './stack?id=' + stack_id;
+    var url = './get_stack?id=' + stack_id;
     $.get(url, function (data) {
         $('#detail_area').html(data);
-        $(challenge_loaded());
-        window.history.pushState('', '', './stack?id=' + stack_id + '&page=1');
+        window.history.pushState('', '', './stack?id=' + stack_id);
     });
 }
 
@@ -63,6 +67,7 @@ function submit_clicked(event) {
     var challenge = $(event.target);
     var challenge_id = challenge.attr('id');
     var url = './submit?id=' + challenge_id;
-    $.get(url, function (data) {});
+    $.get(url, function (data) {
+    });
 
 }
