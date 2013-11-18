@@ -14,7 +14,8 @@ class Elaboration(models.Model):
         # sumbission needs to be at least 3 days old
         return True if self.submission_time + timedelta(3) < datetime.now() else False
 
-    def get_waiting_elaborations(self):
+    @staticmethod
+    def get_waiting_elaborations():
         waiting_elaborations = []
         for elaboration in Elaboration.objects.all():
             if elaboration.is_waiting_elaboration():

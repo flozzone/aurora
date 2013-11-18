@@ -12,8 +12,7 @@ from Elaboration.models import Elaboration
 @login_required()
 def evaluation(request):
     challenges = Challenge.objects.all()
-    waiting_elaborations = Elaboration.objects.first().get_waiting_elaborations()
-    print(waiting_elaborations[0].challenge.title)
+    waiting_elaborations = Elaboration.get_waiting_elaborations()
     return render_to_response('evaluation.html', {'challenges': challenges, 'waiting_elaborations': waiting_elaborations}, context_instance=RequestContext(request))
 
 @login_required()
@@ -28,6 +27,6 @@ def submission(request):
 
 @login_required()
 def waiting(request):
-    elaborations = Elaboration.objects.first().get_waiting_elaborations
+    elaborations = Elaboration.get_waiting_elaborations()
     html = render_to_response('waiting.html', {'elaborations': elaborations})
     return html
