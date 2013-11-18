@@ -1,11 +1,8 @@
-from django.http import HttpResponse
-from django.shortcuts import render_to_response, render
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
-from django.utils import simplejson
 from Challenge.models import Challenge
-from PortfolioUser.models import PortfolioUser
-from Stack.models import Stack
 from Elaboration.models import Elaboration
 
 
@@ -21,12 +18,34 @@ def submission(request):
         challenge_id = request.GET.get('challenge_id', '')
         challenge = Challenge.objects.get(pk=challenge_id)
 
-        elaborations = challenge.get_submissions()
-        html = render_to_response('submission.html', {'elaborations': elaborations})
-        return html
+        elaboration_list = challenge.get_submissions()
+
+        paginator = Paginator(elaboration_list, 1)              # elaborations per page
+
+        page = request.GET.get('page')
+        try:
+            elaborations = paginator.page(page)
+        except PageNotAnInteger:
+            elaborations = paginator.page(1)                    # first page
+        except EmptyPage:
+            elaborations = paginator.page(paginator.num_pages)  # last page
+
+        html = render_to_response('submission.html', {'elaborations': elaborations, 'challenge': challenge})
+    return html
 
 @login_required()
 def waiting(request):
-    elaborations = Elaboration.get_waiting_elaborations()
+    elaboration_list = Elaboration.get_waiting_elaborations()
+    paginator = Paginator(elaboration_list, 1)              # elaborations per page
+
+    page = request.GET.get('page')
+    try:
+        elaborations = paginator.page(page)
+    except PageNotAnInteger:
+        elaborations = paginator.page(1)                    # first page
+    except EmptyPage:
+        elaborations = paginator.page(paginator.num_pages)  # last page
+
     html = render_to_response('waiting.html', {'elaborations': elaborations})
+
     return html

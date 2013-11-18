@@ -50,3 +50,15 @@
     margin-top: 20px;
 }
 
+.paginator {
+    float: left;
+    color: blue;
+    text-decoration: underline;
+    padding-right: 10px;
+    cursor: pointer;
+}
+
+.paginator_info {
+    float: left;
+    padding-right: 10px;
+}

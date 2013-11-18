@@ -1,3 +1,17 @@
+<script type="text/javascript">
+    $(document).ready(function() {
+       $(".paginator").click(function(event) {
+           var page = $(event.target);
+           var page_id = page.attr('id');
+
+           var url = '/waiting?page=' + page_id;
+           $.get(url, function (data) {
+                $('#detail_area').html(data);
+           });
+       });
+    });
+</script>
+
 {% block content %}
 
     {% for elaboration in elaborations %}
@@ -9,5 +23,19 @@
         <div>user: {{ elaboration.user.username }}</div>
         <div>elaboration: {{ elaboration.elaboration_text }}</div></br>
     {% endfor %}
+
+    <div class="pagination">
+        {% if elaborations.has_previous %}
+            <div class="paginator" id="{{ elaborations.previous_page_number }}">previous</div>
+        {% endif %}
+
+        <div class="paginator_info">
+             elaboration {{ elaborations.number }} of {{ elaborations.paginator.num_pages }}
+        </div>
+
+        {% if elaborations.has_next %}
+            <div class="paginator" id="{{ elaborations.next_page_number }}">next</div>
+        {% endif %}
+    </div>
 
 {% endblock %}
