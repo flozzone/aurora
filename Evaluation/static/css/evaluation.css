@@ -70,6 +70,7 @@
     background-color: #d3d3d3;
     padding: 3px;
     max-width: 50%;
+    margin-bottom: 25px;
 }
 
 .spacer {
@@ -82,18 +83,27 @@
 }
 
 .evaluation {
-    border: 1px solid darkgray;
-    border-radius: 3px;
+    border: 1px solid darkred;
+    border-radius: 5px;
     min-height: 80px;
     background-color: indianred;
     margin-bottom: 20px;
 }
 
 .points {
-    border: 1px solid darkgray;
-    border-radius: 3px;
+    float:left;
+    border: 1px solid darkred;
+    border-radius: 5px;
     height: 25px;
     width: 50px;
     background-color: indianred;
-    margin-bottom: 20px;
+    position: absolute;
+    display: inline;
+    margin: 0 0 20px 10px;
+}
+
+.submit {
+    float: right;
+    display: block;
+    height: 30px;
 }
