@@ -50,3 +50,50 @@
     margin-top: 20px;
 }
 
+.paginator {
+    display: inline;
+    color: blue;
+    text-decoration: underline;
+    padding-right: 10px;
+    cursor: pointer;
+}
+
+.paginator_info {
+    display: inline;
+    padding-right: 10px;
+}
+
+.container {
+    border-width: 1px;
+    border-style: dashed;
+    border-radius: 3px;
+    background-color: #d3d3d3;
+    padding: 3px;
+    max-width: 50%;
+}
+
+.spacer {
+    margin: 20px 0 20px 0;
+    border-bottom: 1px solid whitesmoke;
+}
+
+.pagination {
+
+}
+
+.evaluation {
+    border: 1px solid darkgray;
+    border-radius: 3px;
+    min-height: 80px;
+    background-color: indianred;
+    margin-bottom: 20px;
+}
+
+.points {
+    border: 1px solid darkgray;
+    border-radius: 3px;
+    height: 25px;
+    width: 50px;
+    background-color: indianred;
+    margin-bottom: 20px;
+}
