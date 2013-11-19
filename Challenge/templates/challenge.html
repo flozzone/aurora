@@ -21,5 +21,7 @@
       <textarea id="editor">{{ elaboration.elaboration_text }}</textarea>
     </form>
     <button class="submit" id="{{ challenge.id }}">Submit</button>
+  {% else %}
+    <div class="elaboration_text">{{ elaboration.elaboration_text |safe }}</div> <!-- TODO: this has to be secure -->
   {% endif %}
 </div>
