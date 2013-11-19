@@ -9,14 +9,8 @@ from Elaboration.models import Elaboration
 from PortfolioUser.models import PortfolioUser
 from Course.models import Course
 
-@login_required()
-def challenges(request):
-    return render_to_response('elaboration.html', {}, context_instance=RequestContext(request))
-
-
 @csrf_exempt
 def save_elaboration(request):
-
     challenge_id = request.POST['challenge_id']
     elaboration_text = request.POST['elaboration_text']
     challenge = Challenge.objects.get(id=challenge_id)

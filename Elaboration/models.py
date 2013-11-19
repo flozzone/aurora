@@ -20,3 +20,9 @@ class Elaboration(models.Model):
             if elaboration.is_waiting_elaboration():
                 waiting_elaborations.append(elaboration)
         return waiting_elaborations
+
+    def is_submitted(self):
+        if self.submission_time:
+            return True
+        else:
+            return False

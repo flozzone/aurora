@@ -35,11 +35,7 @@ class Challenge(models.Model):
     def is_available_for_user(self, user):
         if not self.prerequisite:  # challenge has no prerequisite
             return True
-        elaboration = Elaboration.objects.filter(challenge=self.prerequisite, user=user)
-        if not elaboration:  # no elaboration for this user for this challenge
-            return False
-        elaboration = elaboration[0]
-        if not elaboration.submission_time:  # elaboration not yet submitted
+        if not self.prerequisite.submitted_by_user(user):
             return False
         reviews = self.prerequisite.get_reviews_written_by_user(user)
         if not reviews:  # user did not write any reviews yet
@@ -47,6 +43,12 @@ class Challenge(models.Model):
         if len(reviews) < 3:  # user did not write enough reviews yet
             return False
         return True
+
+    def submitted_by_user(self, user):
+        elaboration = Elaboration.objects.filter(challenge=self, user=user)
+        if not elaboration:  # no elaboration for this user for this challenge
+            return False
+        return elaboration[0].is_submitted()
 
     def get_reviews_written_by_user(self, user):
         reviews = []

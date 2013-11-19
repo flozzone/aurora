@@ -26,13 +26,18 @@ def stack_page(request):
 def create_context_stack(request):
     data = {'reviews_per_challenge_range': range(3)}  # TODO: this should probably be defined somewhere else
     if 'id' in request.GET:
+        user=request.user
         stack = Stack.objects.get(pk=request.GET.get('id'))
         stack_challenges = StackChallengeRelation.objects.all().filter(stack=stack)
         challenges_active = []
         challenges_inactive = []
         for stack_challenge in stack_challenges:
             if stack_challenge.challenge.is_available_for_user(request.user):
-                challenges_active.append({'challenge': stack_challenge.challenge, 'reviews': len(stack_challenge.challenge.get_reviews_written_by_user(request.user))})
+                challenges_active.append({
+                    'challenge': stack_challenge.challenge,
+                    'submitted': stack_challenge.challenge.submitted_by_user(user),
+                    'reviews': len(stack_challenge.challenge.get_reviews_written_by_user(request.user)),
+                })
             else:
                 challenges_inactive.append(stack_challenge.challenge)
         data['challenges_active'] = challenges_active
