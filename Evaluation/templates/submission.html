@@ -10,6 +10,24 @@
                 $('#detail_area').html(data);
            });
        });
+
+       $(".evaluate").click(function(event) {
+           var elaboration = $(event.target);
+           var elaboration_id = elaboration.attr('id');
+           var evaluation_text = $('.evaluation').text();
+           var evaluation_points = $('.points').text();
+
+           var data = {
+                evaluation_text: evaluation_text,
+                evaluation_points: evaluation_points,
+                elaboration_id: elaboration_id
+           };
+           var args = { type:"POST", url:"/submit_evaluation/", data:data,
+                error: function() {
+                    alert('error saving evaluation');
+                } };
+           $.ajax(args);
+       });
     });
 </script>
 
@@ -30,9 +48,12 @@
             <div class="spacer"></div>
 
             <div class="elaboration">{{ elaboration.elaboration_text }}</div></br>
-            <div class="evaluation" contenteditable="true"></div>
-            points assigned<div class="points" contenteditable="true"></div>
-            <button class="submit" id="TODO">evaluate</button>
+            <form method="post">
+                {% csrf_token %}
+                <div class="evaluation" contenteditable="true"></div>
+                points assigned<div class="points" contenteditable="true"></div>
+                <button class="evaluate" id="{{ elaboration.id }}">evaluate</button>
+            </form>
             <div class="spacer"></div>
         {% endfor %}
 

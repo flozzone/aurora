@@ -1,10 +1,13 @@
-import hashlib, urllib
+from datetime import datetime
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from Challenge.models import Challenge
 from Elaboration.models import Elaboration
+from Evaluation.models import Evaluation
 
 
 @login_required()
@@ -31,7 +34,7 @@ def submission(request):
         except EmptyPage:
             elaborations = paginator.page(paginator.num_pages)  # last page
 
-        html = render_to_response('submission.html', {'elaborations': elaborations, 'challenge': challenge})
+        html = render_to_response('submission.html', {'elaborations': elaborations, 'challenge': challenge}, RequestContext(request))
     return html
 
 @login_required()
@@ -50,3 +53,27 @@ def waiting(request):
     html = render_to_response('waiting.html', {'elaborations': elaborations})
 
     return html
+
+@csrf_exempt
+@login_required()
+def submit_evaluation(request):
+    elaboration_id = request.POST['elaboration_id']
+    evaluation_text = request.POST['evaluation_text']
+    evaluation_points = request.POST['evaluation_points']
+
+    print(elaboration_id)
+    print(evaluation_text)
+    print(evaluation_points)
+
+    elaboration = Elaboration.objects.get(pk=elaboration_id)
+
+    if Evaluation.objects.filter(submission=elaboration, user=elaboration.user):
+        evaluation = Evaluation.objects.filter(submission=elaboration, user=elaboration.user).order_by('id')[0]
+    else:
+        evaluation = Evaluation.objects.create(submission=elaboration, user=elaboration.user, creation_date=datetime.now())
+
+    evaluation.evaluation_text = evaluation_text
+    evaluation.evaluation_points = evaluation_points
+    evaluation.save()
+
+    return HttpResponse
