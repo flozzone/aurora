@@ -1,3 +1,4 @@
+import hashlib, urllib
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render_to_response
 from django.template import RequestContext

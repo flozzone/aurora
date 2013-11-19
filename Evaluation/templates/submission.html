@@ -15,29 +15,40 @@
 
 {% block content %}
 
-    {% for elaboration in elaborations %}
-        {% if forloop.first %}
-            <h2>challenge</h2>
-            <div>title: {{ elaboration.challenge.title }}</div>
-            <div>description: {{ elaboration.challenge.description }}</div>
-            <br/><h2>submissions</h2>
-        {% endif %}
-        <div>user: {{ elaboration.user.username }}</div>
-        <div>elaboration: {{ elaboration.elaboration_text }}</div></br>
-    {% endfor %}
+    <div class="container">
 
-    <div class="pagination">
-        {% if elaborations.has_previous %}
-            <div class="paginator" id="{{ elaborations.previous_page_number }}" name="{{ challenge.id }}">previous</div>
-        {% endif %}
+        {% for elaboration in elaborations %}
+            {% if forloop.first %}
+                <h2>{{ elaboration.challenge.title }}</h2>
+                <div>{{ elaboration.challenge.description }}</div>
+                <div class="spacer"></div>
+            {% endif %}
 
-        <div class="paginator_info">
-             submission {{ elaborations.number }} of {{ elaborations.paginator.num_pages }}
+            <img class="gravatar" src="{{ elaboration.user.get_gravatarurl }}">
+            {{ elaboration.user.username }}<br/>
+            {{ elaboration.user.first_name }} {{ elaboration.user.last_name }}
+            <div class="spacer"></div>
+
+            <div class="elaboration">{{ elaboration.elaboration_text }}</div></br>
+            <div class="evaluation" contenteditable="true"></div>
+            points<div class="points" contenteditable="true"></div>
+            <button class="submit" id="TODO">evaluate</button>
+            <div class="spacer"></div>
+        {% endfor %}
+
+        <div class="pagination">
+            {% if elaborations.has_previous %}
+                <div class="paginator" id="{{ elaborations.previous_page_number }}" name="{{ challenge.id }}">previous</div>
+            {% endif %}
+
+            <div class="paginator_info">
+                 submission {{ elaborations.number }} of {{ elaborations.paginator.num_pages }}
+            </div>
+
+            {% if elaborations.has_next %}
+                <div class="paginator" id="{{ elaborations.next_page_number }}" name="{{ challenge.id }}">next</div>
+            {% endif %}
         </div>
-
-        {% if elaborations.has_next %}
-            <div class="paginator" id="{{ elaborations.next_page_number }}" name="{{ challenge.id }}">next</div>
-        {% endif %}
     </div>
 
 {% endblock %}
