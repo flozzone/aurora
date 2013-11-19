@@ -33,19 +33,19 @@ def init_data(app, sender, **kwargs):
 
         # create the three dummy users for jumpstarting the peer review process
         print('adding dummy user 1')
-        d1 = PortfolioUser(username='d1')
+        d1 = PortfolioUser(username='d1', first_name='dummy', last_name='user 1', email='d1@student.tuwien.ac.at')
         d1.set_password('d1')
         d1.is_staff = False
         d1.is_superuser = False
         d1.save()
         print('adding dummy user 2')
-        d2 = PortfolioUser(username='d2')
+        d2 = PortfolioUser(username='d2', first_name='dummy', last_name='user 2', email='christoph.boerner@testplus.at')
         d2.set_password('d2')
         d2.is_staff = False
         d2.is_superuser = False
         d2.save()
         print('adding dummy user 3')
-        d3 = PortfolioUser(username='d3')
+        d3 = PortfolioUser(username='d3', first_name='dummy', last_name='user 3', email='grisu@gmail.com')
         d3.set_password('d3')
         d3.is_staff = False
         d3.is_superuser = False
