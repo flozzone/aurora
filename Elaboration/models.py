@@ -1,5 +1,7 @@
 from django.db import models
 from datetime import datetime, timedelta
+from Evaluation.models import Evaluation
+
 
 class Elaboration(models.Model):
     challenge = models.ForeignKey('Challenge.Challenge')
@@ -25,5 +27,11 @@ class Elaboration(models.Model):
     def is_submitted(self):
         if self.submission_time:
             return True
+        else:
+            return False
+
+    def get_evaluation(self):
+        if Evaluation.objects.filter(submission=self, user=self.user):
+            return Evaluation.objects.filter(submission=self, user=self.user).order_by('id')[0]
         else:
             return False
