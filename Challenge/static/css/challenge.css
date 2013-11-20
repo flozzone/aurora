@@ -12,7 +12,7 @@
 }
 
 .challenge {
-    border-style:dashed;
+    border: 1px dashed green;
     border-width:1px;
     margin-bottom: 5px;
 }
