@@ -1,7 +1,7 @@
-from datetime import datetime
+import json
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.http import HttpResponse
-from django.shortcuts import render_to_response
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render_to_response, render
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
@@ -55,25 +55,20 @@ def waiting(request):
     return html
 
 @csrf_exempt
-@login_required()
 def submit_evaluation(request):
     elaboration_id = request.POST['elaboration_id']
     evaluation_text = request.POST['evaluation_text']
     evaluation_points = request.POST['evaluation_points']
-
-    print(elaboration_id)
-    print(evaluation_text)
-    print(evaluation_points)
 
     elaboration = Elaboration.objects.get(pk=elaboration_id)
 
     if Evaluation.objects.filter(submission=elaboration, user=elaboration.user):
         evaluation = Evaluation.objects.filter(submission=elaboration, user=elaboration.user).order_by('id')[0]
     else:
-        evaluation = Evaluation.objects.create(submission=elaboration, user=elaboration.user, creation_date=datetime.now())
+        evaluation = Evaluation.objects.create(submission=elaboration, user=elaboration.user)
 
     evaluation.evaluation_text = evaluation_text
     evaluation.evaluation_points = evaluation_points
     evaluation.save()
 
-    return HttpResponse
+    return HttpResponse()
