@@ -11,7 +11,7 @@ class Elaboration(models.Model):
     submission_time = models.DateTimeField(null=True)
 
     def is_waiting_elaboration(self):
-        if self.challenge.is_final_challenge():
+        if self.challenge.is_final_challenge() or not self.submission_time:
             return False
         # sumbission needs to be at least 3 days old
         return True if self.submission_time + timedelta(3) < datetime.now() else False
