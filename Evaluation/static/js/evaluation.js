@@ -30,7 +30,10 @@ $(function() {
 
 $(function() {
    $(".non_adquate_work").click(function(event) {
-       alert("hallo");
+       var url = '/update_overview?data=non_adequate_work';
+       $.get(url, function (data) {
+            $('#overview').html(data);
+       });
    });
 });
 

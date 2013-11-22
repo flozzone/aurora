@@ -48,3 +48,10 @@ class Elaboration(models.Model):
             if elaboration.challenge.is_final_challenge():
                 top_level_challenges.append(elaboration)
         return top_level_challenges
+
+    @staticmethod
+    def get_non_adequate_work():
+        non_adequate_work = []
+        for review in Review.objects.filter(appraisal=Review.FAIL):
+            non_adequate_work.append(review.elaboration)
+        return non_adequate_work

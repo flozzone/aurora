@@ -15,7 +15,8 @@ def evaluation(request):
     return render_to_response('evaluation.html',
             {'challenges': challenges,
              'missing_reviews': Elaboration.get_missing_reviews(),
-             'top_level_challenges': Elaboration.get_top_level_challenges()
+             'top_level_challenges': Elaboration.get_top_level_challenges(),
+             'non_adequate_work': Elaboration.get_non_adequate_work()
             },
             context_instance=RequestContext(request))
 
@@ -37,6 +38,9 @@ def update_overview(request):
     if request.GET.get('data', '') == "top_level_challenges":
         print("loading top level challenges...")
         html = render_to_response('overview.html', {'elaborations': Elaboration.get_top_level_challenges()}, RequestContext(request))
+    if request.GET.get('data', '') == "non_adequate_work":
+        print("loading non adequate work...")
+        html = render_to_response('overview.html', {'elaborations': Elaboration.get_non_adequate_work()}, RequestContext(request))
     return html
 
 
