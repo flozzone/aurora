@@ -9,12 +9,36 @@ from Challenge.models import Challenge
 from Elaboration.models import Elaboration
 from Evaluation.models import Evaluation
 
-
 @login_required()
 def evaluation(request):
     challenges = Challenge.objects.all()
-    waiting_elaborations = Elaboration.get_waiting_elaborations()
-    return render_to_response('evaluation.html', {'challenges': challenges, 'waiting_elaborations': waiting_elaborations}, context_instance=RequestContext(request))
+    missing_reviews = Elaboration.get_missing_reviews()
+    return render_to_response('evaluation.html',
+            {'challenges': challenges,
+             'missing_reviews': missing_reviews
+            },
+            context_instance=RequestContext(request))
+
+@login_required()
+def overview(request):
+    challenges = Challenge.objects.all()
+    missing_reviews = Elaboration.get_missing_reviews()
+    return render_to_response('overview.html',
+            {'challenges': challenges,
+             'missing_reviews': missing_reviews
+            },
+            context_instance=RequestContext(request))
+
+@login_required()
+def update_overview(request):
+    if request.GET.get('data', '') == "missing_reviews":
+        print("loading missing reviews...")
+        html = render_to_response('overview.html', {'elaborations': Elaboration.get_missing_reviews()}, RequestContext(request))
+    return html
+
+
+
+
 
 @login_required()
 def submission(request):

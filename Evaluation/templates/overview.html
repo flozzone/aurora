@@ -1,0 +1,15 @@
+{% block content %}
+
+    {% for elaboration in elaborations %}
+        <div>
+            <img class="gravatar" src="{{ elaboration.user.get_gravatarurl }}">
+            {{ elaboration.user.username }}
+            {{ elaboration.user.first_name }} {{ elaboration.user.last_name }}
+
+            {{ elaboration.submission_time }}
+
+            {{ elaboration.challenge.title }}
+        </div>
+    {% endfor %}
+
+{% endblock %}

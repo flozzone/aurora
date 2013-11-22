@@ -12,31 +12,21 @@
 
 {% block content %}
 
-  <h1>Evaluation</h1>
+  <h1>Evaluation Overview</h1>
 
-  {% for challenge in challenges %}
-     {% if challenge.is_final_challenge %}
 
-        <div class="challenge" id="{{ challenge.id }}">
-            <div class="title"> {{ challenge.title }} </div>
-            <img class="challenge_image" src="{{ STATIC_URL }}img/{{ challenge.image_url }}">
-            {% if challenge.get_submissions %}
-                <div class="submission" id="{{ challenge.id }}">{{ challenge.get_submissions.count }}</div>
-            {% endif %}
-        </div>
-
-    {% endif %}
-  {% endfor %}
-
-  <div class="challenge">
-    <div class="title"> waiting... </div>
-    <img class="challenge_image" src="{{ STATIC_URL }}img/waiting.png">
-    {% if waiting_elaborations %}
-        <div class="waiting">{{ waiting_elaborations|length }}</div>
-    {% endif %}
-    </div>
+  <div class="left">
+        <div class="missing_reviews">missing reviews ({{ missing_reviews|length }})</div>
+        <div class="non_adquate_work">non-adequate work</div>
+        <div class="non_adequate_reviews">non-adequate reviews</div>
+        <div class="top_level_challenges">top-level challenges</div>
+        <div class="complaints">comlaints</div>
+        <div class="questions">questions</div>
+        <div class="select_challenged">select challenged</div>
+        <div class="search">search</div>
+        <div class="tags">tags</div>
   </div>
-
-  <div class="detail_area" id="detail_area"></div>
+  <div class="right" id="overview"></div>
+  <div class="clear"></div>
 
 {% endblock %}

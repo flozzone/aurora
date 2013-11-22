@@ -107,3 +107,22 @@
     display: block;
     height: 30px;
 }
+
+
+
+.left {
+    float: left;
+    width: 25%;
+    border: 1px dashed;
+}
+
+.right {
+    float: right;
+    width: 73%;
+    min-height: 100px;
+    border: 1px dashed;
+}
+
+.clear {
+    clear: left;
+}
