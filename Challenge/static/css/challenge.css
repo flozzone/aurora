@@ -1,41 +1,42 @@
-.mce-widget.mce-tooltip {
-    display: none !important;
+.stack {
+    padding:5px 10px 5px 10px;
+}
+
+h1 {
+    margin:10px;
+
+}
+
+.lineL {
+    background-color:#FFF;
+}
+
+.lineD {
+    background-color:#eee;
 }
 
 #detail_area {
-    margin-top:20px;
+    width:100%;
+
 }
 
-.stack {
-    border:1px dashed red;
-    margin-bottom: 5px;
+.stack_img {
+    width:64px;
+    height:64px;
+    border-radius:6px;
+
 }
+
+.stack .title {
+    font-size:20px;
+    font-weight:bold;
+}
+
+.stack .descriptions {
+    padding-top:10px;
+}
+
 
 .challenge {
-    border: 1px dashed green;
-    border-width:1px;
-    margin-bottom: 5px;
-}
 
-.challenge.inactive {
-    opacity: 0.6;
-}
-
-.review_wrapper {
-    height: 20px;
-    width: 60px;
-    margin: 10px;
-}
-
-.review {
-    height: 18px;
-    width: 18px;
-    float: left;
-    background-color: green;
-    border: 1px solid black;
-}
-
-.review.inactive {
-    background-color: #555555;
-    opacity: 0.6;
 }

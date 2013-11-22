@@ -3,9 +3,10 @@
 {% endblock %}
 
 <div>
-  <div class="login">
-    <a href="/">Portfolio 3.0</a>
-
+  <div class="pagehead">
+  <div class="headline">
+    Aurora <a href="/">Home</a>
+   </div>
 
     {% if user.is_authenticated %}
 
@@ -29,7 +30,7 @@
       </ul>
 
 
-      <div>
+      <div class="logout_button">
 
         <button id="button_sign_out">Sign out</button>
       </div>

@@ -9,15 +9,18 @@
 
   <div id="detail_area">
 
-    <h1>Overview</h1>
+    <h1>Available Stacks</h1>
 
     {% for stack in course_stacks %}
-      <div class="stack" id="{{ stack.id }}">
+      <div class="stack {% cycle 'lineD' 'lineL' %}" id="{{ stack.id }}">
         <div class="title">{{ stack.title }}</div>
         <div class="description">{{ stack.description }}</div>
+        <div class="stack_imgs">
+        Challenges in this stack:<br>
         {% for image_url in stack.get_challenge_image_urls %}
-          <img src="{{ STATIC_URL }}img/{{ image_url }}">
+          <img class = "stack_img" src="{{ STATIC_URL }}img/{{ image_url }}">
         {% endfor %}
+        </div>
       </div>
     {% endfor %}
 

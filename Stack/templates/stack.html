@@ -10,7 +10,7 @@
   <h1>Stack</h1>
 
   {% for challenge_dict in challenges_active %}
-    <div class="challenge" id="{{ challenge_dict.challenge.id }}">
+    <div class="challenge {% cycle 'lineD' 'lineL' %}" id="{{ challenge_dict.challenge.id }}">
       <div class="title"> {{ challenge_dict.challenge.title }} </div>
       <div class="description"> {{ challenge_dict.challenge.description }} </div>
       <img class="challenge_image" src="{{ STATIC_URL }}img/{{ challenge_dict.challenge.image_url }}">
