@@ -8,13 +8,50 @@ from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from Challenge.models import Challenge
 from Elaboration.models import Elaboration
 from Evaluation.models import Evaluation
+from Review.models import Review
 
 
 @login_required()
 def evaluation(request):
     challenges = Challenge.objects.all()
-    waiting_elaborations = Elaboration.get_waiting_elaborations()
-    return render_to_response('evaluation.html', {'challenges': challenges, 'waiting_elaborations': waiting_elaborations}, context_instance=RequestContext(request))
+    return render_to_response('evaluation.html',
+            {'challenges': challenges,
+             'missing_reviews': Elaboration.get_missing_reviews(),
+             'top_level_challenges': Elaboration.get_top_level_challenges(),
+             'non_adequate_work': Elaboration.get_non_adequate_work()
+            },
+            context_instance=RequestContext(request))
+
+@login_required()
+def overview(request):
+    challenges = Challenge.objects.all()
+    missing_reviews = Elaboration.get_missing_reviews()
+    return render_to_response('overview.html',
+            {'challenges': challenges,
+             'missing_reviews': missing_reviews
+            },
+            context_instance=RequestContext(request))
+
+@login_required()
+def update_overview(request):
+    if request.GET.get('data', '') == "missing_reviews":
+        print("loading missing reviews...")
+        html = render_to_response('overview.html', {'elaborations': Elaboration.get_missing_reviews()}, RequestContext(request))
+    if request.GET.get('data', '') == "top_level_challenges":
+        print("loading top level challenges...")
+        html = render_to_response('overview.html', {'elaborations': Elaboration.get_top_level_challenges()}, RequestContext(request))
+    if request.GET.get('data', '') == "non_adequate_work":
+        print("loading non adequate work...")
+        html = render_to_response('overview.html', {'elaborations': Elaboration.get_non_adequate_work()}, RequestContext(request))
+    return html
+
+@login_required()
+def detail(request):
+    if not 'elaboration_id' in request.GET:
+        return False
+    elaboration = Elaboration.objects.get(pk=request.GET.get('elaboration_id', ''))
+    reviews = Review.objects.filter(elaboration=elaboration)
+    return render_to_response('detail.html', {'elaboration': elaboration, 'reviews': reviews }, context_instance=RequestContext(request))
 
 @login_required()
 def submission(request):
@@ -51,7 +88,6 @@ def waiting(request):
         elaborations = paginator.page(paginator.num_pages)  # last page
 
     html = render_to_response('waiting.html', {'elaborations': elaborations})
-
     return html
 
 @csrf_exempt

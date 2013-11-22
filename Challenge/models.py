@@ -1,8 +1,8 @@
 from django.db import models
 from Stack.models import StackChallengeRelation
 from ReviewQuestion.models import ReviewQuestion
-from Elaboration.models import Elaboration
 from Review.models import Review
+from Elaboration.models import Elaboration
 
 
 class Challenge(models.Model):
