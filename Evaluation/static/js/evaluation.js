@@ -42,7 +42,10 @@ $(function() {
 
 $(function() {
    $(".top_level_challenges").click(function(event) {
-       alert("hallo");
+       var url = '/update_overview?data=top_level_challenges';
+       $.get(url, function (data) {
+            $('#overview').html(data);
+       });
    });
 });
 

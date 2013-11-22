@@ -12,10 +12,10 @@ from Evaluation.models import Evaluation
 @login_required()
 def evaluation(request):
     challenges = Challenge.objects.all()
-    missing_reviews = Elaboration.get_missing_reviews()
     return render_to_response('evaluation.html',
             {'challenges': challenges,
-             'missing_reviews': missing_reviews
+             'missing_reviews': Elaboration.get_missing_reviews(),
+             'top_level_challenges': Elaboration.get_top_level_challenges()
             },
             context_instance=RequestContext(request))
 
@@ -34,6 +34,9 @@ def update_overview(request):
     if request.GET.get('data', '') == "missing_reviews":
         print("loading missing reviews...")
         html = render_to_response('overview.html', {'elaborations': Elaboration.get_missing_reviews()}, RequestContext(request))
+    if request.GET.get('data', '') == "top_level_challenges":
+        print("loading top level challenges...")
+        html = render_to_response('overview.html', {'elaborations': Elaboration.get_top_level_challenges()}, RequestContext(request))
     return html
 
 

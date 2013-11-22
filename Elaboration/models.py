@@ -40,3 +40,11 @@ class Elaboration(models.Model):
             if not elaboration.is_reviewed_3times() and elaboration.is_older_3days():
                 missing_reviews.append(elaboration)
         return missing_reviews
+
+    @staticmethod
+    def get_top_level_challenges():
+        top_level_challenges = []
+        for elaboration in Elaboration.objects.all():
+            if elaboration.challenge.is_final_challenge():
+                top_level_challenges.append(elaboration)
+        return top_level_challenges
