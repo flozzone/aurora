@@ -8,6 +8,8 @@ from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from Challenge.models import Challenge
 from Elaboration.models import Elaboration
 from Evaluation.models import Evaluation
+from Review.models import Review
+
 
 @login_required()
 def evaluation(request):
@@ -43,9 +45,13 @@ def update_overview(request):
         html = render_to_response('overview.html', {'elaborations': Elaboration.get_non_adequate_work()}, RequestContext(request))
     return html
 
-
-
-
+@login_required()
+def detail(request):
+    if not 'elaboration_id' in request.GET:
+        return False
+    elaboration = Elaboration.objects.get(pk=request.GET.get('elaboration_id', ''))
+    reviews = Review.objects.filter(elaboration=elaboration)
+    return render_to_response('detail.html', {'elaboration': elaboration, 'reviews': reviews }, context_instance=RequestContext(request))
 
 @login_required()
 def submission(request):
@@ -82,7 +88,6 @@ def waiting(request):
         elaborations = paginator.page(paginator.num_pages)  # last page
 
     html = render_to_response('waiting.html', {'elaborations': elaborations})
-
     return html
 
 @csrf_exempt

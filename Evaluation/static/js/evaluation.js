@@ -81,3 +81,10 @@ $(function() {
        alert("hallo");
    });
 });
+
+function load_details(id) {
+   var url = '/detail?elaboration_id=' + id;
+   $.get(url, function (data) {
+       $('#detail_area').html(data);
+   });
+}

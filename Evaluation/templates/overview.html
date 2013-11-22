@@ -3,17 +3,16 @@
     <table>
         <tr>
             <th></th>
+            <th></th>
             <th>student</th>
             <th>timestamp</th>
             <th>challenge</th>
         </tr>
     {% for elaboration in elaborations|dictsort:"submission_time" %}
-        <tr>
+        <tr onclick="load_details({{ elaboration.id }})">
             <td><img class="gravatar" src="{{ elaboration.user.get_gravatarurl }}"></td>
-            <td>
-                {{ elaboration.user.username }}
-                {{ elaboration.user.first_name }} {{ elaboration.user.last_name }}
-            </td>
+            <td>{{ elaboration.user.username }}</td>
+            <td>{{ elaboration.user.first_name }} {{ elaboration.user.last_name }}</td>
             <td>{{ elaboration.submission_time }}</td>
             <td>{{ elaboration.challenge.title }}</td>
         </tr>

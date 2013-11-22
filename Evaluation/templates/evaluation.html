@@ -12,21 +12,21 @@
 
 {% block content %}
 
-  <h1>Evaluation Overview</h1>
-
-
-  <div class="left">
-        <div class="missing_reviews">missing reviews ({{ missing_reviews|length }})</div>
-        <div class="non_adquate_work">non-adequate work ({{ non_adequate_work|length }})</div>
-        <div class="non_adequate_reviews">non-adequate reviews</div>
-        <div class="top_level_challenges">top-level challenges ({{ top_level_challenges|length }})</div>
-        <div class="complaints">comlaints</div>
-        <div class="questions">questions</div>
-        <div class="select_challenged">select challenged</div>
-        <div class="search">search</div>
-        <div class="tags">tags</div>
+  <div id="detail_area">
+      <h1>Evaluation Overview</h1>
+      <div class="overview_left">
+            <div class="missing_reviews">missing reviews ({{ missing_reviews|length }})</div>
+            <div class="non_adquate_work">non-adequate work ({{ non_adequate_work|length }})</div>
+            <div class="non_adequate_reviews">non-adequate reviews</div>
+            <div class="top_level_challenges">top-level challenges ({{ top_level_challenges|length }})</div>
+            <div class="complaints">comlaints</div>
+            <div class="questions">questions</div>
+            <div class="select_challenged">select challenged</div>
+            <div class="search">search</div>
+            <div class="tags">tags</div>
+      </div>
+      <div class="overview_right" id="overview"></div>
+      <div class="clear"></div>
   </div>
-  <div class="right" id="overview"></div>
-  <div class="clear"></div>
 
 {% endblock %}
