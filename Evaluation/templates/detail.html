@@ -34,6 +34,19 @@
             points assigned<div class="points" contenteditable="true">{{ elaboration.get_evaluation.evaluation_points }}</div>
             <button class="evaluate" id="{{ elaboration.id }}">evaluate</button>
         </form>
+
+        {% for review in reviews %}
+            {% if forloop.first %}
+                <div class="spacer"></div>
+                <div>Reviews</div>
+            {% endif %}
+
+            <img class="gravatar" src="{{ review.reviewer.get_gravatarurl }}">
+            {{ review.reviewer.username }}<br/>
+            {{ review.reviewer.first_name }} {{ review.reviewer.last_name }}<br/><br/>
+
+            {{ review.appraisal }}
+        {% endfor %}
   </div>
   <div class="detail_right" id="options"></div>
   <div class="clear"></div>
