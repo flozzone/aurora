@@ -83,3 +83,11 @@ th {
     display: block;
     height: 30px;
 }
+
+#detail_area {
+    margin: 10px;
+}
+
+#detail_area h1 {
+    margin-bottom: 10px;
+}

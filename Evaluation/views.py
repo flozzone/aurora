@@ -1,4 +1,5 @@
 import json
+from django.core import serializers
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, render
@@ -36,13 +37,19 @@ def overview(request):
 def update_overview(request):
     if request.GET.get('data', '') == "missing_reviews":
         print("loading missing reviews...")
-        html = render_to_response('overview.html', {'elaborations': Elaboration.get_missing_reviews()}, RequestContext(request))
+        elaborations = Elaboration.get_missing_reviews()
+        html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
     if request.GET.get('data', '') == "top_level_challenges":
         print("loading top level challenges...")
-        html = render_to_response('overview.html', {'elaborations': Elaboration.get_top_level_challenges()}, RequestContext(request))
+        elaborations = Elaboration.get_top_level_challenges()
+        html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
     if request.GET.get('data', '') == "non_adequate_work":
         print("loading non adequate work...")
-        html = render_to_response('overview.html', {'elaborations': Elaboration.get_non_adequate_work()}, RequestContext(request))
+        elaborations = Elaboration.get_non_adequate_work()
+        html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
+
+    # store selected elaborations in session
+    request.session['elaborations'] = serializers.serialize('json', elaborations)
     return html
 
 @login_required()
@@ -51,7 +58,13 @@ def detail(request):
         return False
     elaboration = Elaboration.objects.get(pk=request.GET.get('elaboration_id', ''))
     reviews = Review.objects.filter(elaboration=elaboration)
-    return render_to_response('detail.html', {'elaboration': elaboration, 'reviews': reviews }, context_instance=RequestContext(request))
+
+    # get selected elaborations from session
+    elaborations = []
+    for serialized_elaboration in serializers.deserialize('json', request.session.get('elaborations', {})):
+        elaborations.append(serialized_elaboration.object)
+
+    return render_to_response('detail.html', {'elaboration': elaboration, 'elaborations': elaborations, 'reviews': reviews }, RequestContext(request))
 
 @login_required()
 def submission(request):
