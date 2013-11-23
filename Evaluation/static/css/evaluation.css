@@ -104,3 +104,14 @@ th {
 .next {
     float: right;
 }
+
+.stack, .others, .challenge_txt {
+    float: left;
+    width: 33%;
+    text-align: center;
+    padding-top: 10px;
+}
+
+.menu {
+    height: 10px;
+}
