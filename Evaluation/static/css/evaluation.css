@@ -91,3 +91,16 @@ th {
 #detail_area h1 {
     margin-bottom: 10px;
 }
+
+.paginator {
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.prev {
+    float: left;
+}
+
+.next {
+    float: right;
+}

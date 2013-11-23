@@ -54,54 +54,31 @@ def update_overview(request):
 
 @login_required()
 def detail(request):
-    if not 'elaboration_id' in request.GET:
-        return False
-    elaboration = Elaboration.objects.get(pk=request.GET.get('elaboration_id', ''))
-    reviews = Review.objects.filter(elaboration=elaboration)
-
     # get selected elaborations from session
     elaborations = []
     for serialized_elaboration in serializers.deserialize('json', request.session.get('elaborations', {})):
         elaborations.append(serialized_elaboration.object)
 
-    return render_to_response('detail.html', {'elaboration': elaboration, 'elaborations': elaborations, 'reviews': reviews }, RequestContext(request))
+    if not 'elaboration_id' in request.GET:
+        return False;
 
-@login_required()
-def submission(request):
-    if 'challenge_id' in request.GET:
-        challenge_id = request.GET.get('challenge_id', '')
-        challenge = Challenge.objects.get(pk=challenge_id)
+    elaboration = Elaboration.objects.get(pk=request.GET.get('elaboration_id', ''))
+    reviews = Review.objects.filter(elaboration=elaboration)
 
-        elaboration_list = challenge.get_submissions()
+    next = prev = None
+    index = elaborations.index(elaboration)
+    if index+1 < len(elaborations):
+        next = elaborations[index+1].id
+    if not index == 0:
+        prev = elaborations[index-1].id
 
-        paginator = Paginator(elaboration_list, 1)              # elaborations per page
-
-        page = request.GET.get('page')
-        try:
-            elaborations = paginator.page(page)
-        except PageNotAnInteger:
-            elaborations = paginator.page(1)                    # first page
-        except EmptyPage:
-            elaborations = paginator.page(paginator.num_pages)  # last page
-
-        html = render_to_response('submission.html', {'elaborations': elaborations, 'challenge': challenge}, RequestContext(request))
-    return html
-
-@login_required()
-def waiting(request):
-    elaboration_list = Elaboration.get_waiting_elaborations()
-    paginator = Paginator(elaboration_list, 1)              # elaborations per page
-
-    page = request.GET.get('page')
-    try:
-        elaborations = paginator.page(page)
-    except PageNotAnInteger:
-        elaborations = paginator.page(1)                    # first page
-    except EmptyPage:
-        elaborations = paginator.page(paginator.num_pages)  # last page
-
-    html = render_to_response('waiting.html', {'elaborations': elaborations})
-    return html
+    return render_to_response('detail.html',
+        {'elaboration': elaboration,
+         'elaborations': elaborations,
+         'reviews': reviews,
+         'next': next,
+         'prev': prev
+        }, RequestContext(request))
 
 @csrf_exempt
 def submit_evaluation(request):

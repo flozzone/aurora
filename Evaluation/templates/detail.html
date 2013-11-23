@@ -1,8 +1,25 @@
+<script type="text/javascript">
+    $(document).ready(function() {
+       $(".paginator").click(function(event) {
+           var url = '/detail?elaboration_id=' + $(event.target).attr('id');
+           $.get(url, function (data) {
+                $('#detail_area').html(data);
+           });
+       });
+    });
+</script>
+
 {% block content %}
 
   <h1>Detailview</h1>
 
   <div class="detail_left">
+         <div class="pagination">
+            {% if prev %}<div class="paginator prev" id="{{ prev }}">previous</div>{% endif %}
+            {% if next %}<div class="paginator next" id="{{ next }}">next</div>{% endif %}
+        </div>
+        <div class="spacer"></div>
+
         <img class="gravatar" src="{{ elaboration.user.get_gravatarurl }}">
         {{ elaboration.user.username }}<br/>
         {{ elaboration.user.first_name }} {{ elaboration.user.last_name }}
