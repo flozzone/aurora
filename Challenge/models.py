@@ -6,6 +6,8 @@ from Elaboration.models import Elaboration
 
 
 class Challenge(models.Model):
+    reviews_per_challenge = 3
+
     title = models.CharField(max_length=100)
     subtitle = models.CharField(max_length=100)
     prerequisite = models.ForeignKey('self', null=True)

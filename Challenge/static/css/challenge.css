@@ -1,42 +1,64 @@
 .stack {
-    padding:5px 10px 5px 10px;
+    padding: 5px 10px 5px 10px;
 }
 
 h1 {
-    margin:10px;
+    margin: 10px;
 
 }
 
 .lineL {
-    background-color:#FFF;
+    background-color: #FFF;
 }
 
 .lineD {
-    background-color:#eee;
+    background-color: #eee;
 }
 
 #detail_area {
-    width:100%;
+    width: 100%;
 
 }
 
 .stack_img {
-    width:64px;
-    height:64px;
-    border-radius:6px;
+    width: 64px;
+    height: 64px;
+    border-radius: 6px;
 
 }
 
 .stack .title {
-    font-size:20px;
-    font-weight:bold;
+    font-size: 20px;
+    font-weight: bold;
 }
 
 .stack .descriptions {
-    padding-top:10px;
+    padding-top: 10px;
 }
-
 
 .challenge {
 
+}
+
+.review_wrapper {
+    height: 20px;
+    width: 60px;
+    margin: 10px;
+}
+
+.review {
+    height: 18px;
+    width: 18px;
+    float: left;
+    background-color: green;
+    border: 1px solid black;
+}
+
+.review.inactive {
+    background-color: #555555;
+    opacity: 0.6;
+}
+
+.review.active {
+    background-color: yellow;
 }
