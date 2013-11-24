@@ -13,6 +13,7 @@ urlpatterns = patterns('',
     url(r'', include('Challenge.urls')),
     url(r'', include('Elaboration.urls')),
     url(r'', include('Evaluation.urls')),
+    url(r'', include('Comments.urls')),
 
     # url(r'^AmanamanProjekt/', include('AmanamanProjekt.foo.urls')),
 

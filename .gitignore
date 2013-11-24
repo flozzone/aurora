@@ -5,3 +5,4 @@ local_settings.py
 database.db
 .idea
 admin
+.vagrant

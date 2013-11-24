@@ -131,7 +131,7 @@ INSTALLED_APPS = (
     'Evaluation',
     'Review',
     'ReviewQuestion',
-    'ReviewAnswer'
+    'ReviewAnswer',
     'Comments'
 
 )

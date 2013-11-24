@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Feed</h2>
+    <div>
+        {% for comment in object_list %}
+            <div class="comment" id="{{ comment.id }}">
+                <p>{{ comment.text }}</p>
+                <p>submited {{ comment.date_relative }} by <a></a>{{}}</p>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
