@@ -27,7 +27,7 @@ class Challenge(models.Model):
     def get_stack(self):
         stack_challenge_relation = StackChallengeRelation.objects.filter(challenge=self)
         if stack_challenge_relation:
-            return stack_challenge_relation.stack
+            return stack_challenge_relation[0].stack    # TODO: does not work with challenge in multiple stacks
         else:
             return None
 

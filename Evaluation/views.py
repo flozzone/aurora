@@ -81,6 +81,16 @@ def detail(request):
         }, RequestContext(request))
 
 @login_required()
+def stack(request):
+    if not 'elaboration_id' in request.GET:
+        return False;
+
+    elaboration = Elaboration.objects.get(pk=request.GET.get('elaboration_id', ''))
+    elaborations = elaboration.user.get_stack_elaborations(elaboration.challenge.get_stack())
+
+    return render_to_response('user_stack.html', {'elaborations': elaborations}, RequestContext(request))
+
+@login_required()
 def others(request):
     if not 'elaboration_id' in request.GET:
         return False;

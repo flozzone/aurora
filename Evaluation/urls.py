@@ -8,6 +8,7 @@ urlpatterns = patterns('',
     url(r'^overview/$', 'Evaluation.views.overview'),
     url(r'^update_overview/$', 'Evaluation.views.update_overview'),
     url(r'^detail/$', 'Evaluation.views.detail'),
+    url(r'^stack/$', 'Evaluation.views.stack'),
     url(r'^others/$', 'Evaluation.views.others'),
     url(r'^challenge_txt/$', 'Evaluation.views.challenge_txt'),
 )
