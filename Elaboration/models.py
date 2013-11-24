@@ -1,5 +1,8 @@
 from django.db import models
 from datetime import datetime, timedelta
+from Evaluation.models import Evaluation
+from Review.models import Review
+
 
 class Elaboration(models.Model):
     challenge = models.ForeignKey('Challenge.Challenge')
@@ -8,15 +11,52 @@ class Elaboration(models.Model):
     elaboration_text = models.TextField(null=True)
     submission_time = models.DateTimeField(null=True)
 
-    def is_waiting_elaboration(self):
-        if self.challenge.is_final_challenge():
-            return False
-        # sumbission needs to be at least 3 days old
-        return True if self.submission_time + timedelta(3) < datetime.now() else False
+    def is_submitted(self):
+        if self.submission_time:
+            return True
+        return False
 
-    def get_waiting_elaborations(self):
-        waiting_elaborations = []
+    def get_evaluation(self):
+        if Evaluation.objects.filter(submission=self, user=self.user):
+            return Evaluation.objects.filter(submission=self, user=self.user).order_by('id')[0]
+        return False
+
+    def is_reviewed_3times(self):
+        if Review.objects.filter(elaboration=self).count() < 3:
+            return False
+        return True
+
+    def is_older_3days(self):
+        if not self.is_submitted():
+            return False
+        if self.submission_time + timedelta(3) < datetime.now():
+            return False
+        return True
+
+    def get_challenge_elaborations(self):
+        if Elaboration.objects.filter(challenge=self.challenge, submission_time__isnull=False):
+            return Elaboration.objects.filter(challenge=self.challenge, submission_time__isnull=False)
+        return False
+
+    @staticmethod
+    def get_missing_reviews():
+        missing_reviews = []
         for elaboration in Elaboration.objects.all():
-            if elaboration.is_waiting_elaboration():
-                waiting_elaborations.append(elaboration)
-        return waiting_elaborations
+            if not elaboration.is_reviewed_3times() and elaboration.is_older_3days():
+                missing_reviews.append(elaboration)
+        return missing_reviews
+
+    @staticmethod
+    def get_top_level_challenges():
+        top_level_challenges = []
+        for elaboration in Elaboration.objects.all():
+            if elaboration.challenge.is_final_challenge():
+                top_level_challenges.append(elaboration)
+        return top_level_challenges
+
+    @staticmethod
+    def get_non_adequate_work():
+        non_adequate_work = []
+        for review in Review.objects.filter(appraisal=Review.FAIL):
+            non_adequate_work.append(review.elaboration)
+        return non_adequate_work

@@ -1,0 +1,27 @@
+{% block additional_headers %}
+  <script type="text/javascript" src="{{ STATIC_URL }}tinymce/tinymce.min.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}tinymce/jquery.tinymce.min.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/challenge.js"></script>
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/challenge.css" type="text/css" media="screen"/>
+{% endblock %}
+
+
+<div id="{{ challenge.id }}" class="challenge">
+  <h1>Details</h1>
+
+  <div>
+    {{ challenge.id }} {{ challenge.title }}
+  </div>
+
+  <div>
+    {{ challenge.description }}
+  </div>
+  {% if not elaboration.is_submitted %}
+    <form method="post">
+      <textarea id="editor">{{ elaboration.elaboration_text }}</textarea>
+    </form>
+    <button class="submit" id="{{ challenge.id }}">Submit</button>
+  {% else %}
+    <div class="elaboration_text">{{ elaboration.elaboration_text |safe }}</div> <!-- TODO: this has to be secure -->
+  {% endif %}
+</div>

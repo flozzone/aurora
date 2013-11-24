@@ -1,27 +1,27 @@
 {% block additional_headers %}
   <script type="text/javascript" src="{{ STATIC_URL }}tinymce/tinymce.min.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}tinymce/jquery.tinymce.min.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/stack.js"></script>
   <link rel="stylesheet" href="{{ STATIC_URL }}css/challenge.css" type="text/css" media="screen"/>
 {% endblock %}
-
 
 <div class="challenges_stack">
 
   <h1>Stack</h1>
 
   {% for challenge_dict in challenges_active %}
-    <div class="challenge" id="{{ challenge_dict.challenge.id }}">
+    <div class="challenge active {% cycle 'lineD' 'lineL' %}" id="{{ challenge_dict.challenge.id }}">
       <div class="title"> {{ challenge_dict.challenge.title }} </div>
       <div class="description"> {{ challenge_dict.challenge.description }} </div>
       <img class="challenge_image" src="{{ STATIC_URL }}img/{{ challenge_dict.challenge.image_url }}">
     </div>
     {% if not challenge_dict.challenge.is_final_challenge %}
       <div class="review_wrapper">
-        {% for i in reviews_per_challenge_range %}
-          {% if i < challenge_dict.reviews %}
-            <div class="review"></div>
+        {% for review in challenge_dict.reviews %}
+          {% if review %}
+            <div class="review done" id="{{ review.id }}" challenge_id="{{ challenge_dict.challenge.id }}"></div>
           {% else %}
-            <div class="review inactive"></div>
+            <div class="review active" challenge_id="{{ challenge_dict.challenge.id }}"></div>
           {% endif %}
         {% endfor %}
       </div>
@@ -29,11 +29,10 @@
   {% endfor %}
 
   {% for challenge in challenges_inactive %}
-    <div class="challenge inactive" id="{{ challenge.id }}">
+    <div class="challenge" id="{{ challenge.id }}">
       <div class="title"> {{ challenge.title }} </div>
       <div class="description"> {{ challenge.description }} </div>
       <img class="challenge_image" src="{{ STATIC_URL }}img/{{ challenge.image_url }}">
-
     </div>
     {% if not challenge.is_final_challenge %}
       <div class="review_wrapper">

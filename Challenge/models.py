@@ -1,11 +1,13 @@
 from django.db import models
 from Stack.models import StackChallengeRelation
 from ReviewQuestion.models import ReviewQuestion
-from Elaboration.models import Elaboration
 from Review.models import Review
+from Elaboration.models import Elaboration
 
 
 class Challenge(models.Model):
+    reviews_per_challenge = 3
+
     title = models.CharField(max_length=100)
     subtitle = models.CharField(max_length=100)
     prerequisite = models.ForeignKey('self', null=True)
@@ -25,7 +27,7 @@ class Challenge(models.Model):
     def get_stack(self):
         stack_challenge_relation = StackChallengeRelation.objects.filter(challenge=self)
         if stack_challenge_relation:
-            return stack_challenge_relation.stack
+            return stack_challenge_relation[0].stack    # TODO: does not work with challenge in multiple stacks
         else:
             return None
 
@@ -35,11 +37,7 @@ class Challenge(models.Model):
     def is_available_for_user(self, user):
         if not self.prerequisite:  # challenge has no prerequisite
             return True
-        elaboration = Elaboration.objects.filter(challenge=self.prerequisite, user=user)
-        if not elaboration:  # no elaboration for this user for this challenge
-            return False
-        elaboration = elaboration[0]
-        if not elaboration.submission_time:  # elaboration not yet submitted
+        if not self.prerequisite.submitted_by_user(user):
             return False
         reviews = self.prerequisite.get_reviews_written_by_user(user)
         if not reviews:  # user did not write any reviews yet
@@ -47,6 +45,12 @@ class Challenge(models.Model):
         if len(reviews) < 3:  # user did not write enough reviews yet
             return False
         return True
+
+    def submitted_by_user(self, user):
+        elaboration = Elaboration.objects.filter(challenge=self, user=user)
+        if not elaboration:  # no elaboration for this user for this challenge
+            return False
+        return elaboration[0].is_submitted()
 
     def get_reviews_written_by_user(self, user):
         reviews = []

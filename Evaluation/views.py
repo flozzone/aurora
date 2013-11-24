@@ -1,33 +1,130 @@
-from django.http import HttpResponse
+import json
+from django.core import serializers
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, render
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
-from django.utils import simplejson
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from Challenge.models import Challenge
-from PortfolioUser.models import PortfolioUser
-from Stack.models import Stack
 from Elaboration.models import Elaboration
+from Evaluation.models import Evaluation
+from Review.models import Review
 
 
 @login_required()
 def evaluation(request):
     challenges = Challenge.objects.all()
-    waiting_elaborations = Elaboration.objects.first().get_waiting_elaborations()
-    print(waiting_elaborations[0].challenge.title)
-    return render_to_response('evaluation.html', {'challenges': challenges, 'waiting_elaborations': waiting_elaborations}, context_instance=RequestContext(request))
+    return render_to_response('evaluation.html',
+            {'challenges': challenges,
+             'missing_reviews': Elaboration.get_missing_reviews(),
+             'top_level_challenges': Elaboration.get_top_level_challenges(),
+             'non_adequate_work': Elaboration.get_non_adequate_work()
+            },
+            context_instance=RequestContext(request))
 
 @login_required()
-def submission(request):
-    if 'challenge_id' in request.GET:
-        challenge_id = request.GET.get('challenge_id', '')
-        challenge = Challenge.objects.get(pk=challenge_id)
-
-        elaborations = challenge.get_submissions()
-        html = render_to_response('submission.html', {'elaborations': elaborations})
-        return html
+def overview(request):
+    challenges = Challenge.objects.all()
+    missing_reviews = Elaboration.get_missing_reviews()
+    return render_to_response('overview.html',
+            {'challenges': challenges,
+             'missing_reviews': missing_reviews
+            },
+            context_instance=RequestContext(request))
 
 @login_required()
-def waiting(request):
-    elaborations = Elaboration.objects.first().get_waiting_elaborations
-    html = render_to_response('waiting.html', {'elaborations': elaborations})
+def update_overview(request):
+    if request.GET.get('data', '') == "missing_reviews":
+        print("loading missing reviews...")
+        elaborations = Elaboration.get_missing_reviews()
+        html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
+    if request.GET.get('data', '') == "top_level_challenges":
+        print("loading top level challenges...")
+        elaborations = Elaboration.get_top_level_challenges()
+        html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
+    if request.GET.get('data', '') == "non_adequate_work":
+        print("loading non adequate work...")
+        elaborations = Elaboration.get_non_adequate_work()
+        html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
+
+    # store selected elaborations in session
+    request.session['elaborations'] = serializers.serialize('json', elaborations)
     return html
+
+@login_required()
+def detail(request):
+    # get selected elaborations from session
+    elaborations = []
+    for serialized_elaboration in serializers.deserialize('json', request.session.get('elaborations', {})):
+        elaborations.append(serialized_elaboration.object)
+
+    if not 'elaboration_id' in request.GET:
+        return False;
+
+    elaboration = Elaboration.objects.get(pk=request.GET.get('elaboration_id', ''))
+    reviews = Review.objects.filter(elaboration=elaboration)
+
+    next = prev = None
+    index = elaborations.index(elaboration)
+    if index+1 < len(elaborations):
+        next = elaborations[index+1].id
+    if not index == 0:
+        prev = elaborations[index-1].id
+
+    stack_elaborations = elaboration.user.get_stack_elaborations(elaboration.challenge.get_stack())
+
+    return render_to_response('detail.html',
+        {'elaboration': elaboration,
+         'stack_elaborations': stack_elaborations,
+         'reviews': reviews,
+         'next': next,
+         'prev': prev
+        }, RequestContext(request))
+
+@login_required()
+def stack(request):
+    if not 'elaboration_id' in request.GET:
+        return False;
+
+    elaboration = Elaboration.objects.get(pk=request.GET.get('elaboration_id', ''))
+    stack_elaborations = elaboration.user.get_stack_elaborations(elaboration.challenge.get_stack())
+
+    return render_to_response('user_stack.html', {'stack_elaborations': stack_elaborations}, RequestContext(request))
+
+@login_required()
+def others(request):
+    if not 'elaboration_id' in request.GET:
+        return False;
+
+    elaboration = Elaboration.objects.get(pk=request.GET.get('elaboration_id', ''))
+    elaborations = elaboration.get_challenge_elaborations()
+
+    return render_to_response('others.html', {'elaborations': elaborations}, RequestContext(request))
+
+@login_required()
+def challenge_txt(request):
+    if not 'elaboration_id' in request.GET:
+        return False;
+
+    elaboration = Elaboration.objects.get(pk=request.GET.get('elaboration_id', ''))
+    return render_to_response('challenge_txt.html', {'challenge': elaboration.challenge}, RequestContext(request))
+
+@csrf_exempt
+def submit_evaluation(request):
+    elaboration_id = request.POST['elaboration_id']
+    evaluation_text = request.POST['evaluation_text']
+    evaluation_points = request.POST['evaluation_points']
+
+    elaboration = Elaboration.objects.get(pk=elaboration_id)
+
+    if Evaluation.objects.filter(submission=elaboration, user=elaboration.user):
+        evaluation = Evaluation.objects.filter(submission=elaboration, user=elaboration.user).order_by('id')[0]
+    else:
+        evaluation = Evaluation.objects.create(submission=elaboration, user=elaboration.user)
+
+    evaluation.evaluation_text = evaluation_text
+    evaluation.evaluation_points = evaluation_points
+    evaluation.save()
+
+    return HttpResponse()
