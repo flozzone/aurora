@@ -1,8 +1,25 @@
+<script type="text/javascript">
+    $(document).ready(function() {
+       $(".paginator").click(function(event) {
+           var url = '/detail?elaboration_id=' + $(event.target).attr('id');
+           $.get(url, function (data) {
+                $('#detail_area').html(data);
+           });
+       });
+    });
+</script>
+
 {% block content %}
 
-  <h1>Evaluation Details</h1>
+  <h1>Detailview</h1>
 
   <div class="detail_left">
+         <div class="pagination">
+            {% if prev %}<div class="paginator prev" id="{{ prev }}">previous</div>{% endif %}
+            {% if next %}<div class="paginator next" id="{{ next }}">next</div>{% endif %}
+        </div>
+        <div class="spacer"></div>
+
         <img class="gravatar" src="{{ elaboration.user.get_gravatarurl }}">
         {{ elaboration.user.username }}<br/>
         {{ elaboration.user.first_name }} {{ elaboration.user.last_name }}
@@ -17,8 +34,30 @@
             points assigned<div class="points" contenteditable="true">{{ elaboration.get_evaluation.evaluation_points }}</div>
             <button class="evaluate" id="{{ elaboration.id }}">evaluate</button>
         </form>
+
+        {% for review in reviews %}
+            {% if forloop.first %}
+                <div class="spacer"></div>
+                <div>Reviews</div>
+            {% endif %}
+
+            <img class="gravatar" src="{{ review.reviewer.get_gravatarurl }}">
+            {{ review.reviewer.username }}<br/>
+            {{ review.reviewer.first_name }} {{ review.reviewer.last_name }}<br/><br/>
+
+            {{ review.appraisal }}
+        {% endfor %}
   </div>
-  <div class="detail_right" id="options"></div>
+
+  <div class="detail_right" id="options">
+    <div class="menu">
+        <div class="stack">stack</div>
+        <div class="others">others</div>
+        <div class="challenge_txt">challenge text</div>
+    </div>
+    <div class="spacer"></div>
+  </div>
+
   <div class="clear"></div>
 
 {% endblock %}

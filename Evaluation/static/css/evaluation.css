@@ -83,3 +83,35 @@ th {
     display: block;
     height: 30px;
 }
+
+#detail_area {
+    margin: 10px;
+}
+
+#detail_area h1 {
+    margin-bottom: 10px;
+}
+
+.paginator {
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.prev {
+    float: left;
+}
+
+.next {
+    float: right;
+}
+
+.stack, .others, .challenge_txt {
+    float: left;
+    width: 33%;
+    text-align: center;
+    padding-top: 10px;
+}
+
+.menu {
+    height: 10px;
+}

@@ -1,4 +1,5 @@
 import json
+from django.core import serializers
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, render
@@ -36,59 +37,48 @@ def overview(request):
 def update_overview(request):
     if request.GET.get('data', '') == "missing_reviews":
         print("loading missing reviews...")
-        html = render_to_response('overview.html', {'elaborations': Elaboration.get_missing_reviews()}, RequestContext(request))
+        elaborations = Elaboration.get_missing_reviews()
+        html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
     if request.GET.get('data', '') == "top_level_challenges":
         print("loading top level challenges...")
-        html = render_to_response('overview.html', {'elaborations': Elaboration.get_top_level_challenges()}, RequestContext(request))
+        elaborations = Elaboration.get_top_level_challenges()
+        html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
     if request.GET.get('data', '') == "non_adequate_work":
         print("loading non adequate work...")
-        html = render_to_response('overview.html', {'elaborations': Elaboration.get_non_adequate_work()}, RequestContext(request))
+        elaborations = Elaboration.get_non_adequate_work()
+        html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
+
+    # store selected elaborations in session
+    request.session['elaborations'] = serializers.serialize('json', elaborations)
     return html
 
 @login_required()
 def detail(request):
+    # get selected elaborations from session
+    elaborations = []
+    for serialized_elaboration in serializers.deserialize('json', request.session.get('elaborations', {})):
+        elaborations.append(serialized_elaboration.object)
+
     if not 'elaboration_id' in request.GET:
-        return False
+        return False;
+
     elaboration = Elaboration.objects.get(pk=request.GET.get('elaboration_id', ''))
     reviews = Review.objects.filter(elaboration=elaboration)
-    return render_to_response('detail.html', {'elaboration': elaboration, 'reviews': reviews }, context_instance=RequestContext(request))
 
-@login_required()
-def submission(request):
-    if 'challenge_id' in request.GET:
-        challenge_id = request.GET.get('challenge_id', '')
-        challenge = Challenge.objects.get(pk=challenge_id)
+    next = prev = None
+    index = elaborations.index(elaboration)
+    if index+1 < len(elaborations):
+        next = elaborations[index+1].id
+    if not index == 0:
+        prev = elaborations[index-1].id
 
-        elaboration_list = challenge.get_submissions()
-
-        paginator = Paginator(elaboration_list, 1)              # elaborations per page
-
-        page = request.GET.get('page')
-        try:
-            elaborations = paginator.page(page)
-        except PageNotAnInteger:
-            elaborations = paginator.page(1)                    # first page
-        except EmptyPage:
-            elaborations = paginator.page(paginator.num_pages)  # last page
-
-        html = render_to_response('submission.html', {'elaborations': elaborations, 'challenge': challenge}, RequestContext(request))
-    return html
-
-@login_required()
-def waiting(request):
-    elaboration_list = Elaboration.get_waiting_elaborations()
-    paginator = Paginator(elaboration_list, 1)              # elaborations per page
-
-    page = request.GET.get('page')
-    try:
-        elaborations = paginator.page(page)
-    except PageNotAnInteger:
-        elaborations = paginator.page(1)                    # first page
-    except EmptyPage:
-        elaborations = paginator.page(paginator.num_pages)  # last page
-
-    html = render_to_response('waiting.html', {'elaborations': elaborations})
-    return html
+    return render_to_response('detail.html',
+        {'elaboration': elaboration,
+         'elaborations': elaborations,
+         'reviews': reviews,
+         'next': next,
+         'prev': prev
+        }, RequestContext(request))
 
 @csrf_exempt
 def submit_evaluation(request):
