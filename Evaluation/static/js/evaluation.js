@@ -88,3 +88,21 @@ function load_details(id) {
        $('#detail_area').html(data);
    });
 }
+
+$(function() {
+    $(".paginator").click(function(event) {
+        var url = '/detail?elaboration_id=' + $(event.target).attr('id');
+        $.get(url, function (data) {
+            $('#detail_area').html(data);
+        });
+    });
+});
+
+$(function() {
+   $(".challenge_txt").click(function(event) {
+       var url = '/challenge_txt?elaboration_id=' + $(event.target).attr('id');
+        $.get(url, function (data) {
+            $('#info_area').html(data);
+        });
+   });
+});

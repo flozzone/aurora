@@ -80,6 +80,14 @@ def detail(request):
          'prev': prev
         }, RequestContext(request))
 
+@login_required()
+def challenge_txt(request):
+    if not 'elaboration_id' in request.GET:
+        return False;
+
+    elaboration = Elaboration.objects.get(pk=request.GET.get('elaboration_id', ''))
+    return render_to_response('challenge_txt.html', {'challenge': elaboration.challenge}, RequestContext(request))
+
 @csrf_exempt
 def submit_evaluation(request):
     elaboration_id = request.POST['elaboration_id']
