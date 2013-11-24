@@ -72,9 +72,11 @@ def detail(request):
     if not index == 0:
         prev = elaborations[index-1].id
 
+    stack_elaborations = elaboration.user.get_stack_elaborations(elaboration.challenge.get_stack())
+
     return render_to_response('detail.html',
         {'elaboration': elaboration,
-         'elaborations': elaborations,
+         'stack_elaborations': stack_elaborations,
          'reviews': reviews,
          'next': next,
          'prev': prev
@@ -86,9 +88,9 @@ def stack(request):
         return False;
 
     elaboration = Elaboration.objects.get(pk=request.GET.get('elaboration_id', ''))
-    elaborations = elaboration.user.get_stack_elaborations(elaboration.challenge.get_stack())
+    stack_elaborations = elaboration.user.get_stack_elaborations(elaboration.challenge.get_stack())
 
-    return render_to_response('user_stack.html', {'elaborations': elaborations}, RequestContext(request))
+    return render_to_response('user_stack.html', {'stack_elaborations': stack_elaborations}, RequestContext(request))
 
 @login_required()
 def others(request):
