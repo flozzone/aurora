@@ -33,6 +33,11 @@ class Elaboration(models.Model):
             return False
         return True
 
+    def get_challenge_elaborations(self):
+        if Elaboration.objects.filter(challenge=self.challenge, submission_time__isnull=False):
+            return Elaboration.objects.filter(challenge=self.challenge, submission_time__isnull=False)
+        return False
+
     @staticmethod
     def get_missing_reviews():
         missing_reviews = []

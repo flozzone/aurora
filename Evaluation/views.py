@@ -81,6 +81,16 @@ def detail(request):
         }, RequestContext(request))
 
 @login_required()
+def others(request):
+    if not 'elaboration_id' in request.GET:
+        return False;
+
+    elaboration = Elaboration.objects.get(pk=request.GET.get('elaboration_id', ''))
+    elaborations = elaboration.get_challenge_elaborations()
+
+    return render_to_response('others.html', {'elaborations': elaborations}, RequestContext(request))
+
+@login_required()
 def challenge_txt(request):
     if not 'elaboration_id' in request.GET:
         return False;

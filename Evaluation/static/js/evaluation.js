@@ -99,6 +99,15 @@ $(function() {
 });
 
 $(function() {
+   $(".others").click(function(event) {
+       var url = '/others?elaboration_id=' + $(event.target).attr('id');
+        $.get(url, function (data) {
+            $('#info_area').html(data);
+        });
+   });
+});
+
+$(function() {
    $(".challenge_txt").click(function(event) {
        var url = '/challenge_txt?elaboration_id=' + $(event.target).attr('id');
         $.get(url, function (data) {
