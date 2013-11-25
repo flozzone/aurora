@@ -6,7 +6,7 @@
         {% for comment in object_list %}
             <div class="comment" id="{{ comment.id }}">
                 <p>{{ comment.text }}</p>
-                <p>submited {{ comment.date_relative }} by <a></a>{{}}</p>
+                <p>submitted {{ comment.post_date_relative }} by {{ comment.author.username }}</p>
             </div>
         {% endfor %}
     </div>
