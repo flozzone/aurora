@@ -4,6 +4,7 @@ from django.http import HttpResponsePermanentRedirect
 
 urlpatterns = patterns('',
     url(r'^evaluation/$', 'Evaluation.views.evaluation'),
+    url(r'^save_evaluation/$', 'Evaluation.views.save_evaluation'),
     url(r'^submit_evaluation/$', 'Evaluation.views.submit_evaluation'),
     url(r'^overview/$', 'Evaluation.views.overview'),
     url(r'^update_overview/$', 'Evaluation.views.update_overview'),

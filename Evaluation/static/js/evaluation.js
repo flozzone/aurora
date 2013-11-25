@@ -1,25 +1,4 @@
 $(function() {
-   $(".submission").click(function(event) {
-       var challenge = $(event.target);
-       var challenge_id = challenge.attr('id');
-
-       var url = '/submission?challenge_id=' + challenge_id;
-       $.get(url, function (data) {
-            $('#detail_area').html(data);
-       });
-   });
-});
-
-$(function() {
-   $(".waiting").click(function(event) {
-       var url = '/waiting';
-       $.get(url, function (data) {
-            $('#detail_area').html(data);
-       });
-   });
-});
-
-$(function() {
    $(".missing_reviews").click(function(event) {
        var url = '/update_overview?data=missing_reviews';
        $.get(url, function (data) {
@@ -123,4 +102,38 @@ $(function() {
             $('#info_area').html(data);
         });
    });
+});
+
+$(function() {
+   $(".save_evaluation").click(function(event) {
+        event.preventDefault();
+        var data = {
+            elaboration_id: $(event.target).attr('id'),
+            evaluation_text: $(".evaluation").text(),
+            evaluation_points: $(".points").text()
+        };
+        var args = { type: "POST", url: "/save_evaluation/", data: data,
+            error: function () {
+                alert('error saving evaluation');
+            }
+        };
+        $.ajax(args);
+    });
+});
+
+$(function() {
+   $(".submit_evaluation").click(function(event) {
+        event.preventDefault();
+        var data = {
+            elaboration_id: $(event.target).attr('id'),
+            evaluation_text: $(".evaluation").text(),
+            evaluation_points: $(".points").text()
+        };
+        var args = { type: "POST", url: "/submit_evaluation/", data: data,
+            error: function () {
+                alert('error submitting evaluation');
+            }
+        };
+        $.ajax(args);
+    });
 });

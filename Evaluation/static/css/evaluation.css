@@ -78,7 +78,7 @@ th {
     margin-bottom: 20px;
 }
 
-.evaluate {
+.save_evaluation, .submit_evaluation {
     float: right;
     display: block;
     height: 30px;
@@ -118,4 +118,8 @@ th {
 
 #info_area {
     padding: 10px;
+}
+
+.submission_date {
+    padding-top: 10px;
 }

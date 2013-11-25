@@ -23,10 +23,22 @@
 
         <form method="post">
             {% csrf_token %}
-            <div class="evaluation" contenteditable="true">{{ elaboration.get_evaluation.evaluation_text }}</div>
-            <div class="spacer"></div>
-            points assigned<div class="points" contenteditable="true">{{ elaboration.get_evaluation.evaluation_points }}</div>
-            <button class="evaluate" id="{{ elaboration.id }}">evaluate</button>
+            {% if elaboration.get_evaluation.submission_time %}
+                <div class="evaluation">
+                    {{ elaboration.get_evaluation.evaluation_text }}
+                </div>
+                <div class="spacer"></div>
+                points assigned<div class="points">{{ elaboration.get_evaluation.evaluation_points }}</div>
+                <div class="submission_date">submittet on: {{ elaboration.get_evaluation.submission_time }}</div>
+            {% else %}
+                <div class="evaluation" contenteditable="true">
+                    {{ elaboration.get_evaluation.evaluation_text }}
+                </div>
+                <div class="spacer"></div>
+                points assigned<div class="points" contenteditable="true">{{ elaboration.get_evaluation.evaluation_points }}</div>
+                <button class="submit_evaluation" id="{{ elaboration.id }}">submit</button>
+                <button class="save_evaluation" id="{{ elaboration.id }}">save</button>
+            {% endif %}
         </form>
 
         {% for review in reviews %}
