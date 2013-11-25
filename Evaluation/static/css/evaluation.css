@@ -123,3 +123,18 @@ th {
 .submission_date {
     padding-top: 10px;
 }
+
+.reviews {
+    border: 1px solid #484246;
+    border-radius: 5px;
+    background-color: white;
+    padding: 5px;
+}
+
+.appraisal {
+    margin-top: 15px;
+}
+
+.review_head {
+    float:right;
+}

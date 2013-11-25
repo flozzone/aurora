@@ -1,0 +1,21 @@
+<div class="reviews">
+
+    {% for review in reviews %}
+        {% if forloop.first %}
+            <div class="review_head">Reviews</div>
+        {% else %}
+            <div class="spacer"></div>
+        {% endif %}
+
+        <img class="gravatar" src="{{ review.reviewer.get_gravatarurl }}">
+        {{ review.reviewer.username }}<br/>
+        {{ review.reviewer.first_name }} {{ review.reviewer.last_name }}
+
+        <div class="appraisal">
+            <input type="radio" name="reviewgroup" onclick="set_appraisal({{ review.id }}, 'N')" {% if review.appraisal == 'N' %} checked {% endif %}>NOT EVEN TRYING</input>
+            <input type="radio" name="reviewgroup" onclick="set_appraisal({{ review.id }}, 'F')" {% if review.appraisal == 'F' %} checked {% endif %}>FAIL</input>
+            <input type="radio" name="reviewgroup" onclick="set_appraisal({{ review.id }}, 'S')" {% if review.appraisal == 'S' %} checked {% endif %}>SUCCESS</input>
+        </div>
+    {% endfor %}
+
+</div>

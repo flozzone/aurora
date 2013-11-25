@@ -12,4 +12,5 @@ urlpatterns = patterns('',
     url(r'^stack/$', 'Evaluation.views.stack'),
     url(r'^others/$', 'Evaluation.views.others'),
     url(r'^challenge_txt/$', 'Evaluation.views.challenge_txt'),
+    url(r'^set_appraisal/$', 'Evaluation.views.set_appraisal'),
 )

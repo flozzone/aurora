@@ -137,3 +137,16 @@ $(function() {
         $.ajax(args);
     });
 });
+
+function set_appraisal(review_id, appraisal) {
+    var data = {
+        review_id: review_id,
+        appraisal: appraisal
+    };
+    var args = { type: "POST", url: "/set_appraisal/", data: data,
+        error: function () {
+            alert('error updating appraisal');
+        }
+    };
+    $.ajax(args);
+}

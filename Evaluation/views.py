@@ -149,3 +149,14 @@ def submit_evaluation(request):
     evaluation.save()
 
     return HttpResponse()
+
+@csrf_exempt
+def set_appraisal(request):
+    review_id = request.POST['review_id']
+    appraisal = request.POST['appraisal']
+
+    review = Review.objects.get(pk=review_id)
+    review.appraisal = appraisal
+    review.save()
+
+    return HttpResponse()

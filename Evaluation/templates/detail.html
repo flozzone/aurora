@@ -27,32 +27,22 @@
                 <div class="evaluation">
                     {{ elaboration.get_evaluation.evaluation_text }}
                 </div>
-                <div class="spacer"></div>
                 points assigned<div class="points">{{ elaboration.get_evaluation.evaluation_points }}</div>
                 <div class="submission_date">submittet on: {{ elaboration.get_evaluation.submission_time }}</div>
             {% else %}
                 <div class="evaluation" contenteditable="true">
                     {{ elaboration.get_evaluation.evaluation_text }}
                 </div>
-                <div class="spacer"></div>
                 points assigned<div class="points" contenteditable="true">{{ elaboration.get_evaluation.evaluation_points }}</div>
                 <button class="submit_evaluation" id="{{ elaboration.id }}">submit</button>
                 <button class="save_evaluation" id="{{ elaboration.id }}">save</button>
             {% endif %}
         </form>
 
-        {% for review in reviews %}
-            {% if forloop.first %}
-                <div class="spacer"></div>
-                <div>Reviews</div>
-            {% endif %}
-
-            <img class="gravatar" src="{{ review.reviewer.get_gravatarurl }}">
-            {{ review.reviewer.username }}<br/>
-            {{ review.reviewer.first_name }} {{ review.reviewer.last_name }}<br/><br/>
-
-            {{ review.appraisal }}
-        {% endfor %}
+        {% if reviews %}
+            <div class="spacer"></div>
+            {% include "reviews.html" %}
+        {% endif %}
   </div>
 
   <div class="detail_right">
