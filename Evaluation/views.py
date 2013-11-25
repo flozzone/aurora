@@ -1,3 +1,4 @@
+from datetime import datetime
 import json
 from django.core import serializers
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
@@ -111,7 +112,7 @@ def challenge_txt(request):
     return render_to_response('challenge_txt.html', {'challenge': elaboration.challenge}, RequestContext(request))
 
 @csrf_exempt
-def submit_evaluation(request):
+def save_evaluation(request):
     elaboration_id = request.POST['elaboration_id']
     evaluation_text = request.POST['evaluation_text']
     evaluation_points = request.POST['evaluation_points']
@@ -126,5 +127,36 @@ def submit_evaluation(request):
     evaluation.evaluation_text = evaluation_text
     evaluation.evaluation_points = evaluation_points
     evaluation.save()
+
+    return HttpResponse()
+
+@csrf_exempt
+def submit_evaluation(request):
+    elaboration_id = request.POST['elaboration_id']
+    evaluation_text = request.POST['evaluation_text']
+    evaluation_points = request.POST['evaluation_points']
+
+    elaboration = Elaboration.objects.get(pk=elaboration_id)
+
+    if Evaluation.objects.filter(submission=elaboration, user=elaboration.user):
+        evaluation = Evaluation.objects.filter(submission=elaboration, user=elaboration.user).order_by('id')[0]
+    else:
+        evaluation = Evaluation.objects.create(submission=elaboration, user=elaboration.user)
+
+    evaluation.evaluation_text = evaluation_text
+    evaluation.evaluation_points = evaluation_points
+    evaluation.submission_time = datetime.now()
+    evaluation.save()
+
+    return HttpResponse()
+
+@csrf_exempt
+def set_appraisal(request):
+    review_id = request.POST['review_id']
+    appraisal = request.POST['appraisal']
+
+    review = Review.objects.get(pk=review_id)
+    review.appraisal = appraisal
+    review.save()
 
     return HttpResponse()
