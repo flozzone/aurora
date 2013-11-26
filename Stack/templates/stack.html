@@ -20,6 +20,8 @@
         {% for review in challenge_dict.reviews %}
           {% if review %}
             <div class="review done" id="{{ review.id }}" challenge_id="{{ challenge_dict.challenge.id }}"></div>
+          {% elif not challenge_dict.submitted %}
+            <div class="review inactive"></div>
           {% else %}
             <div class="review active" challenge_id="{{ challenge_dict.challenge.id }}"></div>
           {% endif %}

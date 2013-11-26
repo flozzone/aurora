@@ -113,6 +113,12 @@ def init_data(app, sender, **kwargs):
         )
         challenge_2.save()
 
+        ReviewQuestion(challenge=challenge_2, order=1, text="Do you think the submission was funny?",
+                       boolean_answer=True).save()
+        ReviewQuestion(challenge=challenge_2, order=2, text="Was this submission original?", boolean_answer=True, visible_to_author=False).save()
+        ReviewQuestion(challenge=challenge_2, order=3,
+                       text="Can you find any additional material not included in this submission?").save()
+
         challenge_3 = Challenge(id=3,
                                 title='wikipedia',
                                 subtitle='wikipedia',
@@ -265,12 +271,11 @@ def init_data(app, sender, **kwargs):
 
         # create review for elaboration
         print('adding review 1 for elaboration for challenge 1 for s0')
-        Review(elaboration=de1, reviewer=s0, appraisal='N').save()
+        Review(elaboration=de1, reviewer=s0, appraisal='N', submission_time=datetime.now()).save()
         print('adding review 2 for elaboration for challenge 1 for s0')
-        Review(elaboration=de2, reviewer=s0, appraisal='F').save()
+        Review(elaboration=de2, reviewer=s0, appraisal='F', submission_time=datetime.now()).save()
         print('adding review 3 for elaboration for challenge 1 for s0')
-        Review(elaboration=de3, reviewer=s0, appraisal='S', awesome=True).save()
-
+        Review(elaboration=de3, reviewer=s0, appraisal='S', submission_time=datetime.now(), awesome=True).save()
 
         print('adding dummy elaboration 3 for challenge 1')
         de4 = Elaboration(challenge=challenge_2, user=d1, elaboration_text="dummy elaboration 1",
@@ -285,7 +290,7 @@ def init_data(app, sender, **kwargs):
 
         # create review for elaboration
         print('adding review 1 for elaboration for challenge 2 for s0')
-        Review(elaboration=de4, reviewer=s0, appraisal='N').save()
+        Review(elaboration=de4, reviewer=s0, appraisal='N', submission_time=datetime.now()).save()
 
         # create stack-challenge relations
         print('adding stack challenge relations')
