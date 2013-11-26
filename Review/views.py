@@ -12,12 +12,12 @@ def create_context_review(request):
     if 'id' in request.GET:
         user=PortfolioUser.objects.filter(user_ptr=request.user)[0]
         challenge = Challenge.objects.get(pk=request.GET.get('id'))
-        review = Review.getOpenReview(challenge, user)
+        review = Review.get_open_review(challenge, user)
         if review:
             print("Open Review: " + str(review))
         else:
             print("No open review! assigning a random one")
-            review_candidate = Elaboration.getReviewCandidate(challenge, user)
+            review_candidate = Elaboration.get_review_candidate(challenge, user)
             if review_candidate:
                 print(review_candidate.elaboration_text)
                 review = Review(elaboration=review_candidate, reviewer=user)

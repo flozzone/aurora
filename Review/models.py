@@ -22,7 +22,7 @@ class Review(models.Model):
         return self.elaboration.user
 
     @staticmethod
-    def getOpenReview(challenge, user):
+    def get_open_review(challenge, user):
         open_reviews = Review.objects.filter(elaboration__challenge=challenge, submission_time__isnull=True)
         print(open_reviews)
         open_reviews = open_reviews.exclude(elaboration__user=user)
@@ -33,6 +33,6 @@ class Review(models.Model):
             return None
 
     @staticmethod
-    def getReviewAmount(elaboration):
+    def get_review_amount(elaboration):
         return len(Review.objects.filter(elaboration=elaboration).exclude(submission_time__isnull=True))
 

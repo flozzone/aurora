@@ -62,13 +62,13 @@ class Elaboration(models.Model):
         return non_adequate_work
 
     @staticmethod
-    def getReviewCandidate(challenge, user):
+    def get_review_candidate(challenge, user):
         candidates = Elaboration.objects.filter(challenge=challenge).exclude(user=user)
         if candidates:
             best_candidate = candidates[0]
         else:
             return None
         for candidate in candidates:
-            if Review.getReviewAmount(candidate) < Review.getReviewAmount(best_candidate):
+            if Review.get_review_amount(candidate) < Review.get_review_amount(best_candidate):
                 best_candidate = candidate
         return best_candidate
