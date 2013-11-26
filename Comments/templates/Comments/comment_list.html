@@ -1,9 +1,14 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h2>Feed</h2>
+    <form action="new_comment" method="post">
+        <textarea cols="60" rows="6" name="text"></textarea>
+        <input type="submit" value="add comment" />
+    </form>
+
+    <h2>{{ foo }}</h2>
     <div>
-        {% for comment in object_list %}
+        {% for comment in comment_list %}
             <div class="comment" id="{{ comment.id }}">
                 <p>{{ comment.text }}</p>
                 <p>submitted {{ comment.post_date_relative }} by {{ comment.author.username }}</p>
