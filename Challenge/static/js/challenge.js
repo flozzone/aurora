@@ -12,6 +12,7 @@ function challenge_loaded() {
         }
     });
     $('.submit').click(submit_clicked);
+    $('.real_submit').click(real_submit_clicked);
 }
 
 function elaboration_autosave(e, challenge_id) {
@@ -28,9 +29,14 @@ function elaboration_autosave(e, challenge_id) {
 }
 
 function submit_clicked(event) {
+    $('.submit').hide();
+    $('.submission_text').show();
+}
+function real_submit_clicked(event) {
     var challenge = $(event.target);
     var challenge_id = challenge.attr('id');
     var url = './submit?id=' + challenge_id;
     $.get(url, function (data) {
     });
+    window.location.href = "./";
 }

@@ -115,8 +115,7 @@ abbr,acronym { border:0;
     background-image:url("../img/auroraP.png");
     min-height:96px;
     font-family: 'yanone_kaffeesatzthin';
-    /*color:white;*/
-    color:black;
+    color:white;
     font-size:30px;
     vertical-align:bottom;
     width:100%;
@@ -142,8 +141,7 @@ abbr,acronym { border:0;
 }
 
 .pagehead a {
-    /*color:white;*/
-    color:black;
+    color:white;
     font-weight:bold;
     text-decoration:none;
 }
