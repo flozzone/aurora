@@ -60,3 +60,15 @@ class Elaboration(models.Model):
         for review in Review.objects.filter(appraisal=Review.FAIL):
             non_adequate_work.append(review.elaboration)
         return non_adequate_work
+
+    @staticmethod
+    def get_review_candidate(challenge, user):
+        candidates = Elaboration.objects.filter(challenge=challenge).exclude(user=user)
+        if candidates:
+            best_candidate = candidates[0]
+        else:
+            return None
+        for candidate in candidates:
+            if Review.get_review_amount(candidate) < Review.get_review_amount(best_candidate):
+                best_candidate = candidate
+        return best_candidate

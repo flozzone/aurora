@@ -1,3 +1,51 @@
+{% block additional_headers %}
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/review.css" type="text/css" media="screen"/>
+{% endblock %}
+
+{% if review %}
 <div>
-  Test
+  Challenge:
+  <div class="challenge">
+
+    <div class="title">
+      Title: {{ review.elaboration.challenge.title }}
+    </div>
+    <div class="description">
+      Description: {{ review.elaboration.challenge.description }}
+    </div>
+  </div>
+  <br>
+
+  <div class="elaboration">
+
+    <div class="elaboration_text">
+      Elaboration: {{ review.elaboration.elaboration_text |safe }}
+    </div>
+  </div>
+
+  {% for question in questions %}
+    <br>
+    <div class="question_container">
+      <div class="question" id="{{ question.id }}">
+        Question: {{ question.text }}
+      </div>
+      <div class="anwer" id="{{ question.id }}">
+        Answer:
+        {% if question.boolean_answer %}
+          <input type="radio" name="{{ question.id }}" value="yes"> Yes
+          <input type="radio" name="{{ question.id }}" value="no"> No <br>
+        {% else %}
+          <br><input type="text" name="answer">
+        {% endif %}
+        {% if not question.visible_to_author %}
+          <i>Only the LVA-Team will be able to see this answer.</i>
+        {% endif %}
+      </div>
+    </div>
+  {% endfor %}
+  <br>
+  <input type="submit" value="Submit">
 </div>
+{% else %}
+  you should not be here
+{% endif %}
