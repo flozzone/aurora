@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.views.generic import ListView
 from Comments.models import Comment
 from django.contrib.auth.decorators import login_required
+from django import forms
 
 
 class CommentList(ListView):
@@ -13,3 +14,9 @@ class CommentList(ListView):
         context = super(CommentList, self).get_context_data(**kwargs)
         context['foo'] = 'krawuzikabuzi'
         return context
+
+
+class CommentForm(forms.Form):
+    textarea = forms.Textarea
+    textinput = forms.TextInput
+    charfield = forms.CharField
