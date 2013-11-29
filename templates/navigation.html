@@ -20,6 +20,11 @@
         <li id="slides-li">
           <a href="/{{ request.session.course_short_title }}/slides">Slides</a>
         </li>
+
+        <li id="feed-li">
+          <a href="/feed">Feed</a>
+        </li>
+
         {% if user.is_staff %}
           <li id="evaluation-li">
             <a href="/evaluation">Evaluation</a>
