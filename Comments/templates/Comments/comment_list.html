@@ -1,16 +1,16 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <form action="new_comment" method="post">
-        <textarea cols="60" rows="6" name="text"></textarea>
-        <input type="submit" value="add comment" />
+    <h2>Here we have some comments</h2>
+    <form action="{% url 'Comments:post' %}" method="post">{% csrf_token %}
+            {{ form.as_p }}
+        <input type="submit" value="Submit" />
     </form>
 
-    <h2>{{ foo }}</h2>
     <div>
         {% for comment in comment_list %}
             <div class="comment" id="{{ comment.id }}">
-                <p>{{ comment.text }}</p>
+                <p><pre>{{ comment.text }}</pre></p>
                 <p>submitted {{ comment.post_date_relative }} by {{ comment.author.username }}</p>
             </div>
         {% endfor %}
