@@ -13,6 +13,7 @@ class Comment(models.Model):
         timedelta = timezone.now() - self.post_date
 
         # TODO beautify with babel: http://stackoverflow.com/questions/410221/natural-relative-days-in-python
+        # TODO months/years not working yet
         if timedelta.days > 6:
             weeks = timedelta.days/7
             return str(weeks) + " weeks ago" if weeks > 1 else "a week ago"

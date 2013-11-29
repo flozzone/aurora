@@ -4,7 +4,7 @@
     <h2>Here we have some comments</h2>
     <form action="{% url 'Comments:post' %}" method="post">{% csrf_token %}
             {{ form.as_p }}
-        <input type="submit" value="Submit" />
+        <input type="submit" value="Add comment" />
     </form>
 
     <div>

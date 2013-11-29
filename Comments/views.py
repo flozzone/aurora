@@ -12,7 +12,6 @@ from PortfolioUser.models import PortfolioUser
 
 
 class CommentList(ListView):
-#    model = Comment
     queryset = Comment.objects.order_by('-post_date')
 
     def get_context_data(self, **kwargs):
@@ -23,32 +22,10 @@ class CommentList(ListView):
 
 
 class CommentForm(forms.Form):
-    text = forms.CharField(widget=forms.Textarea, label='New comment')
+    text = forms.CharField(widget=forms.Textarea, label='')
 
 
-class ContactForm(forms.Form):
-    subject = forms.CharField(max_length=100)
-    message = forms.CharField()
-    sender = forms.EmailField()
-    cc_myself = forms.BooleanField(required=False)
-
-
-def contact(request):
-    if request.method == 'POST':  # If the form has been submitted...
-        form = ContactForm(request.POST) # A form bound to the POST data
-        if form.is_valid():  # All validation rules pass
-            print(form.cleaned_data)
-            # Process the data in form.cleaned_data
-            # ...
-            return HttpResponseRedirect('/contact/')  # Redirect after POST
-    else:
-        form = ContactForm()  # An unbound form
-
-    return render(request, 'Comments/contact.html', {
-        'form': form,
-    })
-
-
+@login_required
 def post(request):
     if request.method == 'POST':
         form = CommentForm(request.POST)
