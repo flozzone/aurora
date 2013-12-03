@@ -53,7 +53,13 @@ $(function() {
 });
 
 $(function() {
-   $(".search").click(function(event) {
+   $(".search_studi").click(function(event) {
+       alert("TODO: search");
+   });
+});
+
+$(function() {
+   $(".search_all").click(function(event) {
        alert("TODO: search");
    });
 });
