@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models as models
 from django.utils import timezone
 from PortfolioUser.models import PortfolioUser
 
@@ -7,6 +7,7 @@ class Comment(models.Model):
     text = models.TextField()
     author = models.ForeignKey(PortfolioUser)
     post_date = models.DateTimeField('date posted')
+    parent = models.ForeignKey('self', null=True, related_name='children')
 
     @property
     def post_date_relative(self):

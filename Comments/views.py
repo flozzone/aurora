@@ -31,7 +31,7 @@ def post(request):
         form = CommentForm(request.POST)
         if form.is_valid():
             user = PortfolioUser.objects.filter(id=request.user.id)[0]
-            # TODO authentication + authorization!
+            # TODO authentication + authorization?!
             comment = Comment.objects.create(text=form.cleaned_data['text'], author=user, post_date=timezone.now())
             comment.save()
     return HttpResponseRedirect(reverse('Comments:feed'))
