@@ -71,7 +71,7 @@ th {
     margin-bottom: 20px;
 }
 
-.save_evaluation, .submit_evaluation {
+.submit_evaluation {
     float: right;
     display: block;
     height: 30px;

@@ -123,6 +123,7 @@ def save_evaluation(request):
     evaluation_text = request.POST['evaluation_text']
     evaluation_points = request.POST['evaluation_points']
 
+    print("autosaving evaluation...")
     elaboration = Elaboration.objects.get(pk=elaboration_id)
 
     if Evaluation.objects.filter(submission=elaboration, user=elaboration.user):
@@ -130,8 +131,10 @@ def save_evaluation(request):
     else:
         evaluation = Evaluation.objects.create(submission=elaboration, user=elaboration.user)
 
-    evaluation.evaluation_text = evaluation_text
-    evaluation.evaluation_points = evaluation_points
+    if evaluation_text:
+        evaluation.evaluation_text = evaluation_text
+    if evaluation_points:
+        evaluation.evaluation_points = evaluation_points
     evaluation.save()
 
     return HttpResponse()

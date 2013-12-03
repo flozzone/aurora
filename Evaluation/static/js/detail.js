@@ -44,23 +44,6 @@ $(function() {
 });
 
 $(function() {
-   $(".save_evaluation").click(function(event) {
-        event.preventDefault();
-        var data = {
-            elaboration_id: $(event.target).attr('id'),
-            evaluation_text: $(".evaluation").text(),
-            evaluation_points: $(".points").text()
-        };
-        var args = { type: "POST", url: "/save_evaluation/", data: data,
-            error: function () {
-                alert('error saving evaluation');
-            }
-        };
-        $.ajax(args);
-    });
-});
-
-$(function() {
    $(".submit_evaluation").click(function(event) {
         event.preventDefault();
         var data = {
@@ -85,6 +68,30 @@ function set_appraisal(review_id, appraisal) {
     var args = { type: "POST", url: "/set_appraisal/", data: data,
         error: function () {
             alert('error updating appraisal');
+        }
+    };
+    $.ajax(args);
+}
+
+var timer = 0;
+
+function DelayedAutoSave(elaboration_id) {
+    if (timer)
+        window.clearTimeout(timer);
+    timer = window.setTimeout(function() {
+        AutoSave(elaboration_id);
+    }, 500);
+}
+
+function AutoSave(elaboration_id) {
+    var data = {
+        elaboration_id: elaboration_id,
+        evaluation_text: $(".evaluation").text().replace(/\n|<.*?>/g,' '),
+        evaluation_points: $.trim($(".points").text())
+    };
+    var args = { type: "POST", url: "/save_evaluation/", data: data,
+        error: function () {
+            alert('error saving evaluation');
         }
     };
     $.ajax(args);
