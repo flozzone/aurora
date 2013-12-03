@@ -18,7 +18,7 @@ $(function() {
 
 $(function() {
    $(".non_adequate_reviews").click(function(event) {
-       alert("hallo");
+       alert("TODO: non_adequate_reviews");
    });
 });
 
@@ -33,31 +33,34 @@ $(function() {
 
 $(function() {
    $(".complaints").click(function(event) {
-       alert("hallo");
+       alert("TODO: complaints");
    });
 });
 
 $(function() {
    $(".questions").click(function(event) {
-       alert("hallo");
+       alert("TODO: questions");
    });
 });
 
 $(function() {
-   $(".select_challenged").click(function(event) {
-       alert("hallo");
+   $(".select_challenge").click(function(event) {
+       var url = '/select_challenge';
+       $.get(url, function (data) {
+            $('#select_challenge').html(data);
+       });
    });
 });
 
 $(function() {
    $(".search").click(function(event) {
-       alert("hallo");
+       alert("TODO: search");
    });
 });
 
 $(function() {
    $(".tags").click(function(event) {
-       alert("hallo");
+       alert("TODO: tags");
    });
 });
 
@@ -65,5 +68,13 @@ function load_details(id) {
    var url = '/detail?elaboration_id=' + id;
    $.get(url, function (data) {
        $('#detail_area').html(data);
+   });
+}
+
+function load_elaborations(id) {
+   var url = '/update_overview?data=select_challenge&id=' + id;
+   $.get(url, function (data) {
+        $('#overview').html(data);
+        $('#select_challenge').html('<div class="select_challenge" id="select_challenge">select challenge +</div>');
    });
 }
