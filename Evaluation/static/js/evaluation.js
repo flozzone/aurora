@@ -79,7 +79,7 @@ $(function() {
 
 $(function() {
    $(".stack").click(function(event) {
-       var url = '/stack?elaboration_id=' + $(event.target).attr('id');
+       var url = '/stack';
         $.get(url, function (data) {
             $('#info_area').html(data);
         });
@@ -88,7 +88,7 @@ $(function() {
 
 $(function() {
    $(".others").click(function(event) {
-       var url = '/others?elaboration_id=' + $(event.target).attr('id');
+       var url = '/others';
         $.get(url, function (data) {
             $('#info_area').html(data);
         });
@@ -97,7 +97,7 @@ $(function() {
 
 $(function() {
    $(".challenge_txt").click(function(event) {
-       var url = '/challenge_txt?elaboration_id=' + $(event.target).attr('id');
+       var url = '/challenge_txt';
         $.get(url, function (data) {
             $('#info_area').html(data);
         });

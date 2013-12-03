@@ -1,15 +1,20 @@
+{% block additional_headers %}
+  <script type="text/javascript" src="{{ STATIC_URL }}js/detail.js"></script>
+{% endblock %}
+
 {% block content %}
 
-    <table>
-    {% for elaboration in elaborations|dictsort:"submission_time" %}
-        <tr onclick="load_details({{ elaboration.id }})">
-            <td><img class="gravatar" src="{{ elaboration.user.get_gravatarurl }}"></td>
-            <td>{{ elaboration.user.username }}</td>
-            <td>{{ elaboration.user.first_name }} {{ elaboration.user.last_name }}</td>
-            <td>{{ elaboration.submission_time }}</td>
-            <td>{{ elaboration.challenge.title }}</td>
-        </tr>
-    {% endfor %}
-    </table>
+    <img class="gravatar" src="{{ elaboration.user.get_gravatarurl }}">
+    {{ elaboration.user.username }}<br/>
+    {{ elaboration.user.first_name }} {{ elaboration.user.last_name }}
+    <div class="spacer"></div>
+
+    <div class="elaboration">{{ elaboration.elaboration_text }}</div></br>
+    <div class="spacer"></div>
+
+    <div class="pagination">
+        {% if prev != None %}<div class="paginator_others prev" id="{{ prev }}">previous</div>{% endif %}
+        {% if next %}<div class="paginator_others next" id="{{ next }}">next</div>{% endif %}
+    </div>
 
 {% endblock %}

@@ -64,6 +64,9 @@ def detail(request):
         return False;
 
     elaboration = Elaboration.objects.get(pk=request.GET.get('elaboration_id', ''))
+    # store selected elaboration_id in session
+    request.session['elaboration_id'] = elaboration.id
+
     reviews = Review.objects.filter(elaboration=elaboration)
 
     next = prev = None
@@ -85,30 +88,33 @@ def detail(request):
 
 @login_required()
 def stack(request):
-    if not 'elaboration_id' in request.GET:
-        return False;
-
-    elaboration = Elaboration.objects.get(pk=request.GET.get('elaboration_id', ''))
+    elaboration = Elaboration.objects.get(pk=request.session.get('elaboration_id', ''))
     stack_elaborations = elaboration.user.get_stack_elaborations(elaboration.challenge.get_stack())
 
     return render_to_response('user_stack.html', {'stack_elaborations': stack_elaborations}, RequestContext(request))
 
 @login_required()
 def others(request):
-    if not 'elaboration_id' in request.GET:
-        return False;
+    # get selected elaborations from session
+    elaboration = Elaboration.objects.get(pk=request.session.get('elaboration_id', ''))
+    other_elaborations = elaboration.get_challenge_elaborations()
 
-    elaboration = Elaboration.objects.get(pk=request.GET.get('elaboration_id', ''))
-    elaborations = elaboration.get_challenge_elaborations()
+    index=int(request.GET.get('page', '0'))
 
-    return render_to_response('others.html', {'elaborations': elaborations}, RequestContext(request))
+    elaboration_list = list(other_elaborations)
+    next = prev = None
+    if index+1 < len(elaboration_list):
+        next = index+1
+    if not index == 0:
+        prev = index-1
+
+    elaboration = elaboration_list[index]
+
+    return render_to_response('others.html', {'elaboration': elaboration, 'next': next, 'prev': prev}, RequestContext(request))
 
 @login_required()
 def challenge_txt(request):
-    if not 'elaboration_id' in request.GET:
-        return False;
-
-    elaboration = Elaboration.objects.get(pk=request.GET.get('elaboration_id', ''))
+    elaboration = Elaboration.objects.get(pk=request.session.get('elaboration_id', ''))
     return render_to_response('challenge_txt.html', {'challenge': elaboration.challenge}, RequestContext(request))
 
 @csrf_exempt

@@ -85,7 +85,7 @@ th {
     margin-bottom: 10px;
 }
 
-.paginator {
+.paginator, .paginator_others {
     cursor: pointer;
     margin-bottom: 10px;
 }
@@ -110,7 +110,7 @@ th {
 }
 
 #info_area {
-    padding: 10px;
+    padding: 0 10px 10px 10px;
 }
 
 .submission_date {
