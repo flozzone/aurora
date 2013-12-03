@@ -34,5 +34,5 @@ class PortfolioUser(User):
 
     def get_gravatarurl(self):
         gravatarurl = "http://www.gravatar.com/avatar/" + hashlib.md5(self.email.lower().encode("utf-8")).hexdigest() + "?"
-        gravatarurl += urllib.parse.urlencode({'d':'identicon', 's':str(30)})
+        gravatarurl += urllib.parse.urlencode({'d':'monsterid', 's':str(30)})
         return gravatarurl
