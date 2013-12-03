@@ -42,7 +42,7 @@ class Elaboration(models.Model):
     def get_missing_reviews():
         missing_reviews = []
         for elaboration in Elaboration.objects.all():
-            if not elaboration.is_reviewed_3times() and elaboration.is_older_3days():
+            if not elaboration.is_reviewed_3times() and elaboration.is_older_3days() and not elaboration.challenge.is_final_challenge():
                 missing_reviews.append(elaboration)
         return missing_reviews
 
