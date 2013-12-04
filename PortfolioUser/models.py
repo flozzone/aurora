@@ -2,6 +2,7 @@ import sys
 import urllib, hashlib
 from django.db import models
 from django.contrib.auth.models import User, UserManager
+from django.db.models import Q
 from Elaboration.models import Elaboration
 
 
@@ -36,3 +37,9 @@ class PortfolioUser(User):
         gravatarurl = "http://www.gravatar.com/avatar/" + hashlib.md5(self.email.lower().encode("utf-8")).hexdigest() + "?"
         gravatarurl += urllib.parse.urlencode({'d':'monsterid', 's':str(30)})
         return gravatarurl
+
+    @staticmethod
+    def serach_user(query):
+        if PortfolioUser.objects.filter(Q(username=query) | Q(first_name=query) | Q(last_name=query)):
+            return PortfolioUser.objects.filter(Q(username=query) | Q(first_name=query) | Q(last_name=query))
+        return False

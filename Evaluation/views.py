@@ -10,6 +10,7 @@ from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from Challenge.models import Challenge
 from Elaboration.models import Elaboration
 from Evaluation.models import Evaluation
+from PortfolioUser.models import PortfolioUser
 from Review.models import Review
 
 
@@ -183,3 +184,21 @@ def select_challenge(request):
     challenges = Challenge.objects.all()
 
     return render_to_response('select_challenge.html', {'challenges': challenges}, RequestContext(request))
+
+
+@csrf_exempt
+@login_required()
+def search(request):
+    query_studi = request.POST['query_studi']
+    query_all = request.POST['query_all']
+
+    if query_studi:
+        studi = PortfolioUser.serach_user(query_studi)
+        if studi:
+            elaborations = studi[0].get_elaborations()      # TODO: make sure that only 1 user is returned
+
+    html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
+
+    # store selected elaborations in session
+    request.session['elaborations'] = serializers.serialize('json', elaborations)
+    return html

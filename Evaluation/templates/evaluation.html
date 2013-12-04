@@ -16,17 +16,18 @@
       <h1>Overview</h1>
       <div class="overview_left">
             <div class="missing_reviews">missing reviews ({{ missing_reviews|length }})</div>
-            <div class="non_adquate_work">non-adequate work ({{ non_adequate_work|length }})</div>
+            <div class="non_adequate_work">non-adequate work ({{ non_adequate_work|length }})</div>
             <div class="non_adequate_reviews">non-adequate reviews</div>
             <div class="top_level_challenges">top-level challenges ({{ top_level_challenges|length }})</div>
             <div class="complaints">complaints</div>
             <div class="questions">questions</div>
             <br/>
             <div class="select_challenge" id="select_challenge">select challenge +</div>
-            <br/>
-            <div class="search_studi" contenteditable="true">studis...</div>
-            <div class="search_all" contenteditable="true">all...</div>
-            <br/>
+            <div>
+                <div class="search_studi" contenteditable="true">studis...</div>
+                <div class="search_all" contenteditable="true">all...</div>
+            </div>
+            <div class="search_btn">search</div>
             <div class="tags">tags</div>
       </div>
       <div class="overview_right" id="overview"></div>

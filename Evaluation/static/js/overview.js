@@ -8,7 +8,7 @@ $(function() {
 });
 
 $(function() {
-   $(".non_adquate_work").click(function(event) {
+   $(".non_adequate_work").click(function(event) {
        var url = '/update_overview?data=non_adequate_work';
        $.get(url, function (data) {
             $('#overview').html(data);
@@ -54,13 +54,31 @@ $(function() {
 
 $(function() {
    $(".search_studi").click(function(event) {
-       alert("TODO: search");
+       $('.search_studi').html("");
    });
 });
 
 $(function() {
    $(".search_all").click(function(event) {
-       alert("TODO: search");
+       $('.search_all').html("");
+   });
+});
+
+$(function() {
+   $(".search_btn").click(function(event) {
+       var data = {
+            query_studi: $('.search_studi').text(),
+            query_all: $('.search_all').text()
+       };
+       var args = { type: "POST", url: "/search/", data: data,
+            error: function () {
+                alert('error searching data');
+            },
+            success: function(data) {
+                $('#overview').html(data);
+            }
+       };
+       $.ajax(args);
    });
 });
 

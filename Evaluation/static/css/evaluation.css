@@ -137,5 +137,25 @@ th {
     border-radius: 3px;
     background-color: #E9F3D9;
     height: 25px;
-    margin-bottom: 10px;
+    margin-top: 20px;
+    width: 48%;
+}
+
+.search_studi {
+    float: left;
+}
+
+.search_all {
+    float: right;
+}
+
+.search_btn {
+    float: left;
+    border: 1px solid #BAE46E;
+    border-radius: 3px;
+    background-color: #E7FFCF;
+    height: 25px;
+    width: 100%;
+    margin: 10px 0 20px 0;
+    cursor: pointer;
 }
