@@ -38,6 +38,11 @@ class Elaboration(models.Model):
             return Elaboration.objects.filter(challenge=self.challenge, submission_time__isnull=False)
         return False
 
+    def get_others(self):
+        if Elaboration.objects.filter(challenge=self.challenge, submission_time__isnull=False).exclude(pk=self.id):
+            return Elaboration.objects.filter(challenge=self.challenge, submission_time__isnull=False).exclude(pk=self.id)
+        return False
+
     @staticmethod
     def get_sel_challenge_elaborations(challenge):
         if Elaboration.objects.filter(challenge=challenge, submission_time__isnull=False):

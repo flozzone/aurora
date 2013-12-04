@@ -104,7 +104,7 @@ def stack(request):
 def others(request):
     # get selected elaborations from session
     elaboration = Elaboration.objects.get(pk=request.session.get('elaboration_id', ''))
-    other_elaborations = elaboration.get_challenge_elaborations()
+    other_elaborations = elaboration.get_others()
 
     index=int(request.GET.get('page', '0'))
 
