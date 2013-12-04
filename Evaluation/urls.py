@@ -13,4 +13,5 @@ urlpatterns = patterns('',
     url(r'^others/$', 'Evaluation.views.others'),
     url(r'^challenge_txt/$', 'Evaluation.views.challenge_txt'),
     url(r'^set_appraisal/$', 'Evaluation.views.set_appraisal'),
+    url(r'^select_challenge/$', 'Evaluation.views.select_challenge'),
 )

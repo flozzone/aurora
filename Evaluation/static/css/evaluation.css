@@ -71,7 +71,7 @@ th {
     margin-bottom: 20px;
 }
 
-.save_evaluation, .submit_evaluation {
+.submit_evaluation {
     float: right;
     display: block;
     height: 30px;
@@ -85,7 +85,7 @@ th {
     margin-bottom: 10px;
 }
 
-.paginator {
+.paginator, .paginator_others {
     cursor: pointer;
     margin-bottom: 10px;
 }
@@ -110,7 +110,7 @@ th {
 }
 
 #info_area {
-    padding: 10px;
+    padding: 0 10px 10px 10px;
 }
 
 .submission_date {
@@ -130,4 +130,12 @@ th {
 
 .review_head {
     float:right;
+}
+
+.search_studi, .search_all {
+    border: 1px solid #666666;
+    border-radius: 3px;
+    background-color: #E9F3D9;
+    height: 25px;
+    margin-bottom: 10px;
 }

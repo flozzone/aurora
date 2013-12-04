@@ -48,6 +48,13 @@ def update_overview(request):
         print("loading non adequate work...")
         elaborations = Elaboration.get_non_adequate_work()
         html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
+    if request.GET.get('data', '') == "select_challenge":
+        print("loading selected challenge elaborations...")
+        challenge = Challenge.objects.get(pk=request.GET.get('id', ''))
+        elaborations = []
+        if Elaboration.get_sel_challenge_elaborations(challenge):
+            elaborations = Elaboration.get_sel_challenge_elaborations(challenge)
+        html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
 
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
@@ -64,6 +71,9 @@ def detail(request):
         return False;
 
     elaboration = Elaboration.objects.get(pk=request.GET.get('elaboration_id', ''))
+    # store selected elaboration_id in session
+    request.session['elaboration_id'] = elaboration.id
+
     reviews = Review.objects.filter(elaboration=elaboration)
 
     next = prev = None
@@ -85,30 +95,33 @@ def detail(request):
 
 @login_required()
 def stack(request):
-    if not 'elaboration_id' in request.GET:
-        return False;
-
-    elaboration = Elaboration.objects.get(pk=request.GET.get('elaboration_id', ''))
+    elaboration = Elaboration.objects.get(pk=request.session.get('elaboration_id', ''))
     stack_elaborations = elaboration.user.get_stack_elaborations(elaboration.challenge.get_stack())
 
     return render_to_response('user_stack.html', {'stack_elaborations': stack_elaborations}, RequestContext(request))
 
 @login_required()
 def others(request):
-    if not 'elaboration_id' in request.GET:
-        return False;
+    # get selected elaborations from session
+    elaboration = Elaboration.objects.get(pk=request.session.get('elaboration_id', ''))
+    other_elaborations = elaboration.get_challenge_elaborations()
 
-    elaboration = Elaboration.objects.get(pk=request.GET.get('elaboration_id', ''))
-    elaborations = elaboration.get_challenge_elaborations()
+    index=int(request.GET.get('page', '0'))
 
-    return render_to_response('others.html', {'elaborations': elaborations}, RequestContext(request))
+    elaboration_list = list(other_elaborations)
+    next = prev = None
+    if index+1 < len(elaboration_list):
+        next = index+1
+    if not index == 0:
+        prev = index-1
+
+    elaboration = elaboration_list[index]
+
+    return render_to_response('others.html', {'elaboration': elaboration, 'next': next, 'prev': prev}, RequestContext(request))
 
 @login_required()
 def challenge_txt(request):
-    if not 'elaboration_id' in request.GET:
-        return False;
-
-    elaboration = Elaboration.objects.get(pk=request.GET.get('elaboration_id', ''))
+    elaboration = Elaboration.objects.get(pk=request.session.get('elaboration_id', ''))
     return render_to_response('challenge_txt.html', {'challenge': elaboration.challenge}, RequestContext(request))
 
 @csrf_exempt
@@ -117,6 +130,7 @@ def save_evaluation(request):
     evaluation_text = request.POST['evaluation_text']
     evaluation_points = request.POST['evaluation_points']
 
+    print("autosaving evaluation...")
     elaboration = Elaboration.objects.get(pk=elaboration_id)
 
     if Evaluation.objects.filter(submission=elaboration, user=elaboration.user):
@@ -124,8 +138,10 @@ def save_evaluation(request):
     else:
         evaluation = Evaluation.objects.create(submission=elaboration, user=elaboration.user)
 
-    evaluation.evaluation_text = evaluation_text
-    evaluation.evaluation_points = evaluation_points
+    if evaluation_text:
+        evaluation.evaluation_text = evaluation_text
+    if evaluation_points:
+        evaluation.evaluation_points = evaluation_points
     evaluation.save()
 
     return HttpResponse()
@@ -160,3 +176,10 @@ def set_appraisal(request):
     review.save()
 
     return HttpResponse()
+
+@login_required()
+def select_challenge(request):
+    print("loading all challenges...")
+    challenges = Challenge.objects.all()
+
+    return render_to_response('select_challenge.html', {'challenges': challenges}, RequestContext(request))

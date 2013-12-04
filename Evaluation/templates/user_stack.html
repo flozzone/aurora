@@ -2,7 +2,7 @@
 
     <table>
     {% for elaboration in stack_elaborations|dictsort:"submission_time" %}
-        <tr onclick="load_details({{ elaboration.id }})">
+        <tr>
             <td><img class="gravatar" src="{{ elaboration.user.get_gravatarurl }}"></td>
             <td>{{ elaboration.user.username }}</td>
             <td>{{ elaboration.user.first_name }} {{ elaboration.user.last_name }}</td>

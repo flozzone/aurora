@@ -4,7 +4,7 @@
     <script src="{{ STATIC_URL }}js/jquery-2.0.3.min.js"></script>
     <script src="{{ STATIC_URL }}js/libs/jquery-ui-1.10.3.custom.min.js"></script>
 
-    <script type="text/javascript" src="{{ STATIC_URL }}js/evaluation.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/overview.js"></script>
     <link rel="stylesheet" href="{{ STATIC_URL }}css/evaluation.css" type="text/css" media="screen"/>
     <link rel="stylesheet" href="{{ STATIC_URL }}css/jquery-ui.css" type="text/css" media="screen"/>
 {% endblock %}
@@ -21,8 +21,12 @@
             <div class="top_level_challenges">top-level challenges ({{ top_level_challenges|length }})</div>
             <div class="complaints">complaints</div>
             <div class="questions">questions</div>
-            <div class="select_challenged">select challenge</div>
-            <div class="search">search [...]</div>
+            <br/>
+            <div class="select_challenge" id="select_challenge">select challenge +</div>
+            <br/>
+            <div class="search_studi" contenteditable="true">studis...</div>
+            <div class="search_all" contenteditable="true">all...</div>
+            <br/>
             <div class="tags">tags</div>
       </div>
       <div class="overview_right" id="overview"></div>
