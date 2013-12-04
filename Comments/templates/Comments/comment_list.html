@@ -2,7 +2,7 @@
 
 {% block content %}
     <h2>Here we have some comments</h2>
-    <form action="{% url 'Comments:post' %}" method="post">{% csrf_token %}
+    <form action="{% url 'Comments:post_comment' %}" method="post">{% csrf_token %}
             {{ form.as_p }}
         <input type="submit" value="Add comment" />
     </form>
@@ -11,8 +11,14 @@
         {% for comment in comment_list %}
             <div class="comment" id="{{ comment.id }}">
                 <p><pre>{{ comment.text }}</pre></p>
-                <p>submitted {{ comment.post_date_relative }} by {{ comment.author.username }}</p>
+                <p><pre>submitted {{ comment.post_date_relative }} by {{ comment.author.username }}</pre></p>
             </div>
+            {% for response in comment.responses %}
+                <div class="response" id="{{ response.id }}">
+                    <p><pre>    {{ response.text }}</pre></p>
+                    <p><pre>    submitted {{ comment.post_date_relative }} by {{ comment.author.username }}</pre></p>
+                </div>
+            {% endfor %}
         {% endfor %}
     </div>
 {% endblock %}

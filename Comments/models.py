@@ -10,11 +10,23 @@ class Comment(models.Model):
     parent = models.ForeignKey('self', null=True, related_name='children')
 
     @property
+    def responses(self):
+        return self.children.all().order_by('-post_date')
+
+    @property
     def post_date_relative(self):
         timedelta = timezone.now() - self.post_date
+#        months = timezone.now().month - self.post_date.month
+#        years = timezone.now().year - self.post_date.year
 
         # TODO beautify with babel: http://stackoverflow.com/questions/410221/natural-relative-days-in-python
         # TODO months/years not working yet
+#        if years > 0:
+#            return str(years) + " years ago" if years > 1 else "last year"
+#
+#        if months > 0:
+#            return str(months) + " months ago" if months > 1 else "last month"
+
         if timedelta.days > 6:
             weeks = timedelta.days/7
             return str(weeks) + " weeks ago" if weeks > 1 else "a week ago"
