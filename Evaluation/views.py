@@ -51,13 +51,6 @@ def update_overview(request):
         print("loading non adequate work...")
         elaborations = Elaboration.get_non_adequate_work()
         html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
-    if request.GET.get('data', '') == "select_challenge":
-        print("loading selected challenge elaborations...")
-        challenge = Challenge.objects.get(pk=request.GET.get('id', ''))
-        elaborations = []
-        if Elaboration.get_sel_challenge_elaborations(challenge):
-            elaborations = Elaboration.get_sel_challenge_elaborations(challenge)
-        html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
 
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
@@ -185,12 +178,21 @@ def set_appraisal(request):
 
     return HttpResponse()
 
+@csrf_exempt
 @login_required()
 def select_challenge(request):
-    print("loading all challenges...")
-    challenges = Challenge.objects.all()
+    selected_challenge = request.POST['selected_challenge']
 
-    return render_to_response('select_challenge.html', {'challenges': challenges}, RequestContext(request))
+    elaborations = []
+    challenge = Challenge.objects.get(title=selected_challenge)
+    if Elaboration.get_sel_challenge_elaborations(challenge):
+        elaborations = Elaboration.get_sel_challenge_elaborations(challenge)
+
+    html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
+
+    # store selected elaborations in session
+    request.session['elaborations'] = serializers.serialize('json', elaborations)
+    return html
 
 @csrf_exempt
 @login_required()
@@ -206,12 +208,19 @@ def search(request):
         if search_all not in ['', 'all...']:
             print("todo...")
 
-
     html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
 
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
     return html
+
+@login_required()
+def autocomplete_challenge(request):
+    term = request.GET.get('term', '')
+    challenges = Challenge.objects.all().filter(title__istartswith=term)
+    titles = [challenge.title for challenge in challenges[:20]]
+    json = simplejson.dumps(titles, ensure_ascii=False)
+    return HttpResponse(json, mimetype='application/json; charset=utf-8')
 
 @login_required()
 def autocomplete_user(request):

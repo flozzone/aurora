@@ -135,11 +135,7 @@ th {
     float:right;
 }
 
-.select_challenge {
-    margin: 20px 0 20px 0;
-}
-
-.search_user, .search_all {
+.search_user, .search_all, .search_challenge {
     border: 1px solid #666666;
     border-radius: 3px;
     background-color: #E9F3D9;
@@ -148,6 +144,10 @@ th {
     color: #666666;
     padding: 2px 0 0 5px;
     -moz-box-sizing: border-box;
+}
+
+.search_challenge {
+    margin: 25px 0 25px 0;
 }
 
 .search_btn {

@@ -53,14 +53,20 @@ $(function() {
 });
 
 $(function() {
+   $(".search_challenge").click(function(event) {
+       $(".search_challenge").autocomplete( "search", "" );
+   });
+});
+
+$(function() {
    $(".search_user").click(function(event) {
-       $('.search_user').html("");
+       $(".search_user").autocomplete( "search", "" );
    });
 });
 
 $(function() {
    $(".search_all").click(function(event) {
-       $('.search_all').html("");
+       $(".search_all").html("");
    });
 });
 
@@ -77,18 +83,31 @@ function load_details(id) {
    });
 }
 
-function load_elaborations(id) {
-   var url = '/update_overview?data=select_challenge&id=' + id;
-   $.get(url, function (data) {
-        $('#overview').html(data);
-        $('#select_challenge').html('<div class="select_challenge" id="select_challenge">select challenge +</div>');
-   });
-}
+$(function() {
+    $("#search_challenge").autocomplete({
+        source: "/autocomplete_challenge/",
+        select: function (event, ui) {
+           var data = {
+                selected_challenge: ui.item.value     // select value from autocomplete box
+           };
+           var args = { type: "POST", url: "/select_challenge/", data: data,
+                error: function () {
+                    alert('challenge not found');
+                },
+                success: function(data) {
+                    $('#overview').html(data);
+                }
+           };
+           $.ajax(args);
+        },
+        minLength: 0
+    });
+});
 
 $(function() {
     $("#search_user").autocomplete({
         source: "/autocomplete_user/",
-        minLength: 2
+        minLength: 0
     });
 });
 
@@ -107,7 +126,7 @@ $(function() {
        };
        var args = { type: "POST", url: "/search/", data: data,
             error: function () {
-                alert('user not found');
+                alert('no search results found');
             },
             success: function(data) {
                 $('#overview').html(data);
