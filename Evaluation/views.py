@@ -2,10 +2,12 @@ from datetime import datetime
 import json
 from django.core import serializers
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, render
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
+from django.utils import simplejson
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from Challenge.models import Challenge
 from Elaboration.models import Elaboration
@@ -185,20 +187,36 @@ def select_challenge(request):
 
     return render_to_response('select_challenge.html', {'challenges': challenges}, RequestContext(request))
 
-
 @csrf_exempt
 @login_required()
 def search(request):
-    query_studi = request.POST['query_studi']
-    query_all = request.POST['query_all']
+    search_user = request.POST['search_user']
+    search_all = request.POST['search_all']
 
-    if query_studi:
-        studi = PortfolioUser.serach_user(query_studi)
-        if studi:
-            elaborations = studi[0].get_elaborations()      # TODO: make sure that only 1 user is returned
+    if search_user:
+        user = PortfolioUser.objects.get(username=search_user.split()[0])
+        elaborations = user.get_elaborations()
 
     html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
 
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
     return html
+
+@login_required()
+def autocomplete_user(request):
+    term = request.GET.get('term', '')
+    studies = PortfolioUser.objects.all().filter(
+        Q(username__istartswith=term) | Q(first_name__istartswith=term) | Q(last_name__istartswith=term))
+    names = [(studi.username + ' ' + studi.first_name + ' ' + studi.last_name) for studi in studies[:20]]
+    json = simplejson.dumps(names, ensure_ascii=False)
+    return HttpResponse(json, mimetype='application/json; charset=utf-8')
+
+@login_required()
+def autocomplete_all(request):
+    term = request.GET.get('term', '')
+    studies = PortfolioUser.objects.all().filter(
+        Q(username__istartswith=term) | Q(first_name__istartswith=term) | Q(last_name__istartswith=term))
+    names = [studi.username for studi in studies[:20]]
+    json = simplejson.dumps(names, ensure_ascii=False)
+    return HttpResponse(json, mimetype='application/json; charset=utf-8')

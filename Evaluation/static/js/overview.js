@@ -53,32 +53,14 @@ $(function() {
 });
 
 $(function() {
-   $(".search_studi").click(function(event) {
-       $('.search_studi').html("");
+   $(".search_user").click(function(event) {
+       $('.search_user').html("");
    });
 });
 
 $(function() {
    $(".search_all").click(function(event) {
        $('.search_all').html("");
-   });
-});
-
-$(function() {
-   $(".search_btn").click(function(event) {
-       var data = {
-            query_studi: $('.search_studi').text(),
-            query_all: $('.search_all').text()
-       };
-       var args = { type: "POST", url: "/search/", data: data,
-            error: function () {
-                alert('error searching data');
-            },
-            success: function(data) {
-                $('#overview').html(data);
-            }
-       };
-       $.ajax(args);
    });
 });
 
@@ -102,3 +84,35 @@ function load_elaborations(id) {
         $('#select_challenge').html('<div class="select_challenge" id="select_challenge">select challenge +</div>');
    });
 }
+
+$(function() {
+    $("#search_user").autocomplete({
+        source: "/autocomplete_user/",
+        minLength: 2
+    });
+});
+
+$(function() {
+    $("#search_all").autocomplete({
+        source: "/autocomplete_all/",
+        minLength: 2
+    });
+});
+
+$(function() {
+   $(".search_btn").click(function(event) {
+       var data = {
+            search_user: $('.search_user').text(),
+            search_all: $('.search_all').text()
+       };
+       var args = { type: "POST", url: "/search/", data: data,
+            error: function () {
+                alert('user not found');
+            },
+            success: function(data) {
+                $('#overview').html(data);
+            }
+       };
+       $.ajax(args);
+   });
+});

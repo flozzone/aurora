@@ -132,30 +132,32 @@ th {
     float:right;
 }
 
-.search_studi, .search_all {
+.select_challenge {
+    margin: 20px 0 20px 0;
+}
+
+.search_user, .search_all {
     border: 1px solid #666666;
     border-radius: 3px;
     background-color: #E9F3D9;
     height: 25px;
-    margin-top: 20px;
-    width: 48%;
-}
-
-.search_studi {
-    float: left;
-}
-
-.search_all {
-    float: right;
+    margin-top: 10px;
+    color: #666666;
+    padding: 2px 0 0 5px;
+    -moz-box-sizing: border-box;
 }
 
 .search_btn {
     float: left;
     border: 1px solid #BAE46E;
     border-radius: 3px;
-    background-color: #E7FFCF;
+    background-color: #BAE46E;
     height: 25px;
     width: 100%;
     margin: 10px 0 20px 0;
     cursor: pointer;
+    color: white;
+    text-align: center;
+    padding: 2px 0 0 0;
+    -moz-box-sizing: border-box;
 }
