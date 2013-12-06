@@ -83,3 +83,12 @@ class Elaboration(models.Model):
             if Review.get_review_amount(candidate) < Review.get_review_amount(best_candidate):
                 best_candidate = candidate
         return best_candidate
+
+    def get_success_reviews(self):
+        return Review.objects.filter(elaboration=self, appraisal=Review.SUCCESS)
+
+    def get_nothing_reviews(self):
+        return Review.objects.filter(elaboration=self, appraisal=Review.NOTHING)
+
+    def get_fail_reviews(self):
+        return Review.objects.filter(elaboration=self, appraisal=Review.FAIL)

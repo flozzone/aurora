@@ -55,6 +55,7 @@ th {
     border: 1px solid #666666;
     border-radius: 5px;
     background-color: #E9F3D9;
+    -moz-box-sizing: border-box;
 }
 
 .points {
@@ -64,11 +65,13 @@ th {
     position: absolute;
     display: inline;
     margin: 0 0 20px 10px;
+    padding: 3px;
 }
 
 .evaluation {
     min-height: 80px;
     margin-bottom: 20px;
+    padding: 5px;
 }
 
 .submit_evaluation {
@@ -160,4 +163,28 @@ th {
     text-align: center;
     padding: 2px 0 0 0;
     -moz-box-sizing: border-box;
+}
+
+.success_reviews, .notry_reviews, .fail_reviews {
+    border-radius: 3px;
+    height: 25px;
+    padding-top: 3px;
+    text-align: center;
+    -moz-box-sizing: border-box;
+    margin-right: 3px;
+}
+
+.success_reviews {
+    border: 1px solid green;
+    background-color: greenyellow;
+}
+
+.notry_reviews {
+    border: 1px solid orangered;
+    background-color: orange;
+}
+
+.fail_reviews {
+    border: 1px solid red;
+    background-color: #F08080;
 }
