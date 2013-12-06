@@ -107,18 +107,23 @@ def stack(request):
 def others(request):
     # get selected elaborations from session
     elaboration = Elaboration.objects.get(pk=request.session.get('elaboration_id', ''))
-    other_elaborations = elaboration.get_others()
 
-    index=int(request.GET.get('page', '0'))
-
-    elaboration_list = list(other_elaborations)
     next = prev = None
-    if index+1 < len(elaboration_list):
-        next = index+1
-    if not index == 0:
-        prev = index-1
 
-    elaboration = elaboration_list[index]
+    if elaboration.get_others():
+        other_elaborations = elaboration.get_others()
+
+        index=int(request.GET.get('page', '0'))
+        elaboration_list = list(other_elaborations)
+
+        if index+1 < len(elaboration_list):
+            next = index+1
+        if not index == 0:
+            prev = index-1
+
+        elaboration = elaboration_list[index]
+    else:
+        elaboration = []
 
     return render_to_response('others.html', {'elaboration': elaboration, 'next': next, 'prev': prev}, RequestContext(request))
 
@@ -193,9 +198,14 @@ def search(request):
     search_user = request.POST['search_user']
     search_all = request.POST['search_all']
 
-    if search_user:
+    elaborations = []
+    if search_user not in ['', 'user...']:
         user = PortfolioUser.objects.get(username=search_user.split()[0])
         elaborations = user.get_elaborations()
+    else:
+        if search_all not in ['', 'all...']:
+            print("todo...")
+
 
     html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
 
