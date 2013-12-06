@@ -218,7 +218,7 @@ def search(request):
 def autocomplete_challenge(request):
     term = request.GET.get('term', '')
     challenges = Challenge.objects.all().filter(title__istartswith=term)
-    titles = [challenge.title for challenge in challenges[:20]]
+    titles = [challenge.title for challenge in challenges]
     json = simplejson.dumps(titles, ensure_ascii=False)
     return HttpResponse(json, mimetype='application/json; charset=utf-8')
 
@@ -227,7 +227,7 @@ def autocomplete_user(request):
     term = request.GET.get('term', '')
     studies = PortfolioUser.objects.all().filter(
         Q(username__istartswith=term) | Q(first_name__istartswith=term) | Q(last_name__istartswith=term))
-    names = [(studi.username + ' ' + studi.first_name + ' ' + studi.last_name) for studi in studies[:20]]
+    names = [(studi.username + ' ' + studi.first_name + ' ' + studi.last_name) for studi in studies]
     json = simplejson.dumps(names, ensure_ascii=False)
     return HttpResponse(json, mimetype='application/json; charset=utf-8')
 
