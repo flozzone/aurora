@@ -2,14 +2,17 @@ from datetime import datetime
 import json
 from django.core import serializers
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, render
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
+from django.utils import simplejson
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from Challenge.models import Challenge
 from Elaboration.models import Elaboration
 from Evaluation.models import Evaluation
+from PortfolioUser.models import PortfolioUser
 from Review.models import Review
 
 
@@ -47,13 +50,6 @@ def update_overview(request):
     if request.GET.get('data', '') == "non_adequate_work":
         print("loading non adequate work...")
         elaborations = Elaboration.get_non_adequate_work()
-        html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
-    if request.GET.get('data', '') == "select_challenge":
-        print("loading selected challenge elaborations...")
-        challenge = Challenge.objects.get(pk=request.GET.get('id', ''))
-        elaborations = []
-        if Elaboration.get_sel_challenge_elaborations(challenge):
-            elaborations = Elaboration.get_sel_challenge_elaborations(challenge)
         html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
 
     # store selected elaborations in session
@@ -104,18 +100,23 @@ def stack(request):
 def others(request):
     # get selected elaborations from session
     elaboration = Elaboration.objects.get(pk=request.session.get('elaboration_id', ''))
-    other_elaborations = elaboration.get_challenge_elaborations()
 
-    index=int(request.GET.get('page', '0'))
-
-    elaboration_list = list(other_elaborations)
     next = prev = None
-    if index+1 < len(elaboration_list):
-        next = index+1
-    if not index == 0:
-        prev = index-1
 
-    elaboration = elaboration_list[index]
+    if elaboration.get_others():
+        other_elaborations = elaboration.get_others()
+
+        index=int(request.GET.get('page', '0'))
+        elaboration_list = list(other_elaborations)
+
+        if index+1 < len(elaboration_list):
+            next = index+1
+        if not index == 0:
+            prev = index-1
+
+        elaboration = elaboration_list[index]
+    else:
+        elaboration = []
 
     return render_to_response('others.html', {'elaboration': elaboration, 'next': next, 'prev': prev}, RequestContext(request))
 
@@ -177,9 +178,64 @@ def set_appraisal(request):
 
     return HttpResponse()
 
+@csrf_exempt
 @login_required()
 def select_challenge(request):
-    print("loading all challenges...")
-    challenges = Challenge.objects.all()
+    selected_challenge = request.POST['selected_challenge']
 
-    return render_to_response('select_challenge.html', {'challenges': challenges}, RequestContext(request))
+    elaborations = []
+    challenge = Challenge.objects.get(title=selected_challenge)
+    if Elaboration.get_sel_challenge_elaborations(challenge):
+        elaborations = Elaboration.get_sel_challenge_elaborations(challenge)
+
+    html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
+
+    # store selected elaborations in session
+    request.session['elaborations'] = serializers.serialize('json', elaborations)
+    return html
+
+@csrf_exempt
+@login_required()
+def search(request):
+    search_user = request.POST['search_user']
+    search_all = request.POST['search_all']
+
+    elaborations = []
+    if search_user not in ['', 'user...']:
+        user = PortfolioUser.objects.get(username=search_user.split()[0])
+        elaborations = user.get_elaborations()
+    else:
+        if search_all not in ['', 'all...']:
+            print("todo...")
+
+    html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
+
+    # store selected elaborations in session
+    request.session['elaborations'] = serializers.serialize('json', elaborations)
+    return html
+
+@login_required()
+def autocomplete_challenge(request):
+    term = request.GET.get('term', '')
+    challenges = Challenge.objects.all().filter(title__istartswith=term)
+    titles = [challenge.title for challenge in challenges]
+    json = simplejson.dumps(titles, ensure_ascii=False)
+    return HttpResponse(json, mimetype='application/json; charset=utf-8')
+
+@login_required()
+def autocomplete_user(request):
+    term = request.GET.get('term', '')
+    studies = PortfolioUser.objects.all().filter(
+        Q(username__istartswith=term) | Q(first_name__istartswith=term) | Q(last_name__istartswith=term))
+    names = [(studi.username + ' ' + studi.first_name + ' ' + studi.last_name) for studi in studies]
+    json = simplejson.dumps(names, ensure_ascii=False)
+    return HttpResponse(json, mimetype='application/json; charset=utf-8')
+
+@login_required()
+def autocomplete_all(request):
+    term = request.GET.get('term', '')
+    studies = PortfolioUser.objects.all().filter(
+        Q(username__istartswith=term) | Q(first_name__istartswith=term) | Q(last_name__istartswith=term))
+    names = [studi.username for studi in studies[:20]]
+    json = simplejson.dumps(names, ensure_ascii=False)
+    return HttpResponse(json, mimetype='application/json; charset=utf-8')

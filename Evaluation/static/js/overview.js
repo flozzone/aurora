@@ -8,7 +8,7 @@ $(function() {
 });
 
 $(function() {
-   $(".non_adquate_work").click(function(event) {
+   $(".non_adequate_work").click(function(event) {
        var url = '/update_overview?data=non_adequate_work';
        $.get(url, function (data) {
             $('#overview').html(data);
@@ -53,14 +53,20 @@ $(function() {
 });
 
 $(function() {
-   $(".search_studi").click(function(event) {
-       alert("TODO: search");
+   $(".search_challenge").click(function(event) {
+       $(".search_challenge").autocomplete( "search", "" );
+   });
+});
+
+$(function() {
+   $(".search_user").click(function(event) {
+       $(".search_user").autocomplete( "search", "" );
    });
 });
 
 $(function() {
    $(".search_all").click(function(event) {
-       alert("TODO: search");
+       $(".search_all").html("");
    });
 });
 
@@ -77,10 +83,55 @@ function load_details(id) {
    });
 }
 
-function load_elaborations(id) {
-   var url = '/update_overview?data=select_challenge&id=' + id;
-   $.get(url, function (data) {
-        $('#overview').html(data);
-        $('#select_challenge').html('<div class="select_challenge" id="select_challenge">select challenge +</div>');
+$(function() {
+    $("#search_challenge").autocomplete({
+        source: "/autocomplete_challenge/",
+        select: function (event, ui) {
+           var data = {
+                selected_challenge: ui.item.value     // select value from autocomplete box
+           };
+           var args = { type: "POST", url: "/select_challenge/", data: data,
+                error: function () {
+                    alert('challenge not found');
+                },
+                success: function(data) {
+                    $('#overview').html(data);
+                }
+           };
+           $.ajax(args);
+        },
+        minLength: 0
+    });
+});
+
+$(function() {
+    $("#search_user").autocomplete({
+        source: "/autocomplete_user/",
+        minLength: 0
+    });
+});
+
+$(function() {
+    $("#search_all").autocomplete({
+        source: "/autocomplete_all/",
+        minLength: 2
+    });
+});
+
+$(function() {
+   $(".search_btn").click(function(event) {
+       var data = {
+            search_user: $('.search_user').text(),
+            search_all: $('.search_all').text()
+       };
+       var args = { type: "POST", url: "/search/", data: data,
+            error: function () {
+                alert('no search results found');
+            },
+            success: function(data) {
+                $('#overview').html(data);
+            }
+       };
+       $.ajax(args);
    });
-}
+});

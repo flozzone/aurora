@@ -2,6 +2,7 @@ import sys
 import urllib, hashlib
 from django.db import models
 from django.contrib.auth.models import User, UserManager
+from django.db.models import Q
 from Elaboration.models import Elaboration
 
 
