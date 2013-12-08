@@ -72,8 +72,11 @@ $(function() {
 });
 
 $(function() {
-   $(".tags").click(function(event) {
-       alert("TODO: tags");
+   $(".awesome").click(function(event) {
+       var url = '/update_overview?data=awesome';
+       $.get(url, function (data) {
+            $('#overview').html(data);
+       });
    });
 });
 

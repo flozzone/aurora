@@ -51,6 +51,10 @@ def update_overview(request):
         print("loading non adequate work...")
         elaborations = Elaboration.get_non_adequate_work()
         html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
+    if request.GET.get('data', '') == "awesome":
+        print("loading awesome work...")
+        elaborations = Elaboration.get_awesome()
+        html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
 
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
