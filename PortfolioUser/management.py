@@ -278,6 +278,8 @@ def init_data(app, sender, **kwargs):
         Review(elaboration=de2, reviewer=s0, appraisal='F', submission_time=datetime.now()).save()
         print('adding review 3 for elaboration for challenge 1 for s0')
         Review(elaboration=de3, reviewer=s0, appraisal='S', submission_time=datetime.now(), awesome=True).save()
+        print('adding review 5 for elaboration for challenge 1 for s0')
+        Review(elaboration=de3, reviewer=d2, appraisal='F', submission_time=datetime.now()).save()
 
         print('adding dummy elaboration 3 for challenge 1')
         de4 = Elaboration(challenge=challenge_2, user=d1, elaboration_text="dummy elaboration 1",
@@ -293,6 +295,15 @@ def init_data(app, sender, **kwargs):
         # create review for elaboration
         print('adding review 1 for elaboration for challenge 2 for s0')
         Review(elaboration=de4, reviewer=s0, appraisal='N', submission_time=datetime.now()).save()
+
+        print('adding dummy elaboration 5 for challenge 4')
+        de5 = Elaboration(challenge=challenge_3, user=s0, elaboration_text="luke, i'm your brother",
+                          submission_time=datetime.now())
+        de5.save()
+        print('adding review 1 for elaboration for challenge 2 for s0')
+        Review(elaboration=de5, reviewer=d1, appraisal='S', submission_time=datetime.now(), awesome=True).save()
+        print('adding review 2 for elaboration for challenge 2 for s0')
+        Review(elaboration=de5, reviewer=d2, appraisal='S', submission_time=datetime.now()).save()
 
         # create stack-challenge relations
         print('adding stack challenge relations')

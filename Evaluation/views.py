@@ -230,3 +230,13 @@ def autocomplete_user(request):
     names = [(studi.username + ' ' + studi.first_name + ' ' + studi.last_name) for studi in studies]
     json = simplejson.dumps(names, ensure_ascii=False)
     return HttpResponse(json, mimetype='application/json; charset=utf-8')
+
+@login_required()
+def load_reviews(request):
+    if not 'elaboration_id' in request.GET:
+        return False;
+
+    elaboration = Elaboration.objects.get(pk=request.GET.get('elaboration_id', ''))
+    reviews = Review.objects.filter(elaboration=elaboration)
+
+    return render_to_response('stack_rev.html', {'elaboration': elaboration, 'reviews': reviews}, RequestContext(request))
