@@ -12,7 +12,11 @@
     </table>
 
     <div class="spacer"></div>
-    
-    {% include "reviews.html" %}
+    <div>{{ elaboration.elaboration_text }}</div>
+    <div class="spacer"></div>
+
+    {% if reviews %}
+        {% include "reviews.html" %}
+    {% endif %}
 
 {% endblock %}
