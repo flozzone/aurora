@@ -60,7 +60,8 @@ $(function() {
 
 $(function() {
    $(".search_user").click(function(event) {
-       $(".search_user").autocomplete( "search", "" );
+       // $(".search_user").autocomplete( "search", "" );
+       $(".search_user").html("");
    });
 });
 
@@ -107,13 +108,6 @@ $(function() {
 $(function() {
     $("#search_user").autocomplete({
         source: "/autocomplete_user/",
-        minLength: 0
-    });
-});
-
-$(function() {
-    $("#search_all").autocomplete({
-        source: "/autocomplete_all/",
         minLength: 2
     });
 });

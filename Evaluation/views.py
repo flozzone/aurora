@@ -230,12 +230,3 @@ def autocomplete_user(request):
     names = [(studi.username + ' ' + studi.first_name + ' ' + studi.last_name) for studi in studies]
     json = simplejson.dumps(names, ensure_ascii=False)
     return HttpResponse(json, mimetype='application/json; charset=utf-8')
-
-@login_required()
-def autocomplete_all(request):
-    term = request.GET.get('term', '')
-    studies = PortfolioUser.objects.all().filter(
-        Q(username__istartswith=term) | Q(first_name__istartswith=term) | Q(last_name__istartswith=term))
-    names = [studi.username for studi in studies[:20]]
-    json = simplejson.dumps(names, ensure_ascii=False)
-    return HttpResponse(json, mimetype='application/json; charset=utf-8')
