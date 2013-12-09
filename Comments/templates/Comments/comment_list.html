@@ -10,7 +10,7 @@
     <div>
         {% for comment in comment_list %}
             <div class="comment" id="{{ comment.id }}">
-                <p><pre>{{ comment.text }}</pre></p>
+                <p>{{ comment.text|linebreaks }}</p>
                 <p><pre>submitted {{ comment.post_date | naturaltime }} by {{ comment.author.username }}</pre></p>
             </div>
             {% for response in comment.responses %}
