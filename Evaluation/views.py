@@ -51,6 +51,10 @@ def update_overview(request):
         print("loading non adequate work...")
         elaborations = Elaboration.get_non_adequate_work()
         html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
+    if request.GET.get('data', '') == "awesome":
+        print("loading awesome work...")
+        elaborations = Elaboration.get_awesome()
+        html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
 
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
@@ -232,10 +236,11 @@ def autocomplete_user(request):
     return HttpResponse(json, mimetype='application/json; charset=utf-8')
 
 @login_required()
-def autocomplete_all(request):
-    term = request.GET.get('term', '')
-    studies = PortfolioUser.objects.all().filter(
-        Q(username__istartswith=term) | Q(first_name__istartswith=term) | Q(last_name__istartswith=term))
-    names = [studi.username for studi in studies[:20]]
-    json = simplejson.dumps(names, ensure_ascii=False)
-    return HttpResponse(json, mimetype='application/json; charset=utf-8')
+def load_reviews(request):
+    if not 'elaboration_id' in request.GET:
+        return False;
+
+    elaboration = Elaboration.objects.get(pk=request.GET.get('elaboration_id', ''))
+    reviews = Review.objects.filter(elaboration=elaboration)
+
+    return render_to_response('stack_rev.html', {'elaboration': elaboration, 'reviews': reviews}, RequestContext(request))

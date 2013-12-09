@@ -60,7 +60,8 @@ $(function() {
 
 $(function() {
    $(".search_user").click(function(event) {
-       $(".search_user").autocomplete( "search", "" );
+       // $(".search_user").autocomplete( "search", "" );
+       $(".search_user").html("");
    });
 });
 
@@ -71,8 +72,11 @@ $(function() {
 });
 
 $(function() {
-   $(".tags").click(function(event) {
-       alert("TODO: tags");
+   $(".awesome").click(function(event) {
+       var url = '/update_overview?data=awesome';
+       $.get(url, function (data) {
+            $('#overview').html(data);
+       });
    });
 });
 
@@ -107,13 +111,6 @@ $(function() {
 $(function() {
     $("#search_user").autocomplete({
         source: "/autocomplete_user/",
-        minLength: 0
-    });
-});
-
-$(function() {
-    $("#search_all").autocomplete({
-        source: "/autocomplete_all/",
         minLength: 2
     });
 });
