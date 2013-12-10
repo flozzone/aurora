@@ -37,3 +37,7 @@ def post_comment(request):
             comment = Comment.objects.create(text=form.cleaned_data['text'], author=user, post_date=timezone.now())
             comment.save()
     return HttpResponseRedirect(reverse('Comments:feed'))
+
+
+def test_template_tags(request):
+    return render(request, 'Comments/test_template_tags.html', {'test_var': 'test_var_string'})
