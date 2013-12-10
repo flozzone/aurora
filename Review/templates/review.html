@@ -4,49 +4,56 @@
 {% endblock %}
 
 {% if review %}
-<div>
-  Challenge:
-  <div class="challenge">
+  <script>
+    var stack_id = {{ stack_id }};
+  </script>
+  <div class="review" id="{{ review.id }}">
+    Challenge:
+    <div class="challenge" id="{{ review.elaboration.challenge.id }}">
 
-    <div class="title">
-      Title: {{ review.elaboration.challenge.title }}
+      <div class="title">
+        Title: {{ review.elaboration.challenge.title }}
+      </div>
+      <div class="description">
+        Description: {{ review.elaboration.challenge.description }}
+      </div>
     </div>
-    <div class="description">
-      Description: {{ review.elaboration.challenge.description }}
-    </div>
-  </div>
-  <br>
-
-  <div class="elaboration">
-
-    <div class="elaboration_text">
-      Elaboration: {{ review.elaboration.elaboration_text |safe }}
-    </div>
-  </div>
-
-  {% for question in questions %}
     <br>
-    <div class="question_container">
-      <div class="question" id="{{ question.id }}">
-        Question: {{ question.text }}
-      </div>
-      <div class="anwer" id="{{ question.id }}">
-        Answer:
-        {% if question.boolean_answer %}
-          <input type="radio" name="{{ question.id }}" value="yes"> Yes
-          <input type="radio" name="{{ question.id }}" value="no"> No <br>
-        {% else %}
-          <br><input type="text" name="answer">
-        {% endif %}
-        {% if not question.visible_to_author %}
-          <i>Only the LVA-Team will be able to see this answer.</i>
-        {% endif %}
+
+    <div class="elaboration">
+
+      <div class="elaboration_text">
+        Elaboration: {{ review.elaboration.elaboration_text |safe }}
       </div>
     </div>
-  {% endfor %}
-  <br>
-  <input class="submit" type="submit" value="Submit">
-</div>
+
+    <form action="./review_answer/" method="post">
+      {% for question in questions %}
+        <br>
+        <div class="question_container">
+          <div class="question" id="{{ question.id }}">
+            Question: {{ question.text }}
+          </div>
+          <div class="answer {% if question.boolean_answer %}boolean_answer{% endif %}" id="{{ question.id }}"
+               question_id="{{ question.id }}">
+            Answer:
+            {% if question.boolean_answer %}
+              <input type="radio" name="{{ question.id }}" value="yes"> Yes
+              <input type="radio" name="{{ question.id }}" value="no" checked> No <br>
+            {% else %}
+              <br><input type="text" name="answer">
+            {% endif %}
+            {% if not question.visible_to_author %}
+              <i>Only the LVA-Team will be able to see this answer.</i>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+      <br>
+
+      <input class="review_submit" type="submit" value="Submit">
+    </form>
+  </div>
 {% else %}
-  you should not be here
+  Error. Could not find any reviews: probably forgot to create at least 3 dummy reviews!
 {% endif %}
