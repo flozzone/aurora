@@ -1,5 +1,6 @@
 {% block additional_headers %}
   <link rel="stylesheet" href="{{ STATIC_URL }}css/review.css" type="text/css" media="screen"/>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/review.js"></script>
 {% endblock %}
 
 {% if review %}
@@ -44,7 +45,7 @@
     </div>
   {% endfor %}
   <br>
-  <input type="submit" value="Submit">
+  <input class="submit" type="submit" value="Submit">
 </div>
 {% else %}
   you should not be here

@@ -34,7 +34,10 @@ def create_context_stack(request):
             if stack_challenge.challenge.is_available_for_user(request.user):
                 reviews = []
                 for review in stack_challenge.challenge.get_reviews_written_by_user(request.user):
-                    reviews.append(review)
+                    reviews.append({
+                        'review': review,
+                        'submitted': review.submission_time is not None
+                    })
                 for i in range(Challenge.reviews_per_challenge - len(reviews)):
                     reviews.append({})
                 challenges_active.append({

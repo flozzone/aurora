@@ -50,13 +50,20 @@ h1 {
     height: 18px;
     width: 18px;
     float: left;
-    background-color: green;
     border: 1px solid black;
 }
 
 .review.inactive {
     background-color: #555555;
     opacity: 0.6;
+}
+
+.review.done {
+    background-color: green;
+}
+
+.review.in_progress {
+    background-color: orange;
 }
 
 .review.active {
