@@ -12,9 +12,9 @@
         {{ review.reviewer.first_name }} {{ review.reviewer.last_name }}
 
         <div class="appraisal">
-            <input type="radio" name="reviewgroup{{ review.id }}" onclick="set_appraisal({{ review.id }}, 'N')" {% if review.appraisal == 'N' %} checked {% endif %}>NOT EVEN TRYING</input>
-            <input type="radio" name="reviewgroup{{ review.id }}" onclick="set_appraisal({{ review.id }}, 'F')" {% if review.appraisal == 'F' %} checked {% endif %}>FAIL</input>
-            <input type="radio" name="reviewgroup{{ review.id }}" onclick="set_appraisal({{ review.id }}, 'S')" {% if review.appraisal == 'S' %} checked {% endif %}>SUCCESS</input>
+            <input type="radio" name="reviewgroup{{ review.id }}{{ stack_elaborations|length }}" onclick="set_appraisal({{ review.id }}, 'N')" {% if review.appraisal == 'N' %} checked {% endif %}>NOT EVEN TRYING</input>
+            <input type="radio" name="reviewgroup{{ review.id }}{{ stack_elaborations|length }}" onclick="set_appraisal({{ review.id }}, 'F')" {% if review.appraisal == 'F' %} checked {% endif %}>FAIL</input>
+            <input type="radio" name="reviewgroup{{ review.id }}{{ stack_elaborations|length }}" onclick="set_appraisal({{ review.id }}, 'S')" {% if review.appraisal == 'S' %} checked {% endif %}>SUCCESS</input>
         </div>
     {% endfor %}
 
