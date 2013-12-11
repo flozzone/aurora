@@ -54,6 +54,7 @@ $(function() {
 
 $(function() {
    $(".search_challenge").click(function(event) {
+       $(".search_challenge").html("");
        $(".search_challenge").autocomplete( "search", "" );
    });
 });
