@@ -1,7 +1,5 @@
-{% extends "base.html" %}
 {% load humanize %}
 
-{% block content %}
     <form action="{% url 'Comments:post_comment' %}" method="post">{% csrf_token %}
             {{ form.as_p }}
         <input type="submit" value="Add comment" />
@@ -21,4 +19,3 @@
             {% endfor %}
         {% endfor %}
     </div>
-{% endblock %}

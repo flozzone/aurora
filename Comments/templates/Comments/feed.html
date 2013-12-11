@@ -1,11 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title></title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% load comments %}
 
-{% extends "comment_list.html" %}
-
-</body>
-</html>
+{% block content %}
+    {% render_comment_list for none %}
+{% endblock content %}

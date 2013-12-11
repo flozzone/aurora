@@ -1,14 +1,6 @@
+{% extends 'base.html' %}
 {% load comments %}
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title></title>
-</head>
-<body>
-
-{# render_comment_list for evaluation #}
-{% render_comment_list for test_var %}
-
-</body>
-</html>
+{% block content %}
+    {% render_comment_list for object %}
+{% endblock %}
