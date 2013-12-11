@@ -46,19 +46,26 @@ h1 {
     margin: 10px;
 }
 
-.review {
+.review_box {
     height: 18px;
     width: 18px;
     float: left;
-    background-color: green;
     border: 1px solid black;
 }
 
-.review.inactive {
+.review_box.inactive {
     background-color: #555555;
     opacity: 0.6;
 }
 
-.review.active {
+.review_box.done {
+    background-color: green;
+}
+
+.review_box.in_progress {
+    background-color: orange;
+}
+
+.review_box.active {
     background-color: yellow;
 }

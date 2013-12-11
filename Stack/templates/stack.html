@@ -19,11 +19,15 @@
       <div class="review_wrapper">
         {% for review in challenge_dict.reviews %}
           {% if review %}
-            <div class="review done" id="{{ review.id }}" challenge_id="{{ challenge_dict.challenge.id }}"></div>
+            {% if review.submitted %}
+              <div class="review_box done" id="{{ review.id }}" challenge_id="{{ challenge_dict.challenge.id }}"></div>
+            {% else %}
+              <div class="review_box in_progress" id="{{ review.id }}" challenge_id="{{ challenge_dict.challenge.id }}"></div>
+            {% endif %}
           {% elif not challenge_dict.submitted %}
-            <div class="review inactive"></div>
+            <div class="review_box inactive"></div>
           {% else %}
-            <div class="review active" challenge_id="{{ challenge_dict.challenge.id }}"></div>
+            <div class="review_box active" challenge_id="{{ challenge_dict.challenge.id }}"></div>
           {% endif %}
         {% endfor %}
       </div>
@@ -38,9 +42,9 @@
     </div>
     {% if not challenge.is_final_challenge %}
       <div class="review_wrapper">
-        <div class="review inactive"></div>
-        <div class="review inactive"></div>
-        <div class="review inactive"></div>
+        <div class="review_box inactive"></div>
+        <div class="review_box inactive"></div>
+        <div class="review_box inactive"></div>
       </div>
     {% endif %}
   {% endfor %}

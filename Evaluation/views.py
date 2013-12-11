@@ -243,4 +243,4 @@ def load_reviews(request):
     elaboration = Elaboration.objects.get(pk=request.GET.get('elaboration_id', ''))
     reviews = Review.objects.filter(elaboration=elaboration)
 
-    return render_to_response('stack_rev.html', {'elaboration': elaboration, 'reviews': reviews}, RequestContext(request))
+    return render_to_response('stack_rev.html', {'elaboration': elaboration, 'reviews': reviews, 'stack': 'stack'}, RequestContext(request))

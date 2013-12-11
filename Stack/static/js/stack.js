@@ -2,7 +2,8 @@ $(stack_loaded);
 
 function stack_loaded() {
     $(".challenge.active").click(challenge_clicked);
-    $(".review.active").click(review_clicked);
+    $(".review_box.active").click(review_box_clicked);
+    $(".review_box.in_progress").click(review_box_clicked);
 }
 
 function challenge_clicked(event) {
@@ -15,9 +16,9 @@ function challenge_clicked(event) {
     });
 }
 
-function review_clicked(event) {
+function review_box_clicked(event) {
     var challenge_id = $(event.target).attr('challenge_id');
-    var url = './get_challenge_review?id=' + challenge_id;
+    var url = './get_challenge_review/?id=' + challenge_id;
     $.get(url, function (data) {
         $('#detail_area').html(data);
         window.history.pushState('', '', './challenge_review?id=' + challenge_id);
