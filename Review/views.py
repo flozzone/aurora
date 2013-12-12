@@ -56,6 +56,8 @@ def review_answer(request):
             review_question = ReviewQuestion.objects.get(pk=question_id)
             ReviewAnswer(review_question=review_question, text=text).save()
         review = Review.objects.get(pk=review_id)
+        review.appraisal = data['appraisal']
+        review.awesome = data['awesome']
         review.submission_time = datetime.now()
         review.save()
     return HttpResponse()

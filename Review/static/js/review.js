@@ -28,12 +28,13 @@ function submit_clicked(event) {
         } else {
             answer = answer_object.find('input').first().val();
         }
-
         data['answers'].push({
             'question_id': answer_object.attr('question_id'),
             'answer': answer
         });
     });
+    data['appraisal'] = $('input[name=appraisal]:checked').val();
+    data['awesome'] = $('input[name=awesome]').is(':checked');
     ajax_setup()
     var args = {
         type: "POST",
@@ -44,7 +45,6 @@ function submit_clicked(event) {
         },
         success: review_submitted
     };
-    console.log(event);
     $.ajax(args);
 }
 

@@ -50,10 +50,14 @@
         </div>
       {% endfor %}
       <br>
+      <input type="radio" name="appraisal" value="S" checked> Success
+      <input type="radio" name="appraisal" value="F"> Fail
+      <input type="radio" name="appraisal" value="N"> Not even trying<br><br>
 
+      <input type="checkbox" name="awesome" value="awesome"> Check this if the elaboration was an epic win!<br><br>
       <input class="review_submit" type="submit" value="Submit">
     </form>
   </div>
 {% else %}
-  Error. Could not find any reviews: probably forgot to create at least 3 dummy reviews!
+  There are currently now elaborations available for review. Please try again later.
 {% endif %}
