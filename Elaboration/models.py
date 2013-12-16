@@ -76,12 +76,16 @@ class Elaboration(models.Model):
     def get_review_candidate(challenge, user):
         candidates = Elaboration.objects.filter(challenge=challenge).exclude(user=user)
         if candidates:
-            best_candidate = candidates[0]
+            best_candidate = None
         else:
             return None
         for candidate in candidates:
-            if Review.get_review_amount(candidate) < Review.get_review_amount(best_candidate):
-                best_candidate = candidate
+            if not Review.objects.filter(elaboration=candidate, reviewer=user):
+                if best_candidate:
+                    if Review.get_review_amount(candidate) < Review.get_review_amount(best_candidate):
+                        best_candidate = candidate
+                else:
+                    best_candidate = candidate
         return best_candidate
 
     def get_success_reviews(self):
