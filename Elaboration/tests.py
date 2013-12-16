@@ -84,26 +84,41 @@ class ElaborationTest(TestCase):
 
     def test_get_review_candidate_multiple_reviews(self):
         """
-        Tests that a review will not be assigned for a an elaboration that has already been reviewed by the user
+        Tests that a review will not be assigned for a an elaboration that has already been reviewed by the reviewer
         """
-        reviewer = self.users[0]
-        elaboration_list=[]
-        for _ in range(10):
-            elaboration = Elaboration.get_review_candidate(self.challenge, reviewer)
-            if elaboration:
-                assert elaboration not in elaboration_list
-                elaboration_list.append(elaboration)
-                print("Candidate - elaboration.id: " + str(elaboration.id) + " elaboration.user.id: " + str(elaboration.user.id) + " reviewer.id: " + str(reviewer.id))
-                self.create_review(elaboration, reviewer)
+        for reviewer in self.users:
+            elaboration_list=[]
+            for _ in range(10):
+                elaboration = Elaboration.get_review_candidate(self.challenge, reviewer)
+                if elaboration:
+                    assert elaboration not in elaboration_list
+                    elaboration_list.append(elaboration)
+                    print("Candidate - elaboration.id: %s elaboration.user.id: %s reviewer.id: %s" % (elaboration.id, elaboration.user.id, reviewer.id))
+                    self.create_review(elaboration, reviewer)
 
     def test_get_review_candidate_self_review(self):
         """
         Tests that a review will not be assigned for a an elaboration that the reviewer has submitted
         """
-        reviewer = self.users[0]
-        for _ in range(10):
-            elaboration = Elaboration.get_review_candidate(self.challenge, reviewer)
-            if elaboration:
-                print("Candidate - elaboration.id: " + str(elaboration.id) + " elaboration.user.id: " + str(elaboration.user.id) + " reviewer.id: " + str(reviewer.id))
-                assert reviewer.id is not elaboration.user.id
-                self.create_review(elaboration, reviewer)
+        for reviewer in self.users:
+            for _ in range(10):
+                elaboration = Elaboration.get_review_candidate(self.challenge, reviewer)
+                if elaboration:
+                    print("Candidate - elaboration.id: %s elaboration.user.id: %s reviewer.id: %s" % (elaboration.id, elaboration.user.id, reviewer.id))
+                    assert reviewer.id is not elaboration.user.id
+                    self.create_review(elaboration, reviewer)
+
+    def test_get_review_candidate_order(self):
+        """
+        Tests that the elaboration with the least amount of reviews will be returned
+        """
+        for reviewer in self.users:
+            last_review_amount = 0
+            for _ in range(10):
+                elaboration = Elaboration.get_review_candidate(self.challenge, reviewer)
+                if elaboration:
+                    review_amount = Review.get_review_amount(elaboration)
+                    assert last_review_amount <= review_amount, "%s should be <= %s" % (last_review_amount, review_amount)
+                    last_review_amount = review_amount
+                    print("Candidate - elaboration.id: %s elaboration.user.id: %s reviewer.id: %s review_amount: %s" % (elaboration.id, elaboration.user.id, reviewer.id, last_review_amount))
+                    self.create_review(elaboration, reviewer)
