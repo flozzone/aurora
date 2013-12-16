@@ -7,7 +7,6 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, render
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
-from django.utils import simplejson
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from Challenge.models import Challenge
 from Elaboration.models import Elaboration
@@ -223,8 +222,8 @@ def autocomplete_challenge(request):
     term = request.GET.get('term', '')
     challenges = Challenge.objects.all().filter(title__istartswith=term)
     titles = [challenge.title for challenge in challenges]
-    json = simplejson.dumps(titles, ensure_ascii=False)
-    return HttpResponse(json, mimetype='application/json; charset=utf-8')
+    response_data = json.dumps(titles, ensure_ascii=False)
+    return HttpResponse(response_data, mimetype='application/json; charset=utf-8')
 
 @login_required()
 def autocomplete_user(request):
@@ -232,8 +231,8 @@ def autocomplete_user(request):
     studies = PortfolioUser.objects.all().filter(
         Q(username__istartswith=term) | Q(first_name__istartswith=term) | Q(last_name__istartswith=term))
     names = [(studi.username + ' ' + studi.first_name + ' ' + studi.last_name) for studi in studies]
-    json = simplejson.dumps(names, ensure_ascii=False)
-    return HttpResponse(json, mimetype='application/json; charset=utf-8')
+    response_data = json.dumps(names, ensure_ascii=False)
+    return HttpResponse(response_data, mimetype='application/json; charset=utf-8')
 
 @login_required()
 def load_reviews(request):
