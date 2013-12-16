@@ -21,11 +21,6 @@ class ElaborationTest(TestCase):
         self.create_review_question()
         self.create_elaborations()
 
-
-    def tearDown(self):
-        for user in self.users:
-            user.delete()
-
     def create_test_user(self, username):
         user = PortfolioUser(username=username)
         user.email = '%s@student.tuwien.ac.at.' % username
@@ -99,4 +94,16 @@ class ElaborationTest(TestCase):
                 assert elaboration not in elaboration_list
                 elaboration_list.append(elaboration)
                 print("Candidate - elaboration.id: " + str(elaboration.id) + " elaboration.user.id: " + str(elaboration.user.id) + " reviewer.id: " + str(reviewer.id))
+                self.create_review(elaboration, reviewer)
+
+    def test_get_review_candidate_self_review(self):
+        """
+        Tests that a review will not be assigned for a an elaboration that the reviewer has submitted
+        """
+        reviewer = self.users[0]
+        for _ in range(10):
+            elaboration = Elaboration.get_review_candidate(self.challenge, reviewer)
+            if elaboration:
+                print("Candidate - elaboration.id: " + str(elaboration.id) + " elaboration.user.id: " + str(elaboration.user.id) + " reviewer.id: " + str(reviewer.id))
+                assert reviewer.id is not elaboration.user.id
                 self.create_review(elaboration, reviewer)
