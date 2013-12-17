@@ -2,5 +2,7 @@
 {% load comments %}
 
 {% block content %}
+    {{ object }}
     {% render_comment_list for object %}
+    {# render_comment_list_inclusion_tag for object #}
 {% endblock %}
