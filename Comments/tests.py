@@ -63,11 +63,11 @@ def dummy_comment_generator():
 class TagTests(TestCase):
     def setUp(self):
         user_generator = dummy_user_generator()
-        self.u1 = user_generator.next()
+        self.u1 = next(user_generator)
         self.u1.save()
-        self.u2 = user_generator.next()
+        self.u2 = next(user_generator)
         self.u2.save()
-        self.u3 = user_generator.next()
+        self.u3 = next(user_generator)
         self.u3.save()
 
     @staticmethod
@@ -116,12 +116,11 @@ class PersistentTestData:
     def __init__(self):
         self.user_generator = dummy_user_generator()
 
-    def fill_database(self):
-        self.u1 = self.user_generator.next()
+        self.u1 = next(self.user_generator)
         self.u1.save()
-        self.u2 = self.user_generator.next()
+        self.u2 = next(self.user_generator)
         self.u2.save()
-        self.u3 = self.user_generator.next()
+        self.u3 = next(self.user_generator)
         self.u3.save()
 
         self.ref_object = CommentReferenceObject()
