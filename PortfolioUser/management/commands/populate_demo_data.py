@@ -20,10 +20,15 @@ class Command(BaseCommand):
         init_data()
 
 def init_data():
-    user_map = {'s0': 's0'}
-    for i in range(len(list(user_map.keys()))):
-        print('adding student %s of %s' % (i, len(list(user_map.keys()))))
-        username = list(user_map.keys())[i]
+    user_data_list = [
+        {'username': 's0', 'password': 's0'},
+        {'username': 's1', 'password': 's1'},
+        {'username': 's2', 'password': 's2'},
+    ]
+
+    for i in range(len(user_data_list)):
+        print('adding student %s of %s' % (i, len(user_data_list)))
+        username = user_data_list[i]['username']
         user = PortfolioUser(username=username)
         user.email = '%s@student.tuwien.ac.at.' % username
         user.first_name = 'Firstname_%s' % username
@@ -31,15 +36,16 @@ def init_data():
         user.nickname = 'Nickname_%s' % username
         user.is_staff = False
         user.is_superuser = False
-        password = user_map[username]
+        password = user_data_list[i]['password']
         user.set_password(password)
         user.save()
-        s0 = user
+        user_data_list[i]['user'] = user
 
+    s0 = user_data_list[0]['user']
 
     # create the three dummy users for jumpstarting the peer review process
     print('adding dummy user 1')
-    d1 = PortfolioUser(username='d1', first_name='dummy', last_name='user 1', email='d1@student.tuwien.ac.at')
+    d1 = PortfolioUser(username='d1', first_name='dummy', last_name='user 1', email='martin.flucka@gmail.com')
     d1.set_password('d1')
     d1.is_staff = False
     d1.is_superuser = False
@@ -88,11 +94,12 @@ def init_data():
 
     # create course-user relations
     print('adding course-user relations')
-    CourseUserRelation(course=gsi, user=user).save()
-    CourseUserRelation(course=hci, user=user).save()
     CourseUserRelation(course=gsi, user=superuser).save()
-    CourseUserRelation(course=gsi, user=superuser).save()
-
+    CourseUserRelation(course=hci, user=superuser).save()
+    for user_data in user_data_list:
+        user = user_data['user']
+        CourseUserRelation(course=gsi, user=user).save()
+        CourseUserRelation(course=hci, user=user).save()
 
     # create challenges
     print('adding challenges')

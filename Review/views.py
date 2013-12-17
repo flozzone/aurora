@@ -12,6 +12,7 @@ from ReviewAnswer.models import ReviewAnswer
 from django.http import HttpResponse
 from datetime import datetime
 
+
 def create_context_review(request):
     data = {}
     if 'id' in request.GET:
