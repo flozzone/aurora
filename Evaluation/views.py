@@ -17,6 +17,11 @@ from Review.models import Review
 
 @login_required()
 def evaluation(request):
+    # TODO: delete this snippet, fetches gravatar images for every user only for test cases.
+    for puser in PortfolioUser.objects.all():
+        if not puser.avatar:
+            puser.get_gravatar()
+
     challenges = Challenge.objects.all()
     return render_to_response('evaluation.html',
             {'challenges': challenges,
