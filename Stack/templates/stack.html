@@ -14,7 +14,27 @@
       <div class="title"> {{ challenge_dict.challenge.title }} </div>
       <div class="description"> {{ challenge_dict.challenge.description }} </div>
       <img class="challenge_image" src="{{ STATIC_URL }}img/{{ challenge_dict.challenge.image_url }}">
-    </div>
+      {% if challenge_dict.success %}
+        <div class="review_success">
+          Success: {{ challenge_dict.success }}
+        </div>
+      {% endif %}
+    {% if challenge_dict.nothing %}
+        <div class="review_nothing">
+          Nothing: {{ challenge_dict.nothing }}
+        </div>
+      {% endif %}
+    {% if challenge_dict.fail %}
+        <div class="review_fail">
+          Fail: {{ challenge_dict.fail }}
+        </div>
+      {% endif %}
+    {% if challenge_dict.awesome %}
+        <div class="review_awesome">
+          Awesome: {{ challenge_dict.awesome }}
+        </div>
+      {% endif %}
+
     {% if not challenge_dict.challenge.is_final_challenge %}
       <div class="review_wrapper">
         {% for review in challenge_dict.reviews %}
@@ -22,7 +42,8 @@
             {% if review.submitted %}
               <div class="review_box done" id="{{ review.id }}" challenge_id="{{ challenge_dict.challenge.id }}"></div>
             {% else %}
-              <div class="review_box in_progress" id="{{ review.id }}" challenge_id="{{ challenge_dict.challenge.id }}"></div>
+              <div class="review_box in_progress" id="{{ review.id }}"
+                   challenge_id="{{ challenge_dict.challenge.id }}"></div>
             {% endif %}
           {% elif not challenge_dict.submitted %}
             <div class="review_box inactive"></div>

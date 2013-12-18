@@ -97,6 +97,9 @@ class Elaboration(models.Model):
     def get_fail_reviews(self):
         return Review.objects.filter(elaboration=self, appraisal=Review.FAIL)
 
+    def get_awesome_reviews(self):
+        return Review.objects.filter(elaboration=self, appraisal=Review.SUCCESS, awesome=True)
+
     @staticmethod
     def get_awesome():
         awesome = []
