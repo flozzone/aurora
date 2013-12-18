@@ -42,7 +42,7 @@ class PortfolioUser(User):
         gravatarurl = "http://www.gravatar.com/avatar/" + hashlib.md5(self.email.lower().encode("utf-8")).hexdigest() + "?"
         gravatarurl += urllib.parse.urlencode({'d':'monsterid', 's':str(30)})
 
-        filename = "avatar_ " + self.username + str(self.id) + ".jpg"
+        filename = "avatar_" + self.username + str(self.id) + ".jpg"
         urllib.request.urlretrieve(gravatarurl, os.path.join(self.upload_path, filename))
         self.avatar = os.path.join(self.upload_path, filename)
         self.save()
