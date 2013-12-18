@@ -1,7 +1,6 @@
 from datetime import datetime
 import json
 from django.core import serializers
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, render
@@ -9,10 +8,15 @@ from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from Challenge.models import Challenge
+from Comments.models import Comment
+from Course.models import Course
 from Elaboration.models import Elaboration
 from Evaluation.models import Evaluation
 from PortfolioUser.models import PortfolioUser
 from Review.models import Review
+from ReviewAnswer.models import ReviewAnswer
+from ReviewQuestion.models import ReviewQuestion
+from Stack.models import Stack
 
 
 @login_required()
@@ -27,7 +31,8 @@ def evaluation(request):
                               {'challenges': challenges,
                                'missing_reviews': Elaboration.get_missing_reviews(),
                                'top_level_challenges': Elaboration.get_top_level_challenges(),
-                               'non_adequate_work': Elaboration.get_non_adequate_work()
+                               'non_adequate_work': Elaboration.get_non_adequate_work(),
+                               'awesome': Elaboration.get_awesome()
                               },
                               context_instance=RequestContext(request))
 
@@ -226,7 +231,53 @@ def search(request):
         elaborations = user.get_elaborations()
     else:
         if search_all not in ['', 'all...']:
-            print("todo...")
+            studies = PortfolioUser.objects.all().filter(
+                Q(username__icontains=search_all) |
+                Q(first_name__icontains=search_all) |
+                Q(last_name__icontains=search_all) |
+                Q(nickname__icontains=search_all) |
+                Q(statement__icontains=search_all)
+            )
+            elaborations = Elaboration.objects.all().filter(
+                Q(elaboration_text__icontains=search_all)
+            )
+            comments = Comment.objects.all().filter(
+                Q(text__icontains=search_all)
+            )
+            challenges = Challenge.objects.all().filter(
+                Q(title__icontains=search_all) |
+                Q(subtitle__icontains=search_all) |
+                Q(description__icontains=search_all)
+            )
+            courses = Course.objects.all().filter(
+                Q(title__icontains=search_all) |
+                Q(short_title__icontains=search_all) |
+                Q(description__icontains=search_all)
+            )
+            evaluations = Evaluation.objects.all().filter(
+                Q(evaluation_text__icontains=search_all)
+            )
+            rquestions = ReviewQuestion.objects.all().filter(
+                Q(text__icontains=search_all)
+            )
+            ranswers = ReviewAnswer.objects.all().filter(
+                Q(text__icontains=search_all)
+            )
+            stacks = Stack.objects.all().filter(
+                Q(title__icontains=search_all) |
+                Q(description__icontains=search_all)
+            )
+
+            print("studies: ", studies.count())
+            print("elaborations: ", elaborations.count())
+            print("comments: ", comments.count())
+            print("challenges: ", challenges.count())
+            print("courses: ", courses.count())
+            print("evaluations: ", evaluations.count())
+            print("review questions: ", rquestions.count())
+            print("review answers: ", ranswers.count())
+            print("stack: ", stacks.count())
+
 
     html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
 
