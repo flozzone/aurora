@@ -135,6 +135,10 @@ th {
     float:right;
 }
 
+.missing_reviews, .non_adequate_work, .non_adequate_reviews, .top_level_challenges, .complaints, .questions, .awesome, .search_btn {
+    cursor: pointer;
+}
+
 .search_user, .search_all, .search_challenge {
     border: 1px solid #666666;
     border-radius: 3px;
@@ -158,7 +162,6 @@ th {
     height: 25px;
     width: 100%;
     margin: 10px 0 20px 0;
-    cursor: pointer;
     color: white;
     text-align: center;
     padding: 2px 0 0 0;

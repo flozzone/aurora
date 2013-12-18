@@ -32,6 +32,7 @@ def create_context_stack(request):
         challenges_inactive = []
         for stack_challenge in stack_challenges:
             if stack_challenge.challenge.is_available_for_user(request.user):
+
                 reviews = []
                 for review in stack_challenge.challenge.get_reviews_written_by_user(request.user):
                     reviews.append({
@@ -40,11 +41,20 @@ def create_context_stack(request):
                     })
                 for i in range(Challenge.reviews_per_challenge - len(reviews)):
                     reviews.append({})
-                challenges_active.append({
+                challenge_active = {
                     'challenge': stack_challenge.challenge,
                     'submitted': stack_challenge.challenge.submitted_by_user(user),
                     'reviews': reviews,
-                })
+                }
+                elaboration = Elaboration.objects.filter(challenge=stack_challenge, user=user)
+                if elaboration:
+                    elaboration = elaboration[0]
+                    challenge_active['success'] = len(elaboration.get_success_reviews())
+                    challenge_active['nothing'] = len(elaboration.get_nothing_reviews())
+                    challenge_active['fail'] = len(elaboration.get_fail_reviews())
+                    challenge_active['awesome'] = len(elaboration.get_awesome_reviews())
+
+                challenges_active.append(challenge_active)
             else:
                 challenges_inactive.append(stack_challenge.challenge)
         data['challenges_active'] = challenges_active
@@ -70,6 +80,11 @@ def create_context_challenge(request):
         if Elaboration.objects.filter(challenge=challenge, user=user).exists():
             elaboration = Elaboration.objects.all().filter(challenge=challenge, user=user).order_by('id')[0]
             data['elaboration'] = elaboration
+            data['success'] = elaboration.get_success_reviews()
+            data['nothing'] = elaboration.get_nothing_reviews()
+            data['fail'] = elaboration.get_fail_reviews()
+            data['awesome'] = elaboration.get_awesome()
+
     return data
 
 @login_required()
