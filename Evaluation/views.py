@@ -17,24 +17,31 @@ from Review.models import Review
 
 @login_required()
 def evaluation(request):
+    # TODO: delete this snippet, fetches gravatar images for every user only for test cases.
+    for puser in PortfolioUser.objects.all():
+        if not puser.avatar:
+            puser.get_gravatar()
+
     challenges = Challenge.objects.all()
     return render_to_response('evaluation.html',
-            {'challenges': challenges,
-             'missing_reviews': Elaboration.get_missing_reviews(),
-             'top_level_challenges': Elaboration.get_top_level_challenges(),
-             'non_adequate_work': Elaboration.get_non_adequate_work()
-            },
-            context_instance=RequestContext(request))
+                              {'challenges': challenges,
+                               'missing_reviews': Elaboration.get_missing_reviews(),
+                               'top_level_challenges': Elaboration.get_top_level_challenges(),
+                               'non_adequate_work': Elaboration.get_non_adequate_work()
+                              },
+                              context_instance=RequestContext(request))
+
 
 @login_required()
 def overview(request):
     challenges = Challenge.objects.all()
     missing_reviews = Elaboration.get_missing_reviews()
     return render_to_response('overview.html',
-            {'challenges': challenges,
-             'missing_reviews': missing_reviews
-            },
-            context_instance=RequestContext(request))
+                              {'challenges': challenges,
+                               'missing_reviews': missing_reviews
+                              },
+                              context_instance=RequestContext(request))
+
 
 @login_required()
 def update_overview(request):
@@ -59,6 +66,7 @@ def update_overview(request):
     request.session['elaborations'] = serializers.serialize('json', elaborations)
     return html
 
+
 @login_required()
 def detail(request):
     # get selected elaborations from session
@@ -77,20 +85,21 @@ def detail(request):
 
     next = prev = None
     index = elaborations.index(elaboration)
-    if index+1 < len(elaborations):
-        next = elaborations[index+1].id
+    if index + 1 < len(elaborations):
+        next = elaborations[index + 1].id
     if not index == 0:
-        prev = elaborations[index-1].id
+        prev = elaborations[index - 1].id
 
     stack_elaborations = elaboration.user.get_stack_elaborations(elaboration.challenge.get_stack())
 
     return render_to_response('detail.html',
-        {'elaboration': elaboration,
-         'stack_elaborations': stack_elaborations,
-         'reviews': reviews,
-         'next': next,
-         'prev': prev
-        }, RequestContext(request))
+                              {'elaboration': elaboration,
+                               'stack_elaborations': stack_elaborations,
+                               'reviews': reviews,
+                               'next': next,
+                               'prev': prev
+                              }, RequestContext(request))
+
 
 @login_required()
 def stack(request):
@@ -98,6 +107,7 @@ def stack(request):
     stack_elaborations = elaboration.user.get_stack_elaborations(elaboration.challenge.get_stack())
 
     return render_to_response('user_stack.html', {'stack_elaborations': stack_elaborations}, RequestContext(request))
+
 
 @login_required()
 def others(request):
@@ -109,24 +119,27 @@ def others(request):
     if elaboration.get_others():
         other_elaborations = elaboration.get_others()
 
-        index=int(request.GET.get('page', '0'))
+        index = int(request.GET.get('page', '0'))
         elaboration_list = list(other_elaborations)
 
-        if index+1 < len(elaboration_list):
-            next = index+1
+        if index + 1 < len(elaboration_list):
+            next = index + 1
         if not index == 0:
-            prev = index-1
+            prev = index - 1
 
         elaboration = elaboration_list[index]
     else:
         elaboration = []
 
-    return render_to_response('others.html', {'elaboration': elaboration, 'next': next, 'prev': prev}, RequestContext(request))
+    return render_to_response('others.html', {'elaboration': elaboration, 'next': next, 'prev': prev},
+                              RequestContext(request))
+
 
 @login_required()
 def challenge_txt(request):
     elaboration = Elaboration.objects.get(pk=request.session.get('elaboration_id', ''))
     return render_to_response('challenge_txt.html', {'challenge': elaboration.challenge}, RequestContext(request))
+
 
 @csrf_exempt
 def save_evaluation(request):
@@ -150,6 +163,7 @@ def save_evaluation(request):
 
     return HttpResponse()
 
+
 @csrf_exempt
 def submit_evaluation(request):
     elaboration_id = request.POST['elaboration_id']
@@ -170,6 +184,7 @@ def submit_evaluation(request):
 
     return HttpResponse()
 
+
 @csrf_exempt
 def set_appraisal(request):
     review_id = request.POST['review_id']
@@ -180,6 +195,7 @@ def set_appraisal(request):
     review.save()
 
     return HttpResponse()
+
 
 @csrf_exempt
 @login_required()
@@ -196,6 +212,7 @@ def select_challenge(request):
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
     return html
+
 
 @csrf_exempt
 @login_required()
@@ -217,6 +234,7 @@ def search(request):
     request.session['elaborations'] = serializers.serialize('json', elaborations)
     return html
 
+
 @login_required()
 def autocomplete_challenge(request):
     term = request.GET.get('term', '')
@@ -224,6 +242,7 @@ def autocomplete_challenge(request):
     titles = [challenge.title for challenge in challenges]
     response_data = json.dumps(titles, ensure_ascii=False)
     return HttpResponse(response_data, mimetype='application/json; charset=utf-8')
+
 
 @login_required()
 def autocomplete_user(request):
@@ -234,6 +253,7 @@ def autocomplete_user(request):
     response_data = json.dumps(names, ensure_ascii=False)
     return HttpResponse(response_data, mimetype='application/json; charset=utf-8')
 
+
 @login_required()
 def load_reviews(request):
     if not 'elaboration_id' in request.GET:
@@ -242,4 +262,5 @@ def load_reviews(request):
     elaboration = Elaboration.objects.get(pk=request.GET.get('elaboration_id', ''))
     reviews = Review.objects.filter(elaboration=elaboration)
 
-    return render_to_response('stack_rev.html', {'elaboration': elaboration, 'reviews': reviews, 'stack': 'stack'}, RequestContext(request))
+    return render_to_response('stack_rev.html', {'elaboration': elaboration, 'reviews': reviews, 'stack': 'stack'},
+                              RequestContext(request))
