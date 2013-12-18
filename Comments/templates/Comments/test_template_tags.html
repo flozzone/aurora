@@ -3,6 +3,8 @@
 
 {% block content %}
     {{ object }}
-    {% render_comment_list for object %}
+    {# render_comment_list for object #}
     {# render_comment_list_inclusion_tag for object #}
+    {% render_comment_list_plain_tag for object %}
+    {# test_inclusion_tag #}
 {% endblock %}

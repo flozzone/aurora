@@ -1,6 +1,9 @@
 {% load humanize %}
 
-    <form action="{% url 'Comments:post_comment' %}" method="post">{% csrf_token %}
+{% block additional_headers %}
+{% endblock %}
+
+    <form action="{% url 'Comments:post_comment' %}{% if from %}?next={{ from }}{% endif %}" method="post">{% csrf_token %}
             {{ form.as_p }}
         <input type="submit" value="Add comment" />
     </form>
