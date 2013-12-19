@@ -71,6 +71,13 @@ def init_data():
     superuser.is_superuser = True
     superuser.save()
 
+    print('adding superuser')
+    superuser = PortfolioUser(username='hagrid')
+    superuser.set_password('hagrid')
+    superuser.is_staff = True
+    superuser.is_superuser = True
+    superuser.save()
+
 
     # create courses "GSI" and "HCI"
     print('adding course gsi')

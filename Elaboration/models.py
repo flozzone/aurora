@@ -17,8 +17,8 @@ class Elaboration(models.Model):
         return False
 
     def get_evaluation(self):
-        if Evaluation.objects.filter(submission=self, user=self.user):
-            return Evaluation.objects.filter(submission=self, user=self.user).order_by('id')[0]
+        if Evaluation.objects.get(submission=self):
+            return Evaluation.objects.get(submission=self)
         return False
 
     def is_reviewed_3times(self):

@@ -191,3 +191,11 @@ th {
     border: 1px solid red;
     background-color: #F08080;
 }
+
+.evaluation_lock {
+    float: right;
+    border: 1px solid darkred;
+    border-radius: 5px;
+    background-color: indianred;
+    padding: 0 3px 0 3px;
+}
