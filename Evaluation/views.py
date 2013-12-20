@@ -86,6 +86,27 @@ def detail(request):
     # store selected elaboration_id in session
     request.session['elaboration_id'] = elaboration.id
 
+    # set evaluation lock
+    puser = PortfolioUser.objects.get(pk=request.user.id)
+    lock = False
+    if Evaluation.objects.filter(submission=elaboration):
+        evaluation = Evaluation.objects.get(submission=elaboration)
+        if evaluation.user==puser:
+            evaluation.lock_time = datetime.now()
+            evaluation.save()
+        else:
+            if evaluation.is_older_15min():
+                evaluation.lock_time = datetime.now()
+                evaluation.user = puser
+                evaluation.save()
+            else:
+                lock = True
+    else:
+        evaluation = Evaluation.objects.create(submission=elaboration)
+        evaluation.user = puser
+        evaluation.lock_time = datetime.now()
+        evaluation.save()
+
     reviews = Review.objects.filter(elaboration=elaboration)
 
     next = prev = None
@@ -99,10 +120,12 @@ def detail(request):
 
     return render_to_response('detail.html',
                               {'elaboration': elaboration,
+                               'evaluation': evaluation,
                                'stack_elaborations': stack_elaborations,
                                'reviews': reviews,
                                'next': next,
-                               'prev': prev
+                               'prev': prev,
+                               'lock': lock
                               }, RequestContext(request))
 
 
@@ -154,11 +177,7 @@ def save_evaluation(request):
 
     print("autosaving evaluation...")
     elaboration = Elaboration.objects.get(pk=elaboration_id)
-
-    if Evaluation.objects.filter(submission=elaboration, user=elaboration.user):
-        evaluation = Evaluation.objects.filter(submission=elaboration, user=elaboration.user).order_by('id')[0]
-    else:
-        evaluation = Evaluation.objects.create(submission=elaboration, user=elaboration.user)
+    evaluation = Evaluation.objects.get(submission=elaboration)
 
     if evaluation_text:
         evaluation.evaluation_text = evaluation_text
