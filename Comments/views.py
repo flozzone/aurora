@@ -8,12 +8,13 @@ from django.views.generic import ListView
 from django.contrib.auth.decorators import login_required
 from django import forms
 from django.utils import timezone
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.contenttypes.models import ContentType
 
 from Comments.models import Comment
 from PortfolioUser.models import PortfolioUser
 from Comments.tests import CommentReferenceObject
+import json
 
 
 class CommentList(ListView):
@@ -35,19 +36,21 @@ class CommentForm(forms.Form):
 @require_POST
 @login_required
 def post_comment(request):
-    form = CommentForm(request.POST)
-    if form.is_valid():
-        user = PortfolioUser.objects.get(id=request.user.id)
-        ref_type_id = form.cleaned_data['reference_type_id']
-        ref_obj_id = form.cleaned_data['reference_id']
-        ref_obj_model = ContentType.objects.get_for_id(ref_type_id).model_class()
-        ref_obj = ref_obj_model.objects.get(id=ref_obj_id)
-        comment = Comment.objects.create(text=form.cleaned_data['text'],
-                                         author=user,
-                                         content_object=ref_obj,
-                                         post_date=timezone.now())
-        comment.save()
-    return HttpResponseRedirect(reverse('Comments:feed'))
+#    form = CommentForm(request.POST)
+#    if form.is_valid():
+#        user = PortfolioUser.objects.get(id=request.user.id)
+#        ref_type_id = form.cleaned_data['reference_type_id']
+#        ref_obj_id = form.cleaned_data['reference_id']
+#        ref_obj_model = ContentType.objects.get_for_id(ref_type_id).model_class()
+#        ref_obj = ref_obj_model.objects.get(id=ref_obj_id)
+#        comment = Comment.objects.create(text=form.cleaned_data['text'],
+#                                         author=user,
+#                                         content_object=ref_obj,
+#                                         post_date=timezone.now())
+#        comment.save()
+    data = {'text': 'gehabdichwohl'}
+    return HttpResponse(json.dumps(data), mimetype="application/json")
+    #return HttpResponseRedirect(reverse('Comments:feed'))
 
 
 def feed(request):

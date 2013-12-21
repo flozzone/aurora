@@ -65,12 +65,10 @@ def get_reference_type_pk(ref_object):
     #Comments.objects.filter(content_type__pk=object_type.id, object_id=ref_object.id)
 
 
-
 # TODO delete:
 @register.inclusion_tag('Comments/comment_list.html', takes_context=True)
 def test_inclusion_tag(context):
     print(context['request'])
-
 
 
 @register.inclusion_tag('Comments/comment_list.html')
