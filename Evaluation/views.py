@@ -253,7 +253,7 @@ def search(request):
     if search_user not in ['', 'user...']:
         user = PortfolioUser.objects.get(username=search_user.split()[0])
         elaborations = user.get_elaborations()
-    else:
+    if search_all not in ['', 'all...']:
         SEARCH_TERM = search_all
 
         for md in models.get_models():
