@@ -106,3 +106,19 @@ class Elaboration(models.Model):
         for review in Review.objects.filter(awesome=True):
             awesome.append(review.elaboration)
         return awesome
+
+    @staticmethod
+    def get_stack_elaborations(stack):
+        elaborations = []
+        for challenge in stack.get_challenges():
+            for elaboration in challenge.get_submissions():
+                elaborations.append(elaboration)
+        return elaborations
+
+    @staticmethod
+    def get_course_elaborations(course):
+        elaborations = []
+        for challenge in course.get_course_challenges():
+            for elaboration in challenge.get_submissions():
+                elaborations.append(elaboration)
+        return elaborations
