@@ -1,0 +1,54 @@
+{% block additional_headers %}
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/review.css" type="text/css" media="screen"/>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/review.js"></script>
+{% endblock %}
+
+<div class="view_review">
+  <br>
+  <div class="success">
+    Success:<br>
+    {% for review in success %}
+      {% for data in review %}
+        <div class="{% if forloop.counter|divisibleby:2 %}answer{% else %}question{% endif %}">
+          {{ data }}
+        </div>
+      {% endfor %}
+    {% endfor %}
+  </div>
+
+  <br>
+  <div class="nothing">
+    Nothing:<br>
+    {% for review in nothing %}
+      {% for data in review %}
+        <div class="{% if forloop.counter|divisibleby:2 %}answer{% else %}question{% endif %}">
+          {{ data }}
+        </div>
+      {% endfor %}
+    {% endfor %}
+  </div>
+
+  <br>
+  <div class="fail">
+    Fail:<br>
+    {% for review in fail %}
+      {% for data in review %}
+        <div class="{% if forloop.counter|divisibleby:2 %}answer{% else %}question{% endif %}">
+          {{ data }}
+        </div>
+      {% endfor %}
+    {% endfor %}
+  </div>
+
+  <br>
+  <div class="awesome">
+    Awesome:<br>
+    {% for review in awesome %}
+      {% for data in review %}
+        <div class="{% if forloop.counter|divisibleby:2 %}answer{% else %}question{% endif %}">
+          {{ data }}
+        </div>
+      {% endfor %}
+    {% endfor %}
+  </div>
+</div>
