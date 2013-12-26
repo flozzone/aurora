@@ -37,6 +37,6 @@ function real_submit_clicked(event) {
     var challenge_id = challenge.attr('id');
     var url = './submit?id=' + challenge_id;
     $.get(url, function (data) {
+        window.location.href = "./";
     });
-    window.location.href = "./";
 }
