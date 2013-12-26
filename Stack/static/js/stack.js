@@ -1,13 +1,16 @@
 $(stack_loaded);
 
 function stack_loaded() {
-    $(".challenge.active").click(challenge_clicked);
+    $(".challenge").click(challenge_clicked);
     $(".review_box.active").click(review_box_clicked);
     $(".review_box.in_progress").click(review_box_clicked);
 }
 
 function challenge_clicked(event) {
     var challenge = $(event.target).closest(".challenge");
+    if (!challenge.hasClass("active")) {
+        return;
+    }
     var challenge_id = challenge.attr('id');
     var url = './get_challenge?id=' + challenge_id;
     $.get(url, function (data) {
