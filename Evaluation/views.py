@@ -271,29 +271,36 @@ def search(request):
                     if isinstance(result, PortfolioUser):
                         print("PortfolioUser: ", result)
                         for elaboration in result.get_elaborations():
-                            elaborations.append(elaboration)
+                            if elaboration not in elaborations:
+                                elaborations.append(elaboration)
                     if isinstance(result, Elaboration):
                         print("Elaboration: ", result)
-                        elaborations.append(result)
+                        if result not in elaborations:
+                            elaborations.append(result)
                     if isinstance(result, Challenge):
                         print("Challenge: ", result)
                         if Elaboration.get_sel_challenge_elaborations(result):
                             for elaboration in Elaboration.get_sel_challenge_elaborations(result):
-                                elaborations.append(elaboration)
+                                if elaboration not in elaborations:
+                                    elaborations.append(elaboration)
                     if isinstance(result, Course):
                         print("Course: ", result)
                         for elaboration in Elaboration.get_course_elaborations(result):
-                            elaborations.append(elaboration)
+                            if elaboration not in elaborations:
+                                elaborations.append(elaboration)
                     if isinstance(result, Stack):
                         print("Stack: ", result)
                         for elaboration in Elaboration.get_stack_elaborations(result):
-                            elaborations.append(elaboration)
+                            if elaboration not in elaborations:
+                                elaborations.append(elaboration)
                     if isinstance(result, Evaluation):
                         print("Evaluation: ", result)
-                        elaborations.append(result.submission)
+                        if result.submission not in elaborations:
+                            elaborations.append(result.submission)
                     if isinstance(result, Review):
                         print("Review: ", result)
-                        elaborations.append(result.elaboration)
+                        if result.elaboration not in elaborations:
+                            elaborations.append(result.elaboration)
                     if isinstance(result, ReviewAnswer):
                         print("ReviewAnswer: ", result)
                     if isinstance(result, ReviewQuestion):
