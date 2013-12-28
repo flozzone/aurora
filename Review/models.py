@@ -17,6 +17,7 @@ class Review(models.Model):
                                  choices=APPRAISAL_CHOICES,
                                  default=NOTHING)
     awesome = models.BooleanField(default=False)
+    escalate = models.BooleanField(default=False)
 
     def getElaborationAuthor(self):
         return self.elaboration.user

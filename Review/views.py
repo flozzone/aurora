@@ -1,4 +1,4 @@
-from django.shortcuts import render_to_response
+from django.shortcuts import render, render_to_response
 from django.template import RequestContext
 
 import json
@@ -71,51 +71,40 @@ def create_context_view_review(request):
         user = PortfolioUser.objects.filter(user_ptr=request.user)[0]
         challenge = Challenge.objects.get(pk=request.GET.get('id'))
         elaboration = Elaboration.objects.filter(challenge=challenge, user=user)[0]
-        data['success'] = []
-        for review in elaboration.get_success_reviews():
-            review_data = []
+        reviews = Review.objects.filter(elaboration=elaboration).order_by("appraisal")
+        data['reviews'] = []
+        for review in reviews:
+            review_data = {}
+            review_data['review_id'] = review.id
+            review_data['appraisal'] = review.get_appraisal_display()
+            review_data['escalate'] = review.escalate
+            review_data['questions'] = []
             for review_question in ReviewQuestion.objects.filter(challenge=challenge).order_by("order"):
+                question_data = {}
                 review_answer = ReviewAnswer.objects.filter(review=review, review_question=review_question)[0]
-                review_data.append(review_question.text)
-                review_data.append(review_answer.text)
-            data['success'].append(review_data)
-
-        data['nothing'] = []
-        for review in elaboration.get_nothing_reviews():
-            review_data = []
-            for review_question in ReviewQuestion.objects.filter(challenge=challenge).order_by("order"):
-                review_answer = ReviewAnswer.objects.filter(review=review, review_question=review_question)[0]
-                review_data.append(review_question.text)
-                review_data.append(review_answer.text)
-            data['nothing'].append(review_data)
-        data['fail'] = []
-        for review in elaboration.get_fail_reviews():
-            review_data = []
-            for review_question in ReviewQuestion.objects.filter(challenge=challenge).order_by("order"):
-                review_answer = ReviewAnswer.objects.filter(review=review, review_question=review_question)[0]
-                review_data.append(review_question.text)
-                review_data.append(review_answer.text)
-            data['fail'].append(review_data)
-        data['awesome'] = []
-        for review in elaboration.get_awesome_reviews():
-            review_data = []
-            for review_question in ReviewQuestion.objects.filter(challenge=challenge).order_by("order"):
-                review_answer = ReviewAnswer.objects.filter(review=review, review_question=review_question)[0]
-                review_data.append(review_question.text)
-                review_data.append(review_answer.text)
-            data['awesome'].append(review_data)
-
-
+                question_data['question'] = review_question.text
+                question_data['answer'] = review_answer.text
+                review_data['questions'].append(question_data)
+            data['reviews'].append(review_data)
     return data
 
 
 @login_required()
 def received_challenge_reviews(request):
     data = create_context_view_review(request)
-    return render_to_response('view_review.html', data, context_instance=RequestContext(request))
+    return render(request, 'view_review.html', data)
 
 @login_required()
 def received_challenge_reviews_page(request):
     data = create_context_view_review(request)
-    return render_to_response('view_review_page.html', data, context_instance=RequestContext(request))
+    #data = {'listDict':[{'product':'sandwich','price':'5200'}, {'product':'hamburger','price':'3000'}]}
+    print(data)
+    return render(request, 'view_review_page.html', data)
 
+@login_required()
+def review_escalate(request):
+    if 'id' in request.GET:
+        review = Review.objects.get(pk=request.GET.get('id'))
+        review.escalate = True
+        review.save()
+    return HttpResponse()
