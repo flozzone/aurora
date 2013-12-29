@@ -12,7 +12,6 @@ from ReviewAnswer.models import ReviewAnswer
 from django.http import HttpResponse
 from datetime import datetime
 
-
 def create_context_review(request):
     data = {}
     if 'id' in request.GET:
@@ -97,8 +96,6 @@ def received_challenge_reviews(request):
 @login_required()
 def received_challenge_reviews_page(request):
     data = create_context_view_review(request)
-    #data = {'listDict':[{'product':'sandwich','price':'5200'}, {'product':'hamburger','price':'3000'}]}
-    print(data)
     return render(request, 'view_review_page.html', data)
 
 @login_required()

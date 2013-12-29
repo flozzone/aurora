@@ -1,12 +1,14 @@
 {% block additional_headers %}
   <script type="text/javascript" src="{{ STATIC_URL }}js/authentication.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/dropzone.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/file_upload.js"></script>
 {% endblock %}
 
 <div>
   <div class="pagehead">
-  <div class="headline">
-    Aurora <a href="/">Home</a>
-   </div>
+    <div class="headline">
+      Aurora <a href="/">Home</a>
+    </div>
 
     {% if user.is_authenticated %}
 
@@ -34,11 +36,15 @@
 
       </ul>
 
-
-      <div class="logout_button">
-
-        <button id="button_sign_out">Sign out</button>
+      <div style="display: none" class="file_upload_menu">
+        <form action="/fileupload" class="dropzone"
+              id="my-awesome-dropzone">{% csrf_token %}</form>
+        <div class="upload_history"><h1 class="history_headline">History</h1></div>
       </div>
+
+      <button class="upload_button" id="upload_button">File Upload</button>
+      <button class="logout_button" id="button_sign_out">Sign out</button>
+
     {% endif %}
   </div>
 </div>

@@ -14,6 +14,7 @@ urlpatterns = patterns('',
     url(r'', include('Elaboration.urls')),
     url(r'', include('Evaluation.urls')),
     url(r'', include('Review.urls')),
+    url(r'', include('FileUpload.urls')),
     url(r'', include('Comments.urls', namespace='Comments')),
 
     # url(r'^AmanamanProjekt/', include('AmanamanProjekt.foo.urls')),
