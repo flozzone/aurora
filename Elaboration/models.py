@@ -101,6 +101,13 @@ class Elaboration(models.Model):
         return Review.objects.filter(elaboration=self, appraisal=Review.SUCCESS, awesome=True)
 
     @staticmethod
+    def get_non_adequate_reviews():
+        elaborations = []
+        for review in Review.objects.filter(escalate=True):
+            elaborations.append(review.elaboration)
+        return elaborations
+
+    @staticmethod
     def get_awesome():
         awesome = []
         for review in Review.objects.filter(awesome=True):

@@ -291,7 +291,7 @@ def init_data():
 
     # create review for elaboration
     print('adding review 1 for elaboration for challenge 1 for s0')
-    Review(elaboration=de1, reviewer=s0, appraisal='N', submission_time=datetime.now()).save()
+    Review(elaboration=de1, reviewer=s0, appraisal='N', submission_time=datetime.now(), escalate=True).save()
     print('adding review 2 for elaboration for challenge 1 for s0')
     Review(elaboration=de2, reviewer=s0, appraisal='F', submission_time=datetime.now()).save()
     print('adding review 3 for elaboration for challenge 1 for s0')

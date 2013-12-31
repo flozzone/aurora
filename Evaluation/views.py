@@ -37,6 +37,8 @@ def evaluation(request):
                                'missing_reviews': Elaboration.get_missing_reviews(),
                                'top_level_challenges': Elaboration.get_top_level_challenges(),
                                'non_adequate_work': Elaboration.get_non_adequate_work(),
+                               'non_adequate_reviews': Elaboration.get_non_adequate_reviews(),
+                               'complaints': Elaboration.get_non_adequate_reviews(),
                                'awesome': Elaboration.get_awesome()
                               },
                               context_instance=RequestContext(request))
@@ -66,6 +68,10 @@ def update_overview(request):
     if request.GET.get('data', '') == "non_adequate_work":
         print("loading non adequate work...")
         elaborations = Elaboration.get_non_adequate_work()
+        html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
+    if request.GET.get('data', '') == "non_adequate_reviews":
+        print("loading non adequate reviews...")
+        elaborations = Elaboration.get_non_adequate_reviews()
         html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
     if request.GET.get('data', '') == "awesome":
         print("loading awesome work...")
