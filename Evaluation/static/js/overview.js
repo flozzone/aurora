@@ -18,7 +18,10 @@ $(function() {
 
 $(function() {
    $(".non_adequate_reviews").click(function(event) {
-       alert("TODO: non_adequate_reviews");
+       var url = '/update_overview?data=non_adequate_reviews';
+       $.get(url, function (data) {
+            $('#overview').html(data);
+       });
    });
 });
 
@@ -33,7 +36,10 @@ $(function() {
 
 $(function() {
    $(".complaints").click(function(event) {
-       alert("TODO: complaints");
+       var url = '/update_overview?data=non_adequate_reviews';
+       $.get(url, function (data) {
+            $('#overview').html(data);
+       });
    });
 });
 
@@ -60,6 +66,13 @@ $(function() {
 });
 
 $(function() {
+   $(".search_challenge").focusout(function(event) {
+       if($('.search_challenge').text() == "")
+          $(".search_challenge").html("challenge...");
+   });
+});
+
+$(function() {
    $(".search_user").click(function(event) {
        // $(".search_user").autocomplete( "search", "" );
        $(".search_user").html("");
@@ -67,8 +80,22 @@ $(function() {
 });
 
 $(function() {
+   $(".search_user").focusout(function(event) {
+       if($('.search_user').text() == "")
+          $(".search_user").html("user...");
+   });
+});
+
+$(function() {
    $(".search_all").click(function(event) {
        $(".search_all").html("");
+   });
+});
+
+$(function() {
+   $(".search_all").focusout(function(event) {
+       if($('.search_all').text() == "")
+          $(".search_all").html("all...");
    });
 });
 

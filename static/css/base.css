@@ -146,6 +146,50 @@ abbr,acronym { border:0;
     text-decoration:none;
 }
 
+
 .logout_button {
-    float:right;
+    position:absolute;
+    top: 50px;
+    right:0px;
+}
+.upload_button {
+    position:absolute;
+    top: 50px;
+    right:100px;
+}
+
+.dropzone {
+    position: absolute;
+    top: 96px;
+    right: 0px;
+    background-color: grey;
+    width: 300px;
+    height: 170px;
+    text-align: center;
+}
+
+.upload_history {
+    position: absolute;
+    top: 266px;
+    right: 0px;
+    background-color: darkgray;
+    width: 300px;
+    height: 300px;
+
+}
+
+.history_headline {
+    text-align: center;
+}
+.dz-filename {
+    display: none;
+}
+.dz-size {
+    display: none;
+}
+.dz-error-mark {
+    display: none;
+}
+.dz-success-mark {
+    display: none;
 }

@@ -1,12 +1,17 @@
 from datetime import datetime
 import json
+
 from django.core import serializers
-from django.db.models import Q
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render_to_response, render
+from django.db.models import TextField
+from django.http import HttpResponse
+from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.csrf import csrf_exempt, csrf_protect
+from django.views.decorators.csrf import csrf_exempt
+from django.db.models import CharField
+from django.db.models import Q
+from django.db import models
+
 from Challenge.models import Challenge
 from Comments.models import Comment
 from Course.models import Course
@@ -32,6 +37,8 @@ def evaluation(request):
                                'missing_reviews': Elaboration.get_missing_reviews(),
                                'top_level_challenges': Elaboration.get_top_level_challenges(),
                                'non_adequate_work': Elaboration.get_non_adequate_work(),
+                               'non_adequate_reviews': Elaboration.get_non_adequate_reviews(),
+                               'complaints': Elaboration.get_non_adequate_reviews(),
                                'awesome': Elaboration.get_awesome()
                               },
                               context_instance=RequestContext(request))
@@ -61,6 +68,10 @@ def update_overview(request):
     if request.GET.get('data', '') == "non_adequate_work":
         print("loading non adequate work...")
         elaborations = Elaboration.get_non_adequate_work()
+        html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
+    if request.GET.get('data', '') == "non_adequate_reviews":
+        print("loading non adequate reviews...")
+        elaborations = Elaboration.get_non_adequate_reviews()
         html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
     if request.GET.get('data', '') == "awesome":
         print("loading awesome work...")
@@ -248,55 +259,60 @@ def search(request):
     if search_user not in ['', 'user...']:
         user = PortfolioUser.objects.get(username=search_user.split()[0])
         elaborations = user.get_elaborations()
-    else:
-        if search_all not in ['', 'all...']:
-            studies = PortfolioUser.objects.all().filter(
-                Q(username__icontains=search_all) |
-                Q(first_name__icontains=search_all) |
-                Q(last_name__icontains=search_all) |
-                Q(nickname__icontains=search_all) |
-                Q(statement__icontains=search_all)
-            )
-            elaborations = Elaboration.objects.all().filter(
-                Q(elaboration_text__icontains=search_all)
-            )
-            comments = Comment.objects.all().filter(
-                Q(text__icontains=search_all)
-            )
-            challenges = Challenge.objects.all().filter(
-                Q(title__icontains=search_all) |
-                Q(subtitle__icontains=search_all) |
-                Q(description__icontains=search_all)
-            )
-            courses = Course.objects.all().filter(
-                Q(title__icontains=search_all) |
-                Q(short_title__icontains=search_all) |
-                Q(description__icontains=search_all)
-            )
-            evaluations = Evaluation.objects.all().filter(
-                Q(evaluation_text__icontains=search_all)
-            )
-            rquestions = ReviewQuestion.objects.all().filter(
-                Q(text__icontains=search_all)
-            )
-            ranswers = ReviewAnswer.objects.all().filter(
-                Q(text__icontains=search_all)
-            )
-            stacks = Stack.objects.all().filter(
-                Q(title__icontains=search_all) |
-                Q(description__icontains=search_all)
-            )
+    if search_all not in ['', 'all...']:
+        SEARCH_TERM = search_all
 
-            print("studies: ", studies.count())
-            print("elaborations: ", elaborations.count())
-            print("comments: ", comments.count())
-            print("challenges: ", challenges.count())
-            print("courses: ", courses.count())
-            print("evaluations: ", evaluations.count())
-            print("review questions: ", rquestions.count())
-            print("review answers: ", ranswers.count())
-            print("stack: ", stacks.count())
+        for md in models.get_models():
+            # search query in all models and fields (char and textfields) of database
+            fields = [f for f in md._meta.fields if isinstance(f, CharField) or isinstance(f, TextField)]
+            if fields:
+                queries = [Q(**{f.name+'__icontains': SEARCH_TERM}) for f in fields]
 
+                qs = Q()
+                for query in queries:
+                    qs = qs | query
+
+                results = md.objects.filter(qs)
+                for result in results:
+                    if isinstance(result, PortfolioUser):
+                        print("PortfolioUser: ", result)
+                        for elaboration in result.get_elaborations():
+                            if elaboration not in elaborations:
+                                elaborations.append(elaboration)
+                    if isinstance(result, Elaboration):
+                        print("Elaboration: ", result)
+                        if result not in elaborations:
+                            elaborations.append(result)
+                    if isinstance(result, Challenge):
+                        print("Challenge: ", result)
+                        if Elaboration.get_sel_challenge_elaborations(result):
+                            for elaboration in Elaboration.get_sel_challenge_elaborations(result):
+                                if elaboration not in elaborations:
+                                    elaborations.append(elaboration)
+                    if isinstance(result, Course):
+                        print("Course: ", result)
+                        for elaboration in Elaboration.get_course_elaborations(result):
+                            if elaboration not in elaborations:
+                                elaborations.append(elaboration)
+                    if isinstance(result, Stack):
+                        print("Stack: ", result)
+                        for elaboration in Elaboration.get_stack_elaborations(result):
+                            if elaboration not in elaborations:
+                                elaborations.append(elaboration)
+                    if isinstance(result, Evaluation):
+                        print("Evaluation: ", result)
+                        if result.submission not in elaborations:
+                            elaborations.append(result.submission)
+                    if isinstance(result, Review):
+                        print("Review: ", result)
+                        if result.elaboration not in elaborations:
+                            elaborations.append(result.elaboration)
+                    if isinstance(result, ReviewAnswer):
+                        print("ReviewAnswer: ", result)
+                    if isinstance(result, ReviewQuestion):
+                        print("ReviewQuestion: ", result)
+                    if isinstance(result, Comment):
+                        print("Comments: ", result)
 
     html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
 
