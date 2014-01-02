@@ -18,7 +18,10 @@ $(function() {
 
 $(function() {
    $(".non_adequate_reviews").click(function(event) {
-       alert("TODO: non_adequate_reviews");
+       var url = '/update_overview?data=non_adequate_reviews';
+       $.get(url, function (data) {
+            $('#overview').html(data);
+       });
    });
 });
 
@@ -33,7 +36,10 @@ $(function() {
 
 $(function() {
    $(".complaints").click(function(event) {
-       alert("TODO: complaints");
+       var url = '/update_overview?data=non_adequate_reviews';
+       $.get(url, function (data) {
+            $('#overview').html(data);
+       });
    });
 });
 

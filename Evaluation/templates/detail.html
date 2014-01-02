@@ -37,7 +37,7 @@
                 </div>
                 points assigned<div class="points" {% if not lock %} contenteditable="true" {% endif %} onkeyup="DelayedAutoSave({{ elaboration.id }})">
                     {% if evaluation.evaluation_points %}{{ evaluation.evaluation_points }}{% endif %}</div>
-                <button class="submit_evaluation" id="{{ elaboration.id }}">evaluate</button>
+                {% if not lock %}<button class="submit_evaluation" id="{{ elaboration.id }}">evaluate</button>{% endif %}
             {% endif %}
         </form>
 
