@@ -9,6 +9,8 @@ from Elaboration.models import Elaboration
 from Stack.models import Stack, StackChallengeRelation
 from Review.models import Review
 from ReviewQuestion.models import ReviewQuestion
+from Comments.models import Comment
+from django.contrib.contenttypes.models import ContentType
 
 class Command(BaseCommand):
 
@@ -337,6 +339,16 @@ def init_data():
 
     StackChallengeRelation(stack=gtav, challenge=challenge_9).save()
     StackChallengeRelation(stack=gtav, challenge=challenge_10).save()
+
+    print('adding comments to elaborations')
+    com1 = Comment(text="luke i am your father", author=superuser, post_date=datetime.now(), content_type=ContentType.objects.get_for_model(Elaboration), object_id=de1.id)
+    com1.save()
+    com2 = Comment(text="spuke i am your mother", author=superuser, post_date=datetime.now(), content_type=ContentType.objects.get_for_model(Elaboration), object_id=de2.id, visible=True)
+    com2.save()
+    com3 = Comment(text="use the force", author=superuser, post_date=datetime.now(), content_type=ContentType.objects.get_for_model(Elaboration), object_id=de3.id)
+    com3.save()
+    com4 = Comment(text="testplus - die smarte software tester", author=superuser, post_date=datetime.now(), content_type=ContentType.objects.get_for_model(Elaboration), object_id=de4.id, visible=True)
+    com4.save()
 
 if __name__ == '__main__':
     init_data()

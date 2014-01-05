@@ -1,8 +1,9 @@
-from django.db import models
 from datetime import datetime, timedelta
+from django.contrib.contenttypes.models import ContentType
+from django.db import models
+from Comments.models import Comment
 from Evaluation.models import Evaluation
 from Review.models import Review
-
 
 class Elaboration(models.Model):
     challenge = models.ForeignKey('Challenge.Challenge')
@@ -129,3 +130,9 @@ class Elaboration(models.Model):
             for elaboration in challenge.get_submissions():
                 elaborations.append(elaboration)
         return elaborations
+
+    def get_visible_comments(self):
+        return Comment.objects.filter(visible=True, content_type=ContentType.objects.get_for_model(Elaboration), object_id=self.id)
+
+    def get_invisible_comments(self):
+        return Comment.objects.filter(visible=False, content_type=ContentType.objects.get_for_model(Elaboration), object_id=self.id)

@@ -199,3 +199,22 @@ th {
     background-color: indianred;
     padding: 0 3px 0 3px;
 }
+
+.visible_comments, .invisible_comments {
+    border-radius: 10px;
+    height: 25px;
+    padding-top: 3px;
+    text-align: center;
+    -moz-box-sizing: border-box;
+    margin-right: 3px;
+}
+
+.visible_comments {
+    border: 1px solid darkblue;
+    background-color: cornflowerblue;
+}
+
+.invisible_comments {
+    border: 1px solid gray;
+    background-color: darkgray;
+}
