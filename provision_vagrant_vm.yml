@@ -1,0 +1,16 @@
+---
+- hosts: all
+  tasks:
+  - name: apt-get update
+    apt: update_cache=yes
+    sudo: yes
+  - apt: pkg=vim
+    sudo: yes
+  - apt: pkg=python-pip
+    sudo: yes
+  - apt: pkg=ipython
+    sudo: yes
+  - pip: name=Django
+    sudo: yes
+
+# - pip: requirements=requirements.txt
