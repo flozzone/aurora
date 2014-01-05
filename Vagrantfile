@@ -5,13 +5,14 @@
 VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  config.vm.provision "shell" do |s|
-    s.path = "provision_vagrant_vm.sh"
-  end
+  #config.vm.provision "shell" do |s|
+  #  s.path = "provision_vagrant_vm.sh"
+  #end
 
-  # config.vm.provision "ansible" do |ansible|
-  #   ansible.playbook = "provision_vagrant_vm.yml"
-  # end
+  config.vm.provision "ansible" do |ansible|
+    ansible.playbook = "provision_vagrant_vm.yml"
+    ansible.verbose = "v"
+  end
 
   # All Vagrant configuration is done here. The most common configuration
   # options are documented and commented below. For a complete reference,
