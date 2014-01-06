@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.contrib.auth.tests import *
 from django.http import HttpResponse
 from django.shortcuts import render_to_response

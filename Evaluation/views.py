@@ -80,6 +80,7 @@ def update_overview(request):
 
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
+    request.session['selection'] = request.GET.get('data', '')
     return html
 
 
@@ -89,6 +90,7 @@ def detail(request):
     elaborations = []
     for serialized_elaboration in serializers.deserialize('json', request.session.get('elaborations', {})):
         elaborations.append(serialized_elaboration.object)
+    selection = request.session.get('selection', 'error')
 
     if not 'elaboration_id' in request.GET:
         return False;
@@ -97,26 +99,42 @@ def detail(request):
     # store selected elaboration_id in session
     request.session['elaboration_id'] = elaboration.id
 
-    # set evaluation lock
-    puser = PortfolioUser.objects.get(pk=request.user.id)
-    lock = False
-    if Evaluation.objects.filter(submission=elaboration):
-        evaluation = Evaluation.objects.get(submission=elaboration)
-        if evaluation.user==puser:
-            evaluation.lock_time = datetime.now()
-            evaluation.save()
-        else:
-            if evaluation.is_older_15min():
+    if selection == "missing_reviews":
+        print('selection: missing_reviews')
+        questions = ReviewQuestion.objects.filter(challenge=elaboration.challenge).order_by("order")
+        params = {'questions': questions}
+    if selection == "top_level_challenges":
+        # set evaluation lock
+        puser = PortfolioUser.objects.get(pk=request.user.id)
+        lock = False
+        if Evaluation.objects.filter(submission=elaboration):
+            evaluation = Evaluation.objects.get(submission=elaboration)
+            if evaluation.user==puser:
                 evaluation.lock_time = datetime.now()
-                evaluation.user = puser
                 evaluation.save()
             else:
-                lock = True
-    else:
-        evaluation = Evaluation.objects.create(submission=elaboration)
-        evaluation.user = puser
-        evaluation.lock_time = datetime.now()
-        evaluation.save()
+                if evaluation.is_older_15min():
+                    evaluation.lock_time = datetime.now()
+                    evaluation.user = puser
+                    evaluation.save()
+                else:
+                    lock = True
+        else:
+            evaluation = Evaluation.objects.create(submission=elaboration)
+            evaluation.user = puser
+            evaluation.lock_time = datetime.now()
+            evaluation.save()
+
+        params = {'evaluation': evaluation, 'lock': lock}
+    if selection == "non_adequate_work":
+        print('selection: non_adequate_work')
+        params = {}
+    if selection == "non_adequate_reviews":
+        print('selection: non_adequate_reviews')
+        params = {}
+    if selection == "awesome":
+        print('selection: awesome')
+        params = {}
 
     reviews = Review.objects.filter(elaboration=elaboration)
 
@@ -129,16 +147,14 @@ def detail(request):
 
     stack_elaborations = elaboration.user.get_stack_elaborations(elaboration.challenge.get_stack())
 
-    return render_to_response('detail.html',
-                              {'elaboration': elaboration,
-                               'evaluation': evaluation,
-                               'stack_elaborations': stack_elaborations,
-                               'reviews': reviews,
-                               'next': next,
-                               'prev': prev,
-                               'lock': lock
-                              }, RequestContext(request))
+    params['elaboration'] = elaboration
+    params['stack_elaborations'] = stack_elaborations
+    params['reviews'] = reviews
+    params['next'] = next
+    params['prev'] = prev
+    params['selection'] = selection
 
+    return render_to_response('detail.html', params, RequestContext(request))
 
 @login_required()
 def stack(request):
@@ -350,3 +366,23 @@ def load_reviews(request):
 
     return render_to_response('stack_rev.html', {'elaboration': elaboration, 'reviews': reviews, 'stack': 'stack'},
                               RequestContext(request))
+
+
+@csrf_exempt
+@login_required()
+def review_answer(request):
+    if request.POST:
+        data = request.body.decode(encoding='UTF-8')
+        data = json.loads(data)
+        answers = data['answers']
+        review = Review.objects.create(elaboration_id=request.session.get('elaboration_id', ''), reviewer_id=request.user.id)
+        review.appraisal = data['appraisal']
+        review.awesome = data['awesome']
+        review.submission_time = datetime.now()
+        review.save()
+        for answer in answers:
+            question_id = answer['question_id']
+            text = answer['answer']
+            review_question = ReviewQuestion.objects.get(pk=question_id)
+            ReviewAnswer(review=review, review_question=review_question, text=text).save()
+    return HttpResponse()
