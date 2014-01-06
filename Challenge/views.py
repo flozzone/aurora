@@ -83,8 +83,6 @@ def create_context_challenge(request):
             data['success'] = elaboration.get_success_reviews()
             data['nothing'] = elaboration.get_nothing_reviews()
             data['fail'] = elaboration.get_fail_reviews()
-            data['awesome'] = elaboration.get_awesome()
-
     return data
 
 @login_required()

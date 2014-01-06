@@ -293,11 +293,11 @@ def init_data():
 
     # create review for elaboration
     print('adding review 1 for elaboration for challenge 1 for s0')
-    Review(elaboration=de1, reviewer=s0, appraisal='N', submission_time=datetime.now(), escalate=True).save()
+    Review(elaboration=de1, reviewer=s0, appraisal='N', submission_time=datetime.now()).save()
     print('adding review 2 for elaboration for challenge 1 for s0')
     Review(elaboration=de2, reviewer=s0, appraisal='F', submission_time=datetime.now()).save()
     print('adding review 3 for elaboration for challenge 1 for s0')
-    Review(elaboration=de3, reviewer=s0, appraisal='S', submission_time=datetime.now(), awesome=True).save()
+    Review(elaboration=de3, reviewer=s0, appraisal='A', submission_time=datetime.now()).save()
     print('adding review 5 for elaboration for challenge 1 for s0')
     Review(elaboration=de3, reviewer=d2, appraisal='F', submission_time=datetime.now()).save()
 
@@ -321,7 +321,7 @@ def init_data():
                       submission_time=datetime.now())
     de5.save()
     print('adding review 1 for elaboration for challenge 2 for s0')
-    Review(elaboration=de5, reviewer=d1, appraisal='S', submission_time=datetime.now(), awesome=True).save()
+    Review(elaboration=de5, reviewer=d1, appraisal='A', submission_time=datetime.now()).save()
     print('adding review 2 for elaboration for challenge 2 for s0')
     Review(elaboration=de5, reviewer=d2, appraisal='S', submission_time=datetime.now()).save()
 

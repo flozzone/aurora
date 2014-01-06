@@ -8,18 +8,18 @@ class Review(models.Model):
     NOTHING = 'N'
     FAIL = 'F'
     SUCCESS = 'S'
+    AWESOME = 'A'
     APPRAISAL_CHOICES = (
         (NOTHING, 'Not even trying'),
         (FAIL, 'Fail'),
         (SUCCESS, 'Success'),
+        (AWESOME, 'Awesome'),
     )
     appraisal = models.CharField(max_length=1,
                                  choices=APPRAISAL_CHOICES,
                                  default=NOTHING)
-    awesome = models.BooleanField(default=False)
-    escalate = models.BooleanField(default=False)
 
-    def getElaborationAuthor(self):
+    def get_elaboration_author(self):
         return self.elaboration.user
 
     @staticmethod

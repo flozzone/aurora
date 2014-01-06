@@ -99,7 +99,7 @@ class Elaboration(models.Model):
         return Review.objects.filter(elaboration=self, appraisal=Review.FAIL)
 
     def get_awesome_reviews(self):
-        return Review.objects.filter(elaboration=self, appraisal=Review.SUCCESS, awesome=True)
+        return Review.objects.filter(elaboration=self, appraisal=Review.AWESOME)
 
     @staticmethod
     def get_non_adequate_reviews():
@@ -111,7 +111,7 @@ class Elaboration(models.Model):
     @staticmethod
     def get_awesome():
         awesome = []
-        for review in Review.objects.filter(awesome=True):
+        for review in Review.objects.filter(appraisal=Review.AWESOME):
             awesome.append(review.elaboration)
         return awesome
 

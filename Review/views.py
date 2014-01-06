@@ -53,7 +53,6 @@ def review_answer(request):
         answers = data['answers']
         review = Review.objects.get(pk=review_id)
         review.appraisal = data['appraisal']
-        review.awesome = data['awesome']
         review.submission_time = datetime.now()
         review.save()
         for answer in answers:
