@@ -32,9 +32,10 @@ function file_upload_loaded() {
         data.forEach(function (file) {
             console.log(file);
             // Create the mock file:
-            var mockFile = { name: file.name, size: file.size, image_url: file.path, type: 'image.*'};
+            var mockFile = { name: file.name, size: file.size, image_url: file.path, type: 'image.*', status: Dropzone.success};
             dropzone.emit("addedfile", mockFile);
             dropzone.emit("thumbnail", mockFile, '/' + file.path);
+            dropzone.files.push(mockFile);
             $(mockFile.previewElement).find('img').wrap(function () {
                 return "<a href='/" + file.path + "' data-lightbox='preview' title='" + file.name + "'></div>";
             });
