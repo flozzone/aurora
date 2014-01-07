@@ -4,6 +4,7 @@ from django.db import models
 from Comments.models import Comment
 from Evaluation.models import Evaluation
 from Review.models import Review
+from django.db.models import Q
 
 class Elaboration(models.Model):
     challenge = models.ForeignKey('Challenge.Challenge')
@@ -104,8 +105,9 @@ class Elaboration(models.Model):
     @staticmethod
     def get_non_adequate_reviews():
         elaborations = []
-        # for review in Review.objects.filter(escalate=True):
-        #     elaborations.append(review.elaboration)
+        for review in Review.objects.filter(Q(appraisal=Review.NOTHING) | Q(appraisal=Review.FAIL)):
+             if Comment.objects.filter(content_type=ContentType.objects.get_for_model(Review), object_id=review.id):
+                elaborations.append(review.elaboration)
         return elaborations
 
     @staticmethod
@@ -132,7 +134,15 @@ class Elaboration(models.Model):
         return elaborations
 
     def get_visible_comments(self):
-        return Comment.objects.filter(visible=True, content_type=ContentType.objects.get_for_model(Elaboration), object_id=self.id)
+        comments = []
+        for review in Review.objects.filter(elaboration=self.id):
+            for comment in Comment.objects.filter(visible=True, content_type=ContentType.objects.get_for_model(Review), object_id=review.id):
+                comments.append(comment)
+        return comments
 
     def get_invisible_comments(self):
-        return Comment.objects.filter(visible=False, content_type=ContentType.objects.get_for_model(Elaboration), object_id=self.id)
+        comments = []
+        for review in Review.objects.filter(elaboration=self.id):
+            for comment in Comment.objects.filter(visible=False, content_type=ContentType.objects.get_for_model(Review), object_id=review.id):
+                comments.append(comment)
+        return comments

@@ -293,9 +293,11 @@ def init_data():
 
     # create review for elaboration
     print('adding review 1 for elaboration for challenge 1 for s0')
-    Review(elaboration=de1, reviewer=s0, appraisal='N', submission_time=datetime.now()).save()
+    r1 = Review(elaboration=de1, reviewer=s0, appraisal='N', submission_time=datetime.now())
+    r1.save()
     print('adding review 2 for elaboration for challenge 1 for s0')
-    Review(elaboration=de2, reviewer=s0, appraisal='F', submission_time=datetime.now()).save()
+    r2 = Review(elaboration=de2, reviewer=s0, appraisal='F', submission_time=datetime.now())
+    r2.save()
     print('adding review 3 for elaboration for challenge 1 for s0')
     Review(elaboration=de3, reviewer=s0, appraisal='A', submission_time=datetime.now()).save()
     print('adding review 5 for elaboration for challenge 1 for s0')
@@ -340,15 +342,12 @@ def init_data():
     StackChallengeRelation(stack=gtav, challenge=challenge_9).save()
     StackChallengeRelation(stack=gtav, challenge=challenge_10).save()
 
-    print('adding comments to elaborations')
-    com1 = Comment(text="luke i am your father", author=superuser, post_date=datetime.now(), content_type=ContentType.objects.get_for_model(Elaboration), object_id=de1.id)
+    print('adding escalation for challenge 1 for s0')
+    com1 = Comment(text="escalation for review 1 for challenge 1 for d1", author=superuser, post_date=datetime.now(), content_type=ContentType.objects.get_for_model(Review), object_id=r1.id)
     com1.save()
-    com2 = Comment(text="spuke i am your mother", author=superuser, post_date=datetime.now(), content_type=ContentType.objects.get_for_model(Elaboration), object_id=de2.id, visible=True)
+    com2 = Comment(text="escalation for review 2 for challenge 1 for d2", author=superuser, post_date=datetime.now(), content_type=ContentType.objects.get_for_model(Review), object_id=r2.id, visible=True)
     com2.save()
-    com3 = Comment(text="use the force", author=superuser, post_date=datetime.now(), content_type=ContentType.objects.get_for_model(Elaboration), object_id=de3.id)
-    com3.save()
-    com4 = Comment(text="testplus - die smarte software tester", author=superuser, post_date=datetime.now(), content_type=ContentType.objects.get_for_model(Elaboration), object_id=de4.id, visible=True)
-    com4.save()
+
 
 if __name__ == '__main__':
     init_data()
