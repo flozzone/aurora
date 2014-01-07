@@ -6,11 +6,15 @@ function challenge_loaded() {
         selector: "textarea#editor",
         plugins: "image",
         setup: function (editor) {
+            editor.on('init', function (e) {
+                elaboration_autosave(e, challenge_id);
+            });
             editor.on('change', function (e) {
                 elaboration_autosave(e, challenge_id);
             });
         }
     });
+
     $('.submit').click(submit_clicked);
     $('.real_submit').click(real_submit_clicked);
 }

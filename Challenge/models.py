@@ -13,6 +13,8 @@ class Challenge(models.Model):
     prerequisite = models.ForeignKey('self', null=True)
     description = models.TextField()
     image_url = models.CharField(max_length=100)
+    # This is a comma separated list of mime types or file extensions. Eg.: image/*,application/pdf,.psd.
+    accepted_files = models.CharField(max_length=100, default="image/*,application/pdf")
 
     def get_previous(self):
         return self.prerequisite

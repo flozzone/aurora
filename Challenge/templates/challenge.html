@@ -2,9 +2,12 @@
   <script type="text/javascript" src="{{ STATIC_URL }}tinymce/tinymce.min.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}tinymce/jquery.tinymce.min.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/challenge.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/file_upload.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}lightbox/js/lightbox-2.6.min.js"></script>
   <link rel="stylesheet" href="{{ STATIC_URL }}css/challenge.css" type="text/css" media="screen"/>
-{% endblock %}
+  <link rel="stylesheet" href="{{ STATIC_URL }}lightbox/css/lightbox.css" type="text/css" media="screen"/>
 
+{% endblock %}
 
 <div id="{{ challenge.id }}" class="challenge">
   <h1>Details</h1>
@@ -16,19 +19,30 @@
   <div>
     {{ challenge.description }}
   </div>
+
+  <div class="file_upload" id="{{ elaboration.id }}">
+    <form action="/fileupload" class="dropzone dz-clickable" id="dropzone">
+      <input type="hidden" name="elaboration_id" value="{{ elaboration.id }}" />
+      {% csrf_token %}
+    </form>
+  </div>
+
   {% if not elaboration.is_submitted %}
+
     <form method="post">
       <textarea id="editor">{{ elaboration.elaboration_text }}</textarea>
     </form>
     <button class="submit">Submit</button>
     <div class="submission_text" hidden>
-    <button class="real_submit" id="{{ challenge.id }}">Submit</button><br>
-    I certify that the work presented here is, to the best of my knowledge and belief, original and the result of my own<br>
-    investigations and creation, except as acknowledged, and has not been submitted, either in part or whole, for a<br>
-    degree at this or any other University.<br><br>
-    Please press submit again.
+      <button class="real_submit" id="{{ challenge.id }}">Submit</button>
+      <br>
+      I certify that the work presented here is, to the best of my knowledge and belief, original and the result of my
+      own<br>
+      investigations and creation, except as acknowledged, and has not been submitted, either in part or whole, for
+      a<br>
+      degree at this or any other University.<br><br>
+      Please press submit again.
     </div>
-
   {% else %}
     <div class="elaboration_text">{{ elaboration.elaboration_text |safe }}</div> <!-- TODO: this has to be secure -->
   {% endif %}

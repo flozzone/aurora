@@ -1,24 +1,47 @@
+Dropzone.autoDiscover = false;
+
 $(file_upload_loaded);
 
 function file_upload_loaded() {
-    Dropzone.options.myAwesomeDropzone = {
+    Dropzone.options.dropzone = {
         maxFilesize: 100, // MB
+        addRemoveLinks: true,
         init: function () {
-            var _this = this;
             this.on("success", function (file, response) {
-                setTimeout(
-                    function () {
-                        _this.removeAllFiles();
-                    }, 1000);
+                file.image_url = response;
+                var elaboration_id = $('.file_upload').attr('id');
+                $(file.previewElement).find('img').wrap(function () {
+                    return "<a href='/" + file.image_url + "' data-lightbox='preview' title='" + file.name + "'></div>";
+                });
+                $(file.previewElement).find('img').attr('src', '/' + file.image_url);
             });
-            this.on("thumbnail", function (file, dataUrl) {
-                $('.upload_history').append("<img src=" + dataUrl + " />");
+            this.on("removedfile", function (file) {
+                console.log(file);
+                var url = '/fileupload/remove?url=' + file.image_url;
+                $.get(url, function (data) {
+                });
             });
         }
     };
-    $('#upload_button').click(file_upload_clicked);
-}
+    var dropzone = new Dropzone("#dropzone");
+    var elaboration_id = $('.file_upload').attr('id');
+    var url = '/fileupload/all?elaboration_id=' + elaboration_id;
+    $.get(url, function (data) {
+        var data = JSON.parse(data);
 
-function file_upload_clicked(event) {
-    $('.file_upload_menu').toggle();
+        data.forEach(function (file) {
+            console.log(file);
+            // Create the mock file:
+            var mockFile = { name: file.name, size: file.size, image_url: file.path, type: 'image.*'};
+            dropzone.emit("addedfile", mockFile);
+            dropzone.emit("thumbnail", mockFile, '/' + file.path);
+            $(mockFile.previewElement).find('img').wrap(function () {
+                return "<a href='/" + file.path + "' data-lightbox='preview' title='" + file.name + "'></div>";
+            });
+            // If you use the maxFiles option, make sure you adjust it to the
+            // correct amount:
+            // var existingFileCount = 0; // The number of files already uploaded
+            //dropzone.options.maxFiles = dropzone.options.maxFiles - existingFileCount;
+        });
+    });
 }
