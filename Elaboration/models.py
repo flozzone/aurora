@@ -104,8 +104,8 @@ class Elaboration(models.Model):
     @staticmethod
     def get_non_adequate_reviews():
         elaborations = []
-        for review in Review.objects.filter(escalate=True):
-            elaborations.append(review.elaboration)
+        # for review in Review.objects.filter(escalate=True):
+        #     elaborations.append(review.elaboration)
         return elaborations
 
     @staticmethod
