@@ -29,6 +29,17 @@ def save_elaboration(request):
     return HttpResponse()
 
 @login_required()
+def create_elaboration(request):
+    challenge_id = request.GET['id']
+    challenge = Challenge.objects.get(id=challenge_id)
+    user = PortfolioUser.objects.get(id=request.user.id)
+    elaboration, created = Elaboration.objects.get_or_create(user=user, challenge=challenge);
+    if created:
+        elaboration.elaboration_text = ""
+        elaboration.save()
+    return HttpResponse(elaboration.id)
+
+@login_required()
 def submit_elaboration(request):
     if 'id' in request.GET:
         course = Course.objects.filter(short_title='gsi')

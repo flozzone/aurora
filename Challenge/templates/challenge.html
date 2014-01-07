@@ -20,9 +20,9 @@
     {{ challenge.description }}
   </div>
 
-  <div class="file_upload" id="{{ elaboration.id }}">
+  <div class="file_upload">
     <form action="/fileupload" class="dropzone dz-clickable" id="dropzone">
-      <input type="hidden" name="elaboration_id" value="{{ elaboration.id }}" />
+      <input id="elaboration_id" type="hidden" name="elaboration_id" value="{{ elaboration.id }}" />
       {% csrf_token %}
     </form>
   </div>
