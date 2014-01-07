@@ -43,6 +43,7 @@ function file_upload_loaded() {
         clickable: false,
         init: function () {
             $('.dropzone').removeClass('dz-clickable');
+            $('.dz-message').remove();
         }
     };
     if (is_submitted) {
@@ -58,17 +59,21 @@ function file_upload_loaded() {
         $.get(url, function (data) {
             elaboration_id = data;
             $('#elaboration_id').val(elaboration_id);
-            load_files(elaboration_id)
+            load_files(elaboration_id, is_submitted)
         });
     } else {
-        load_files(elaboration_id)
+        load_files(elaboration_id, is_submitted)
     }
 }
 
-function load_files(elaboration_id) {
+function load_files(elaboration_id, is_submitted) {
     var url = '/fileupload/all?elaboration_id=' + elaboration_id;
     $.get(url, function (data) {
         var data = JSON.parse(data);
+        if (data.length === 0 && is_submitted) {
+            $('.file_upload').hide();
+            return;
+        }
         data.forEach(function (file) {
             // Create the mock file:
             var mockFile = { name: file.name, size: file.size, path: file.path, type: 'image/*', status: Dropzone.success};
