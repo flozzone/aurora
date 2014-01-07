@@ -19,13 +19,15 @@
   <div>
     {{ challenge.description }}
   </div>
-
-  <div class="file_upload">
-    <form action="/fileupload" class="dropzone dz-clickable{% if elaboration.is_submitted %} is_submitted{% endif %}" id="dropzone">
-      <input id="elaboration_id" type="hidden" name="elaboration_id" value="{{ elaboration.id }}"/>
-      {% csrf_token %}
-    </form>
-  </div>
+  {% if challenge.accepted_files %}
+    <div class="file_upload" accepted_files="{{ challenge.accepted_files }}">
+      <form action="/fileupload" class="dropzone dz-clickable{% if elaboration.is_submitted %} is_submitted{% endif %}"
+            id="dropzone">
+        <input id="elaboration_id" type="hidden" name="elaboration_id" value="{{ elaboration.id }}"/>
+        {% csrf_token %}
+      </form>
+    </div>
+  {% endif %}
 
   {% if not elaboration.is_submitted %}
     <form method="post">

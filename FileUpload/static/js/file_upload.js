@@ -3,31 +3,36 @@ Dropzone.autoDiscover = false;
 $(file_upload_loaded);
 var dropzone_instance;
 function file_upload_loaded() {
+    if (! $(".file_upload").length ) {
+        return;
+    }
     var is_submitted = $("#dropzone").hasClass('is_submitted');
 
     var read_write_options = {
         maxFilesize: 100, // MB
         addRemoveLinks: true,
+        acceptedFiles: $('.file_upload').attr('accepted_files'),
         init: function () {
-            if (is_submitted) {
-                console.log('is submitted');
-                $('.dropzone').removeClass('dz-clickable');
-                $('.dropzone').click(function (e) {
-                    console.log('bla');
-                    e.preventDefault();
-                    return false;
-                });
-            }
             this.on("success", function (file, response) {
-                file.image_url = response;
+                file.path = response;
                 var elaboration_id = $('#elaboration_id').val();
-                $(file.previewElement).find('img').wrap(function () {
-                    return "<a href='/" + file.image_url + "' data-lightbox='preview' title='" + file.name + "'></div>";
-                });
-                $(file.previewElement).find('img').attr('src', '/' + file.image_url);
+                if (file.type === 'application/pdf') {
+                    $(file.previewElement).addClass('dz-image-preview');
+                    $(file.previewElement).find('img').show();
+                    $(file.previewElement).find('img').attr('src', '/static/img/pdf_icon.jpg');
+                    $(file.previewElement).find('img').attr('alt', file.path);
+                    $(file.previewElement).find('img').wrap(function () {
+                        return "<a href='/" + file.path + "' title='" + file.name + "'></div>";
+                    });
+                } else {
+                    $(file.previewElement).find('img').wrap(function () {
+                        return "<a href='/" + file.path + "' data-lightbox='preview' title='" + file.name + "'></div>";
+                    });
+                    $(file.previewElement).find('img').attr('src', '/' + file.path);
+                }
             });
             this.on("removedfile", function (file) {
-                var url = '/fileupload/remove?url=' + file.image_url;
+                var url = '/fileupload/remove?url=' + file.path;
                 $.get(url, function (data) {
                 });
             });
@@ -66,13 +71,33 @@ function load_files(elaboration_id) {
         var data = JSON.parse(data);
         data.forEach(function (file) {
             // Create the mock file:
-            var mockFile = { name: file.name, size: file.size, image_url: file.path, type: 'image.*', status: Dropzone.success};
+            var mockFile = { name: file.name, size: file.size, path: file.path, type: 'image/*', status: Dropzone.success};
             dropzone_instance.emit("addedfile", mockFile);
-            dropzone_instance.emit("thumbnail", mockFile, '/' + file.path);
+
+            if (file.path.match(/pdf$/)) {
+                dropzone_instance.emit("thumbnail", mockFile, '/static/img/pdf_icon.jpg');
+                $(mockFile.previewElement).find('img').wrap(function () {
+                    return "<a href='/" + file.path + "' title='" + file.name + "'></div>";
+                });
+            } else {
+                dropzone_instance.emit("thumbnail", mockFile, '/' + file.path);
+                $(mockFile.previewElement).find('img').wrap(function () {
+                    return "<a href='/" + file.path + "' data-lightbox='preview' title='" + file.name + "'></div>";
+                });
+            }
             dropzone_instance.files.push(mockFile);
-            $(mockFile.previewElement).find('img').wrap(function () {
-                return "<a href='/" + file.path + "' data-lightbox='preview' title='" + file.name + "'></div>";
-            });
         });
     });
+}
+
+function openPdf(e, path, redirect) {
+    // stop the browser from going to the href
+    e = e || window.event; // for IE
+    e.preventDefault();
+
+    // launch a new window with your PDF
+    window.open(path, 'Test');
+
+    // redirect current page to new location
+    window.location = redirect;
 }
