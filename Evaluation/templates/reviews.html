@@ -17,6 +17,15 @@
             <input type="radio" name="reviewgroup{{ stack }}{{ review.id }}" onclick="set_appraisal({{ review.id }}, 'F')" {% if review.appraisal == 'F' %} checked {% endif %}>Fail</input>
             <input type="radio" name="reviewgroup{{ stack }}{{ review.id }}" onclick="set_appraisal({{ review.id }}, 'N')" {% if review.appraisal == 'N' %} checked {% endif %}>Not even trying</input>
         </div>
+
+        {% for comment in review.get_comments %}
+            <div class="spacer"></div>
+            <div class="review_head">Comment</div>
+            <div>
+                {{ comment.text }}
+                <br/>from {{ comment.author }}
+            </div>
+        {% endfor %}
     {% endfor %}
 
 </div>

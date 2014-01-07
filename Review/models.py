@@ -1,4 +1,7 @@
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from Comments.models import Comment
+
 
 class Review(models.Model):
     elaboration = models.ForeignKey('Elaboration.Elaboration')
@@ -37,3 +40,5 @@ class Review(models.Model):
     def get_review_amount(elaboration):
         return len(Review.objects.filter(elaboration=elaboration).exclude(submission_time__isnull=True))
 
+    def get_comments(self):
+        return Comment.objects.filter(content_type=ContentType.objects.get_for_model(Review), object_id=self.id)
