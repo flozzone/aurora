@@ -5,24 +5,18 @@
     <script type="text/javascript" src="{% static "Comments/comments.js" %}"></script>
 {% endblock %}
 
-    <!-- <form action="{% url 'Comments:post_comment' %}{% if from %}?next={{ from }}{% endif %}" method="post">{% csrf_token %} -->
-    <form action='' method="post">{% csrf_token %}
+{#    <form action="{% url 'Comments:post_comment' %}{% if from %}?next={{ from }}{% endif %}" method="post">{% csrf_token %}#}
+    <form method="post" id="commentForm">{% csrf_token %}
             {{ form.as_p }}
-        <!-- <input id="add_comment" onclick='' type="submit" value="Add comment" /> -->
-        <button id="add_comment" onclick=post_comment()>Add comment</button>
+{#        <input id="add_comment_submit" type="submit" value="Add comment submit" />#}
     </form>
+    <button id="add_comment" onclick=postComment()>Add comment</button>
 
-    <div>
+    <div class="comments" id="comments">
         {% for comment in comment_list %}
-            <div class="comment" id="{{ comment.id }}">
-                <p>{{ comment.text|linebreaks }}</p>
-                <p><pre>submitted {{ comment.post_date | naturaltime }} by {{ comment.author.username }}</pre></p>
-            </div>
+            {% include 'Comments/comment.html' %}
             {% for response in comment.responses %}
-                <div class="response" id="{{ response.id }}">
-                    <p><pre>    {{ response.text }}</pre></p>
-                    <p><pre>    submitted {{ response.post_date | naturaltime }} by {{ response.author.username }}</pre></p>
-                </div>
+                {% include 'Comments/response.html' %}
             {% endfor %}
         {% endfor %}
     </div>
