@@ -2,7 +2,7 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_POST, require_GET
 
 from django.views.generic import ListView
 from django.contrib.auth.decorators import login_required
@@ -54,6 +54,12 @@ def post_comment(request):
     #return HttpResponse(json.dumps(data), content_type="application/json")
     return render_to_response('Comments/comment.html', {'comment': comment}, context_instance = RequestContext(request))
     #return HttpResponseRedirect(reverse('Comments:feed'))
+
+
+@require_GET
+@login_required
+def update_comment(request):
+    print(request.GET)
 
 
 def feed(request):

@@ -61,18 +61,35 @@ function showReplyForm(that) {
 }
 
 function pollForChanges() {
-    $.post('ajax/test.html', function (data) {
-        alert(data);  // process results here
-        setTimeout(pollForChanges(), 5000);
-    });
+//    $.post('ajax/test.html', function (data) {
+//        alert(data);  // process results here
+//        setTimeout(pollForChanges(), 5000);
+//    });
 }
 
 function updateComments() {
-    $.get('comment_update', { last_comment_id: id , reference_object_id: reference_object_id}, function(response){
-//        if we got new stuff, update DOM
-    });
+    var lastComment = { last_comment_id: getMaxCommentId(), reference_object_id: reference_object_id }
+    $.ajax({
+        url: '/update_comment/',
+        data: lastComment,
+        type: 'json',
+        success: function (json) {
+            alert(json);
+//          if we get new stuff update DOM
+        }
+    })
 }
 
 function postReply(id) {
     alert(id);
+}
+
+function getMaxCommentId() {
+    var max = 0;
+    var id;
+    $('.comment, .reply').each(function() {
+        id = parseInt( $(this).attr('id') );
+        if (id > max) max = id;
+    })
+    return(max);
 }
