@@ -1,0 +1,10 @@
+{% load humanize %}
+
+<div class="comment" id="{{ comment.id }}">
+    <p>{{ comment.text|linebreaks }}</p>
+
+    <p>
+    <pre>submitted {{ comment.post_date | naturaltime }} by {{ comment.author.username }}</pre>
+    </p>
+    <a href="javascript:void(0)" onclick="showReplyForm(this);">reply</a>
+</div>

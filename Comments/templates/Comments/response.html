@@ -1,0 +1,6 @@
+{% load humanize %}
+
+<div class="response" id="{{ response.id }}">
+    <p><pre>    {{ response.text }}</pre></p>
+    <p><pre>    submitted {{ response.post_date | naturaltime }} by {{ response.author.username }}</pre></p>
+</div>
