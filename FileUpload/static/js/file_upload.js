@@ -74,6 +74,7 @@ function load_files(elaboration_id, is_submitted) {
             $('.file_upload').hide();
             return;
         }
+        $('.file_upload').show();
         data.forEach(function (file) {
             // Create the mock file:
             var mockFile = { name: file.name, size: file.size, path: file.path, type: 'image/*', status: Dropzone.success};

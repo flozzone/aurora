@@ -1,6 +1,10 @@
 {% block additional_headers %}
   <script type="text/javascript" src="{{ STATIC_URL }}js/detail.js"></script>
   <link rel="stylesheet" href="{{ STATIC_URL }}css/evaluation.css" type="text/css" media="screen"/>
+
+  <script type="text/javascript" src="{{ STATIC_URL }}js/file_upload.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}lightbox/js/lightbox-2.6.min.js"></script>
+  <link rel="stylesheet" href="{{ STATIC_URL }}lightbox/css/lightbox.css" type="text/css" media="screen"/>
 {% endblock %}
 
 
@@ -20,7 +24,14 @@
         {{ elaboration.user.first_name }} {{ elaboration.user.last_name }}
         <div class="spacer"></div>
 
-        <div class="elaboration">{{ elaboration.elaboration_text }}</div></br>
+        <div class="file_upload" style="display: none">
+          <form action="/fileupload" class="dropzone dz-clickable is_submitted" id="dropzone">
+            <input id="elaboration_id" type="hidden" name="elaboration_id" value="{{ elaboration.id }}"/>
+            {% csrf_token %}
+          </form>
+        </div>
+
+        <div class="elaboration">{{ elaboration.elaboration_text|striptags }}</div></br>
 
         {% if selection == 'top_level_challenges' %}
             <form method="post">

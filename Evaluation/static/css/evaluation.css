@@ -218,3 +218,15 @@ th {
     border: 1px solid gray;
     background-color: darkgray;
 }
+
+
+.dropzone {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    min-height: 200px;
+    background-color: grey;
+}
+
+.dropzone .dz-default.dz-message {
+    top: 300px;
+}
