@@ -11,6 +11,7 @@ function challenge_loaded() {
             });
         }
     });
+
     $('.submit').click(submit_clicked);
     $('.real_submit').click(real_submit_clicked);
 }

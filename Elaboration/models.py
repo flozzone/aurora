@@ -1,8 +1,10 @@
-from django.db import models
 from datetime import datetime, timedelta
+from django.contrib.contenttypes.models import ContentType
+from django.db import models
+from Comments.models import Comment
 from Evaluation.models import Evaluation
 from Review.models import Review
-
+from django.db.models import Q
 
 class Elaboration(models.Model):
     challenge = models.ForeignKey('Challenge.Challenge')
@@ -98,19 +100,20 @@ class Elaboration(models.Model):
         return Review.objects.filter(elaboration=self, appraisal=Review.FAIL)
 
     def get_awesome_reviews(self):
-        return Review.objects.filter(elaboration=self, appraisal=Review.SUCCESS, awesome=True)
+        return Review.objects.filter(elaboration=self, appraisal=Review.AWESOME)
 
     @staticmethod
     def get_non_adequate_reviews():
         elaborations = []
-        for review in Review.objects.filter(escalate=True):
-            elaborations.append(review.elaboration)
+        for review in Review.objects.filter(Q(appraisal=Review.NOTHING) | Q(appraisal=Review.FAIL)):
+             if Comment.objects.filter(content_type=ContentType.objects.get_for_model(Review), object_id=review.id):
+                elaborations.append(review.elaboration)
         return elaborations
 
     @staticmethod
     def get_awesome():
         awesome = []
-        for review in Review.objects.filter(awesome=True):
+        for review in Review.objects.filter(appraisal=Review.AWESOME):
             awesome.append(review.elaboration)
         return awesome
 
@@ -129,3 +132,17 @@ class Elaboration(models.Model):
             for elaboration in challenge.get_submissions():
                 elaborations.append(elaboration)
         return elaborations
+
+    def get_visible_comments(self):
+        comments = []
+        for review in Review.objects.filter(elaboration=self.id):
+            for comment in Comment.objects.filter(visible=True, content_type=ContentType.objects.get_for_model(Review), object_id=review.id):
+                comments.append(comment)
+        return comments
+
+    def get_invisible_comments(self):
+        comments = []
+        for review in Review.objects.filter(elaboration=self.id):
+            for comment in Comment.objects.filter(visible=False, content_type=ContentType.objects.get_for_model(Review), object_id=review.id):
+                comments.append(comment)
+        return comments

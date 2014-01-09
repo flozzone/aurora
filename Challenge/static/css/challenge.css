@@ -36,10 +36,6 @@ h1 {
     padding-top: 10px;
 }
 
-.challenge {
-
-}
-
 .review_wrapper {
     height: 20px;
     width: 60px;
@@ -68,4 +64,19 @@ h1 {
 
 .review_box.active {
     background-color: yellow;
+}
+
+.dropzone {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    min-height: 250px;
+    background-color: grey;
+}
+
+.dropzone .dz-default.dz-message {
+    top: 300px;
+}
+
+.history_headline {
+
 }

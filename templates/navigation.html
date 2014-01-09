@@ -1,7 +1,6 @@
 {% block additional_headers %}
   <script type="text/javascript" src="{{ STATIC_URL }}js/authentication.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}dropzone/dropzone.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/file_upload.js"></script>
   <link rel="stylesheet" href="{{ STATIC_URL }}dropzone/css/basic.css" type="text/css" media="screen"/>
   <link rel="stylesheet" href="{{ STATIC_URL }}dropzone/css/dropzone.css" type="text/css" media="screen"/>
 {% endblock %}
@@ -15,8 +14,6 @@
     {% if user.is_authenticated %}
 
       <ul>
-
-
         <li id="challenges-li">
           <a href="/challenges">Challenges</a>
         </li>
@@ -34,17 +31,8 @@
             <a href="/evaluation">Evaluation</a>
           </li>
         {% endif %}
-
-
       </ul>
 
-      <div style="display: none" class="file_upload_menu">
-        <form action="/fileupload" class="dropzone dz-square"
-              id="my-awesome-dropzone">{% csrf_token %}</form>
-        <div class="upload_history"><h1 class="history_headline">History</h1></div>
-      </div>
-
-      <button class="upload_button" id="upload_button">File Upload</button>
       <button class="logout_button" id="button_sign_out">Sign out</button>
 
     {% endif %}

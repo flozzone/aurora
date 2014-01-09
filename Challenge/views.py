@@ -1,5 +1,4 @@
-from datetime import datetime
-from django.http import HttpResponse
+import os
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
@@ -8,7 +7,8 @@ from Course.models import Course
 from Elaboration.models import Elaboration
 from PortfolioUser.models import PortfolioUser
 from Stack.models import Stack, StackChallengeRelation
-from Review.models import Review
+from FileUpload.models import UploadFile
+
 
 @login_required()
 def stack(request):
@@ -25,7 +25,7 @@ def stack_page(request):
 def create_context_stack(request):
     data = {}
     if 'id' in request.GET:
-        user=request.user
+        user = request.user
         stack = Stack.objects.get(pk=request.GET.get('id'))
         stack_challenges = StackChallengeRelation.objects.all().filter(stack=stack)
         challenges_active = []
@@ -83,14 +83,14 @@ def create_context_challenge(request):
             data['success'] = elaboration.get_success_reviews()
             data['nothing'] = elaboration.get_nothing_reviews()
             data['fail'] = elaboration.get_fail_reviews()
-            data['awesome'] = elaboration.get_awesome()
-
     return data
+
 
 @login_required()
 def challenge(request):
     data = create_context_challenge(request)
     return render_to_response('challenge.html', data, context_instance=RequestContext(request))
+
 
 @login_required()
 def challenge_page(request):

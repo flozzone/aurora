@@ -103,3 +103,41 @@ function load_reviews(elaboration_id) {
        $('#info_area').html(data);
    });
 }
+
+$(function() {
+   $(".review_submit").click(function(event) {
+    event.preventDefault();
+    var data = {};
+    data['answers'] = [];
+    $(".answer").each(function (index) {
+        var answer_object = $(this);
+        var answer = null;
+        if (answer_object.hasClass('boolean_answer')) {
+            answer = answer_object.find('input').first().is(':checked');
+        } else {
+            answer = answer_object.find('input').first().val();
+        }
+        data['answers'].push({
+            'question_id': answer_object.attr('question_id'),
+            'answer': answer
+        });
+    });
+    data['appraisal'] = $('input[name=appraisal]:checked').val();
+    data['awesome'] = $('input[name=awesome]').is(':checked');
+    ajax_setup()
+    var args = {
+        type: "POST",
+        url: "/evaluation/review_answer/",
+        data: JSON.stringify(data),
+        error: function (data) {
+            alert('error submitting review');
+        },
+        success: review_submitted
+    };
+    $.ajax(args);
+   });
+});
+
+function review_submitted() {
+    window.location.href = '../evaluation';
+}

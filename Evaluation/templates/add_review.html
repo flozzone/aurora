@@ -1,0 +1,31 @@
+<div class="reviews">
+    <div class="review_head">Add Review</div>
+
+    <form action="./review_answer/" method="post">
+      {% for question in questions %}
+        <br>
+        <div class="question_container">
+          <div class="question" id="{{ question.id }}">
+            Question: {{ question.text }}
+          </div>
+          <div class="answer {% if question.boolean_answer %}boolean_answer{% endif %}" id="{{ question.id }}"
+               question_id="{{ question.id }}">
+            Answer:
+            {% if question.boolean_answer %}
+              <input type="radio" name="{{ question.id }}" value="yes"> Yes
+              <input type="radio" name="{{ question.id }}" value="no" checked> No <br>
+            {% else %}
+              <input type="text" name="answer">
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+      <br>
+      <input type="radio" name="appraisal" value="A"> Awesome
+      <input type="radio" name="appraisal" value="S" checked> Success
+      <input type="radio" name="appraisal" value="F"> Fail
+      <input type="radio" name="appraisal" value="N"> Not even trying<br><br>
+
+      <input class="review_submit" type="submit" value="Submit">
+    </form>
+</div>

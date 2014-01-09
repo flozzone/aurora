@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.contrib.auth.tests import *
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
@@ -26,6 +27,17 @@ def save_elaboration(request):
         elaboration = Elaboration.objects.create(challenge=challenge, user= user, elaboration_text=elaboration_text)
 
     return HttpResponse()
+
+@login_required()
+def create_elaboration(request):
+    challenge_id = request.GET['id']
+    challenge = Challenge.objects.get(id=challenge_id)
+    user = PortfolioUser.objects.get(id=request.user.id)
+    elaboration, created = Elaboration.objects.get_or_create(user=user, challenge=challenge);
+    if created:
+        elaboration.elaboration_text = ""
+        elaboration.save()
+    return HttpResponse(elaboration.id)
 
 @login_required()
 def submit_elaboration(request):

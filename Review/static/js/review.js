@@ -34,7 +34,7 @@ function submit_clicked(event) {
         });
     });
     data['appraisal'] = $('input[name=appraisal]:checked').val();
-    data['awesome'] = $('input[name=awesome]').is(':checked');
+
     ajax_setup()
     var args = {
         type: "POST",

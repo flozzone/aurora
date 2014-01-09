@@ -1,15 +1,15 @@
 from django.db import models as models
 from django.utils import timezone
-from PortfolioUser.models import PortfolioUser
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 
 
 class Comment(models.Model):
     text = models.TextField()
-    author = models.ForeignKey(PortfolioUser)
+    author = models.ForeignKey('PortfolioUser.PortfolioUser')
     post_date = models.DateTimeField('date posted')
     parent = models.ForeignKey('self', null=True, related_name='children')
+    visible = models.BooleanField(default=False)
 
     # Foreign object this Comment is attached to
     content_type = models.ForeignKey(ContentType)
