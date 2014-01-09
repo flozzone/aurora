@@ -13,15 +13,8 @@ register = template.Library()
 class CommentListNode(template.Node):
     def __init__(self, reference):
         self.reference_var = template.Variable(reference)
-        #self.request_var = template.Variable('request')
-        #self.request_var = template.Variable('messages')
 
     def render(self, context):
-        print(context)
-        #context.push()
-        print(context)
-        #print(self.request_var.resolve(context))
-        #request.path
         try:
             reference = self.reference_var.resolve(context)
 
@@ -34,7 +27,8 @@ class CommentListNode(template.Node):
             form = CommentForm()
             form.fields['reference_id'].initial = reference.id
             form.fields['reference_type_id'].initial = ref_type.id
-            context.update({'comment_list': queryset, 'form': form})
+            context.update({'comment_list': queryset,
+                            'form': form})
 
             return render_to_string('Comments/comment_list.html', context)
         except template.VariableDoesNotExist:
@@ -62,25 +56,11 @@ def get_reference_type_pk(ref_object):
     object_pk = ref_object.id
     return object_type, object_pk
 
-    #Comments.objects.filter(content_type__pk=object_type.id, object_id=ref_object.id)
-
-
-# TODO delete:
-@register.inclusion_tag('Comments/comment_list.html', takes_context=True)
-def test_inclusion_tag(context):
-    print(context['request'])
-
 
 @register.inclusion_tag('Comments/comment_list.html')
 def render_comment_list(for_string, reference):
     from Comments.views import CommentForm
     from Comments.models import Comment
-
-    #usage = 'template tag has to look like this: {% ' \
-    #        + render_comment_list.__name__ + ' for <reference> %}'
-
-    #if for_string != 'for':
-    #    raise template.TemplateSyntaxError(usage)
 
     ref_type = ContentType.objects.get_for_model(reference)
 
