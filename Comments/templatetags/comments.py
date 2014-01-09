@@ -28,7 +28,9 @@ class CommentListNode(template.Node):
             form.fields['reference_id'].initial = reference.id
             form.fields['reference_type_id'].initial = ref_type.id
             context.update({'comment_list': queryset,
-                            'form': form})
+                            'form': form,
+                            'ref_type': ref_type.id,
+                            'ref_id': reference.id})
 
             return render_to_string('Comments/comment_list.html', context)
         except template.VariableDoesNotExist:
@@ -74,6 +76,8 @@ def render_comment_list(for_string, reference):
     form.fields['reference_type_id'].initial = ref_type.id
 
     context = {'comment_list': queryset,
-               'form': form}
+               'form': form,
+               'ref_type': ref_type.id,
+               'ref_id': reference.id}
 
     return context
