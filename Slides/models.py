@@ -35,7 +35,7 @@ class Slide(models.Model):
     # get_pdf_image
     
 class Lecture(models.Model):
-    course = models.ForeignKey("course.course")
+    course = models.ForeignKey("Course.course")
     id_relative = models.IntegerField(blank=True)
     start = models.DateTimeField()
     end = models.DateTimeField()
