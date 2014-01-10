@@ -134,7 +134,8 @@ INSTALLED_APPS = (
     'ReviewQuestion',
     'ReviewAnswer',
     'FileUpload',
-    'Comments'
+    'Comments',
+    'Slides'
 
 )
 
