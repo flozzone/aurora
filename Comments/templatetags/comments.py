@@ -32,14 +32,14 @@ class CommentListNode(template.Node):
                             'ref_type': ref_type.id,
                             'ref_id': reference.id})
 
-            return render_to_string('Comments/comment_list.html', context)
+            return render_to_string('Comments/comments.html', context)
         except template.VariableDoesNotExist:
             return ''
 
 
 @register.tag
-def render_comment_list_plain_tag(parser, token):
-#def render_comment_list(parser, token):
+# def render_comment_list_plain_tag(parser, token):
+def render_comment_list(parser, token):
     tokens = token.split_contents()
     usage = 'template tag has to look like this: {% ' \
             + tokens[0] + ' for <reference> %}'
@@ -59,8 +59,8 @@ def get_reference_type_pk(ref_object):
     return object_type, object_pk
 
 
-@register.inclusion_tag('Comments/comment_list.html')
-def render_comment_list(for_string, reference):
+@register.inclusion_tag('Comments/comments.html')
+def render_comment_list_inclusion_tag(for_string, reference):
     from Comments.views import CommentForm
     from Comments.models import Comment
 

@@ -1,0 +1,16 @@
+{% load humanize %}
+{% load staticfiles %}
+
+{% block additional_headers %}
+    <script type="text/javascript" src="{% static "Comments/comments.js" %}"></script>
+{% endblock %}
+
+{#    <form action="{% url 'Comments:post_comment' %}{% if from %}?next={{ from }}{% endif %}" method="post">{% csrf_token %}#}
+    <form method="post" id="commentForm">{% csrf_token %}
+            {{ form.as_p }}
+{#        <input id="add_comment_submit" type="submit" value="Add comment submit" />#}
+    </form>
+    <button id="add_comment" onclick=postComment()>Add comment</button>
+    <button id="myTest" onclick=test()>Test Button</button>
+
+{% include 'Comments/comment_list.html' %}

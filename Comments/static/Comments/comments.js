@@ -2,6 +2,7 @@
  * Created by dan on 12/21/13.
  */
 $(document).ready(function() {
+    updateComments(true);
 });
 
 function postComment() {
@@ -13,8 +14,8 @@ function postComment() {
         dataType: 'html',
         success: function (response) {
             $("#commentText").val('');
-
-            $('#comments').prepend(response)
+            updateComments(false);
+//            $('#comments').prepend(response)
         },
         error: function (xhr, status) {
 //            alert("Sorry, there was a problem!");
@@ -60,36 +61,46 @@ function showReplyForm(that) {
     alert(that.text);
 }
 
-function pollForChanges() {
-//    $.post('ajax/test.html', function (data) {
-//        alert(data);  // process results here
-//        setTimeout(pollForChanges(), 5000);
-//    });
-}
-
-function updateComments() {
-    var lastComment = { last_comment_id: getMaxCommentId(), reference_object_id: reference_object_id }
+function updateComments(keepPolling) {
     $.ajax({
-        url: '/update_comment/',
-        data: lastComment,
-        type: 'json',
-        success: function (json) {
-            alert(json);
-//          if we get new stuff update DOM
+        url: '/update_comments/',
+        data: getCommentWithMaxId(),
+        type: 'GET',
+        dataType: 'html',
+        success: function (html) {
+            if(html != '') {
+                $('#comments').replaceWith(html);
+            }
+        },
+        complete: function(xhr, status) {
+            if(keepPolling == true) {
+                setTimeout('updateComments(true);', 5000);
+            }
         }
     })
 }
 
 function postReply(id) {
-    alert(id);
+    alert("post reply");
 }
 
-function getMaxCommentId() {
-    var max = 0;
+function test() {
+    updateComments(false);
+//    alert(x.toString() + " # " + y.toString());
+}
+
+function getCommentWithMaxId() {
+    var maxComment = {id: -1,
+                      ref_type: -1,
+                      ref_id: -1}
     var id;
     $('.comment, .reply').each(function() {
         id = parseInt( $(this).attr('id') );
-        if (id > max) max = id;
+        if (id > maxComment.id) {
+            maxComment.id = id;
+            maxComment.ref_type= $(this).parent(this).attr('data-ref_type');
+            maxComment.ref_id = $(this).parent(this).attr('data-ref_id');
+        }
     })
-    return(max);
+    return(maxComment);
 }

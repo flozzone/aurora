@@ -52,14 +52,35 @@ def post_comment(request):
                 # 'post_date': comment.post_date,
                 'text': comment.text}
     #return HttpResponse(json.dumps(data), content_type="application/json")
-    return render_to_response('Comments/comment.html', {'comment': comment}, context_instance = RequestContext(request))
+    # return render_to_response('Comments/comment.html', {'comment': comment}, context_instance=RequestContext(request))
+    return HttpResponse('')
     #return HttpResponseRedirect(reverse('Comments:feed'))
 
 
-@require_GET
-@login_required
-def update_comment(request):
-    print(request.GET)
+def query_comment_list(ref_type_id, ref_id):
+    queryset = Comment.objects.filter(
+        parent=None,
+        content_type__pk=ref_type_id,
+        object_id=ref_id).order_by('-post_date')
+    return queryset
+
+
+# @require_GET
+# @login_required
+def update_comments(request):
+    latest_client_comment = request.GET
+    ref_type = latest_client_comment['ref_type']
+    ref_id = latest_client_comment['ref_id']
+
+    latest_comment_id = Comment.objects.latest('id').id
+    if int(latest_client_comment['id']) < int(latest_comment_id):
+        comment_list = query_comment_list(ref_type, ref_id)
+        context = {'comment_list': comment_list,
+                   'ref_type': ref_type,
+                   'ref_id': ref_id}
+        return render_to_response('Comments/comment_list.html', context)
+    else:
+        return HttpResponse('')
 
 
 def feed(request):
