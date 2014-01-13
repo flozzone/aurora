@@ -1,5 +1,5 @@
 import json
-from django.core.files import File
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login as django_login, logout
 from django.template import RequestContext
@@ -42,8 +42,25 @@ def signout(request):
     response_data = {'success': True}
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
+
 def login(request):
     if 'next' in request.GET:
         return render_to_response('login.html', {'next': request.GET['next']}, context_instance=RequestContext(request))
     else:
         return render_to_response('login.html', {'next': '/'}, context_instance=RequestContext(request))
+
+
+@login_required()
+def profile(request):
+    user = request.user
+    user = PortfolioUser.objects.get(id=user.id)
+    if request.method == 'POST':
+        user.nickname = request.POST['nickname']
+        user.statement = request.POST['statement']
+        user.email = request.POST['email']
+        if 'file' in request.FILES:
+            user.avatar = request.FILES['file']
+        user.save()
+        return render_to_response('profile.html', {'user': user}, context_instance=RequestContext(request))
+    else:
+        return render_to_response('profile.html', {'user': user}, context_instance=RequestContext(request))

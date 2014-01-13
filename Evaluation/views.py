@@ -88,6 +88,7 @@ def update_overview(request):
 def detail(request):
     # get selected elaborations from session
     elaborations = []
+    params = {}
     for serialized_elaboration in serializers.deserialize('json', request.session.get('elaborations', {})):
         elaborations.append(serialized_elaboration.object)
     selection = request.session.get('selection', 'error')

@@ -70,7 +70,7 @@ function sign_in() {
 function sign_out() {
     ajax_setup();
     $.get("/signout/").done(function (data) {
-        window.location.href = '../login';
+        window.location.href = '/login';
     });
     return false;
 }

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block additional_headers %}
+  <script type="text/javascript" src="{{ STATIC_URL }}lightbox/js/lightbox-2.6.min.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/profile.js"></script>
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/profile.css" type="text/css" media="screen"/>
+  <link rel="stylesheet" href="{{ STATIC_URL }}lightbox/css/lightbox.css" type="text/css" media="screen"/>
+{% endblock %}
+
+{% block content %}
+  <div id="detail_area">
+    <form id="profile" action='/profile/' method='POST' enctype='multipart/form-data'>
+      <div class="title">Profile</div>
+      <br>
+
+      <div class="label">Nickname:</div>
+      <input type="text" class="nickname" name="nickname" value="{{ user.nickname }}">
+      <br>
+
+      <div class="label">Statement:</div>
+      <input type="text" class="statement" name="statement" value="{{ user.statement }}">
+      <br>
+
+      <div class="label">E-Mail:</div>
+      <input type="text" class="email" name="email" value="{{ user.email }}">
+      <br>
+
+      <div class="label">Avatar:</div>
+      <img class="avatar" src="/{{ user.avatar.url }}" alt="Avatar">
+      <br>
+      <input name="file" type='file' form="profile">
+
+      <br>
+      <br>
+
+      <button type='button' class="save_button">Save</button>
+      {% csrf_token %}
+    </form>
+
+
+  </div>
+{% endblock %}
