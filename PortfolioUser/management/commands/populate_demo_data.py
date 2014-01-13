@@ -26,6 +26,7 @@ def init_data():
         {'username': 's0', 'password': 's0'},
         {'username': 's1', 'password': 's1'},
         {'username': 's2', 'password': 's2'},
+        {'username': 's3', 'password': 's3'},
     ]
 
     for i in range(len(user_data_list)):

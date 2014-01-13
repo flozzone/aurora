@@ -3,7 +3,7 @@ Dropzone.autoDiscover = false;
 $(file_upload_loaded);
 var dropzone_instance;
 function file_upload_loaded() {
-    if (! $(".file_upload").length ) {
+    if (!$(".file_upload").length) {
         return;
     }
     var is_submitted = $("#dropzone").hasClass('is_submitted');
@@ -29,11 +29,17 @@ function file_upload_loaded() {
                         return "<a href='/" + file.path + "' data-lightbox='preview' title='" + file.name + "'></div>";
                     });
                     $(file.previewElement).find('img').attr('src', '/' + file.path);
+                    $(file.previewElement).append('<div class="fig">Fig: ' + dropzone_instance.files.length + '</div>');
                 }
             });
             this.on("removedfile", function (file) {
                 var url = '/fileupload/remove?url=' + file.path;
                 $.get(url, function (data) {
+                });
+                var i = 0;
+                dropzone_instance.files.forEach(function(file) {
+                    i++;
+                    $(file.previewElement).find('.fig').replaceWith('<div class="fig">Fig: ' + i + '</div>');
                 });
             });
         }
@@ -75,7 +81,9 @@ function load_files(elaboration_id, is_submitted) {
             return;
         }
         $('.file_upload').show();
+        var i = 0;
         data.forEach(function (file) {
+            i++;
             // Create the mock file:
             var mockFile = { name: file.name, size: file.size, path: file.path, type: 'image/*', status: Dropzone.success};
             dropzone_instance.emit("addedfile", mockFile);
@@ -90,6 +98,7 @@ function load_files(elaboration_id, is_submitted) {
                 $(mockFile.previewElement).find('img').wrap(function () {
                     return "<a href='/" + file.path + "' data-lightbox='preview' title='" + file.name + "'></div>";
                 });
+                $(mockFile.previewElement).append('<div class="fig">Fig: ' + i + '</div>');
             }
             dropzone_instance.files.push(mockFile);
         });
