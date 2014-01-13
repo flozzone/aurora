@@ -1,6 +1,6 @@
 {% load humanize %}
 
-<div class="response" id="{{ response.id }}">
+<div class="response" id="comment_response_{{ response.id }}" data-comment_number="{{ response.id }}">
     <p><pre>    {{ response.text }}</pre></p>
     <p><pre>    submitted {{ response.post_date | naturaltime }} by {{ response.author.username }}</pre></p>
 </div>

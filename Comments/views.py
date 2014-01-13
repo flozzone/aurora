@@ -1,4 +1,5 @@
 from django.core.urlresolvers import reverse
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -36,7 +37,7 @@ class CommentForm(forms.Form):
 class ReplyForm(forms.Form):
     reference_type_id = forms.IntegerField(widget=forms.HiddenInput)
     reference_id = forms.IntegerField(widget=forms.HiddenInput)
-    parentComment = forms.IntegerField(widget=forms.HiddenInput)
+    parent_comment = forms.IntegerField(widget=forms.HiddenInput)
     text = forms.CharField(widget=forms.Textarea(attrs={'id': 'replyTextarea'}), label='')
 
 
@@ -62,6 +63,35 @@ def post_comment(request):
     # return render_to_response('Comments/comment.html', {'comment': comment}, context_instance=RequestContext(request))
     return HttpResponse('')
     #return HttpResponseRedirect(reverse('Comments:feed'))
+
+
+@require_POST
+@login_required
+def post_reply(request):
+    form = ReplyForm(request.POST)
+    handle_form(form, request)
+    return HttpResponse('')
+
+
+def handle_form(form, request):
+    if form.is_valid():
+        user = PortfolioUser.objects.get(id=request.user.id)
+        ref_type_id = form.cleaned_data['reference_type_id']
+        ref_obj_id = form.cleaned_data['reference_id']
+        ref_obj_model = ContentType.objects.get_for_id(ref_type_id).model_class()
+        ref_obj = ref_obj_model.objects.get(id=ref_obj_id)
+        parent_comment_id = form.cleaned_data.get('parent_comment', None)
+        try:
+            parent_comment = Comment.objects.get(id=parent_comment_id)
+        except ObjectDoesNotExist:
+            parent_comment = None
+
+        comment = Comment.objects.create(text=form.cleaned_data['text'],
+                                         author=user,
+                                         content_object=ref_obj,
+                                         parent=parent_comment,
+                                         post_date=timezone.now())
+        comment.save()
 
 
 def query_comment_list(ref_type_id, ref_id):

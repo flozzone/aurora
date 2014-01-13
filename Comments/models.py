@@ -1,5 +1,4 @@
 from django.db import models as models
-from django.utils import timezone
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 
@@ -17,7 +16,7 @@ class Comment(models.Model):
     content_object = generic.GenericForeignKey('content_type', 'object_id')
 
     def responses(self):
-        return self.children.all().order_by('-post_date')
+        return self.children.all().order_by('post_date')
 
     def __unicode__(self):
         return self.text[:20]

@@ -2,20 +2,42 @@
  * Created by dan on 12/21/13.
  */
 $(document).ready( function() {
-    updateComments(true);
-    registerReplyLinks();
+//    updateComments(true);
     registerTestButton();
+    registerReplyLinks();
+    registerReplyButton();
 });
 
 function registerReplyLinks() {
-    $('[id^=reply_to_]').click(function() {
+    $('[id^=comment_reply_link_]').click(function(event) {
+        event.preventDefault();
         var replyForm = $('#replyForm');
+        var commentId = $(this).attr('data-reply_to');
+        replyForm.find('#id_parent_comment').attr('value', commentId);
         $(this).parent().append(replyForm);
         replyForm.show();
         return false;
     })
 }
 //    $('#commentTextarea').focus
+
+function registerReplyButton() {
+    $('#post_reply').click( function(event) {
+        event.preventDefault();
+        $.ajax({
+            url: '/post_reply/',
+            data: $(this).closest('form').serialize(),
+            type: 'POST',
+            dataType: 'html',
+            success: function(response) {
+                $("#replyTextarea").val('');
+                $('#replyForm').hide();
+                updateComments(false);
+            }
+        })
+        return false;
+    })
+}
 
 function postComment() {
     $.ajax({
@@ -27,15 +49,12 @@ function postComment() {
         success: function (response) {
             $("#commentText").val('');
             updateComments(false);
-//            $('#comments').prepend(response)
         },
         error: function (xhr, status) {
-//            alert("Sorry, there was a problem!");
         },
         complete: function (xhr, status) {
         }
     });
-//    console.log(response); // undefined
 }
 
 function formSubmitButton() {
@@ -64,18 +83,6 @@ function formSubmitButton() {
     });
 }
 
-function placeForm() {
-//    $('#commentForm').append()
-//    look for form
-//    if form doesnt exist: create
-//    if it does exist: unhide
-//    that.append($('<h1/>').text('blub'));
-//    alert(that.text);
-//    console.log(that);
-//    that.parent().appendChild('<p>hihi</>');
-//    $('.comment#' + currentId.toString()).parent().append('<p>blub</b>');
-}
-
 function updateComments(keepPolling) {
     $.ajax({
         url: '/update_comments/',
@@ -84,10 +91,13 @@ function updateComments(keepPolling) {
         dataType: 'html',
         success: function (html) {
             if(html != '') {
-                var replyForm = $('#replyForm');
-                var currentId = replyForm.parent().children('.comment').attr('id');
-                $('#comments').replaceWith(html);
-                $('.comment#' + currentId.toString()).parent().append(replyForm);
+                var current_parent_comment_id = $('#id_parent_comment').val();
+                var $comments = $('#comments');
+                var $replyForm = $('#replyForm');
+                $comments.replaceWith(html);
+                $('#comment_reply_link_' + current_parent_comment_id).parent().append($replyForm);
+                registerReplyLinks();
+                registerReplyButton();
             }
         },
         complete: function(xhr, status) {
@@ -105,13 +115,16 @@ function postReply(id) {
 function registerTestButton() {
     $('#myTest').click(function () {
 //    updateComments(false);
-//    alert($("href[id^='reply_to_']"));
 //    alert(x.toString() + " # " + y.toString());
 //    var currentId = $('.comment').first().attr('id');
 //    console.log(currentId);
 //    placeForm();
-//    updateComments(false);
-        $('#commentForm').toggle();
+        updateComments(false);
+//        $('#commentForm').toggle();
+//        console.log($('#id_parent_comment').val());
+//        $('#replyForm').toggle();
+//        $('#replyForm').hide();
+//        console.log($('#id_parent_comment').val());
         return false;
     })
 }
@@ -121,8 +134,8 @@ function getCommentWithMaxId() {
                       ref_type: -1,
                       ref_id: -1}
     var id;
-    $('.comment, .reply').each(function() {
-        id = parseInt( $(this).attr('id') );
+    $('.comment, .response').each(function() {
+        id = parseInt( $(this).attr('data-comment_number') );
         if (id > maxComment.id) {
             maxComment.id = id;
             maxComment.ref_type= $(this).closest('[data-ref_type]').attr('data-ref_type');

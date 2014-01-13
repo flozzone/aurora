@@ -1,12 +1,12 @@
 from django import template
 from django.contrib.contenttypes.models import ContentType
 from Comments.models import Comment
-from Comments.views import CommentForm
+from Comments.views import CommentForm, ReplyForm
 from django.template.loader import render_to_string
 
 register = template.Library()
 
-# {% get_comment_list for [object] as [varname] %} => assignment_tag
+# {% get_comment_list for [object] as [varname] %}
 # {% render_comment_list for [object] %}
 
 
@@ -27,8 +27,13 @@ class CommentListNode(template.Node):
             form = CommentForm()
             form.fields['reference_id'].initial = reference.id
             form.fields['reference_type_id'].initial = ref_type.id
+            reply_form = ReplyForm()
+            reply_form.fields['reference_id'].initial = reference.id
+            reply_form.fields['reference_type_id'].initial = ref_type.id
+            reply_form.fields['parent_comment'].initial = -1
             context.update({'comment_list': queryset,
                             'form': form,
+                            'reply_form': reply_form,
                             'ref_type': ref_type.id,
                             'ref_id': reference.id})
 

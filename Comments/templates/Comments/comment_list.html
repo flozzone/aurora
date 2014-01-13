@@ -5,7 +5,9 @@
             {% for response in comment.responses %}
                 {% include 'Comments/response.html' %}
             {% endfor %}
-            <a href="#" id="reply_to_{{ comment.id }}">reply</a>
+            <a href="javascript:void(0)" id="comment_reply_link_{{ comment.id }}" data-reply_to="{{ comment.id }}">
+                reply
+            </a>
         </div>
     {% endfor %}
 </div>
