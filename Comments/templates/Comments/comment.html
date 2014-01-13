@@ -1,10 +1,22 @@
 {% load humanize %}
 
-<div class="comment" id="{{ comment.id }}">
-    <p>{{ comment.text|linebreaks }}</p>
-
-    <p>
-    <pre>submitted {{ comment.post_date | naturaltime }} by {{ comment.author.username }}</pre>
-    </p>
-    <a href="javascript:void(0)" onclick="showReplyForm(this);">reply</a>
+<div class="vote">
+    <input name="_id_" value="4686858" type="hidden">
+    <a class="vote-up-off" title="This question shows research effort; it is useful and clear">up vote</a>
+    <span class="vote-count-post ">12</span>
+    <a class="vote-down-off" title="This question does not show any research effort; it is unclear or not useful">down
+        vote</a>
 </div>
+
+<div class="comment" id="{{ comment.id }}">
+    <p class="comment_text">{{ comment.text | linebreaks }}</p>
+
+    <p class="comment_author">
+        submitted {{ comment.post_date | naturaltime }} by {{ comment.author.username }}
+    </p>
+</div>
+
+
+
+
+

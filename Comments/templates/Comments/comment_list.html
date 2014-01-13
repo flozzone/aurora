@@ -1,9 +1,11 @@
-    <div class="comments" id="comments" data-ref_type="{{ ref_type }}" data-ref_id="{{ ref_id }}">
-{#    <div class="comments" id="comments">#}
-        {% for comment in comment_list %}
+<div class="comments" id="comments" data-ref_type="{{ ref_type }}" data-ref_id="{{ ref_id }}">
+    {% for comment in comment_list %}
+        <div class="comment_with_responses">
             {% include 'Comments/comment.html' %}
             {% for response in comment.responses %}
                 {% include 'Comments/response.html' %}
             {% endfor %}
-        {% endfor %}
-    </div>
+            <a href="#" id="reply_to_{{ comment.id }}">reply</a>
+        </div>
+    {% endfor %}
+</div>

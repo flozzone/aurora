@@ -14,7 +14,6 @@ from django.contrib.contenttypes.models import ContentType
 from Comments.models import Comment
 from PortfolioUser.models import PortfolioUser
 from Comments.tests import CommentReferenceObject
-import json
 
 
 class CommentList(ListView):
@@ -23,14 +22,22 @@ class CommentList(ListView):
     def get_context_data(self, **kwargs):
         context = super(CommentList, self).get_context_data(**kwargs)
         context['form'] = CommentForm()
-        context['form_action'] = '/post/'
+        context['reply_form'] = ReplyForm()
+        # context['form_action'] = '/post/'
         return context
 
 
 class CommentForm(forms.Form):
     reference_type_id = forms.IntegerField(widget=forms.HiddenInput)
     reference_id = forms.IntegerField(widget=forms.HiddenInput)
-    text = forms.CharField(widget=forms.Textarea(attrs={'id': 'commentText'}), label='')
+    text = forms.CharField(widget=forms.Textarea(attrs={'id': 'commentTextarea'}), label='')
+
+
+class ReplyForm(forms.Form):
+    reference_type_id = forms.IntegerField(widget=forms.HiddenInput)
+    reference_id = forms.IntegerField(widget=forms.HiddenInput)
+    parentComment = forms.IntegerField(widget=forms.HiddenInput)
+    text = forms.CharField(widget=forms.Textarea(attrs={'id': 'replyTextarea'}), label='')
 
 
 @require_POST

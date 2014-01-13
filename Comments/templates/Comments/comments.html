@@ -9,8 +9,12 @@
     <form method="post" id="commentForm">{% csrf_token %}
             {{ form.as_p }}
 {#        <input id="add_comment_submit" type="submit" value="Add comment submit" />#}
+        <button id="add_comment" onclick=postComment()>Add comment</button>
+        <button id="myTest">Test Button</button>
     </form>
-    <button id="add_comment" onclick=postComment()>Add comment</button>
-    <button id="myTest" onclick=test()>Test Button</button>
 
+    <form method="post" id="replyForm">{% csrf_token %}
+            {{ reply_form.as_p }}
+        <button id="post_reply" hidden="hidden">Post reply</button>
+    </form>
 {% include 'Comments/comment_list.html' %}
