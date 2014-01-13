@@ -10,7 +10,6 @@ urlpatterns = patterns('',
                        url(r'^signin/$', 'PortfolioUser.views.signin'),
                        url(r'^signout/$', 'PortfolioUser.views.signout'),
                        url(r'^profile/$', 'PortfolioUser.views.profile'),
-                       url(r'^profile/save/$', 'PortfolioUser.views.save'),
 )
 
 
