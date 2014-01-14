@@ -12,12 +12,12 @@ $(document).ready( function() {
 
     registerReplyLinks();
     registerReplyButton();
-    registerReplyTextArea();
+    registerReplyTextarea();
     registerCancelReplyButton();
     registerAddCommentButton();
 
 
-//    updateComments(true);
+    updateComments(true);
 });
 
 function registerStopPolling() {
@@ -50,10 +50,10 @@ function registerReplyLinks() {
     })
 }
 
-function registerReplyTextArea() {
+function registerReplyTextarea() {
     var $replyTextarea = $('#replyTextarea');
+
     $replyTextarea.focusin( function() {
-        console.log('textarea has focus');
         stopPolling();
     })
 
@@ -152,12 +152,12 @@ function updateComments(keepPolling) {
                 $comments.replaceWith(html);
                 $('#comment_reply_link_' + current_parent_comment_id).parent().append($replyForm);
                 registerReplyLinks();
-                registerReplyButton();
+//                registerReplyButton();
             }
         },
         complete: function(xhr, status) {
             if(keepPolling == true && !stop_update_poll) {
-                current_poll_timeout = setTimeout('updateComments(true);', 1000);
+                current_poll_timeout = setTimeout('updateComments(true);', 5000);
             }
         }
     })

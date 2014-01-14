@@ -8,7 +8,7 @@
 {#        vote</a>#}
 {#</div>#}
 
-<div class="comment" id="comment_{{ comment.id }}" data-comment_number="{{ comment.id }}">
+<div class="comment{% if comment.author.is_staff %} staff{% endif %}" id="comment_{{ comment.id }}" data-comment_number="{{ comment.id }}">
     <p class="comment_text">{{ comment.text | linebreaks }}</p>
 
     <p class="comment_author">

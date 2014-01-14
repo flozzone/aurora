@@ -3,6 +3,7 @@
 
 {% block additional_headers %}
     <script type="text/javascript" src="{% static "Comments/comments.js" %}"></script>
+    <link rel="stylesheet" href="{% static "Comments/comments.css" %}" type="text/css" media="screen"/>
 {% endblock %}
 
     <form method="post" id="commentForm">{% csrf_token %}
@@ -12,7 +13,7 @@
     </form>
     <button id="stopPolling">Staahhp polling godamit</button>
     <button id="startPolling">Start polling</button>
-    <form method="post" id="replyForm" style="display:none">{% csrf_token %}
+    <form id="replyForm" style="display:none">{% csrf_token %}
             {{ reply_form.as_p }}
         <button id="button_post_reply">Post reply</button>
         <button id="button_cancel_reply">Cancel</button>
