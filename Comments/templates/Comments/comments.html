@@ -7,12 +7,14 @@
 
     <form method="post" id="commentForm">{% csrf_token %}
             {{ form.as_p }}
-        <button id="add_comment" onclick=postComment()>Add comment</button>
+        <button id="button_add_comment">Add comment</button>
         <button id="myTest">Test Button</button>
     </form>
+    <button id="stopPolling">Staahhp polling godamit</button>
+    <button id="startPolling">Start polling</button>
     <form method="post" id="replyForm" style="display:none">{% csrf_token %}
             {{ reply_form.as_p }}
-        <button id="post_reply">Post reply</button>
-        <button id="cancel_reply">Cancel</button>
+        <button id="button_post_reply">Post reply</button>
+        <button id="button_cancel_reply">Cancel</button>
     </form>
 {% include 'Comments/comment_list.html' %}

@@ -45,22 +45,9 @@ class ReplyForm(forms.Form):
 @login_required
 def post_comment(request):
     form = CommentForm(request.POST)
-    if form.is_valid():
-        user = PortfolioUser.objects.get(id=request.user.id)
-        ref_type_id = form.cleaned_data['reference_type_id']
-        ref_obj_id = form.cleaned_data['reference_id']
-        ref_obj_model = ContentType.objects.get_for_id(ref_type_id).model_class()
-        ref_obj = ref_obj_model.objects.get(id=ref_obj_id)
-        comment = Comment.objects.create(text=form.cleaned_data['text'],
-                                         author=user,
-                                         content_object=ref_obj,
-                                         post_date=timezone.now())
-        comment.save()
-        data = {'author': comment.author.username,
-                # 'post_date': comment.post_date,
-                'text': comment.text}
-    #return HttpResponse(json.dumps(data), content_type="application/json")
-    # return render_to_response('Comments/comment.html', {'comment': comment}, context_instance=RequestContext(request))
+    handle_form(form, request)
+    # #return HttpResponse(json.dumps(data), content_type="application/json")
+    # # return render_to_response('Comments/comment.html', {'comment': comment}, context_instance=RequestContext(request))
     return HttpResponse('')
     #return HttpResponseRedirect(reverse('Comments:feed'))
 
@@ -81,9 +68,12 @@ def handle_form(form, request):
         ref_obj_model = ContentType.objects.get_for_id(ref_type_id).model_class()
         ref_obj = ref_obj_model.objects.get(id=ref_obj_id)
         parent_comment_id = form.cleaned_data.get('parent_comment', None)
-        try:
-            parent_comment = Comment.objects.get(id=parent_comment_id)
-        except ObjectDoesNotExist:
+        if parent_comment_id is not None:
+            try:
+                parent_comment = Comment.objects.get(id=parent_comment_id)
+            except ObjectDoesNotExist:
+                parent_comment = None
+        else:
             parent_comment = None
 
         comment = Comment.objects.create(text=form.cleaned_data['text'],

@@ -1,12 +1,42 @@
 /**
  * Created by dan on 12/21/13.
  */
+
+var stop_update_poll = false;
+var current_poll_timeout;
+
 $(document).ready( function() {
-//    updateComments(true);
     registerTestButton();
+    registerStartPolling();
+    registerStopPolling();
+
     registerReplyLinks();
     registerReplyButton();
+    registerReplyTextArea();
+    registerCancelReplyButton();
+    registerAddCommentButton();
+
+
+//    updateComments(true);
 });
+
+function registerStopPolling() {
+    $('#stopPolling').click(function (event) {
+        event.preventDefault();
+        console.log('stopPolling');
+        stopPolling();
+        return false;
+    })
+}
+
+function registerStartPolling() {
+    $('#startPolling').click(function (event) {
+        event.preventDefault();
+        console.log('startPolling');
+        startPolling();
+        return false;
+    })
+}
 
 function registerReplyLinks() {
     $('[id^=comment_reply_link_]').click(function(event) {
@@ -19,10 +49,21 @@ function registerReplyLinks() {
         return false;
     })
 }
-//    $('#commentTextarea').focus
+
+function registerReplyTextArea() {
+    var $replyTextarea = $('#replyTextarea');
+    $replyTextarea.focusin( function() {
+        console.log('textarea has focus');
+        stopPolling();
+    })
+
+    $replyTextarea.focusout( function() {
+        startPolling();
+    })
+}
 
 function registerReplyButton() {
-    $('#post_reply').click( function(event) {
+    $('#button_post_reply').click( function(event) {
         event.preventDefault();
         $.ajax({
             url: '/post_reply/',
@@ -30,8 +71,8 @@ function registerReplyButton() {
             type: 'POST',
             dataType: 'html',
             success: function(response) {
-                $("#replyTextarea").val('');
                 $('#replyForm').hide();
+                $("#replyTextarea").val('');
                 updateComments(false);
             }
         })
@@ -39,22 +80,36 @@ function registerReplyButton() {
     })
 }
 
-function postComment() {
-    $.ajax({
-        url: "/post_comment/",
-        data: $("#commentForm").serialize(),
-        type: "POST",
-        // the type of data we expect back
-        dataType: 'html',
-        success: function (response) {
-            $("#commentText").val('');
-            updateComments(false);
-        },
-        error: function (xhr, status) {
-        },
-        complete: function (xhr, status) {
-        }
-    });
+function registerCancelReplyButton() {
+    $('#button_cancel_reply').click( function(event) {
+        event.preventDefault();
+        $('#replyForm').hide();
+        $('#replyTextarea').val('');
+        return false;
+    })
+}
+
+function registerAddCommentButton() {
+    $('#button_add_comment').click(function (event) {
+        event.preventDefault();
+
+        $.ajax({
+            url: "/post_comment/",
+            data: $("#commentForm").serialize(),
+            type: "POST",
+            // the type of data we expect back
+            dataType: 'html',
+            success: function (response) {
+                $("#commentTextarea").val('');
+                updateComments(false);
+            },
+            error: function (xhr, status) {
+            },
+            complete: function (xhr, status) {
+            }
+        });
+        return true;
+    })
 }
 
 function formSubmitButton() {
@@ -101,15 +156,21 @@ function updateComments(keepPolling) {
             }
         },
         complete: function(xhr, status) {
-            if(keepPolling == true) {
-                setTimeout('updateComments(true);', 5000);
+            if(keepPolling == true && !stop_update_poll) {
+                current_poll_timeout = setTimeout('updateComments(true);', 1000);
             }
         }
     })
 }
 
-function postReply(id) {
-    alert("post reply");
+function stopPolling() {
+    clearTimeout(current_poll_timeout);
+    stop_update_poll = true;
+}
+
+function startPolling() {
+    stop_update_poll = false;
+    updateComments(true);
 }
 
 function registerTestButton() {
@@ -119,12 +180,14 @@ function registerTestButton() {
 //    var currentId = $('.comment').first().attr('id');
 //    console.log(currentId);
 //    placeForm();
-        updateComments(false);
+//        updateComments(false);
 //        $('#commentForm').toggle();
 //        console.log($('#id_parent_comment').val());
 //        $('#replyForm').toggle();
 //        $('#replyForm').hide();
 //        console.log($('#id_parent_comment').val());
+        if(stop_update_poll) startPolling();
+        else stopPolling();
         return false;
     })
 }
