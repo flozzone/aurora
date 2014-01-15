@@ -18,6 +18,7 @@ class Comment(models.Model):
     parent = models.ForeignKey('self', null=True, related_name='children')
     score = models.IntegerField(default=0)
     visible = models.BooleanField(default=False)
+    promoted = models.BooleanField(default=False)
 
     # Foreign object this Comment is attached to
     content_type = models.ForeignKey(ContentType)

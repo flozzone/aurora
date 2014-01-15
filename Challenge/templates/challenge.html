@@ -1,3 +1,4 @@
+{% load comments %}
 {% block additional_headers %}
   <script type="text/javascript" src="{{ STATIC_URL }}tinymce/tinymce.min.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}tinymce/jquery.tinymce.min.js"></script>
@@ -47,5 +48,7 @@
   {% else %}
     <div class="elaboration_text">{{ elaboration.elaboration_text |safe }}</div> <!-- TODO: this has to be secure -->
   {% endif %}
+
+  {% render_comment_list for challenge %}
 
 </div>
