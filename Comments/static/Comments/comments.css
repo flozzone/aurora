@@ -2,6 +2,15 @@
     margin-left: 50px;
 }
 
+.response_vote {
+    margin-left: 50px;
+}
+
+.vote_up_on .vote_down_on {
+    cursor: pointer;
+    background-image: url("https://cdn.sstatic.net/stackoverflow/img/sprites.png?v=6");
+}
+
 .staff {
     background-color: rgb(224,255,200);
 }

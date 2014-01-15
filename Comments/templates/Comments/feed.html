@@ -2,5 +2,8 @@
 {% load comments %}
 
 {% block content %}
+    <button id="myTest">Test Button</button>
+    <button id="stopPolling">Staahhp polling godamit</button>
+    <button id="startPolling">Start polling</button>
     {% render_comment_list for object %}
 {% endblock content %}

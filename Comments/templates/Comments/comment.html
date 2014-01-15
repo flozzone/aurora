@@ -1,12 +1,13 @@
 {% load humanize %}
 
-{#<div class="vote">#}
+<div class="comment_vote">
 {#    <input name="_id_" value="4686858" type="hidden">#}
-{#    <a class="vote-up-off" title="This question shows research effort; it is useful and clear">up vote</a>#}
-{#    <span class="vote-count-post ">12</span>#}
-{#    <a class="vote-down-off" title="This question does not show any research effort; it is unclear or not useful">down#}
-{#        vote</a>#}
-{#</div>#}
+{#    <a href='{% url 'Comments:vote_on_comment' %}?direction=up&comment_id={{ comment.id }}' class="vote_up_on" data-comment_number="{{ comment.id }}" title="This comment is helpful">up vote</a>#}
+    <a href='#' class="vote_up_on" data-comment_number="{{ comment.id }}" title="This comment is helpful">up vote</a>
+    <span class="comment_score">{{ comment.score }}</span>
+    <a href='#' class="vote_down_on" data-comment_number="{{ comment.id }}" title="This comment is not helpful at all">down
+        vote</a>
+</div>
 
 <div class="comment{% if comment.author.is_staff %} staff{% endif %}" id="comment_{{ comment.id }}" data-comment_number="{{ comment.id }}">
     <p class="comment_text">{{ comment.text | linebreaks }}</p>

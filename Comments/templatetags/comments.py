@@ -16,26 +16,26 @@ class CommentListNode(template.Node):
 
     def render(self, context):
         try:
-            reference = self.reference_var.resolve(context)
+            ref_object = self.reference_var.resolve(context)
 
-            ref_type = ContentType.objects.get_for_model(reference)
+            ref_type = ContentType.objects.get_for_model(ref_object)
             queryset = Comment.objects.filter(
                 parent=None,
                 content_type__pk=ref_type.id,
-                object_id=reference.id).order_by('-post_date')
+                object_id=ref_object.id).order_by('-post_date')
 
             form = CommentForm()
-            form.fields['reference_id'].initial = reference.id
+            form.fields['reference_id'].initial = ref_object.id
             form.fields['reference_type_id'].initial = ref_type.id
             reply_form = ReplyForm()
-            reply_form.fields['reference_id'].initial = reference.id
+            reply_form.fields['reference_id'].initial = ref_object.id
             reply_form.fields['reference_type_id'].initial = ref_type.id
             reply_form.fields['parent_comment'].initial = -1
             context.update({'comment_list': queryset,
                             'form': form,
                             'reply_form': reply_form,
                             'ref_type': ref_type.id,
-                            'ref_id': reference.id})
+                            'ref_id': ref_object.id})
 
             return render_to_string('Comments/comments.html', context)
         except template.VariableDoesNotExist:

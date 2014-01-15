@@ -6,16 +6,16 @@
     <link rel="stylesheet" href="{% static "Comments/comments.css" %}" type="text/css" media="screen"/>
 {% endblock %}
 
+<div id="#comments_with_forms">
     <form method="post" id="commentForm">{% csrf_token %}
             {{ form.as_p }}
         <button id="button_add_comment">Add comment</button>
-        <button id="myTest">Test Button</button>
     </form>
-    <button id="stopPolling">Staahhp polling godamit</button>
-    <button id="startPolling">Start polling</button>
     <form id="replyForm" style="display:none">{% csrf_token %}
             {{ reply_form.as_p }}
         <button id="button_post_reply">Post reply</button>
         <button id="button_cancel_reply">Cancel</button>
     </form>
-{% include 'Comments/comment_list.html' %}
+
+    {% include 'Comments/comment_list.html' %}
+</div>

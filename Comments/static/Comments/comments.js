@@ -15,10 +15,33 @@ $(document).ready( function() {
     registerReplyTextarea();
     registerCancelReplyButton();
     registerAddCommentButton();
-
+    registerVote();
 
     updateComments(true);
 });
+
+function registerVote() {
+    $('.vote_down_on, .vote_up_on').click( function(event) {
+        event.preventDefault();
+        var direction;
+        if($(this).attr('class') == 'vote_up_on') direction = 'up'
+        else direction = 'down';
+        console.log('voting ' + direction);
+        $.ajax({
+            url: '/vote_on_comment/',
+            data: {
+                direction: direction,
+                comment_id: $(this).attr('data-comment_number')
+            },
+            type: 'GET',
+            dataType: 'html',
+            success: function(response) {
+                updateComments(false, true);
+            }
+        })
+        return false;
+    })
+}
 
 function registerStopPolling() {
     $('#stopPolling').click(function (event) {
@@ -74,6 +97,8 @@ function registerReplyButton() {
                 $('#replyForm').hide();
                 $("#replyTextarea").val('');
                 updateComments(false);
+//                omg dont use dat ugly hax!
+//                setTimeout('registerReplyButton()', 1000);
             }
         })
         return false;
@@ -101,7 +126,7 @@ function registerAddCommentButton() {
             dataType: 'html',
             success: function (response) {
                 $("#commentTextarea").val('');
-                updateComments(false);
+                updateComments(false, true);
             },
             error: function (xhr, status) {
             },
@@ -112,36 +137,25 @@ function registerAddCommentButton() {
     })
 }
 
-function formSubmitButton() {
-    $("#commentForm").submit(function (event) {
-        event.preventDefault();
-
-        $.ajax({
-            url: "/post_comment/",
-            data: $(this).serialize(),
-            type: "POST",
-            // the type of data we expect back
-            dataType: "json",
-            success: function (json) {
-                alert($("#commentText").val)
-                $("<h1/>").text("Yay").appendTo("body");
-                alert(json['text']);
-            },
-            error: function (xhr, status) {
-                alert("Sorry, there was a problem!");
-            },
-            complete: function (xhr, status) {
-                alert("Request completed successfully");
-            }
-        });
-        return false;
-    });
+function updateComments(keepPolling) {
+    updateComments(keepPolling, false);
 }
 
-function updateComments(keepPolling) {
+function updateComments(keepPolling, force) {
+    var maxComment;
+    if(force) {
+        var $comments = $('#comments')
+        maxComment = {
+            ref_type: $comments.attr('data-ref_type'),
+            ref_id: $comments.attr('data-ref_id'),
+            id: -1
+        }
+    } else {
+        maxComment = getCommentWithMaxId();
+    }
     $.ajax({
         url: '/update_comments/',
-        data: getCommentWithMaxId(),
+        data: maxComment,
         type: 'GET',
         dataType: 'html',
         success: function (html) {
@@ -152,12 +166,13 @@ function updateComments(keepPolling) {
                 $comments.replaceWith(html);
                 $('#comment_reply_link_' + current_parent_comment_id).parent().append($replyForm);
                 registerReplyLinks();
+                registerVote();
 //                registerReplyButton();
             }
         },
         complete: function(xhr, status) {
             if(keepPolling == true && !stop_update_poll) {
-                current_poll_timeout = setTimeout('updateComments(true);', 5000);
+                current_poll_timeout = setTimeout('updateComments(true, false)', 5000);
             }
         }
     })
@@ -180,22 +195,24 @@ function registerTestButton() {
 //    var currentId = $('.comment').first().attr('id');
 //    console.log(currentId);
 //    placeForm();
-//        updateComments(false);
+        updateComments(false, true);
 //        $('#commentForm').toggle();
 //        console.log($('#id_parent_comment').val());
 //        $('#replyForm').toggle();
 //        $('#replyForm').hide();
 //        console.log($('#id_parent_comment').val());
-        if(stop_update_poll) startPolling();
-        else stopPolling();
+//        if(stop_update_poll) startPolling();
+//        else stopPolling();
         return false;
     })
 }
 
 function getCommentWithMaxId() {
+    var $comments = $('#comments');
+
     var maxComment = {id: -1,
-                      ref_type: -1,
-                      ref_id: -1}
+                      ref_type: $comments.attr('data-ref_type'),
+                      ref_id: $comments.attr('data-ref_id')}
     var id;
     $('.comment, .response').each(function() {
         id = parseInt( $(this).attr('data-comment_number') );

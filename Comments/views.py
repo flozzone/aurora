@@ -9,7 +9,7 @@ from django.views.generic import ListView
 from django.contrib.auth.decorators import login_required
 from django import forms
 from django.utils import timezone
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden
 from django.contrib.contenttypes.models import ContentType
 
 from Comments.models import Comment
@@ -82,6 +82,32 @@ def handle_form(form, request):
                                          parent=parent_comment,
                                          post_date=timezone.now())
         comment.save()
+
+
+@login_required
+def vote_on_comment(request):
+    data = request.GET
+    if data['direction'] == 'up':
+        diff = 1
+    elif data['direction'] == 'down':
+        diff = -1
+    else:
+        return HttpResponse('')
+
+    comment = Comment.objects.get(id=data['comment_id'])
+    user = PortfolioUser.objects.get(id=request.user.id)
+
+    if user == comment.author:
+        return HttpResponseForbidden('')
+
+    if comment.was_voted_on_by.filter(pk=request.user.id).exists():
+        return HttpResponseForbidden('')
+
+    comment.score += diff
+    comment.was_voted_on_by.add(user)
+    comment.save()
+
+    return HttpResponse('')
 
 
 def query_comment_list(ref_type_id, ref_id):

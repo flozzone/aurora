@@ -1,5 +1,12 @@
 {% load humanize %}
 
+<div class="response_vote">
+    <a href='#' class="vote_up_on" data-comment_number="{{ response.id }}" title="This comment is helpful">up vote</a>
+    <span class="response_score">{{ response.score }}</span>
+    <a href='#' class="vote_down_on" data-comment_number="{{ response.id }}"
+       title="This comment is not helpful at all">down vote</a>
+</div>
+
 <div class="response{% if response.author.is_staff %} staff{% endif %}" id="comment_response_{{ response.id }}" data-comment_number="{{ response.id }}">
     <p>{{ response.text }}</p>
     <p>submitted {{ response.post_date | naturaltime }} by {{ response.author.username }}</p>
