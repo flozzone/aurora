@@ -1,5 +1,6 @@
 .stack {
     padding: 5px 10px 5px 10px;
+	clear:both;
 }
 
 h1 {
@@ -17,14 +18,29 @@ h1 {
 
 #detail_area {
     width: 100%;
-
 }
 
-.stack_img {
+.stack_imgs {
+	min-height:70px;
+}
+
+.stack_imgs > li {
+	display:inline;
+	
+}
+
+.stack_imgs > li > img {
     width: 64px;
     height: 64px;
-    border-radius: 6px;
+	float:left;
+}
 
+.stack_imgs >  li:first-child > img {
+    border-radius: 6px 0px 0px 6px;
+}
+
+.stack_imgs > li:last-child > img {
+    border-radius: 0px 6px 6px 0px;
 }
 
 .stack .title {
@@ -32,7 +48,15 @@ h1 {
     font-weight: bold;
 }
 
+.stack {	
+	clear:both;
+}
+
 .stack .descriptions {
+    padding-top: 10px;
+}
+
+.stack .legend {
     padding-top: 10px;
 }
 

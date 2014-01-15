@@ -7,14 +7,14 @@
 
 .overview_left {
     float: left;
-    width: 25%;
+    width: 300px;
     min-height: 400px;
     padding: 10px;
 }
 
 .overview_right {
-    float: right;
-    width: 73%;
+    width: 100%;
+	margin-left:340px;
     min-height: 400px;
     background-color: white;
     padding: 10px;
