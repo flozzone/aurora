@@ -15,12 +15,12 @@
       <div class="stack {% cycle 'lineD' 'lineL' %}" id="{{ stack.id }}">
         <div class="title">{{ stack.title }}</div>
         <div class="description">{{ stack.description }}</div>
-        <div class="stack_imgs">
-        Challenges in this stack:<br>
-        {% for image_url in stack.get_challenge_image_urls %}
-          <img class = "stack_img" src="{{ STATIC_URL }}img/{{ image_url }}">
-        {% endfor %}
-        </div>
+    	<div class="legend">Challenges in this stack:</div>
+        <ul class="stack_imgs">
+    		{% for image_url in stack.get_challenge_image_urls %}
+        		<li><img class = "stack_img" src="{{ STATIC_URL }}img/{{ image_url }}"></li>
+    		{% endfor %}
+        </ul>
       </div>
     {% endfor %}
 
