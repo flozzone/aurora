@@ -7,7 +7,7 @@
        title="This comment is not helpful at all">down vote</a>
 </div>
 
-<div class="response{% if response.author.is_staff %} staff{% endif %}" id="comment_response_{{ response.id }}" data-comment_number="{{ response.id }}">
+<div class="response{% if response.author.is_staff %} staff{% endif %}" id="comment_response_{{ response.id }}{{ id_suffix }}" data-comment_number="{{ response.id }}{{ id_suffix }}">
     <p>{{ response.text }}</p>
     <p>submitted {{ response.post_date | naturaltime }} by {{ response.author.nickname }}</p>
 </div>

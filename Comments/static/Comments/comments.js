@@ -20,6 +20,11 @@ $(document).ready( function() {
     updateComments(true);
 });
 
+function removeMultipleForms() {
+    $('#commentForm:not(:first)').remove();
+    $('#replyForm:not(:first)').remove();
+}
+
 function registerVote() {
     $('.vote_down_on, .vote_up_on').click( function(event) {
         event.preventDefault();
@@ -64,7 +69,7 @@ function registerStartPolling() {
 function registerReplyLinks() {
     $('[id^=comment_reply_link_]').click(function(event) {
         event.preventDefault();
-        var replyForm = $('#replyForm');
+        var replyForm = $('#replyForm').first();
         var commentId = $(this).attr('data-reply_to');
         replyForm.find('#id_parent_comment').attr('value', commentId);
         $(this).parent().append(replyForm);

@@ -1,11 +1,11 @@
-<div class="comments" id="comments" data-ref_type="{{ ref_type }}" data-ref_id="{{ ref_id }}">
+<div id="comments{{ id_suffix }}" class="comments" data-ref_type="{{ ref_type }}" data-ref_id="{{ ref_id }}">
     {% for comment in comment_list %}
         <div class="comment_with_responses">
             {% include 'Comments/comment.html' %}
             {% for response in comment.responses %}
                 {% include 'Comments/response.html' %}
             {% endfor %}
-            <a href="javascript:void(0)" id="comment_reply_link_{{ comment.id }}" data-reply_to="{{ comment.id }}">
+            <a href="javascript:void(0)" id="comment_reply_link_{{ comment.id }}{{ id_suffix }}" data-reply_to="{{ comment.id }}{{ id_suffix }}">
                 reply
             </a>
         </div>

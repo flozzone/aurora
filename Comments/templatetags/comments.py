@@ -13,6 +13,7 @@ register = template.Library()
 class CommentListNode(template.Node):
     def __init__(self, reference):
         self.reference_var = template.Variable(reference)
+        self.template = 'Comments/comments.html'
 
     def render(self, context):
         try:
@@ -31,20 +32,40 @@ class CommentListNode(template.Node):
             reply_form.fields['reference_id'].initial = ref_object.id
             reply_form.fields['reference_type_id'].initial = ref_type.id
             reply_form.fields['parent_comment'].initial = -1
+
+            id_suffix = "_" + str(ref_object.id) + "_" + str(ref_type)
             context.update({'comment_list': queryset,
                             'form': form,
                             'reply_form': reply_form,
                             'ref_type': ref_type.id,
-                            'ref_id': ref_object.id})
+                            'ref_id': ref_object.id,
+                            'id_suffix': id_suffix})
 
-            return render_to_string('Comments/comments.html', context)
+            return render_to_string(self.template, context)
         except template.VariableDoesNotExist:
             return ''
+
+
+class AdditionalCommentListNode(CommentListNode):
+    def __init__(self, reference):
+        self.reference_var = template.Variable(reference)
+        self.template = 'Comments/additional_comments.html'
 
 
 @register.tag
 # def render_comment_list_plain_tag(parser, token):
 def render_comment_list(parser, token):
+    ref_token = handle_tokens(token)
+    return CommentListNode(ref_token)
+
+
+@register.tag
+def render_additional_comment_list(parser, token):
+    ref_token = handle_tokens(token)
+    return AdditionalCommentListNode(ref_token)
+
+
+def handle_tokens(token):
     tokens = token.split_contents()
     usage = 'template tag has to look like this: {% ' \
             + tokens[0] + ' for <reference> %}'
@@ -55,7 +76,7 @@ def render_comment_list(parser, token):
     if tokens[1] != 'for':
         raise template.TemplateSyntaxError(usage)
 
-    return CommentListNode(tokens[2])
+    return tokens[2]
 
 
 def get_reference_type_pk(ref_object):

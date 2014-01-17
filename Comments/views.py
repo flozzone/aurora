@@ -139,10 +139,13 @@ def update_comments(request):
 def feed(request):
     try:
         o = CommentReferenceObject.objects.get(id=1)
+        o2 = CommentReferenceObject.objects.get(id=2)
     except CommentReferenceObject.DoesNotExist:
         CommentReferenceObject().save()
         o = CommentReferenceObject.objects.get(id=1)
-    return render(request, 'Comments/feed.html', {'object': o})
+        CommentReferenceObject().save()
+        o2 = CommentReferenceObject.objects.get(id=2)
+    return render(request, 'Comments/feed.html', {'object': o, 'object2': o2})
 
 
 def test_template_tags(request):
