@@ -7,7 +7,7 @@
 {% endblock %}
 
 <div id="#comments_with_forms{{ id_suffix }}">
-    <form method="post" class="add_comment_form" id="commentForm" style="display:none">{% csrf_token %}
+    <form method="post" class="add_comment_form" id="commentForm" {# style="display:none" #}>{% csrf_token %}
             {{ form.as_p }}
         <button id="button_add_comment">Add comment</button>
     </form>

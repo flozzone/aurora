@@ -110,14 +110,6 @@ def vote_on_comment(request):
     return HttpResponse('')
 
 
-def query_comment_list(ref_type_id, ref_id):
-    queryset = Comment.objects.filter(
-        parent=None,
-        content_type__pk=ref_type_id,
-        object_id=ref_id).order_by('-post_date')
-    return queryset
-
-
 # @require_GET
 # @login_required
 def update_comments(request):
@@ -125,17 +117,24 @@ def update_comments(request):
     ref_type = latest_client_comment['ref_type']
     ref_id = latest_client_comment['ref_id']
 
-    latest_comment_id = Comment.objects.latest('id').id
+    try:
+        latest_comment_id = Comment.query_all(ref_id, ref_type).latest('id').id
+    except ObjectDoesNotExist:
+        latest_comment_id = -1
+
     if int(latest_client_comment['id']) < int(latest_comment_id):
-        comment_list = query_comment_list(ref_type, ref_id)
+        comment_list = Comment.query_top_level_sorted(ref_id, ref_type)
+        id_suffix = "_" + str(ref_id) + "_" + str(ref_type)
         context = {'comment_list': comment_list,
                    'ref_type': ref_type,
-                   'ref_id': ref_id}
+                   'ref_id': ref_id,
+                   'id_suffix': id_suffix}
         return render_to_response('Comments/comment_list.html', context)
     else:
         return HttpResponse('')
 
 
+@login_required
 def feed(request):
     try:
         o = CommentReferenceObject.objects.get(id=1)

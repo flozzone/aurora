@@ -1,7 +1,6 @@
 from django.db import models as models
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
-# from PortfolioUser.models import PortfolioUser
 
 
 class Tag(models.Model):
@@ -47,10 +46,23 @@ class Comment(models.Model):
         return self.children.all().order_by('post_date')
 
     def __str__(self):
-        return self.text[:20]
+        return self.text[:30]
 
     def __unicode__(self):
-        return self.text[:20]
+        return self.text[:30]
+
+    @staticmethod
+    def query_top_level_sorted(ref_object_id, ref_type_id):
+        return Comment.objects.filter(
+            parent=None,
+            content_type__pk=ref_type_id,
+            object_id=ref_object_id).order_by('-post_date')
+
+    @staticmethod
+    def query_all(ref_object_id, ref_type_id):
+        return Comment.objects.filter(
+            content_type__pk=ref_type_id,
+            object_id=ref_object_id)
 
 
 class CommentReferenceObject(models.Model):

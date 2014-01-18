@@ -3,16 +3,19 @@
 <div class="comment_vote">
 {#    <input name="_id_" value="4686858" type="hidden">#}
 {#    <a href='{% url 'Comments:vote_on_comment' %}?direction=up&comment_id={{ comment.id }}' class="vote_up_on" data-comment_number="{{ comment.id }}" title="This comment is helpful">up vote</a>#}
-    <a href='#' class="vote_up_on" data-comment_number="{{ comment.id }}{{ id_suffix }}" title="This comment is helpful">up vote</a>
+    <a href='#' class="vote_up_on" data-comment_number="{{ comment.id }}" title="This comment is helpful">up vote</a>
     <span class="comment_score">{{ comment.score }}</span>
-    <a href='#' class="vote_down_on" data-comment_number="{{ comment.id }}{{ id_suffix }}" title="This comment is not helpful at all">down
+    <a href='#' class="vote_down_on" data-comment_number="{{ comment.id }}" title="This comment is not helpful at all">down
         vote</a>
 </div>
 
-<div class="comment{% if comment.author.is_staff %} staff{% endif %}" id="comment_{{ comment.id }}{{ id_suffix }}" data-comment_number="{{ comment.id }}{{ id_suffix }}">
+<div class="comment{% if comment.author.is_staff %} staff{% endif %}" id="comment_{{ comment.id }}" data-comment_number="{{ comment.id }}" data-comment_author="{{ comment.author.nickname }}">
     <p class="comment_text">{{ comment.text | linebreaks }}</p>
 
     <p class="comment_author">
         submitted {{ comment.post_date | naturaltime }} by {{ comment.author.nickname }}
     </p>
+    <a href="javascript:void(0)" id="comment_reply_link_{{ comment.id }}" data-reply_to="{{ comment.id }}">
+        reply
+    </a>
 </div>

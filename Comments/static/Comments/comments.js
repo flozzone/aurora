@@ -31,7 +31,6 @@ function registerVote() {
         var direction;
         if($(this).attr('class') == 'vote_up_on') direction = 'up'
         else direction = 'down';
-        console.log('voting ' + direction);
         $.ajax({
             url: '/vote_on_comment/',
             data: {
@@ -69,11 +68,23 @@ function registerStartPolling() {
 function registerReplyLinks() {
     $('[id^=comment_reply_link_]').click(function(event) {
         event.preventDefault();
-        var replyForm = $('#replyForm').first();
+        var $replyForm = $('#replyForm');
+
         var commentId = $(this).attr('data-reply_to');
-        replyForm.find('#id_parent_comment').attr('value', commentId);
-        $(this).parent().append(replyForm);
-        replyForm.show();
+        $replyForm.find('#id_parent_comment').attr('value', commentId);
+
+        var ref_obj = findClosestRefObj(this);
+        $replyForm.find('#id_reference_id').attr('value', ref_obj.id);
+        $replyForm.find('#id_reference_type_id').attr('value', ref_obj.type);
+
+        var $textArea = $('#replyTextarea');
+        var user = $(this).closest('.comment, .response').attr('data-comment_author');
+        var new_text = $textArea.val();
+        new_text = new_text.replace(/(@[^ ]+\s|^)/, '@' + user + ' ');
+        $textArea.val(new_text);
+
+        $(this).parent().append($replyForm);
+        $replyForm.show();
         return false;
     })
 }
@@ -142,44 +153,65 @@ function registerAddCommentButton() {
     })
 }
 
+
 function updateComments(keepPolling) {
     updateComments(keepPolling, false);
 }
 
+/**
+ * updates a comment_list by sending highest comment id to server and replacinng the div with the answer if one is
+ * being received
+ * @param keepPolling   should updateComments keep polling for updates after call
+ * @param force         force a reload of the comment_list
+ *                      if not provided
+ */
 function updateComments(keepPolling, force) {
-    var maxComment;
-    if(force) {
-        var $comments = $('#comments')
-        maxComment = {
-            ref_type: $comments.attr('data-ref_type'),
-            ref_id: $comments.attr('data-ref_id'),
-            id: -1
+    var first = true;
+    $('.comment_list').each(function () {
+        if(first) {
+            first = false;
+            keepPolling = false;
         }
-    } else {
-        maxComment = getCommentWithMaxId();
-    }
-    $.ajax({
-        url: '/update_comments/',
-        data: maxComment,
-        type: 'GET',
-        dataType: 'html',
-        success: function (html) {
-            if(html != '') {
-                var current_parent_comment_id = $('#id_parent_comment').val();
-                var $comments = $('#comments');
-                var $replyForm = $('#replyForm');
-                $comments.replaceWith(html);
-                $('#comment_reply_link_' + current_parent_comment_id).parent().append($replyForm);
-                registerReplyLinks();
-                registerVote();
+
+        var $comment_list = $(this)
+
+        var maxComment;     // comment with highest ID in current $comment_list
+        if (force) {
+            maxComment = {
+                ref_type: $comment_list.attr('data-ref_type'),
+                ref_id: $comment_list.attr('data-ref_id'),
+                id: -1
+            }
+        } else {
+            maxComment = getCommentWithMaxId($comment_list);
+        }
+
+        $.ajax({
+            url: '/update_comments/',
+            data: maxComment,
+            type: 'GET',
+            dataType: 'html',
+            success: function (html) {
+                if (html != '') {
+                    // save current replyForm so it isn't deleted by the div update
+                    var current_parent_comment_id = $('#id_parent_comment').val();
+                    var $replyForm = $('#replyForm');
+
+//                var $comment_list = $('.comment_list');
+                    $comment_list.replaceWith(html);
+
+                    $('#comment_reply_link_' + current_parent_comment_id).parent().append($replyForm);
+                    registerReplyLinks();
+                    registerVote();
 //                registerReplyButton();
+                }
+            },
+            complete: function (xhr, status) {
+                if (keepPolling == true && !stop_update_poll) {
+//                current_poll_timeout = setTimeout('updateComments(true, false)', 5000);
+                }
             }
-        },
-        complete: function(xhr, status) {
-            if(keepPolling == true && !stop_update_poll) {
-                current_poll_timeout = setTimeout('updateComments(true, false)', 5000);
-            }
-        }
+        })
     })
 }
 
@@ -212,19 +244,25 @@ function registerTestButton() {
     })
 }
 
-function getCommentWithMaxId() {
-    var $comments = $('#comments');
+function findClosestRefObj(child) {
+    var ref_type = $(child).closest('[data-ref_type]').attr('data-ref_type');
+    var ref_id = $(child).closest('[data-ref_id]').attr('data-ref_id');
+    return { type: ref_type, id: ref_id }
+}
 
+function getCommentWithMaxId($comment_list) {
     var maxComment = {id: -1,
-                      ref_type: $comments.attr('data-ref_type'),
-                      ref_id: $comments.attr('data-ref_id')}
+                      ref_type: $comment_list.attr('data-ref_type'),
+                      ref_id: $comment_list.attr('data-ref_id')}
     var id;
-    $('.comment, .response').each(function() {
+    $comment_list.find('.comment, .response').each(function() {
         id = parseInt( $(this).attr('data-comment_number') );
         if (id > maxComment.id) {
             maxComment.id = id;
-            maxComment.ref_type= $(this).closest('[data-ref_type]').attr('data-ref_type');
-            maxComment.ref_id = $(this).closest('[data-ref_id]').attr('data-ref_id');
+
+            var ref_obj = findClosestRefObj(this);
+            maxComment.ref_id = ref_obj.id;
+            maxComment.ref_type = ref_obj.type;
         }
     })
     return(maxComment);
