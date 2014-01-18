@@ -2,9 +2,15 @@
 {% load comments %}
 
 {% block content %}
-    <button id="myTest">Test Button</button>
-    <button id="stopPolling">Staahhp polling godamit</button>
-    <button id="startPolling">Start polling</button>
-    {% render_comment_list for object %}
-{#    {% render_additional_comment_list for object2 %}#}
+    <div>
+        <button id="myTest">Test Button</button>
+        <button id="stopPolling">Staahhp polling godamit</button>
+        <button id="startPolling">Start polling</button>
+    </div>
+    <div id="comments_column_1">
+        {% render_comment_list for object %}
+    </div>
+    <div id="comments_column_2">
+        {% render_additional_comment_list for object2 %}
+    </div>
 {% endblock content %}

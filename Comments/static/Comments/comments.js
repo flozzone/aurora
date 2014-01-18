@@ -3,7 +3,7 @@
  */
 
 var stop_update_poll = false;
-var polling_interval = 5000;
+var polling_interval = 1000;
 var current_poll_timeout;
 
 $(document).ready( function() {
@@ -16,6 +16,7 @@ $(document).ready( function() {
     registerReplyTextarea();
     registerCancelReplyButton();
     registerAddCommentButton();
+    registerAddCommentFormButtons();
     registerVote();
 
     updateComments(true, false);
@@ -65,6 +66,34 @@ function registerVoteForCommentList($comment_list) {
     })
 }
 
+function registerAddCommentFormButtons() {
+    $('.button_add_comment_form').each( function() {
+        registerAddCommentFormButton($(this));
+    })
+}
+
+function registerAddCommentFormButton($button) {
+    $button.click( function(event) {
+        event.preventDefault();
+
+        var ref_id = $(this).attr('data-ref_id');
+        var ref_type = $(this).attr('data-ref_type');
+        var $commentForm = $('#commentForm');
+        var $form_ref_id = $commentForm.find('#id_reference_id')
+        var $form_ref_type = $commentForm.find('#id_reference_type_id')
+        $form_ref_id.val(ref_id);
+        $form_ref_type.val(ref_type);
+        if($commentForm.is(':visible')) {
+            $commentForm.prev().show();
+        }
+        $commentForm.show()
+        $(this).after($commentForm);
+        $(this).hide();
+
+        return false;
+    })
+}
+
 function registerReplyLinks() {
     $('.comment_list').each( function () {
         registerReplyLinksForCommentList($(this));
@@ -72,7 +101,7 @@ function registerReplyLinks() {
 }
 
 function registerReplyLinksForCommentList($comment_list) {
-    $comment_list.find('[id^=comment_reply_link_]').click(function(event) {
+    $comment_list.find('[id^=comment_reply_link_]').click( function(event) {
         event.preventDefault();
         var $replyForm = $('#replyForm');
 
@@ -96,15 +125,13 @@ function registerReplyLinksForCommentList($comment_list) {
 }
 
 function registerReplyTextarea() {
-    var $replyTextarea = $('#replyTextarea');
+    var $replyTextarea = $('#replyTextarea, #commentTextarea');
 
     $replyTextarea.focusin( function() {
-        console.log('stop polling');
         stopPolling();
     })
 
     $replyTextarea.focusout( function() {
-        console.log('start polling');
         startPolling();
     })
 }
@@ -168,62 +195,61 @@ function registerAddCommentButton() {
  * @param force         force a reload of the comment_list
  */
 function updateComments(keepPolling, force) {
-    var first = true;
-    $('.comment_list').each(function () {
-        if(first) first = false;
-        else keepPolling = false;
+    updateCommentList(keepPolling, force, $('.comment_list').first());
+    $('.comment_list').not(':first').each( function() {
+        updateCommentList(false, force, $(this));
+    })
+}
 
-        var $comment_list = $(this)
-
-        var maxComment;     // comment with highest ID in current $comment_list
-        if (force) {
-            maxComment = {
-                ref_type: $comment_list.attr('data-ref_type'),
-                ref_id: $comment_list.attr('data-ref_id'),
-                id: -1
-            }
-        } else {
-            maxComment = getCommentWithMaxId($comment_list);
+var updateCommentList = function (keepPolling, force, $comment_list) {
+    var maxComment;     // comment with highest ID in current $comment_list
+    if (force) {
+        maxComment = {
+            ref_type: $comment_list.attr('data-ref_type'),
+            ref_id: $comment_list.attr('data-ref_id'),
+            id: -1
         }
+    } else {
+        maxComment = getCommentWithMaxId($comment_list);
+    }
 
-        $.ajax({
-            url: '/update_comments/',
-            data: maxComment,
-            type: 'GET',
-            dataType: 'html',
-            success: function (html) {
-                if (html != '') {
-                    var ref_type = $comment_list.attr('data-ref_type');
-                    var ref_id = $comment_list.attr('data-ref_id');
+    $.ajax({
+        url: '/update_comments/',
+        data: maxComment,
+        type: 'GET',
+        dataType: 'html',
+        success: function (html) {
+            if (html != '') {
+                var ref_type = $comment_list.attr('data-ref_type');
+                var ref_id = $comment_list.attr('data-ref_id');
 
-                    // reply form replacement & conservation
-                    var $reply_form_parent_info = $comment_list.find('#id_parent_comment');
-                    if($reply_form_parent_info.length > 0) {
-                        // save current replyForm so it isn't deleted by the div update
-                        var $replyForm = $('#replyForm');
-                        var current_parent_comment_id = $comment_list.find('#id_parent_comment').val();
-                        $comment_list.replaceWith(html);
-                        $('#comment_reply_link_' + current_parent_comment_id).parent().append($replyForm);
-                        registerReplyButton();
-                        registerReplyTextarea();
-                    } else {
-                        $comment_list.replaceWith(html);
-                    }
-
-                    // get us the new comment list for the ref_object
-                    $comment_list = $('.comment_list').filter('[data-ref_type=' + ref_type + ']')
-                        .filter('[data-ref_id=' + ref_id + ']');
-                    // only reregister replaced elements to avoid multi registration
-                    registerReplyLinksForCommentList($comment_list);
-                    registerVoteForCommentList($comment_list);
+                // reply form replacement & conservation
+                var $reply_form_parent_info = $comment_list.find('#id_parent_comment');
+                if ($reply_form_parent_info.length > 0) {
+                    // save current replyForm so it isn't deleted by the div update
+                    var $replyForm = $('#replyForm');
+                    var current_parent_comment_id = $comment_list.find('#id_parent_comment').val();
+                    $comment_list.replaceWith(html);
+                    $('#comment_reply_link_' + current_parent_comment_id).parent().append($replyForm);
+                    registerReplyButton();
+                    registerReplyTextarea();
+                } else {
+                    $comment_list.replaceWith(html);
                 }
-            },
-            complete: function (xhr, status) {
-                if (keepPolling == true && !stop_update_poll) {
-                    current_poll_timeout = setTimeout('updateComments(true, false)', polling_interval);
-                }
+
+                // get us the new comment list for the ref_object
+                $comment_list = $('.comment_list').filter('[data-ref_type=' + ref_type + ']')
+                    .filter('[data-ref_id=' + ref_id + ']');
+                // only reregister replaced elements to avoid multi registration
+                registerReplyLinksForCommentList($comment_list);
+                registerVoteForCommentList($comment_list);
             }
-        })
+        },
+        complete: function (xhr, status) {
+            if (keepPolling == true && !stop_update_poll) {
+                current_poll_timeout = setTimeout('updateComments(true, false)', polling_interval);
+            }
+        }
     })
 }
 
@@ -234,7 +260,7 @@ function stopPolling() {
 
 function startPolling() {
     stop_update_poll = false;
-    updateComments(true);
+    updateComments(true, false);
 }
 
 function registerTestButton() {

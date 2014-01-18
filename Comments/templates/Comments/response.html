@@ -9,7 +9,7 @@
 
 <div class="response{% if response.author.is_staff %} staff{% endif %}" id="comment_response_{{ response.id }}" data-comment_number="{{ response.id }}" data-comment_author="{{ response.author.nickname }}">
     <p>{{ response.text }}</p>
-    <p>submitted {{ response.post_date | naturaltime }} by {{ response.author.nickname }}</p>
+    <p>submitted {{ response.post_date | naturaltime }} by {{ response.author.display_name }}</p>
     <a href="javascript:void(0)" id="comment_reply_link_{{ response.id }}" data-reply_to="{{ comment.id }}">
         reply
     </a>

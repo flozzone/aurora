@@ -9,11 +9,11 @@
         vote</a>
 </div>
 
-<div class="comment{% if comment.author.is_staff %} staff{% endif %}" id="comment_{{ comment.id }}" data-comment_number="{{ comment.id }}" data-comment_author="{{ comment.author.nickname }}">
+<div class="comment{% if comment.author.is_staff %} staff{% endif %}" id="comment_{{ comment.id }}" data-comment_number="{{ comment.id }}" data-comment_author="{{ comment.author.display_name }}">
     <p class="comment_text">{{ comment.text | linebreaks }}</p>
 
     <p class="comment_author">
-        submitted {{ comment.post_date | naturaltime }} by {{ comment.author.nickname }}
+        submitted {{ comment.post_date | naturaltime }} by {{ comment.author.display_name }}
     </p>
     <a href="javascript:void(0)" id="comment_reply_link_{{ comment.id }}" data-reply_to="{{ comment.id }}">
         reply

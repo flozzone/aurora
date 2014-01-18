@@ -16,5 +16,17 @@
 }
 
 .comments_with_forms {
-    width: 300px
+    width: 400px;
+}
+
+#comments_column_1 {
+    float: left;
+    width: 400px;
+    /*margin-right: 100px;*/
+}
+
+#comments_column_2 {
+    float: left;
+    /*width: 200px;*/
+    /*margin-left: 400px;*/
 }
