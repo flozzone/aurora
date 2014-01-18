@@ -41,7 +41,7 @@
                         {{ evaluation.evaluation_text }}
                     </div>
                     points assigned<div class="points">{{ evaluation.evaluation_points }}</div>
-                    <div class="submission_date">submittet on: {{ evaluation.submission_time }}</div>
+                    <div class="submission_date">evaluated on {{ evaluation.submission_time }}</div>
                 {% else %}
                     <div class="evaluation" {% if not lock %} contenteditable="true" {% endif %}
                             onkeyup="DelayedAutoSave({{ elaboration.id }})">
