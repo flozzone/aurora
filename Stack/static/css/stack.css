@@ -4,5 +4,10 @@
 	height:64px;
 }
 
-.singleChallenge {
+.challenge_image.active{
+    cursor: pointer;
+}
+
+.received_review {
+    cursor: pointer;
 }

@@ -14,7 +14,7 @@
   <div class="singleChallenge">
     <div class="challenge active {% cycle 'lineD' 'lineL' %}" id="{{ challenge_dict.challenge.id }}">
     <div class="description" > {{ challenge_dict.challenge.description }} </div>
-    <img class="challenge_image" src="{{ STATIC_URL }}img/{{ challenge_dict.challenge.image_url }}">
+    <img class="challenge_image active" src="{{ STATIC_URL }}img/{{ challenge_dict.challenge.image_url }}">
     {% if challenge_dict.success %}
       <div class="received_review">
         Success: {{ challenge_dict.success }}

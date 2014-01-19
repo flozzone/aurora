@@ -50,8 +50,10 @@
 
   {% if evaluation %}
     <div class="evaluation_text">Evaluation Text: {{ evaluation.evaluation_text }}</div>
+    {% render_comment_list for evaluation %}
+  {% else %}
+    {% render_comment_list for challenge %}
   {% endif %}
 
-  {% render_comment_list for challenge %}
 
 </div>
