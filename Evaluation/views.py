@@ -110,19 +110,18 @@ def detail(request):
         lock = False
         if Evaluation.objects.filter(submission=elaboration):
             evaluation = Evaluation.objects.get(submission=elaboration)
-            if evaluation.user==puser:
+            if evaluation.tutor==puser:
                 evaluation.lock_time = datetime.now()
                 evaluation.save()
             else:
                 if evaluation.is_older_15min():
                     evaluation.lock_time = datetime.now()
-                    evaluation.user = puser
+                    evaluation.tutor = puser
                     evaluation.save()
                 else:
                     lock = True
         else:
-            evaluation = Evaluation.objects.create(submission=elaboration)
-            evaluation.user = puser
+            evaluation = Evaluation.objects.create(submission=elaboration, tutor=puser)
             evaluation.lock_time = datetime.now()
             evaluation.save()
         params = {'evaluation': evaluation, 'lock': lock}

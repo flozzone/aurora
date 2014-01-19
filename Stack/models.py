@@ -1,5 +1,6 @@
 from django.db import models
-
+from Evaluation.models import Evaluation
+from Elaboration.models import Elaboration
 
 class Stack(models.Model):
     title = models.CharField(max_length=100)
@@ -23,6 +24,17 @@ class Stack(models.Model):
             challenge_image_urls.append(challenge.image_url)
         return challenge_image_urls
 
+    def get_points(self, user):
+        for challenge in self.get_challenges():
+            if challenge.is_final_challenge():
+                elaboration = None
+                evaluation = None
+                elaboration = Elaboration.objects.filter(challenge=challenge, user=user)
+                if elaboration:
+                    evaluation = Evaluation.objects.filter(submission=elaboration[0])
+                if evaluation:
+                    return evaluation[0].evaluation_points
+        return 0
 
 class StackChallengeRelation(models.Model):
     stack = models.ForeignKey('Stack.Stack')

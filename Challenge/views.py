@@ -7,6 +7,7 @@ from Course.models import Course
 from Elaboration.models import Elaboration
 from PortfolioUser.models import PortfolioUser
 from Stack.models import Stack, StackChallengeRelation
+from Evaluation.models import Evaluation
 from FileUpload.models import UploadFile
 
 
@@ -67,7 +68,12 @@ def challenges_page(request):
     data = {}
     gsi = Course.objects.get(short_title='gsi')
     course_stacks = Stack.objects.all().filter(course=gsi)
-    data['course_stacks'] = course_stacks
+    data['course_stacks'] = []
+    for stack in course_stacks:
+         data['course_stacks'].append({
+             'stack': stack,
+             'points': stack.get_points(request.user)
+         })
     return render_to_response('challenges_page.html', data, context_instance=RequestContext(request))
 
 
@@ -83,6 +89,8 @@ def create_context_challenge(request):
             data['success'] = elaboration.get_success_reviews()
             data['nothing'] = elaboration.get_nothing_reviews()
             data['fail'] = elaboration.get_fail_reviews()
+            if Evaluation.objects.filter(submission=elaboration).exists():
+                data['evaluation'] = Evaluation.objects.filter(submission=elaboration)[0]
     return data
 
 

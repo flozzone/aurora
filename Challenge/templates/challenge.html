@@ -48,6 +48,10 @@
     <div class="elaboration_text">{{ elaboration.elaboration_text |safe }}</div> <!-- TODO: this has to be secure -->
   {% endif %}
 
+  {% if evaluation %}
+    <div class="evaluation_text">Evaluation Text: {{ evaluation.evaluation_text }}</div>
+  {% endif %}
+
   {% render_comment_list for challenge %}
 
 </div>
