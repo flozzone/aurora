@@ -144,7 +144,6 @@ function registerDeleteLinksForCommentList($comment_list) {
 }
 
 function deleteComment(comment_id) {
-    console.log('delete comment ' + comment_id.toString());
     $.ajax({
         url: '/delete_comment/',
         data: { comment_id: comment_id },
@@ -172,7 +171,7 @@ function registerTextarea($text_area) {
 }
 
 function registerReplyTextarea() {
-    registerReplyTextarea($('#replyTextarea'));
+    registerTextarea($('#replyTextarea'));
 }
 
 function registerTextareas() {
@@ -254,10 +253,13 @@ function registerAddCommentButton() {
  * @param force         force a reload of the comment_list
  */
 function updateComments(keepPolling, force) {
-    updateCommentList(keepPolling, force, $('.comment_list').first());
-    $('.comment_list').not(':first').each( function() {
+    var $comment_lists = $('.comment_list')
+    console.log('updateComments' + $comment_lists.first().attr('id'));
+    updateCommentList(keepPolling, force, $comment_lists.first());
+    $comment_lists.not(':first').each( function() {
+        console.log('updateComments' + $(this).attr('id'));
         updateCommentList(false, force, $(this));
-    })
+    });
 }
 
 function updateCommentList(keepPolling, force, $comment_list) {;
@@ -299,6 +301,7 @@ function updateCommentList(keepPolling, force, $comment_list) {;
                 // get us the new comment list for the ref_object
                 $comment_list = $('.comment_list').filter('[data-ref_type=' + ref_type + ']')
                     .filter('[data-ref_id=' + ref_id + ']');
+
                 // only reregister replaced elements to avoid multi registration
                 registerReplyLinksForCommentList($comment_list);
                 registerVoteForCommentList($comment_list);
