@@ -15,6 +15,8 @@ class Comment(models.Model):
     text = models.TextField()
     author = models.ForeignKey('PortfolioUser.PortfolioUser')
     post_date = models.DateTimeField('date posted')
+    delete_date = models.DateTimeField('date posted', null=True)
+    deleter = models.ForeignKey('PortfolioUser.PortfolioUser', related_name='deleted_comments_set', null=True)
     parent = models.ForeignKey('self', null=True, related_name='children')
     score = models.IntegerField(default=0)
     visible = models.BooleanField(default=False)
@@ -74,7 +76,8 @@ class Comment(models.Model):
         if requester.is_staff:
             return queryset
 
-        return queryset.exclude(visibility=Comment.STAFF).filter(Q(visibility=Comment.PUBLIC) | Q(author=requester))
+        return queryset.exclude(visibility=Comment.STAFF).filter(~Q(visibility=Comment.PRIVATE) | Q(author=requester))
+
 
 class CommentReferenceObject(models.Model):
     """

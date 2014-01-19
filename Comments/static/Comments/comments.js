@@ -12,12 +12,15 @@ $(document).ready( function() {
     registerStopPolling();
 
     registerReplyLinks();
+    registerDeleteLinks();
+    registerTextareas();
     registerReplyButton();
-    registerReplyTextarea();
     registerCancelReplyButton();
-    registerAddCommentButton();
+
     registerAddCommentFormButtons();
-    registerVote();
+    registerAddCommentButton();
+    registerCancelCommentButton();
+    registerVotes();
 
     updateComments(true, false);
 });
@@ -38,7 +41,7 @@ function registerStartPolling() {
     })
 }
 
-function registerVote() {
+function registerVotes() {
     $('.comment_list').each( function() {
         registerVoteForCommentList($(this));
     });
@@ -101,6 +104,7 @@ function registerReplyLinks() {
 }
 
 function registerReplyLinksForCommentList($comment_list) {
+
     $comment_list.find('[id^=comment_reply_link_]').click( function(event) {
         event.preventDefault();
         var $replyForm = $('#replyForm');
@@ -118,22 +122,63 @@ function registerReplyLinksForCommentList($comment_list) {
         new_text = new_text.replace(/(@[^ ]+\s|^)/, '@' + user + ' ');
         $textArea.val(new_text);
 
-        $(this).parent().append($replyForm);
+        $(this).after($replyForm);
         $replyForm.show();
         return false;
+    });
+}
+
+function registerDeleteLinks() {
+    $('.comment_list').each( function () {
+        registerDeleteLinksForCommentList($(this));
+    });
+}
+
+function registerDeleteLinksForCommentList($comment_list) {
+    $comment_list.find('.delete_comment, .delete_response').click( function(event) {
+        event.preventDefault();
+        deleteComment($(this).attr('data-delete_id'));
+        updateCommentList(false, true, $comment_list);
+        return false;
+    });
+}
+
+function deleteComment(comment_id) {
+    console.log('delete comment ' + comment_id.toString());
+    $.ajax({
+        url: '/delete_comment/',
+        data: { comment_id: comment_id },
+        type: 'POST',
+        dataType: 'json',
+        beforeSend: function(xhr, settings) {
+            var csrftoken = getCsrfToken();
+            xhr.setRequestHeader("X-CSRFToken", csrftoken)
+        }
+    })
+}
+
+function getCsrfToken() {
+    return $('[name=csrfmiddlewaretoken]').first().val();
+}
+
+function registerTextarea($text_area) {
+    $text_area.focusin( function() {
+        stopPolling();
+    })
+
+    $text_area.focusout( function() {
+        startPolling();
     })
 }
 
 function registerReplyTextarea() {
-    var $replyTextarea = $('#replyTextarea, #commentTextarea');
+    registerReplyTextarea($('#replyTextarea'));
+}
 
-    $replyTextarea.focusin( function() {
-        stopPolling();
-    })
-
-    $replyTextarea.focusout( function() {
-        startPolling();
-    })
+function registerTextareas() {
+    $('#replyTextarea, #commentTextarea').each( function() {
+        registerTextarea($(this));
+    });
 }
 
 function registerReplyButton() {
@@ -147,9 +192,7 @@ function registerReplyButton() {
             success: function(response) {
                 $('#replyForm').hide();
                 $("#replyTextarea").val('');
-                updateComments(false);
-//                omg dont use dat ugly hax!
-//                setTimeout('registerReplyButton()', 1000);
+                updateComments(false, true);
             }
         })
         return false;
@@ -165,6 +208,21 @@ function registerCancelReplyButton() {
     })
 }
 
+function hideCommentForm() {
+    var $form =  $('#commentForm');
+    $form.hide();
+    $('#commentTextarea').val('');
+    $form.prev().show();
+}
+
+function registerCancelCommentButton() {
+    $('#button_cancel_comment').click( function(event) {
+        event.preventDefault();
+        hideCommentForm();
+        return false;
+    })
+}
+
 function registerAddCommentButton() {
     $('#button_add_comment').click(function (event) {
         event.preventDefault();
@@ -176,7 +234,7 @@ function registerAddCommentButton() {
             // the type of data we expect back
             dataType: 'html',
             success: function (response) {
-                $("#commentTextarea").val('');
+                hideCommentForm();
                 updateComments(false, true);
             },
             error: function (xhr, status) {
@@ -184,7 +242,8 @@ function registerAddCommentButton() {
             complete: function (xhr, status) {
             }
         });
-        return true;
+
+        return false;
     })
 }
 
@@ -201,7 +260,7 @@ function updateComments(keepPolling, force) {
     })
 }
 
-var updateCommentList = function (keepPolling, force, $comment_list) {
+function updateCommentList(keepPolling, force, $comment_list) {;
     var maxComment;     // comment with highest ID in current $comment_list
     if (force) {
         maxComment = {
@@ -243,6 +302,7 @@ var updateCommentList = function (keepPolling, force, $comment_list) {
                 // only reregister replaced elements to avoid multi registration
                 registerReplyLinksForCommentList($comment_list);
                 registerVoteForCommentList($comment_list);
+                registerDeleteLinks();
             }
         },
         complete: function (xhr, status) {

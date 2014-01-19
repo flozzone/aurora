@@ -11,6 +11,7 @@
     <form method="post" class="comment_form" id="commentForm" style="display:none">{% csrf_token %}
             {{ form.as_p }}
         <button id="button_add_comment">Add comment</button>
+        <button id="button_cancel_comment">Cancel</button>
     </form>
     <form id="replyForm" class="add_reply_form" style="display:none">{% csrf_token %}
             {{ reply_form.as_p }}

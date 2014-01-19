@@ -1,5 +1,12 @@
 .response {
+    border-style: solid;
+    border-width: thin;
     margin-left: 50px;
+}
+
+.comment {
+    border-style: solid;
+    border-width: thin;
 }
 
 .response_vote {
@@ -15,9 +22,12 @@
     width: 400px;
 }
 
-.staff_author.staff_visibility {
-    background-color: rgb(224,255,200);
+.staff_visibility {
     color: darkgreen;
+}
+
+.staff_author {
+    background-color: rgb(224,255,200);
 }
 
 .staff_author {
@@ -36,4 +46,15 @@
 
 #comments_column_2 {
     float: left;
+    margin-left: 30px;
+}
+
+.delete_comment,.delete_response{
+  float: right;
+  background-image: url(/static/img/waiting.png);
+  display: block;
+  margin: 0 auto;
+  text-indent: -9999px;
+  width: 20px;
+  height: 20px;
 }

@@ -10,8 +10,10 @@
 </div>
 
 <div class="comment{% if comment.author.is_staff %} staff_author{% endif %} {{ comment.visibility }}_visibility" id="comment_{{ comment.id }}" data-comment_number="{{ comment.id }}" data-comment_author="{{ comment.author.display_name }}">
-    <p class="comment_text">{{ comment.text | linebreaks }}</p>
-
+    <a href="javascript:void(0)" id="delete_comment_{{ comment.id }}" data-delete_id="{{ comment.id }}" class="delete_comment">
+        delete post
+    </a>
+    <div class="comment_text">{{ comment.text | linebreaks | wordwrap:40 }}</div>
     <p class="comment_author">
         submitted {{ comment.post_date | naturaltime }} by {{ comment.author.display_name }}
     </p>

@@ -55,6 +55,34 @@ def post_comment(request):
 
 @require_POST
 @login_required
+def delete_comment(request):
+    comment_id = request.POST['comment_id']
+    user = PortfolioUser.objects.get(id=request.user.id)
+
+    comment = Comment.objects.get(id=comment_id)
+
+    if comment.author != user and not comment.author.is_staff:
+        return HttpResponseForbidden('You shall not delete (other users posts)!')
+
+    # complete wipe when all replies and comment are delete-tagged
+    # if comment.parent is None and comment.responses().filter(deleter=None) == 0:
+    #     comment.delete()
+    #     return HttpResponse('')
+
+    if comment.parent is None and comment.responses() == 0:
+        comment.delete()
+        return HttpResponse('')
+
+    comment.text = '[deleted]'
+    comment.deleter = user
+    comment.delete_date = timezone.now()
+    comment.save()
+
+    return HttpResponse('')
+
+
+@require_POST
+@login_required
 def post_reply(request):
     form = ReplyForm(request.POST)
     handle_form(form, request)
