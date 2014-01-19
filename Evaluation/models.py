@@ -4,10 +4,10 @@ from django.db import models
 
 class Evaluation(models.Model):
     submission = models.ForeignKey('Elaboration.Elaboration')
-    user = models.ForeignKey('PortfolioUser.PortfolioUser', null=True)
+    tutor = models.ForeignKey('PortfolioUser.PortfolioUser')
     creation_date = models.DateTimeField(auto_now_add=True)
     evaluation_text = models.TextField()
-    evaluation_points = models.IntegerField(null=True)
+    evaluation_points = models.IntegerField(default=0)
     submission_time = models.DateTimeField(null=True)
     lock_time = models.DateTimeField(null=True)
 

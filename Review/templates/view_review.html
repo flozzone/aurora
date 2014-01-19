@@ -1,3 +1,5 @@
+{% load comments %}
+
 {% block additional_headers %}
   <link rel="stylesheet" href="{{ STATIC_URL }}css/review.css" type="text/css" media="screen"/>
 {% endblock %}
@@ -10,10 +12,8 @@
       <div class="question">Q: {{ question.question }}</div>
       <div class="answer">A: {{ question.answer }}</div>
     {% endfor %}
-    {% if not review_data.escalate %}
-      <button id="{{ review_data.review_id }}" class="escalate_button" type="button">Escalate</button>
-    {% endif %}
     <br>
+     {% render_comment_list for review_data.review %}
     <br>
   {% endfor %}
 </div>
