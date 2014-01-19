@@ -3,7 +3,7 @@
  */
 
 var stop_update_poll = false;
-var polling_interval = 1000;
+var polling_interval = 5000;
 var current_poll_timeout;
 
 $(document).ready( function() {
@@ -19,7 +19,7 @@ $(document).ready( function() {
     registerAddCommentFormButtons();
     registerVote();
 
-    updateComments(true, false);
+//    updateComments(true, false);
 });
 
 function registerStopPolling() {

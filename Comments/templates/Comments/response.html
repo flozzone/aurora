@@ -7,8 +7,8 @@
        title="This comment is not helpful at all">down vote</a>
 </div>
 
-<div class="response{% if response.author.is_staff %} staff{% endif %}" id="comment_response_{{ response.id }}" data-comment_number="{{ response.id }}" data-comment_author="{{ response.author.nickname }}">
-    <p>{{ response.text }}</p>
+<div class="response{% if response.author.is_staff %} staff{% endif %}_author {{ response.visibility }}_visibility" id="comment_response_{{ response.id }}" data-comment_number="{{ response.id }}" data-comment_author="{{ response.author.nickname }}">
+    <p class="response_text">{{ response.text }}</p>
     <p>submitted {{ response.post_date | naturaltime }} by {{ response.author.display_name }}</p>
     <a href="javascript:void(0)" id="comment_reply_link_{{ response.id }}" data-reply_to="{{ comment.id }}">
         reply

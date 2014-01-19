@@ -1,6 +1,7 @@
 from django.db import models as models
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
+from django.db.models import Q
 
 
 class Tag(models.Model):
@@ -37,7 +38,7 @@ class Comment(models.Model):
                                   choices=VISIBILITY_CHOICES,
                                   default=PUBLIC)
 
-    custom_visibility = models.ManyToManyField('PortfolioUser.PortfolioUser', related_name='visible_comments_set')
+    # custom_visibility = models.ManyToManyField('PortfolioUser.PortfolioUser', related_name='visible_comments_set')
     bookmarked_by = models.ManyToManyField('PortfolioUser.PortfolioUser', related_name='bookmarked_comments_set')
     was_voted_on_by = models.ManyToManyField('PortfolioUser.PortfolioUser', related_name='voted_comments_set')
     tags = models.ManyToManyField(Tag)
@@ -52,18 +53,28 @@ class Comment(models.Model):
         return self.text[:30]
 
     @staticmethod
-    def query_top_level_sorted(ref_object_id, ref_type_id):
-        return Comment.objects.filter(
+    def query_top_level_sorted(ref_object_id, ref_type_id, requester):
+        queryset_all = Comment.objects.filter(
             parent=None,
             content_type__pk=ref_type_id,
             object_id=ref_object_id).order_by('-post_date')
 
+        return Comment.filter_visible(queryset_all, requester)
+
     @staticmethod
-    def query_all(ref_object_id, ref_type_id):
-        return Comment.objects.filter(
+    def query_all(ref_object_id, ref_type_id, requester):
+        queryset = Comment.objects.filter(
             content_type__pk=ref_type_id,
             object_id=ref_object_id)
 
+        return Comment.filter_visible(queryset, requester)
+
+    @staticmethod
+    def filter_visible(queryset, requester):
+        if requester.is_staff:
+            return queryset
+
+        return queryset.exclude(visibility=Comment.STAFF).filter(Q(visibility=Comment.PUBLIC) | Q(author=requester))
 
 class CommentReferenceObject(models.Model):
     """

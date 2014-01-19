@@ -3,6 +3,7 @@ from django.contrib.contenttypes.models import ContentType
 from Comments.models import Comment
 from Comments.views import CommentForm, ReplyForm
 from django.template.loader import render_to_string
+from PortfolioUser.models import PortfolioUser
 
 register = template.Library()
 
@@ -20,15 +21,19 @@ class CommentListNode(template.Node):
             ref_object = self.reference_var.resolve(context)
             ref_type = ContentType.objects.get_for_model(ref_object)
 
-            queryset = Comment.query_top_level_sorted(ref_object.id, ref_type.id)
+            user = PortfolioUser.objects.get(id=context['user'].id)
+
+            queryset = Comment.query_top_level_sorted(ref_object.id, ref_type.id, user)
 
             form = CommentForm()
             form.fields['reference_id'].initial = ref_object.id
             form.fields['reference_type_id'].initial = ref_type.id
+            form.fields['visibility'].initial = Comment.PUBLIC
             reply_form = ReplyForm()
             reply_form.fields['reference_id'].initial = ref_object.id
             reply_form.fields['reference_type_id'].initial = ref_type.id
             reply_form.fields['parent_comment'].initial = -1
+            reply_form.fields['visibility'].initial = Comment.PUBLIC
 
             id_suffix = "_" + str(ref_object.id) + "_" + str(ref_type.id)
             context.update({'comment_list': queryset,
@@ -38,7 +43,6 @@ class CommentListNode(template.Node):
                             'ref_id': ref_object.id,
                             'id_suffix': id_suffix})
 
-            print(self.template)
             return render_to_string(self.template, context)
         except template.VariableDoesNotExist:
             return ''

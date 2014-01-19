@@ -1,4 +1,3 @@
-from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
 from django.shortcuts import render_to_response
@@ -31,12 +30,14 @@ class CommentList(ListView):
 class CommentForm(forms.Form):
     reference_type_id = forms.IntegerField(widget=forms.HiddenInput)
     reference_id = forms.IntegerField(widget=forms.HiddenInput)
+    visibility = forms.ChoiceField(choices=Comment.VISIBILITY_CHOICES)
     text = forms.CharField(widget=forms.Textarea(attrs={'id': 'commentTextarea'}), label='')
 
 
 class ReplyForm(forms.Form):
     reference_type_id = forms.IntegerField(widget=forms.HiddenInput)
     reference_id = forms.IntegerField(widget=forms.HiddenInput)
+    visibility = forms.ChoiceField(choices=Comment.VISIBILITY_CHOICES)
     parent_comment = forms.IntegerField(widget=forms.HiddenInput)
     text = forms.CharField(widget=forms.Textarea(attrs={'id': 'replyTextarea'}), label='')
 
@@ -67,6 +68,8 @@ def handle_form(form, request):
         ref_obj_id = form.cleaned_data['reference_id']
         ref_obj_model = ContentType.objects.get_for_id(ref_type_id).model_class()
         ref_obj = ref_obj_model.objects.get(id=ref_obj_id)
+        visibility = form.cleaned_data['visibility']
+
         parent_comment_id = form.cleaned_data.get('parent_comment', None)
         if parent_comment_id is not None:
             try:
@@ -80,7 +83,8 @@ def handle_form(form, request):
                                          author=user,
                                          content_object=ref_obj,
                                          parent=parent_comment,
-                                         post_date=timezone.now())
+                                         post_date=timezone.now(),
+                                         visibility=visibility)
         comment.save()
 
 
@@ -116,14 +120,15 @@ def update_comments(request):
     latest_client_comment = request.GET
     ref_type = latest_client_comment['ref_type']
     ref_id = latest_client_comment['ref_id']
+    user = PortfolioUser.objects.get(id=request.user.id)
 
     try:
-        latest_comment_id = Comment.query_all(ref_id, ref_type).latest('id').id
+        latest_comment_id = Comment.query_all(ref_id, ref_type, user).latest('id').id
     except ObjectDoesNotExist:
         latest_comment_id = -1
 
     if int(latest_client_comment['id']) < int(latest_comment_id):
-        comment_list = Comment.query_top_level_sorted(ref_id, ref_type)
+        comment_list = Comment.query_top_level_sorted(ref_id, ref_type, user)
         id_suffix = "_" + str(ref_id) + "_" + str(ref_type)
         context = {'comment_list': comment_list,
                    'ref_type': ref_type,

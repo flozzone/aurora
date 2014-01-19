@@ -11,22 +11,32 @@
     background-image: url("https://cdn.sstatic.net/stackoverflow/img/sprites.png?v=6");
 }
 
-.staff {
+.comments_with_forms {
+    width: 400px;
+}
+
+.staff_author.staff_visibility {
+    background-color: rgb(224,255,200);
+    color: darkgreen;
+}
+
+.staff_author {
     background-color: rgb(224,255,200);
 }
 
-.comments_with_forms {
-    width: 400px;
+.staff_visibility {
+    color: darkgreen;
+}
+
+.private_visibility {
+    color: rosybrown;
 }
 
 #comments_column_1 {
     float: left;
     width: 400px;
-    /*margin-right: 100px;*/
 }
 
 #comments_column_2 {
     float: left;
-    /*width: 200px;*/
-    /*margin-left: 400px;*/
 }
