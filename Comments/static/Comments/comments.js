@@ -19,7 +19,7 @@ $(document).ready( function() {
     registerAddCommentFormButtons();
     registerVote();
 
-//    updateComments(true, false);
+    updateComments(true, false);
 });
 
 function registerStopPolling() {
