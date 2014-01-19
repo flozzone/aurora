@@ -4,5 +4,10 @@
 	height:64px;
 }
 
+.challenge_image.active{
+    cursor: pointer;
+}
+
+
 .singleChallenge {
 }

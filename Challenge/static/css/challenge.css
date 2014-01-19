@@ -22,11 +22,11 @@ h1 {
 
 .stack_imgs {
 	min-height:70px;
+    cursor: pointer;
 }
 
 .stack_imgs > li {
 	display:inline;
-	
 }
 
 .stack_imgs > li > img {
@@ -84,10 +84,12 @@ h1 {
 
 .review_box.in_progress {
     background-color: orange;
+    cursor: pointer;
 }
 
 .review_box.active {
     background-color: yellow;
+    cursor: pointer;
 }
 
 .dropzone {
