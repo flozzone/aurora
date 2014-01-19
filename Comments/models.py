@@ -78,6 +78,11 @@ class Comment(models.Model):
 
         return queryset.exclude(visibility=Comment.STAFF).filter(~Q(visibility=Comment.PRIVATE) | Q(author=requester))
 
+    def delete_with_responses(self):
+        for response in self.responses():
+            response.delete()
+        self.delete()
+
 
 class CommentReferenceObject(models.Model):
     """

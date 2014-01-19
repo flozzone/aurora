@@ -254,10 +254,8 @@ function registerAddCommentButton() {
  */
 function updateComments(keepPolling, force) {
     var $comment_lists = $('.comment_list')
-    console.log('updateComments' + $comment_lists.first().attr('id'));
     updateCommentList(keepPolling, force, $comment_lists.first());
     $comment_lists.not(':first').each( function() {
-        console.log('updateComments' + $(this).attr('id'));
         updateCommentList(false, force, $(this));
     });
 }

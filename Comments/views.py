@@ -64,14 +64,19 @@ def delete_comment(request):
     if comment.author != deleter and not deleter.is_staff:
         return HttpResponseForbidden('You shall not delete (other users posts)!')
 
-    # complete wipe when all replies and comment are delete-tagged
-    # if comment.parent is None and len(comment.responses().filter(deleter=None)) == 0:
-    #     comment.delete()
-    #     return HttpResponse('')
+    parent = comment.parent
 
-    if comment.parent is None and comment.responses().count() == 0:
-        comment.delete()
-        return HttpResponse('')
+    # delete comment tree for comment without non-deleted responses
+    if parent is None:
+        if comment.responses().filter(deleter=None).count() == 0:
+            comment.delete_with_responses()
+            return HttpResponse('')
+    else:
+        if parent.deleter is not None:
+            non_deleted_responses = parent.responses().filter(deleter=None).exclude(id=comment_id).count()
+            if non_deleted_responses == 0:
+                parent.delete_with_responses()
+                return HttpResponse('')
 
     comment.text = '[deleted]'
     comment.deleter = deleter
@@ -142,8 +147,8 @@ def vote_on_comment(request):
     return HttpResponse('')
 
 
-# @require_GET
-# @login_required
+@require_GET
+@login_required
 def update_comments(request):
     latest_client_comment = request.GET
     ref_type = latest_client_comment['ref_type']
@@ -161,7 +166,8 @@ def update_comments(request):
         context = {'comment_list': comment_list,
                    'ref_type': ref_type,
                    'ref_id': ref_id,
-                   'id_suffix': id_suffix}
+                   'id_suffix': id_suffix,
+                   'requester': user}
         return render_to_response('Comments/comment_list.html', context)
     else:
         return HttpResponse('')

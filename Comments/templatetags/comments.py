@@ -41,7 +41,8 @@ class CommentListNode(template.Node):
                             'reply_form': reply_form,
                             'ref_type': ref_type.id,
                             'ref_id': ref_object.id,
-                            'id_suffix': id_suffix})
+                            'id_suffix': id_suffix,
+                            'requester': user})
 
             return render_to_string(self.template, context)
         except template.VariableDoesNotExist:
