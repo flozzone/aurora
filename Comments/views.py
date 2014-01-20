@@ -30,16 +30,16 @@ class CommentList(ListView):
 class CommentForm(forms.Form):
     reference_type_id = forms.IntegerField(widget=forms.HiddenInput)
     reference_id = forms.IntegerField(widget=forms.HiddenInput)
-    visibility = forms.ChoiceField(choices=Comment.VISIBILITY_CHOICES)
     text = forms.CharField(widget=forms.Textarea(attrs={'id': 'commentTextarea'}), label='')
+    visibility = forms.ChoiceField(choices=Comment.VISIBILITY_CHOICES)
 
 
 class ReplyForm(forms.Form):
     reference_type_id = forms.IntegerField(widget=forms.HiddenInput)
     reference_id = forms.IntegerField(widget=forms.HiddenInput)
-    visibility = forms.ChoiceField(choices=Comment.VISIBILITY_CHOICES)
     parent_comment = forms.IntegerField(widget=forms.HiddenInput)
     text = forms.CharField(widget=forms.Textarea(attrs={'id': 'replyTextarea'}), label='')
+    visibility = forms.ChoiceField(choices=Comment.VISIBILITY_CHOICES)
 
 
 @require_POST

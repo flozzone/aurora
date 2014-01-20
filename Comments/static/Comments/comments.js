@@ -104,7 +104,6 @@ function registerReplyLinks() {
 }
 
 function registerReplyLinksForCommentList($comment_list) {
-
     $comment_list.find('[id^=comment_reply_link_]').click( function(event) {
         event.preventDefault();
         var $replyForm = $('#replyForm');
@@ -260,7 +259,7 @@ function updateComments(keepPolling, force) {
     });
 }
 
-function updateCommentList(keepPolling, force, $comment_list) {;
+function updateCommentList(keepPolling, force, $comment_list) {
     var maxComment;     // comment with highest ID in current $comment_list
     if (force) {
         maxComment = {
@@ -279,31 +278,7 @@ function updateCommentList(keepPolling, force, $comment_list) {;
         dataType: 'html',
         success: function (html) {
             if (html != '') {
-                var ref_type = $comment_list.attr('data-ref_type');
-                var ref_id = $comment_list.attr('data-ref_id');
-
-                // reply form replacement & conservation
-                var $reply_form_parent_info = $comment_list.find('#id_parent_comment');
-                if ($reply_form_parent_info.length > 0) {
-                    // save current replyForm so it isn't deleted by the div update
-                    var $replyForm = $('#replyForm');
-                    var current_parent_comment_id = $comment_list.find('#id_parent_comment').val();
-                    $comment_list.replaceWith(html);
-                    $('#comment_reply_link_' + current_parent_comment_id).parent().append($replyForm);
-                    registerReplyButton();
-                    registerReplyTextarea();
-                } else {
-                    $comment_list.replaceWith(html);
-                }
-
-                // get us the new comment list for the ref_object
-                $comment_list = $('.comment_list').filter('[data-ref_type=' + ref_type + ']')
-                    .filter('[data-ref_id=' + ref_id + ']');
-
-                // only reregister replaced elements to avoid multi registration
-                registerReplyLinksForCommentList($comment_list);
-                registerVoteForCommentList($comment_list);
-                registerDeleteLinks();
+                replaceCommentListWithHtml($comment_list, html)
             }
         },
         complete: function (xhr, status) {
@@ -312,6 +287,55 @@ function updateCommentList(keepPolling, force, $comment_list) {;
             }
         }
     })
+}
+
+function findCommentListByRef(ref_id, ref_type) {
+    return $('.comment_list').filter('[data-ref_type=' + ref_type + ']')
+        .filter('[data-ref_id=' + ref_id + ']');
+}
+
+function replaceCommentListWithHtml($comment_list, html) {
+    var ref_type = $comment_list.attr('data-ref_type');
+    var ref_id = $comment_list.attr('data-ref_id');
+
+    // reply form replacement & conservation
+    var $replyForm = $('#replyForm');
+    if ($replyForm.length > 0) {
+        // save current replyForm so it isn't deleted by the div update
+        var prev_id = $replyForm.prev().attr('id')
+        var parent_comment_number = $comment_list.find('#id_parent_comment').val();
+        var parent_comment_id = $('[data-comment_number=' + parent_comment_number + ']');
+        $comment_list.replaceWith(html);
+
+        var $new_prev = $('#' + prev_id);
+        if($new_prev.length > 0) {
+            console.log('new prev found: ' + $new_prev.attr('id'));
+            $new_prev.after($replyForm);
+        } else {
+            var $parent_comment = $('[data-comment_number=' + parent_comment_number + ']');
+            if($parent_comment > 0) {
+                console.log('new parent_comment found: ' + $parent_comment.attr('id'))
+                $parent_comment.append($replyForm);
+            } else {
+                $comment_list = findCommentListByRef(ref_id, ref_type);
+                $comment_list.prepend($replyForm);
+                $replyForm.hide();
+            }
+        }
+
+        registerReplyButton();
+        registerReplyTextarea();
+    } else {
+        $comment_list.replaceWith(html);
+    }
+
+    // get us the new comment list for the ref_object
+    $comment_list = findCommentListByRef(ref_id, ref_type);
+
+    // only reregister replaced elements to avoid multi registration
+    registerReplyLinksForCommentList($comment_list);
+    registerVoteForCommentList($comment_list);
+    registerDeleteLinksForCommentList($comment_list);
 }
 
 function stopPolling() {
@@ -330,7 +354,6 @@ function registerTestButton() {
 //    alert(x.toString() + " # " + y.toString());
 //    var currentId = $('.comment').first().attr('id');
 //    console.log(currentId);
-//    placeForm();
         updateComments(false, true);
 //        $('#commentForm').toggle();
 //        console.log($('#id_parent_comment').val());
@@ -339,6 +362,8 @@ function registerTestButton() {
 //        console.log($('#id_parent_comment').val());
 //        if(stop_update_poll) startPolling();
 //        else stopPolling();
+        console.log($('replyForm').prev().attr('id'));
+
         return false;
     })
 }
