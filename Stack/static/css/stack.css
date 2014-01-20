@@ -1,7 +1,9 @@
 .challenge_image {
-	border-radius:6px;
-	width:64px;
-	height:64px;
+	border-radius:12px 0 0 0;
+	width:128px;
+	height:128px;
+	float:left;
+	margin-right:10px;
 }
 
 .challenge_image.active{
@@ -10,4 +12,27 @@
 
 .received_review {
     cursor: pointer;
+}
+
+.challenges_stack {
+}
+
+.singleChallenge {
+}
+
+.challenge {
+	clear:both;
+	min-height:128px;
+	padding-left:16px;
+}
+
+.review_label {
+	clear:both;
+	color:white;
+	
+}
+
+
+.challenge_description {
+	padding:10px;
 }

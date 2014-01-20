@@ -14,6 +14,7 @@
     {% for stack in course_stacks %}
       <div class="stack {% cycle 'lineD' 'lineL' %}" id="{{ stack.stack.id }}">
         <div class="title">{{ stack.stack.title }}</div>
+		<div id="stack_points{{ stack.stack.id }}" class="stack_points">You have {{ stack.points }} points so far. Your status is: [waiting for review(s) | free to go | blocked]</div>
         <div class="description">{{ stack.stack.description }}</div>
     	<div class="legend">Challenges in this stack:</div>
         <ul class="stack_imgs">
@@ -21,7 +22,6 @@
         		<li><img class = "stack_img" src="{{ STATIC_URL }}img/{{ image_url }}"></li>
     		{% endfor %}
         </ul>
-      <div id="stack_points{{ stack.stack.id }}" class="stack_points">{{ stack.points }}</div>
       </div>
     {% endfor %}
 

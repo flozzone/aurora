@@ -53,7 +53,7 @@ h1 {
 }
 
 .stack .descriptions {
-    padding-top: 10px;
+    padding: 10px;
 }
 
 .stack .legend {
@@ -61,16 +61,22 @@ h1 {
 }
 
 .review_wrapper {
-    height: 20px;
-    width: 60px;
-    margin: 10px;
+	clear:both;
+	height:48px;
+	width:120px;
+	background-color:#bbb;
+	border-radius:0 0 0 16px;
+	margin-bottom:32px;
+	padding:4px;
 }
 
 .review_box {
-    height: 18px;
-    width: 18px;
+	float:left;
+    height: 16px;
+    width: 16px;
+	border-radius:3px;
     float: left;
-    border: 1px solid black;
+	margin-left:16px;
 }
 
 .review_box.inactive {
@@ -79,16 +85,14 @@ h1 {
 }
 
 .review_box.done {
-    background-color: green;
 }
 
 .review_box.in_progress {
-    background-color: orange;
     cursor: pointer;
 }
 
 .review_box.active {
-    background-color: yellow;
+	background-color:white;
     cursor: pointer;
 }
 
