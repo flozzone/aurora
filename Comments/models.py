@@ -73,10 +73,11 @@ class Comment(models.Model):
 
     @staticmethod
     def filter_visible(queryset, requester):
+        non_private_or_authored = queryset.filter(~Q(visibility=Comment.PRIVATE) | Q(author=requester))
         if requester.is_staff:
-            return queryset
+            return non_private_or_authored
 
-        return queryset.exclude(visibility=Comment.STAFF).filter(~Q(visibility=Comment.PRIVATE) | Q(author=requester))
+        return non_private_or_authored.exclude(visibility=Comment.STAFF)
 
     def delete_with_responses(self):
         for response in self.responses():
