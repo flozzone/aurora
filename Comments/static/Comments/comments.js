@@ -130,7 +130,7 @@ function registerReplyLinksForCommentList($comment_list) {
         if($commentTextarea.val() != '') {
             var new_text = $commentTextarea.val();
         } else {
-            var new_text = $('#replyTextarea').val();
+            var new_text = $replyTextarea.val();
         }
         new_text = new_text.replace(/(@[^ ]+\s|^)/, '@' + user + ' ');
         $replyTextarea.val(new_text);

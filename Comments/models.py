@@ -71,6 +71,12 @@ class Comment(models.Model):
 
         return Comment.filter_visible(queryset, requester)
 
+    # @staticmethod
+    # def filter_deleted(comment_set):
+    #     for c in comment_set:
+    #         if c.responses.filter(deleter=None).count() > 0:
+    #             comment_set.
+
     @staticmethod
     def filter_visible(queryset, requester):
         non_private_or_authored = queryset.filter(~Q(visibility=Comment.PRIVATE) | Q(author=requester))
@@ -79,11 +85,16 @@ class Comment(models.Model):
 
         return non_private_or_authored.exclude(visibility=Comment.STAFF)
 
-    def delete_with_responses(self):
-        for response in self.responses():
-            response.delete()
-        self.delete()
-
+    # if parent is None:
+    #     if comment.responses().filter(deleter=None).count() == 0:
+    #         comment.delete_with_responses()
+    #         return HttpResponse('')
+    # else:
+    #     if parent.deleter is not None:
+    #         non_deleted_responses = parent.responses().filter(deleter=None).exclude(id=comment_id).count()
+    #         if non_deleted_responses == 0:
+    #             parent.delete_with_responses()
+    #             return HttpResponse('')
 
 class CommentReferenceObject(models.Model):
     """
