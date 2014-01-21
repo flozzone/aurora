@@ -13,7 +13,7 @@ $(document).ready( function() {
 
     registerReplyLinks();
     registerDeleteLinks();
-    registerTextareas();
+//    registerTextareas();
     registerReplyButton();
     registerCancelReplyButton();
 
@@ -79,6 +79,9 @@ function registerAddCommentFormButton($button) {
     $button.click( function(event) {
         event.preventDefault();
 
+        stopPolling();
+        $('#replyForm').hide();
+
         var ref_id = $(this).attr('data-ref_id');
         var ref_type = $(this).attr('data-ref_type');
         var $commentForm = $('#commentForm');
@@ -106,6 +109,10 @@ function registerReplyLinks() {
 function registerReplyLinksForCommentList($comment_list) {
     $comment_list.find('[id^=comment_reply_link_]').click( function(event) {
         event.preventDefault();
+
+        stopPolling();
+        $('#commentForm').hide();
+
         var $replyForm = $('#replyForm');
 
         var commentId = $(this).attr('data-reply_to');
@@ -202,6 +209,7 @@ function registerCancelReplyButton() {
         event.preventDefault();
         $('#replyForm').hide();
         $('#replyTextarea').val('');
+        startPolling();
         return false;
     })
 }
@@ -217,6 +225,7 @@ function registerCancelCommentButton() {
     $('#button_cancel_comment').click( function(event) {
         event.preventDefault();
         hideCommentForm();
+        startPolling();
         return false;
     })
 }
@@ -233,7 +242,7 @@ function registerAddCommentButton() {
             dataType: 'html',
             success: function (response) {
                 hideCommentForm();
-                updateComments(false, true);
+                startPolling();
             },
             error: function (xhr, status) {
             },
@@ -309,12 +318,10 @@ function replaceCommentListWithHtml($comment_list, html) {
 
         var $new_prev = $('#' + prev_id);
         if($new_prev.length > 0) {
-            console.log('new prev found: ' + $new_prev.attr('id'));
             $new_prev.after($replyForm);
         } else {
             var $parent_comment = $('[data-comment_number=' + parent_comment_number + ']');
             if($parent_comment > 0) {
-                console.log('new parent_comment found: ' + $parent_comment.attr('id'))
                 $parent_comment.append($replyForm);
             } else {
                 $comment_list = findCommentListByRef(ref_id, ref_type);
