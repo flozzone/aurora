@@ -13,7 +13,6 @@ $(document).ready( function() {
 
     registerReplyLinks();
     registerDeleteLinks();
-//    registerTextareas();
     registerReplyButton();
     registerCancelReplyButton();
 
@@ -85,15 +84,18 @@ function registerAddCommentFormButton($button) {
         var ref_id = $(this).attr('data-ref_id');
         var ref_type = $(this).attr('data-ref_type');
         var $commentForm = $('#commentForm');
-        var $form_ref_id = $commentForm.find('#id_reference_id')
-        var $form_ref_type = $commentForm.find('#id_reference_type_id')
-        $form_ref_id.val(ref_id);
-        $form_ref_type.val(ref_type);
+        $commentForm.find('#id_reference_id').val(ref_id);
+        $commentForm.find('#id_reference_type_id').val(ref_type);
         if($commentForm.is(':visible')) {
             $commentForm.prev().show();
         }
-        $commentForm.show()
         $(this).after($commentForm);
+        var reply_text = $('#replyForm').find('textarea').val();
+        if(reply_text != '') {
+            reply_text = reply_text.replace(/(@[^ ]+\s|^)/, '');
+           $commentForm.find('textarea').val(reply_text);
+        }
+        $commentForm.show()
         $(this).hide();
 
         return false;
@@ -111,7 +113,6 @@ function registerReplyLinksForCommentList($comment_list) {
         event.preventDefault();
 
         stopPolling();
-        $('#commentForm').hide();
 
         var $replyForm = $('#replyForm');
 
@@ -122,13 +123,20 @@ function registerReplyLinksForCommentList($comment_list) {
         $replyForm.find('#id_reference_id').attr('value', ref_obj.id);
         $replyForm.find('#id_reference_type_id').attr('value', ref_obj.type);
 
-        var $textArea = $('#replyTextarea');
         var user = $(this).closest('.comment, .response').attr('data-comment_author');
-        var new_text = $textArea.val();
+
+        var $commentTextarea = $('#commentTextarea');
+        var $replyTextarea = $('#replyTextarea');
+        if($commentTextarea.val() != '') {
+            var new_text = $commentTextarea.val();
+        } else {
+            var new_text = $('#replyTextarea').val();
+        }
         new_text = new_text.replace(/(@[^ ]+\s|^)/, '@' + user + ' ');
-        $textArea.val(new_text);
+        $replyTextarea.val(new_text);
 
         $(this).after($replyForm);
+        hideCommentForm();
         $replyForm.show();
         return false;
     });
@@ -164,26 +172,6 @@ function deleteComment(comment_id) {
 
 function getCsrfToken() {
     return $('[name=csrfmiddlewaretoken]').first().val();
-}
-
-function registerTextarea($text_area) {
-    $text_area.focusin( function() {
-        stopPolling();
-    })
-
-    $text_area.focusout( function() {
-        startPolling();
-    })
-}
-
-function registerReplyTextarea() {
-    registerTextarea($('#replyTextarea'));
-}
-
-function registerTextareas() {
-    $('#replyTextarea, #commentTextarea').each( function() {
-        registerTextarea($(this));
-    });
 }
 
 function registerReplyButton() {
@@ -308,7 +296,7 @@ function replaceCommentListWithHtml($comment_list, html) {
     var ref_id = $comment_list.attr('data-ref_id');
 
     // reply form replacement & conservation
-    var $replyForm = $('#replyForm');
+    var $replyForm = $comment_list.find('#replyForm');
     if ($replyForm.length > 0) {
         // save current replyForm so it isn't deleted by the div update
         var prev_id = $replyForm.prev().attr('id')
@@ -331,7 +319,6 @@ function replaceCommentListWithHtml($comment_list, html) {
         }
 
         registerReplyButton();
-        registerReplyTextarea();
     } else {
         $comment_list.replaceWith(html);
     }
@@ -361,7 +348,7 @@ function registerTestButton() {
 //    alert(x.toString() + " # " + y.toString());
 //    var currentId = $('.comment').first().attr('id');
 //    console.log(currentId);
-        updateComments(false, true);
+//        updateComments(false, true);
 //        $('#commentForm').toggle();
 //        console.log($('#id_parent_comment').val());
 //        $('#replyForm').toggle();
@@ -369,7 +356,14 @@ function registerTestButton() {
 //        console.log($('#id_parent_comment').val());
 //        if(stop_update_poll) startPolling();
 //        else stopPolling();
-        console.log($('replyForm').prev().attr('id'));
+        var text = $('#commentTextarea').val();
+        console.log(text);
+
+        if(text != '') {
+            console.log('not empty')
+        } else {
+            console.log('empty')
+        }
 
         return false;
     })
