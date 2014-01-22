@@ -20,7 +20,13 @@
         </a>
     {% endif %}
 
-    <div class="comment_text">{{ comment.text | linebreaks | wordwrap:40 }}</div>
+    <div class="comment_text">
+        {% if comment.deleter == None %}
+            {{ comment.text | linebreaks | wordwrap:40 }}
+        {% else %}
+            [deleted]
+        {% endif %}
+    </div>
     <p class="comment_author">
         submitted {{ comment.post_date | naturaltime }} by {{ comment.author.display_name }}
     </p>

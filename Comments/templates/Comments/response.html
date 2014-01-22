@@ -18,7 +18,13 @@
         </a>
     {% endif %}
 
-    <div class="response_text">{{ response.text | linebreaks | wordwrap:37 }}</div>
+    <div class="response_text">
+        {% if response.deleter == None %}
+            {{ response.text | linebreaks | wordwrap:37 }}
+        {% else %}
+            [deleted]
+        {% endif %}
+    </div>
     <p class="response_author">submitted {{ response.post_date | naturaltime }}
         by {{ response.author.display_name }}</p>
     {% if response.deleter != None %}

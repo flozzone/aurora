@@ -66,19 +66,6 @@ def delete_comment(request):
 
     parent = comment.parent
 
-    # delete comment tree for comment without non-deleted responses
-    # if parent is None:
-    #     if comment.responses().filter(deleter=None).count() == 0:
-    #         comment.delete_with_responses()
-    #         return HttpResponse('')
-    # else:
-    #     if parent.deleter is not None:
-    #         non_deleted_responses = parent.responses().filter(deleter=None).exclude(id=comment_id).count()
-    #         if non_deleted_responses == 0:
-    #             parent.delete_with_responses()
-    #             return HttpResponse('')
-
-    comment.text = '[deleted]'
     comment.deleter = deleter
     comment.delete_date = timezone.now()
     comment.save()
