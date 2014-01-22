@@ -17,7 +17,7 @@
   {% for challenge_dict in challenges_active %}
   	  <tr>
 		  <td class="lineD"><img class="challenge_image active" src="{{ STATIC_URL }}img/{{ challenge_dict.challenge.image_url }}"></td>
-		  <td class="challenge active lineL %}" id="{{ challenge_dict.challenge.id }}">
+		  <td class="challenge active lineL" id="{{ challenge_dict.challenge.id }}">
 	  		 <div style="font-weight:bold">{{ challenge_dict.challenge.title }}</div>{{ challenge_dict.challenge.description }}
 	  </td>
   </tr>

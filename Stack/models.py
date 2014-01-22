@@ -7,6 +7,12 @@ class Stack(models.Model):
     description = models.TextField()
     course = models.ForeignKey('Course.Course')
 
+    AVAILABLE = 'free to go'
+    REVIEW_MISSING_SELF = 'review missing self'
+    REVIEW_MISSING_OTHERS = 'review missing others'
+    BLOCKED = 'blocked'
+
+
     def get_root_challenge(self):
         for relation in StackChallengeRelation.objects.filter(stack=self):
             if relation.challenge.prerequisite:
@@ -36,6 +42,28 @@ class Stack(models.Model):
                     return evaluation[0].evaluation_points
         return 0
 
+    def get_last_available_challenge(self, user):
+        available_challenge = None
+        for challenge in self.get_challenges():
+            if challenge.is_available_for_user(user):
+                available_challenge = challenge
+        return available_challenge
+
+    def get_status(self, user):
+        # AVAILABLE
+        # REVIEW_MISSING_SELF
+        # REVIEW_MISSING_OTHERS
+        # BLOCKED
+        last_available_challenge = self.get_last_available_challenge(user)
+        if not last_available_challenge.is_final_challenge():
+            print(last_available_challenge.title)
+            print(last_available_challenge.is_review_missing(user))
+            if last_available_challenge.is_review_missing(user):
+                return self.REVIEW_MISSING_SELF
+            else:
+                return self.AVAILABLE
+        else:
+            return 'final challenge TBD'
 class StackChallengeRelation(models.Model):
     stack = models.ForeignKey('Stack.Stack')
     challenge = models.ForeignKey('Challenge.Challenge')
