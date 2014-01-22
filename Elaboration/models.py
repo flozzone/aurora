@@ -136,13 +136,13 @@ class Elaboration(models.Model):
     def get_visible_comments(self):
         comments = []
         for review in Review.objects.filter(elaboration=self.id):
-            for comment in Comment.objects.filter(visible=True, content_type=ContentType.objects.get_for_model(Review), object_id=review.id):
+            for comment in Comment.objects.filter(visibility=Comment.PUBLIC, content_type=ContentType.objects.get_for_model(Review), object_id=review.id):
                 comments.append(comment)
         return comments
 
     def get_invisible_comments(self):
         comments = []
         for review in Review.objects.filter(elaboration=self.id):
-            for comment in Comment.objects.filter(visible=False, content_type=ContentType.objects.get_for_model(Review), object_id=review.id):
+            for comment in Comment.objects.filter(visibility=Comment.STAFF, content_type=ContentType.objects.get_for_model(Review), object_id=review.id):
                 comments.append(comment)
         return comments

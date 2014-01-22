@@ -354,9 +354,9 @@ def init_data():
     StackChallengeRelation(stack=gtav, challenge=challenge_10).save()
 
     print('adding escalation for challenge 1 for s0')
-    com1 = Comment(text="escalation for review 1 for challenge 1 for d1", author=superuser, post_date=datetime.now(), content_type=ContentType.objects.get_for_model(Review), object_id=r1.id)
+    com1 = Comment(text="escalation for review 1 for challenge 1 for d1", author=superuser, post_date=datetime.now(), content_type=ContentType.objects.get_for_model(Review), object_id=r1.id, visibility=Comment.STAFF)
     com1.save()
-    com2 = Comment(text="escalation for review 2 for challenge 1 for d2", author=superuser, post_date=datetime.now(), content_type=ContentType.objects.get_for_model(Review), object_id=r2.id, visible=True)
+    com2 = Comment(text="escalation for review 2 for challenge 1 for d2", author=superuser, post_date=datetime.now(), content_type=ContentType.objects.get_for_model(Review), object_id=r2.id, visibility=Comment.PUBLIC)
     com2.save()
 
 

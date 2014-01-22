@@ -19,8 +19,6 @@ class Comment(models.Model):
     deleter = models.ForeignKey('PortfolioUser.PortfolioUser', related_name='deleted_comments_set', null=True)
     parent = models.ForeignKey('self', null=True, related_name='children')
     score = models.IntegerField(default=0)
-    # TODO: @grisu remove this one
-    visible = models.BooleanField(default=False)
     promoted = models.BooleanField(default=False)
 
     # Foreign object this Comment is attached to
