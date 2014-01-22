@@ -49,10 +49,10 @@ class Comment(models.Model):
         return self.children.all().order_by('post_date')
 
     def __str__(self):
-        return self.text[:30]
+        return str(self.id) + ": " + self.text[:30]
 
     def __unicode__(self):
-        return self.text[:30]
+        return str(self.id) + ": " + self.text[:30]
 
     @staticmethod
     def query_top_level_sorted(ref_object_id, ref_type_id, requester):
@@ -61,7 +61,9 @@ class Comment(models.Model):
             content_type__pk=ref_type_id,
             object_id=ref_object_id).order_by('-post_date')
 
-        return Comment.filter_visible(queryset_all, requester)
+        visible = Comment.filter_visible(queryset_all, requester)
+
+        return Comment.filter_deleted(visible)
 
     @staticmethod
     def query_all(ref_object_id, ref_type_id, requester):
@@ -71,11 +73,18 @@ class Comment(models.Model):
 
         return Comment.filter_visible(queryset, requester)
 
-    # @staticmethod
-    # def filter_deleted(comment_set):
-    #     for c in comment_set:
-    #         if c.responses.filter(deleter=None).count() > 0:
-    #             comment_set.
+    @staticmethod
+    def filter_deleted(comment_set):
+        # for every deleted parent
+        for comment in comment_set.exclude(deleter=None):
+            # if not deleted responses <= 0
+            if comment.responses().filter(deleter=None).count() <= 0:
+                # remove parent from queryset
+                comment_set = comment_set.exclude(id=comment.id)
+
+        print('filter deleted returns:')
+        print(comment_set)
+        return comment_set
 
     @staticmethod
     def filter_visible(queryset, requester):
@@ -85,16 +94,6 @@ class Comment(models.Model):
 
         return non_private_or_authored.exclude(visibility=Comment.STAFF)
 
-    # if parent is None:
-    #     if comment.responses().filter(deleter=None).count() == 0:
-    #         comment.delete_with_responses()
-    #         return HttpResponse('')
-    # else:
-    #     if parent.deleter is not None:
-    #         non_deleted_responses = parent.responses().filter(deleter=None).exclude(id=comment_id).count()
-    #         if non_deleted_responses == 0:
-    #             parent.delete_with_responses()
-    #             return HttpResponse('')
 
 class CommentReferenceObject(models.Model):
     """
