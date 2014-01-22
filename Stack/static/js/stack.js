@@ -8,7 +8,7 @@ function stack_loaded() {
 }
 
 function challenge_clicked(event) {
-    var challenge = $(event.target).closest(".challenge");
+    var challenge = $(event.target).parent().parent().find('.challenge');
     if (!challenge.hasClass("active")) {
         return;
     }
@@ -17,7 +17,7 @@ function challenge_clicked(event) {
 }
 
 function review_box_clicked(event) {
-    var challenge_id = $(event.target).attr('challenge_id');
+    var challenge_id = $(event.target).parent().attr('challenge_id');
     window.location.href = './challenge_review?id=' + challenge_id;
 }
 

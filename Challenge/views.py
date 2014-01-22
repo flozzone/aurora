@@ -33,7 +33,6 @@ def create_context_stack(request):
         challenges_inactive = []
         for stack_challenge in stack_challenges:
             if stack_challenge.challenge.is_available_for_user(request.user):
-
                 reviews = []
                 for review in stack_challenge.challenge.get_reviews_written_by_user(request.user):
                     reviews.append({
@@ -70,10 +69,14 @@ def challenges_page(request):
     course_stacks = Stack.objects.all().filter(course=gsi)
     data['course_stacks'] = []
     for stack in course_stacks:
-         data['course_stacks'].append({
-             'stack': stack,
-             'points': stack.get_points(request.user)
-         })
+        data['course_stacks'].append({
+            'stack': stack,
+            'status': stack.get_status(request.user),
+            'points': stack.get_points(request.user)
+        })
+
+
+
     return render_to_response('challenges_page.html', data, context_instance=RequestContext(request))
 
 

@@ -1,7 +1,6 @@
 .challenge_image {
-	border-radius:6px;
-	width:64px;
-	height:64px;
+	width:128px;
+	height:128px;
 }
 
 .challenge_image.active{
@@ -10,4 +9,49 @@
 
 .received_review {
     cursor: pointer;
+}
+
+.challenges_stack {
+	margin-left:16px;
+	max-width:940px;
+}
+
+.challenges_stack tr td{
+/*	border:1px dotted silver; */
+	vertical-align:top;
+}
+
+.singleChallenge {
+}
+
+.challenge {
+	clear:both;
+	min-height:128px;
+	padding-left:16px;
+}
+
+.review_label {
+	clear:both;
+	
+}
+
+
+.challenge_description {
+}
+
+.below {
+	opacity:0.6;
+	filter:alpha(opacity=86); /* For IE8 and earlier */
+	
+}
+
+.divider {
+	margin-top:10px;
+	border-top:1px dashed black;
+}
+
+.row1 {
+	padding:16px 0 16px 0;
+	font-size:20px;
+	font-weight:bold;
 }
