@@ -2,6 +2,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.shortcuts import redirect
 from Course.models import Course
+from PortfolioUser.models import PortfolioUser
 from Stack.models import Stack
 
 
@@ -19,6 +20,8 @@ def home(request):
             })
             points_sum += stack.get_points(request.user)
         data['sum'] = points_sum
+        puser = PortfolioUser.objects.get(pk=request.user.id)
+        data['puser'] = puser
         return render_to_response('home.html', data, context_instance=RequestContext(request))
     else:
         return redirect('/login')

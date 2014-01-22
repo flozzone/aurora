@@ -126,6 +126,12 @@ abbr, acronym {
     right: 0px;
 }
 
+.user_info {
+    position: absolute;
+    top: 15px;
+    right: 10px;
+}
+
 
 
 
@@ -1467,4 +1473,3 @@ abbr, acronym {
 .fa-plus-square-o:before {
   content: "\f196";
 }
-
