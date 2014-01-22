@@ -272,10 +272,14 @@ function updateCommentList(keepPolling, force, $comment_list) {
         url: '/update_comments/',
         data: maxComment,
         type: 'GET',
-        dataType: 'html',
-        success: function (html) {
-            if (html != '') {
+        dataType: 'json',
+        success: function (json) {
+            var html = json['comment_list'];
+            if (html) {
                 replaceCommentListWithHtml($comment_list, html)
+            }
+            if (json['polling_interval']) {
+                polling_interval = json['polling_interval']
             }
         },
         complete: function (xhr, status) {

@@ -2,6 +2,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.template.loader import render_to_string
 from django.views.decorators.http import require_POST, require_GET
 
 from django.views.generic import ListView
@@ -10,8 +11,9 @@ from django import forms
 from django.utils import timezone
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden
 from django.contrib.contenttypes.models import ContentType
+import json
 
-from Comments.models import Comment
+from Comments.models import Comment, CommentsRuntimeConfig
 from PortfolioUser.models import PortfolioUser
 from Comments.tests import CommentReferenceObject
 
@@ -47,10 +49,7 @@ class ReplyForm(forms.Form):
 def post_comment(request):
     form = CommentForm(request.POST)
     handle_form(form, request)
-    # #return HttpResponse(json.dumps(data), content_type="application/json")
-    # # return render_to_response('Comments/comment.html', {'comment': comment}, context_instance=RequestContext(request))
     return HttpResponse('')
-    #return HttpResponseRedirect(reverse('Comments:feed'))
 
 
 @require_POST
@@ -155,7 +154,12 @@ def update_comments(request):
                    'ref_id': ref_id,
                    'id_suffix': id_suffix,
                    'requester': user}
-        return render_to_response('Comments/comment_list.html', context)
+        template_response = json.dumps({
+            'comment_list': render_to_string('Comments/comment_list.html', context),
+            'polling_interval': CommentsRuntimeConfig.polling_interval
+        })
+            # render_to_response('Comments/comment_list.html', context))
+        return HttpResponse(template_response, content_type="application/json")
     else:
         return HttpResponse('')
 

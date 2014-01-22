@@ -83,8 +83,6 @@ class Comment(models.Model):
                 # remove parent from queryset
                 comment_set = comment_set.exclude(id=comment.id)
 
-        print('filter deleted returns:')
-        print(comment_set)
         return comment_set
 
     @staticmethod
@@ -94,6 +92,10 @@ class Comment(models.Model):
             return non_private_or_authored
 
         return non_private_or_authored.exclude(visibility=Comment.STAFF)
+
+
+class CommentsRuntimeConfig:
+    polling_interval = 5000
 
 
 class CommentReferenceObject(models.Model):
