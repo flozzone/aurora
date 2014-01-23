@@ -11,7 +11,7 @@ $(document).ready( function() {
     registerStartPolling();
     registerStopPolling();
 
-    registerReplyLinks();
+    registerReplyAndEditLinks();
     registerDeleteLinks();
     registerReplyButton();
     registerCancelReplyButton();
@@ -25,7 +25,7 @@ $(document).ready( function() {
 });
 
 function registerStopPolling() {
-    $('#stopPolling').click(function (event) {
+    $('#stopPolling').click( function(event) {
         event.preventDefault();
         stopPolling();
         return false;
@@ -33,7 +33,7 @@ function registerStopPolling() {
 }
 
 function registerStartPolling() {
-    $('#startPolling').click(function (event) {
+    $('#startPolling').click( function(event) {
         event.preventDefault();
         startPolling();
         return false;
@@ -102,10 +102,39 @@ function registerAddCommentFormButton($button) {
     })
 }
 
-function registerReplyLinks() {
+function registerReplyAndEditLinks() {
     $('.comment_list').each( function () {
         registerReplyLinksForCommentList($(this));
+        registerEditLinksForCommentList($(this));
     });
+}
+
+function registerEditLinksForCommentList($comment_list) {
+    $comment_list.find('.edit_link').click( function(event) {
+        event.preventDefault();
+
+        var $replyForm = $('#replyForm');
+        var $commentForm = $('#commentForm');
+        var $replyTextarea = $('#replyTextarea');
+
+        if($replyForm.is(':visible') || $commentForm.is(':visible'))
+            return false;
+
+        stopPolling();
+
+        setClosestCommentIdTo($replyForm);
+
+        var $comment = $(this).closest('.comment, .response');
+        var $commentText = $comment.find('.comment_text, .response_text').html().trim();
+        $replyTextarea.val($.parseHTML($commentText));
+        // TODO implement!
+        // <div contenteditable="true">?
+
+        $replyForm.show();
+        $comment.replaceWith($replyForm);
+
+        return false;
+    })
 }
 
 function registerReplyLinksForCommentList($comment_list) {
@@ -116,12 +145,13 @@ function registerReplyLinksForCommentList($comment_list) {
 
         var $replyForm = $('#replyForm');
 
-        var commentId = $(this).attr('data-reply_to');
-        $replyForm.find('#id_parent_comment').attr('value', commentId);
+//        var commentId = $(this).attr('data-reply_to');
+//        $replyForm.find('#id_parent_comment').attr('value', commentId);
 
-        var ref_obj = findClosestRefObj(this);
-        $replyForm.find('#id_reference_id').attr('value', ref_obj.id);
-        $replyForm.find('#id_reference_type_id').attr('value', ref_obj.type);
+//        var ref_obj = findClosestRefObj(this);
+//        $replyForm.find('#id_reference_id').attr('value', ref_obj.id);
+//        $replyForm.find('#id_reference_type_id').attr('value', ref_obj.type);
+        setClosestCommentIdTo($replyForm)
 
         var user = $(this).closest('.comment, .response').attr('data-comment_author');
 
@@ -140,6 +170,15 @@ function registerReplyLinksForCommentList($comment_list) {
         $replyForm.show();
         return false;
     });
+}
+
+function setClosestCommentIdTo($elem) {
+    var commentId = $elem.closest('[data-comment_number]').attr('data-comment_number');
+    $elem.find('#id_parent_comment').attr('value', commentId);
+
+    var ref_obj = findClosestRefObj(this);
+    $elem.find('#id_reference_id').attr('value', ref_obj.id);
+    $elem.find('#id_reference_type_id').attr('value', ref_obj.type);
 }
 
 function registerDeleteLinks() {
@@ -347,7 +386,9 @@ function startPolling() {
 }
 
 function registerTestButton() {
-    $('#myTest').click(function () {
+    $('#myTest').on('click', function(){
+        console.log('foobar');
+//    $('#myTest').click(function () {
 //    updateComments(false);
 //    alert(x.toString() + " # " + y.toString());
 //    var currentId = $('.comment').first().attr('id');
@@ -360,15 +401,6 @@ function registerTestButton() {
 //        console.log($('#id_parent_comment').val());
 //        if(stop_update_poll) startPolling();
 //        else stopPolling();
-        var text = $('#commentTextarea').val();
-        console.log(text);
-
-        if(text != '') {
-            console.log('not empty')
-        } else {
-            console.log('empty')
-        }
-
         return false;
     })
 }

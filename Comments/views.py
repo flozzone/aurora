@@ -61,9 +61,7 @@ def delete_comment(request):
     comment = Comment.objects.get(id=comment_id)
 
     if comment.author != deleter and not deleter.is_staff:
-        return HttpResponseForbidden('You shall not delete (other users posts)!')
-
-    parent = comment.parent
+        return HttpResponseForbidden('You shall not delete (other users postings)!')
 
     comment.deleter = deleter
     comment.delete_date = timezone.now()
@@ -149,6 +147,7 @@ def update_comments(request):
     if int(latest_client_comment['id']) < int(latest_comment_id):
         comment_list = Comment.query_top_level_sorted(ref_id, ref_type, user)
         id_suffix = "_" + str(ref_id) + "_" + str(ref_type)
+
         context = {'comment_list': comment_list,
                    'ref_type': ref_type,
                    'ref_id': ref_id,

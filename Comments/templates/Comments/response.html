@@ -35,4 +35,9 @@
     <a href="javascript:void(0)" id="comment_reply_link_{{ response.id }}" data-reply_to="{{ comment.id }}">
         reply
     </a>
+    {% if response.is_staff or requester == response.author %}
+        <a href="javascript:void(0)" id="response_edit_link_{{ response.id }}" class="edit_link">
+            edit
+        </a>
+    {% endif %}
 </div>

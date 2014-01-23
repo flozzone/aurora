@@ -58,11 +58,12 @@ class Comment(models.Model):
         queryset_all = Comment.objects.filter(
             parent=None,
             content_type__pk=ref_type_id,
-            object_id=ref_object_id).order_by('-post_date')
+            object_id=ref_object_id)
 
         visible = Comment.filter_visible(queryset_all, requester)
-
-        return Comment.filter_deleted(visible)
+        visible = Comment.filter_deleted(visible)
+        # Comment.set_permission_flags(visible, requester)
+        return visible.order_by('-post_date')
 
     @staticmethod
     def query_all(ref_object_id, ref_type_id, requester):
@@ -70,7 +71,21 @@ class Comment(models.Model):
             content_type__pk=ref_type_id,
             object_id=ref_object_id)
 
-        return Comment.filter_visible(queryset, requester)
+        visible_comments = Comment.filter_visible(queryset, requester)
+        # Comment.set_permission_flags(visible_comments, requester)
+        return visible_comments
+
+    # TODO not working for some weird reason
+    # TODO delete or fix
+    @staticmethod
+    def set_permission_flags(comment_set, requester):
+        for comment in comment_set:
+            if comment.author == requester or requester.is_staff:
+                comment.editable = True
+                comment.deletable = True
+
+            if comment.deleter is not None:
+                comment.deletable = False
 
     @staticmethod
     def filter_deleted(comment_set):
