@@ -10,9 +10,9 @@ from django.template.loader import render_to_string
 from django.utils import simplejson
 from django.utils.timezone import utc
 
-from course.models import Course
-from slides.models import Lecture, Slide
-from slides.settings import LIVECAST_START
+from Course.models import Course
+from Slides.models import Lecture, Slide
+from Slides.settings import LIVECAST_START
 
 """
 - slidecasting_mode
@@ -44,6 +44,7 @@ def livecast_update_slide(request, course_short_title, lecture_id_relative, slid
     json_return_dict = {'hello': 'world'}
     # return HttpResponse(simplejson.dumps({'hello': 'world'}), mimetype='application/javascript')
     return HttpResponse('<html><body>' + str(json_return_dict) + '</body></html>')
+
 
 def livecast(request, course_short_title, lecture_id_relative):
     course, lectures = _get_contentbar_data(course_short_title)
@@ -159,7 +160,7 @@ def mark_slide(request, course_short_title, slide_id, marker, value):
     if request.method == 'POST':
         try:
             slide = Slide.objects.get(id=slide_id)
-        except Slide.DoesNotExist, MultipleObjectsReturned:
+        except (Slide.DoesNotExist, MultipleObjectsReturned): 
             return HttpResponse(simplejson.dumps({'success': False}), mimetype='application/javascript')
         if value == 'xxx':
             return HttpResponse(simplejson.dumps({'success': False}), mimetype='application/javascript')
@@ -172,4 +173,3 @@ def mark_slide(request, course_short_title, slide_id, marker, value):
         json_return_dict = {'success': True, 'count': count, 'new_title': new_title}
         return HttpResponse(simplejson.dumps(json_return_dict), mimetype='application/javascript')
     return HttpResponse(simplejson.dumps({'success': False}), mimetype='application/javascript')
-
