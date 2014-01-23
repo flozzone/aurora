@@ -50,12 +50,21 @@
     margin-left: 30px;
 }
 
-.delete_comment,.delete_response{
-  float: right;
-  background-image: url(/static/img/waiting.png);
-  display: block;
-  margin: 0 auto;
-  text-indent: -9999px;
-  width: 20px;
-  height: 20px;
+.edit
+
+/*.delete_comment,.delete_response{*/
+  /*float: right;*/
+  /*background-image: url(/static/img/waiting.png);*/
+  /*display: block;*/
+  /*margin: 0 auto;*/
+  /*text-indent: -9999px;*/
+  /*width: 20px;*/
+  /*height: 20px;*/
+/*}*/
+
+[contenteditable="true"]:active,
+[contenteditable="true"]:focus{
+background-color: #d3d3d3;
+border:none;
+outline:none;
 }

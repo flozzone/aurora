@@ -11,13 +11,6 @@
      id="comment_response_{{ response.id }}" data-comment_number="{{ response.id }}"
      data-comment_author="{{ response.author.display_name }}">
 
-    {% if requester.is_staff or requester == response.author %}
-        <a href="javascript:void(0)" id="delete_response_{{ response.id }}" data-delete_id="{{ response.id }}"
-           class="delete_response">
-            delete post
-        </a>
-    {% endif %}
-
     <div class="response_text">
         {% if response.deleter == None %}
             {{ response.text | linebreaks | wordwrap:37 }}
@@ -25,6 +18,7 @@
             [deleted]
         {% endif %}
     </div>
+
     <p class="response_author">submitted {{ response.post_date | naturaltime }}
         by {{ response.author.display_name }}</p>
     {% if response.deleter != None %}
@@ -32,12 +26,22 @@
             deleted {{ response.delete_date | naturaltime }} by {{ response.deleter.display_name }}
         </p>
     {% endif %}
-    <a href="javascript:void(0)" id="comment_reply_link_{{ response.id }}" data-reply_to="{{ comment.id }}">
-        reply
-    </a>
-    {% if response.is_staff or requester == response.author %}
-        <a href="javascript:void(0)" id="response_edit_link_{{ response.id }}" class="edit_link">
-            edit
+
+    <div class="actions">
+        {% if requester.is_staff or requester == response.author %}
+            <a href="javascript:void(0)" id="edit_response_link_{{ response.id }}" class="edit_link">
+                edit
+            </a>
+            {% if response.deleter == None %}
+                <a href="javascript:void(0)" id="delete_response_link_{{ response.id }}" data-delete_id="{{ response.id }}"
+                   class="delete_link">
+                    delete
+                </a>
+            {% endif %}
+        {% endif %}
+        <a href="javascript:void(0)" id="reply_comment_link_{{ response.id }}" data-reply_to="{{ comment.id }}"
+                class="reply_link">
+            reply
         </a>
-    {% endif %}
+    </div>
 </div>

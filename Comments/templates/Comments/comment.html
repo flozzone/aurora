@@ -13,13 +13,6 @@
      id="comment_{{ comment.id }}" data-comment_number="{{ comment.id }}"
      data-comment_author="{{ comment.author.display_name }}">
 
-    {% if requester.is_staff or requester == comment.author %}
-        <a href="javascript:void(0)" id="delete_comment_{{ comment.id }}" data-delete_id="{{ comment.id }}"
-           class="delete_comment">
-            delete post
-        </a>
-    {% endif %}
-
     <div class="comment_text">
         {% if comment.deleter == None %}
             {{ comment.text | linebreaks | wordwrap:40 }}
@@ -27,20 +20,31 @@
             [deleted]
         {% endif %}
     </div>
+
     <p class="comment_author">
         submitted {{ comment.post_date | naturaltime }} by {{ comment.author.display_name }}
     </p>
     {% if comment.deleter != None %}
         <p class="comment_deleter">
-        deleted {{ comment.delete_date | naturaltime }} by {{ comment.deleter.display_name }}
+            deleted {{ comment.delete_date | naturaltime }} by {{ comment.deleter.display_name }}
         </p>
     {% endif %}
-    <a href="javascript:void(0)" id="comment_reply_link_{{ comment.id }}" data-reply_to="{{ comment.id }}">
-        reply
-    </a>
-    {% if comment.is_staff or requester == comment.author %}
-        <a href="javascript:void(0)" id="comment_edit_link_{{ comment.id }}" class="edit_link">
-            edit
+
+    <div class="actions">
+        {% if requester.is_staff or requester == comment.author %}
+            <a href="javascript:void(0)" id="edit_comment_link_{{ comment.id }}" class="edit_link">
+                edit
+            </a>
+            {% if deleter == None %}
+                <a href="javascript:void(0)" id="delete_comment_{{ comment.id }}" data-delete_id="{{ comment.id }}"
+                   class="delete_comment">
+                    delete
+                </a>
+            {% endif %}
+        {% endif %}
+        <a href="javascript:void(0)" id="reply_comment_link_{{ comment.id }}" data-reply_to="{{ comment.id }}"
+                class="reply_link">
+            reply
         </a>
-    {% endif %}
+    </div>
 </div>

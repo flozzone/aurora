@@ -109,6 +109,26 @@ function registerReplyAndEditLinks() {
     });
 }
 
+function registerEditSaveButton() {
+    $('#edit_save').click( function(event) {
+        event.preventDefault();
+
+        alert('edit_save');
+
+        return false;
+    });
+}
+
+function registerEditCacnelButton() {
+    $('#edit_cancel').click( function(event) {
+        event.preventDefault();
+
+        $(this).closest('#edit_buttons').hide();
+
+        return false;
+    })
+}
+
 function registerEditLinksForCommentList($comment_list) {
     $comment_list.find('.edit_link').click( function(event) {
         event.preventDefault();
@@ -125,20 +145,31 @@ function registerEditLinksForCommentList($comment_list) {
         setClosestCommentIdTo($replyForm);
 
         var $comment = $(this).closest('.comment, .response');
-        var $commentText = $comment.find('.comment_text, .response_text').html().trim();
-        $replyTextarea.val($.parseHTML($commentText));
+        var $commentText = $comment.find('.comment_text, .response_text');
+        var $oldCommentText = $commentText.clone();
+        var $editButtons = $('#edit_buttons');
+        var $actions = $(this).closest('.actions');
+
+        $commentText.attr('contenteditable', true);
+        $actions.after($editButtons);
+        $actions.hide();
+        $editButtons.show();
+
+        // TODO registerEditButtons
+
+//        $replyTextarea.val($.parseHTML($commentText));
         // TODO implement!
         // <div contenteditable="true">?
 
-        $replyForm.show();
-        $comment.replaceWith($replyForm);
+//        $replyForm.show();
+//        $comment.replaceWith($replyForm);
 
         return false;
     })
 }
 
 function registerReplyLinksForCommentList($comment_list) {
-    $comment_list.find('[id^=comment_reply_link_]').click( function(event) {
+    $comment_list.find('[id^=reply_comment_link_]').click( function(event) {
         event.preventDefault();
 
         stopPolling();
