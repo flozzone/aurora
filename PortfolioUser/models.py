@@ -46,3 +46,8 @@ class PortfolioUser(User):
         urllib.request.urlretrieve(gravatarurl, os.path.join(self.upload_path, filename))
         self.avatar = os.path.join(self.upload_path, filename)
         self.save()
+
+    @property
+    def display_name(self):
+        display_name = self.username if self.nickname is None else self.nickname
+        return display_name

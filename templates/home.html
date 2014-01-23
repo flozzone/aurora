@@ -2,4 +2,7 @@
 
 {% block content %}
   <h1>Portfolio Homepage</h1>
+  {% if not user.is_staff %}
+    {% include 'points.html' %}
+  {% endif %}
 {% endblock %}

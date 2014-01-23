@@ -88,6 +88,7 @@ def update_overview(request):
 def detail(request):
     # get selected elaborations from session
     elaborations = []
+    params = {}
     for serialized_elaboration in serializers.deserialize('json', request.session.get('elaborations', {})):
         elaborations.append(serialized_elaboration.object)
     selection = request.session.get('selection', 'error')
@@ -109,22 +110,20 @@ def detail(request):
         lock = False
         if Evaluation.objects.filter(submission=elaboration):
             evaluation = Evaluation.objects.get(submission=elaboration)
-            if evaluation.user==puser:
+            if evaluation.tutor==puser:
                 evaluation.lock_time = datetime.now()
                 evaluation.save()
             else:
                 if evaluation.is_older_15min():
                     evaluation.lock_time = datetime.now()
-                    evaluation.user = puser
+                    evaluation.tutor = puser
                     evaluation.save()
                 else:
                     lock = True
         else:
-            evaluation = Evaluation.objects.create(submission=elaboration)
-            evaluation.user = puser
+            evaluation = Evaluation.objects.create(submission=elaboration, tutor=puser)
             evaluation.lock_time = datetime.now()
             evaluation.save()
-
         params = {'evaluation': evaluation, 'lock': lock}
     if selection == "non_adequate_work":
         print('selection: non_adequate_work')
@@ -222,12 +221,14 @@ def submit_evaluation(request):
     evaluation_points = request.POST['evaluation_points']
 
     elaboration = Elaboration.objects.get(pk=elaboration_id)
+    puser = PortfolioUser.objects.get(pk=request.user.id)
 
-    if Evaluation.objects.filter(submission=elaboration, user=elaboration.user):
-        evaluation = Evaluation.objects.filter(submission=elaboration, user=elaboration.user).order_by('id')[0]
+    if Evaluation.objects.filter(submission=elaboration):
+        evaluation = Evaluation.objects.get(submission=elaboration)
     else:
-        evaluation = Evaluation.objects.create(submission=elaboration, user=elaboration.user)
+        evaluation = Evaluation.objects.create(submission=elaboration)
 
+    evaluation.user = user=puser
     evaluation.evaluation_text = evaluation_text
     evaluation.evaluation_points = evaluation_points
     evaluation.submission_time = datetime.now()

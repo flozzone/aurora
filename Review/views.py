@@ -74,8 +74,8 @@ def create_context_view_review(request):
         for review in reviews:
             review_data = {}
             review_data['review_id'] = review.id
+            review_data['review'] = review
             review_data['appraisal'] = review.get_appraisal_display()
-            review_data['escalate'] = review.escalate
             review_data['questions'] = []
             for review_question in ReviewQuestion.objects.filter(challenge=challenge).order_by("order"):
                 question_data = {}

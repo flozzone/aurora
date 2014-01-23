@@ -1,0 +1,28 @@
+{% block additional_headers %}
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/points.css" type="text/css" media="screen"/>
+{% endblock %}
+<div class="points_table">
+  <table>
+    <tr>
+      <td>Stack</td>
+      <td>Points</td>
+    </tr>
+    {% for stack in course_stacks %}
+      <tr class="{% cycle 'lineD' 'lineL' %}">
+        <td class="stack_name">{{ stack.stack.title }}</td>
+        <td>{{ stack.points }}</td>
+      </tr>
+    {% endfor %}
+
+    <tr class="slides">
+      <td>Slide Special Points</td>
+      <td>tbd</td>
+    </tr>
+    <tr class="sum">
+      <td>Sum</td>
+      <td>{{ sum }}</td>
+    </tr>
+  </table>
+</div>
+
+

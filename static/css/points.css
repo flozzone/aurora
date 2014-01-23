@@ -1,0 +1,46 @@
+.points_table {
+    width: 20%;
+    float: right;
+    margin-right: 40px;
+}
+
+.points_table table {
+    width: 100%;
+    height: 100%;
+}
+
+
+.points_table td {
+    vertical-align: middle;
+    text-align: right;
+    padding: 9px;
+    font-size: 10px;
+    font-family: Arial;
+    font-weight: normal;
+    color: #000000;
+}
+
+.points_table tr:first-child td {
+    background-color: #098909;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.points_table tr.lineL td {
+    background-color: #d4ffaa;
+
+}
+
+.points_table td {
+    border: 1px solid #000000;
+}
+
+.slides {
+    background-color: #fffb8e;
+}
+
+.sum {
+    background-color: #80ff4f;
+}

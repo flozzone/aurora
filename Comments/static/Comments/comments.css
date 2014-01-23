@@ -1,0 +1,61 @@
+.response {
+    border-style: solid;
+    border-width: thin;
+    margin-left: 50px;
+}
+
+.comment {
+    border-style: solid;
+    border-width: thin;
+}
+
+.comment_author, .response_author, .comment_deleter, .response_deleter {
+    font-size: small;
+}
+
+.response_vote {
+    margin-left: 50px;
+}
+
+.vote_up_on .vote_down_on {
+    cursor: pointer;
+    background-image: url("https://cdn.sstatic.net/stackoverflow/img/sprites.png?v=6");
+}
+
+.comments_with_forms {
+    width: 400px;
+}
+
+.staff_visibility {
+    color: darkgreen;
+}
+
+.staff_author {
+    background-color: rgb(224,255,200);
+}
+
+.private_visibility {
+    color: rosybrown;
+}
+
+#comments_column_1 {
+    float: left;
+    width: 400px;
+    overflow: auto;
+}
+
+#comments_column_2 {
+    float: left;
+    width: 400px;
+    margin-left: 30px;
+}
+
+.delete_comment,.delete_response{
+  float: right;
+  background-image: url(/static/img/waiting.png);
+  display: block;
+  margin: 0 auto;
+  text-indent: -9999px;
+  width: 20px;
+  height: 20px;
+}

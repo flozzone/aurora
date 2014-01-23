@@ -16,6 +16,10 @@ class Challenge(models.Model):
     # This is a comma separated list of mime types or file extensions. Eg.: image/*,application/pdf,.psd.
     accepted_files = models.CharField(max_length=100, default="image/*,application/pdf")
 
+    AVAILABLE = 'available'
+    NOT_AVAILABLE = 'not_available'
+    REVIEW_MISSING = 'review_missing'
+
     def get_previous(self):
         return self.prerequisite
 
@@ -36,17 +40,24 @@ class Challenge(models.Model):
     def is_final_challenge(self):
         return False if self.get_next() else True
 
-    def is_available_for_user(self, user):
+    def get_status(self, user):
         if not self.prerequisite:  # challenge has no prerequisite
-            return True
+            return self.AVAILABLE
         if not self.prerequisite.submitted_by_user(user):
-            return False
+            return self.NOT_AVAILABLE
         reviews = self.prerequisite.get_reviews_written_by_user(user)
         if not reviews:  # user did not write any reviews yet
-            return False
+            return self.REVIEW_MISSING
         if len(reviews) < 3:  # user did not write enough reviews yet
-            return False
-        return True
+            return self.REVIEW_MISSING
+        return self.AVAILABLE
+
+    def is_available_for_user(self, user):
+        return self.get_status(user) == self.AVAILABLE
+
+    def is_review_missing(self, user):
+        print(self.get_status(user))
+        return self.get_status(user) == self.REVIEW_MISSING
 
     def submitted_by_user(self, user):
         elaboration = Elaboration.objects.filter(challenge=self, user=user)

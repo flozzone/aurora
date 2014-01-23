@@ -1,28 +1,10 @@
-{% load humanize %}
-{% load staticfiles %}
-
-{% block additional_headers %}
-    <script type="text/javascript" src="{% static "Comments/comments.js" %}"></script>
-{% endblock %}
-
-    <!-- <form action="{% url 'Comments:post_comment' %}{% if from %}?next={{ from }}{% endif %}" method="post">{% csrf_token %} -->
-    <form action='' method="post">{% csrf_token %}
-            {{ form.as_p }}
-        <!-- <input id="add_comment" onclick='' type="submit" value="Add comment" /> -->
-        <button id="add_comment" onclick=post_comment()>Add comment</button>
-    </form>
-
-    <div>
-        {% for comment in comment_list %}
-            <div class="comment" id="{{ comment.id }}">
-                <p>{{ comment.text|linebreaks }}</p>
-                <p><pre>submitted {{ comment.post_date | naturaltime }} by {{ comment.author.username }}</pre></p>
-            </div>
+<div id="comments{{ id_suffix }}" class="comment_list" data-ref_type="{{ ref_type }}" data-ref_id="{{ ref_id }}">
+    {% for comment in comment_list %}
+        <div class="comment_with_responses">
+            {% include 'Comments/comment.html' %}
             {% for response in comment.responses %}
-                <div class="response" id="{{ response.id }}">
-                    <p><pre>    {{ response.text }}</pre></p>
-                    <p><pre>    submitted {{ response.post_date | naturaltime }} by {{ response.author.username }}</pre></p>
-                </div>
+                {% include 'Comments/response.html' %}
             {% endfor %}
-        {% endfor %}
-    </div>
+        </div>
+    {% endfor %}
+</div>

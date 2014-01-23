@@ -1,3 +1,4 @@
+{% load comments %}
 {% block additional_headers %}
   <script type="text/javascript" src="{{ STATIC_URL }}tinymce/tinymce.min.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}tinymce/jquery.tinymce.min.js"></script>
@@ -33,19 +34,26 @@
     <form method="post">
       <textarea id="editor">{{ elaboration.elaboration_text }}</textarea>
     </form>
-    <button class="submit">Submit</button>
+    <button class="submit">Enter for Evaluation</button>
     <div class="submission_text" hidden>
-      <button class="real_submit" id="{{ challenge.id }}">Submit</button>
-      <br>
       I certify that the work presented here is, to the best of my knowledge and belief, original and the result of my
       own<br>
       investigations and creation, except as acknowledged, and has not been submitted, either in part or whole, for
       a<br>
       degree at this or any other University.<br><br>
-      Please press submit again.
+      Please press submit again.<br>
+      <button class="real_submit" id="{{ challenge.id }}">Submit</button>
     </div>
   {% else %}
     <div class="elaboration_text">{{ elaboration.elaboration_text |safe }}</div> <!-- TODO: this has to be secure -->
   {% endif %}
+
+  {% if evaluation %}
+    <div class="evaluation_text">Evaluation Text: {{ evaluation.evaluation_text }}</div>
+    {% render_comment_list for evaluation %}
+  {% else %}
+    {% render_comment_list for challenge %}
+  {% endif %}
+
 
 </div>
