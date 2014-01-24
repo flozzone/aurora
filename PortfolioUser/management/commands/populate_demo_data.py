@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
+from datetime import datetime
+
+from django.contrib.contenttypes.models import ContentType
 from django.core.management.base import BaseCommand, CommandError
 
-from datetime import datetime
 from PortfolioUser.models import PortfolioUser
 from Course.models import *
 from Challenge.models import Challenge
@@ -9,8 +11,9 @@ from Elaboration.models import Elaboration
 from Stack.models import Stack, StackChallengeRelation
 from Review.models import Review
 from ReviewQuestion.models import ReviewQuestion
+from Slides.models import *
 from Comments.models import Comment
-from django.contrib.contenttypes.models import ContentType
+
 
 class Command(BaseCommand):
 
@@ -358,6 +361,134 @@ def init_data():
     com1.save()
     com2 = Comment(text="escalation for review 2 for challenge 1 for d2", author=superuser, post_date=datetime.now(), content_type=ContentType.objects.get_for_model(Review), object_id=r2.id, visibility=Comment.PUBLIC)
     com2.save()
+    
+    print('Adding Sample Lectures')
+    Lecture(
+        course=gsi,
+        start=datetime(2013, 2, 15, 15, 00, 17, 345952),
+        end=datetime(2013, 2, 15, 17, 20, 17, 345952),
+        active=True,
+    ).save()
+    Lecture(
+        course=gsi,
+        start=datetime(2013, 2, 16, 15, 00, 17, 345952),
+        end=datetime(2013, 2, 16, 17, 20, 17, 345952),
+        active=True,
+    ).save()
+    Lecture(
+        course=gsi,
+        start=datetime(2013, 2, 17, 15, 00, 17, 345952),
+        end=datetime(2013, 2, 17, 17, 20, 17, 345952),
+        active=True,
+    ).save()
+    Lecture(
+        course=gsi,
+        start=datetime(2013, 2, 24, 15, 00, 17, 345952),
+        end=datetime(2014, 2, 24, 17, 20, 17, 345952),
+        active=True,
+    ).save()
+    Lecture(
+        course=hci,
+        start=datetime(2013, 1, 15, 15, 00, 17, 345952),
+        end=datetime(2013, 1, 15, 17, 20, 17, 345952),
+        active=True,
+    ).save()
+    Lecture(
+        course=hci,
+        start=datetime(2013, 1, 16, 15, 00, 17, 345952),
+        end=datetime(2013, 1, 16, 17, 20, 17, 345952),
+        active=True,
+    ).save()
+
+    print('Adding Sample Slides')
+    Slide(
+        lecture_id=1,
+        title="Super Sample Slide #1 - Lecture 1",
+        pub_date=datetime(2013, 2, 15, 15, 20, 17, 345952),
+        filename="vo_15_02_13_1",
+        tags='.exercise',
+    ).save()
+    Slide(
+        lecture_id=1,
+        title="Super Sample Slide #2 - Lecture 1",
+        pub_date=datetime(2013, 2, 15, 15, 22, 17, 345952),
+        filename="vo_15_02_13_2",
+    ).save()
+    Slide(
+        lecture_id=1,
+        title="Super Sample Slide #3 - Lecture 1",
+        pub_date=datetime(2013, 2, 15, 15, 24, 17, 345952),
+        filename="vo_15_02_13_3",
+    ).save()
+    Slide(
+        lecture_id=1,
+        title="Super Sample Slide #4 - Lecture 1",
+        pub_date=datetime(2013, 2, 15, 15, 26, 17, 345952),
+        filename="vo_15_02_13_4",
+    ).save()
+    Slide(
+        lecture_id=1,
+        title="Super Sample Slide #5 - Lecture 1",
+        pub_date=datetime(2013, 2, 15, 15, 28, 17, 345952),
+        filename="vo_15_02_13_5",
+        tags='.exercise',
+    ).save()
+    Slide(
+        lecture_id=1,
+        title="Super Sample Slide #6 - Lecture 1",
+        pub_date=datetime(2013, 2, 15, 15, 30, 17, 345952),
+        filename="vo_15_02_13_6",
+    ).save()
+    Slide(
+        lecture_id=1,
+        title="Super Sample Slide #7 - Lecture 1",
+        pub_date=datetime(2013, 2, 15, 15, 32, 17, 345952),
+        filename="vo_15_02_13_7",
+    ).save()
+    Slide(
+        lecture_id=1,
+        title="Super Sample Slide #8 - Lecture 1",
+        pub_date=datetime(2013, 2, 15, 15, 34, 17, 345952),
+        filename="vo_15_02_13_8",
+    ).save()
+    Slide(
+        lecture_id=1,
+        title="Super Sample Slide #9 - Lecture 1",
+        pub_date=datetime(2013, 2, 15, 15, 36, 17, 345952),
+        filename="vo_15_02_13_9",
+        tags='.exercise',
+    ).save()
+    Slide(
+        lecture_id=2,
+        title="Super Sample Slide #1 - Lecture 2",
+        pub_date=datetime(2013, 2, 16, 15, 20, 17, 345952),
+        filename="vo_16_02_13_1",
+    ).save()
+    Slide(
+        lecture_id=2,
+        title="Super Sample Slide #2 - Lecture 2",
+        pub_date=datetime(2013, 2, 16, 15, 22, 17, 345952),
+        filename="vo_16_02_13_2",
+    ).save()
+    Slide(
+        lecture_id=2,
+        title="Super Sample Slide #2 - Lecture 2",
+        pub_date=datetime(2013, 2, 16, 15, 24, 17, 345952),
+        filename="vo_16_02_13_3",
+    ).save()
+    Slide(
+        lecture_id=3,
+        title="Super Sample Slide #1 - Lecture 3",
+        pub_date=datetime(2013, 2, 17, 15, 20, 17, 345952),
+        filename="vo_17_02_13_1",
+    ).save()
+    Slide(
+        lecture_id=3,
+        title="Super Sample Slide #2 - Lecture 3",
+        pub_date=datetime(2013, 2, 17, 15, 22, 17, 345952),
+        filename="vo_17_02_13_2",
+        tags='.exercise',
+    ).save()
 
 
 if __name__ == '__main__':

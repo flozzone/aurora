@@ -15,7 +15,7 @@ urlpatterns = patterns('',
                        url(r'', include('Review.urls')),
                        url(r'', include('FileUpload.urls')),
                        url(r'', include('Comments.urls', namespace='Comments')),
-
+                       url(r'slides/', include('Slides.urls', namespace='Slides')),
                        # url(r'^AmanamanProjekt/', include('AmanamanProjekt.foo.urls')),
 
                        # Uncomment the admin/doc line below to enable admin documentation:
