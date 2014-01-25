@@ -55,6 +55,10 @@ def profile(request):
     user = request.user
     user = PortfolioUser.objects.get(id=user.id)
     if request.method == 'POST':
+        users_with_same_nickname = PortfolioUser.objects.filter(nickname=request.POST['nickname'])
+        for user_with_same_nickname in users_with_same_nickname:
+            if user.id is not user_with_same_nickname.id:
+                return render_to_response('profile.html', {'user': user, 'error': "Nickname already taken"}, context_instance=RequestContext(request))
         user.nickname = request.POST['nickname']
         user.statement = request.POST['statement']
         user.email = request.POST['email']
