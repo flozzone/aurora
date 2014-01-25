@@ -2,15 +2,11 @@ from django.db import models
 from Evaluation.models import Evaluation
 from Elaboration.models import Elaboration
 
+
 class Stack(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField()
     course = models.ForeignKey('Course.Course')
-
-    AVAILABLE = 'free to go'
-    REVIEW_MISSING_SELF = 'review missing self'
-    REVIEW_MISSING_OTHERS = 'review missing others'
-    BLOCKED = 'blocked'
 
     def get_root_challenge(self):
         for relation in StackChallengeRelation.objects.filter(stack=self):
@@ -48,20 +44,10 @@ class Stack(models.Model):
                 available_challenge = challenge
         return available_challenge
 
-    def get_status(self, user):
-        # AVAILABLE
-        # REVIEW_MISSING_SELF
-        # REVIEW_MISSING_OTHERS
-        # BLOCKED
+    def get_status_text(self, user):
         last_available_challenge = self.get_last_available_challenge(user)
-        if not last_available_challenge.is_final_challenge():
-            print(last_available_challenge.title)
-            if last_available_challenge.is_user_review_missing(user):
-                return self.REVIEW_MISSING_SELF
-            else:
-                return self.AVAILABLE
-        else:
-            return 'final challenge TBD'
+        print(last_available_challenge.title)
+        return last_available_challenge.get_status_text(user)
 
 class StackChallengeRelation(models.Model):
     stack = models.ForeignKey('Stack.Stack')

@@ -75,7 +75,7 @@ def challenges_page(request):
     for stack in course_stacks:
         data['course_stacks'].append({
             'stack': stack,
-            'status': stack.get_status(request.user),
+            'status': stack.get_status_text(request.user),
             'points': stack.get_points(request.user)
         })
     return render_to_response('challenges_page.html', data, context_instance=RequestContext(request))
