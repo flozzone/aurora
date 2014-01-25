@@ -32,7 +32,7 @@ def create_context_stack(request):
         challenges_active = []
         challenges_inactive = []
         for stack_challenge in stack_challenges:
-            if stack_challenge.challenge.is_available_for_user(request.user):
+            if stack_challenge.challenge.is_enabled_for_user(request.user):
                 reviews = []
                 for review in stack_challenge.challenge.get_reviews_written_by_user(request.user):
                     reviews.append({
@@ -45,6 +45,7 @@ def create_context_stack(request):
                     'challenge': stack_challenge.challenge,
                     'submitted': stack_challenge.challenge.submitted_by_user(user),
                     'reviews': reviews,
+                    'status': stack_challenge.challenge.get_status_text(user)
                 }
                 elaboration = Elaboration.objects.filter(challenge=stack_challenge, user=user)
                 if elaboration:
@@ -53,6 +54,9 @@ def create_context_stack(request):
                     challenge_active['nothing'] = len(elaboration.get_nothing_reviews())
                     challenge_active['fail'] = len(elaboration.get_fail_reviews())
                     challenge_active['awesome'] = len(elaboration.get_awesome_reviews())
+                    evaluation = elaboration.get_evaluation()
+                    if evaluation:
+                        challenge_active['points'] = evaluation.evaluation_points
 
                 challenges_active.append(challenge_active)
             else:
@@ -74,9 +78,6 @@ def challenges_page(request):
             'status': stack.get_status(request.user),
             'points': stack.get_points(request.user)
         })
-
-
-
     return render_to_response('challenges_page.html', data, context_instance=RequestContext(request))
 
 

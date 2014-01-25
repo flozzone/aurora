@@ -19,12 +19,13 @@ class Elaboration(models.Model):
         return False
 
     def get_evaluation(self):
-        if Evaluation.objects.get(submission=self):
-            return Evaluation.objects.get(submission=self)
-        return False
+        evaluation = Evaluation.objects.filter(submission=self)
+        if evaluation:
+            return evaluation[0]
+        return None
 
-    def is_reviewed_3times(self):
-        if Review.objects.filter(elaboration=self).count() < 3:
+    def is_reviewed_2times(self):
+        if Review.objects.filter(elaboration=self).count() < 2:
             return False
         return True
 
@@ -55,7 +56,7 @@ class Elaboration(models.Model):
     def get_missing_reviews():
         missing_reviews = []
         for elaboration in Elaboration.objects.all():
-            if not elaboration.is_reviewed_3times() and elaboration.is_older_3days() and not elaboration.challenge.is_final_challenge():
+            if not elaboration.is_reviewed_2times() and elaboration.is_older_3days() and not elaboration.challenge.is_final_challenge():
                 missing_reviews.append(elaboration)
         return missing_reviews
 
@@ -101,6 +102,9 @@ class Elaboration(models.Model):
 
     def get_awesome_reviews(self):
         return Review.objects.filter(elaboration=self, appraisal=Review.AWESOME)
+
+    def is_passing_peer_review(self):
+        return len(Review.objects.filter(elaboration=self, appraisal=Review.NOTHING) | Review.objects.filter(elaboration=self, appraisal=Review.FAIL)) == 0
 
     @staticmethod
     def get_non_adequate_reviews():
