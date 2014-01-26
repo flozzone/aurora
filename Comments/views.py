@@ -101,15 +101,15 @@ def handle_form(form, request):
         #     comment = Comment.objects.get(id=form.cleaned_data['id'])
         #     comment.text = form.cleaned_data['text']
         # except Comment.DoesNotExist:
-        comment = Comment.objects.get_or_create(text=form.cleaned_data['text'],
-                                                author=user,
-                                                content_object=ref_obj,
-                                                parent=parent_comment,
-                                                post_date=timezone.now(),
-                                                visibility=visibility)
+        comment = Comment.objects.create(text=form.cleaned_data['text'],
+                                         author=user,
+                                         content_object=ref_obj,
+                                         parent=parent_comment,
+                                         post_date=timezone.now(),
+                                         visibility=visibility)
 
-        if type(ref_obj_model) == Elaboration:
-            print('elaboration')
+        # if type(ref_obj_model) == Elaboration:
+        #     print('elaboration')
 
         comment.save()
 
