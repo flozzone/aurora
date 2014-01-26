@@ -13,7 +13,7 @@ from Review.models import Review
 from ReviewQuestion.models import ReviewQuestion
 from Slides.models import *
 from Comments.models import Comment
-
+from Notification.models import Notification
 
 class Command(BaseCommand):
 
@@ -47,6 +47,7 @@ def init_data():
         user.save()
         user_data_list[i]['user'] = user
 
+
     s0 = user_data_list[0]['user']
 
     # create the three dummy users for jumpstarting the peer review process
@@ -71,17 +72,17 @@ def init_data():
 
     # create an admin user with password amanaman
     print('adding superuser')
-    superuser = PortfolioUser(username='amanaman')
-    superuser.set_password('amanaman')
-    superuser.is_staff = True
-    superuser.is_superuser = True
-    superuser.save()
+    amanaman = PortfolioUser(username='amanaman')
+    amanaman.set_password('amanaman')
+    amanaman.is_staff = True
+    amanaman.is_superuser = True
+    amanaman.save()
 
-    print('adding superuser')
+    print('adding staff')
     superuser = PortfolioUser(username='hagrid')
     superuser.set_password('hagrid')
     superuser.is_staff = True
-    superuser.is_superuser = True
+    superuser.is_superuser = False
     superuser.save()
 
 
@@ -107,12 +108,16 @@ def init_data():
 
     # create course-user relations
     print('adding course-user relations')
+    CourseUserRelation(course=gsi, user=amanaman).save()
+    CourseUserRelation(course=hci, user=amanaman).save()
     CourseUserRelation(course=gsi, user=superuser).save()
     CourseUserRelation(course=hci, user=superuser).save()
     for user_data in user_data_list:
         user = user_data['user']
         CourseUserRelation(course=gsi, user=user).save()
         CourseUserRelation(course=hci, user=user).save()
+        Notification(user=user, course=gsi, text="Welcome to GSI!").save()
+        Notification(user=user, course=hci, text="Welcome to HCI!").save()
 
     # create challenges
     print('adding challenges')

@@ -1,16 +1,18 @@
+import json
+from datetime import datetime
+
 from django.shortcuts import render, render_to_response
 from django.template import RequestContext
-
-import json
 from django.contrib.auth.decorators import login_required
-from PortfolioUser.models import PortfolioUser
+from django.http import HttpResponse
+
 from Review.models import Review
 from Elaboration.models import Elaboration
 from Challenge.models import Challenge
 from ReviewQuestion.models import ReviewQuestion
 from ReviewAnswer.models import ReviewAnswer
-from django.http import HttpResponse
-from datetime import datetime
+from Notification.models import Notification
+
 
 def create_context_review(request):
     data = {}
@@ -46,6 +48,8 @@ def review_page(request):
 
 @login_required()
 def review_answer(request):
+    user = RequestContext(request)['user']
+    course = RequestContext(request)['last_selected_course']
     if request.POST:
         data = request.body.decode(encoding='UTF-8')
         data = json.loads(data)
@@ -60,6 +64,25 @@ def review_answer(request):
             text = answer['answer']
             review_question = ReviewQuestion.objects.get(pk=question_id)
             ReviewAnswer(review=review, review_question=review_question, text=text).save()
+            # send notifications
+        if review.appraisal == review.FAIL or review.appraisal == review.NOTHING:
+            Notification(
+                user=review.elaboration.user,
+                course=course,
+                text=Notification.BAD_REVIEW + review.elaboration.challenge.title,
+                image_url='/static/img/' + review.elaboration.challenge.image_url,
+                link="review=" + str(review.elaboration.challenge.id)
+            ).save()
+        else:
+            final_challenge = review.elaboration.challenge.get_final_challenge()
+            if final_challenge.get_status(review.elaboration.user) == 0:
+                obj, created = Notification.objects.get_or_create(
+                    user=review.elaboration.user,
+                    course=course,
+                    text=Notification.ENOUGH_PEER_REVIEWS + final_challenge.title,
+                    image_url='/static/img/' + final_challenge.image_url,
+                    link="stack=" + str(review.elaboration.challenge.get_stack().id)
+                )
     return HttpResponse()
 
 
@@ -92,15 +115,8 @@ def received_challenge_reviews(request):
     data = create_context_view_review(request)
     return render(request, 'view_review.html', data)
 
+
 @login_required()
 def received_challenge_reviews_page(request):
     data = create_context_view_review(request)
     return render(request, 'view_review_page.html', data)
-
-@login_required()
-def review_escalate(request):
-    if 'id' in request.GET:
-        review = Review.objects.get(pk=request.GET.get('id'))
-        review.escalate = True
-        review.save()
-    return HttpResponse()

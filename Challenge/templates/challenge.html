@@ -10,11 +10,11 @@
 
 {% endblock %}
 
-<div id="{{ challenge.id }}" class="challenge">
+<div id="{{ challenge.id }}" class="challenge" stack="{{ challenge.get_stack.id }}">
   <h1>Details</h1>
 
   <div>
-    {{ challenge.id }} {{ challenge.title }}
+    {{ challenge.title }}
   </div>
 
   <div>

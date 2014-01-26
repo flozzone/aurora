@@ -73,6 +73,13 @@ class Challenge(models.Model):
     def is_final_challenge(self):
         return False if self.get_next() else True
 
+    def get_final_challenge(self):
+        next_challenge = self
+        while (not next_challenge.is_final_challenge()):
+            next_challenge = next_challenge.get_next()
+        return next_challenge
+
+
     def get_status_text(self, user):
         status = self.get_status(user)
         status_text = self.status_dict[status]
@@ -83,58 +90,42 @@ class Challenge(models.Model):
         }
 
     def get_status(self, user):
-        print("get status for '" + self.title + "':")
-        if self.is_first_challenge():  # first challenge is always available
-            print("available - because no prerequisite")
-        else:
+        if not self.is_first_challenge():  # first challenge is always available
             prerequisite_status = self.prerequisite.get_status(user)
-            if not (prerequisite_status is self.DONE or prerequisite_status is self.PEER_REVIEW_MISSING):   # missing prerequisite means unavailable
-                print("not available - because prerequisite is not done")
+            if not prerequisite_status == self.DONE:  # missing prerequisite means unavailable
+                if self.is_final_challenge():
+                    if prerequisite_status == self.PEER_REVIEW_MISSING:
+                        return self.PREREQUISITE_MISSING
                 return self.PREREQUISITE_MISSING
 
         elaboration = Elaboration.objects.filter(challenge=self, user=user)
         if not elaboration:  # user did all 3 reviews from the prerequisite and therefore start this challenge
-            print("available - no elaboration exists yet")
             return self.AVAILABLE
         if not elaboration[0].is_submitted():  # user already wrote an elaboration but did not submit yet
-            print("waiting_for_submission - user already wrote an elaboration but did not submit yet")
             return self.WAITING_FOR_SUBMISSION
         if not self.is_final_challenge(): # for normal challenge
             reviews = self.get_reviews_written_by_user(user)
             if not reviews:  # user did not write any reviews yet
-                print("user review missing - no review written")
                 return self.USER_REVIEW_MISSING
             if len(reviews) < 3:  # user did not write enough reviews yet
-                print("user review missing - not enough reviews")
                 return self.USER_REVIEW_MISSING
             if not elaboration[0].is_passing_peer_review():
-                print("bad_peer_review - unfortunately at least one of the peer reviews was bad")
                 return self.BAD_PEER_REVIEW
             if not elaboration[0].is_reviewed_2times():
-                print("peer_review_missing - not enough peers wrote a review for this submission")
                 return self.PEER_REVIEW_MISSING
-            print("done - enough reviews everything is fine")
             return self.DONE
         else:  # for final challenge
             if not elaboration[0].get_evaluation():
-                print("waiting_for_evaluation - final challenge is submitted but not yet evaluated by a tutor")
                 return self.WAITING_FOR_EVALUATION
-            print("evaluated - final challenge is evaluated yay")
             return self.EVALUATED
 
     def is_enabled_for_user(self, user):
-        print("is enabled for user?")
         enabled_for_user = self.get_status(user) != self.PREREQUISITE_MISSING
-        print(enabled_for_user)
-        print()
         return enabled_for_user
 
     def is_user_review_missing(self, user):
-        print("is user review missing?")
         user_review_missing = self.get_status(user) == self.USER_REVIEW_MISSING
-        print(user_review_missing)
-        print()
-        return
+        return user_review_missing
 
     def submitted_by_user(self, user):
         elaboration = Elaboration.objects.filter(challenge=self, user=user)

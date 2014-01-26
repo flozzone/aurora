@@ -1,6 +1,6 @@
 from PortfolioUser.models import PortfolioUser
 from Course.models import CourseUserRelation, Course
-
+from Notification.models import Notification
 
 def general_context_processor(request):
     context = {}
@@ -19,4 +19,6 @@ def general_context_processor(request):
             user.last_selected_course = last_selected_course
             user.save()
         context['last_selected_course'] = last_selected_course
+        unread_notifications = Notification.objects.filter(user=user, course=last_selected_course, read=False)
+        context['unread_notifications'] = unread_notifications
     return context

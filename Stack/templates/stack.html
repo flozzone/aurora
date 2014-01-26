@@ -30,7 +30,7 @@
             {% if review.submitted %}
               <div class="review_box done" challenge_id="{{ challenge_dict.challenge.id }}"><i class="fa fa-check-square-o fa-lg"></i></div>
             {% else %}
-              <div class="review_box in_progress" challenge_id="{{ challenge_dict.challenge.id }}"> </div>
+              <div class="review_box in_progress" challenge_id="{{ challenge_dict.challenge.id }}"><i class="fa fa-pencil-square-o fa-lg"></i></div>
             {% endif %}
           {% elif not challenge_dict.submitted %}
             <div class="review_box inactive"></div>

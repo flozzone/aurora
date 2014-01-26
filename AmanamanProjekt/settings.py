@@ -135,8 +135,8 @@ INSTALLED_APPS = (
     'ReviewAnswer',
     'FileUpload',
     'Comments',
-    'Slides'
-
+    'Slides',
+    'Notification'
 )
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
