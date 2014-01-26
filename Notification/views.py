@@ -24,7 +24,8 @@ def notifications(request):
                 return redirect('/challenges/received_challenge_reviews/?id=' + id)
             if destination == 'stack':
                 return redirect('/challenges/stack?id=' + id)
-            print(request.GET['link'].split('='))
+            if destination == 'challenge':
+                return redirect('/challenges/challenge?id=' + id)
         return redirect('/notifications')
     notifications = Notification.objects.filter(user=user, course=course).order_by('-creation_time')
     data['notifications'] = notifications

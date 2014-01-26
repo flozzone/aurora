@@ -13,4 +13,4 @@ class Notification(models.Model):
     BAD_REVIEW = "Unfortunately you received a bad review for challenge: "
     ENOUGH_PEER_REVIEWS = "You have received enough positive reviews to submit your final challenge: "
     SUBMISSION_EVALUATED = "Your submission was evaluated: "
-    NEW_MESSAGE = "New message from "
+    NEW_MESSAGE = "New message for your submission: "
