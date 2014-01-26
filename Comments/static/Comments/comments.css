@@ -62,9 +62,11 @@
   /*height: 20px;*/
 /*}*/
 
-[contenteditable="true"]:active,
-[contenteditable="true"]:focus{
-background-color: #d3d3d3;
-border:none;
-outline:none;
+/*[contenteditable="true"]:active,*/
+/*[contenteditable="true"]:focus{*/
+
+ [contenteditable="true"] {
+    background-color: #d3d3d3;
+    border: none;
+    outline: none;
 }

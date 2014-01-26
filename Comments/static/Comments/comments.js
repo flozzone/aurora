@@ -114,28 +114,21 @@ function registerEditSaveButton() {
         event.preventDefault();
 
         alert('edit_save');
+//       $replyTextarea.val($.parseHTML($commentText));
 
         return false;
     });
-}
-
-function registerEditCacnelButton() {
-    $('#edit_cancel').click( function(event) {
-        event.preventDefault();
-
-        $(this).closest('#edit_buttons').hide();
-
-        return false;
-    })
 }
 
 function registerEditLinksForCommentList($comment_list) {
     $comment_list.find('.edit_link').click( function(event) {
         event.preventDefault();
 
+        console.log('clicked edit_link');
+
         var $replyForm = $('#replyForm');
         var $commentForm = $('#commentForm');
-        var $replyTextarea = $('#replyTextarea');
+//        var $replyTextarea = $('#replyTextarea');
 
         if($replyForm.is(':visible') || $commentForm.is(':visible'))
             return false;
@@ -146,23 +139,33 @@ function registerEditLinksForCommentList($comment_list) {
 
         var $comment = $(this).closest('.comment, .response');
         var $commentText = $comment.find('.comment_text, .response_text');
-        var $oldCommentText = $commentText.clone();
         var $editButtons = $('#edit_buttons');
         var $actions = $(this).closest('.actions');
+        var oldCommentText = $commentText.html();
 
         $commentText.attr('contenteditable', true);
         $actions.after($editButtons);
         $actions.hide();
         $editButtons.show();
 
-        // TODO registerEditButtons
+        var $cancel = $('#edit_cancel');
+        $cancel.off();
+        $cancel.click( function(event) {
+            event.preventDefault();
 
-//        $replyTextarea.val($.parseHTML($commentText));
-        // TODO implement!
-        // <div contenteditable="true">?
+            console.log('clicked cancel');
 
-//        $replyForm.show();
-//        $comment.replaceWith($replyForm);
+            $commentText.html(oldCommentText);
+            $actions.show();
+            $editButtons.hide();
+            $commentText.attr('contenteditable', false);
+
+            $('#comments_with_forms').prepend($editButtons);
+
+//            startPolling();
+
+            return false;
+        });
 
         return false;
     })
@@ -418,7 +421,8 @@ function startPolling() {
 
 function registerTestButton() {
     $('#myTest').on('click', function(){
-        console.log('foobar');
+        editElements.prop = 'bam';
+        editElements();
 //    $('#myTest').click(function () {
 //    updateComments(false);
 //    alert(x.toString() + " # " + y.toString());

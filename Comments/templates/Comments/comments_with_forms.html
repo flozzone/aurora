@@ -7,6 +7,7 @@
 {% endblock %}
 
 <div id="#comments_with_forms{{ id_suffix }}">
+    <div id="element_shelter"></div>
     <button id="button_add_comment_form{{ id_suffix }}" class="button_add_comment_form" data-ref_type="{{ ref_type }}" data-ref_id="{{ ref_id }}">Post a comment</button>
     <form method="post" class="comment_form" id="commentForm" style="display:none">{% csrf_token %}
             {{ form.as_p }}
