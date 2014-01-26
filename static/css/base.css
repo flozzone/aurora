@@ -132,6 +132,10 @@ abbr, acronym {
     right: 10px;
 }
 
+.unread_notifications.glow{
+    text-shadow: 0 0 10px #c60017;
+    color: #ff002e;
+}
 
 
 /*!
