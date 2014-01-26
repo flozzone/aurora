@@ -14,7 +14,7 @@ from django.db import models
 
 from Challenge.models import Challenge
 from Comments.models import Comment
-from Course.models import Course
+from Course.models import Course, CourseChallengeRelation
 from Elaboration.models import Elaboration
 from Evaluation.models import Evaluation
 from PortfolioUser.models import PortfolioUser
@@ -22,6 +22,7 @@ from Review.models import Review
 from ReviewAnswer.models import ReviewAnswer
 from ReviewQuestion.models import ReviewQuestion
 from Stack.models import Stack
+from Notification.models import Notification
 
 
 @login_required()
@@ -110,7 +111,7 @@ def detail(request):
         lock = False
         if Evaluation.objects.filter(submission=elaboration):
             evaluation = Evaluation.objects.get(submission=elaboration)
-            if evaluation.tutor==user:
+            if evaluation.tutor == user:
                 evaluation.lock_time = datetime.now()
                 evaluation.save()
             else:
@@ -154,6 +155,7 @@ def detail(request):
     params['selection'] = selection
 
     return render_to_response('detail.html', params, RequestContext(request))
+
 
 @login_required()
 def stack(request):
@@ -222,18 +224,27 @@ def submit_evaluation(request):
 
     elaboration = Elaboration.objects.get(pk=elaboration_id)
     user = RequestContext(request)['user']
+    course = CourseChallengeRelation.objects.filter(challenge=elaboration.challenge)[0].course
 
     if Evaluation.objects.filter(submission=elaboration):
         evaluation = Evaluation.objects.get(submission=elaboration)
     else:
         evaluation = Evaluation.objects.create(submission=elaboration)
 
-    evaluation.user = user=user
+    evaluation.user = user = user
     evaluation.evaluation_text = evaluation_text
     evaluation.evaluation_points = evaluation_points
     evaluation.submission_time = datetime.now()
     evaluation.save()
-
+    obj, created = Notification.objects.get_or_create(
+        user=elaboration.user,
+        course=course,
+        text=Notification.SUBMISSION_EVALUATED + elaboration.challenge.title,
+        image_url='/static/img/' + elaboration.challenge.image_url,
+        link="stack=" + str(elaboration.challenge.get_stack().id)
+    )
+    obj.read = False
+    obj.save
     return HttpResponse()
 
 
@@ -283,7 +294,7 @@ def search(request):
             # search query in all models and fields (char and textfields) of database
             fields = [f for f in md._meta.fields if isinstance(f, CharField) or isinstance(f, TextField)]
             if fields:
-                queries = [Q(**{f.name+'__icontains': SEARCH_TERM}) for f in fields]
+                queries = [Q(**{f.name + '__icontains': SEARCH_TERM}) for f in fields]
 
                 qs = Q()
                 for query in queries:

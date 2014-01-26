@@ -45,9 +45,7 @@ def submit_elaboration(request):
         course = RequestContext(request)['last_selected_course']
         challenge = Challenge.objects.get(id=request.GET['id'])
         user = RequestContext(request)['user']
-
         elaboration = Elaboration.objects.filter(challenge=challenge, user=user)[0] # there should only be one
         elaboration.submission_time = datetime.now()
         elaboration.save()
-
     return HttpResponse()

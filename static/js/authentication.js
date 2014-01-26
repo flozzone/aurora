@@ -3,7 +3,24 @@ $(homepage_loaded);
 function homepage_loaded() {
     $('#button_sign_in').click(sign_in);
     $('#button_sign_out').click(sign_out);
-    $('#course_select').change(course_change)
+    $('#course_select').change(course_change);
+    if ($('#unread_notifications').length) {
+        notifications_refresh();
+    }
+}
+
+function notifications_refresh() {
+    (function refresh_worker() {
+        $.ajax({
+            url: '/notifications/refresh',
+            success: function (data) {
+                $('#unread_notifications').html(data);
+            },
+            complete: function () {
+                setTimeout(refresh_worker, 10000);
+            }
+        });
+    })();
 }
 
 function getCookie(name) {
@@ -30,16 +47,16 @@ function course_change(event) {
             'short_title': short_title
         }).done(function (data) {
             console.log(data);
-        if (data.success === true) {
-            console.log(data.success);
-            location.href = '/';
-        } else {
-            console.log("test failed");
-            $('#password').val("")
-            $('#error_message').html(data.message);
-            $('#error').show();
-        }
-    });
+            if (data.success === true) {
+                console.log(data.success);
+                location.href = '/';
+            } else {
+                console.log("test failed");
+                $('#password').val("")
+                $('#error_message').html(data.message);
+                $('#error').show();
+            }
+        });
 }
 
 function csrfSafeMethod(method) {
@@ -66,10 +83,10 @@ function sign_in() {
     var remember = $('#checkbox_remember').prop('checked');
     console.log(next);
     console.log({
-            'username': username,
-            'password': password,
-            'remember': remember
-        });
+        'username': username,
+        'password': password,
+        'remember': remember
+    });
 
     $.post("/signin/",
         {
@@ -77,14 +94,14 @@ function sign_in() {
             'password': password,
             'remember': remember
         }).done(function (data) {
-        if (data.success === true) {
-            location.href = next;
-        } else {
-            $('#password').val("")
-            $('#error_message').html(data.message);
-            $('#error').show();
-        }
-    });
+            if (data.success === true) {
+                location.href = next;
+            } else {
+                $('#password').val("")
+                $('#error_message').html(data.message);
+                $('#error').show();
+            }
+        });
     return false;
 }
 

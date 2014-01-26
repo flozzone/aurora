@@ -1,0 +1,27 @@
+.notification {
+    height: 60px;
+    margin: 5px;
+    border: 1px;
+    border-style: solid;
+    border-color: #d3d3d3;
+    overflow: hidden;
+}
+
+.notification.read {
+    background-color: #d3d3d3;
+}
+
+.notification.unread {
+    background-color: lightgreen;
+}
+
+.notification img {
+    width: 60px;
+    float: left;
+}
+
+.notification_text {
+    float: left;
+    margin: 5px;
+    overflow: hidden;
+}

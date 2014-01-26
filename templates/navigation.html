@@ -19,6 +19,7 @@
       {% endif %}
     </div>
 
+
     {% if user.is_authenticated %}
 
       <ul>
@@ -42,6 +43,10 @@
 
         <li id="profile-li">
           <a href="/profile">Profile</a>
+        </li>
+
+        <li id="notifications-li">
+          <a id="unread_notifications" href="/notifications">{{ unread_notifications|length }}</a>
         </li>
       </ul>
 

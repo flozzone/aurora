@@ -8,9 +8,14 @@ class Stack(models.Model):
     description = models.TextField()
     course = models.ForeignKey('Course.Course')
 
-    def get_root_challenge(self):
+    def get_final_challenge(self):
         for relation in StackChallengeRelation.objects.filter(stack=self):
             if relation.challenge.prerequisite:
+                return relation.challenge
+
+    def get_root_challenge(self):
+        for relation in StackChallengeRelation.objects.filter(stack=self):
+            if not relation.challenge.prerequisite:
                 return relation.challenge
 
     def get_challenges(self):
