@@ -46,7 +46,7 @@
         </li>
 
         <li id="notifications-li">
-          <a id="unread_notifications" href="/notifications">{{ unread_notifications|length }}</a>
+          <a id="unread_notifications" class="unread_notifications{% if unread_notifications|length != 0 %} glow{% endif %}" href="/notifications">{{ unread_notifications|length }}</a>
         </li>
       </ul>
 
