@@ -6,6 +6,7 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.views.decorators.csrf import csrf_exempt
 from PortfolioUser.models import PortfolioUser
+from Course.models import Course
 
 
 @csrf_exempt
@@ -52,8 +53,7 @@ def login(request):
 
 @login_required()
 def profile(request):
-    user = request.user
-    user = PortfolioUser.objects.get(id=user.id)
+    user = RequestContext(request)['user']
     if request.method == 'POST':
         users_with_same_nickname = PortfolioUser.objects.filter(nickname=request.POST['nickname'])
         for user_with_same_nickname in users_with_same_nickname:
@@ -68,3 +68,16 @@ def profile(request):
         return render_to_response('profile.html', {'user': user}, context_instance=RequestContext(request))
     else:
         return render_to_response('profile.html', {'user': user}, context_instance=RequestContext(request))
+
+@login_required()
+def course(request):
+    user = RequestContext(request)['user']
+    response_data = {}
+    if request.method == 'POST':
+        course = Course.objects.filter(short_title=request.POST['short_title'])
+        if course:
+            course = course[0]
+            user.last_selected_course = course
+            user.save()
+        response_data['success'] = True
+    return HttpResponse(json.dumps(response_data), content_type="application/json")

@@ -26,15 +26,15 @@ def stack_page(request):
 def create_context_stack(request):
     data = {}
     if 'id' in request.GET:
-        user = request.user
+        user = RequestContext(request)['user']
         stack = Stack.objects.get(pk=request.GET.get('id'))
         stack_challenges = StackChallengeRelation.objects.all().filter(stack=stack)
         challenges_active = []
         challenges_inactive = []
         for stack_challenge in stack_challenges:
-            if stack_challenge.challenge.is_enabled_for_user(request.user):
+            if stack_challenge.challenge.is_enabled_for_user(user):
                 reviews = []
-                for review in stack_challenge.challenge.get_reviews_written_by_user(request.user):
+                for review in stack_challenge.challenge.get_reviews_written_by_user(user):
                     reviews.append({
                         'review': review,
                         'submitted': review.submission_time is not None
@@ -69,14 +69,15 @@ def create_context_stack(request):
 @login_required()
 def challenges_page(request):
     data = {}
-    gsi = Course.objects.get(short_title='gsi')
-    course_stacks = Stack.objects.all().filter(course=gsi)
+    user = RequestContext(request)['user']
+    course = RequestContext(request)['last_selected_course']
+    course_stacks = Stack.objects.all().filter(course=course)
     data['course_stacks'] = []
     for stack in course_stacks:
         data['course_stacks'].append({
             'stack': stack,
-            'status': stack.get_status_text(request.user),
-            'points': stack.get_points(request.user)
+            'status': stack.get_status_text(user),
+            'points': stack.get_points(user)
         })
     return render_to_response('challenges_page.html', data, context_instance=RequestContext(request))
 
@@ -85,7 +86,7 @@ def create_context_challenge(request):
     data = {}
     if 'id' in request.GET:
         challenge = Challenge.objects.get(pk=request.GET.get('id'))
-        user = PortfolioUser.objects.get(id=request.user.id)
+        user = RequestContext(request)['user']
         data['challenge'] = challenge
         if Elaboration.objects.filter(challenge=challenge, user=user).exists():
             elaboration = Elaboration.objects.all().filter(challenge=challenge, user=user).order_by('id')[0]

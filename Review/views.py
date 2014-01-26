@@ -15,7 +15,7 @@ from datetime import datetime
 def create_context_review(request):
     data = {}
     if 'id' in request.GET:
-        user = PortfolioUser.objects.filter(user_ptr=request.user)[0]
+        user = RequestContext(request)['user']
         challenge = Challenge.objects.get(pk=request.GET.get('id'))
         review = Review.get_open_review(challenge, user)
         if not review:
@@ -66,7 +66,7 @@ def review_answer(request):
 def create_context_view_review(request):
     data = {}
     if 'id' in request.GET:
-        user = PortfolioUser.objects.filter(user_ptr=request.user)[0]
+        user = RequestContext(request)['user']
         challenge = Challenge.objects.get(pk=request.GET.get('id'))
         elaboration = Elaboration.objects.filter(challenge=challenge, user=user)[0]
         reviews = Review.objects.filter(elaboration=elaboration).order_by("appraisal")

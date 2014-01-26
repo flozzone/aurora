@@ -57,7 +57,7 @@ def post_comment(request):
 @login_required
 def delete_comment(request):
     comment_id = request.POST['comment_id']
-    deleter = PortfolioUser.objects.get(id=request.user.id)
+    deleter = RequestContext(request)['user']
 
     comment = Comment.objects.get(id=comment_id)
 
@@ -96,7 +96,7 @@ def post_reply(request):
 
 def handle_form(form, request):
     if form.is_valid():
-        user = PortfolioUser.objects.get(id=request.user.id)
+        user = RequestContext(request)['user']
         ref_type_id = form.cleaned_data['reference_type_id']
         ref_obj_id = form.cleaned_data['reference_id']
         ref_obj_model = ContentType.objects.get_for_id(ref_type_id).model_class()
@@ -132,12 +132,12 @@ def vote_on_comment(request):
         return HttpResponse('')
 
     comment = Comment.objects.get(id=data['comment_id'])
-    user = PortfolioUser.objects.get(id=request.user.id)
+    user = RequestContext(request)['user']
 
     if user == comment.author:
         return HttpResponseForbidden('')
 
-    if comment.was_voted_on_by.filter(pk=request.user.id).exists():
+    if comment.was_voted_on_by.filter(pk=user.id).exists():
         return HttpResponseForbidden('')
 
     comment.score += diff
@@ -153,7 +153,7 @@ def update_comments(request):
     latest_client_comment = request.GET
     ref_type = latest_client_comment['ref_type']
     ref_id = latest_client_comment['ref_id']
-    user = PortfolioUser.objects.get(id=request.user.id)
+    user = RequestContext(request)['user']
 
     try:
         latest_comment_id = Comment.query_all(ref_id, ref_type, user).latest('id').id
