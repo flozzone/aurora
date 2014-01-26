@@ -5,7 +5,7 @@
   <link rel="stylesheet" href="{{ STATIC_URL }}css/challenge.css" type="text/css" media="screen"/>
   <link rel="stylesheet" href="{{ STATIC_URL }}css/stack.css" type="text/css" media="screen"/>
 {% endblock %}
-   
+
 
   <table class="challenges_stack">
 	  <tr>
@@ -13,11 +13,11 @@
 			  Challenge: Master Accessibility
 		  </td>
 	  </tr>
-	  
+
   {% for challenge_dict in challenges_active %}
   	  <tr>
 		  <td class="lineD"><img class="challenge_image active" src="{{ STATIC_URL }}img/{{ challenge_dict.challenge.image_url }}"></td>
-		  <td class="challenge active lineL" id="{{ challenge_dict.challenge.id }}">
+		  <td class="challenge active lineL" challenge_id="{{ challenge_dict.challenge.id }}">
 	  		 <div style="font-weight:bold">{{ challenge_dict.challenge.title }}</div>{{ challenge_dict.challenge.description }}
 	  </td>
   </tr>
@@ -28,10 +28,9 @@
         {% for review in challenge_dict.reviews %}
           {% if review %}
             {% if review.submitted %}
-              <div class="review_box done" id="{{ review.id }}" challenge_id="{{ challenge_dict.challenge.id }}"><i class="fa fa-check-square-o fa-lg"></i></div>
+              <div class="review_box done" challenge_id="{{ challenge_dict.challenge.id }}"><i class="fa fa-check-square-o fa-lg"></i></div>
             {% else %}
-              <div class="review_box in_progress" id="{{ review.id }}"
-                   challenge_id="{{ challenge_dict.challenge.id }}"> </div>
+              <div class="review_box in_progress" challenge_id="{{ challenge_dict.challenge.id }}"> </div>
             {% endif %}
           {% elif not challenge_dict.submitted %}
             <div class="review_box inactive"></div>
@@ -41,46 +40,55 @@
         {% endfor %}
     {% endif %}
 </td>
-<td class="challenge lineD"> 
-		<b>Status:</b> 
-<!--challenge_dict.success|add:challenge_dict.nothing|add:challenge_dict.fail|add:challenge_dict.awesome|add:0-->
-<span style="font-style:italic">TBD</span> participants have reviewed your work. Result: 
-  {% if challenge_dict.awesome %}
-	<span class="received_review">
-		{{ challenge_dict.awesome }} <span style="font-style:italic">Awesome</span> &nbsp;
-	</span>
-  {% endif %}
-  {% if challenge_dict.success %}
-	<span class="received_review">
-      	{{ challenge_dict.success }} <span style="font-style:italic">Success</span> &nbsp;
-   	</span>
-  {% endif %}
-  {% if challenge_dict.nothing %}
-    	<span class="received_review">
-      	{{ challenge_dict.nothing }} <span style="font-style:italic">»Lame«</span> &nbsp;
-    	</span>
-  {% endif %}
-  {% if challenge_dict.fail %}
-    	<span class="received_review">
-      	{{ challenge_dict.fail }} <span style="font-style:italic">Epic Fail</span> &nbsp;
-    	</span>
-  {% endif %}
+<td class="challenge lineD">
+  <b>Status:</b>
+  <span>{{ challenge_dict.status.status }}</span>
   <br>
-  <b>Next:</b> 
- You are done here. Move on. 
+  <b>Next:</b>
+  <span>{{ challenge_dict.status.next }}</span>
+{% if challenge_dict.points %}
+  <br>
+  <b>Points:</b>
+  <span>{{ challenge_dict.points }}</span>
+{% endif %}
+  <div class="peer_reviews" challenge_id="{{ challenge_dict.challenge.id }}">
+    {% if challenge_dict.awesome %}
+    <span class="received_review">
+      {{ challenge_dict.awesome }} <span style="font-style:italic">Awesome</span> &nbsp;
+    </span>
+    {% endif %}
+    {% if challenge_dict.success %}
+    <span class="received_review">
+          {{ challenge_dict.success }} <span style="font-style:italic">Success</span> &nbsp;
+      </span>
+    {% endif %}
+    {% if challenge_dict.nothing %}
+        <span class="received_review">
+          {{ challenge_dict.nothing }} <span style="font-style:italic">»Lame«</span> &nbsp;
+        </span>
+    {% endif %}
+    {% if challenge_dict.fail %}
+        <span class="received_review">
+          {{ challenge_dict.fail }} <span style="font-style:italic">Epic Fail</span> &nbsp;
+        </span>
+    {% endif %}
+  </div>
 </td>
+
 </tr>
 <tr> <td> &nbsp; </td></tr>
   {% endfor %}
 </table>
-  <div class="divider">&nbsp;<i class="fa fa-scissors" style="position:relative;top:-9px;left:200px;"></i></div>
+  {% if challenges_inactive %}
+    <div class="divider">&nbsp;<i class="fa fa-scissors" style="position:relative;top:-9px;left:200px;"></i></div>
+  {% endif %}
 
   <table class="challenges_stack">
   {% for challenge in challenges_inactive %}
   	  <tr>
 		  <td class="lineD"><img class="challenge_image" src="{{ STATIC_URL }}img/{{ challenge.image_url }}"></td>
-		  <td class="challenge below" id="{{ challenge.id }}" >
-        
+		  <td class="challenge below">
+
  			 <div style="font-weight:bold">{{ challenge.title }}</div>
  			  <div class="description"> {{ challenge.description }} </div>
     </td>

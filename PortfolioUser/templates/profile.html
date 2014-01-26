@@ -9,6 +9,9 @@
 
 {% block content %}
   <div id="detail_area">
+    {% if error %}
+      <div class="error">{{ error }}</div>
+    {% endif %}
     <form id="profile" action='/profile/' method='POST' enctype='multipart/form-data'>
       <div class="title">Profile</div>
       <br>

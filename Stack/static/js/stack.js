@@ -12,7 +12,7 @@ function challenge_clicked(event) {
     if (!challenge.hasClass("active")) {
         return;
     }
-    var challenge_id = challenge.attr('id');
+    var challenge_id = challenge.attr('challenge_id');
     window.location.href = './challenge?id=' + challenge_id
 }
 
@@ -22,7 +22,7 @@ function review_box_clicked(event) {
 }
 
 function received_review_clicked(event) {
-    var challenge = $(event.target).parent();
-    var challenge_id = challenge.attr('id');
+    var challenge = $(event.target).parent().parent();
+    var challenge_id = challenge.attr('challenge_id');
     window.location.href = './received_challenge_reviews?id=' + challenge_id;
 }

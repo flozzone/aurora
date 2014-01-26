@@ -106,22 +106,22 @@ def detail(request):
         params = {'questions': questions}
     if selection == "top_level_challenges":
         # set evaluation lock
-        puser = PortfolioUser.objects.get(pk=request.user.id)
+        user = RequestContext(request)['user']
         lock = False
         if Evaluation.objects.filter(submission=elaboration):
             evaluation = Evaluation.objects.get(submission=elaboration)
-            if evaluation.tutor==puser:
+            if evaluation.tutor==user:
                 evaluation.lock_time = datetime.now()
                 evaluation.save()
             else:
                 if evaluation.is_older_15min():
                     evaluation.lock_time = datetime.now()
-                    evaluation.tutor = puser
+                    evaluation.tutor = user
                     evaluation.save()
                 else:
                     lock = True
         else:
-            evaluation = Evaluation.objects.create(submission=elaboration, tutor=puser)
+            evaluation = Evaluation.objects.create(submission=elaboration, tutor=user)
             evaluation.lock_time = datetime.now()
             evaluation.save()
         params = {'evaluation': evaluation, 'lock': lock}
@@ -221,14 +221,14 @@ def submit_evaluation(request):
     evaluation_points = request.POST['evaluation_points']
 
     elaboration = Elaboration.objects.get(pk=elaboration_id)
-    puser = PortfolioUser.objects.get(pk=request.user.id)
+    user = RequestContext(request)['user']
 
     if Evaluation.objects.filter(submission=elaboration):
         evaluation = Evaluation.objects.get(submission=elaboration)
     else:
         evaluation = Evaluation.objects.create(submission=elaboration)
 
-    evaluation.user = user=puser
+    evaluation.user = user=user
     evaluation.evaluation_text = evaluation_text
     evaluation.evaluation_points = evaluation_points
     evaluation.submission_time = datetime.now()
@@ -375,8 +375,9 @@ def review_answer(request):
     if request.POST:
         data = request.body.decode(encoding='UTF-8')
         data = json.loads(data)
+        user = RequestContext(request)['user']
         answers = data['answers']
-        review = Review.objects.create(elaboration_id=request.session.get('elaboration_id', ''), reviewer_id=request.user.id)
+        review = Review.objects.create(elaboration_id=request.session.get('elaboration_id', ''), reviewer_id=user.id)
         review.appraisal = data['appraisal']
         review.awesome = data['awesome']
         review.submission_time = datetime.now()

@@ -3,14 +3,14 @@ import json
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from Elaboration.models import Elaboration
-
+from django.template import RequestContext
 from PortfolioUser.models import PortfolioUser
 from FileUpload.models import UploadFile
 
 
 @login_required()
 def file_upload(request):
-    user = PortfolioUser.objects.get(id=request.user.id)
+    user = RequestContext(request)['user']
     if 'elaboration_id' in request.POST:
         print(request.POST)
         elaboration_id = request.POST.get('elaboration_id')
@@ -21,7 +21,7 @@ def file_upload(request):
 
 @login_required()
 def file_remove(request):
-    user = PortfolioUser.objects.get(id=request.user.id)
+    user = RequestContext(request)['user']
     if 'url' in request.GET:
         url = request.GET.get('url')
         files = UploadFile.objects.filter(user=user)

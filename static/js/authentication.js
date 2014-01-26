@@ -3,6 +3,7 @@ $(homepage_loaded);
 function homepage_loaded() {
     $('#button_sign_in').click(sign_in);
     $('#button_sign_out').click(sign_out);
+    $('#course_select').change(course_change)
 }
 
 function getCookie(name) {
@@ -19,6 +20,26 @@ function getCookie(name) {
         }
     }
     return cookieValue;
+}
+
+function course_change(event) {
+    ajax_setup();
+    var short_title = $('#course_select').find(":selected").attr('value');
+    $.post("/course/",
+        {
+            'short_title': short_title
+        }).done(function (data) {
+            console.log(data);
+        if (data.success === true) {
+            console.log(data.success);
+            location.href = '/';
+        } else {
+            console.log("test failed");
+            $('#password').val("")
+            $('#error_message').html(data.message);
+            $('#error').show();
+        }
+    });
 }
 
 function csrfSafeMethod(method) {

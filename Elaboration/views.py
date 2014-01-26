@@ -15,7 +15,7 @@ def save_elaboration(request):
     challenge_id = request.POST['challenge_id']
     elaboration_text = request.POST['elaboration_text']
     challenge = Challenge.objects.get(id=challenge_id)
-    user = PortfolioUser.objects.get(id=request.user.id)
+    user = RequestContext(request)['user']
 
     # check if elaboration exists
     if Elaboration.objects.filter(challenge=challenge, user=user).exists():
@@ -32,7 +32,7 @@ def save_elaboration(request):
 def create_elaboration(request):
     challenge_id = request.GET['id']
     challenge = Challenge.objects.get(id=challenge_id)
-    user = PortfolioUser.objects.get(id=request.user.id)
+    user = RequestContext(request)['user']
     elaboration, created = Elaboration.objects.get_or_create(user=user, challenge=challenge);
     if created:
         elaboration.elaboration_text = ""
@@ -42,9 +42,9 @@ def create_elaboration(request):
 @login_required()
 def submit_elaboration(request):
     if 'id' in request.GET:
-        course = Course.objects.filter(short_title='gsi')
+        course = RequestContext(request)['last_selected_course']
         challenge = Challenge.objects.get(id=request.GET['id'])
-        user = PortfolioUser.objects.get(id=request.user.id)
+        user = RequestContext(request)['user']
 
         elaboration = Elaboration.objects.filter(challenge=challenge, user=user)[0] # there should only be one
         elaboration.submission_time = datetime.now()
