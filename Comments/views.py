@@ -14,6 +14,7 @@ from django.contrib.contenttypes.models import ContentType
 import json
 
 from Comments.models import Comment, CommentsRuntimeConfig
+from Elaboration.models import Elaboration
 from PortfolioUser.models import PortfolioUser
 from Comments.tests import CommentReferenceObject
 
@@ -96,12 +97,20 @@ def handle_form(form, request):
         else:
             parent_comment = None
 
-        comment = Comment.objects.create(text=form.cleaned_data['text'],
-                                         author=user,
-                                         content_object=ref_obj,
-                                         parent=parent_comment,
-                                         post_date=timezone.now(),
-                                         visibility=visibility)
+        # try:
+        #     comment = Comment.objects.get(id=form.cleaned_data['id'])
+        #     comment.text = form.cleaned_data['text']
+        # except Comment.DoesNotExist:
+        comment = Comment.objects.get_or_create(text=form.cleaned_data['text'],
+                                                author=user,
+                                                content_object=ref_obj,
+                                                parent=parent_comment,
+                                                post_date=timezone.now(),
+                                                visibility=visibility)
+
+        if type(ref_obj_model) == Elaboration:
+            print('elaboration')
+
         comment.save()
 
 

@@ -113,8 +113,8 @@ function registerEditSaveButton() {
     $('#edit_save').click( function(event) {
         event.preventDefault();
 
-        alert('edit_save');
-//       $replyTextarea.val($.parseHTML($commentText));
+        $('#replyextarea').val($)
+        $replyTextarea.val($.parseHTML($commentText));
 
         return false;
     });
@@ -124,18 +124,13 @@ function registerEditLinksForCommentList($comment_list) {
     $comment_list.find('.edit_link').click( function(event) {
         event.preventDefault();
 
-        console.log('clicked edit_link');
-
         var $replyForm = $('#replyForm');
         var $commentForm = $('#commentForm');
-//        var $replyTextarea = $('#replyTextarea');
 
         if($replyForm.is(':visible') || $commentForm.is(':visible'))
             return false;
 
         stopPolling();
-
-        setClosestCommentIdTo($replyForm);
 
         var $comment = $(this).closest('.comment, .response');
         var $commentText = $comment.find('.comment_text, .response_text');
@@ -148,27 +143,54 @@ function registerEditLinksForCommentList($comment_list) {
         $actions.hide();
         $editButtons.show();
 
+        function endEdit() {
+            $actions.show();
+            $('#element_shelter').append($editButtons);
+            $editButtons.hide();
+            $commentText.attr('contenteditable', false);
+
+            startPolling();
+        }
+
         var $cancel = $('#edit_cancel');
         $cancel.off();
         $cancel.click( function(event) {
             event.preventDefault();
 
-            console.log('clicked cancel');
-
             $commentText.html(oldCommentText);
-            $actions.show();
-            $editButtons.hide();
-            $commentText.attr('contenteditable', false);
 
-            $('#comments_with_forms').prepend($editButtons);
+            endEdit();
 
-//            startPolling();
+            return false;
+        });
+
+        var $save = $('#edit_save');
+        $save.click( function(event) {
+            event.preventDefault();
+
+            var text = $commentText.text().trim();
+            var $formTextarea = $('#commentTextarea');
+            $formTextarea.val(text);
+            setClosestCommentIdTo($commentForm);
+
+            $.ajax({
+                url: '/post_comment/',
+                data: $commentForm.serialize(),
+                type: 'POST',
+                dataType: 'html',
+                success: function (response) {
+                    endEdit();
+                },
+                complete: function(xhr, status) {
+                    $formTextarea.val('');
+                }
+            });
 
             return false;
         });
 
         return false;
-    })
+    });
 }
 
 function registerReplyLinksForCommentList($comment_list) {
@@ -405,6 +427,7 @@ function replaceCommentListWithHtml($comment_list, html) {
 
     // only reregister replaced elements to avoid multi registration
     registerReplyLinksForCommentList($comment_list);
+    registerEditLinksForCommentList($comment_list);
     registerVoteForCommentList($comment_list);
     registerDeleteLinksForCommentList($comment_list);
 }
