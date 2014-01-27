@@ -1,10 +1,11 @@
 import os
 import json
+
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from Elaboration.models import Elaboration
 from django.template import RequestContext
-from PortfolioUser.models import PortfolioUser
+
+from Elaboration.models import Elaboration
 from FileUpload.models import UploadFile
 
 
@@ -12,10 +13,15 @@ from FileUpload.models import UploadFile
 def file_upload(request):
     user = RequestContext(request)['user']
     if 'elaboration_id' in request.POST:
-        print(request.POST)
         elaboration_id = request.POST.get('elaboration_id')
         upload_file = UploadFile(user=user, elaboration_id=elaboration_id, upload_file=request.FILES['file'])
         upload_file.save()
+    if 'user_id' in request.POST:
+        request.FILES['file'].name = 'avatar_' + str(user.id)
+        print(request.FILES['file'])
+        user.avatar = request.FILES['file']
+        user.save()
+        return HttpResponse(user.avatar.name)
     return HttpResponse(upload_file.upload_file.name)
 
 

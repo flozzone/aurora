@@ -1,3 +1,4 @@
+
 .title {
 	font-size:24px;
 	font-weight:bold;
@@ -5,12 +6,9 @@
 }
 
 .avatar {
+	border:1px solid silver;
     width: 100px;
     height: 100px;
-}
-
-.avatar {
-	border:1px solid silver;
 }
 
 
@@ -44,4 +42,28 @@ input[type=text] {
 	float:left;
 	height:24px;
 	margin-left:12px;
+}
+
+#profile {
+    margin-top: 50px;
+    margin-left: 30px;
+}
+
+td {
+    padding: 5px;
+}
+
+.line {
+    margin: 20px;
+}
+
+#error {
+    color: red;
+    padding-left: 65px;
+}
+
+label {
+    padding-left: 30px;
+    display: inline-block;
+    width: 100px;
 }
