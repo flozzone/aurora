@@ -181,8 +181,22 @@ abbr, acronym {
 
 
 .unread_notifications.glow{
-    text-shadow: 0 0 10px #c60017;
-    color: #ff002e;
+	border-radius:12px;
+	display:inline-block;
+	width:30px;
+	height:20px;
+	text-align:center;
+	line-height:30px;
+	background-color:lightgreen;
+	position:relative;
+	top:4px;
+}
+
+.unread_notifications.glow  a {
+	display:inline-block;
+	position:relative;
+	top:-6px;
+	color:black;
 }
 
 #course_select {
