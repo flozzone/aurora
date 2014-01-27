@@ -1,4 +1,47 @@
+.title {
+	font-size:24px;
+	font-weight:bold;
+	margin-left:16px;
+}
+
 .avatar {
     width: 100px;
     height: 100px;
+}
+
+.avatar {
+	border:1px solid silver;
+}
+
+
+input[type=file] {
+	display:block;
+	height:24px;
+	border:none;
+	margin-left:108px;
+}
+
+button {
+	height:16px;
+	width:100px;
+	margin-left:112px;
+	
+}
+
+input[type=text] {
+		display: inline;
+		font-size:14px;
+		height:18px;
+		margin-bottom:6px;
+		width: 200px;
+}
+
+
+.label {
+	clear:both;
+	width:100px;
+	font-size:14px;
+	float:left;
+	height:24px;
+	margin-left:12px;
 }
