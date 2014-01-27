@@ -15,6 +15,7 @@ import json
 
 from Comments.models import Comment, CommentsRuntimeConfig
 from Elaboration.models import Elaboration
+from Notification.models import Notification
 from PortfolioUser.models import PortfolioUser
 from Comments.tests import CommentReferenceObject
 
@@ -81,7 +82,8 @@ def post_reply(request):
 
 def handle_form(form, request):
     if form.is_valid():
-        user = RequestContext(request)['user']
+        context = RequestContext(request)
+        user = context['user']
         ref_type_id = form.cleaned_data['reference_type_id']
         ref_obj_id = form.cleaned_data['reference_id']
         ref_obj_model = ContentType.objects.get_for_id(ref_type_id).model_class()
@@ -108,10 +110,20 @@ def handle_form(form, request):
                                          post_date=timezone.now(),
                                          visibility=visibility)
 
-        # if type(ref_obj_model) == Elaboration:
-        #     print('elaboration')
-
         comment.save()
+
+        if ref_obj_model == Elaboration:
+            elaboration = ref_obj
+            user = ref_obj.user
+            obj, created = Notification.objects.get_or_create(
+                user=ref_obj.user, # this is in your case the user of the elaboration object
+                course=context['last_selected_course'], # the course is necessary to not mix the notifications between different courses
+                text=Notification.NEW_MESSAGE + elaboration.challenge.title,
+                # the elaboration title helps the user to understand where the message comes from
+                image_url='/static/img/' + elaboration.challenge.image_url, # image of the challenge
+                link="challenge=" + str(elaboration.challenge.id)
+                # for the link to the page where the comment can be read
+            )
 
 
 @login_required
