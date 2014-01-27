@@ -12,34 +12,53 @@
     {% if error %}
       <div class="error">{{ error }}</div>
     {% endif %}
-    <form id="profile" action='/profile/' method='POST' enctype='multipart/form-data'>
-      <div class="title">Profile</div>
-      <br>
-
-      <div class="label">Nickname:</div>
-      <input type="text" class="nickname" name="nickname" value="{{ user.nickname }}">
-      <br>
-
-      <div class="label">Statement:</div>
-      <input type="text" class="statement" name="statement" value="{{ user.statement }}">
-      <br>
-
-      <div class="label">E-Mail:</div>
-      <input type="text" class="email" name="email" value="{{ user.email }}">
-      <br>
-
-      <div class="label">Avatar:</div>
-      <img class="avatar" src="/{{ user.avatar.url }}" alt="Avatar">
-      <br>
-      <input name="file" type='file' form="profile">
-
-      <br>
-      <br>
-
-      <button type='button' class="save_button">Save</button>
-      {% csrf_token %}
-    </form>
 
 
+    <table id="profile">
+
+      <tr>
+        <td>
+          <label for="nickname">Nickname</label>
+        </td>
+        <td>
+          <input id="nickname" type="text" name="nickname" value="{{ user.nickname }}">
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <label for="statement">Statement</label>
+        </td>
+        <td>
+          <input id="statement" type="text" name="statement" value="{{ user.statement }}">
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <label for="email">E-Mail</label>
+        </td>
+        <td>
+          <input id="email" type="text" name="email" value="{{ user.email }}">
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <label for="avatar">Avatar</label>
+        </td>
+        <td>
+          <img id="profile_avatar" class="avatar" src="/{{ user.avatar.url }}" alt="Avatar">
+
+          <form id="file_upload_form" action="/fileupload">
+            <input id="user_id" type="text" name="user_id" value="{{ user.id }}" hidden>
+            <input id="file_upload_input" type="file" accept="image/*" hidden>
+          </form>
+        </td>
+      </tr>
+
+    </table>
+    <div id="error"></div>
   </div>
+
 {% endblock %}

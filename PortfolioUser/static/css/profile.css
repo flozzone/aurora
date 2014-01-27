@@ -1,4 +1,28 @@
-.avatar {
+#profile_avatar {
     width: 100px;
     height: 100px;
+}
+
+#profile {
+    margin-top: 50px;
+    margin-left: 30px;
+}
+
+td {
+    padding: 5px;
+}
+
+.line {
+    margin: 20px;
+}
+
+#error {
+    color: red;
+    padding-left: 65px;
+}
+
+label {
+    padding-left: 30px;
+    display: inline-block;
+    width: 100px;
 }

@@ -11,6 +11,7 @@ urlpatterns = patterns('',
                        url(r'^signout/$', 'PortfolioUser.views.signout'),
                        url(r'^course/$', 'PortfolioUser.views.course'),
                        url(r'^profile/$', 'PortfolioUser.views.profile'),
+                       url(r'^profile/save/$', 'PortfolioUser.views.profile_save'),
 )
 
 
