@@ -1,16 +1,18 @@
 {% load humanize %}
 
 <div class="response_vote">
-    <a href='#' class="vote_up_on" data-comment_number="{{ response.id }}" title="This comment is helpful">up vote</a>
-    <span class="response_score">{{ response.score }}</span>
-    <a href='#' class="vote_down_on" data-comment_number="{{ response.id }}"
-       title="This comment is not helpful at all">down vote</a>
+    <a href='#' class="vote_up_on" data-comment_number="{{ response.id }}" title="This comment is helpful"><i class="fa fa-angle-up"></i></a><br>
+    <a href='#' class="vote_down_on" data-comment_number="{{ response.id }}" title="This comment is not helpful at all"><i class="fa fa-angle-down"></i></a>
 </div>
 
 <div class="response{% if response.author.is_staff %} staff_author{% endif %} {{ response.visibility }}_visibility"
      id="comment_response_{{ response.id }}" data-comment_number="{{ response.id }}"
      data-comment_author="{{ response.author.display_name }}">
-
+	 <div class="response_top">
+		 <div class="comment_author">{{ comment.author.display_name }}</div>
+		 <div class="comment_score"> &nbsp;&nbsp; {% if comment.score > 0%} +{% endif %}{{ comment.score }}</div>
+		 <div class="comment_time">{{ comment.post_date | naturaltime }}</div>
+	 </div>
     <div class="response_text">
         {% if response.deleter == None %}
             {{ response.text | linebreaks | wordwrap:37 }}
@@ -27,7 +29,7 @@
         </p>
     {% endif %}
 
-    <div class="actions">
+    <div class="response_actions">
         {% if requester.is_staff or requester == response.author %}
             <a href="javascript:void(0)" id="edit_response_link_{{ response.id }}" class="edit_link">
                 edit

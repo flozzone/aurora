@@ -1,25 +1,98 @@
 .response {
-    border-style: solid;
-    border-width: thin;
-    margin-left: 50px;
+	margin-top:0px;
+	margin-bottom:16px;
+	display:inline-block;
+	width:90%;
+}
+
+.response_text {
+    border-top: 1px solid silver;
+    border-bottom: 1px solid silver;
+	padding:2px;
+}
+
+.response_vote {
+	box-sizing: border-box;
+	margin-top:6px;
+	float:left;
+	text-align:right;
+	width:10%;
+	padding:4px;
+}
+
+.response_vote > a {
+	text-decoration:none;
+	color:black;
 }
 
 .comment {
-    border-style: solid;
-    border-width: thin;
+	margin-top:0px;
+	margin-bottom:16px;
+	display:inline-block;
+	width:95%;
+}
+
+.comment_vote {
+	box-sizing: border-box;
+	margin-top:6px;
+	float:left;
+	text-align:right;
+	width:5%;
+	padding:4px;
+}
+
+.comment_vote a {
+	text-decoration:none;
+	color:black;
+}
+
+.comment_top, .response_top {
+	height:19px;
+	width:100%;
+}
+
+.comment_bottom {
+	height:20px;
+	width:100%;
+}
+
+.comment_actions, .response_actions {
+	float:right;
+}
+
+.comment_actions a, .response_actions a {
+	text-decoration:none;
+	text-transform:uppercase;
+	color:green;
+	margin-left:6px;
+}
+
+.comment_text {
+    border-top: 1px solid silver;
+    border-bottom: 1px solid silver;
 }
 
 .comment_author, .response_author, .comment_deleter, .response_deleter {
     font-size: small;
+	font-weight:bold;
+	float:left;
+	padding:2px;
 }
 
-.response_vote {
-    margin-left: 50px;
+.comment_score, .respons_score {
+	font-size:small;
+	float:left;
+	padding:2px;
+}
+
+.comment_time {
+	font-size:small;
+	float:right;
+	padding:2px;
 }
 
 .vote_up_on .vote_down_on {
     cursor: pointer;
-    background-image: url("https://cdn.sstatic.net/stackoverflow/img/sprites.png?v=6");
 }
 
 .comments_with_forms {
@@ -30,8 +103,12 @@
     color: darkgreen;
 }
 
-.staff_author {
-    background-color: rgb(224,255,200);
+.staff_author > .comment_top {
+    background-color: lightyellow;
+}
+
+.author_author > .comment_top {
+	background-color: lightblue;
 }
 
 .private_visibility {
@@ -46,7 +123,7 @@
 
 #comments_column_2 {
     float: left;
-    width: 400px;
+    width: 680px;
     margin-left: 30px;
 }
 
