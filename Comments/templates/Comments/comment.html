@@ -11,6 +11,7 @@
      id="comment_{{ comment.id }}" data-comment_number="{{ comment.id }}"
      data-comment_author="{{ comment.author.display_name }}">
 	 <div class="comment_top">
+         <img src="/{{ comment.author.avatar.url }}">
 		 <div class="comment_author">{{ comment.author.display_name }}</div>
 		 <div class="comment_score"> &nbsp;&nbsp; {% if comment.score > 0%} +{% endif %}{{ comment.score }}</div>
 		 <div class="comment_time">{{ comment.post_date | naturaltime }}</div>
