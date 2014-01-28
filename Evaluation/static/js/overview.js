@@ -50,6 +50,15 @@ $(function() {
 });
 
 $(function() {
+   $(".evaluated_non_adequate_work").click(function(event) {
+       var url = '/update_overview?data=evaluated_non_adequate_work';
+       $.get(url, function (data) {
+            $('#overview').html(data);
+       });
+   });
+});
+
+$(function() {
    $(".select_challenge").click(function(event) {
        var url = '/select_challenge';
        $.get(url, function (data) {
