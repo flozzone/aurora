@@ -54,6 +54,12 @@ $(function() {
         var args = { type: "POST", url: "/submit_evaluation/", data: data,
             error: function () {
                 alert('error submitting evaluation');
+            },
+            success: function () {
+                var url = '/detail?elaboration_id=' + $(event.target).attr('id');
+                $.get(url, function (data) {
+                    $('#detail_area').html(data);
+                });
             }
         };
         $.ajax(args);
