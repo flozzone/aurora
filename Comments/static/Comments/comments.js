@@ -109,33 +109,25 @@ function registerReplyAndEditLinks() {
     });
 }
 
-function registerEditSaveButton() {
-    $('#edit_save').click( function(event) {
-        event.preventDefault();
-
-        $('#replyextarea').val($)
-        $replyTextarea.val($.parseHTML($commentText));
-
-        return false;
-    });
-}
-
 function registerEditLinksForCommentList($comment_list) {
     $comment_list.find('.edit_link').click( function(event) {
         event.preventDefault();
 
         var $replyForm = $('#replyForm');
         var $commentForm = $('#commentForm');
+        var $editButtons = $('#edit_buttons');
 
         if($replyForm.is(':visible') || $commentForm.is(':visible'))
+            return false;
+
+        if($editButtons.is(':visible'))
             return false;
 
         stopPolling();
 
         var $comment = $(this).closest('.comment, .response');
         var $commentText = $comment.find('.comment_text, .response_text');
-        var $editButtons = $('#edit_buttons');
-        var $actions = $(this).closest('.actions');
+        var $actions = $(this).closest('.comment_actions, .response_actions');
         var oldCommentText = $commentText.html();
 
         $commentText.attr('contenteditable', true);
@@ -168,7 +160,8 @@ function registerEditLinksForCommentList($comment_list) {
         $save.click( function(event) {
             event.preventDefault();
 
-            var text = $commentText.text().trim();
+            var text = $commentText.html().trim()
+            text = text.replace(/(<br><\/br>)|(<br>)|(<br \/>)|(<p>)|(<\/p>)|(<div>)|(<\/div>)/g, "\r\n");
 
             var data = {comment_id: $comment.attr('data-comment_number'),
                         text: text}
@@ -417,6 +410,7 @@ function replaceCommentListWithHtml($comment_list, html) {
         }
 
         registerReplyButton();
+        registerCancelReplyButton();
     } else {
         $comment_list.replaceWith(html);
     }
