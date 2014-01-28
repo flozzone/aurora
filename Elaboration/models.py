@@ -64,8 +64,13 @@ class Elaboration(models.Model):
     def get_top_level_challenges():
         top_level_challenges = []
         for elaboration in Elaboration.objects.all():
-            if elaboration.challenge.is_final_challenge():
-                top_level_challenges.append(elaboration)
+            evaluation = elaboration.get_evaluation()
+            if evaluation:
+                if elaboration.challenge.is_final_challenge() and evaluation.submission_time is None:
+                    top_level_challenges.append(elaboration)
+            else:
+                if elaboration.challenge.is_final_challenge():
+                    top_level_challenges.append(elaboration)
         return top_level_challenges
 
     @staticmethod
