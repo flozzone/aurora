@@ -230,3 +230,8 @@ th {
 .dropzone .dz-default.dz-message {
     top: 300px;
 }
+
+.gravatar {
+	width:32px;
+	height:32px;
+}

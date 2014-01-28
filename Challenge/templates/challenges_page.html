@@ -21,11 +21,7 @@
             <li><img class="stack_img" src="{{ STATIC_URL }}img/{{ image_url }}"></li>
           {% endfor %}
         </ul>
-        <b>Status:</b>
-        <span>{{ stack.status.status }}</span>
-        <br>
-        <b>Next:</b>
-        <span>{{ stack.status.next }}</span>
+        <span><b>{{ stack.status.status }}</b> ({{ stack.status.next }})</span>
         <br>
         <b>Points:</b>
         <span>{{ stack.points }}</span>

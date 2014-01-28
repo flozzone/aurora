@@ -45,13 +45,13 @@
           <a href="/profile">Profile</a>
         </li>
 
-        <li id="notifications-li">
-          <a id="unread_notifications" class="unread_notifications{% if unread_notifications|length != 0 %} glow{% endif %}" href="/notifications">{{ unread_notifications|length }}</a>
+        <li id="notifications-li" class="unread_notifications{% if unread_notifications|length != 0 %} glow{% endif %}">
+          <a id="unread_notifications"  href="/notifications">{{ unread_notifications|length }}</a>
         </li>
       </ul>
 
-      <div class="user_info"><img id="avatar" src="/{{ user.avatar.url }}">{{ user.username }}</div>
-      <button class="logout_button" id="button_sign_out">Sign out</button>
+      <div class="user_info"><a href="/profile"><img id="avatar" src="/{{ user.avatar.url }}"><div class="user_name"><span>{{ user.username }}</div></a></div>    
+	<button class="logout_button" id="button_sign_out">Sign out</button>
 
     {% endif %}
   </div>

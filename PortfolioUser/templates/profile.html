@@ -48,11 +48,11 @@
           <label for="avatar">Avatar</label>
         </td>
         <td>
-          <img id="profile_avatar" class="avatar" src="/{{ user.avatar.url }}" alt="Avatar">
+          <img id="profile_avatar" class="avatar" src="/{{ user.avatar.url }}" alt="Avatar"> <div class="subtitle">(click to edit)</div>
 
           <form id="file_upload_form" action="/fileupload">
-            <input id="user_id" type="text" name="user_id" value="{{ user.id }}" hidden>
-            <input id="file_upload_input" type="file" accept="image/*" hidden>
+            <input id="user_id" type="text" name="user_id" value="{{ user.id }}" hidden style="visibility:none">
+            <input id="file_upload_input" type="file" accept="image/*" hidden style="visibility:none">
           </form>
         </td>
       </tr>
