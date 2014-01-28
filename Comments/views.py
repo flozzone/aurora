@@ -16,7 +16,6 @@ import json
 from Comments.models import Comment, CommentsRuntimeConfig
 from Elaboration.models import Elaboration
 from Notification.models import Notification
-from PortfolioUser.models import PortfolioUser
 from Comments.tests import CommentReferenceObject
 
 
@@ -85,11 +84,16 @@ def post_reply(request):
 def edit_comment(request):
     data = request.POST
     print(data)
+    context = RequestContext(request)
+    requester = context['user']
 
     try:
         comment = Comment.objects.get(id=data['comment_id'])
     except Comment.DoesNotExist:
         return HttpResponse('')
+
+    if comment.author != requester and not requester.is_staff:
+        return HttpResponseForbidden('You shall not edit!')
 
     text = data['text']
     if text == '':
