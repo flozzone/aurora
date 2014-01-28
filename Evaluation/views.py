@@ -78,6 +78,10 @@ def update_overview(request):
         print("loading awesome work...")
         elaborations = Elaboration.get_awesome()
         html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
+    if request.GET.get('data', '') == "evaluated_non_adequate_work":
+        print("loading evaluated non adequate work...")
+        elaborations = Elaboration.get_evaluated_non_adequate_work()
+        html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
 
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
@@ -134,6 +138,9 @@ def detail(request):
         params = {}
     if selection == "awesome":
         print('selection: awesome')
+        params = {}
+    if selection == "evaluated_non_adequate_work":
+        print('selection: evaluated_non_adequate_work')
         params = {}
 
     reviews = Review.objects.filter(elaboration=elaboration)
