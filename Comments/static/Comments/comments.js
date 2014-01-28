@@ -169,20 +169,24 @@ function registerEditLinksForCommentList($comment_list) {
             event.preventDefault();
 
             var text = $commentText.text().trim();
-            var $formTextarea = $('#commentTextarea');
-            $formTextarea.val(text);
-            setCommentId($commentForm, $comment.attr('data-comment_number'));
+
+            var data = {comment_id: $comment.attr('data-comment_number'),
+                        text: text}
 
             $.ajax({
+                beforeSend: function(xhr, settings) {
+                    xhr.setRequestHeader("X-CSRFToken", getCsrfToken());
+                },
                 url: '/edit_comment/',
-                data: $commentForm.serialize(),
+                crossDomain: false,
+                data: data,
                 type: 'POST',
                 dataType: 'html',
                 success: function (response) {
                     endEdit();
                 },
                 complete: function(xhr, status) {
-                    $formTextarea.val('');
+//                    $formTextarea.val('');
                 }
             });
 

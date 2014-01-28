@@ -83,23 +83,22 @@ def post_reply(request):
 @require_POST
 @login_required
 def edit_comment(request):
-    form = ReplyForm(request.POST)
+    data = request.POST
+    print(data)
 
-    if form.is_valid():
-        context = RequestContext(request)
-        user = context['user']
-        comment_id = form.cleaned_data['comment_id']
+    try:
+        comment = Comment.objects.get(id=data['comment_id'])
+    except Comment.DoesNotExist:
+        return HttpResponse('')
 
-        try:
-            comment = Comment.objects.get(id=comment_id)
-        except Comment.DoesNotExist:
-            create_comment(form, request)
+    text = data['text']
+    if text == '':
+        return HttpResponse('')
 
-        if comment.author != user and not user.is_staff:
-            return HttpResponseForbidden('You shall not edit!')
+    comment.text = data['text']
+    comment.save()
 
-        comment.text = form.cleaned_data['text']
-        comment.save()
+    return HttpResponse('')
 
 
 def create_comment(form, request):
