@@ -171,10 +171,10 @@ function registerEditLinksForCommentList($comment_list) {
             var text = $commentText.text().trim();
             var $formTextarea = $('#commentTextarea');
             $formTextarea.val(text);
-            setClosestCommentIdTo($commentForm);
+            setCommentId($commentForm, $comment.attr('data-comment_number'));
 
             $.ajax({
-                url: '/post_comment/',
+                url: '/edit_comment/',
                 data: $commentForm.serialize(),
                 type: 'POST',
                 dataType: 'html',
@@ -201,13 +201,8 @@ function registerReplyLinksForCommentList($comment_list) {
 
         var $replyForm = $('#replyForm');
 
-//        var commentId = $(this).attr('data-reply_to');
-//        $replyForm.find('#id_parent_comment').attr('value', commentId);
-
-//        var ref_obj = findClosestRefObj(this);
-//        $replyForm.find('#id_reference_id').attr('value', ref_obj.id);
-//        $replyForm.find('#id_reference_type_id').attr('value', ref_obj.type);
-        setClosestCommentIdTo($replyForm)
+        var comment_number = $(this).attr('data-reply_to');
+        setCommentId($replyForm, comment_number);
 
         var user = $(this).closest('.comment, .response').attr('data-comment_author');
 
@@ -228,13 +223,13 @@ function registerReplyLinksForCommentList($comment_list) {
     });
 }
 
-function setClosestCommentIdTo($elem) {
-    var commentId = $elem.closest('[data-comment_number]').attr('data-comment_number');
-    $elem.find('#id_parent_comment').attr('value', commentId);
+function setCommentId($form, comment_number) {
+    $form.find('#id_parent_comment').attr('value', comment_number);
 
-    var ref_obj = findClosestRefObj(this);
-    $elem.find('#id_reference_id').attr('value', ref_obj.id);
-    $elem.find('#id_reference_type_id').attr('value', ref_obj.type);
+    var $comment = $('[data-comment_number=' + comment_number + ']');
+    var ref_obj = findClosestRefObj($comment);
+    $form.find('#id_reference_id').attr('value', ref_obj.id);
+    $form.find('#id_reference_type_id').attr('value', ref_obj.type);
 }
 
 function registerDeleteLinks() {
@@ -463,9 +458,9 @@ function registerTestButton() {
     })
 }
 
-function findClosestRefObj(child) {
-    var ref_type = $(child).closest('[data-ref_type]').attr('data-ref_type');
-    var ref_id = $(child).closest('[data-ref_id]').attr('data-ref_id');
+function findClosestRefObj($child) {
+    var ref_type = $child.closest('[data-ref_type]').attr('data-ref_type');
+    var ref_id = $child.closest('[data-ref_id]').attr('data-ref_id');
     return { type: ref_type, id: ref_id }
 }
 
@@ -479,7 +474,7 @@ function getCommentWithMaxId($comment_list) {
         if (id > maxComment.id) {
             maxComment.id = id;
 
-            var ref_obj = findClosestRefObj(this);
+            var ref_obj = findClosestRefObj($(this));
             maxComment.ref_id = ref_obj.id;
             maxComment.ref_type = ref_obj.type;
         }

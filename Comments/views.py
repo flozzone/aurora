@@ -50,7 +50,7 @@ class ReplyForm(forms.Form):
 @login_required
 def post_comment(request):
     form = CommentForm(request.POST)
-    handle_form(form, request)
+    create_comment(form, request)
     return HttpResponse('')
 
 
@@ -63,7 +63,7 @@ def delete_comment(request):
     comment = Comment.objects.get(id=comment_id)
 
     if comment.author != deleter and not deleter.is_staff:
-        return HttpResponseForbidden('You shall not delete (other users postings)!')
+        return HttpResponseForbidden('You shall not delete!')
 
     comment.deleter = deleter
     comment.delete_date = timezone.now()
@@ -76,11 +76,33 @@ def delete_comment(request):
 @login_required
 def post_reply(request):
     form = ReplyForm(request.POST)
-    handle_form(form, request)
+    create_comment(form, request)
     return HttpResponse('')
 
 
-def handle_form(form, request):
+@require_POST
+@login_required
+def edit_comment(request):
+    form = ReplyForm(request.POST)
+
+    if form.is_valid():
+        context = RequestContext(request)
+        user = context['user']
+        comment_id = form.cleaned_data['comment_id']
+
+        try:
+            comment = Comment.objects.get(id=comment_id)
+        except Comment.DoesNotExist:
+            create_comment(form, request)
+
+        if comment.author != user and not user.is_staff:
+            return HttpResponseForbidden('You shall not edit!')
+
+        comment.text = form.cleaned_data['text']
+        comment.save()
+
+
+def create_comment(form, request):
     if form.is_valid():
         context = RequestContext(request)
         user = context['user']
@@ -99,10 +121,6 @@ def handle_form(form, request):
         else:
             parent_comment = None
 
-        # try:
-        #     comment = Comment.objects.get(id=form.cleaned_data['id'])
-        #     comment.text = form.cleaned_data['text']
-        # except Comment.DoesNotExist:
         comment = Comment.objects.create(text=form.cleaned_data['text'],
                                          author=user,
                                          content_object=ref_obj,
@@ -116,13 +134,11 @@ def handle_form(form, request):
             elaboration = ref_obj
             user = ref_obj.user
             obj, created = Notification.objects.get_or_create(
-                user=ref_obj.user, # this is in your case the user of the elaboration object
-                course=context['last_selected_course'], # the course is necessary to not mix the notifications between different courses
+                user=ref_obj.user,
+                course=context['last_selected_course'],
                 text=Notification.NEW_MESSAGE + elaboration.challenge.title,
-                # the elaboration title helps the user to understand where the message comes from
-                image_url='/static/img/' + elaboration.challenge.image_url, # image of the challenge
+                image_url='/static/img/' + elaboration.challenge.image_url,
                 link="challenge=" + str(elaboration.challenge.id)
-                # for the link to the page where the comment can be read
             )
 
 

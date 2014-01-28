@@ -6,6 +6,7 @@ urlpatterns = patterns(
     url(r'^feed/$', views.feed, name='feed'),
     url(r'^post_comment/$', views.post_comment, name='post_comment'),
     url(r'^delete_comment/$', views.delete_comment, name='delete_comment'),
+    url(r'^edit_comment/$', views.edit_comment, name='edit_comment'),
     url(r'^post_reply/$', views.post_reply, name='post_reply'),
     url(r'^vote_on_comment/$', views.vote_on_comment, name='vote_on_comment'),
     url(r'^update_comments/$', views.update_comments, name='update_comments'),
