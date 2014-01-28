@@ -1,11 +1,17 @@
-.response {
-	margin-top:0px;
-	margin-bottom:16px;
-	display:inline-block;
-	width:89%;
+.comments {
+	max-width:680px;
 }
 
-.response_text {
+.response {
+	margin-top:8px;
+	margin-bottom:8px;
+	display:inline-block;
+	width:88%;
+}
+
+.response_text, .comment_text {
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
     border-top: 1px solid silver;
     border-bottom: 1px solid silver;
 	padding:2px;
@@ -27,10 +33,10 @@
 }
 
 .comment {
-	margin-top:0px;
-	margin-bottom:16px;
+	margin-top:24px;
+	margin-bottom:8px;
 	display:inline-block;
-	width:94%;
+	width:93%;
 }
 
 .comment_vote {
@@ -69,10 +75,6 @@
 	margin-left:6px;
 }
 
-.comment_text {
-    border-top: 1px solid silver;
-    border-bottom: 1px solid silver;
-}
 
 .comment_author, .response_author, .comment_deleter, .response_deleter {
     font-size: small;
