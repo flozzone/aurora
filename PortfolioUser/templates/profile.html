@@ -13,7 +13,10 @@
       <div class="error">{{ error }}</div>
     {% endif %}
 
-
+	<script language="javascript">
+	
+	</script>
+	
     <table id="profile">
 
       <tr>
@@ -44,11 +47,11 @@
       </tr>
 
       <tr>
-        <td>
+        <td class="avatar_label">
           <label for="avatar">Avatar</label>
         </td>
         <td>
-          <img id="profile_avatar" class="avatar" src="/{{ user.avatar.url }}" alt="Avatar"> <div class="subtitle">(click to edit)</div>
+          <div class="avatar"><img id="profile_avatar" class="avatar_img" src="/{{ user.avatar.url }}" alt="Avatar"> <div class="subtitle">(click to edit)</div></div>
 
           <form id="file_upload_form" action="/fileupload">
             <input id="user_id" type="text" name="user_id" value="{{ user.id }}" hidden style="visibility:none">

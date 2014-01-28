@@ -9,8 +9,19 @@
 	border:1px solid silver;
     width: 96px;
     height: 96px;
+	position:relative;
 }
 
+.avatar_img {
+    width: 96px;
+    height: 96px;
+}
+
+.avatar:hover .subtitle {
+	background-color:rgba(0,0,0,0.5);
+	color:rgba(255,255,255,0.9);
+	
+}
 
 input[type=file] {
 	height:24px;
@@ -18,12 +29,18 @@ input[type=file] {
 	margin-left:108px;
 }
 
-
 input[type=text] {
 		font-size:14px;
 		height:18px;
 		margin-bottom:6px;
 		width: 200px;
+		border-radius: 1px;
+		padding:4px;
+		appearance:none;
+		-webkit-appearance:none;
+		border:none;
+		background-color:lightyellow;
+		box-shadow: inset 0px 1px 2px rgba(0,0,0,0.3);
 }
 
 
@@ -52,17 +69,18 @@ label {
     width: 100px;
 }
 
-.subtitle {
-	height:19px;
+.avatar_label {
+	vertical-align:top;
 	position:relative;
-	top:-25px;
-	background-color:rgba(0,0,0,0.1);
-	color:rgba(255,255,255,0.7);
-	width:98px;
-	text-align:center;
+	top:6px;
 }
 
-.subtitle:hover {
-	background-color:rgba(0,0,0,0.5);
-	color:rgba(255,255,255,0.9);
+.subtitle {
+	height:19px;
+	position:absolute;
+	bottom:0px;
+	background-color:rgba(0,0,0,0.1);
+	color:rgba(255,255,255,0.7);
+	width:96px;
+	text-align:center;
 }
