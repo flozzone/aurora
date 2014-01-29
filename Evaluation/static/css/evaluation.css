@@ -80,6 +80,12 @@ th {
     height: 30px;
 }
 
+.reopen_evaluation {
+    float: right;
+    display: block;
+    height: 30px;
+}
+
 #detail_area {
     margin: 10px;
 }

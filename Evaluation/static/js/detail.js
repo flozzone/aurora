@@ -66,6 +66,24 @@ $(function() {
     });
 });
 
+$(function() {
+   $(".reopen_evaluation").click(function(event) {
+        event.preventDefault();
+        var data = {
+            elaboration_id: $(event.target).attr('id')
+        };
+        var args = { type: "POST", url: "/reopen_evaluation/", data: data,
+            success: function () {
+                var url = '/detail?elaboration_id=' + $(event.target).attr('id');
+                $.get(url, function (data) {
+                    $('#detail_area').html(data);
+                });
+            }
+        };
+        $.ajax(args);
+    });
+});
+
 function set_appraisal(review_id, appraisal) {
     var data = {
         review_id: review_id,

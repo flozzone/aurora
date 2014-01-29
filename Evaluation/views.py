@@ -256,6 +256,28 @@ def submit_evaluation(request):
 
 
 @csrf_exempt
+def reopen_evaluation(request):
+    elaboration_id = request.POST['elaboration_id']
+    elaboration = Elaboration.objects.get(pk=elaboration_id)
+    evaluation = Evaluation.objects.get(submission=elaboration)
+    course = CourseChallengeRelation.objects.filter(challenge=elaboration.challenge)[0].course
+
+    evaluation.submission_time = None
+    evaluation.save()
+
+    obj, created = Notification.objects.get_or_create(
+        user=elaboration.user,
+        course=course,
+        text=Notification.SUBMISSION_EVALUATED + elaboration.challenge.title,
+        image_url='/static/img/' + elaboration.challenge.image_url,
+        link="stack=" + str(elaboration.challenge.get_stack().id)
+    )
+    obj.read = False
+    obj.save
+    return HttpResponse()
+
+
+@csrf_exempt
 def set_appraisal(request):
     review_id = request.POST['review_id']
     appraisal = request.POST['appraisal']
