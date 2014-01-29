@@ -1,3 +1,23 @@
+.comment_form > p > textarea {
+	margin-left:5%;
+	width:93%;
+	border:none;
+    border-top: 1px solid silver;
+    border-bottom: 1px solid silver;
+	padding:2px;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size:13px;
+	line-height:17px;
+	padding-top:4px;
+	height:80px;
+}
+
+.comment_form > p > label {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size:11px;
+	
+}
+
 .comments {
 	max-width:680px;
 }
@@ -73,7 +93,7 @@
 .comment_top, .response_top {
 	height:16px;
 	width:100%;
-	font-size:11px;
+	font-size:10px;
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
@@ -85,7 +105,7 @@
 
 .comment_actions, .response_actions {
 	float:right;
-	font-size:11px;
+	font-size:10px;
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
@@ -94,30 +114,38 @@
 	text-transform:uppercase;
 	color:rgb(58,201,88);
 	margin-left:6px;
-	font-size:11px;
+	font-size:10px;
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 
-.comment_author, .response_author, .comment_deleter, .response_deleter {
+.comment_author, .response_author {
 	font-weight:bold;
 	float:left;
 	padding:2px;
-	font-size:11px;
+	font-size:10px;
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+
+.comment_deleter, .response_deleter {
+	font-style:italic;
+	float:left;
+	padding:2px;
+	font-size:10px;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;	
+}
 .comment_score, .respons_score {
 	float:left;
 	padding:2px;
-	font-size:11px;
+	font-size:10px;
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .comment_time {
 	float:right;
 	padding:2px;
-	font-size:11px;
+	font-size:10px;
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
