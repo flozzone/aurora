@@ -30,16 +30,14 @@
     {% endif %}
 
     <div class="response_actions">
-        {% if requester.is_staff or requester == response.author %}
+        {% if requester.is_staff or requester == response.author and response.deleter == None %}
             <a href="javascript:void(0)" id="edit_response_link_{{ response.id }}" class="edit_link">
                 edit
             </a>
-            {% if response.deleter == None %}
-                <a href="javascript:void(0)" id="delete_response_link_{{ response.id }}" data-delete_id="{{ response.id }}"
-                   class="delete_response">
-                    delete
-                </a>
-            {% endif %}
+            <a href="javascript:void(0)" id="delete_response_link_{{ response.id }}" data-delete_id="{{ response.id }}"
+               class="delete_response">
+                delete
+            </a>
         {% endif %}
         <a href="javascript:void(0)" id="reply_comment_link_{{ response.id }}" data-reply_to="{{ comment.id }}"
                 class="reply_link">

@@ -151,3 +151,7 @@
     border: none;
     outline: none;
 }
+
+#edit_buttons, #delete_buttons {
+    float: right;
+}

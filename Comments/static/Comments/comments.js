@@ -6,6 +6,11 @@ var stop_update_poll = false;
 var polling_interval = 5000;
 var current_poll_timeout;
 
+var state = {
+    modifying: false,
+    posting: false
+}
+
 $(document).ready( function() {
     registerTestButton();
     registerStartPolling();
@@ -78,6 +83,10 @@ function registerAddCommentFormButton($button) {
     $button.click( function(event) {
         event.preventDefault();
 
+        if(state.modifying)
+            return false;
+        state.posting = true;
+
         stopPolling();
         $('#replyForm').hide();
 
@@ -113,15 +122,13 @@ function registerEditLinksForCommentList($comment_list) {
     $comment_list.find('.edit_link').click( function(event) {
         event.preventDefault();
 
-        var $replyForm = $('#replyForm');
-        var $commentForm = $('#commentForm');
+        if(state.posting || state.modifying)
+            return false;
+        state.modifying = true;
+
+//        var $replyForm = $('#replyForm');
+//        var $commentForm = $('#commentForm');
         var $editButtons = $('#edit_buttons');
-
-        if($replyForm.is(':visible') || $commentForm.is(':visible'))
-            return false;
-
-        if($editButtons.is(':visible'))
-            return false;
 
         stopPolling();
 
@@ -141,6 +148,7 @@ function registerEditLinksForCommentList($comment_list) {
             $editButtons.hide();
             $commentText.attr('contenteditable', false);
 
+            state.modifying = false;
             startPolling();
         }
 
@@ -157,6 +165,7 @@ function registerEditLinksForCommentList($comment_list) {
         });
 
         var $save = $('#edit_save');
+        $save.off();
         $save.click( function(event) {
             event.preventDefault();
 
@@ -193,6 +202,10 @@ function registerEditLinksForCommentList($comment_list) {
 function registerReplyLinksForCommentList($comment_list) {
     $comment_list.find('[id^=reply_comment_link_]').click( function(event) {
         event.preventDefault();
+
+        if(state.modifying)
+            return false;
+        state.posting = true;
 
         stopPolling();
 
@@ -238,8 +251,47 @@ function registerDeleteLinks() {
 function registerDeleteLinksForCommentList($comment_list) {
     $comment_list.find('.delete_comment, .delete_response').click( function(event) {
         event.preventDefault();
-        deleteComment($(this).attr('data-delete_id'));
-        updateCommentList(false, true, $comment_list);
+
+        if(state.modifying || state.posting)
+            return false;
+
+        stopPolling();
+        state.modifying = true;
+
+        var $delete_buttons = $('#delete_buttons');
+        var $actions = $(this).closest('.comment_actions, .response_actions');
+        $actions.after($delete_buttons);
+        $actions.hide();
+        $delete_buttons.show();
+
+        var comment_number = $(this).attr('data-delete_id');
+
+        function endDelete() {
+            $delete_buttons.hide();
+            $('#element_shelter').append($delete_buttons);
+            $actions.show();
+            state.modifying = false;
+            updateCommentList(false, true, $comment_list);
+            startPolling();
+        }
+
+        var $delete_cancel = $('#delete_cancel');
+        $delete_cancel.off();
+        $delete_cancel.click( function(event) {
+            event.preventDefault();
+            endDelete();
+            return false;
+        });
+
+        var $delete_confirm = $('#delete_confirm');
+        $delete_confirm.off();
+        $delete_confirm.click( function(event) {
+            event.preventDefault();
+            deleteComment(comment_number);
+            endDelete();
+            return false;
+        })
+
         return false;
     });
 }
@@ -275,6 +327,7 @@ function registerReplyButton() {
                 updateComments(false, true);
             }
         })
+        state.posting = false;
         return false;
     })
 }
@@ -284,6 +337,7 @@ function registerCancelReplyButton() {
         event.preventDefault();
         $('#replyForm').hide();
         $('#replyTextarea').val('');
+        state.posting = false;
         startPolling();
         return false;
     })
@@ -300,6 +354,7 @@ function registerCancelCommentButton() {
     $('#button_cancel_comment').click( function(event) {
         event.preventDefault();
         hideCommentForm();
+        state.posting = false;
         startPolling();
         return false;
     })
@@ -325,6 +380,7 @@ function registerAddCommentButton() {
             }
         });
 
+        state.posting = false;
         return false;
     })
 }
@@ -431,6 +487,9 @@ function stopPolling() {
 }
 
 function startPolling() {
+    if(stop_update_poll == false)
+        return
+
     stop_update_poll = false;
     updateComments(true, false);
 }
