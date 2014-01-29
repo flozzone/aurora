@@ -7,7 +7,18 @@
 {% endblock %}
 
 <div id="#comments_with_forms{{ id_suffix }}">
-    <div id="element_shelter"></div>
+    <div id="element_shelter">
+        <div id="edit_buttons" style="display:none">
+            <button id="edit_save">Save</button>
+            <button id="edit_cancel">Cancel</button>
+        </div>
+
+        <div id="delete_buttons" style="display:none">
+            <button id="delete_confirm">Confirm delete</button>
+            <button id="delete_cancel">Cancel</button>
+        </div>
+    </div>
+
     <button id="button_add_comment_form{{ id_suffix }}" class="button_add_comment_form" data-ref_type="{{ ref_type }}" data-ref_id="{{ ref_id }}">Post a comment</button>
     <form method="post" class="comment_form" id="commentForm" style="display:none">{% csrf_token %}
             {{ form.as_p }}
@@ -19,16 +30,6 @@
         <button id="button_post_reply">Post reply</button>
         <button id="button_cancel_reply">Cancel</button>
     </form>
-
-    <div id="edit_buttons" style="display:none">
-        <button id="edit_save">Save</button>
-        <button id="edit_cancel">Cancel</button>
-    </div>
-
-    <div id="delete_buttons" style="display:none">
-        <button id="delete_confirm">Confirm delete</button>
-        <button id="delete_cancel">Cancel</button>
-    </div>
 
     {% include 'Comments/comment_list.html' %}
 </div>
