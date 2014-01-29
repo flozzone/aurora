@@ -5,11 +5,14 @@
 
 .notification {
     min-height: 30px;
-	width:680px;
+	width:740px;
 	margin-left:24px;
-    border: 1px;
-    overflow: hidden;
-	border-bottom:1px solid white;
+    overflow: hidden;	
+	border-bottom:1px solid #f8f8f8;
+}
+
+.notification.read {
+	color:#999;
 }
 
 .notification.read:before {
@@ -29,6 +32,7 @@
 	float:left;
 	background-color:green;
 	border-radius:10px;
+	box-shadow: inset 0px 1px 3px rgba(255,255,255,0.7), inset 0px -1px 3px rgba(0,0,0,0.4);
 }
 
 .notification img {
@@ -40,11 +44,19 @@
 	padding:5px;
     overflow: hidden;
 	line-height:20px;
+	max-width:500px;
+	float:left;
 }
 
 a {
 	text-decoration:none;
 	color:black;
+}
+
+.notification_time {
+	padding:5px;
+	line-height:20px;
+	float:right;
 }
 
 #read_all_button {
