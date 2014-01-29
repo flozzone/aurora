@@ -112,12 +112,19 @@ def init_data():
     CourseUserRelation(course=hci, user=amanaman).save()
     CourseUserRelation(course=gsi, user=superuser).save()
     CourseUserRelation(course=hci, user=superuser).save()
+    CourseUserRelation(course=gsi, user=d1).save()
+    CourseUserRelation(course=hci, user=d1).save()
+    CourseUserRelation(course=gsi, user=d2).save()
+    CourseUserRelation(course=hci, user=d2).save()
+    CourseUserRelation(course=gsi, user=d3).save()
+    CourseUserRelation(course=hci, user=d3).save()
     for user_data in user_data_list:
         user = user_data['user']
         CourseUserRelation(course=gsi, user=user).save()
         CourseUserRelation(course=hci, user=user).save()
         Notification(user=user, course=gsi, text="Welcome to GSI!").save()
         Notification(user=user, course=hci, text="Welcome to HCI!").save()
+
 
     # create challenges
     print('adding challenges')
