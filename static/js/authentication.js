@@ -17,7 +17,7 @@ function notifications_refresh() {
                 $('#unread_notifications').html(data);
             },
             complete: function () {
-                setTimeout(refresh_worker, 10000);
+                setTimeout(refresh_worker, 60000);
             }
         });
     })();
