@@ -34,7 +34,7 @@
 
         <div class="elaboration">{{ elaboration.elaboration_text|striptags }}</div></br>
 
-        {% if selection == 'top_level_challenges' %}
+        {% if evaluation %}
             <form method="post">
                 {% csrf_token %}
                 {% if evaluation.submission_time %}

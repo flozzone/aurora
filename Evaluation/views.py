@@ -142,6 +142,11 @@ def detail(request):
     if selection == "evaluated_non_adequate_work":
         print('selection: evaluated_non_adequate_work')
         params = {}
+    if selection == "search":
+        if elaboration.challenge.is_final_challenge():
+            if Evaluation.objects.filter(submission=elaboration):
+                evaluation = Evaluation.objects.get(submission=elaboration)
+                params = {'evaluation': evaluation}
 
     reviews = Review.objects.filter(elaboration=elaboration)
 
@@ -260,17 +265,17 @@ def reopen_evaluation(request):
     elaboration_id = request.POST['elaboration_id']
     elaboration = Elaboration.objects.get(pk=elaboration_id)
     evaluation = Evaluation.objects.get(submission=elaboration)
-    course = CourseChallengeRelation.objects.filter(challenge=elaboration.challenge)[0].course
+    course = CourseChallengeRelation.objects.filter(challenge=evaluation.submission.challenge)[0].course
 
     evaluation.submission_time = None
     evaluation.save()
 
     obj, created = Notification.objects.get_or_create(
-        user=elaboration.user,
+        user=evaluation.submission.user,
         course=course,
-        text=Notification.SUBMISSION_EVALUATED + elaboration.challenge.title,
-        image_url='/static/img/' + elaboration.challenge.image_url,
-        link="stack=" + str(elaboration.challenge.get_stack().id)
+        text=Notification.SUBMISSION_EVALUATED + evaluation.submission.challenge.title,
+        image_url='/static/img/' + evaluation.submission.challenge.image_url,
+        link="stack=" + str(evaluation.submission.challenge.get_stack().id)
     )
     obj.read = False
     obj.save
@@ -303,6 +308,7 @@ def select_challenge(request):
 
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
+    request.session['selection'] = 'search'
     return html
 
 
@@ -375,6 +381,7 @@ def search(request):
 
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
+    request.session['selection'] = 'search'
     return html
 
 
