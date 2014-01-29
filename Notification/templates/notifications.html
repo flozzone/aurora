@@ -7,9 +7,10 @@
 
 {% block content %}
   <button id="read_all_button">Mark all as read</button>
+  <div class="notificationList">
   {% for notification in notifications %}
     <a href="/notifications?id={{ notification.id }}{% if notification.link %}&link={{ notification.link }}{% endif %}">
-      <div class="notification {% if notification.read %}read{% else %}unread{% endif %}">
+      <div class="notification {% if notification.read %}read{% else %}unread{% endif %} {% cycle 'darkRow' 'lightRow' %}">
 
         <img src="{{ notification.image_url }}"/>
 
@@ -18,4 +19,5 @@
       </div>
     </a>
   {% endfor %}
+  </div>
 {% endblock %}
