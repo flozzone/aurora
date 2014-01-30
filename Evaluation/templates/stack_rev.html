@@ -18,14 +18,14 @@
     <div class="spacer"></div>
     <div>{{ elaboration.elaboration_text }}</div>
     <div class="spacer"></div>
+    {% if elaboration %}
+        {% render_comment_list for elaboration %}
+    {% endif %}
 
+    <div class="spacer"></div>
     {% if reviews %}
         {% include "reviews.html" %}
         <div class="spacer"></div>
-    {% endif %}
-
-    {% if elaboration %}
-        {% render_comment_list for elaboration %}
     {% endif %}
 
 {% endblock %}
