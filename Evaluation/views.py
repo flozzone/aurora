@@ -38,6 +38,7 @@ def evaluation(request):
                                'missing_reviews': Elaboration.get_missing_reviews(),
                                'top_level_challenges': Elaboration.get_top_level_challenges(),
                                'non_adequate_work': Elaboration.get_non_adequate_work(),
+                               'evaluated_non_adequate_work': Elaboration.get_evaluated_non_adequate_work(),
                                'non_adequate_reviews': Elaboration.get_non_adequate_reviews(),
                                'complaints': Elaboration.get_non_adequate_reviews(),
                                'awesome': Elaboration.get_awesome()
