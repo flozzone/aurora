@@ -13,13 +13,17 @@
 		 <div class="comment_score"> &nbsp; {% if comment.score > 0%} +{% endif %}{{ comment.score }}</div>
 		 <div class="comment_time">{{ comment.post_date | naturaltime }}</div>
 	 </div>
-    <div class="response_text">
+
+    <div class="response_body">
 		<img src="/{{ comment.author.avatar.url }}">
+
+        <div class="response_text">
         {% if response.deleter == None %}
             {{ response.text | linebreaksbr }}
         {% else %}
             [deleted]
         {% endif %}
+        </div>
     </div>
 
 	<div class="response_bottom">

@@ -65,7 +65,7 @@
 	width:88%;
 }
 
-.response_text, .comment_text {
+.response_body, .comment_body {
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
     border-top: 1px solid silver;
@@ -78,7 +78,7 @@
 	min-height:40px;
 }
 
-.response_text > img, .comment_text > img {
+.response_body > img, .comment_body > img {
 	height:32px;
 	float:left;
 	margin-right:4px;
@@ -212,7 +212,7 @@
 	color:gray;
 }
 
-.private_visibility > .comment_text {
+.private_visibility > .comment_body {
 	border-top: 1px dashed gray;
 	border-bottom: 1px dashed gray;
 }
