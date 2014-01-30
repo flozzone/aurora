@@ -83,7 +83,6 @@ def post_reply(request):
 @login_required
 def edit_comment(request):
     data = request.POST
-    print(data)
     context = RequestContext(request)
     requester = context['user']
 
@@ -173,6 +172,28 @@ def vote_on_comment(request):
 
 @require_POST
 @login_required
+def bookmark_comment(request):
+    data = request.POST
+
+    requester = RequestContext(request)['user']
+
+    try:
+        comment = Comment.objects.get(id=data['comment_id'])
+    except Comment.DoesNotExist:
+        return HttpResponse('')
+
+    if data['value'] == 'true':
+        comment.bookmarked_by.add(requester)
+    else:
+        comment.bookmarked_by.remove(requester)
+
+    comment.save()
+
+    return HttpResponse('')
+
+
+@require_POST
+@login_required
 def promote_comment(request):
     data = request.POST
 
@@ -207,6 +228,12 @@ def update_comments(request):
     if int(latest_client_comment['id']) < int(latest_comment_id):
         comment_list = Comment.query_top_level_sorted(ref_id, ref_type, user)
         id_suffix = "_" + str(ref_id) + "_" + str(ref_type)
+
+        for comment in comment_list:
+            if comment.bookmarked_by.filter(pk=user.id).exists():
+                comment.bookmarked = True
+            else:
+                comment.bookmarked = False
 
         context = {'comment_list': comment_list,
                    'ref_type': ref_type,

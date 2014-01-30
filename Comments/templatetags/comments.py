@@ -35,6 +35,12 @@ class CommentListNode(template.Node):
             reply_form.fields['parent_comment'].initial = -1
             reply_form.fields['visibility'].initial = Comment.PUBLIC
 
+            for comment in queryset:
+                if comment.bookmarked_by.filter(pk=user.id).exists():
+                    comment.bookmarked = True
+                else:
+                    comment.bookmarked = False
+
             id_suffix = "_" + str(ref_object.id) + "_" + str(ref_type.id)
             context.update({'comment_list': queryset,
                             'form': form,

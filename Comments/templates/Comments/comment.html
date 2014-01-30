@@ -20,6 +20,18 @@
             0
         </a>
     {% endif %}
+
+    <br>
+
+    {% if comment.bookmarked %}
+        <a href='#' class="comment_unbookmark" data-comment_number="{{ comment.id }}" title="Remove this comment from Bookmarks">
+            <img src="/static/img/heart.png" height="20" width="20">
+        </a>
+    {% else %}
+        <a href='#' class="comment_bookmark" data-comment_number="{{ comment.id }}" title="Bookmark this comment">
+            <img src="/static/img/heart_empty.png" height="20" width="20">
+        </a>
+    {% endif %}
 </div>
 
 <div class="comment{% if comment.author.is_staff %} staff_author{% endif %} {{ comment.visibility }}_visibility {% if comment.author == requester %} author_author{% endif %}"
