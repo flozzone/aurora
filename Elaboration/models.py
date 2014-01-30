@@ -87,8 +87,11 @@ class Elaboration(models.Model):
     def get_evaluated_non_adequate_work():
         non_adequate_work = []
         for review in Review.objects.filter(appraisal=Review.FAIL):
-            if review.elaboration.is_evaluated():
-                non_adequate_work.append(review.elaboration)
+            final_challenge = review.elaboration.challenge.get_final_challenge()
+            if final_challenge.get_submissions():
+                final_elaboration = final_challenge.get_submissions()[0]
+                if final_elaboration.is_evaluated():
+                    non_adequate_work.append(review.elaboration)
         return non_adequate_work
 
     @staticmethod

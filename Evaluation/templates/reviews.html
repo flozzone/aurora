@@ -1,3 +1,5 @@
+{% load comments %}
+
 <div class="reviews">
 
     {% for review in reviews %}
@@ -18,14 +20,19 @@
             <input type="radio" name="reviewgroup{{ stack }}{{ review.id }}" onclick="set_appraisal({{ review.id }}, 'N')" {% if review.appraisal == 'N' %} checked {% endif %}>Not even trying</input>
         </div>
 
-        {% for comment in review.get_comments %}
+        {% if review %}
             <div class="spacer"></div>
-            <div class="review_head">Comment</div>
-            <div>
-                {{ comment.text }}
-                <br/>from {{ comment.author }}
-            </div>
-        {% endfor %}
+            {% render_comment_list for review %}
+        {% endif %}
+
+{#        {% for comment in review.get_comments %}#}
+{#            <div class="spacer"></div>#}
+{#            <div class="review_head">Comment</div>#}
+{#            <div>#}
+{#                {{ comment.text }}#}
+{#                <br/>from {{ comment.author }}#}
+{#            </div>#}
+{#        {% endfor %}#}
     {% endfor %}
 
 </div>

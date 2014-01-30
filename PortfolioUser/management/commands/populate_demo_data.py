@@ -301,6 +301,9 @@ def init_data():
                       submission_time=datetime.now())
     de4.save()
 
+    print('adding FAIL review for dummy user d1')
+    Review(elaboration=de4, reviewer=d3, appraisal='F', submission_time=datetime.now()).save()
+
     print('adding final elaboration 2 for challenge 10')
     de5 = Elaboration(challenge=challenge_10, user=d2, elaboration_text="final submission user d2",
                       submission_time=datetime.now())
