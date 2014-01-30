@@ -5,7 +5,7 @@
     <a href='#' class="vote_down_on" data-comment_number="{{ comment.id }}" title="This comment is not helpful at all"><i class="fa fa-angle-down"></i></a>
 </div>
 
-<div class="comment{% if comment.author.is_staff %} staff_author{% endif %} {{ comment.visibility }}_visibility {% if comment.author = requester %} author_author{% endif %}"
+<div class="comment{% if comment.author.is_staff %} staff_author{% endif %} {{ comment.visibility }}_visibility {% if comment.author == requester %} author_author{% endif %}"
      id="comment_{{ comment.id }}" data-comment_number="{{ comment.id }}"
      data-comment_author="{{ comment.author.display_name }}">
 	 <div class="comment_top">
@@ -42,12 +42,11 @@
             </a>
         {% endif %}
 
-        <p class="comment_author">
-            {% if comment.deleter != None %}
-                <p class="comment_deleter">
+        {% if comment.deleter != None %}
+            <p class="comment_deleter">
                 deleted {{ comment.delete_date | naturaltime }} by {{ comment.deleter.display_name }}
-                </p>
-            {% endif %}
+            </p>
+        {% endif %}
 
         <div class="comment_actions">
             {% if requester.is_staff and comment.deleter == None %}
