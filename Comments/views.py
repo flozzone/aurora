@@ -132,16 +132,17 @@ def create_comment(form, request):
 
         comment.save()
 
-        if ref_obj_model == Elaboration:
-            elaboration = ref_obj
-            user = ref_obj.user
-            obj, created = Notification.objects.get_or_create(
-                user=ref_obj.user,
-                course=context['last_selected_course'],
-                text=Notification.NEW_MESSAGE + elaboration.challenge.title,
-                image_url='/static/img/' + elaboration.challenge.image_url,
-                link="challenge=" + str(elaboration.challenge.id)
-            )
+        if parent_comment is not None:
+            if ref_obj_model == Elaboration:
+                elaboration = ref_obj
+                user = parent_comment.author
+                obj, created = Notification.objects.get_or_create(
+                    user=user,
+                    course=context['last_selected_course'],
+                    text=Notification.NEW_MESSAGE + elaboration.challenge.title,
+                    image_url='/static/img/' + elaboration.challenge.image_url,
+                    link="challenge=" + str(elaboration.challenge.id)
+                )
 
 
 @login_required
@@ -228,11 +229,6 @@ def update_comments(request):
     if int(latest_client_comment['id']) < int(latest_comment_id):
         comment_list = Comment.query_top_level_sorted(ref_id, ref_type, user)
         id_suffix = "_" + str(ref_id) + "_" + str(ref_type)
-
-        # for comment in comment_list:
-        #     comment.bookmarked = True if comment.bookmarked_by.filter(pk=user.id).exists() else False
-        #     for response in comment.children.all():
-        #         response.bookmarked = True if response.bookmarked_by.filter(pk=user.id).exists() else False
 
         context = {'comment_list': comment_list,
                    'ref_type': ref_type,
