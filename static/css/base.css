@@ -87,7 +87,10 @@ abbr, acronym {
 .pagehead {
     position: relative;
 	top:-5px;
-    background-image: url("../img/auroraP.png");
+    background-image: url("../img/auroraH.png");
+	background-clip: border-box;
+	background-origin: border-box;
+	background-position: 0 10%;
     min-height: 96px;
     font-family: 'yanone_kaffeesatzthin';
     color: white;

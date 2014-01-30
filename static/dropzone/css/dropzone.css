@@ -151,13 +151,16 @@
 .dropzone-previews .dz-preview:hover.dz-error .dz-error-message {
   display: block;
 }
+
 .dropzone {
   border: 1px solid rgba(0,0,0,0.03);
   min-height: 170px;
-  -webkit-border-radius: 3px;
-  border-radius: 3px;
+  border-radius: 0px;
   padding: 23px;
+  backgr
+  box-shadow: inset 0px 10px 10px -10px rgba(0,0,0,0.8), inset 0px -10px 10px -10px rgba(0,0,0,0.8);
 }
+
 .dropzone .dz-default.dz-message {
   opacity: 1;
   -ms-filter: none;
