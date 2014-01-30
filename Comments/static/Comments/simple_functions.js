@@ -5,10 +5,6 @@
  * e.g. vote up/down, promote, bookmark
  */
 
-function registerSimpleFunctions() {
-    registerPromoteLinks();
-}
-
 function sendPromotion(comment_number, value) {
     $.ajax({
         url: '/promote_comment/',
@@ -23,9 +19,9 @@ function sendPromotion(comment_number, value) {
     })
 }
 
-function registerPromoteLinks() {
-    $('.comment_promote').click( promote );
-    $('.comment_demote').click( demote );
+function registerPromoteLinksForCommentList($comment_list) {
+    $comment_list.find('.comment_promote').click( promote );
+    $comment_list.find('.comment_demote').click( demote );
 
     function promote(event) {
         event.preventDefault();
@@ -36,7 +32,7 @@ function registerPromoteLinks() {
         $(this).off();
         $(this).click( demote );
         $(this).toggleClass('comment_demote comment_promote');
-        $(this).html('demote comment');
+        $(this).html('1');
 
         return false
     }
@@ -50,7 +46,7 @@ function registerPromoteLinks() {
         $(this).off();
         $(this).click( promote );
         $(this).toggleClass('comment_demote comment_promote');
-        $(this).html('promote comment');
+        $(this).html('0');
 
         return false;
     }

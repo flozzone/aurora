@@ -3,6 +3,23 @@
 <div class="comment_vote">
     <a href='#' class="vote_up_on" data-comment_number="{{ comment.id }}" title="This comment is helpful"><i class="fa fa-angle-up"></i></a><br>
     <a href='#' class="vote_down_on" data-comment_number="{{ comment.id }}" title="This comment is not helpful at all"><i class="fa fa-angle-down"></i></a>
+
+    <br>
+
+    {% if comment.promoted %}
+        {% if requester.is_staff %}
+            <a href='#' class="comment_demote" data-comment_number="{{ comment.id }}"
+               title="Demote this comment">
+                1
+            </a>
+        {% else %}
+            <p>1</p>
+        {% endif %}
+    {% elif requester.is_staff %}
+        <a href='#' class="comment_promote" data-comment_number="{{ comment.id }}" title="Promote this comment">
+            0
+        </a>
+    {% endif %}
 </div>
 
 <div class="comment{% if comment.author.is_staff %} staff_author{% endif %} {{ comment.visibility }}_visibility {% if comment.author == requester %} author_author{% endif %}"
@@ -27,21 +44,6 @@
     </div>
 
     <div class="comment_bottom">
-        {% if comment.promoted %}
-            {% if requester.is_staff %}
-                <a href='#' class="comment_demote" data-comment_number="{{ comment.id }}"
-                   title="Demote this comment">
-                    demote comment
-                </a>
-            {% else %}
-                <p>promoted</p>
-            {% endif %}
-        {% elif requester.is_staff %}
-            <a href='#' class="comment_promote" data-comment_number="{{ comment.id }}" title="Promote this comment">
-                promote comment
-            </a>
-        {% endif %}
-
         {% if comment.deleter != None %}
             <p class="comment_deleter">
                 deleted {{ comment.delete_date | naturaltime }} by {{ comment.deleter.display_name }}

@@ -175,13 +175,17 @@ def vote_on_comment(request):
 @login_required
 def promote_comment(request):
     data = request.POST
+
+    requester = RequestContext(request)['user']
+    if not requester.is_staff:
+        return HttpResponseForbidden('You shall not promote!')
+
     try:
         comment = Comment.objects.get(id=data['comment_id'])
     except Comment.DoesNotExist:
         return HttpResponse('')
 
     comment.promoted = True if data['value'] == 'true' else False
-    print(comment.promoted)
     comment.save()
 
     return HttpResponse('')

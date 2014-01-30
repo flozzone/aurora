@@ -16,20 +16,27 @@ $(document).ready( function() {
     registerStartPolling();
     registerStopPolling();
 
-    registerReplyAndEditLinks();
-    registerDeleteLinks();
+    $('.comment_list').each( function () {
+        registerElementsForCommentList($(this))
+    });
+
     registerReplyButton();
     registerCancelReplyButton();
 
     registerAddCommentFormButtons();
     registerAddCommentButton();
     registerCancelCommentButton();
-    registerVotes();
-
-    registerSimpleFunctions();
 
     updateComments(true, false);
 });
+
+function registerElementsForCommentList($comment_list) {
+    registerReplyLinksForCommentList($comment_list);
+    registerEditLinksForCommentList($comment_list);
+    registerDeleteLinksForCommentList($comment_list);
+    registerVoteForCommentList($comment_list);
+    registerPromoteLinksForCommentList($comment_list);
+}
 
 function registerStopPolling() {
     $('#stopPolling').click( function(event) {
@@ -45,12 +52,6 @@ function registerStartPolling() {
         startPolling();
         return false;
     })
-}
-
-function registerVotes() {
-    $('.comment_list').each( function() {
-        registerVoteForCommentList($(this));
-    });
 }
 
 function registerVoteForCommentList($comment_list) {
@@ -111,13 +112,6 @@ function registerAddCommentFormButton($button) {
 
         return false;
     })
-}
-
-function registerReplyAndEditLinks() {
-    $('.comment_list').each( function () {
-        registerReplyLinksForCommentList($(this));
-        registerEditLinksForCommentList($(this));
-    });
 }
 
 function registerEditLinksForCommentList($comment_list) {
@@ -242,12 +236,6 @@ function setCommentId($form, comment_number) {
     var ref_obj = findClosestRefObj($comment);
     $form.find('#id_reference_id').attr('value', ref_obj.id);
     $form.find('#id_reference_type_id').attr('value', ref_obj.type);
-}
-
-function registerDeleteLinks() {
-    $('.comment_list').each( function () {
-        registerDeleteLinksForCommentList($(this));
-    });
 }
 
 function registerDeleteLinksForCommentList($comment_list) {
@@ -477,10 +465,7 @@ function replaceCommentListWithHtml($comment_list, html) {
     $comment_list = findCommentListByRef(ref_id, ref_type);
 
     // only reregister replaced elements to avoid multi registration
-    registerReplyLinksForCommentList($comment_list);
-    registerEditLinksForCommentList($comment_list);
-    registerVoteForCommentList($comment_list);
-    registerDeleteLinksForCommentList($comment_list);
+    registerElementsForCommentList($comment_list);
 }
 
 function stopPolling() {
