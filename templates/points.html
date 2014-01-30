@@ -1,7 +1,12 @@
 {% block additional_headers %}
   <link rel="stylesheet" href="{{ STATIC_URL }}css/points.css" type="text/css" media="screen"/>
 {% endblock %}
-<div class="points_table" onload="$('pagehead').css('background-position','0 {{ sum }}%')">
+
+<script>
+	$($('.pagehead').css('background-position','0 {{ sum }}%'));
+</script>
+
+<div class="points_table" >
   <table>
     <tr>
       <td>Stack</td>
