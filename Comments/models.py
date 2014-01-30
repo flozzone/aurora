@@ -45,11 +45,9 @@ class Comment(models.Model):
     tags = models.ManyToManyField(Tag)
 
     def responses(self):
-        responses = self.children.all()
-        for response in responses:
-            response.bookmarked = True if response.bookmarked_by.filter(pk=self.requester.id).exists() else False
-            response.requester = self.requester
-        return responses.order_by('post_date')
+        responses = self.children.order_by('post_date')
+        Comment.set_bookmark_flags(responses, self.requester)
+        return responses
 
     def __str__(self):
         return str(self.id) + ": " + self.text[:30]
@@ -66,9 +64,16 @@ class Comment(models.Model):
 
         visible = Comment.filter_visible(queryset_all, requester)
         visible = Comment.filter_deleted(visible)
+        visible = visible.order_by('-post_date')
+
+        # Only when all query actions are done we can set custom properties to
+        # the objects in the queryset. If another query method is called (even if
+        # it's just order_by() the Instances and their custom non persistent properties
+        # will be overwritten.
+
         # Comment.set_permission_flags(visible, requester)
         Comment.set_bookmark_flags(visible, requester)
-        return visible.order_by('-post_date')
+        return visible
 
     @staticmethod
     def query_all(ref_object_id, ref_type_id, requester):
@@ -86,7 +91,6 @@ class Comment(models.Model):
         for comment in comment_set:
             comment.bookmarked = True if comment.bookmarked_by.filter(pk=requester.id).exists() else False
             comment.requester = requester
-            print('setting requester for comment ' + str(comment.id))
 
     # TODO not working for some weird reason
     # TODO delete or fix

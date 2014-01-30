@@ -20,18 +20,6 @@
             0
         </a>
     {% endif %}
-
-    <br>
-
-    {% if response.bookmarked %}
-        <a href='#' class="comment_unbookmark" data-comment_number="{{ response.id }}" title="Remove this comment from Bookmarks">
-            <img src="/static/img/heart.png" height="15" width="15">
-        </a>
-    {% else %}
-        <a href='#' class="comment_bookmark" data-comment_number="{{ response.id }}" title="Bookmark this comment">
-            <img src="/static/img/heart_empty.png" height="15" width="15">
-        </a>
-    {% endif %}
 </div>
 
 <div class="response{% if response.author.is_staff %} staff_author{% endif %} {{ response.visibility }}_visibility {% if comment.author == requester %} author_author{% endif %}"
@@ -45,6 +33,16 @@
 
     <div class="response_body">
 		<img src="/{{ comment.author.avatar.url }}">
+
+        {% if response.bookmarked %}
+            <a href='#' class="comment_unbookmark" data-comment_number="{{ response.id }}" title="Remove this comment from Bookmarks">
+                <img src="/static/img/heart.png" height="20" width="20">
+            </a>
+        {% else %}
+            <a href='#' class="comment_bookmark" data-comment_number="{{ response.id }}" title="Bookmark this comment">
+                <img src="/static/img/heart_empty.png" height="20" width="20">
+            </a>
+        {% endif %}
 
         <div class="response_text">
         {% if response.deleter == None %}
