@@ -26,6 +26,8 @@ $(document).ready( function() {
     registerCancelCommentButton();
     registerVotes();
 
+    registerSimpleFunctions();
+
     updateComments(true, false);
 });
 

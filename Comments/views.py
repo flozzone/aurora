@@ -171,6 +171,22 @@ def vote_on_comment(request):
     return HttpResponse('')
 
 
+@require_POST
+@login_required
+def promote_comment(request):
+    data = request.POST
+    try:
+        comment = Comment.objects.get(id=data['comment_id'])
+    except Comment.DoesNotExist:
+        return HttpResponse('')
+
+    comment.promoted = True if data['value'] == 'true' else False
+    print(comment.promoted)
+    comment.save()
+
+    return HttpResponse('')
+
+
 @require_GET
 @login_required
 def update_comments(request):

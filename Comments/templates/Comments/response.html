@@ -23,7 +23,22 @@
     </div>
 
 	<div class="response_bottom">
-		{% if response.deleter != None %}
+        {% if comment.promoted %}
+            {% if requester.is_staff %}
+                <a href='#' class="comment_demote" data-comment_number="{{ response.id }}"
+                   title="Demote this comment">
+                    demote comment
+                </a>
+            {% else %}
+                <p>promoted</p>
+            {% endif %}
+        {% elif requester.is_staff %}
+            <a href='#' class="comment_promote" data-comment_number="{{ response.id }}" title="Promote this comment">
+                promote comment
+            </a>
+        {% endif %}
+
+        {% if response.deleter != None %}
 		<p class="response_deleter">
 			deleted {{ response.delete_date | naturaltime }} by {{ response.deleter.display_name }}
 		</p>

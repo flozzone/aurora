@@ -23,15 +23,32 @@
         {% endif %}
     </div>
 
-	<div class="comment_bottom">
-		<p class="comment_author">
+    <div class="comment_bottom">
+        {% if comment.promoted %}
+            {% if requester.is_staff %}
+                <a href='#' class="comment_demote" data-comment_number="{{ comment.id }}"
+                   title="Demote this comment">
+                    demote comment
+                </a>
+            {% else %}
+                <p>promoted</p>
+            {% endif %}
+        {% elif requester.is_staff %}
+            <a href='#' class="comment_promote" data-comment_number="{{ comment.id }}" title="Promote this comment">
+                promote comment
+            </a>
+        {% endif %}
+
+        <p class="comment_author">
             {% if comment.deleter != None %}
                 <p class="comment_deleter">
-                    deleted {{ comment.delete_date | naturaltime }} by {{ comment.deleter.display_name }}
+                deleted {{ comment.delete_date | naturaltime }} by {{ comment.deleter.display_name }}
                 </p>
             {% endif %}
 
         <div class="comment_actions">
+            {% if requester.is_staff and comment.deleter == None %}
+            {% endif %}
             {% if requester.is_staff or requester == comment.author and comment.deleter == None %}
                 <a href="javascript:void(0)" id="edit_comment_link_{{ comment.id }}" class="edit_link">
                     edit
