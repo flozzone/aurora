@@ -230,10 +230,9 @@ def update_comments(request):
         id_suffix = "_" + str(ref_id) + "_" + str(ref_type)
 
         for comment in comment_list:
-            if comment.bookmarked_by.filter(pk=user.id).exists():
-                comment.bookmarked = True
-            else:
-                comment.bookmarked = False
+            comment.bookmarked = True if comment.bookmarked_by.filter(pk=user.id).exists() else False
+            for response in comment.children.all():
+                response.bookmarked = True if response.bookmarked_by.filter(pk=user.id).exists() else False
 
         context = {'comment_list': comment_list,
                    'ref_type': ref_type,
