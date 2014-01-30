@@ -45,7 +45,11 @@ class Comment(models.Model):
     tags = models.ManyToManyField(Tag)
 
     def responses(self):
-        return self.children.all().order_by('post_date')
+        responses = self.children.all()
+        for response in responses:
+            response.bookmarked = True if response.bookmarked_by.filter(pk=self.requester.id).exists() else False
+            response.requester = self.requester
+        return responses.order_by('post_date')
 
     def __str__(self):
         return str(self.id) + ": " + self.text[:30]
@@ -63,6 +67,7 @@ class Comment(models.Model):
         visible = Comment.filter_visible(queryset_all, requester)
         visible = Comment.filter_deleted(visible)
         # Comment.set_permission_flags(visible, requester)
+        Comment.set_bookmark_flags(visible, requester)
         return visible.order_by('-post_date')
 
     @staticmethod
@@ -73,7 +78,15 @@ class Comment(models.Model):
 
         visible_comments = Comment.filter_visible(queryset, requester)
         # Comment.set_permission_flags(visible_comments, requester)
+        Comment.set_bookmark_flags(visible_comments, requester)
         return visible_comments
+
+    @staticmethod
+    def set_bookmark_flags(comment_set, requester):
+        for comment in comment_set:
+            comment.bookmarked = True if comment.bookmarked_by.filter(pk=requester.id).exists() else False
+            comment.requester = requester
+            print('setting requester for comment ' + str(comment.id))
 
     # TODO not working for some weird reason
     # TODO delete or fix
@@ -92,7 +105,7 @@ class Comment(models.Model):
         # for every deleted parent
         for comment in comment_set.exclude(deleter=None):
             # if not deleted responses <= 0
-            if comment.responses().filter(deleter=None).count() <= 0:
+            if comment.children.all().filter(deleter=None).count() <= 0:
                 # remove parent from queryset
                 comment_set = comment_set.exclude(id=comment.id)
 

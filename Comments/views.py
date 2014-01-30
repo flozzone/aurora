@@ -229,10 +229,10 @@ def update_comments(request):
         comment_list = Comment.query_top_level_sorted(ref_id, ref_type, user)
         id_suffix = "_" + str(ref_id) + "_" + str(ref_type)
 
-        for comment in comment_list:
-            comment.bookmarked = True if comment.bookmarked_by.filter(pk=user.id).exists() else False
-            for response in comment.children.all():
-                response.bookmarked = True if response.bookmarked_by.filter(pk=user.id).exists() else False
+        # for comment in comment_list:
+        #     comment.bookmarked = True if comment.bookmarked_by.filter(pk=user.id).exists() else False
+        #     for response in comment.children.all():
+        #         response.bookmarked = True if response.bookmarked_by.filter(pk=user.id).exists() else False
 
         context = {'comment_list': comment_list,
                    'ref_type': ref_type,

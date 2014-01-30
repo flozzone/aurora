@@ -37,10 +37,10 @@ class CommentListNode(template.Node):
 
             # for comment in user.bookmarked_comments_set.all():
             #     comment.bookmarked = True
-            for comment in queryset:
-                comment.bookmarked = True if comment.bookmarked_by.filter(pk=user.id).exists() else False
-                for response in comment.children.all():
-                    response.bookmarked = True if response.bookmarked_by.filter(pk=user.id).exists() else False
+            # for comment in queryset:
+            #     comment.bookmarked = True if comment.bookmarked_by.filter(pk=user.id).exists() else False
+            #     for response in comment.children.all():
+            #         response.bookmarked = True if response.bookmarked_by.filter(pk=user.id).exists() else False
 
             id_suffix = "_" + str(ref_object.id) + "_" + str(ref_type.id)
             context.update({'comment_list': queryset,
