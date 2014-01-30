@@ -83,7 +83,6 @@ def post_reply(request):
 @login_required
 def edit_comment(request):
     data = request.POST
-    print(data)
     context = RequestContext(request)
     requester = context['user']
 
@@ -133,16 +132,17 @@ def create_comment(form, request):
 
         comment.save()
 
-        if ref_obj_model == Elaboration:
-            elaboration = ref_obj
-            user = ref_obj.user
-            obj, created = Notification.objects.get_or_create(
-                user=ref_obj.user,
-                course=context['last_selected_course'],
-                text=Notification.NEW_MESSAGE + elaboration.challenge.title,
-                image_url='/static/img/' + elaboration.challenge.image_url,
-                link="challenge=" + str(elaboration.challenge.id)
-            )
+        if parent_comment is not None:
+            if ref_obj_model == Elaboration:
+                elaboration = ref_obj
+                user = parent_comment.author
+                obj, created = Notification.objects.get_or_create(
+                    user=user,
+                    course=context['last_selected_course'],
+                    text=Notification.NEW_MESSAGE + elaboration.challenge.title,
+                    image_url='/static/img/' + elaboration.challenge.image_url,
+                    link="challenge=" + str(elaboration.challenge.id)
+                )
 
 
 @login_required
@@ -166,6 +166,28 @@ def vote_on_comment(request):
 
     comment.score += diff
     comment.was_voted_on_by.add(user)
+    comment.save()
+
+    return HttpResponse('')
+
+
+@require_POST
+@login_required
+def bookmark_comment(request):
+    data = request.POST
+
+    requester = RequestContext(request)['user']
+
+    try:
+        comment = Comment.objects.get(id=data['comment_id'])
+    except Comment.DoesNotExist:
+        return HttpResponse('')
+
+    if data['value'] == 'true':
+        comment.bookmarked_by.add(requester)
+    else:
+        comment.bookmarked_by.remove(requester)
+
     comment.save()
 
     return HttpResponse('')

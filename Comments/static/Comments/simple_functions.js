@@ -5,9 +5,8 @@
  * e.g. vote up/down, promote, bookmark
  */
 
-function sendPromotion(comment_number, value) {
-    $.ajax({
-        url: '/promote_comment/',
+function sendValueForComment(url, comment_number, value) { $.ajax({
+        url: url,
         data: {comment_id: comment_number,
                value: value},
         type: 'POST',
@@ -27,7 +26,7 @@ function registerPromoteLinksForCommentList($comment_list) {
         event.preventDefault();
 
         var comment_number = $(this).attr('data-comment_number');
-        sendPromotion(comment_number, true);
+        sendValueForComment('/promote_comment/', comment_number, true);
 
         $(this).off();
         $(this).click( demote );
@@ -41,12 +40,49 @@ function registerPromoteLinksForCommentList($comment_list) {
         event.preventDefault();
 
         var comment_number = $(this).attr('data-comment_number');
-        sendPromotion(comment_number, false);
+        sendValueForComment('/promote_comment/', comment_number, false);
 
         $(this).off();
         $(this).click( promote );
         $(this).toggleClass('comment_demote comment_promote');
         $(this).html('0');
+
+        return false;
+    }
+}
+
+function registerBookmarkLinksForCommentList($comment_list) {
+    $comment_list.find('.comment_bookmark').click( bookmark );
+    $comment_list.find('.comment_unbookmark').click( unbookmark );
+
+    var url = '/bookmark_comment/';
+
+    function bookmark(event) {
+        event.preventDefault();
+
+        var comment_number = $(this).attr('data-comment_number');
+        sendValueForComment(url, comment_number, true);
+        console.log(comment_number);
+
+        $(this).off();
+        $(this).click( unbookmark );
+        $(this).toggleClass('comment_unbookmark comment_bookmark');
+        $(this).find('img').attr('src', '/static/img/heart.png');
+
+        return false;
+    }
+
+    function unbookmark(event){
+        event.preventDefault();
+
+        var comment_number = $(this).attr('data-comment_number');
+        sendValueForComment(url, comment_number, false);
+        console.log(comment_number);
+
+        $(this).off();
+        $(this).click( bookmark );
+        $(this).toggleClass('comment_unbookmark comment_bookmark');
+        $(this).find('img').attr('src', '/static/img/heart_empty.png');
 
         return false;
     }

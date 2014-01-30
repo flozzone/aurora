@@ -36,6 +36,7 @@ function registerElementsForCommentList($comment_list) {
     registerDeleteLinksForCommentList($comment_list);
     registerVoteForCommentList($comment_list);
     registerPromoteLinksForCommentList($comment_list);
+    registerBookmarkLinksForCommentList($comment_list)
 }
 
 function registerStopPolling() {
