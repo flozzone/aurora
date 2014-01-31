@@ -1,8 +1,9 @@
 {% load comments %}
 {% block additional_headers %}
+  <script type="text/javascript" src="{{ STATIC_URL }}tinymce/tinymce.min.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}tinymce/jquery.tinymce.min.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/detail.js"></script>
   <link rel="stylesheet" href="{{ STATIC_URL }}css/evaluation.css" type="text/css" media="screen"/>
-
   <script type="text/javascript" src="{{ STATIC_URL }}js/file_upload.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}lightbox/js/lightbox-2.6.min.js"></script>
   <link rel="stylesheet" href="{{ STATIC_URL }}lightbox/css/lightbox.css" type="text/css" media="screen"/>
@@ -32,7 +33,7 @@
           </form>
         </div>
 
-        <div class="elaboration">{{ elaboration.elaboration_text|striptags }}</div>
+        <textarea id="editor">{{ elaboration.elaboration_text }}</textarea>
         <div class="spacer"></div>
 
         {% if evaluation %}

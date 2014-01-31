@@ -1,4 +1,12 @@
 $(function() {
+    tinymce.init({
+        selector: "textarea#editor",
+        plugins: "image",
+        readonly: 1
+    });
+});
+
+$(function() {
    $(".stack").click(function(event) {
        var url = '/stack';
         $.get(url, function (data) {
