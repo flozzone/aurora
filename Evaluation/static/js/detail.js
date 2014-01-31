@@ -1,7 +1,8 @@
 $(function() {
     tinymce.init({
         selector: "textarea#editor",
-        plugins: "image",
+        menubar: false,
+        statusbar: false,
         readonly: 1
     });
 });
