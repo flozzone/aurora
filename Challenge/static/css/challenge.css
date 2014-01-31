@@ -1,3 +1,17 @@
+.challenge {
+	padding:10px;
+	width:940;
+}
+
+.challenge_title {
+	font-size:16px;
+	font-weight:bold;
+}
+
+.challenge_description {
+	margin-bottom:16px;
+}
+
 .stack {
     padding: 5px 10px 5px 10px;
 	clear:both;
@@ -17,7 +31,7 @@ h1 {
 }
 
 #detail_area {
-    width: 100%;
+    width: 960px;
 }
 
 .stack_imgs {

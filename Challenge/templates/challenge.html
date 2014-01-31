@@ -11,13 +11,12 @@
 {% endblock %}
 
 <div id="{{ challenge.id }}" class="challenge" stack="{{ challenge.get_stack.id }}">
-  <h1>Details</h1>
 
-  <div>
+  <div class="challenge_title">
     {{ challenge.title }}
   </div>
 
-  <div>
+  <div class="challenge_description">
     {{ challenge.description }}
   </div>
   {% if challenge.accepted_files %}
