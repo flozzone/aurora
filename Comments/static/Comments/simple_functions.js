@@ -62,7 +62,6 @@ function registerBookmarkLinksForCommentList($comment_list) {
 
         var comment_number = $(this).attr('data-comment_number');
         sendValueForComment(url, comment_number, true);
-        console.log(comment_number);
 
         $(this).off();
         $(this).click( unbookmark );

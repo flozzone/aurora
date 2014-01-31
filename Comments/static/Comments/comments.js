@@ -50,10 +50,15 @@ function registerPolling() {
     })
     $(window).focus( function() {
         POLLING.current_interval = POLLING.active_interval;
-        if(!state.modifying && !state.posting) {
-            stopPolling();
-            startPolling();
-        }
+
+//        following lines cause a race condition: if switching
+//        fast, multiple instances of startPolling might run at the same
+//        time and start multiple pollers
+
+//        if(!state.modifying && !state.posting) {
+//            stopPolling();
+//            startPolling();
+//        }
     })
 }
 
@@ -500,6 +505,7 @@ function startPolling() {
         return
 
     stop_update_poll = false;
+    clearTimeout(current_poll_timeout);
     updateComments(true, false);
 }
 
