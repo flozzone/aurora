@@ -437,7 +437,6 @@ function updateCommentList(keepPolling, force, $comment_list) {
         },
         complete: function (xhr, status) {
             if (keepPolling == true && !stop_update_poll) {
-                console.log(POLLING.current_interval);
                 current_poll_timeout = setTimeout('updateComments(true, false)', POLLING.current_interval);
             }
         }
