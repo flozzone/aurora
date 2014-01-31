@@ -12,7 +12,7 @@ from Stack.models import Stack, StackChallengeRelation
 from Review.models import Review
 from ReviewQuestion.models import ReviewQuestion
 from Slides.models import *
-from Comments.models import Comment
+from Comments.models import Comment, CommentsConfig
 from Notification.models import Notification
 
 class Command(BaseCommand):
@@ -25,6 +25,8 @@ class Command(BaseCommand):
         init_data()
 
 def init_data():
+    CommentsConfig.setup()
+
     user_data_list = [
         {'username': 's0', 'password': 's0'},
         {'username': 's1', 'password': 's1'},

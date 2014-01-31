@@ -3,8 +3,11 @@
  */
 
 var stop_update_poll = false;
-var polling_interval = 5000;
 var current_poll_timeout;
+var POLLING = {
+    current_interval: 5000,
+    active_interval: 5000,
+    idle_interval: 60000}
 
 var state = {
     modifying: false,
@@ -27,6 +30,8 @@ $(document).ready( function() {
     registerAddCommentButton();
     registerCancelCommentButton();
 
+    registerPolling();
+
     updateComments(true, false);
 });
 
@@ -37,6 +42,24 @@ function registerElementsForCommentList($comment_list) {
     registerVoteForCommentList($comment_list);
     registerPromoteLinksForCommentList($comment_list);
     registerBookmarkLinksForCommentList($comment_list)
+}
+
+function registerPolling() {
+    $(window).blur( function() {
+        POLLING.current_interval = POLLING.idle_interval;
+    })
+    $(window).focus( function() {
+        POLLING.current_interval = POLLING.active_interval;
+
+//        following lines cause a race condition: if switching
+//        fast, multiple instances of startPolling might run at the same
+//        time and start multiple pollers
+
+//        if(!state.modifying && !state.posting) {
+//            stopPolling();
+//            startPolling();
+//        }
+    })
 }
 
 function registerStopPolling() {
@@ -391,20 +414,20 @@ function updateComments(keepPolling, force) {
 }
 
 function updateCommentList(keepPolling, force, $comment_list) {
-    var maxComment;     // comment with highest ID in current $comment_list
+    var revision;
     if (force) {
-        maxComment = {
+        revision = {
             ref_type: $comment_list.attr('data-ref_type'),
             ref_id: $comment_list.attr('data-ref_id'),
             id: -1
         }
     } else {
-        maxComment = getCommentWithMaxId($comment_list);
+        revision = getRevision($comment_list);
     }
 
     $.ajax({
         url: '/update_comments/',
-        data: maxComment,
+        data: revision,
         type: 'GET',
         dataType: 'json',
         success: function (json) {
@@ -412,13 +435,16 @@ function updateCommentList(keepPolling, force, $comment_list) {
             if (html) {
                 replaceCommentListWithHtml($comment_list, html)
             }
-            if (json['polling_interval']) {
-                polling_interval = json['polling_interval']
+            if (json['polling_active_interval']) {
+                POLLING.active_interval = json['polling_active_interval'];
+            }
+            if (json['polling_idle_interval']) {
+                POLLING.idle_interval = json['polling_idle_interval'];
             }
         },
         complete: function (xhr, status) {
             if (keepPolling == true && !stop_update_poll) {
-                current_poll_timeout = setTimeout('updateComments(true, false)', polling_interval);
+                current_poll_timeout = setTimeout('updateComments(true, false)', POLLING.current_interval);
             }
         }
     })
@@ -470,8 +496,8 @@ function replaceCommentListWithHtml($comment_list, html) {
 }
 
 function stopPolling() {
-    clearTimeout(current_poll_timeout);
     stop_update_poll = true;
+    clearTimeout(current_poll_timeout);
 }
 
 function startPolling() {
@@ -479,13 +505,14 @@ function startPolling() {
         return
 
     stop_update_poll = false;
+    clearTimeout(current_poll_timeout);
     updateComments(true, false);
 }
 
 function registerTestButton() {
     $('#myTest').on('click', function(){
-        editElements.prop = 'bam';
-        editElements();
+//        editElements.prop = 'bam';
+//        editElements();
 //    $('#myTest').click(function () {
 //    updateComments(false);
 //    alert(x.toString() + " # " + y.toString());
@@ -499,6 +526,7 @@ function registerTestButton() {
 //        console.log($('#id_parent_comment').val());
 //        if(stop_update_poll) startPolling();
 //        else stopPolling();
+        alert('nothing assigned')
         return false;
     })
 }
@@ -509,20 +537,8 @@ function findClosestRefObj($child) {
     return { type: ref_type, id: ref_id }
 }
 
-function getCommentWithMaxId($comment_list) {
-    var maxComment = {id: -1,
-                      ref_type: $comment_list.attr('data-ref_type'),
-                      ref_id: $comment_list.attr('data-ref_id')}
-    var id;
-    $comment_list.find('.comment, .response').each(function() {
-        id = parseInt( $(this).attr('data-comment_number') );
-        if (id > maxComment.id) {
-            maxComment.id = id;
-
-            var ref_obj = findClosestRefObj($(this));
-            maxComment.ref_id = ref_obj.id;
-            maxComment.ref_type = ref_obj.type;
-        }
-    })
-    return(maxComment);
+function getRevision($comment_list) {
+    return {id: $comment_list.attr('data-revision'),
+            ref_type: $comment_list.attr('data-ref_type'),
+            ref_id: $comment_list.attr('data-ref_id')}
 }

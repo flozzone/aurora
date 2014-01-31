@@ -11,6 +11,42 @@ class Tag(models.Model):
         return self.name
 
 
+class CommentListRevision(models.Model):
+    number = models.PositiveIntegerField(default=0)
+
+    content_type = models.ForeignKey(ContentType)
+    object_id = models.PositiveIntegerField()
+    content_object = generic.GenericForeignKey('content_type', 'object_id')
+
+    @staticmethod
+    def get_or_create(ref_object):
+        ref_type = ContentType.objects.get_for_model(ref_object)
+
+        try:
+            revision = CommentListRevision.objects.get(
+                content_type__pk=ref_type.id,
+                object_id=ref_object.id)
+        except CommentListRevision.DoesNotExist:
+            revision = CommentListRevision.objects.create(content_object=ref_object)
+            revision.save()
+
+        return revision
+
+    @staticmethod
+    def get_by_ref_numbers(ref_id, ref_type):
+        return CommentListRevision.objects.get(
+            content_type__pk=ref_type,
+            object_id=ref_id)
+
+    @staticmethod
+    def get_by_comment(comment):
+        return CommentListRevision.get_by_ref_numbers(comment.object_id, comment.content_type.id)
+
+    def increment(self):
+        self.number += 1
+        self.save()
+
+
 class Comment(models.Model):
     text = models.TextField()
     author = models.ForeignKey('PortfolioUser.PortfolioUser')
@@ -124,8 +160,32 @@ class Comment(models.Model):
         return non_private_or_authored.exclude(visibility=Comment.STAFF)
 
 
-class CommentsRuntimeConfig:
-    polling_interval = 5000
+class CommentsConfig(models.Model):
+    key = models.CharField(primary_key=True, max_length=30)
+    value = models.CharField(max_length=20)
+
+    factor = 1000
+
+    @staticmethod
+    def setup():
+        config = CommentsConfig.objects.create(key='polling_active',
+                                               value='5')
+        config = CommentsConfig.objects.create(key='polling_idle',
+                                               value='60')
+        config.save()
+
+    @staticmethod
+    def get_polling_interval():
+        active = CommentsConfig.objects.get(key='polling_active')
+        idle = CommentsConfig.objects.get(key='polling_idle')
+
+        return int(active.value) * CommentsConfig.factor, int(idle.value) * CommentsConfig.factor
+
+    def __unicode__(self):
+        return self.key
+
+    def __str__(self):
+        return self.key
 
 
 class CommentReferenceObject(models.Model):

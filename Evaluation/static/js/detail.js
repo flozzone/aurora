@@ -1,4 +1,13 @@
 $(function() {
+    tinymce.init({
+        selector: "textarea#editor",
+        menubar: false,
+        statusbar: false,
+        readonly: 1
+    });
+});
+
+$(function() {
    $(".stack").click(function(event) {
        var url = '/stack';
         $.get(url, function (data) {

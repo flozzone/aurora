@@ -1,6 +1,6 @@
 from django import template
 from django.contrib.contenttypes.models import ContentType
-from Comments.models import Comment
+from Comments.models import Comment, CommentListRevision
 from Comments.views import CommentForm, ReplyForm
 from django.template.loader import render_to_string
 from PortfolioUser.models import PortfolioUser
@@ -24,6 +24,7 @@ class CommentListNode(template.Node):
             user = PortfolioUser.objects.get(id=context['user'].id)
 
             queryset = Comment.query_top_level_sorted(ref_object.id, ref_type.id, user)
+            revision = CommentListRevision.get_or_create(ref_object).number
 
             form = CommentForm()
             form.fields['reference_id'].initial = ref_object.id
@@ -35,13 +36,6 @@ class CommentListNode(template.Node):
             reply_form.fields['parent_comment'].initial = -1
             reply_form.fields['visibility'].initial = Comment.PUBLIC
 
-            # for comment in user.bookmarked_comments_set.all():
-            #     comment.bookmarked = True
-            # for comment in queryset:
-            #     comment.bookmarked = True if comment.bookmarked_by.filter(pk=user.id).exists() else False
-            #     for response in comment.children.all():
-            #         response.bookmarked = True if response.bookmarked_by.filter(pk=user.id).exists() else False
-
             id_suffix = "_" + str(ref_object.id) + "_" + str(ref_type.id)
             context.update({'comment_list': queryset,
                             'form': form,
@@ -49,7 +43,8 @@ class CommentListNode(template.Node):
                             'ref_type': ref_type.id,
                             'ref_id': ref_object.id,
                             'id_suffix': id_suffix,
-                            'requester': user})
+                            'requester': user,
+                            'revision': revision})
 
             return render_to_string(self.template, context)
         except template.VariableDoesNotExist:

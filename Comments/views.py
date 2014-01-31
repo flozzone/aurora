@@ -13,7 +13,7 @@ from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidde
 from django.contrib.contenttypes.models import ContentType
 import json
 
-from Comments.models import Comment, CommentsRuntimeConfig
+from Comments.models import Comment, CommentsConfig, CommentListRevision
 from Elaboration.models import Elaboration
 from Notification.models import Notification
 from Comments.tests import CommentReferenceObject
@@ -24,7 +24,7 @@ class CommentList(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(CommentList, self).get_context_data(**kwargs)
-        context['form'] = CommentForm()
+        # context['form'] = CommentForm()
         context['reply_form'] = ReplyForm()
         # context['form_action'] = '/post/'
         return context
@@ -67,6 +67,7 @@ def delete_comment(request):
     comment.deleter = deleter
     comment.delete_date = timezone.now()
     comment.save()
+    CommentListRevision.get_by_comment(comment).increment()
 
     return HttpResponse('')
 
@@ -100,6 +101,7 @@ def edit_comment(request):
 
     comment.text = data['text']
     comment.save()
+    CommentListRevision.get_by_comment(comment).increment()
 
     return HttpResponse('')
 
@@ -131,6 +133,7 @@ def create_comment(form, request):
                                          visibility=visibility)
 
         comment.save()
+        CommentListRevision.get_by_comment(comment).increment()
 
         if parent_comment is not None:
             if ref_obj_model == Elaboration:
@@ -167,6 +170,7 @@ def vote_on_comment(request):
     comment.score += diff
     comment.was_voted_on_by.add(user)
     comment.save()
+    CommentListRevision.get_by_comment(comment).increment()
 
     return HttpResponse('')
 
@@ -189,6 +193,7 @@ def bookmark_comment(request):
         comment.bookmarked_by.remove(requester)
 
     comment.save()
+    CommentListRevision.get_by_comment(comment).increment()
 
     return HttpResponse('')
 
@@ -209,6 +214,7 @@ def promote_comment(request):
 
     comment.promoted = True if data['value'] == 'true' else False
     comment.save()
+    CommentListRevision.get_by_comment(comment).increment()
 
     return HttpResponse('')
 
@@ -216,17 +222,19 @@ def promote_comment(request):
 @require_GET
 @login_required
 def update_comments(request):
-    latest_client_comment = request.GET
-    ref_type = latest_client_comment['ref_type']
-    ref_id = latest_client_comment['ref_id']
+    client_revision = request.GET
+    ref_type = client_revision['ref_type']
+    ref_id = client_revision['ref_id']
     user = RequestContext(request)['user']
 
-    try:
-        latest_comment_id = Comment.query_all(ref_id, ref_type, user).latest('id').id
-    except ObjectDoesNotExist:
-        latest_comment_id = -1
+    revision = CommentListRevision.get_by_ref_numbers(ref_id, ref_type).number
 
-    if int(latest_client_comment['id']) < int(latest_comment_id):
+    polling_active, polling_idle = CommentsConfig.get_polling_interval()
+
+    response_data = {'polling_active_interval': polling_active,
+                     'polling_idle_interval': polling_idle}
+
+    if revision > int(client_revision['id']):
         comment_list = Comment.query_top_level_sorted(ref_id, ref_type, user)
         id_suffix = "_" + str(ref_id) + "_" + str(ref_type)
 
@@ -234,15 +242,17 @@ def update_comments(request):
                    'ref_type': ref_type,
                    'ref_id': ref_id,
                    'id_suffix': id_suffix,
-                   'requester': user}
-        template_response = json.dumps({
-            'comment_list': render_to_string('Comments/comment_list.html', context),
-            'polling_interval': CommentsRuntimeConfig.polling_interval
-        })
+                   'requester': user,
+                   'revision': revision}
+
+        response_data.update(
+            {'comment_list': render_to_string('Comments/comment_list.html', context)}
+        )
+        template_response = json.dumps(response_data)
             # render_to_response('Comments/comment_list.html', context))
         return HttpResponse(template_response, content_type="application/json")
     else:
-        return HttpResponse('')
+        return HttpResponse(json.dumps(response_data))
 
 
 @login_required
@@ -256,9 +266,3 @@ def feed(request):
         CommentReferenceObject().save()
         o2 = CommentReferenceObject.objects.get(id=2)
     return render(request, 'Comments/feed.html', {'object': o, 'object2': o2})
-
-
-def test_template_tags(request):
-    o = CommentReferenceObject.objects.all()[0]
-    #return render(request, 'Comments/test_template_tags.html', {'object': o})
-    return render_to_response('Comments/test_template_tags.html', {'object': o}, context_instance=RequestContext(request))
