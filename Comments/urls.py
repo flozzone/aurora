@@ -12,5 +12,5 @@ urlpatterns = patterns(
     url(r'^post_reply/$', views.post_reply, name='post_reply'),
     url(r'^vote_on_comment/$', views.vote_on_comment, name='vote_on_comment'),
     url(r'^update_comments/$', views.update_comments, name='update_comments'),
-    url(r'^test_template_tags/$', views.test_template_tags, name='test_template_tags'),
+    # url(r'^test_template_tags/$', views.test_template_tags, name='test_template_tags'),
 )

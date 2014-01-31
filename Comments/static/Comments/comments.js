@@ -510,19 +510,22 @@ function findClosestRefObj($child) {
 }
 
 function getCommentWithMaxId($comment_list) {
-    var maxComment = {id: -1,
-                      ref_type: $comment_list.attr('data-ref_type'),
-                      ref_id: $comment_list.attr('data-ref_id')}
-    var id;
-    $comment_list.find('.comment, .response').each(function() {
-        id = parseInt( $(this).attr('data-comment_number') );
-        if (id > maxComment.id) {
-            maxComment.id = id;
-
-            var ref_obj = findClosestRefObj($(this));
-            maxComment.ref_id = ref_obj.id;
-            maxComment.ref_type = ref_obj.type;
-        }
-    })
-    return(maxComment);
+    return {id: $comment_list.attr('data-revision'),
+            ref_type: $comment_list.attr('data-ref_type'),
+            ref_id: $comment_list.attr('data-ref_id')}
+//    var maxComment = {id: -1,
+//                      ref_type: $comment_list.attr('data-ref_type'),
+//                      ref_id: $comment_list.attr('data-ref_id')}
+//    var id;
+//    $comment_list.find('.comment, .response').each(function() {
+//        id = parseInt( $(this).attr('data-comment_number') );
+//        if (id > maxComment.id) {
+//            maxComment.id = id;
+//
+//            var ref_obj = findClosestRefObj($(this));
+//            maxComment.ref_id = ref_obj.id;
+//            maxComment.ref_type = ref_obj.type;
+//        }
+//    })
+//    return(maxComment);
 }

@@ -26,9 +26,9 @@
      id="comment_response_{{ response.id }}" data-comment_number="{{ response.id }}"
      data-comment_author="{{ response.author.display_name }}">
 	 <div class="response_top">
-		 <div class="comment_author">{{ comment.author.display_name }}</div>
-		 <div class="comment_score"> &nbsp; {% if comment.score > 0%} +{% endif %}{{ comment.score }}</div>
-		 <div class="comment_time">{{ comment.post_date | naturaltime }}</div>
+		 <div class="comment_author">{{ response.author.display_name }}</div>
+		 <div class="comment_score"> &nbsp; {% if response.score > 0%} +{% endif %}{{ response.score }}</div>
+		 <div class="comment_time">{{ response.post_date | naturaltime }}</div>
 	 </div>
 
     <div class="response_body">
