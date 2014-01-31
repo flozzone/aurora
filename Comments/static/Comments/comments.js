@@ -50,8 +50,10 @@ function registerPolling() {
     })
     $(window).focus( function() {
         POLLING.current_interval = POLLING.active_interval;
-        stopPolling();
-        startPolling();
+        if(!state.modifying && !state.posting) {
+            stopPolling();
+            startPolling();
+        }
     })
 }
 
@@ -489,8 +491,8 @@ function replaceCommentListWithHtml($comment_list, html) {
 }
 
 function stopPolling() {
-    clearTimeout(current_poll_timeout);
     stop_update_poll = true;
+    clearTimeout(current_poll_timeout);
 }
 
 function startPolling() {
