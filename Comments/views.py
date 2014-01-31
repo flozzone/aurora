@@ -218,7 +218,10 @@ def update_comments(request):
 
     revision = CommentListRevision.get_by_ref_numbers(ref_id, ref_type).number
 
-    polling_interval = CommentsConfig.get_polling_interval()
+    polling_active, polling_idle = CommentsConfig.get_polling_interval()
+
+    response_data = {'polling_active_interval': polling_active,
+                     'polling_idle_interval': polling_idle}
 
     if revision > int(client_revision['id']):
         comment_list = Comment.query_top_level_sorted(ref_id, ref_type, user)
@@ -230,16 +233,15 @@ def update_comments(request):
                    'id_suffix': id_suffix,
                    'requester': user,
                    'revision': revision}
-        template_response = json.dumps({
-            'comment_list': render_to_string('Comments/comment_list.html', context),
-            'polling_interval': polling_interval
-        })
+
+        response_data.update(
+            {'comment_list': render_to_string('Comments/comment_list.html', context)}
+        )
+        template_response = json.dumps(response_data)
             # render_to_response('Comments/comment_list.html', context))
         return HttpResponse(template_response, content_type="application/json")
     else:
-        return HttpResponse(json.dumps({
-            'polling_interval': polling_interval
-        }))
+        return HttpResponse(json.dumps(response_data))
 
 
 @login_required

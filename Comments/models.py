@@ -164,17 +164,28 @@ class CommentsConfig(models.Model):
     key = models.CharField(primary_key=True, max_length=30)
     value = models.CharField(max_length=20)
 
+    factor = 1000
+
     @staticmethod
     def setup():
-        config = CommentsConfig.objects.create(key='polling_interval',
-                                               value='5000')
+        config = CommentsConfig.objects.create(key='polling_active',
+                                               value='5')
+        config = CommentsConfig.objects.create(key='polling_idle',
+                                               value='60')
         config.save()
 
     @staticmethod
     def get_polling_interval():
-        config = CommentsConfig.objects.get(key='polling_interval')
+        active = CommentsConfig.objects.get(key='polling_active')
+        idle = CommentsConfig.objects.get(key='polling_idle')
 
-        return int(config.value)
+        return int(active.value) * CommentsConfig.factor, int(idle.value) * CommentsConfig.factor
+
+    def __unicode__(self):
+        return self.key
+
+    def __str__(self):
+        return self.key
 
 
 class CommentReferenceObject(models.Model):

@@ -3,8 +3,11 @@
  */
 
 var stop_update_poll = false;
-var polling_interval = 5000;
 var current_poll_timeout;
+var POLLING = {
+    current_interval: 5000,
+    active_interval: 5000,
+    idle_interval: 60000}
 
 var state = {
     modifying: false,
@@ -27,6 +30,8 @@ $(document).ready( function() {
     registerAddCommentButton();
     registerCancelCommentButton();
 
+    registerPolling();
+
     updateComments(true, false);
 });
 
@@ -37,6 +42,17 @@ function registerElementsForCommentList($comment_list) {
     registerVoteForCommentList($comment_list);
     registerPromoteLinksForCommentList($comment_list);
     registerBookmarkLinksForCommentList($comment_list)
+}
+
+function registerPolling() {
+    $(window).blur( function() {
+        POLLING.current_interval = POLLING.idle_interval;
+    })
+    $(window).focus( function() {
+        POLLING.current_interval = POLLING.active_interval;
+        stopPolling();
+        startPolling();
+    })
 }
 
 function registerStopPolling() {
@@ -408,18 +424,21 @@ function updateCommentList(keepPolling, force, $comment_list) {
         type: 'GET',
         dataType: 'json',
         success: function (json) {
-            console.log(json)
             var html = json['comment_list'];
             if (html) {
                 replaceCommentListWithHtml($comment_list, html)
             }
-            if (json['polling_interval']) {
-                polling_interval = json['polling_interval']
+            if (json['polling_active_interval']) {
+                POLLING.active_interval = json['polling_active_interval'];
+            }
+            if (json['polling_idle_interval']) {
+                POLLING.idle_interval = json['polling_idle_interval'];
             }
         },
         complete: function (xhr, status) {
             if (keepPolling == true && !stop_update_poll) {
-                current_poll_timeout = setTimeout('updateComments(true, false)', polling_interval);
+                console.log(POLLING.current_interval);
+                current_poll_timeout = setTimeout('updateComments(true, false)', POLLING.current_interval);
             }
         }
     })
