@@ -391,23 +391,24 @@ function updateComments(keepPolling, force) {
 }
 
 function updateCommentList(keepPolling, force, $comment_list) {
-    var maxComment;     // comment with highest ID in current $comment_list
+    var revision;
     if (force) {
-        maxComment = {
+        revision = {
             ref_type: $comment_list.attr('data-ref_type'),
             ref_id: $comment_list.attr('data-ref_id'),
             id: -1
         }
     } else {
-        maxComment = getCommentWithMaxId($comment_list);
+        revision = getRevision($comment_list);
     }
 
     $.ajax({
         url: '/update_comments/',
-        data: maxComment,
+        data: revision,
         type: 'GET',
         dataType: 'json',
         success: function (json) {
+            console.log(json)
             var html = json['comment_list'];
             if (html) {
                 replaceCommentListWithHtml($comment_list, html)
@@ -484,8 +485,8 @@ function startPolling() {
 
 function registerTestButton() {
     $('#myTest').on('click', function(){
-        editElements.prop = 'bam';
-        editElements();
+//        editElements.prop = 'bam';
+//        editElements();
 //    $('#myTest').click(function () {
 //    updateComments(false);
 //    alert(x.toString() + " # " + y.toString());
@@ -499,6 +500,7 @@ function registerTestButton() {
 //        console.log($('#id_parent_comment').val());
 //        if(stop_update_poll) startPolling();
 //        else stopPolling();
+        alert('nothing assigned')
         return false;
     })
 }
@@ -509,23 +511,8 @@ function findClosestRefObj($child) {
     return { type: ref_type, id: ref_id }
 }
 
-function getCommentWithMaxId($comment_list) {
+function getRevision($comment_list) {
     return {id: $comment_list.attr('data-revision'),
             ref_type: $comment_list.attr('data-ref_type'),
             ref_id: $comment_list.attr('data-ref_id')}
-//    var maxComment = {id: -1,
-//                      ref_type: $comment_list.attr('data-ref_type'),
-//                      ref_id: $comment_list.attr('data-ref_id')}
-//    var id;
-//    $comment_list.find('.comment, .response').each(function() {
-//        id = parseInt( $(this).attr('data-comment_number') );
-//        if (id > maxComment.id) {
-//            maxComment.id = id;
-//
-//            var ref_obj = findClosestRefObj($(this));
-//            maxComment.ref_id = ref_obj.id;
-//            maxComment.ref_type = ref_obj.type;
-//        }
-//    })
-//    return(maxComment);
 }

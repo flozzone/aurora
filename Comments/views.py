@@ -13,7 +13,7 @@ from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidde
 from django.contrib.contenttypes.models import ContentType
 import json
 
-from Comments.models import Comment, CommentsRuntimeConfig, CommentListRevision
+from Comments.models import Comment, CommentsConfig, CommentListRevision
 from Elaboration.models import Elaboration
 from Notification.models import Notification
 from Comments.tests import CommentReferenceObject
@@ -218,6 +218,8 @@ def update_comments(request):
 
     revision = CommentListRevision.get_by_ref_numbers(ref_id, ref_type).number
 
+    polling_interval = CommentsConfig.get_polling_interval()
+
     if revision > int(client_revision['id']):
         comment_list = Comment.query_top_level_sorted(ref_id, ref_type, user)
         id_suffix = "_" + str(ref_id) + "_" + str(ref_type)
@@ -230,12 +232,14 @@ def update_comments(request):
                    'revision': revision}
         template_response = json.dumps({
             'comment_list': render_to_string('Comments/comment_list.html', context),
-            'polling_interval': CommentsRuntimeConfig.polling_interval
+            'polling_interval': polling_interval
         })
             # render_to_response('Comments/comment_list.html', context))
         return HttpResponse(template_response, content_type="application/json")
     else:
-        return HttpResponse('')
+        return HttpResponse(json.dumps({
+            'polling_interval': polling_interval
+        }))
 
 
 @login_required

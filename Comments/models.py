@@ -160,8 +160,21 @@ class Comment(models.Model):
         return non_private_or_authored.exclude(visibility=Comment.STAFF)
 
 
-class CommentsRuntimeConfig:
-    polling_interval = 5000
+class CommentsConfig(models.Model):
+    key = models.CharField(primary_key=True, max_length=30)
+    value = models.CharField(max_length=20)
+
+    @staticmethod
+    def setup():
+        config = CommentsConfig.objects.create(key='polling_interval',
+                                               value='5000')
+        config.save()
+
+    @staticmethod
+    def get_polling_interval():
+        config = CommentsConfig.objects.get(key='polling_interval')
+
+        return int(config.value)
 
 
 class CommentReferenceObject(models.Model):
