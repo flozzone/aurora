@@ -12,7 +12,7 @@ class Tag(models.Model):
 
 
 class CommentListRevision(models.Model):
-    number = models.PositiveIntegerField(default=0)
+    number = models.BigIntegerField(default=0)
 
     content_type = models.ForeignKey(ContentType)
     object_id = models.PositiveIntegerField()
@@ -48,15 +48,11 @@ class CommentListRevision(models.Model):
 
 
 class Vote(models.Model):
-    # UP = True
-    # DOWN = False
-    # direction = models.BooleanField(choices=((UP, True), (DOWN, False)),
-    #                                 default=True)
-    UP = 'u'
-    DOWN = 'd'
-    direction = models.CharField(max_length=1,
-                                 choices=((UP, 'up'), (DOWN, 'down'))
-    )
+    UP = True
+    DOWN = False
+    direction = models.BooleanField(choices=((UP, True), (DOWN, False)),
+                                    default=True)
+
     voter = models.ForeignKey('PortfolioUser.PortfolioUser')
     comment = models.ForeignKey('Comment', related_name='votes')
 
@@ -92,8 +88,6 @@ class Comment(models.Model):
                                   default=PUBLIC)
 
     bookmarked_by = models.ManyToManyField('PortfolioUser.PortfolioUser', related_name='bookmarked_comments_set')
-    # was_voted_up_by = models.ManyToManyField('PortfolioUser.PortfolioUser', related_name='up_voted_comments_set')
-    # was_voted_down_by = models.ManyToManyField('PortfolioUser.PortfolioUser', related_name='down_voted_comments_set')
     tags = models.ManyToManyField(Tag)
 
     @property
