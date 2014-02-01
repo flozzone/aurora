@@ -25,7 +25,7 @@
 
 <ul>
 	   	<li id="search_slides_li">
-    		<form action="{% url studio_search course.short_title %}" method="GET"><input class="rounded_field search_field" name="search_text" type="text" placeholder="slides & comments" /></form>
+    		<form action="{% url studio_search %}" method="GET"><input class="rounded_field search_field" name="search_text" type="text" placeholder="slides & comments" /></form>
     	</li>
 
 </ul>
@@ -35,7 +35,7 @@
 <div id="dateMenu" class="content_navigation_menu" style="left:0px;visibility:hidden;">
         {% for lect in lectures %}
             {% if lect.id != lecture.id %}
-				<a class="button b_float" href="{% url studio_lecture course.short_title lect.id_relative %}">{{lect.start.day}}.{{lect.start.month}}</a> 
+				<a class="button b_float" href="{% url studio_lecture lect.id_relative %}">{{lect.start.day}}.{{lect.start.month}}</a> 
             {% else %}
                 <a class="button b_float_selected" > {{lect.start.day}}.{{lect.start.month}}</a>     		
             {% endif %}

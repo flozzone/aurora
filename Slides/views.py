@@ -87,7 +87,7 @@ def studio_marker(request, marker):
     return render_to_response('studio.html', render_dict, context_instance=RequestContext(request))
 
 
-def studio_search(request, course_short_title):
+def studio_search(request):
     course = RequestContext(request)['last_selected_course']
     lectures = _get_contentbar_data(coursee)
     search_text = request.GET.get('search_text', '')
