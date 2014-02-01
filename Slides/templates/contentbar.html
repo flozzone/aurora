@@ -1,0 +1,77 @@
+<script>
+    $('#slides-li').addClass('active');
+</script>
+
+<div class = "content_navigation_bar">
+    <ul class="content_navigation_list" title="show..." xml:lang="en">
+    {% if slidecasting_mode == 'livecast' %}
+        <li>Livecast</li>
+    {% else %}
+        <li id="load_all_comments" class="button b_light b_left_right {% if slidecasting_mode == 'start' %}b_inactive{% endif %}" onclick="loadAllComments()">load all comments</li>
+	<!--
+    	<li id="flowplayer_controls_label"><span style="font-size:80%">&nbsp;&nbsp;Play Audio</span></li>
+		<li id="flowplayer_controls_prev" class="b_left b_light button b_inactive b_prev" onclick="previousChapter()">&nbsp;</li>
+		<li id="flowplayer_controls_play" class="b_middle b_light button b_inactive b_play" onclick="togglePlayback()">&nbsp;</li>
+		<li id="flowplayer_controls_next" class="b_right b_light button b_inactive b_next" onclick="nextChapter()">&nbsp;</li>
+		<li id="flowplay_controls_where_am_i" class="button b_light b_left_right b_inactive" onclick="whereAmI()">where am I?</li>
+    	-->
+	{% endif %}
+    <li>&nbsp;&nbsp;</li>
+    <li id="dateHead" class="{%if slidecasting_mode == 'studio' %}b_light_selected {% endif %}button b_light b_left b_arrow" onclick="toggleMenu(this,'dateMenu')">{% if slidecasting_mode == 'start' or slidecasting_mode == 'new_comments_since' or slidecasting_mode == 'marked_slides' or slidecasting_mode == 'exercises' or slidecasting_mode == 'discourses' or slidecasting_mode == 'search_results' or slidecasting_mode == 'create_pdf' %}dates{% else %}date: {{lecture.start.day}}.{{lecture.start.month}}{% endif %}</li>
+
+    <li id="bookmarkHead" class="{%if slidecasting_mode == 'new_comments_since' or  slidecasting_mode == 'marked_slides' or slidecasting_mode == 'exercises' or slidecasting_mode == 'discourses'%}b_light_selected {% endif %}button b_light b_right b_arrow" onclick="toggleMenu(this,'bookmarkMenu')">{%if slidecasting_mode == 'new_comments_since' %}active last {{hours}}h{%else%}{% if slidecasting_mode == 'marked_slides' %}{%if marker == 'important'%}important slides{%endif%}{%if marker == 'liked'%}slides i like{%endif%}{%if marker == 'confusing'%}confusing slides{%endif%}{%else%}{%if slidecasting_mode == 'exercises'%}exercises{%else%}{%if slidecasting_mode == 'discourses' %}discourses{%else%}bookmarks{%endif%}{%endif%}{%endif%}{%endif%}</li>
+    </li>
+</ul>
+
+<ul>
+	   	<li id="search_slides_li">
+    		<form action="{% url studio_search course.short_title %}" method="GET"><input class="rounded_field search_field" name="search_text" type="text" placeholder="slides & comments" /></form>
+    	</li>
+
+</ul>
+</div>
+
+<!-- this is the content of the above declared dateHead -->
+<div id="dateMenu" class="content_navigation_menu" style="left:0px;visibility:hidden;">
+        {% for lect in lectures %}
+            {% if lect.id != lecture.id %}
+				<a class="button b_float" href="{% url studio_lecture course.short_title lect.id_relative %}">{{lect.start.day}}.{{lect.start.month}}</a> 
+            {% else %}
+                <a class="button b_float_selected" > {{lect.start.day}}.{{lect.start.month}}</a>     		
+            {% endif %}
+        {% endfor %}
+</div>
+
+<div id="bookmarkMenu" class="content_navigation_menu" style="left:0px;visibility:hidden;">
+	{% comment %}
+	<div title="show slides which had comments in the last 24 hours" class="button b_float{%if slidecasting_mode == 'new_comments_since' and hours == '24'%}_selected{%endif%}" onclick="ajax_request_with_feedback('studio', '{# {% url slidecasting.views.ajax_render_special_studio 'new_comments_since' course.id 24 %}?page=1&mode={{mode}}' #})"> 
+		active last 24h
+	</div>
+	<div title="show slides which had comments in the last 72 hours" class="button b_float{%if slidecasting_mode == 'new_comments_since' and hours == '72'%}_selected{%endif%}" onclick="ajax_request_with_feedback('studio', '{# {% url slidecasting.views.ajax_render_special_studio 'new_comments_since' course.id 72 %}?page=1&mode={{mode}} #}')"> 
+		active last 72h
+	</div>
+	
+	{% if user.is_staff %}
+	<div style="margin-top:1em;" title="show slides which had comments in the last 96 hours" class="button b_float{%if slidecasting_mode == 'new_comments_since' and hours == '96'%}_selected{%endif%}" onclick="ajax_request_with_feedback('studio', '{# {% url slidecasting.views.ajax_render_special_studio 'new_comments_since' course.id 96 %}?page=1&mode={{mode}} #}')"> 
+		&there4;&there4; active last 4d
+	</div>
+	<div title="show slides which had comments in the last 120 hours" class="button b_float{%if slidecasting_mode == 'new_comments_since' and hours == '120'%}_selected{%endif%}" onclick="ajax_request_with_feedback('studio', '{# {% url slidecasting.views.ajax_render_special_studio 'new_comments_since' course.id 120 %}?page=1&mode={{mode}}' #})"> 
+		&there4;&there4; active last 5d
+	</div>
+	<div style="margin-bottom:1em;" title="show slides which had comments in the last 168 hours" class="button b_float{%if slidecasting_mode == 'new_comments_since' and hours == '168'%}_selected{%endif%}" onclick="ajax_request_with_feedback('studio', '{# {% url slidecasting.views.ajax_render_special_studio 'new_comments_since' course.id 168 %}?page=1&mode={{mode}} #}')"> 
+		&there4;&there4; active last week
+	</div>
+	{% endif %}
+	
+	<div title="show slides with exercise-comments" class="button b_float{%if slidecasting_mode == 'exercises'%}_selected{%endif%}" onclick="ajax_request_with_feedback('studio', '{# {% url slidecasting.views.ajax_render_special_studio 'exercises' course.id %}?page=1&mode={{mode}} #}');"> 
+		exercises
+	</div>
+	<div style="margin-bottom:1em;" title="show slides with discourse-comments" class="button b_float{%if slidecasting_mode == 'discourses'%}_selected{%endif%}" onclick="ajax_request_with_feedback('studio', '{#{% url slidecasting.views.ajax_render_special_studio 'discourses' course.id %}?page=1&mode={{mode}}#}');"> 
+		discussions
+	</div>
+	{% endcomment %}
+	
+	<a class="button b_float{% if slidecasting_mode == 'marked_slides' and marker == 'confused' %}_selected{% endif %}" href="{% url studio_confusing course.short_title %}" title="show slides which were marked as confusing" >confusing slides</a>
+	<a class="button b_float{% if slidecasting_mode == 'marked_slides' and marker == 'important' %}_selected{% endif %}" href="{% url studio_important course.short_title %}" title="show slides which were marked as important" >important slides</a>
+	<a class="button b_float{% if slidecasting_mode == 'marked_slides' and marker == 'liked' %}_selected{% endif %}" href="{% url studio_liked course.short_title %}" title="show slides which were marked as like" >slides i like</a>
+</div>

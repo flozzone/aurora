@@ -34,7 +34,7 @@ def start(request):
     course = RequestContext(request)['last_selected_course']
     lectures = _get_contentbar_data(course)
     render_dict = {'slidecasting_mode': 'start', 'course':course, 'lectures': lectures}
-    return render_to_response('slides/start.html', render_dict, context_instance=RequestContext(request))
+    return render_to_response('start.html', render_dict, context_instance=RequestContext(request))
 
 
 def livecast_update_slide(request, lecture_id_relative, slide_id, client_timestamp):
@@ -54,7 +54,7 @@ def livecast(request, lecture_id_relative):
     if not _livecast_now(lecture):
         return redirect('studio_lecture', course_short_title=course_short_title, lecture_id_relative=lecture_id_relative)
     render_dict = {'slidecasting_mode': 'livecast', 'course':course, 'lectures': lectures, 'lecture': lecture }
-    return render_to_response('slides/livecast.html', render_dict, context_instance=RequestContext(request))
+    return render_to_response('livecast.html', render_dict, context_instance=RequestContext(request))
 
 
 def studio_lecture(request, lecture_id_relative):
@@ -70,7 +70,7 @@ def studio_lecture(request, lecture_id_relative):
                     #TODO: why the extra course_id variable? and y u fetching it form the database, when we already
                     #      have the course object? y u no use {{course.id}} (course should exist everywhere), or,
                     #      if absolutely neccessary, y u no use {% with course.id as course_id %} in template?
-    return render_to_response('slides/studio.html', render_dict, context_instance=RequestContext(request))
+    return render_to_response('studio.html', render_dict, context_instance=RequestContext(request))
     
 
 def studio_marker(request, marker):
@@ -84,7 +84,7 @@ def studio_marker(request, marker):
         slides = Slide.objects.filter(liked=request.user.customuser, lecture__course__short_title=course_short_title)
     slides = _cache_slide_markers(slides)
     render_dict = {'slidecasting_mode': 'marked_slides', 'marker': marker, 'course':course, 'lectures': lectures, 'slides': slides}
-    return render_to_response('slides/studio.html', render_dict, context_instance=RequestContext(request))
+    return render_to_response('studio.html', render_dict, context_instance=RequestContext(request))
 
 
 def studio_search(request, course_short_title):
@@ -97,7 +97,7 @@ def studio_search(request, course_short_title):
         slides = _cache_slide_markers(slides)
         render_dict = {'slidecasting_mode': 'search_results', 'course':course, 'lectures': lectures, 'slides': slides, 
                         'search_text': search_text}
-        return render_to_response('slides/studio.html', render_dict, context_instance=RequestContext(request))
+        return render_to_response('studio.html', render_dict, context_instance=RequestContext(request))
     else:
         raise Http404
 
@@ -116,7 +116,7 @@ def mark_slide(request, slide_id, marker, value):
         else:
             slide.set_marker(request.user.customuser, marker, False)
         count = slide.get_marker_count(marker)
-        new_title = render_to_string('slides/marker_title.html', {'count': count, 'marker': marker})
+        new_title = render_to_string('marker_title.html', {'count': count, 'marker': marker})
         json_return_dict = {'success': True, 'count': count, 'new_title': new_title}
         return HttpResponse(simplejson.dumps(json_return_dict), mimetype='application/javascript')
     return HttpResponse(simplejson.dumps({'success': False}), mimetype='application/javascript')
