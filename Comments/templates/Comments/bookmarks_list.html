@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block additional_headers %}
+    <script type="text/javascript" src="{% static "Comments/simple_functions.js" %}"></script>
+    <script type="text/javascript" src="{% static "Comments/comments.js" %}"></script>
+    <link rel="stylesheet" href="{% static "Comments/comments.css" %}" type="text/css" media="screen"/>
+{% endblock %}
+
+{% block content %}
+Bookmarks :)
+
+<div id="comments{{ id_suffix }}" class="comment_list" data-ref_type="{{ ref_type }}" data-ref_id="{{ ref_id }}" data-revision="{{ revision }}">
+    {% for comment in comment_list %}
+{#        <div class="comment_with_responses">#}
+            {% include 'Comments/comment.html' %}
+{#            {% for response in comment.responses %}#}
+{#                {% include 'Comments/response.html' %}#}
+{#            {% endfor %}#}
+{#        </div>#}
+    {% endfor %}
+</div>
+{% endblock content %}

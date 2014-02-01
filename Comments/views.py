@@ -19,15 +19,15 @@ from Notification.models import Notification
 from Comments.tests import CommentReferenceObject
 
 
-class CommentList(ListView):
-    queryset = Comment.objects.filter(parent=None).order_by('-post_date')
-
-    def get_context_data(self, **kwargs):
-        context = super(CommentList, self).get_context_data(**kwargs)
-        # context['form'] = CommentForm()
-        context['reply_form'] = ReplyForm()
+# class BookmarkedView(ListView):
+#     queryset = Comment.query_bookmarked()
+#
+    # def get_context_data(self, **kwargs):
+    #     context = super(BookmarkedView, self).get_context_data(**kwargs)
+    #     context['form'] = CommentForm()
+        # context['reply_form'] = ReplyForm()
         # context['form_action'] = '/post/'
-        return context
+        # return context
 
 
 class CommentForm(forms.Form):
@@ -266,3 +266,11 @@ def feed(request):
         CommentReferenceObject().save()
         o2 = CommentReferenceObject.objects.get(id=2)
     return render(request, 'Comments/feed.html', {'object': o, 'object2': o2})
+
+
+@login_required
+def bookmarks(request):
+    requester = RequestContext(request)['user']
+    comment_list = Comment.query_bookmarks(requester)
+    template = 'Comments/bookmarks_list.html'
+    return render_to_response(template, {'comment_list': comment_list}, context_instance=RequestContext(request))

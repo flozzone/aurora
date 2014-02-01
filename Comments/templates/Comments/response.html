@@ -32,7 +32,7 @@
 	 </div>
 
     <div class="response_body">
-		<img src="/{{ comment.author.avatar.url }}">
+		<img src="/{{ response.author.avatar.url }}">
 
         {% if response.bookmarked %}
             <a href='#' class="comment_unbookmark" data-comment_number="{{ response.id }}" title="Remove this comment from Bookmarks">

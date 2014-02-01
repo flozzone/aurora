@@ -146,8 +146,6 @@ function registerEditLinksForCommentList($comment_list) {
             return false;
         state.modifying = true;
 
-//        var $replyForm = $('#replyForm');
-//        var $commentForm = $('#commentForm');
         var $editButtons = $('#edit_buttons');
 
         stopPolling();
@@ -208,7 +206,6 @@ function registerEditLinksForCommentList($comment_list) {
                     endEdit();
                 },
                 complete: function(xhr, status) {
-//                    $formTextarea.val('');
                 }
             });
 

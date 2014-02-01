@@ -123,6 +123,13 @@ class Comment(models.Model):
         return visible_comments
 
     @staticmethod
+    def query_bookmarks(requester):
+        result = requester.bookmarked_comments_set.all().order_by('-post_date')
+        Comment.filter_visible(result, requester)
+        Comment.set_bookmark_flags(result, requester)
+        return result
+
+    @staticmethod
     def set_bookmark_flags(comment_set, requester):
         for comment in comment_set:
             comment.bookmarked = True if comment.bookmarked_by.filter(pk=requester.id).exists() else False
