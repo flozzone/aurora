@@ -93,7 +93,7 @@ function registerVoteForCommentList($comment_list) {
             type: 'GET',
             dataType: 'html',
             success: function(response) {
-                updateComments(false, true);
+                updateComments(false, false);
             }
         })
         return false;
@@ -335,7 +335,7 @@ function registerReplyButton() {
             success: function(response) {
                 $('#replyForm').hide();
                 $("#replyTextarea").val('');
-                updateComments(false, true);
+                updateComments(false, false);
             }
         })
         state.posting = false;

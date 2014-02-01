@@ -47,6 +47,18 @@ class CommentListRevision(models.Model):
         self.save()
 
 
+class Vote(models.Model):
+    UP = True
+    DOWN = False
+    direction = models.BooleanField(choices=((UP, True), (DOWN, False)),
+                                    default=True)
+    voter = models.ForeignKey('PortfolioUser.PortfolioUser')
+    comment = models.ForeignKey('Comment', related_name='votes')
+
+    class Meta:
+        unique_together = ('voter', 'comment')
+
+
 class Comment(models.Model):
     text = models.TextField()
     author = models.ForeignKey('PortfolioUser.PortfolioUser')
@@ -54,7 +66,6 @@ class Comment(models.Model):
     delete_date = models.DateTimeField('date posted', null=True)
     deleter = models.ForeignKey('PortfolioUser.PortfolioUser', related_name='deleted_comments_set', null=True)
     parent = models.ForeignKey('self', null=True, related_name='children')
-    score = models.IntegerField(default=0)
     promoted = models.BooleanField(default=False)
 
     # Foreign object this Comment is attached to
@@ -75,15 +86,29 @@ class Comment(models.Model):
                                   choices=VISIBILITY_CHOICES,
                                   default=PUBLIC)
 
-    # custom_visibility = models.ManyToManyField('PortfolioUser.PortfolioUser', related_name='visible_comments_set')
     bookmarked_by = models.ManyToManyField('PortfolioUser.PortfolioUser', related_name='bookmarked_comments_set')
-    was_voted_on_by = models.ManyToManyField('PortfolioUser.PortfolioUser', related_name='voted_comments_set')
+    # was_voted_up_by = models.ManyToManyField('PortfolioUser.PortfolioUser', related_name='up_voted_comments_set')
+    # was_voted_down_by = models.ManyToManyField('PortfolioUser.PortfolioUser', related_name='down_voted_comments_set')
     tags = models.ManyToManyField(Tag)
+
+    @property
+    def score(self):
+        up_votes = self.votes.filter(direction=Vote.UP).count()
+        down_votes = self.votes.filter(direction=Vote.DOWN).count()
+        return up_votes - down_votes
 
     def responses(self):
         responses = self.children.order_by('post_date')
         Comment.set_bookmark_flags(responses, self.requester)
         return responses
+
+    def add_up_vote(self, voter):
+        vote = Vote(direction=Vote.UP, voter=voter, comment=self)
+        vote.save()
+
+    def add_down_vote(self, voter):
+        vote = Vote(direction=Vote.DOWN, voter=voter, comment=self)
+        vote.save()
 
     def __str__(self):
         return str(self.id) + ": " + self.text[:30]
