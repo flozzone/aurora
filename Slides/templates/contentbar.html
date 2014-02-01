@@ -25,7 +25,7 @@
 
 <ul>
 	   	<li id="search_slides_li">
-    		<form action="{% url studio_search %}" method="GET"><input class="rounded_field search_field" name="search_text" type="text" placeholder="slides & comments" /></form>
+    		<form action="{% url 'Slides:start' %}" method="GET"><input class="rounded_field search_field" name="search_text" type="text" placeholder="slides & comments" /></form>
     	</li>
 
 </ul>
@@ -35,7 +35,7 @@
 <div id="dateMenu" class="content_navigation_menu" style="left:0px;visibility:hidden;">
         {% for lect in lectures %}
             {% if lect.id != lecture.id %}
-				<a class="button b_float" href="{% url studio_lecture lect.id_relative %}">{{lect.start.day}}.{{lect.start.month}}</a> 
+				<a class="button b_float" href="{% url 'Slides:studio_lecture' lect.id_relative %}">{{lect.start.day}}.{{lect.start.month}}</a> 
             {% else %}
                 <a class="button b_float_selected" > {{lect.start.day}}.{{lect.start.month}}</a>     		
             {% endif %}
@@ -71,7 +71,7 @@
 	</div>
 	{% endcomment %}
 	
-	<a class="button b_float{% if slidecasting_mode == 'marked_slides' and marker == 'confused' %}_selected{% endif %}" href="{% url studio_confusing course.short_title %}" title="show slides which were marked as confusing" >confusing slides</a>
-	<a class="button b_float{% if slidecasting_mode == 'marked_slides' and marker == 'important' %}_selected{% endif %}" href="{% url studio_important course.short_title %}" title="show slides which were marked as important" >important slides</a>
-	<a class="button b_float{% if slidecasting_mode == 'marked_slides' and marker == 'liked' %}_selected{% endif %}" href="{% url studio_liked course.short_title %}" title="show slides which were marked as like" >slides i like</a>
+	<a class="button b_float{% if slidecasting_mode == 'marked_slides' and marker == 'confused' %}_selected{% endif %}" href="{# {% url 'Slides:studio_confusing' course.short_title %} #}" title="show slides which were marked as confusing" >confusing slides</a>
+	<a class="button b_float{% if slidecasting_mode == 'marked_slides' and marker == 'important' %}_selected{% endif %}" href="{# {% url 'Slides:studio_important' course.short_title %} #}"title="show slides which were marked as important" >important slides</a>
+	<a class="button b_float{% if slidecasting_mode == 'marked_slides' and marker == 'liked' %}_selected{% endif %}" href="{# {% url 'Slides:studio_liked' course.short_title %} #}" title="show slides which were marked as like" >slides i like</a>
 </div>
