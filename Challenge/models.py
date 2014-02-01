@@ -22,9 +22,8 @@ class Challenge(models.Model):
     BLOCKED_BAD_REVIEW = 3
     DONE_MISSING_PEER_REVIEW = 4
     DONE_PEER_REVIEWED = 5
-    BLOCK_MISSING_PEER_REVIEW = 6
-    WAITING_FOR_EVALUATION = 7
-    EVALUATED = 8
+    WAITING_FOR_EVALUATION = 6
+    EVALUATED = 7
 
     status_dict = {
         0: "Not started",
@@ -57,9 +56,6 @@ class Challenge(models.Model):
 
     def get_elaboration(self, user):
         try:
-            print(user.id)
-            for elaboration in Elaboration.objects.filter(challenge=self, user=user):
-                print(elaboration.user.id)
             return Elaboration.objects.get(challenge=self, user=user)
         except Elaboration.DoesNotExist:
             return None
