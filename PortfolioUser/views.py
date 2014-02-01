@@ -6,6 +6,7 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.views.decorators.csrf import csrf_exempt
 from PortfolioUser.models import PortfolioUser
+from Course.models import Course
 
 
 @csrf_exempt
@@ -52,15 +53,58 @@ def login(request):
 
 @login_required()
 def profile(request):
-    user = request.user
-    user = PortfolioUser.objects.get(id=user.id)
-    if request.method == 'POST':
+    user = RequestContext(request)['user']
+    return render_to_response('profile.html', {'user': user}, context_instance=RequestContext(request))
+
+
+@login_required()
+def profile_save(request):
+    data = {}
+    user = RequestContext(request)['user']
+    valid_nickname = True
+    users_with_same_nickname = PortfolioUser.objects.filter(nickname=request.POST['nickname'])
+    for user_with_same_nickname in users_with_same_nickname:
+        if user.id is not user_with_same_nickname.id:
+            data['error'] = "nickname already taken"
+            valid_nickname = False
+    if valid_nickname:
         user.nickname = request.POST['nickname']
-        user.statement = request.POST['statement']
+    user.statement = request.POST['statement']
+
+    if is_valid_email(request.POST['email']):
         user.email = request.POST['email']
-        if 'file' in request.FILES:
-            user.avatar = request.FILES['file']
-        user.save()
-        return render_to_response('profile.html', {'user': user}, context_instance=RequestContext(request))
     else:
-        return render_to_response('profile.html', {'user': user}, context_instance=RequestContext(request))
+        data['error'] = "not a valid email address"
+
+    if 'file' in request.FILES:
+        user.avatar = request.FILES['file']
+    user.save()
+    data['nickname'] = user.nickname
+    data['email'] = user.email
+    data['statement'] = user.statement
+    return HttpResponse(json.dumps(data))
+
+
+def is_valid_email(email):
+    from django.core.validators import validate_email
+    from django.core.exceptions import ValidationError
+
+    try:
+        validate_email(email)
+        return True
+    except ValidationError:
+        return False
+
+
+@login_required()
+def course(request):
+    user = RequestContext(request)['user']
+    response_data = {}
+    if request.method == 'POST':
+        course = Course.objects.filter(short_title=request.POST['short_title'])
+        if course:
+            course = course[0]
+            user.last_selected_course = course
+            user.save()
+        response_data['success'] = True
+    return HttpResponse(json.dumps(response_data), content_type="application/json")

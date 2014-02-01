@@ -14,7 +14,7 @@ from django.db import models
 
 from Challenge.models import Challenge
 from Comments.models import Comment
-from Course.models import Course
+from Course.models import Course, CourseChallengeRelation
 from Elaboration.models import Elaboration
 from Evaluation.models import Evaluation
 from PortfolioUser.models import PortfolioUser
@@ -22,6 +22,7 @@ from Review.models import Review
 from ReviewAnswer.models import ReviewAnswer
 from ReviewQuestion.models import ReviewQuestion
 from Stack.models import Stack
+from Notification.models import Notification
 
 
 @login_required()
@@ -37,6 +38,7 @@ def evaluation(request):
                                'missing_reviews': Elaboration.get_missing_reviews(),
                                'top_level_challenges': Elaboration.get_top_level_challenges(),
                                'non_adequate_work': Elaboration.get_non_adequate_work(),
+                               'evaluated_non_adequate_work': Elaboration.get_evaluated_non_adequate_work(),
                                'non_adequate_reviews': Elaboration.get_non_adequate_reviews(),
                                'complaints': Elaboration.get_non_adequate_reviews(),
                                'awesome': Elaboration.get_awesome()
@@ -77,6 +79,10 @@ def update_overview(request):
         print("loading awesome work...")
         elaborations = Elaboration.get_awesome()
         html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
+    if request.GET.get('data', '') == "evaluated_non_adequate_work":
+        print("loading evaluated non adequate work...")
+        elaborations = Elaboration.get_evaluated_non_adequate_work()
+        html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
 
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
@@ -106,22 +112,22 @@ def detail(request):
         params = {'questions': questions}
     if selection == "top_level_challenges":
         # set evaluation lock
-        puser = PortfolioUser.objects.get(pk=request.user.id)
+        user = RequestContext(request)['user']
         lock = False
         if Evaluation.objects.filter(submission=elaboration):
             evaluation = Evaluation.objects.get(submission=elaboration)
-            if evaluation.tutor==puser:
+            if evaluation.tutor == user:
                 evaluation.lock_time = datetime.now()
                 evaluation.save()
             else:
                 if evaluation.is_older_15min():
                     evaluation.lock_time = datetime.now()
-                    evaluation.tutor = puser
+                    evaluation.tutor = user
                     evaluation.save()
                 else:
                     lock = True
         else:
-            evaluation = Evaluation.objects.create(submission=elaboration, tutor=puser)
+            evaluation = Evaluation.objects.create(submission=elaboration, tutor=user)
             evaluation.lock_time = datetime.now()
             evaluation.save()
         params = {'evaluation': evaluation, 'lock': lock}
@@ -134,6 +140,14 @@ def detail(request):
     if selection == "awesome":
         print('selection: awesome')
         params = {}
+    if selection == "evaluated_non_adequate_work":
+        print('selection: evaluated_non_adequate_work')
+        params = {}
+    if selection == "search":
+        if elaboration.challenge.is_final_challenge():
+            if Evaluation.objects.filter(submission=elaboration):
+                evaluation = Evaluation.objects.get(submission=elaboration)
+                params = {'evaluation': evaluation}
 
     reviews = Review.objects.filter(elaboration=elaboration)
 
@@ -154,6 +168,7 @@ def detail(request):
     params['selection'] = selection
 
     return render_to_response('detail.html', params, RequestContext(request))
+
 
 @login_required()
 def stack(request):
@@ -221,19 +236,50 @@ def submit_evaluation(request):
     evaluation_points = request.POST['evaluation_points']
 
     elaboration = Elaboration.objects.get(pk=elaboration_id)
-    puser = PortfolioUser.objects.get(pk=request.user.id)
+    user = RequestContext(request)['user']
+    course = CourseChallengeRelation.objects.filter(challenge=elaboration.challenge)[0].course
 
     if Evaluation.objects.filter(submission=elaboration):
         evaluation = Evaluation.objects.get(submission=elaboration)
     else:
         evaluation = Evaluation.objects.create(submission=elaboration)
 
-    evaluation.user = user=puser
+    evaluation.user = user = user
     evaluation.evaluation_text = evaluation_text
     evaluation.evaluation_points = evaluation_points
     evaluation.submission_time = datetime.now()
     evaluation.save()
+    obj, created = Notification.objects.get_or_create(
+        user=elaboration.user,
+        course=course,
+        text=Notification.SUBMISSION_EVALUATED + elaboration.challenge.title,
+        image_url='/static/img/' + elaboration.challenge.image_url,
+        link="stack=" + str(elaboration.challenge.get_stack().id)
+    )
+    obj.read = False
+    obj.save
+    return HttpResponse()
 
+
+@csrf_exempt
+def reopen_evaluation(request):
+    elaboration_id = request.POST['elaboration_id']
+    elaboration = Elaboration.objects.get(pk=elaboration_id)
+    evaluation = Evaluation.objects.get(submission=elaboration)
+    course = CourseChallengeRelation.objects.filter(challenge=evaluation.submission.challenge)[0].course
+
+    evaluation.submission_time = None
+    evaluation.save()
+
+    obj, created = Notification.objects.get_or_create(
+        user=evaluation.submission.user,
+        course=course,
+        text=Notification.SUBMISSION_EVALUATED + evaluation.submission.challenge.title,
+        image_url='/static/img/' + evaluation.submission.challenge.image_url,
+        link="stack=" + str(evaluation.submission.challenge.get_stack().id)
+    )
+    obj.read = False
+    obj.save
     return HttpResponse()
 
 
@@ -263,6 +309,7 @@ def select_challenge(request):
 
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
+    request.session['selection'] = 'search'
     return html
 
 
@@ -283,7 +330,7 @@ def search(request):
             # search query in all models and fields (char and textfields) of database
             fields = [f for f in md._meta.fields if isinstance(f, CharField) or isinstance(f, TextField)]
             if fields:
-                queries = [Q(**{f.name+'__icontains': SEARCH_TERM}) for f in fields]
+                queries = [Q(**{f.name + '__icontains': SEARCH_TERM}) for f in fields]
 
                 qs = Q()
                 for query in queries:
@@ -335,6 +382,7 @@ def search(request):
 
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
+    request.session['selection'] = 'search'
     return html
 
 
@@ -375,8 +423,9 @@ def review_answer(request):
     if request.POST:
         data = request.body.decode(encoding='UTF-8')
         data = json.loads(data)
+        user = RequestContext(request)['user']
         answers = data['answers']
-        review = Review.objects.create(elaboration_id=request.session.get('elaboration_id', ''), reviewer_id=request.user.id)
+        review = Review.objects.create(elaboration_id=request.session.get('elaboration_id', ''), reviewer_id=user.id)
         review.appraisal = data['appraisal']
         review.awesome = data['awesome']
         review.submission_time = datetime.now()

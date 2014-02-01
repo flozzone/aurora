@@ -17,6 +17,5 @@ class UploadFile(models.Model):
 @receiver(post_delete, sender=UploadFile)
 def upload_file_post_delete_handler(sender, **kwargs):
     upload_file = kwargs['instance']
-
     storage, path = upload_file.upload_file.storage, upload_file.upload_file.path
     storage.delete(path)

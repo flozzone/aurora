@@ -34,10 +34,12 @@ function submit_clicked(event) {
     $('.submission_text').show();
 }
 function real_submit_clicked(event) {
-    var challenge = $(event.target);
+    var button = $(event.target);
+    var challenge = button.parent().parent();
     var challenge_id = challenge.attr('id');
+    var stack_id = challenge.attr('stack');
     var url = './submit?id=' + challenge_id;
     $.get(url, function (data) {
-        window.location.href = "./";
+        window.location.href = "/challenges/stack?id=" + stack_id;
     });
 }

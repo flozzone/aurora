@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block additional_headers %}
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/notification.css" type="text/css" media="screen"/>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/notification.js"></script>
+{% endblock %}
+
+{% block content %}
+{% load humanize %}
+  <button id="read_all_button">Mark all as read</button>
+  <div class="notificationList">
+  {% for notification in notifications %}
+    <a href="/notifications?id={{ notification.id }}{% if notification.link %}&link={{ notification.link }}{% endif %}">
+      <div class="notification {% if notification.read %}read{% else %}unread{% endif %} {% cycle 'darkRow' 'lightRow' %}">
+
+        <img src="{{ notification.image_url }}"/>
+
+        <div class="notification_text">{{ notification.text }}</div>
+		
+		<div class="notification_time">{{ notification.creation_time | naturaltime }}</div>
+
+      </div>
+    </a>
+  {% endfor %}
+  </div>
+{% endblock %}

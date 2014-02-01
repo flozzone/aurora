@@ -1,32 +1,79 @@
 {% load humanize %}
 
 <div class="response_vote">
-    <a href='#' class="vote_up_on" data-comment_number="{{ response.id }}" title="This comment is helpful">up vote</a>
-    <span class="response_score">{{ response.score }}</span>
-    <a href='#' class="vote_down_on" data-comment_number="{{ response.id }}"
-       title="This comment is not helpful at all">down vote</a>
-</div>
+    <a href='#' class="vote_up_on" data-comment_number="{{ response.id }}" title="This comment is helpful"><i class="fa fa-angle-up"></i></a><br>
+    <a href='#' class="vote_down_on" data-comment_number="{{ response.id }}" title="This comment is not helpful at all"><i class="fa fa-angle-down"></i></a>
 
-<div class="response{% if response.author.is_staff %} staff_author{% endif %} {{ response.visibility }}_visibility"
-     id="comment_response_{{ response.id }}" data-comment_number="{{ response.id }}"
-     data-comment_author="{{ response.author.display_name }}">
+    <br>
 
-    {% if requester.is_staff or requester == response.author %}
-        <a href="javascript:void(0)" id="delete_response_{{ response.id }}" data-delete_id="{{ response.id }}"
-           class="delete_response">
-            delete post
+    {% if response.promoted %}
+        {% if requester.is_staff %}
+            <a href='#' class="comment_demote" data-comment_number="{{ response.id }}"
+               title="Demote this comment">
+                1
+            </a>
+        {% else %}
+            <p>1</p>
+        {% endif %}
+    {% elif requester.is_staff %}
+        <a href='#' class="comment_promote" data-comment_number="{{ response.id }}" title="Promote this comment">
+            0
         </a>
     {% endif %}
+</div>
 
-    <div class="response_text">{{ response.text | linebreaks | wordwrap:37 }}</div>
-    <p class="response_author">submitted {{ response.post_date | naturaltime }}
-        by {{ response.author.display_name }}</p>
-    {% if response.deleter != None %}
-        <p class="response_deleter">
-            deleted {{ response.delete_date | naturaltime }} by {{ response.deleter.display_name }}
-        </p>
-    {% endif %}
-    <a href="javascript:void(0)" id="comment_reply_link_{{ response.id }}" data-reply_to="{{ comment.id }}">
-        reply
-    </a>
+<div class="response{% if response.author.is_staff %} staff_author{% endif %} {{ response.visibility }}_visibility {% if comment.author == requester %} author_author{% endif %}"
+     id="comment_response_{{ response.id }}" data-comment_number="{{ response.id }}"
+     data-comment_author="{{ response.author.display_name }}">
+	 <div class="response_top">
+		 <div class="comment_author">{{ response.author.display_name }}</div>
+		 <div class="comment_score"> &nbsp; {% if response.score > 0%} +{% endif %}{{ response.score }}</div>
+		 <div class="comment_time">{{ response.post_date | naturaltime }}</div>
+	 </div>
+
+    <div class="response_body">
+		<img src="/{{ comment.author.avatar.url }}">
+
+        {% if response.bookmarked %}
+            <a href='#' class="comment_unbookmark" data-comment_number="{{ response.id }}" title="Remove this comment from Bookmarks">
+                <img src="/static/img/heart.png" height="20" width="20">
+            </a>
+        {% else %}
+            <a href='#' class="comment_bookmark" data-comment_number="{{ response.id }}" title="Bookmark this comment">
+                <img src="/static/img/heart_empty.png" height="20" width="20">
+            </a>
+        {% endif %}
+
+        <div class="response_text">
+        {% if response.deleter == None %}
+            {{ response.text | linebreaksbr }}
+        {% else %}
+            [deleted]
+        {% endif %}
+        </div>
+    </div>
+
+	<div class="response_bottom">
+        {% if response.deleter != None %}
+		<p class="response_deleter">
+			deleted {{ response.delete_date | naturaltime }} by {{ response.deleter.display_name }}
+		</p>
+		{% endif %}
+
+		<div class="response_actions">
+			{% if requester.is_staff or requester == response.author and response.deleter == None %}
+			<a href="javascript:void(0)" id="edit_response_link_{{ response.id }}" class="edit_link">
+				edit
+			</a>
+			<a href="javascript:void(0)" id="delete_response_link_{{ response.id }}" data-delete_id="{{ response.id }}"
+			class="delete_response">
+			delete
+			</a>
+			{% endif %}
+			<a href="javascript:void(0)" id="reply_comment_link_{{ response.id }}" data-reply_to="{{ comment.id }}"
+				class="reply_link">
+				reply
+			</a>
+		</div>
+	</div>
 </div>

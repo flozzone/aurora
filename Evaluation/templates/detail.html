@@ -1,7 +1,9 @@
+{% load comments %}
 {% block additional_headers %}
+  <script type="text/javascript" src="{{ STATIC_URL }}tinymce/tinymce.min.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}tinymce/jquery.tinymce.min.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/detail.js"></script>
   <link rel="stylesheet" href="{{ STATIC_URL }}css/evaluation.css" type="text/css" media="screen"/>
-
   <script type="text/javascript" src="{{ STATIC_URL }}js/file_upload.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}lightbox/js/lightbox-2.6.min.js"></script>
   <link rel="stylesheet" href="{{ STATIC_URL }}lightbox/css/lightbox.css" type="text/css" media="screen"/>
@@ -31,9 +33,10 @@
           </form>
         </div>
 
-        <div class="elaboration">{{ elaboration.elaboration_text|striptags }}</div></br>
+        <textarea id="editor">{{ elaboration.elaboration_text }}</textarea>
+        <div class="spacer"></div>
 
-        {% if selection == 'top_level_challenges' %}
+        {% if evaluation %}
             <form method="post">
                 {% csrf_token %}
                 {% if evaluation.submission_time %}
@@ -41,18 +44,27 @@
                         {{ evaluation.evaluation_text }}
                     </div>
                     points assigned<div class="points">{{ evaluation.evaluation_points }}</div>
-                    <div class="submission_date">evaluated on {{ evaluation.submission_time }}</div>
+                    <div class="submission_date">
+                        evaluated on {{ evaluation.submission_time }}
+                        <button class="reopen_evaluation" id="{{ elaboration.id }}">Reopen</button>
+                    </div>
                 {% else %}
                     <div class="evaluation" {% if not lock %} contenteditable="true" {% endif %}
                             onkeyup="DelayedAutoSave({{ elaboration.id }})">
-                        {{ evaluation.evaluation_text }}{% if lock %}<div class="evaluation_lock">locked by {{ evaluation.user.username }}</div>{% endif %}
+                        {{ evaluation.evaluation_text }}{% if lock %}<div class="evaluation_lock">locked by {{ evaluation.tutor.username }}</div>{% endif %}
                     </div>
                     points assigned<div class="points" {% if not lock %} contenteditable="true" {% endif %} onkeyup="DelayedAutoSave({{ elaboration.id }})">
                         {% if evaluation.evaluation_points %}{{ evaluation.evaluation_points }}{% endif %}</div>
                     {% if not lock %}<button class="submit_evaluation" id="{{ elaboration.id }}">evaluate</button>{% endif %}
                 {% endif %}
             </form>
+            <div class="spacer"></div>
         {% endif %}
+
+        {% if elaboration %}
+            {% render_comment_list for elaboration %}
+        {% endif %}
+
         {% if reviews %}
             <div class="spacer"></div>
             {% include "reviews.html" %}

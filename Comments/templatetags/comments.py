@@ -1,6 +1,6 @@
 from django import template
 from django.contrib.contenttypes.models import ContentType
-from Comments.models import Comment
+from Comments.models import Comment, CommentListRevision
 from Comments.views import CommentForm, ReplyForm
 from django.template.loader import render_to_string
 from PortfolioUser.models import PortfolioUser
@@ -24,6 +24,7 @@ class CommentListNode(template.Node):
             user = PortfolioUser.objects.get(id=context['user'].id)
 
             queryset = Comment.query_top_level_sorted(ref_object.id, ref_type.id, user)
+            revision = CommentListRevision.get_or_create(ref_object).number
 
             form = CommentForm()
             form.fields['reference_id'].initial = ref_object.id
@@ -42,7 +43,8 @@ class CommentListNode(template.Node):
                             'ref_type': ref_type.id,
                             'ref_id': ref_object.id,
                             'id_suffix': id_suffix,
-                            'requester': user})
+                            'requester': user,
+                            'revision': revision})
 
             return render_to_string(self.template, context)
         except template.VariableDoesNotExist:

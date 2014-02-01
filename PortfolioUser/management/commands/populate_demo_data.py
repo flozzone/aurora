@@ -12,8 +12,8 @@ from Stack.models import Stack, StackChallengeRelation
 from Review.models import Review
 from ReviewQuestion.models import ReviewQuestion
 from Slides.models import *
-from Comments.models import Comment
-
+from Comments.models import Comment, CommentsConfig
+from Notification.models import Notification
 
 class Command(BaseCommand):
 
@@ -25,6 +25,8 @@ class Command(BaseCommand):
         init_data()
 
 def init_data():
+    CommentsConfig.setup()
+
     user_data_list = [
         {'username': 's0', 'password': 's0'},
         {'username': 's1', 'password': 's1'},
@@ -46,6 +48,7 @@ def init_data():
         user.set_password(password)
         user.save()
         user_data_list[i]['user'] = user
+
 
     s0 = user_data_list[0]['user']
 
@@ -71,17 +74,17 @@ def init_data():
 
     # create an admin user with password amanaman
     print('adding superuser')
-    superuser = PortfolioUser(username='amanaman')
-    superuser.set_password('amanaman')
-    superuser.is_staff = True
-    superuser.is_superuser = True
-    superuser.save()
+    amanaman = PortfolioUser(username='amanaman')
+    amanaman.set_password('amanaman')
+    amanaman.is_staff = True
+    amanaman.is_superuser = True
+    amanaman.save()
 
-    print('adding superuser')
+    print('adding staff')
     superuser = PortfolioUser(username='hagrid')
     superuser.set_password('hagrid')
     superuser.is_staff = True
-    superuser.is_superuser = True
+    superuser.is_superuser = False
     superuser.save()
 
 
@@ -107,12 +110,23 @@ def init_data():
 
     # create course-user relations
     print('adding course-user relations')
+    CourseUserRelation(course=gsi, user=amanaman).save()
+    CourseUserRelation(course=hci, user=amanaman).save()
     CourseUserRelation(course=gsi, user=superuser).save()
     CourseUserRelation(course=hci, user=superuser).save()
+    CourseUserRelation(course=gsi, user=d1).save()
+    CourseUserRelation(course=hci, user=d1).save()
+    CourseUserRelation(course=gsi, user=d2).save()
+    CourseUserRelation(course=hci, user=d2).save()
+    CourseUserRelation(course=gsi, user=d3).save()
+    CourseUserRelation(course=hci, user=d3).save()
     for user_data in user_data_list:
         user = user_data['user']
         CourseUserRelation(course=gsi, user=user).save()
         CourseUserRelation(course=hci, user=user).save()
+        Notification(user=user, course=gsi, text="Welcome to GSI!").save()
+        Notification(user=user, course=hci, text="Welcome to HCI!").save()
+
 
     # create challenges
     print('adding challenges')
@@ -288,6 +302,9 @@ def init_data():
     de4 = Elaboration(challenge=challenge_10, user=d1, elaboration_text="final submission user d1",
                       submission_time=datetime.now())
     de4.save()
+
+    print('adding FAIL review for dummy user d1')
+    Review(elaboration=de4, reviewer=d3, appraisal='F', submission_time=datetime.now()).save()
 
     print('adding final elaboration 2 for challenge 10')
     de5 = Elaboration(challenge=challenge_10, user=d2, elaboration_text="final submission user d2",

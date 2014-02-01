@@ -2,13 +2,31 @@
 {% load staticfiles %}
 
 {% block additional_headers %}
+    <script type="text/javascript" src="{% static "Comments/simple_functions.js" %}"></script>
     <script type="text/javascript" src="{% static "Comments/comments.js" %}"></script>
     <link rel="stylesheet" href="{% static "Comments/comments.css" %}" type="text/css" media="screen"/>
 {% endblock %}
 
 <div id="#comments_with_forms{{ id_suffix }}">
-    <button id="button_add_comment_form{{ id_suffix }}" class="button_add_comment_form" data-ref_type="{{ ref_type }}" data-ref_id="{{ ref_id }}">Post a comment</button>
-    <form method="post" class="comment_form" id="commentForm" style="display:none">{% csrf_token %}
+    <div id="element_shelter">
+        <div id="edit_buttons" style="display:none">
+            <button id="edit_save">Save</button>
+            <button id="edit_cancel">Cancel</button>
+        </div>
+
+        <div id="delete_buttons" style="display:none">
+            <button id="delete_confirm">Confirm delete</button>
+            <button id="delete_cancel">Cancel</button>
+        </div>
+    </div>
+
+    <button id="button_add_comment_form{{ id_suffix }}" class="button_add_comment_form" data-ref_type="{{ ref_type }}" data-ref_id="{{ ref_id }}">add comment</button>
+    <form method="post" class="comment_form  author_author" id="commentForm" style="display:none">{% csrf_token %}
+   	 <div class="comment_top author_author" style="margin-left:5%; width:93%">
+   		 <div class="comment_author">{{ requester.nickname }}</div>
+   		 <div class="comment_score"> &nbsp; 0</div>
+   		 <div class="comment_time">right now</div>
+   	 </div>
             {{ form.as_p }}
         <button id="button_add_comment">Add comment</button>
         <button id="button_cancel_comment">Cancel</button>

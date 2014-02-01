@@ -2,7 +2,6 @@ import os
 import hashlib
 from urllib.parse import urlparse
 import urllib.request
-from django.core.files import File
 from django.db import models
 from django.contrib.auth.models import User, UserManager
 from Elaboration.models import Elaboration
@@ -12,8 +11,9 @@ class PortfolioUser(User):
     nickname = models.CharField(max_length=100, null=True, blank=True)
     statement = models.TextField()
     last_activity = models.DateTimeField(auto_now_add=True, blank=True)
-    upload_path = 'static/img'
+    upload_path = 'static/img/avatar'
     avatar = models.ImageField(upload_to=upload_path, null=True, blank=True)
+    last_selected_course = models.ForeignKey('Course.Course', null=True)
 
     # Use UserManager to get the create_user method, etc.
     objects = UserManager()
@@ -40,9 +40,10 @@ class PortfolioUser(User):
 
     def get_gravatar(self):
         gravatarurl = "http://www.gravatar.com/avatar/" + hashlib.md5(self.email.lower().encode("utf-8")).hexdigest() + "?"
-        gravatarurl += urllib.parse.urlencode({'d':'monsterid', 's':str(30)})
-
-        filename = "avatar_" + self.username + str(self.id) + ".jpg"
+        gravatarurl += urllib.parse.urlencode({'d': 'monsterid', 's': str(100)})
+        filename = "avatar_" + str(self.id)
+        if not os.path.isdir(self.upload_path):
+            os.makedirs(self.upload_path)
         urllib.request.urlretrieve(gravatarurl, os.path.join(self.upload_path, filename))
         self.avatar = os.path.join(self.upload_path, filename)
         self.save()

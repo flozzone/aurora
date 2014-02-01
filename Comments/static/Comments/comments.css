@@ -1,25 +1,191 @@
+
+.comment_form > p > textarea {
+	margin-left:5%;
+	width:93%;
+	border:none;
+    border-top: 1px solid silver;
+    border-bottom: 1px solid silver;
+	padding:2px;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size:13px;
+	line-height:17px;
+	padding-top:4px;
+	height:60px;
+}
+
+.comment_form{
+	margin-top:20px;
+}
+
+.comment_form > p > label {
+	float:left;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size:11px;
+	display:none;
+}
+
+.comment_form > p > select {
+	float:left;
+	margin-left:5%;
+    -webkit-appearance:none;
+    -moz-appearance:none;
+    appearance:none;
+	background-color:white;
+	border:none;
+	text-transform:uppercase;
+	color:rgb(58,201,88);
+	font-size:10px;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+
+.comment_form > button,#edit_save,#edit_cancel {
+	float:right;
+    -webkit-appearance:none;
+    -moz-appearance:none;
+    appearance:none;
+	background-color:white;
+	border:none;
+	text-transform:uppercase;
+	color:rgb(58,201,88);
+	margin-left:6px;
+	font-size:10px;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+}
+
+.comments {
+	max-width:680px;
+}
+
 .response {
-    border-style: solid;
-    border-width: thin;
-    margin-left: 50px;
+	margin-top:0px;
+	margin-bottom:8px;
+	display:inline-block;
+	width:88%;
+}
+
+.response_body, .comment_body {
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+    border-top: 1px solid silver;
+    border-bottom: 1px solid silver;
+	padding:2px;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size:13px;
+	line-height:17px;
+	padding-top:4px;
+	min-height:40px;
+}
+
+.response_body > img, .comment_body > img {
+	height:32px;
+	float:left;
+	margin-right:4px;
+}
+
+
+.response_vote {
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	margin-top:14px;
+	float:left;
+	text-align:right;
+	width:10%;
+	padding:4px;
+}
+
+.response_vote > a {
+	text-decoration:none;
+	color:black;
 }
 
 .comment {
-    border-style: solid;
-    border-width: thin;
+	margin-top:12px;
+	margin-bottom:0px;
+	display:inline-block;
+	width:93%;
 }
 
-.comment_author, .response_author, .comment_deleter, .response_deleter {
-    font-size: small;
+.comment:hover > .comment_bottom, .response:hover > .response_bottom {
+	visibility:visible;
 }
 
-.response_vote {
-    margin-left: 50px;
+.comment_vote {
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	margin-top:19px;
+	float:left;
+	text-align:right;
+	width:5%;
+	padding:4px;
+	clear:both;
+}
+
+.comment_vote a {
+	text-decoration:none;
+	color:black;
+}
+
+.comment_top, .response_top {
+	height:16px;
+	width:100%;
+	font-size:10px;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.comment_bottom, .response_bottom {
+	height:20px;
+	width:100%;
+	visibility:hidden;
+}
+
+.comment_actions, .response_actions {
+	float:right;
+}
+
+.comment_actions a, .response_actions a {
+	text-decoration:none;
+	text-transform:uppercase;
+	color:rgb(58,201,88);
+	margin-left:6px;
+	font-size:10px;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+
+.comment_author, .response_author {
+	font-weight:bold;
+	float:left;
+	padding:2px;
+	font-size:10px;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+
+.comment_deleter, .response_deleter {
+	font-style:italic;
+	float:left;
+	padding:2px;
+	font-size:10px;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;	
+}
+.comment_score, .respons_score {
+	float:left;
+	padding:2px;
+	font-size:10px;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.comment_time {
+	float:right;
+	padding:2px;
+	font-size:10px;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .vote_up_on .vote_down_on {
     cursor: pointer;
-    background-image: url("https://cdn.sstatic.net/stackoverflow/img/sprites.png?v=6");
 }
 
 .comments_with_forms {
@@ -30,13 +196,27 @@
     color: darkgreen;
 }
 
-.staff_author {
-    background-color: rgb(224,255,200);
+.staff_author > .comment_top {
+    background-color: rgb(229, 235, 253);
+}
+
+.author_author > .comment_top {
+	background-color: rgb(251, 249, 149);
+}
+
+.author_author > .response_top {
+	background-color: rgb(251, 249, 149);
 }
 
 .private_visibility {
-    color: rosybrown;
+	color:gray;
 }
+
+.private_visibility > .comment_body {
+	border-top: 1px dashed gray;
+	border-bottom: 1px dashed gray;
+}
+
 
 #comments_column_1 {
     float: left;
@@ -46,16 +226,31 @@
 
 #comments_column_2 {
     float: left;
-    width: 400px;
+    width: 680px;
     margin-left: 30px;
 }
 
-.delete_comment,.delete_response{
-  float: right;
-  background-image: url(/static/img/waiting.png);
-  display: block;
-  margin: 0 auto;
-  text-indent: -9999px;
-  width: 20px;
-  height: 20px;
+.edit
+
+/*.delete_comment,.delete_response{*/
+  /*float: right;*/
+  /*background-image: url(/static/img/waiting.png);*/
+  /*display: block;*/
+  /*margin: 0 auto;*/
+  /*text-indent: -9999px;*/
+  /*width: 20px;*/
+  /*height: 20px;*/
+/*}*/
+
+/*[contenteditable="true"]:active,*/
+/*[contenteditable="true"]:focus{*/
+
+ [contenteditable="true"] {
+    background-color: #d3d3d3;
+    border: none;
+    outline: none;
+}
+
+#edit_buttons, #delete_buttons {
+    float: right;
 }

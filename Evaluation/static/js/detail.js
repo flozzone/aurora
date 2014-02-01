@@ -1,4 +1,13 @@
 $(function() {
+    tinymce.init({
+        selector: "textarea#editor",
+        menubar: false,
+        statusbar: false,
+        readonly: 1
+    });
+});
+
+$(function() {
    $(".stack").click(function(event) {
        var url = '/stack';
         $.get(url, function (data) {
@@ -54,6 +63,30 @@ $(function() {
         var args = { type: "POST", url: "/submit_evaluation/", data: data,
             error: function () {
                 alert('error submitting evaluation');
+            },
+            success: function () {
+                var url = '/detail?elaboration_id=' + $(event.target).attr('id');
+                $.get(url, function (data) {
+                    $('#detail_area').html(data);
+                });
+            }
+        };
+        $.ajax(args);
+    });
+});
+
+$(function() {
+   $(".reopen_evaluation").click(function(event) {
+        event.preventDefault();
+        var data = {
+            elaboration_id: $(event.target).attr('id')
+        };
+        var args = { type: "POST", url: "/reopen_evaluation/", data: data,
+            success: function () {
+                var url = '/detail?elaboration_id=' + $(event.target).attr('id');
+                $.get(url, function (data) {
+                    $('#detail_area').html(data);
+                });
             }
         };
         $.ajax(args);

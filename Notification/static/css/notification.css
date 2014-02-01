@@ -1,0 +1,79 @@
+.notificationList {
+	margin-top:15px;
+	clear:both;
+}
+
+.notification {
+    min-height: 30px;
+	width:740px;
+	margin-left:24px;
+    overflow: hidden;	
+	border-bottom:1px solid #f8f8f8;
+}
+
+.notification.read {
+	color:#999;
+}
+
+.notification.read:before {
+	content: "\00A0";
+	width:12px;
+	font-size:10px;
+	float:left;
+	margin:4px 15px 4px 15px ;
+}
+
+.notification.unread:before {
+	margin:4px 15px 4px 15px ;
+	content: "\00A0";
+	margin-top:8px;
+	width:12px;
+	font-size:10px;
+	float:left;
+	background-color:green;
+	border-radius:10px;
+	box-shadow: inset 0px 1px 3px rgba(255,255,255,0.7), inset 0px -1px 3px rgba(0,0,0,0.4);
+}
+
+.notification img {
+    width: 30px;
+    float: left;
+}
+
+.notification_text {
+	padding:5px;
+    overflow: hidden;
+	line-height:20px;
+	max-width:500px;
+	float:left;
+}
+
+a {
+	text-decoration:none;
+	color:black;
+}
+
+.notification_time {
+	padding:5px;
+	line-height:20px;
+	float:right;
+}
+
+#read_all_button {
+	margin-left:15px;
+    -webkit-appearance:none;
+    -moz-appearance:none;
+    appearance:none;
+	background-color:white;
+	border:none;
+	text-transform:uppercase;
+	color:rgb(58,201,88);
+	font-size:10px;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.lightRow {
+}
+
+.darkRow {
+}

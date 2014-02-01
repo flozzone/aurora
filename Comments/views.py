@@ -2,6 +2,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.template.loader import render_to_string
 from django.views.decorators.http import require_POST, require_GET
 
 from django.views.generic import ListView
@@ -10,9 +11,11 @@ from django import forms
 from django.utils import timezone
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden
 from django.contrib.contenttypes.models import ContentType
+import json
 
-from Comments.models import Comment
-from PortfolioUser.models import PortfolioUser
+from Comments.models import Comment, CommentsConfig, CommentListRevision
+from Elaboration.models import Elaboration
+from Notification.models import Notification
 from Comments.tests import CommentReferenceObject
 
 
@@ -21,7 +24,7 @@ class CommentList(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(CommentList, self).get_context_data(**kwargs)
-        context['form'] = CommentForm()
+        # context['form'] = CommentForm()
         context['reply_form'] = ReplyForm()
         # context['form_action'] = '/post/'
         return context
@@ -46,42 +49,25 @@ class ReplyForm(forms.Form):
 @login_required
 def post_comment(request):
     form = CommentForm(request.POST)
-    handle_form(form, request)
-    # #return HttpResponse(json.dumps(data), content_type="application/json")
-    # # return render_to_response('Comments/comment.html', {'comment': comment}, context_instance=RequestContext(request))
+    create_comment(form, request)
     return HttpResponse('')
-    #return HttpResponseRedirect(reverse('Comments:feed'))
 
 
 @require_POST
 @login_required
 def delete_comment(request):
     comment_id = request.POST['comment_id']
-    deleter = PortfolioUser.objects.get(id=request.user.id)
+    deleter = RequestContext(request)['user']
 
     comment = Comment.objects.get(id=comment_id)
 
     if comment.author != deleter and not deleter.is_staff:
-        return HttpResponseForbidden('You shall not delete (other users posts)!')
+        return HttpResponseForbidden('You shall not delete!')
 
-    parent = comment.parent
-
-    # delete comment tree for comment without non-deleted responses
-    if parent is None:
-        if comment.responses().filter(deleter=None).count() == 0:
-            comment.delete_with_responses()
-            return HttpResponse('')
-    else:
-        if parent.deleter is not None:
-            non_deleted_responses = parent.responses().filter(deleter=None).exclude(id=comment_id).count()
-            if non_deleted_responses == 0:
-                parent.delete_with_responses()
-                return HttpResponse('')
-
-    comment.text = '[deleted]'
     comment.deleter = deleter
     comment.delete_date = timezone.now()
     comment.save()
+    CommentListRevision.get_by_comment(comment).increment()
 
     return HttpResponse('')
 
@@ -90,13 +76,40 @@ def delete_comment(request):
 @login_required
 def post_reply(request):
     form = ReplyForm(request.POST)
-    handle_form(form, request)
+    create_comment(form, request)
     return HttpResponse('')
 
 
-def handle_form(form, request):
+@require_POST
+@login_required
+def edit_comment(request):
+    data = request.POST
+    context = RequestContext(request)
+    requester = context['user']
+
+    try:
+        comment = Comment.objects.get(id=data['comment_id'])
+    except Comment.DoesNotExist:
+        return HttpResponse('')
+
+    if comment.author != requester and not requester.is_staff:
+        return HttpResponseForbidden('You shall not edit!')
+
+    text = data['text']
+    if text == '':
+        return HttpResponse('')
+
+    comment.text = data['text']
+    comment.save()
+    CommentListRevision.get_by_comment(comment).increment()
+
+    return HttpResponse('')
+
+
+def create_comment(form, request):
     if form.is_valid():
-        user = PortfolioUser.objects.get(id=request.user.id)
+        context = RequestContext(request)
+        user = context['user']
         ref_type_id = form.cleaned_data['reference_type_id']
         ref_obj_id = form.cleaned_data['reference_id']
         ref_obj_model = ContentType.objects.get_for_id(ref_type_id).model_class()
@@ -118,7 +131,21 @@ def handle_form(form, request):
                                          parent=parent_comment,
                                          post_date=timezone.now(),
                                          visibility=visibility)
+
         comment.save()
+        CommentListRevision.get_by_comment(comment).increment()
+
+        if parent_comment is not None:
+            if ref_obj_model == Elaboration:
+                elaboration = ref_obj
+                user = parent_comment.author
+                obj, created = Notification.objects.get_or_create(
+                    user=user,
+                    course=context['last_selected_course'],
+                    text=Notification.NEW_MESSAGE + elaboration.challenge.title,
+                    image_url='/static/img/' + elaboration.challenge.image_url,
+                    link="challenge=" + str(elaboration.challenge.id)
+                )
 
 
 @login_required
@@ -132,17 +159,62 @@ def vote_on_comment(request):
         return HttpResponse('')
 
     comment = Comment.objects.get(id=data['comment_id'])
-    user = PortfolioUser.objects.get(id=request.user.id)
+    user = RequestContext(request)['user']
 
     if user == comment.author:
         return HttpResponseForbidden('')
 
-    if comment.was_voted_on_by.filter(pk=request.user.id).exists():
+    if comment.was_voted_on_by.filter(pk=user.id).exists():
         return HttpResponseForbidden('')
 
     comment.score += diff
     comment.was_voted_on_by.add(user)
     comment.save()
+    CommentListRevision.get_by_comment(comment).increment()
+
+    return HttpResponse('')
+
+
+@require_POST
+@login_required
+def bookmark_comment(request):
+    data = request.POST
+
+    requester = RequestContext(request)['user']
+
+    try:
+        comment = Comment.objects.get(id=data['comment_id'])
+    except Comment.DoesNotExist:
+        return HttpResponse('')
+
+    if data['value'] == 'true':
+        comment.bookmarked_by.add(requester)
+    else:
+        comment.bookmarked_by.remove(requester)
+
+    comment.save()
+    CommentListRevision.get_by_comment(comment).increment()
+
+    return HttpResponse('')
+
+
+@require_POST
+@login_required
+def promote_comment(request):
+    data = request.POST
+
+    requester = RequestContext(request)['user']
+    if not requester.is_staff:
+        return HttpResponseForbidden('You shall not promote!')
+
+    try:
+        comment = Comment.objects.get(id=data['comment_id'])
+    except Comment.DoesNotExist:
+        return HttpResponse('')
+
+    comment.promoted = True if data['value'] == 'true' else False
+    comment.save()
+    CommentListRevision.get_by_comment(comment).increment()
 
     return HttpResponse('')
 
@@ -150,27 +222,37 @@ def vote_on_comment(request):
 @require_GET
 @login_required
 def update_comments(request):
-    latest_client_comment = request.GET
-    ref_type = latest_client_comment['ref_type']
-    ref_id = latest_client_comment['ref_id']
-    user = PortfolioUser.objects.get(id=request.user.id)
+    client_revision = request.GET
+    ref_type = client_revision['ref_type']
+    ref_id = client_revision['ref_id']
+    user = RequestContext(request)['user']
 
-    try:
-        latest_comment_id = Comment.query_all(ref_id, ref_type, user).latest('id').id
-    except ObjectDoesNotExist:
-        latest_comment_id = -1
+    revision = CommentListRevision.get_by_ref_numbers(ref_id, ref_type).number
 
-    if int(latest_client_comment['id']) < int(latest_comment_id):
+    polling_active, polling_idle = CommentsConfig.get_polling_interval()
+
+    response_data = {'polling_active_interval': polling_active,
+                     'polling_idle_interval': polling_idle}
+
+    if revision > int(client_revision['id']):
         comment_list = Comment.query_top_level_sorted(ref_id, ref_type, user)
         id_suffix = "_" + str(ref_id) + "_" + str(ref_type)
+
         context = {'comment_list': comment_list,
                    'ref_type': ref_type,
                    'ref_id': ref_id,
                    'id_suffix': id_suffix,
-                   'requester': user}
-        return render_to_response('Comments/comment_list.html', context)
+                   'requester': user,
+                   'revision': revision}
+
+        response_data.update(
+            {'comment_list': render_to_string('Comments/comment_list.html', context)}
+        )
+        template_response = json.dumps(response_data)
+            # render_to_response('Comments/comment_list.html', context))
+        return HttpResponse(template_response, content_type="application/json")
     else:
-        return HttpResponse('')
+        return HttpResponse(json.dumps(response_data))
 
 
 @login_required
@@ -184,9 +266,3 @@ def feed(request):
         CommentReferenceObject().save()
         o2 = CommentReferenceObject.objects.get(id=2)
     return render(request, 'Comments/feed.html', {'object': o, 'object2': o2})
-
-
-def test_template_tags(request):
-    o = CommentReferenceObject.objects.all()[0]
-    #return render(request, 'Comments/test_template_tags.html', {'object': o})
-    return render_to_response('Comments/test_template_tags.html', {'object': o}, context_instance=RequestContext(request))

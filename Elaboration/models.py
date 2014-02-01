@@ -18,13 +18,21 @@ class Elaboration(models.Model):
             return True
         return False
 
-    def get_evaluation(self):
-        if Evaluation.objects.get(submission=self):
-            return Evaluation.objects.get(submission=self)
+    def is_evaluated(self):
+        evaluation = self.get_evaluation()
+        if evaluation:
+            if evaluation.submission_time:
+                return True
         return False
 
-    def is_reviewed_3times(self):
-        if Review.objects.filter(elaboration=self).count() < 3:
+    def get_evaluation(self):
+        evaluation = Evaluation.objects.filter(submission=self)
+        if evaluation:
+            return evaluation[0]
+        return None
+
+    def is_reviewed_2times(self):
+        if Review.objects.filter(elaboration=self).count() < 2:
             return False
         return True
 
@@ -55,7 +63,7 @@ class Elaboration(models.Model):
     def get_missing_reviews():
         missing_reviews = []
         for elaboration in Elaboration.objects.all():
-            if not elaboration.is_reviewed_3times() and elaboration.is_older_3days() and not elaboration.challenge.is_final_challenge():
+            if not elaboration.is_reviewed_2times() and elaboration.is_older_3days() and not elaboration.challenge.is_final_challenge():
                 missing_reviews.append(elaboration)
         return missing_reviews
 
@@ -63,15 +71,27 @@ class Elaboration(models.Model):
     def get_top_level_challenges():
         top_level_challenges = []
         for elaboration in Elaboration.objects.all():
-            if elaboration.challenge.is_final_challenge():
-                top_level_challenges.append(elaboration)
+            if elaboration.challenge.is_final_challenge() and not elaboration.is_evaluated():
+                    top_level_challenges.append(elaboration)
         return top_level_challenges
 
     @staticmethod
     def get_non_adequate_work():
         non_adequate_work = []
         for review in Review.objects.filter(appraisal=Review.FAIL):
-            non_adequate_work.append(review.elaboration)
+            if not review.elaboration.is_evaluated():
+                non_adequate_work.append(review.elaboration)
+        return non_adequate_work
+
+    @staticmethod
+    def get_evaluated_non_adequate_work():
+        non_adequate_work = []
+        for review in Review.objects.filter(appraisal=Review.FAIL):
+            final_challenge = review.elaboration.challenge.get_final_challenge()
+            if final_challenge.get_submissions():
+                final_elaboration = final_challenge.get_submissions()[0]
+                if final_elaboration.is_evaluated():
+                    non_adequate_work.append(review.elaboration)
         return non_adequate_work
 
     @staticmethod
@@ -101,6 +121,9 @@ class Elaboration(models.Model):
 
     def get_awesome_reviews(self):
         return Review.objects.filter(elaboration=self, appraisal=Review.AWESOME)
+
+    def is_passing_peer_review(self):
+        return len(Review.objects.filter(elaboration=self, appraisal=Review.NOTHING) | Review.objects.filter(elaboration=self, appraisal=Review.FAIL)) == 0
 
     @staticmethod
     def get_non_adequate_reviews():
@@ -138,11 +161,17 @@ class Elaboration(models.Model):
         for review in Review.objects.filter(elaboration=self.id):
             for comment in Comment.objects.filter(visibility=Comment.PUBLIC, content_type=ContentType.objects.get_for_model(Review), object_id=review.id):
                 comments.append(comment)
+        for elaboration in Elaboration.objects.filter(id=self.id):
+            for comment in Comment.objects.filter(visibility=Comment.PUBLIC, content_type=ContentType.objects.get_for_model(Elaboration), object_id=elaboration.id):
+                comments.append(comment)
         return comments
 
     def get_invisible_comments(self):
         comments = []
         for review in Review.objects.filter(elaboration=self.id):
             for comment in Comment.objects.filter(visibility=Comment.STAFF, content_type=ContentType.objects.get_for_model(Review), object_id=review.id):
+                comments.append(comment)
+        for elaboration in Elaboration.objects.filter(id=self.id):
+            for comment in Comment.objects.filter(visibility=Comment.STAFF, content_type=ContentType.objects.get_for_model(Elaboration), object_id=elaboration.id):
                 comments.append(comment)
         return comments
