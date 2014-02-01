@@ -168,28 +168,28 @@ def vote_on_comment(request):
 
 def vote_up_on(comment, voter):
     try:
-        vote = comment.votes.get(pk=voter.id)
+        vote = comment.votes.get(voter=voter)
         if vote.direction == Vote.DOWN:
             vote.delete()
             CommentListRevision.get_by_comment(comment).increment()
 
         return
     except Vote.DoesNotExist:
-        vote = Vote(direction=Vote.UP, voter=voter, comment)
+        vote = Vote(direction=Vote.UP, voter=voter, comment=comment)
         vote.save()
         CommentListRevision.get_by_comment(comment).increment()
 
 
 def vote_down_on(comment, voter):
     try:
-        vote = comment.votes.get(pk=voter.id)
+        vote = comment.votes.get(voter=voter)
         if vote.direction == Vote.UP:
             vote.delete()
             CommentListRevision.get_by_comment(comment).increment()
 
         return
     except Vote.DoesNotExist:
-        vote = Vote(direction=Vote.DOWN, voter=voter, comment)
+        vote = Vote(direction=Vote.DOWN, voter=voter, comment=comment)
         vote.save()
         CommentListRevision.get_by_comment(comment).increment()
 

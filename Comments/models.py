@@ -48,10 +48,15 @@ class CommentListRevision(models.Model):
 
 
 class Vote(models.Model):
-    UP = True
-    DOWN = False
-    direction = models.BooleanField(choices=((UP, True), (DOWN, False)),
-                                    default=True)
+    # UP = True
+    # DOWN = False
+    # direction = models.BooleanField(choices=((UP, True), (DOWN, False)),
+    #                                 default=True)
+    UP = 'u'
+    DOWN = 'd'
+    direction = models.CharField(max_length=1,
+                                 choices=((UP, 'up'), (DOWN, 'down'))
+    )
     voter = models.ForeignKey('PortfolioUser.PortfolioUser')
     comment = models.ForeignKey('Comment', related_name='votes')
 
