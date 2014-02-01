@@ -15,9 +15,10 @@ def general_context_processor(request):
             context['available_courses'] = available_courses
         last_selected_course = user.last_selected_course
         if not last_selected_course:
-            last_selected_course = available_courses[0]
-            user.last_selected_course = last_selected_course
-            user.save()
+            if available_courses:
+                last_selected_course = available_courses[0]
+                user.last_selected_course = last_selected_course
+                user.save()
         context['last_selected_course'] = last_selected_course
         unread_notifications = Notification.objects.filter(user=user, course=last_selected_course, read=False)
         context['unread_notifications'] = unread_notifications

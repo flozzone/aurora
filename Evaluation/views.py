@@ -278,8 +278,9 @@ def reopen_evaluation(request):
         image_url='/static/img/' + evaluation.submission.challenge.image_url,
         link="stack=" + str(evaluation.submission.challenge.get_stack().id)
     )
+    obj.creation_time = datetime.now()
     obj.read = False
-    obj.save
+    obj.save()
     return HttpResponse()
 
 
