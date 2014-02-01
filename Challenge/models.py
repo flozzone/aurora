@@ -16,69 +16,72 @@ class Challenge(models.Model):
     # This is a comma separated list of mime types or file extensions. Eg.: image/*,application/pdf,.psd.
     accepted_files = models.CharField(max_length=100, default="image/*,application/pdf")
 
-    AVAILABLE = 0
-    PREREQUISITE_MISSING = 1
+    NOT_STARTED = 0
+    NOT_SUBMITTED = 1
     USER_REVIEW_MISSING = 2
-    WAITING_FOR_SUBMISSION = 3
-    BAD_PEER_REVIEW = 4
-    PEER_REVIEW_MISSING = 5
-    DONE = 6
+    BLOCKED_BAD_REVIEW = 3
+    DONE_MISSING_PEER_REVIEW = 4
+    DONE_PEER_REVIEWED = 5
+    BLOCK_MISSING_PEER_REVIEW = 6
     WAITING_FOR_EVALUATION = 7
     EVALUATED = 8
 
     status_dict = {
-        0: "Available",
-        1: "Prerequisite missing",
+        0: "Not started",
+        1: "Not submitted",
         2: "Review missing",
-        3: "Waiting for submission",
-        4: "Bad Review",
-        5: "Waiting for reviews",
-        6: "Done",
-        7: "Waiting for evaluation",
-        8: "Evaluated"
+        3: "Bad review",
+        4: "Done, missing peer review", # can proceed but will be a problem for final challenge
+        5: "Done, peer reviewed",
+        6: "Waiting for evaluation",
+        7: "Evaluated"
     }
 
     next_dict = {
         0: "Start the next challenge",
-        1: "Prerequisite missing",
+        1: "Submit your elaboration once it is finished",
         2: "Write another review to proceed",
-        3: "Submit your elaboration once it is finished",
-        4: "You received a bad review this stack will be blocked until the issue is resolved",
-        5: "This submission did not pass the peer review yet",
-        6: "Congratulations, this challenge is completed",
-        7: "Your submission will be evaluated by a tutor soon",
-        8: "Evaluation received this stack is completed"
+        3: "You received a bad review this stack will be blocked until the issue is resolved",
+        4: "Done. This submission did not pass the peer review yet (needed to enable final challenge)",
+        5: "Congratulations, this challenge passed all peer reviews",
+        6: "Your submission will be evaluated by a tutor soon",
+        7: "Evaluation received this stack is completed"
     }
 
-    def get_previous(self):
-        return self.prerequisite
-
-    def get_next(self):  # TODO: this will not work if we branch out stacks (can return multiple results)
+    def get_next(self):
         next_challenges = Challenge.objects.filter(prerequisite=self)
         if next_challenges:
             return next_challenges[0]
         else:
             return None
 
+    def get_elaboration(self, user):
+        try:
+            print(user.id)
+            for elaboration in Elaboration.objects.filter(challenge=self, user=user):
+                print(elaboration.user.id)
+            return Elaboration.objects.get(challenge=self, user=user)
+        except Elaboration.DoesNotExist:
+            return None
+
     def get_stack(self):
         stack_challenge_relation = StackChallengeRelation.objects.filter(challenge=self)
         if stack_challenge_relation:
-            return stack_challenge_relation[0].stack    # TODO: does not work with challenge in multiple stacks
+            return stack_challenge_relation[0].stack
         else:
             return None
 
     def is_first_challenge(self):
-        return not self.prerequisite # challenge without prerequisite is the first challenge
+        return not self.prerequisite  # challenge without prerequisite is the first challenge
 
     def is_final_challenge(self):
         return False if self.get_next() else True
 
     def get_final_challenge(self):
         next_challenge = self
-        while (not next_challenge.is_final_challenge()):
+        while not next_challenge.is_final_challenge():
             next_challenge = next_challenge.get_next()
         return next_challenge
-
 
     def get_status_text(self, user):
         status = self.get_status(user)
@@ -89,43 +92,92 @@ class Challenge(models.Model):
             'next': next_text
         }
 
-    def get_status(self, user):
-        if not self.is_first_challenge():  # first challenge is always available
-            prerequisite_status = self.prerequisite.get_status(user)
-            if not prerequisite_status == self.DONE:  # missing prerequisite means unavailable
-                if self.is_final_challenge():
-                    if prerequisite_status == self.PEER_REVIEW_MISSING:
-                        return self.PREREQUISITE_MISSING
-                return self.PREREQUISITE_MISSING
+    def has_enough_user_reviews(self, user):
+        return len(self.get_reviews_written_by_user(user)) == 3
 
-        elaboration = Elaboration.objects.filter(challenge=self, user=user)
-        if not elaboration:  # user did all 3 reviews from the prerequisite and therefore start this challenge
-            return self.AVAILABLE
-        if not elaboration[0].is_submitted():  # user already wrote an elaboration but did not submit yet
-            return self.WAITING_FOR_SUBMISSION
-        if not self.is_final_challenge(): # for normal challenge
-            reviews = self.get_reviews_written_by_user(user)
-            if not reviews:  # user did not write any reviews yet
+    def get_status(self, user):
+        elaboration = self.get_elaboration(user)
+
+        # user did not start to write an elaboration
+        if not elaboration:
+            return self.NOT_STARTED
+
+        # user started to write but did not yet submit an elaboration
+        if not elaboration.is_submitted():
+            return self.NOT_SUBMITTED
+
+        # for normal peer review challenges
+        if not self.is_final_challenge():
+            # user did not complete 3 user reviews for this challenge
+            if not self.has_enough_user_reviews(user):
                 return self.USER_REVIEW_MISSING
-            if len(reviews) < 3:  # user did not write enough reviews yet
-                return self.USER_REVIEW_MISSING
-            if not elaboration[0].is_passing_peer_review():
-                return self.BAD_PEER_REVIEW
-            if not elaboration[0].is_reviewed_2times():
-                return self.PEER_REVIEW_MISSING
-            return self.DONE
-        else:  # for final challenge
-            if not elaboration[0].get_evaluation():
+
+            # user received at least one bad review for his submission
+            if not elaboration.is_passing_peer_review():
+                return self.BLOCKED_BAD_REVIEW
+
+            # user is done but needs peer reviews for final challenge
+            if not elaboration.is_reviewed_2times():
+                return self.DONE_MISSING_PEER_REVIEW
+
+            # user is done and passed at least 2 peer reviews
+            else:
+                return self.DONE_PEER_REVIEWED
+
+        # for the final challenge
+        else:
+            # final challenge not evaluated yet
+            if not elaboration.is_evaluated():
                 return self.WAITING_FOR_EVALUATION
-            return self.EVALUATED
+            # all done this stack is completed
+            else:
+                return self.EVALUATED
 
     def is_enabled_for_user(self, user):
-        enabled_for_user = self.get_status(user) != self.PREREQUISITE_MISSING
-        return enabled_for_user
+        # first challenge is always enabled
+        if self.is_first_challenge():
+            print("is first challenge")
+            return True
 
-    def is_user_review_missing(self, user):
-        user_review_missing = self.get_status(user) == self.USER_REVIEW_MISSING
-        return user_review_missing
+        # if challenge is already submitted it is enabled by default
+        elaboration = self.get_elaboration(user)
+        if elaboration:
+            print("has elaboration")
+            if elaboration.is_submitted():
+                print("elaboration is submitted")
+                return True
+
+        # if the stack is blocked the challenge is not available
+        if self.get_stack().is_blocked(user):
+            print("stack is blocked")
+            return False
+
+        # if not final challenge the prerequisite must have enough (3) user reviews
+        if not self.is_final_challenge():
+            print("is not final challenge")
+            if self.prerequisite.has_enough_user_reviews(user):
+                print("prerequisite has enough user reviews")
+                return True
+            else:
+                print("prerequisite has not enough user reviews")
+                return False
+
+        # for the final challenge to be enabled
+        # the prerequisite must have enough (3) user reviews
+        # and the stack must have enough peer reviews
+        else:
+            print("is final challenge")
+            if not self.prerequisite.has_enough_user_reviews(user):
+                print("prerequisite has not enough user reviews")
+                return False
+            print("prerequisite has enough user reviews")
+            if self.get_stack().has_enough_peer_reviews(user):
+                print("has enough peer reviews")
+                return True
+            else:
+                print("has not enough peer reviews")
+                return False
+        raise Exception("this case is not supposed to happen")
 
     def submitted_by_user(self, user):
         elaboration = Elaboration.objects.filter(challenge=self, user=user)

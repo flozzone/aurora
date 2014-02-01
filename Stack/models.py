@@ -51,8 +51,21 @@ class Stack(models.Model):
 
     def get_status_text(self, user):
         last_available_challenge = self.get_last_available_challenge(user)
-        print(last_available_challenge.title)
         return last_available_challenge.get_status_text(user)
+
+    def is_blocked(self, user):
+        for challenge in self.get_challenges():
+            elaboration = challenge.get_elaboration(user)
+            if elaboration:
+                if not elaboration.is_passing_peer_review():
+                    return True
+        return False
+
+    def has_enough_peer_reviews(self, user):
+        for challenge in self.get_challenges():
+            if not challenge.get_elaboration(user).is_reviewed_2times():
+                return False
+        return True
 
 class StackChallengeRelation(models.Model):
     stack = models.ForeignKey('Stack.Stack')

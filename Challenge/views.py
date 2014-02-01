@@ -32,7 +32,10 @@ def create_context_stack(request):
         challenges_active = []
         challenges_inactive = []
         for stack_challenge in stack_challenges:
+            print("-" * 200)
+            print(stack_challenge.challenge.title)
             if stack_challenge.challenge.is_enabled_for_user(user):
+                print("IS ENABLED")
                 reviews = []
                 for review in stack_challenge.challenge.get_reviews_written_by_user(user):
                     reviews.append({
@@ -57,9 +60,9 @@ def create_context_stack(request):
                     evaluation = elaboration.get_evaluation()
                     if evaluation:
                         challenge_active['points'] = evaluation.evaluation_points
-
                 challenges_active.append(challenge_active)
             else:
+                print("IS NOT ENABLED")
                 challenges_inactive.append(stack_challenge.challenge)
         data['challenges_active'] = challenges_active
         data['challenges_inactive'] = challenges_inactive
