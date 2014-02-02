@@ -34,8 +34,7 @@ function submit_clicked(event) {
     $('.submission_text').show();
 }
 function real_submit_clicked(event) {
-    var button = $(event.target);
-    var challenge = button.parent().parent();
+    var challenge = $('.challenge');
     var challenge_id = challenge.attr('id');
     var stack_id = challenge.attr('stack');
     var url = './submit?id=' + challenge_id;
