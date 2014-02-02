@@ -51,19 +51,19 @@
       <div class="evaluation_text">Evaluation Text: {{ evaluation.evaluation_text }}</div>
       <div class="evaluation_comments">
         Evaluation Comments:
-        {% render_comment_list for evaluation %}
+        {% render_additional_comment_list for evaluation %}
       </div>
     {% elif elaboration %}
       <div class="elaboration_comments">
         Elaboration Comments:
-        {% render_comment_list for elaboration %}
-      </div>
-    {% else %}
-      <div class="challenge_comments">
-        Challenge Comments:
-        {% render_comment_list for challenge %}
+        {% render_additional_comment_list for elaboration %}
       </div>
     {% endif %}
+    <div class="challenge_comments">
+      Challenge Comments:
+      {% render_comment_list for challenge %}
+    </div>
+
   </div>
 
 
