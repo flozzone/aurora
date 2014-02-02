@@ -66,7 +66,7 @@ function registerBookmarkLinksForCommentList($comment_list) {
         $(this).off();
         $(this).click( unbookmark );
         $(this).toggleClass('comment_unbookmark comment_bookmark');
-        $(this).find('img').attr('src', '/static/img/heart.png');
+        $(this).text('unsave');
 
         return false;
     }
@@ -81,7 +81,7 @@ function registerBookmarkLinksForCommentList($comment_list) {
         $(this).off();
         $(this).click( bookmark );
         $(this).toggleClass('comment_unbookmark comment_bookmark');
-        $(this).find('img').attr('src', '/static/img/heart_empty.png');
+        $(this).text('save');
 
         return false;
     }
