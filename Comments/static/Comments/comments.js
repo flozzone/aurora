@@ -335,10 +335,10 @@ function registerReplyButton() {
             success: function(response) {
                 $('#replyForm').hide();
                 $("#replyTextarea").val('');
-                updateComments(false, false);
+                startPolling();
+                state.posting = false;
             }
         })
-        state.posting = false;
         return false;
     })
 }

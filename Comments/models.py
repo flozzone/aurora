@@ -98,7 +98,8 @@ class Comment(models.Model):
 
     def responses(self):
         responses = self.children.order_by('post_date')
-        Comment.set_bookmark_flags(responses, self.requester)
+        responses = Comment.filter_visible(responses, self.requester)
+        Comment.set_flags(responses, self.requester)
         return responses
 
     def add_up_vote(self, voter):
@@ -132,7 +133,7 @@ class Comment(models.Model):
         # will be overwritten.
 
         # Comment.set_permission_flags(visible, requester)
-        Comment.set_bookmark_flags(visible, requester)
+        Comment.set_flags(visible, requester)
         return visible
 
     @staticmethod
@@ -143,21 +144,46 @@ class Comment(models.Model):
 
         visible_comments = Comment.filter_visible(queryset, requester)
         # Comment.set_permission_flags(visible_comments, requester)
-        Comment.set_bookmark_flags(visible_comments, requester)
+        Comment.set_flags(visible_comments, requester)
         return visible_comments
 
     @staticmethod
     def query_bookmarks(requester):
         result = requester.bookmarked_comments_set.all().order_by('-post_date')
         Comment.filter_visible(result, requester)
-        Comment.set_bookmark_flags(result, requester)
+        Comment.set_flags(result, requester)
         return result
 
+    # @staticmethod
+    # def set_bookmark_flags(comment_set, requester):
+    #     for comment in comment_set:
+    #         comment.bookmarked = True if comment.bookmarked_by.filter(pk=requester.id).exists() else False
+    #         comment.requester = requester
+
     @staticmethod
-    def set_bookmark_flags(comment_set, requester):
+    def set_flags(comment_set, requester):
         for comment in comment_set:
-            comment.bookmarked = True if comment.bookmarked_by.filter(pk=requester.id).exists() else False
             comment.requester = requester
+            # comment.set_visibility_flag(requester)
+            comment.bookmarked = True if comment.bookmarked_by.filter(pk=requester.id).exists() else False
+
+    def set_visibility_flag(self, requester):
+        self.visible = False
+        if self.visibility == Comment.PUBLIC:
+            self.visible = True
+            return
+
+        if self.author == requester:
+            self.visible = True
+            return
+
+        if self.visibility == Comment.STAFF and requester.is_staff:
+            self.visibility = True
+            return
+
+        if self.parent.author == requester:
+            self.visibility = True
+            return
 
     # TODO not working for some weird reason
     # TODO delete or fix
@@ -188,7 +214,8 @@ class Comment(models.Model):
         if requester.is_staff:
             return non_private_or_authored
 
-        return non_private_or_authored.exclude(visibility=Comment.STAFF)
+        return non_private_or_authored.filter(
+            ~Q(visibility=Comment.STAFF) | Q(author=requester) | Q(parent__author=requester))
 
 
 class CommentsConfig(models.Model):
@@ -199,11 +226,10 @@ class CommentsConfig(models.Model):
 
     @staticmethod
     def setup():
-        config = CommentsConfig.objects.create(key='polling_active',
-                                               value='5')
-        config = CommentsConfig.objects.create(key='polling_idle',
-                                               value='60')
-        config.save()
+        CommentsConfig.objects.create(key='polling_active',
+                                      value='5')
+        CommentsConfig.objects.create(key='polling_idle',
+                                      value='60')
 
     @staticmethod
     def get_polling_interval():
