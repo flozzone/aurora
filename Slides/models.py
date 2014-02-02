@@ -1,8 +1,5 @@
 from django.db import models
 
-from django.db import models
-
-
 class Slide(models.Model):
     title = models.CharField(max_length=128)
     pub_date = models.DateTimeField()

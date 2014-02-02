@@ -26,7 +26,7 @@ class PortfolioUser(User):
 
     def get_challenge_elaboration(self, challenge):
         try:
-            elaboration = Elaboration.objects.get(user=self, challenge=challenge)
+            elaboration = Elaboration.objects.get(user=self, challenge=challenge, submission_time__isnull=False)
         except Elaboration.DoesNotExist:
             elaboration = None
         return elaboration

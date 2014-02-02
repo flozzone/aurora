@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% load url from future %}
+
+{% block additional_headers %}
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.ba-throttle-debounce.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/shared.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/studio.js"></script>
+<link rel="stylesheet" href="{{ STATIC_URL }}css/slides_base.css" type="text/css" media="screen"/>
+{% endblock %}
+
+{% block content %}
+
+{% include "contentbar.html" %}
+
+<div id="contentblock">
+	<script>
+	jQuery(document).ready(function($) {
+		$('#contentblock').scroll(scrollEnded);
+        $(window).resize(checkSlidesInView);
+
+		/*
+	    $('.lightbox_trigger').click(function(e) {
+
+	        //prevent default action (hyperlink)
+	        e.preventDefault();
+
+	        //Get clicked link href
+	        var image_href = $(this).attr("href");
+
+	        ///*
+	        //If the lightbox window HTML already exists in document,
+	        //change the img src to to match the href of whatever link was clicked
+
+	        //If the lightbox window HTML doesn't exists, create it and insert it.
+	        //(This will only happen the first time around)
+	        // * /
+
+	        if ($('#lightbox').length > 0) { // #lightbox exists
+
+	            //place href as img src value
+	            $('#content').html('<img src="' + image_href + '" />');
+
+	            //show lightbox window - you could use .show('fast') for a transition
+	            $('#lightbox').show();
+	        }
+
+	        else { //#lightbox does not exist - create and insert (runs 1st time only)
+
+	            //create HTML markup for lightbox window
+	            var lightbox =
+	            '<div id="lightbox">' +
+	                '<p>Click to close</p>' +
+	                '<div id="content">' + //insert clicked link's href into img src
+	                    '<img src="' + image_href +'" />' +
+	                '</div>' +
+	            '</div>';
+
+	            //insert lightbox HTML into page
+	            $('body').append(lightbox);
+	        }
+
+	    });
+
+	    //Click anywhere on the page to get rid of lightbox window
+	    $('#lightbox').live('click', function() { //must use live, as the lightbox element is inserted into the DOM
+	        $('#lightbox').hide();
+	    });
+	
+		*/
+
+	});
+	</script>
+
+	<br />
+	 <div id="flowplayer_invisible"></div>
+	 {% if slidecasting_mode == 'search_results'%}
+		<br />
+		Your search for {{search_text}} found {{slides.count}} results. <br />
+	 {% endif %} 
+	<table id="slides_table">
+	 <tr>
+		 {% with user.customuser as customuser %}
+	     {% for slide in slides %}
+			<td id="slide_{{slide.id}}" class="slide_image {# {% if slide in slide_list_preparation %}preparation_slide{% endif %} #}">
+		        <div class="glass" id="slide_text_{{slide.id}}">
+				<h1 class="glass_full glass_text_full">
+				    <a href = "{# {{slide.get_filepath}}pdf/{{ slide.filename }}.pdf #}" target="_blank">{{ slide.title }}</a>
+	                <div>
+						{% with marker='liked' count=slide.count_liked %}
+						<div class="oneBB leftBB {% if slide.count_liked > 0 %}somebody{% else %}nobody{% endif %}" title="{% include 'marker_title.html' %}" onClick="markSlide(this, '{# {% url 'Slides:mark_slide' course.short_title slide.id 'liked' 'xxx' %} #}')">
+							<img src="{{ STATIC_URL }}img/liked{% if customuser in slide.liked.all %}_slide_marked{%endif%}.png" > 
+						</div>
+						{% endwith %}
+						{% with marker='important' count=slide.count_important %}
+						<div class="oneBB middleBB {% if slide.count_important > 0 %}somebody{% else %}nobody{% endif %}" title="{% include 'marker_title.html' %}" onClick="markSlide(this, '{# {% url 'Slides:mark_slide' course.short_title slide.id 'important' 'xxx' %} #}')">
+							<img src="{{ STATIC_URL }}img/important{% if customuser in slide.important.all %}_slide_marked{%endif%}.png" > 
+						</div>
+						{% endwith %}
+						{% with marker='confusing' count=slide.count_confusing %}
+						<div class="oneBB rightBB {% if slide.count_confusing > 0 %}somebody{% else %}nobody{% endif %}" title="{% include 'marker_title.html' %}" onClick="markSlide(this, '{# {% url 'Slides:mark_slide' course.short_title slide.id 'confusing' 'xxx' %} #}')">
+							<img src="{{ STATIC_URL }}img/confusing{% if customuser in slide.confusing.all %}_slide_marked{%endif%}.png" > 
+						</div>
+						{% endwith %}
+					</div>
+	            </h1>
+	            </div>
+				<div class="studio_slide_medium">
+					<a href="{{slide.get_filepath}}/jpg/{{slide.filename}}.jpg" class="lightbox_trigger">
+						<img onError="this.src='{{ STATIC_URL }}img/white_medium.jpg'" class="studio_slide" src="{{slide.get_filepath}}/thumb/{{slide.filename}}_thumb.jpg" alt="{{slide.title}}"/ >
+					</a>
+				</div>
+				<div ID="lazyload_{{slide.id}}" class="lazyload">comments will load on demand</div>
+			</td>
+	     {% endfor %}
+		 {% endwith %}
+	  </tr>
+	  </table>
+</div>
+
+{% endblock %}

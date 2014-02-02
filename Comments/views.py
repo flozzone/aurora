@@ -13,21 +13,21 @@ from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidde
 from django.contrib.contenttypes.models import ContentType
 import json
 
-from Comments.models import Comment, CommentsConfig, CommentListRevision
+from Comments.models import Comment, CommentsConfig, CommentListRevision, Vote
 from Elaboration.models import Elaboration
 from Notification.models import Notification
 from Comments.tests import CommentReferenceObject
 
 
-class CommentList(ListView):
-    queryset = Comment.objects.filter(parent=None).order_by('-post_date')
-
-    def get_context_data(self, **kwargs):
-        context = super(CommentList, self).get_context_data(**kwargs)
-        # context['form'] = CommentForm()
-        context['reply_form'] = ReplyForm()
+# class BookmarkedView(ListView):
+#     queryset = Comment.query_bookmarked()
+#
+    # def get_context_data(self, **kwargs):
+    #     context = super(BookmarkedView, self).get_context_data(**kwargs)
+    #     context['form'] = CommentForm()
+        # context['reply_form'] = ReplyForm()
         # context['form_action'] = '/post/'
-        return context
+        # return context
 
 
 class CommentForm(forms.Form):
@@ -151,12 +151,6 @@ def create_comment(form, request):
 @login_required
 def vote_on_comment(request):
     data = request.GET
-    if data['direction'] == 'up':
-        diff = 1
-    elif data['direction'] == 'down':
-        diff = -1
-    else:
-        return HttpResponse('')
 
     comment = Comment.objects.get(id=data['comment_id'])
     user = RequestContext(request)['user']
@@ -164,15 +158,40 @@ def vote_on_comment(request):
     if user == comment.author:
         return HttpResponseForbidden('')
 
-    if comment.was_voted_on_by.filter(pk=user.id).exists():
-        return HttpResponseForbidden('')
-
-    comment.score += diff
-    comment.was_voted_on_by.add(user)
-    comment.save()
-    CommentListRevision.get_by_comment(comment).increment()
+    if data['direction'] == 'up':
+        vote_up_on(comment, user)
+    elif data['direction'] == 'down':
+        vote_down_on(comment, user)
 
     return HttpResponse('')
+
+
+def vote_up_on(comment, voter):
+    try:
+        vote = comment.votes.get(voter=voter)
+        if vote.direction == Vote.DOWN:
+            vote.delete()
+            CommentListRevision.get_by_comment(comment).increment()
+
+        return
+    except Vote.DoesNotExist:
+        vote = Vote(direction=Vote.UP, voter=voter, comment=comment)
+        vote.save()
+        CommentListRevision.get_by_comment(comment).increment()
+
+
+def vote_down_on(comment, voter):
+    try:
+        vote = comment.votes.get(voter=voter)
+        if vote.direction == Vote.UP:
+            vote.delete()
+            CommentListRevision.get_by_comment(comment).increment()
+
+        return
+    except Vote.DoesNotExist:
+        vote = Vote(direction=Vote.DOWN, voter=voter, comment=comment)
+        vote.save()
+        CommentListRevision.get_by_comment(comment).increment()
 
 
 @require_POST
@@ -266,3 +285,11 @@ def feed(request):
         CommentReferenceObject().save()
         o2 = CommentReferenceObject.objects.get(id=2)
     return render(request, 'Comments/feed.html', {'object': o, 'object2': o2})
+
+
+@login_required
+def bookmarks(request):
+    requester = RequestContext(request)['user']
+    comment_list = Comment.query_bookmarks(requester)
+    template = 'Comments/bookmarks_list.html'
+    return render_to_response(template, {'comment_list': comment_list}, context_instance=RequestContext(request))

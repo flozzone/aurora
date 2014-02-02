@@ -93,7 +93,7 @@ function registerVoteForCommentList($comment_list) {
             type: 'GET',
             dataType: 'html',
             success: function(response) {
-                updateComments(false, true);
+                updateComments(false, false);
             }
         })
         return false;
@@ -146,8 +146,6 @@ function registerEditLinksForCommentList($comment_list) {
             return false;
         state.modifying = true;
 
-//        var $replyForm = $('#replyForm');
-//        var $commentForm = $('#commentForm');
         var $editButtons = $('#edit_buttons');
 
         stopPolling();
@@ -208,7 +206,6 @@ function registerEditLinksForCommentList($comment_list) {
                     endEdit();
                 },
                 complete: function(xhr, status) {
-//                    $formTextarea.val('');
                 }
             });
 
@@ -338,10 +335,10 @@ function registerReplyButton() {
             success: function(response) {
                 $('#replyForm').hide();
                 $("#replyTextarea").val('');
-                updateComments(false, true);
+                startPolling();
+                state.posting = false;
             }
         })
-        state.posting = false;
         return false;
     })
 }
