@@ -12,7 +12,7 @@ class Tag(models.Model):
 
 
 class CommentListRevision(models.Model):
-    number = models.PositiveIntegerField(default=0)
+    number = models.BigIntegerField(default=0)
 
     content_type = models.ForeignKey(ContentType)
     object_id = models.PositiveIntegerField()
@@ -47,6 +47,19 @@ class CommentListRevision(models.Model):
         self.save()
 
 
+class Vote(models.Model):
+    UP = True
+    DOWN = False
+    direction = models.BooleanField(choices=((UP, True), (DOWN, False)),
+                                    default=True)
+
+    voter = models.ForeignKey('PortfolioUser.PortfolioUser')
+    comment = models.ForeignKey('Comment', related_name='votes')
+
+    class Meta:
+        unique_together = ('voter', 'comment')
+
+
 class Comment(models.Model):
     text = models.TextField()
     author = models.ForeignKey('PortfolioUser.PortfolioUser')
@@ -54,7 +67,6 @@ class Comment(models.Model):
     delete_date = models.DateTimeField('date posted', null=True)
     deleter = models.ForeignKey('PortfolioUser.PortfolioUser', related_name='deleted_comments_set', null=True)
     parent = models.ForeignKey('self', null=True, related_name='children')
-    score = models.IntegerField(default=0)
     promoted = models.BooleanField(default=False)
 
     # Foreign object this Comment is attached to
@@ -75,15 +87,28 @@ class Comment(models.Model):
                                   choices=VISIBILITY_CHOICES,
                                   default=PUBLIC)
 
-    # custom_visibility = models.ManyToManyField('PortfolioUser.PortfolioUser', related_name='visible_comments_set')
     bookmarked_by = models.ManyToManyField('PortfolioUser.PortfolioUser', related_name='bookmarked_comments_set')
-    was_voted_on_by = models.ManyToManyField('PortfolioUser.PortfolioUser', related_name='voted_comments_set')
     tags = models.ManyToManyField(Tag)
+
+    @property
+    def score(self):
+        up_votes = self.votes.filter(direction=Vote.UP).count()
+        down_votes = self.votes.filter(direction=Vote.DOWN).count()
+        return up_votes - down_votes
 
     def responses(self):
         responses = self.children.order_by('post_date')
-        Comment.set_bookmark_flags(responses, self.requester)
+        responses = Comment.filter_visible(responses, self.requester)
+        Comment.set_flags(responses, self.requester)
         return responses
+
+    def add_up_vote(self, voter):
+        vote = Vote(direction=Vote.UP, voter=voter, comment=self)
+        vote.save()
+
+    def add_down_vote(self, voter):
+        vote = Vote(direction=Vote.DOWN, voter=voter, comment=self)
+        vote.save()
 
     def __str__(self):
         return str(self.id) + ": " + self.text[:30]
@@ -108,7 +133,7 @@ class Comment(models.Model):
         # will be overwritten.
 
         # Comment.set_permission_flags(visible, requester)
-        Comment.set_bookmark_flags(visible, requester)
+        Comment.set_flags(visible, requester)
         return visible
 
     @staticmethod
@@ -119,14 +144,46 @@ class Comment(models.Model):
 
         visible_comments = Comment.filter_visible(queryset, requester)
         # Comment.set_permission_flags(visible_comments, requester)
-        Comment.set_bookmark_flags(visible_comments, requester)
+        Comment.set_flags(visible_comments, requester)
         return visible_comments
 
     @staticmethod
-    def set_bookmark_flags(comment_set, requester):
+    def query_bookmarks(requester):
+        result = requester.bookmarked_comments_set.all().order_by('-post_date')
+        Comment.filter_visible(result, requester)
+        Comment.set_flags(result, requester)
+        return result
+
+    # @staticmethod
+    # def set_bookmark_flags(comment_set, requester):
+    #     for comment in comment_set:
+    #         comment.bookmarked = True if comment.bookmarked_by.filter(pk=requester.id).exists() else False
+    #         comment.requester = requester
+
+    @staticmethod
+    def set_flags(comment_set, requester):
         for comment in comment_set:
-            comment.bookmarked = True if comment.bookmarked_by.filter(pk=requester.id).exists() else False
             comment.requester = requester
+            # comment.set_visibility_flag(requester)
+            comment.bookmarked = True if comment.bookmarked_by.filter(pk=requester.id).exists() else False
+
+    def set_visibility_flag(self, requester):
+        self.visible = False
+        if self.visibility == Comment.PUBLIC:
+            self.visible = True
+            return
+
+        if self.author == requester:
+            self.visible = True
+            return
+
+        if self.visibility == Comment.STAFF and requester.is_staff:
+            self.visibility = True
+            return
+
+        if self.parent.author == requester:
+            self.visibility = True
+            return
 
     # TODO not working for some weird reason
     # TODO delete or fix
@@ -157,7 +214,8 @@ class Comment(models.Model):
         if requester.is_staff:
             return non_private_or_authored
 
-        return non_private_or_authored.exclude(visibility=Comment.STAFF)
+        return non_private_or_authored.filter(
+            ~Q(visibility=Comment.STAFF) | Q(author=requester) | Q(parent__author=requester))
 
 
 class CommentsConfig(models.Model):
@@ -168,11 +226,10 @@ class CommentsConfig(models.Model):
 
     @staticmethod
     def setup():
-        config = CommentsConfig.objects.create(key='polling_active',
-                                               value='5')
-        config = CommentsConfig.objects.create(key='polling_idle',
-                                               value='60')
-        config.save()
+        CommentsConfig.objects.create(key='polling_active',
+                                      value='5')
+        CommentsConfig.objects.create(key='polling_idle',
+                                      value='60')
 
     @staticmethod
     def get_polling_interval():
