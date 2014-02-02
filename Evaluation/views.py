@@ -158,6 +158,8 @@ def detail(request):
         prev = elaborations[index - 1].id
 
     stack_elaborations = elaboration.user.get_stack_elaborations(elaboration.challenge.get_stack())
+    # sort stack_elaborations by submission time
+    stack_elaborations.sort(key=lambda stack_elaboration: stack_elaboration.submission_time)
 
     params['elaboration'] = elaboration
     params['stack_elaborations'] = stack_elaborations

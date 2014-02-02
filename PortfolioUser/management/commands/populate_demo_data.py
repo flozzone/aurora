@@ -353,10 +353,6 @@ def init_data():
     print('adding review 4 for elaboration for challenge 1 for s0')
     Review(elaboration=e3, reviewer=d2, appraisal='F', submission_time=datetime.now()).save()
 
-    print('adding dummy elaboration 1 for challenge 2')
-    de4 = Elaboration(challenge=challenge_2, user=d1, elaboration_text="dummy elaboration 1",
-                      submission_time=datetime.now())
-    de4.save()
 
     # create elaboration for challenge 2 for s0
     print('adding elaboration for challenge 2 for s0')
