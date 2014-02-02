@@ -242,7 +242,7 @@ ul.content_navigation_list li {
 #contentblock {
 	z-index:-2;
 	position:fixed;
-	top:2em;
+    top: 7.3em;
 	bottom:0;
 	left:0;
 	right:0;
