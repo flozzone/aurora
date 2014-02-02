@@ -1,0 +1,7 @@
+{% if marker = 'confusing' %}
+{{count}} student{{count|pluralize}} find{{count|pluralize:'s,'}} this slide confusing.
+{% elif marker = 'important' %}
+{{count}} student{{count|pluralize}} think{{count|pluralize:'s,'}} this this is important.
+{% elif marker = 'liked' %}
+{{count}} student{{count|pluralize}} like{{count|pluralize:'s,'}} this slide.
+{% endif %}

@@ -65,11 +65,7 @@ def studio_lecture(request, lecture_id_relative):
         return redirect('livecast', course_short_title=course_short_title, lecture_id_relative=lecture_id_relative)
     slides = Slide.objects.filter(lecture=lecture)
     slides = _cache_slide_markers(slides)
-    render_dict = {'slidecasting_mode': 'studio', 'course':course, 'course_id':Course.objects.get(short_title=course_short_title).id, 'lectures': lectures, 'lecture': lecture, 
-                    'slides': slides} 
-                    #TODO: why the extra course_id variable? and y u fetching it form the database, when we already
-                    #      have the course object? y u no use {{course.id}} (course should exist everywhere), or,
-                    #      if absolutely neccessary, y u no use {% with course.id as course_id %} in template?
+    render_dict = {'slidecasting_mode': 'studio', 'course':course, 'lectures': lectures, 'lecture': lecture, 'slides': slides} 
     return render_to_response('studio.html', render_dict, context_instance=RequestContext(request))
     
 
@@ -137,7 +133,7 @@ def _cache_slide_markers(slides):
 
 
 def _livecast_now(lecture):
-    now = datetime.datetime.utcnow().replace(tzinfo=utc)
+    now = datetime.datetime.now()
     lecture_livecast_start = lecture.start - timedelta(minutes=LIVECAST_START)
     if now > lecture_livecast_start and now < lecture.end:
         return True
