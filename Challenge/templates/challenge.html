@@ -29,20 +29,37 @@
     </div>
   {% endif %}
 
+
+  <div class="comments">
+      <div class="challenge_comments">
+        Challenge Q+A Section
+        {% render_comment_list for challenge %}
+      </div>
+  </div>
+
   {% if not elaboration.is_submitted %}
-    <form method="post">
-      <textarea id="editor">{{ elaboration.elaboration_text }}</textarea>
-    </form>
-    <button class="submit">Enter for Evaluation</button>
-    <div class="submission_text" hidden>
-      I certify that the work presented here is, to the best of my knowledge and belief, original and the result of my
-      own<br>
-      investigations and creation, except as acknowledged, and has not been submitted, either in part or whole, for
-      a<br>
-      degree at this or any other University.<br><br>
-      Please press submit again.<br>
-      <button class="real_submit" id="{{ challenge.id }}">Submit</button>
-    </div>
+  
+    {% if not elaboration.elaboration_text %}
+	  	<div class="accept_button" onclick="$('.elaboration_block').css(display,'inherit')">
+			START WORKING
+		</div>
+    {% endif %}
+	
+	<div class="elaboration_block{% if not elaboration.elaboration_text %} unstarted{% endif %}">
+		<form method="post">
+			<textarea id="editor">{{ elaboration.elaboration_text }}</textarea>
+		</form>
+		<button class="submit">Enter for Evaluation</button>
+		<div class="submission_text" hidden>
+			I certify that the work presented here is, to the best of my knowledge and belief, original and the result of my
+			own<br>
+			investigations and creation, except as acknowledged, and has not been submitted, either in part or whole, for
+			a<br>
+			degree at this or any other University.<br><br>
+			Please press submit again.<br>
+			<button class="real_submit" id="{{ challenge.id }}">Submit</button>
+		</div>
+	</div>
   {% else %}
     <div class="elaboration_text">{{ elaboration.elaboration_text |safe }}</div> <!-- TODO: this has to be secure -->
   {% endif %}
@@ -59,10 +76,6 @@
         {% render_additional_comment_list for elaboration %}
       </div>
     {% endif %}
-    <div class="challenge_comments">
-      Challenge Comments:
-      {% render_comment_list for challenge %}
-    </div>
 
   </div>
 

@@ -144,7 +144,7 @@
 	float:right;
 }
 
-.comment_actions a, .response_actions a {
+.comment_actions a, .response_actions a, .comment_bottom > a, .response_bottom > a {
 	text-decoration:none;
 	text-transform:uppercase;
 	color:rgb(58,201,88);
