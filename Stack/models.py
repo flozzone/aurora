@@ -63,8 +63,13 @@ class Stack(models.Model):
 
     def has_enough_peer_reviews(self, user):
         for challenge in self.get_challenges():
-            if not challenge.get_elaboration(user).is_reviewed_2times():
-                return False
+            if not challenge.is_final_challenge():
+                elaboration = challenge.get_elaboration(user)
+                if not elaboration:
+                    # this should never happen
+                    return False
+                if not elaboration.is_reviewed_2times():
+                    return False
         return True
 
 class StackChallengeRelation(models.Model):
