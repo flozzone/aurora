@@ -30,17 +30,18 @@
   {% endif %}
 
 
-  <div class="comments">
-      <div class="challenge_comments">
-        Challenge Q+A Section
-        {% render_comment_list for challenge %}
+  <div class="comments qa_section">
+      <span><b onclick="$('#qa').toggle('fast');"><i class="fa fa-toggle-down"></i> Challenge Q+A Section</b></span>
+
+      <div id="qa" class="challenge_comments">
+		  If you that the description of the challenge is unclear, use this section to ask questions. We will try to answer as soon as possible.         {% render_comment_list for challenge %}
       </div>
   </div>
 
   {% if not elaboration.is_submitted %}
   
     {% if not elaboration.elaboration_text %}
-	  	<div class="accept_button" onclick="$('.elaboration_block').css(display,'inherit')">
+	  	<div class="accept_button" onclick="$('.elaboration_block').css('display','inherit');$('.accept_button').css('display','none')">
 			START WORKING
 		</div>
     {% endif %}

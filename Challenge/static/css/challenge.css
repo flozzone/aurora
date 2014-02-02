@@ -1,4 +1,5 @@
 .unstarted {
+	display:none;
 }
 
 .invisible {
@@ -13,9 +14,24 @@
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+.qa_section {
+	margin-top:8px;
+	padding-top:8px;
+	padding-bottom:8px;
+	margin-bottom:8px;
+	width:100%;
+	border-top:1px dashed silver;
+	border-bottom:1px dashed silver;
+}
+
+.qa_section > span {
+	display:block;
+	margin-bottom:8px;
+}
+
 .challenge {
 	padding:10px;
-	width:940;
+	width:680px;
 }
 
 .challenge_title {
