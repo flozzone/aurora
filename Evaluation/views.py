@@ -62,31 +62,30 @@ def update_overview(request):
     if request.GET.get('data', '') == "missing_reviews":
         print("loading missing reviews...")
         elaborations = Elaboration.get_missing_reviews()
-        html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
     if request.GET.get('data', '') == "top_level_challenges":
         print("loading top level challenges...")
         elaborations = Elaboration.get_top_level_challenges()
-        html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
     if request.GET.get('data', '') == "non_adequate_work":
         print("loading non adequate work...")
         elaborations = Elaboration.get_non_adequate_work()
-        html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
     if request.GET.get('data', '') == "non_adequate_reviews":
         print("loading non adequate reviews...")
         elaborations = Elaboration.get_non_adequate_reviews()
-        html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
     if request.GET.get('data', '') == "awesome":
         print("loading awesome work...")
         elaborations = Elaboration.get_awesome()
-        html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
     if request.GET.get('data', '') == "evaluated_non_adequate_work":
         print("loading evaluated non adequate work...")
         elaborations = Elaboration.get_evaluated_non_adequate_work()
-        html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
+
+    # sort elaborations by submission time
+    elaborations.sort(key=lambda elaboration: elaboration.submission_time)
 
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
     request.session['selection'] = request.GET.get('data', '')
+
+    html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
     return html
 
 

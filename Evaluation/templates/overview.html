@@ -6,7 +6,7 @@
             <th>elaboration</th>
             <th>hand in</th>
         </tr>
-    {% for elaboration in elaborations|dictsort:"submission_time" %}
+    {% for elaboration in elaborations %}
         <tr onclick="load_details({{ elaboration.id }})">
             <td><img class="gravatar" src="../{{ elaboration.user.avatar.url }}"></td>
             <td>{{ elaboration.challenge.title }}</td>
