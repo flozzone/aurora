@@ -5,20 +5,19 @@
 .invisible {
 }
 
-.accept_button {
-	text-decoration:none;
-	text-transform:uppercase;
-	color:rgb(58,201,88);
-	margin-left:6px;
-	font-size:10px;
-	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+.XLbutton:before {
+	content: '';
 }
 
+
+
 .qa_section {
-	margin-top:8px;
-	padding-top:8px;
-	padding-bottom:8px;
-	margin-bottom:8px;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	background-color:#eee;
+	padding:8px;
+	margin:8px 0 8px 0;
 	width:100%;
 	border-top:1px dashed silver;
 	border-bottom:1px dashed silver;
@@ -26,12 +25,27 @@
 
 .qa_section > span {
 	display:block;
-	margin-bottom:8px;
+}
+
+
+.submission_text {
+	background:rgb(58,201,88);
+	padding:16px 16px 32px 16px;
+	color:white;
+	border-radius:3px;
+	margin-top:3px;
+}
+
+.real_submit {
+	margin-top:10px;
+	color:white;
+	background:none;
+	border:1px solid white;
 }
 
 .challenge {
 	padding:10px;
-	width:680px;
+	width:940px;
 }
 
 .challenge_title {
@@ -62,7 +76,7 @@ h1 {
 }
 
 #detail_area {
-    width: 960px;
+    width: 940px;
 }
 
 .stack_imgs {

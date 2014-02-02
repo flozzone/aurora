@@ -30,19 +30,21 @@
   {% endif %}
 
 
-  <div class="comments qa_section">
-      <span><b onclick="$('#qa').toggle('fast');"><i class="fa fa-toggle-down"></i> Challenge Q+A Section</b></span>
+  <div class="qa_section">
+  	<div class="comments">
+      	<span><b onclick="$('#qa').toggle('fast');"><i class="fa fa-toggle-down"></i> Challenge Q+A Section</b></span>
 
-      <div id="qa" class="challenge_comments">
-		  If you that the description of the challenge is unclear, use this section to ask questions. We will try to answer as soon as possible.         {% render_comment_list for challenge %}
-      </div>
-  </div>
-
+      	<div id="qa" class="challenge_comments">
+		  If you that the description of the challenge is unclear, use this section to ask questions. We will try to answer as soon as possible.         
+		  {% render_comment_list for challenge %}
+      	</div>
+	  </div>
+	</div>
   {% if not elaboration.is_submitted %}
   
     {% if not elaboration.elaboration_text %}
-	  	<div class="accept_button" onclick="$('.elaboration_block').css('display','inherit');$('.accept_button').css('display','none')">
-			START WORKING
+	  	<div id="Caccept" class="button XL" onclick="$('.elaboration_block').toggle('fast');$('#Caccept').toggle('fast');$('#qa').toggle('fast');">
+			accept challenge
 		</div>
     {% endif %}
 	
@@ -50,15 +52,16 @@
 		<form method="post">
 			<textarea id="editor">{{ elaboration.elaboration_text }}</textarea>
 		</form>
-		<button class="submit">Enter for Evaluation</button>
+		<button class="submit XL R">Enter work for Evaluation</button>
 		<div class="submission_text" hidden>
+			<div>
 			I certify that the work presented here is, to the best of my knowledge and belief, original and the result of my
-			own<br>
-			investigations and creation, except as acknowledged, and has not been submitted, either in part or whole, for
-			a<br>
-			degree at this or any other University.<br><br>
-			Please press submit again.<br>
-			<button class="real_submit" id="{{ challenge.id }}">Submit</button>
+			own investigations and creation, except as acknowledged, and has not been submitted, either in part or whole, for
+			a degree at this or any other University.
+			</div>
+			<div>
+				<button class="real_submit XL R" id="{{ challenge.id }}">Submit work</button>
+			</div>
 		</div>
 	</div>
   {% else %}

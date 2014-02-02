@@ -3,6 +3,7 @@ body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, 
     padding: 0;
 }
 
+
 table {
     border-collapse: collapse;
     border-spacing: 0;
@@ -217,6 +218,41 @@ abbr, acronym {
 #course_select: hover {
 	-webkit-appearance:select;
 	
+}
+
+button {
+	text-decoration:none;
+	text-transform:uppercase;
+	color:rgb(58,201,88);
+	margin-left:6px;
+	font-size:10px;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    -webkit-appearance:none;
+    -moz-appearance:none;
+    appearance:none;
+	background-color:white;
+	border:none;
+}
+
+.XL {
+	font-size:16px !important;
+}
+
+.R {
+	float:right;
+}
+.button {
+	text-decoration:none;
+	text-transform:uppercase;
+	color:rgb(58,201,88);
+	margin-left:6px;
+	font-size:10px;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    -webkit-appearance:none;
+    -moz-appearance:none;
+    appearance:none;
+	background-color:white;
+	border:none;
 }
 
 /*!
