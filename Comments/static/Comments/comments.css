@@ -198,7 +198,7 @@
     color: darkgreen;
 }
 
-.staff_author > .comment_top {
+.staff_author > .comment_top, .staff_author > .response_top {
     background-color: rgb(229, 235, 253);
 }
 

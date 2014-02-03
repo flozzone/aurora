@@ -31,7 +31,7 @@
 .qa_section {
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
-	background-color:#eee;
+	background-color:rgb(242,255,242);
 	padding:8px;
 	margin:8px 0 8px 0;
 	width:100%;
@@ -46,7 +46,7 @@
 .comment_section {
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
-	background-color:#eee;
+	background-color:rgb(242,255,242);
 	padding:8px;
 	margin:8px 0 8px 0;
 	width:100%;

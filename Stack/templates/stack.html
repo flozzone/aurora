@@ -6,13 +6,32 @@
   <link rel="stylesheet" href="{{ STATIC_URL }}css/stack.css" type="text/css" media="screen"/>
 {% endblock %}
 
+<table class="challenges_stack">
+  <tr>
+	  <td colspan="2" class="row1">
+		  Challenge: Master Accessibility
+	  </td>
+  </tr>
 
-  <table class="challenges_stack">
+
+{% if user.is_staff %}
+
+{% for challenge_dict in challenges_active %}
+	<tr>
+		<td class="lineD"><img class="challenge_image active" src="{{ STATIC_URL }}img/{{ challenge_dict.challenge.image_url }}"></td>
+		<td class="challenge active lineL" challenge_id="{{ challenge_dict.challenge.id }}">
+  			 <div style="font-weight:bold">{{ challenge_dict.challenge.title }}</div>{{ challenge_dict.challenge.description }}
+  		</td>
+ 	</tr>
+	{% endfor %}
+	{% for challenge in challenges_inactive %}
 	  <tr>
-		  <td colspan="2" class="row1">
-			  Challenge: Master Accessibility
-		  </td>
-	  </tr>
+	 	 <td class="lineD"><img class="challenge_image active" src="{{ STATIC_URL }}img/{{ challenge.image_url }}"></td>
+	 	 <td class="challenge active lineL" challenge_id="{{ challenge.id }}">
+  		 <div style="font-weight:bold">{{ challenge.title }}</div>{{ challenge.description }} </td>
+     </tr>
+	{% endfor %} 
+{% else %}
 
   {% for challenge_dict in challenges_active %}
   	  <tr>
@@ -20,7 +39,6 @@
 		  <td class="challenge active lineL" challenge_id="{{ challenge_dict.challenge.id }}">
 	  		 <div style="font-weight:bold">{{ challenge_dict.challenge.title }}</div>{{ challenge_dict.challenge.description }}
 	  </td>
-  </tr>
   <tr>
 	  <td class="review_wrapper lineD">
 
@@ -78,6 +96,7 @@
 </tr>
 <tr> <td> &nbsp; </td></tr>
   {% endfor %}
+  
 </table>
   {% if challenges_inactive %}
     <div class="divider">&nbsp;<i class="fa fa-scissors" style="position:relative;top:-9px;left:200px;"></i></div>
@@ -102,6 +121,8 @@
       </div>
     {% endif %}-->
   {% endfor %}
+  {% endif %}
+  
 </table>
   </div>
 </div>

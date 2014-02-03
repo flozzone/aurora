@@ -32,6 +32,10 @@
     </div>
   </div>
 
+  {% if user.is_staff %}
+  <!-- admin corner -->
+  <!-- xxxxxxxxxxxx -->  
+  {% else %}
 
   {% if not elaboration.is_submitted %}
 
@@ -89,6 +93,8 @@
       <div class="evaluation_text">Evaluation text: {{ evaluation.evaluation_text }}</div>
     </div>
   {% endif %}
+  {% endif %}
+  
   {% if  elaboration.elaboration_text %}
     <div class="comment_section">
       <div class="comments">
