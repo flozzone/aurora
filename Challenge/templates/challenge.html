@@ -49,11 +49,8 @@
   <div class="comments">
     {% if evaluation %}
       <div class="evaluation_text">Evaluation Text: {{ evaluation.evaluation_text }}</div>
-      <div class="evaluation_comments">
-        Evaluation Comments:
-        {% render_additional_comment_list for evaluation %}
-      </div>
-    {% elif elaboration %}
+    {% endif %}
+    {% if elaboration %}
       <div class="elaboration_comments">
         Elaboration Comments:
         {% render_additional_comment_list for elaboration %}
