@@ -4,10 +4,6 @@
 
 <div class = "content_navigation_bar">
     <ul class="content_navigation_list" title="show..." xml:lang="en">
-    {% if slidecasting_mode == 'livecast' %}
-        <li>Livecast</li>
-    {% else %}
-        <li id="load_all_comments" class="button b_light b_left_right {% if slidecasting_mode == 'start' %}b_inactive{% endif %}" onclick="loadAllComments()">load all comments</li>
 	<!--
     	<li id="flowplayer_controls_label"><span style="font-size:80%">&nbsp;&nbsp;Play Audio</span></li>
 		<li id="flowplayer_controls_prev" class="b_left b_light button b_inactive b_prev" onclick="previousChapter()">&nbsp;</li>
@@ -15,7 +11,6 @@
 		<li id="flowplayer_controls_next" class="b_right b_light button b_inactive b_next" onclick="nextChapter()">&nbsp;</li>
 		<li id="flowplay_controls_where_am_i" class="button b_light b_left_right b_inactive" onclick="whereAmI()">where am I?</li>
     	-->
-	{% endif %}
     <li>&nbsp;&nbsp;</li>
 		{% comment %} <!-- deprecated. do not update this. thank you. -->
     <li id="dateHead" class="{%if slidecasting_mode == 'studio' %}b_light_selected {% endif %}button b_light b_left b_arrow" onclick="toggleMenu(this,'dateMenu')">{% if slidecasting_mode == 'start' or slidecasting_mode == 'new_comments_since' or slidecasting_mode == 'marked_slides' or slidecasting_mode == 'exercises' or slidecasting_mode == 'discourses' or slidecasting_mode == 'search_results' or slidecasting_mode == 'create_pdf' %}{% else %}DATE: {{lecture.start.day}}.{{lecture.start.month}}{% endif %}</li>
@@ -24,7 +19,12 @@
     </li>
 		{% endcomment %}
 		<!-- this is what will stay. also, the divs with class 'lectureFront' in start.html will stay. update those -->
-		<li> showing {% if slidecasting_mode == 'start' %} overview {% elif slidecasting_mode == 'new_comments_since' %}recent comments {% elif slidecasting_mode == 'marked_slides' %} your bookmarks {% elif slidecasting_mode == 'exercises' %} slides with exercises (?) {% elif slidecasting_mode == 'discourses' %} slides with discussions {% elif slidecasting_mode == 'search_results' %} search results {% elif slidecasting_mode == 'create_pdf' %} create pdf {% else %}date: {{lecture.start.day}}.{{lecture.start.month}}{% endif %} {%if not slidecasting_mode == 'start' %}<a href="/slides">SHOW OVERVIEW</a>{% endif %}</li>
+		<li> {%if not slidecasting_mode == 'start' %}<a href="/slides"><i class="fa fa-angle-double-left" style="color:white;"></i></a>&nbsp;&nbsp;{% endif %} {% if slidecasting_mode == 'start' %} overview {% elif slidecasting_mode == 'new_comments_since' %}recent comments {% elif slidecasting_mode == 'marked_slides' %} your bookmarks {% elif slidecasting_mode == 'exercises' %} slides with exercises (?) {% elif slidecasting_mode == 'discourses' %} slides with discussions {% elif slidecasting_mode == 'search_results' %} search results {% elif slidecasting_mode == 'create_pdf' %} create pdf {% else %}date: {{lecture.start.day}}.{{lecture.start.month}}{% endif %} </li>
+	    {% if slidecasting_mode == 'livecast' %}
+	        <li>Livecast</li>
+	    {% elif not slidecasting_mode == 'start' %}
+	        <li id="load_all_comments" class="button {% if slidecasting_mode == 'start' %}b_inactive{% endif %}" onclick="loadAllComments()">load all comments</li>
+			{% endif %}
 </ul>
 
 <ul>
