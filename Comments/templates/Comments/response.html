@@ -22,7 +22,7 @@
     {% endif %}
 </div>
 
-<div class="response{% if response.author.is_staff %} staff_author{% endif %} {{ response.visibility }}_visibility {% if comment.author == requester %} author_author{% endif %}"
+<div class="response{% if response.author.is_staff %} staff_author{% endif %} {{ response.visibility }}_visibility {% if response.author == requester %} author_author{% endif %}"
      id="comment_response_{{ response.id }}" data-comment_number="{{ response.id }}"
      data-comment_author="{{ response.author.display_name }}">
 	 <div class="response_top">
@@ -34,15 +34,6 @@
     <div class="response_body">
 		<img src="/{{ response.author.avatar.url }}">
 
-        {% if response.bookmarked %}
-            <a href='#' class="comment_unbookmark" data-comment_number="{{ response.id }}" title="Remove this comment from Bookmarks">
-                <img src="/static/img/heart.png" height="20" width="20">
-            </a>
-        {% else %}
-            <a href='#' class="comment_bookmark" data-comment_number="{{ response.id }}" title="Bookmark this comment">
-                <img src="/static/img/heart_empty.png" height="20" width="20">
-            </a>
-        {% endif %}
 
         <div class="response_text">
         {% if response.deleter == None %}
@@ -54,6 +45,19 @@
     </div>
 
 	<div class="response_bottom">
+		
+        {% if response.bookmarked %}
+            <a href='#' class="comment_unbookmark" data-comment_number="{{ response.id }}" title="Remove this comment from Bookmarks">
+				unsave
+<!--                <img src="/static/img/heart.png" height="20" width="20"> -->
+            </a>
+        {% else %}
+            <a href='#' class="comment_bookmark" data-comment_number="{{ response.id }}" title="Bookmark this comment">
+				save
+<!--                <img src="/static/img/heart_empty.png" height="20" width="20"> -->
+            </a>
+        {% endif %}
+		
         {% if response.deleter != None %}
 		<p class="response_deleter">
 			deleted {{ response.delete_date | naturaltime }} by {{ response.deleter.display_name }}

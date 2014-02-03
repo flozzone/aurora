@@ -19,49 +19,84 @@
   <div class="challenge_description">
     {{ challenge.description }}
   </div>
-  {% if challenge.accepted_files %}
-    <div class="file_upload" accepted_files="{{ challenge.accepted_files }}">
-      <form action="/fileupload" class="dropzone dz-clickable{% if elaboration.is_submitted %} is_submitted{% endif %}"
-            id="dropzone">
-        <input id="elaboration_id" type="hidden" name="elaboration_id" value="{{ elaboration.id }}"/>
-        {% csrf_token %}
-      </form>
-    </div>
-  {% endif %}
 
-  {% if not elaboration.is_submitted %}
-    <form method="post">
-      <textarea id="editor">{{ elaboration.elaboration_text }}</textarea>
-    </form>
-    <button class="submit">Enter for Evaluation</button>
-    <div class="submission_text" hidden>
-      I certify that the work presented here is, to the best of my knowledge and belief, original and the result of my
-      own<br>
-      investigations and creation, except as acknowledged, and has not been submitted, either in part or whole, for
-      a<br>
-      degree at this or any other University.<br><br>
-      Please press submit again.<br>
-      <button class="real_submit" id="{{ challenge.id }}">Submit</button>
-    </div>
-  {% else %}
-    <div class="elaboration_text">{{ elaboration.elaboration_text |safe }}</div> <!-- TODO: this has to be secure -->
-  {% endif %}
-  <div class="comments">
-    {% if evaluation %}
-      <div class="evaluation_text">Evaluation Text: {{ evaluation.evaluation_text }}</div>
-    {% endif %}
-    {% if elaboration %}
-      <div class="elaboration_comments">
-        Elaboration Comments:
-        {% render_additional_comment_list for elaboration %}
+  <div class="qa_section">
+    <div class="comments">
+      <span><b onclick="$('#qa').toggle('fast');"><i class="fa fa-toggle-down"></i> Challenge Q+A Section</b></span>
+
+      <div id="qa" class="challenge_comments">
+        If you that the description of the challenge is unclear, use this section to ask questions. We will try to
+        answer as soon as possible.
+        {% render_comment_list for challenge %}
       </div>
-    {% endif %}
-    <div class="challenge_comments">
-      Challenge Comments:
-      {% render_comment_list for challenge %}
     </div>
-
   </div>
 
 
+  {% if not elaboration.is_submitted %}
+
+    {% if not elaboration.elaboration_text %}
+      <div id="Caccept" class="button XL"
+           onclick="$('.elaboration_block').toggle('fast');$('#Caccept').toggle('fast');$('#qa').toggle('fast');">
+        accept challenge
+      </div>
+    {% endif %}
+
+    <div class="elaboration_block{% if not elaboration.elaboration_text %} unstarted{% endif %}">
+      {% if challenge.accepted_files %}
+        <div class="file_upload" accepted_files="{{ challenge.accepted_files }}">
+          <form action="/fileupload"
+                class="dropzone dz-clickable{% if elaboration.is_submitted %} is_submitted{% endif %}"
+                id="dropzone">
+            <input id="elaboration_id" type="hidden" name="elaboration_id" value="{{ elaboration.id }}"/>
+            {% csrf_token %}
+          </form>
+        </div>
+      {% endif %}
+
+      <form method="post">
+        <textarea id="editor">{{ elaboration.elaboration_text }}</textarea>
+      </form>
+      <button class="submit XL R">Enter work for Evaluation</button>
+      <div class="submission_text" hidden>
+        <div>
+          I certify that the work presented here is, to the best of my knowledge and belief, original and the result of
+          my
+          own investigations and creation, except as acknowledged, and has not been submitted, either in part or whole,
+          for
+          a degree at this or any other University.
+        </div>
+        <div>
+          <button class="real_submit XL R" id="{{ challenge.id }}">Submit work</button>
+        </div>
+      </div>
+    </div>
+  {% else %}
+    {% if challenge.accepted_files %}
+      <div class="file_upload" accepted_files="{{ challenge.accepted_files }}">
+        <form action="/fileupload"
+              class="dropzone dz-clickable{% if elaboration.is_submitted %} is_submitted{% endif %}"
+              id="dropzone">
+          <input id="elaboration_id" type="hidden" name="elaboration_id" value="{{ elaboration.id }}"/>
+          {% csrf_token %}
+        </form>
+      </div>
+    {% endif %}
+    <div class="elaboration_text">{{ elaboration.elaboration_text |safe }}</div> <!-- TODO: this has to be secure -->
+  {% endif %}
+  {% if evaluation %}
+    <div class="comments">
+      <div class="evaluation_text">Evaluation text: {{ evaluation.evaluation_text }}</div>
+    </div>
+  {% endif %}
+  {% if  elaboration.elaboration_text %}
+    <div class="comment_section">
+      <div class="comments">
+        <div class="elaboration_comments">
+          <b>Discuss with LVA team</b>
+          {% render_additional_comment_list for elaboration %}
+        </div>
+      </div>
+    </div>
+  {% endif %}
 </div>
