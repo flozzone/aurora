@@ -15,7 +15,7 @@
 	<div style="padding:30px">
 	        {% for lect in lectures %}
 	            {% if lect.id != lecture.id %}
-					<div class="lectureFront"><a href="{% url 'Slides:studio_lecture' lect.id_relative %}">{{lect.start.day}}.{{lect.start.month}}</a> </div>
+					<div class="lectureFront vo_bookmark"><a href="{% url 'Slides:studio_lecture' lect.id_relative %}">{{lect.start.day}}.{{lect.start.month}}</a> </div>
 	            {% else %}
 	                <div class="lectureFront"> <a > {{lect.start.day}}.{{lect.start.month}}</a></div>  		
 	            {% endif %}
@@ -46,9 +46,9 @@
 				discussions
 			</div>
 				{% endcomment %}
-			<div class="lectureFront"><a href="{# {% url 'Slides:studio_confusing' course.short_title %} #}" title="show slides which were marked as confusing" >confusing </a></div>
-			<div class="lectureFront"><a href="{# {% url 'Slides:studio_important' course.short_title %} #}"title="show slides which were marked as important" >important </a></div>
-			<div class="lectureFront"><a href="{# {% url 'Slides:studio_liked' course.short_title %} #}" title="show slides which were marked as like" >slides i like</a></div>
+			<div class="lectureFront confused_bookmark"><a href="{# {% url 'Slides:studio_confusing' course.short_title %} #}" title="show slides which were marked as confusing" >confusing </a></div>
+			<div class="lectureFront important_bookmark"><a href="{# {% url 'Slides:studio_important' course.short_title %} #}"title="show slides which were marked as important" >important </a></div>
+			<div class="lectureFront liked_bookmark"><a href="{# {% url 'Slides:studio_liked' course.short_title %} #}" title="show slides which were marked as like" >slides i like</a></div>
 
 
 	</div>

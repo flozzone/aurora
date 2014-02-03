@@ -1,13 +1,44 @@
 .lectureFront {
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
-	width:100px;
-	height:100px;
+	width:160px;
+	height:90px;
 	border:1px solid silver;
 	border-radius: 5px;
 	display:inline-block;
-	padding-top:70px;
+	padding-top:66px;
 	text-align:center;
+}
+
+.lectureFront a{
+	display:block;
+	font-size:18px;
+	font-weight:bold;
+	text-decoration:none;
+	color:rgb(58,201,88);
+	width:158px;
+	background:rgba(0,0,0,0.7);
+	border-radius:0 0 4px 4px;
+}
+
+.confused_bookmark {
+	background-image: url('../img/confused_bookmark.png');
+	background-size:160px 90px;
+}
+
+.important_bookmark {
+	background-image: url('../img/important_bookmark.png');
+	background-size:160px 90px;
+}
+
+.liked_bookmark {
+	background-image: url('../img/liked_bookmark.png');
+	background-size:160px 90px;
+}
+
+.vo_bookmark {
+	background-image: url('../img/vo_bookmark.png');
+	background-size:160px 90px;
 }
 
 .content_navigation_bar{
