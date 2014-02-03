@@ -11,6 +11,22 @@
 }
 
 
+.elaboration_text {
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	width:940px;
+	overflow:hidden;
+	padding:8px;
+}
+
+.evaluation_text {
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	width:940px;
+	padding:16px;
+	background-color:#eee;
+	border:1px solid silver;
+}
 
 .qa_section {
 	box-sizing: border-box;
@@ -25,6 +41,17 @@
 
 .qa_section > span {
 	display:block;
+}
+
+.comment_section {
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	background-color:#eee;
+	padding:8px;
+	margin:8px 0 8px 0;
+	width:100%;
+	border-top:1px dashed silver;
+	border-bottom:1px dashed silver;	
 }
 
 
