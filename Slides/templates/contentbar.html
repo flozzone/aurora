@@ -17,11 +17,14 @@
     	-->
 	{% endif %}
     <li>&nbsp;&nbsp;</li>
-	
-    <li id="dateHead" class="{%if slidecasting_mode == 'studio' %}b_light_selected {% endif %}button b_light b_left b_arrow" onclick="toggleMenu(this,'dateMenu')">{% if slidecasting_mode == 'start' or slidecasting_mode == 'new_comments_since' or slidecasting_mode == 'marked_slides' or slidecasting_mode == 'exercises' or slidecasting_mode == 'discourses' or slidecasting_mode == 'search_results' or slidecasting_mode == 'create_pdf' %}dates{% else %}date: {{lecture.start.day}}.{{lecture.start.month}}{% endif %}</li>
+		{% comment %} <!-- deprecated. do not update this. thank you. -->
+    <li id="dateHead" class="{%if slidecasting_mode == 'studio' %}b_light_selected {% endif %}button b_light b_left b_arrow" onclick="toggleMenu(this,'dateMenu')">{% if slidecasting_mode == 'start' or slidecasting_mode == 'new_comments_since' or slidecasting_mode == 'marked_slides' or slidecasting_mode == 'exercises' or slidecasting_mode == 'discourses' or slidecasting_mode == 'search_results' or slidecasting_mode == 'create_pdf' %}{% else %}DATE: {{lecture.start.day}}.{{lecture.start.month}}{% endif %}</li>
 
     <li id="bookmarkHead" class="{%if slidecasting_mode == 'new_comments_since' or  slidecasting_mode == 'marked_slides' or slidecasting_mode == 'exercises' or slidecasting_mode == 'discourses'%}b_light_selected {% endif %}button b_light b_right b_arrow" onclick="toggleMenu(this,'bookmarkMenu')">{%if slidecasting_mode == 'new_comments_since' %}active last {{hours}}h{%else%}{% if slidecasting_mode == 'marked_slides' %}{%if marker == 'important'%}important slides{%endif%}{%if marker == 'liked'%}slides i like{%endif%}{%if marker == 'confusing'%}confusing slides{%endif%}{%else%}{%if slidecasting_mode == 'exercises'%}exercises{%else%}{%if slidecasting_mode == 'discourses' %}discourses{%else%}bookmarks{%endif%}{%endif%}{%endif%}{%endif%}</li>
     </li>
+		{% endcomment %}
+		<!-- this is what will stay. also, the divs with class 'lectureFront' in start.html will stay. update those -->
+		<li> showing {% if slidecasting_mode == 'start' %} overview {% elif slidecasting_mode == 'new_comments_since' %}recent comments {% elif slidecasting_mode == 'marked_slides' %} your bookmarks {% elif slidecasting_mode == 'exercises' %} slides with exercises (?) {% elif slidecasting_mode == 'discourses' %} slides with discussions {% elif slidecasting_mode == 'search_results' %} search results {% elif slidecasting_mode == 'create_pdf' %} create pdf {% else %}date: {{lecture.start.day}}.{{lecture.start.month}}{% endif %} {%if not slidecasting_mode == 'start' %}<a href="/slides">SHOW OVERVIEW</a>{% endif %}</li>
 </ul>
 
 <ul>
