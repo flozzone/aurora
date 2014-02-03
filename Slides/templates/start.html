@@ -11,6 +11,17 @@
 {% include "contentbar.html" %}
 
 <div id="contentblock">
+	
+	<div style="padding:30px">
+	        {% for lect in lectures %}
+	            {% if lect.id != lecture.id %}
+					<div class="lectureFront"><a href="{% url 'Slides:studio_lecture' lect.id_relative %}">{{lect.start.day}}.{{lect.start.month}}</a> </div>
+	            {% else %}
+	                <div class="lectureFront"> <a > {{lect.start.day}}.{{lect.start.month}}</a></div>  		
+	            {% endif %}
+	        {% endfor %}
+	</div>
+	
 </div>
 
 {% endblock %}

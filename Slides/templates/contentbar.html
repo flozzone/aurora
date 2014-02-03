@@ -17,6 +17,7 @@
     	-->
 	{% endif %}
     <li>&nbsp;&nbsp;</li>
+	
     <li id="dateHead" class="{%if slidecasting_mode == 'studio' %}b_light_selected {% endif %}button b_light b_left b_arrow" onclick="toggleMenu(this,'dateMenu')">{% if slidecasting_mode == 'start' or slidecasting_mode == 'new_comments_since' or slidecasting_mode == 'marked_slides' or slidecasting_mode == 'exercises' or slidecasting_mode == 'discourses' or slidecasting_mode == 'search_results' or slidecasting_mode == 'create_pdf' %}dates{% else %}date: {{lecture.start.day}}.{{lecture.start.month}}{% endif %}</li>
 
     <li id="bookmarkHead" class="{%if slidecasting_mode == 'new_comments_since' or  slidecasting_mode == 'marked_slides' or slidecasting_mode == 'exercises' or slidecasting_mode == 'discourses'%}b_light_selected {% endif %}button b_light b_right b_arrow" onclick="toggleMenu(this,'bookmarkMenu')">{%if slidecasting_mode == 'new_comments_since' %}active last {{hours}}h{%else%}{% if slidecasting_mode == 'marked_slides' %}{%if marker == 'important'%}important slides{%endif%}{%if marker == 'liked'%}slides i like{%endif%}{%if marker == 'confusing'%}confusing slides{%endif%}{%else%}{%if slidecasting_mode == 'exercises'%}exercises{%else%}{%if slidecasting_mode == 'discourses' %}discourses{%else%}bookmarks{%endif%}{%endif%}{%endif%}{%endif%}</li>
@@ -31,7 +32,7 @@
 </ul>
 </div>
 
-<!-- this is the content of the above declared dateHead -->
+<!-- this is the content of the above declared dateHead *about to be deprecated*-->
 <div id="dateMenu" class="content_navigation_menu" style="left:0px;visibility:hidden;">
         {% for lect in lectures %}
             {% if lect.id != lecture.id %}
