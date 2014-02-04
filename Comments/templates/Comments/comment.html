@@ -1,36 +1,29 @@
 {% load humanize %}
 
-<div class="comment_vote">
-<!-->    <a href='#' class="vote_up_on" data-comment_number="{{ comment.id }}" title="This comment is helpful"><i class="fa fa-angle-up"></i></a><br>
-    <a href='#' class="vote_down_on" data-comment_number="{{ comment.id }}" title="This comment is not helpful at all"><i class="fa fa-angle-down"></i></a>
-	<-->
-
-    <br>
-
-    {% if comment.promoted %}
-        {% if requester.is_staff %}
-            <a class="comment_demote" data-comment_number="{{ comment.id }}"
-               title="Demote this comment">
-                1
-            </a>
-        {% else %}
-            <p>1</p>
-        {% endif %}
-    {% elif requester.is_staff %}
-        <a href='#' class="comment_promote" data-comment_number="{{ comment.id }}" title="Promote this comment">
-            0
-        </a>
-    {% endif %}
-</div>
-
 <div class="comment{% if comment.author.is_staff %} staff_author{% endif %} {{ comment.visibility }}_visibility {% if comment.author == requester %} author_author{% endif %}"
      id="comment_{{ comment.id }}" data-comment_number="{{ comment.id }}"
      data-comment_author="{{ comment.author.display_name }}">
 	 <div class="comment_top">
-		 <div class="comment_author">{{ comment.author.display_name }},</div>
-		 <div class="comment_score">  {{ comment.post_date | naturaltime }}</div>
-		 <div class="comment_time" ><a href='#' class="vote_up_on" data-comment_number="{{ comment.id }}" title="This comment is helpful"><i class="fa fa-arrow-up notBlack"></i></a> {% if comment.score > 0 %} +{% endif %}{{ comment.score }} <a href='#' class="vote_down_on" data-comment_number="{{ comment.id }}" title="This comment is not helpful at all"><i class="fa fa-arrow-down notBlack"></i></a></i></div>
-	 </div>
+		 <div class="comment_author">{{ comment.author.display_name }}</div>
+		 <div class="comment_time">({{ comment.post_date | naturaltime }})</div>
+		 <div class="comment_award">    
+			 {% if comment.promoted %}
+			 {% if requester.is_staff %}
+			 <a href="#" class="comment_demote" data-comment_number="{{ comment.id }}" title="Demote this comment">
+				 <i class="fa fa-star fa-lg gold"></i>
+			 </a>
+			 {% else %}
+ 		 		<a title="This comment was rewarded with a point by the organizers"><i class="fa fa-star fa-lg gold"></i></a>
+			 {% endif %}
+			 {% elif requester.is_staff %}
+			 <a href='#' class="comment_promote" data-comment_number="{{ comment.id }}" title="Promote this comment">
+				 <i class="fa fa-star fa-lg ungold"></i>
+			 </a>
+			 {% endif %}
+		</div>
+		 <div class="comment_score" ><a href='#' class="vote_up_on" data-comment_number="{{ comment.id }}" title="This comment is helpful"><i class="fa fa-arrow-up notBlack"></i></a> {% if comment.score > 0 %} +{% endif %}{{ comment.score }} <a href='#' class="vote_down_on" data-comment_number="{{ comment.id }}" title="This comment is not helpful at all"><i class="fa fa-arrow-down notBlack"></i></a></i></div>
+		 </div>
+
 
     <div class="comment_body">
 		<img src="/{{ comment.author.avatar.url }}">
@@ -45,16 +38,14 @@
         </div>
     </div>
 
-    <div class="comment_bottom">
+    <div class="comment_actions">
         {% if comment.bookmarked %}
             <a href='#' class="comment_unbookmark" data-comment_number="{{ comment.id }}" title="Remove this comment from Bookmarks">
 				forget this
-<!--                <img src="/static/img/heart.png" height="20" width="20"> -->
             </a>
         {% else %}
             <a href='#' class="comment_bookmark" data-comment_number="{{ comment.id }}" title="Bookmark this comment">
 				remember this
-<!--                <img src="/static/img/heart_empty.png" height="20" width="20"> -->
             </a>
         {% endif %}
  
@@ -67,22 +58,20 @@
 		
 		
 
-        <div class="comment_actions">
             {% if requester.is_staff and comment.deleter == None %}
             {% endif %}
             {% if requester.is_staff or requester == comment.author and comment.deleter == None %}
-                <a href="javascript:void(0)" id="edit_comment_link_{{ comment.id }}" class="edit_link">
+                <a class="flR" href="javascript:void(0)" id="edit_comment_link_{{ comment.id }}" class="edit_link">
                     edit
                 </a>
-                <a href="javascript:void(0)" id="delete_comment_{{ comment.id }}" data-delete_id="{{ comment.id }}"
+                <a class="flR" href="javascript:void(0)" id="delete_comment_{{ comment.id }}" data-delete_id="{{ comment.id }}"
                    class="delete_comment">
-                    delete
+                    delete&nbsp;&nbsp;
                 </a>
             {% endif %}
-            <a href="javascript:void(0)" id="reply_comment_link_{{ comment.id }}" data-reply_to="{{ comment.id }}"
-               class="reply_link">
-                reply
-            </a>
-        </div>
+	        <a class="flR" href="javascript:void(0)" id="reply_comment_link_{{ comment.id }}" data-reply_to="{{ comment.id }}"
+	           class="reply_link">
+	            reply&nbsp;&nbsp;
+	        </a>
 	</div>
 </div>

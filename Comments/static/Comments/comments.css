@@ -1,32 +1,35 @@
-
-.comment_form > p > textarea {
-	margin-left:5%;
-	width:93%;
+.comment_form > p > textarea, .add_reply_form > p > textarea {
+	width:100%;
 	border:none;
-    border-top: 1px solid silver;
-    border-bottom: 1px solid silver;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
 	padding:2px;
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 	font-size:13px;
 	line-height:17px;
 	padding-top:4px;
 	height:60px;
+	background-color: rgb(252,252,227);
 }
 
-.comment_form{
+.add_reply_form > p > textarea {
+	width:95%;
+	margin-left:5%;
+}
+ 
+.comment_form, .add_reply_form{
 	margin-top:20px;
 }
 
-.comment_form > p > label {
+.comment_form > p > label, .add_reply_form > p > label {
 	float:left;
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 	font-size:11px;
 	display:none;
 }
 
-.comment_form > p > select {
+.comment_form > p > select, .add_reply_form > p > select {
 	float:left;
-	margin-left:5%;
     -webkit-appearance:none;
     -moz-appearance:none;
     appearance:none;
@@ -50,7 +53,6 @@
 	border:none;
 	text-transform:uppercase;
 	color:rgb(58,201,88);
-	margin-left:6px;
 	font-size:11px;
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 
@@ -61,17 +63,18 @@
 }
 
 .response {
+	margin-left:5%;
 	margin-top:0px;
 	margin-bottom:8px;
 	display:inline-block;
-	width:88%;
+	width:95%;
 }
 
 .response_body, .comment_body {
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
-    border-top: 1px solid silver;
-    border-bottom: 1px solid silver;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
 	padding:2px;
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 	font-size:14px;
@@ -110,7 +113,7 @@
 	margin-top:12px;
 	margin-bottom:0px;
 	display:inline-block;
-	width:93%;
+	width:100%;
 }
 
 .comment_bottom:hover, .response_bottom:hover {
@@ -148,28 +151,50 @@
 	opacity:0.35;
 }
 
-.comment_actions, .response_actions {
-	float:right;
+.comment_actions {}
+.response_actions {
 }
 
-.comment_actions a, .response_actions a, .comment_bottom > a, .response_bottom > a {
+.comment_unbookmark, .comment_bookmark {
+	display:inline-block;
+}
+.comment_actions > a, .response_actions > a, .comment_bottom > a, .response_bottom > a {
 	text-decoration:none;
 	text-transform:uppercase;
 	color:rgb(58,201,88);
-	margin-left:6px;
 	font-size:11px;
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+.flR {
+	float:right;
+	
+}
+.comment_award { 
+	height:15px;
+	float:right;
+	position:relative;
+	bottom:-2px;
+}
+
+.gold {
+	color:rgb(231,205,0);
+    text-shadow: 0 0 1px black,0 0 1px black;
+}
+
+.ungold {
+	color:white;
+	text-shadow: 0 0 1px black,0 0 1px black;
+}
 
 .comment_author, .response_author {
+	height:15px;
 	font-weight:bold;
 	float:left;
 	padding:2px;
 	font-size:11px;
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
-
 
 .comment_deleter, .response_deleter {
 	font-style:italic;
@@ -178,14 +203,16 @@
 	font-size:11px;
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;	
 }
-.comment_score, .respons_score {
+.comment_time, .response_time {
+	height:15px;
 	float:left;
 	padding:2px;
 	font-size:11px;
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-.comment_time {
+.comment_score, .response_score {
+	height:15px;
 	float:right;
 	padding:2px;
 	font-size:11px;
@@ -207,8 +234,6 @@
 .staff_author > .comment_top, .staff_author > .response_top {
     background-color: rgb(229, 235, 253);
 }
-
-
 
 .staff_author > .comment_body, .staff_author > .response_body {
     background-color: rgb(245,247,252);

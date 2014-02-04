@@ -22,16 +22,21 @@
 
     <button id="button_add_comment_form{{ id_suffix }}" class="button_add_comment_form" data-ref_type="{{ ref_type }}" data-ref_id="{{ ref_id }}">add comment</button>
     <form method="post" class="comment_form  author_author" id="commentForm" style="display:none">{% csrf_token %}
-   	 <div class="comment_top author_author" style="margin-left:5%; width:93%">
+   	 <div class="comment_top author_author" >
    		 <div class="comment_author">{{ requester.nickname }}</div>
-   		 <div class="comment_score"> &nbsp; 0</div>
    		 <div class="comment_time">right now</div>
+   		 <div class="comment_score"> &nbsp; 0</div>
    	 </div>
             {{ form.as_p }}
         <button id="button_add_comment">Add comment</button>
         <button id="button_cancel_comment">Cancel</button>
     </form>
-    <form id="replyForm" class="add_reply_form" style="display:none">{% csrf_token %}
+    <form id="replyForm" class="add_reply_form author_author" style="display:none">{% csrf_token %}
+      	 <div class="response_top author_author" style="width:95%;margin-left:5%;">
+      		 <div class="comment_author">{{ requester.nickname }}</div>
+      		 <div class="comment_time">right now</div>
+      		 <div class="comment_score"> &nbsp; 0</div>
+      	 </div>
             {{ reply_form.as_p }}
         <button id="button_post_reply">Post reply</button>
         <button id="button_cancel_reply">Cancel</button>
