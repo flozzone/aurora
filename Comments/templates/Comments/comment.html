@@ -1,14 +1,15 @@
 {% load humanize %}
 
 <div class="comment_vote">
-    <a href='#' class="vote_up_on" data-comment_number="{{ comment.id }}" title="This comment is helpful"><i class="fa fa-angle-up"></i></a><br>
+<!-->    <a href='#' class="vote_up_on" data-comment_number="{{ comment.id }}" title="This comment is helpful"><i class="fa fa-angle-up"></i></a><br>
     <a href='#' class="vote_down_on" data-comment_number="{{ comment.id }}" title="This comment is not helpful at all"><i class="fa fa-angle-down"></i></a>
+	<-->
 
     <br>
 
     {% if comment.promoted %}
         {% if requester.is_staff %}
-            <a href='#' class="comment_demote" data-comment_number="{{ comment.id }}"
+            <a class="comment_demote" data-comment_number="{{ comment.id }}"
                title="Demote this comment">
                 1
             </a>
@@ -26,9 +27,9 @@
      id="comment_{{ comment.id }}" data-comment_number="{{ comment.id }}"
      data-comment_author="{{ comment.author.display_name }}">
 	 <div class="comment_top">
-		 <div class="comment_author">{{ comment.author.display_name }}</div>
-		 <div class="comment_score"> &nbsp; {% if comment.score > 0 %} +{% endif %}{{ comment.score }}</div>
-		 <div class="comment_time">{{ comment.post_date | naturaltime }}</div>
+		 <div class="comment_author">{{ comment.author.display_name }},</div>
+		 <div class="comment_score">  {{ comment.post_date | naturaltime }}</div>
+		 <div class="comment_time" ><a href='#' class="vote_up_on" data-comment_number="{{ comment.id }}" title="This comment is helpful"><i class="fa fa-arrow-up notBlack"></i></a> {% if comment.score > 0 %} +{% endif %}{{ comment.score }} <a href='#' class="vote_down_on" data-comment_number="{{ comment.id }}" title="This comment is not helpful at all"><i class="fa fa-arrow-down notBlack"></i></a></i></div>
 	 </div>
 
     <div class="comment_body">
@@ -47,12 +48,12 @@
     <div class="comment_bottom">
         {% if comment.bookmarked %}
             <a href='#' class="comment_unbookmark" data-comment_number="{{ comment.id }}" title="Remove this comment from Bookmarks">
-				unsave
+				forget this
 <!--                <img src="/static/img/heart.png" height="20" width="20"> -->
             </a>
         {% else %}
             <a href='#' class="comment_bookmark" data-comment_number="{{ comment.id }}" title="Bookmark this comment">
-				save
+				remember this
 <!--                <img src="/static/img/heart_empty.png" height="20" width="20"> -->
             </a>
         {% endif %}
@@ -75,7 +76,7 @@
                 </a>
                 <a href="javascript:void(0)" id="delete_comment_{{ comment.id }}" data-delete_id="{{ comment.id }}"
                    class="delete_comment">
-                    del
+                    delete
                 </a>
             {% endif %}
             <a href="javascript:void(0)" id="reply_comment_link_{{ comment.id }}" data-reply_to="{{ comment.id }}"

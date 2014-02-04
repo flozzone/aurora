@@ -102,6 +102,10 @@
 	color:black;
 }
 
+.notBlack {
+	color:#666;
+}
+
 .comment {
 	margin-top:12px;
 	margin-bottom:0px;
@@ -109,8 +113,9 @@
 	width:93%;
 }
 
-.comment:hover > .comment_bottom, .response:hover > .response_bottom {
-	visibility:visible;
+.comment_bottom:hover, .response_bottom:hover {
+	filter:alpha(opacity=100); 
+	opacity:1;
 }
 
 .comment_vote {
@@ -139,7 +144,8 @@
 .comment_bottom, .response_bottom {
 	height:20px;
 	width:100%;
-	visibility:hidden;
+	filter:alpha(opacity=35); 
+	opacity:0.35;
 }
 
 .comment_actions, .response_actions {
@@ -202,11 +208,21 @@
     background-color: rgb(229, 235, 253);
 }
 
-.author_author > .comment_top {
+
+
+.staff_author > .comment_body, .staff_author > .response_body {
+    background-color: rgb(245,247,252);
+}
+
+.author_author > .comment_top, .author_author > .response_top {
 	background-color: rgb(251, 249, 149);
 }
 
-.author_author > .response_top {
+.author_author > .comment_body, .author_author > .response_body {
+	background-color: rgb(252,252,227);
+}
+
+ {
 	background-color: rgb(251, 249, 149);
 }
 
