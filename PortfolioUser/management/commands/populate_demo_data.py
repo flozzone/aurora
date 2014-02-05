@@ -82,7 +82,8 @@ def init_data():
         password = username
         tutor.set_password(password)
         tutor.save()
-        tutors.append(user)
+        print("***tutor username: %s" % tutor.username)
+        tutors.append(tutor)
 
     # create an admin user with password amanaman
     print('adding superuser')
@@ -100,9 +101,9 @@ def init_data():
     print('adding staff')
     username = "hagrid"
     superuser = PortfolioUser(username=username)
-    tutor.first_name = 'Firstname_%s' % username
-    tutor.last_name = 'Lastname_%s' % username
-    tutor.nickname = 'Nickname_%s' % username
+    superuser.first_name = 'Firstname_%s' % username
+    superuser.last_name = 'Lastname_%s' % username
+    superuser.nickname = 'Nickname_%s' % username
     superuser.set_password(username)
     superuser.is_staff = True
     superuser.is_superuser = False
