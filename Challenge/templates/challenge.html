@@ -12,25 +12,25 @@
 
 <div id="{{ challenge.id }}" class="challenge" stack="{{ challenge.get_stack.id }}">
 
-  <div class="challenge_title">
+   <div class="challenge_title" {% if elaboration.is_submitted %}onclick="$('.challenge_description').toggle('fast');" {% endif %}>
+	   {% if elaboration.is_submitted %}<i class="fa fa-toggle-down"></i>{% endif %}
     {{ challenge.title }}
   </div>
 
-  <div class="challenge_description">
+  <div class="challenge_description{% if elaboration.is_submitted %} nothere{% endif %}" >
     {{ challenge.description }}
-  </div>
 
   <div class="qa_section">
     <div class="comments">
-      <span><b onclick="$('#qa').toggle('fast');"><i class="fa fa-toggle-down"></i> Challenge Q+A Section</b></span>
+      <span><b {% if not elaboration.is_submitted %}onclick="$('#qa').toggle('fast');"><i class="fa fa-toggle-down"></i{% endif %}> Challenge Q+A Section</b></span>
 
-      <div id="qa" class="challenge_comments">
-        If you that the description of the challenge is unclear, use this section to ask questions. We will try to
+      <div id="qa" class="challenge_comments"%        If you that the description of the challenge is unclear, use this section to ask questions. We will try to
         answer as soon as possible.
         {% render_comment_list for challenge %}
       </div>
     </div>
   </div>
+</div>
 
   {% if user.is_staff %}
   <!-- admin corner -->
