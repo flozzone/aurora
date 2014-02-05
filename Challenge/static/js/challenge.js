@@ -4,7 +4,8 @@ function challenge_loaded() {
     var challenge_id = $('.challenge').attr('id');
     tinymce.init({
         selector: "textarea#editor",
-        plugins: "image",
+        menubar: false,
+        statusbar: false,
         setup: function (editor) {
             editor.on('change', function (e) {
                 elaboration_autosave(e, challenge_id);
