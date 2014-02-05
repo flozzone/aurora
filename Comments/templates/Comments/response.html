@@ -21,7 +21,7 @@
 		 </a>
 		 {% endif %}
 		 </div> 
-		 <div class="comment_score"> <a href='#' class="vote_up_on" data-comment_number="{{ response.id }}" title="This comment is helpful"><i class="fa fa-arrow-up notBlack"></i></a> {% if response.score > 0%} +{% endif %}{{ response.score }} <a href='#' class="vote_down_on" data-comment_number="{{ response.id }}" title="This comment is not helpful at all"><i class="fa fa-arrow-down notBlack"></i></a></div>
+		 <div class="comment_score">{% if not response.author = requester %}<a href='#' class="vote_up_on" data-comment_number="{{ response.id }}" title="This comment is helpful"><i class="fa fa-arrow-up notBlack"></i></a>{% endif %} {% if response.score > 0%} +{% endif %}{{ response.score }} {% if not response.author = requester %}<a href='#' class="vote_down_on" data-comment_number="{{ response.id }}" title="This comment is not helpful at all"><i class="fa fa-arrow-down notBlack"></i></a>{% endif %}</div>
 		 </div>
 
     <div class="response_body">
