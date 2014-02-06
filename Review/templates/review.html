@@ -26,7 +26,7 @@
     </div>
 
 	<div class="betweentext"><i class="fa fa-arrow-right"></i> Please carefully examine the work shown above and answer the following questions</div>
-    <form action="./review_answer/" method="post">
+    <form>
       {% for question in questions %}
         <div class="question_container">
             {% if not question.visible_to_author %}
@@ -41,7 +41,7 @@
               <input type="radio" name="{{ question.id }}" value="yes"> Yes <br>
               <input type="radio" name="{{ question.id }}" value="no" checked> No
             {% else %}
-              <textarea name="answer"></textarea>
+              <textarea id="text_answer" name="answer"></textarea>
             {% endif %}
           </div>
         </div>
@@ -54,7 +54,7 @@
       	<input type="radio" name="appraisal" value="N"> Unacceptable (*)<br><br>
   	  </div>
 	  <div class="suButton">
-    	  <input class="button XL" style="padding-left:0.5em;" type="submit" value="Submit">
+    	  <input id="submit_button" class="button XL" style="padding-left:0.5em;" type="submit" value="Submit">
   	  </div>
     </form>
   </div>
