@@ -7,7 +7,7 @@ function review_loaded() {
             return false;
         }
     });
-    $('.review_submit').click(submit_clicked);
+    $('#submit_button').click(submit_clicked);
 }
 
 function submit_clicked(event) {
@@ -26,12 +26,16 @@ function submit_clicked(event) {
         if (answer_object.hasClass('boolean_answer')) {
             answer = answer_object.find('input').first().is(':checked');
         } else {
-            answer = answer_object.find('input').first().val();
+            answer = answer_object.find('#text_answer').html();
         }
-        data['answers'].push({
-            'question_id': answer_object.attr('question_id'),
-            'answer': answer
-        });
+        var question = answer_object.parent().find('.question').first();
+        var question_id = question.attr('id');
+        if (question_id) {
+            data['answers'].push({
+                'question_id': answer_object.parent().find('.question').first().attr('id'),
+                'answer': answer
+            });
+        }
     });
     data['appraisal'] = $('input[name=appraisal]:checked').val();
 
