@@ -1,8 +1,15 @@
 
-.review {
+.all_reviews, .review {
 	max-width:940px;
 	padding:1em;
 }
+
+.view_review {
+	padding:1em;
+	box-shadow: 0px 3px 6px #ccc inset;
+	overflow:hidden;
+}
+
 
 .challenge > .title {
 	font-weight:bold;
@@ -11,6 +18,13 @@
 	padding-bottom:0;
 }
 
+.all_reviews > .title{
+	font-weight:bold;
+	background:#eee;
+	padding:1em;
+}
+ 
+ 
 .challenge > .description {
 	font-size:90%;
 	background:#eee;
@@ -38,15 +52,48 @@
 	margin-bottom:1em;
 }
 
-.question {
+.view_review .appraisal {
+	padding:0.5em;
+	padding-left:1.5em;
+	width:110%;
+	margin-left:-1em;
+}
+
+.Verdict_Success {
+	background-color:rgb(186,201,0);
+	color:white;
+}
+
+.Verdict_Not {
+	background-color:rgb(186,0,0);
+	color:white;
+}
+
+.Verdict_Fail {
+	background-color:rgb(255,227,0);
+	color:black;
+}
+
+.Verdict_Awesome {
+	background-color:rgb(58,201,88);
+	color:white;
+}
+
+.review .question, .view_review .question {
 	padding:0.5em;
 	padding-bottom:0;
 }
 
-.answer {
+.review .answer {
 	background-color: rgb(252,252,227);
 	padding:0.5em;
 	padding-top:0.25em;
+}
+
+.view_review .answer {
+	padding:0.5em;
+	padding-top:0.25em;
+	font-weight:bold;
 }
 
 .suButton {

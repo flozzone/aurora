@@ -44,17 +44,6 @@
 	display:block;
 }
 
-.comment_section {
-	box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	background-color:rgb(242,255,242);
-	padding:8px;
-	margin:8px 0 8px 0;
-	width:100%;
-	border-top:1px dashed silver;
-	border-bottom:1px dashed silver;	
-}
-
 
 .submission_text {
 	background:rgb(58,201,88);
