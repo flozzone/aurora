@@ -1,4 +1,55 @@
-.question_container {
-    border-style:dotted;
-border-width:1px;
+
+.review {
+	max-width:940px;
+	padding:1em;
+}
+
+.review > .challenge > .title {
+	font-weight:bold;
+	background:#eee;
+	padding:1em;
+	padding-bottom:0;
+}
+
+.challenge > .description {
+	font-size:90%;
+	background:#eee;
+	padding:1em;
+}
+
+.review > .elaboration {
+	border:1px solid silver;
+	padding:1em;
+	background:#eee;
+	box-shadow: 0px 3px 6px #ccc inset;
+}
+
+.review > form {
+	margin-top:1em;
+	padding:1em;
+	border: 1px solid silver;
+	
+}
+
+.review > form > .question_container {
+	margin-bottom:1em;
+}
+
+.review > form > .question_container > .question {
+	background-color: lightgreen;
+	padding:0.5em;
+}
+
+.review > form > .question_container > .answer {
+	background-color: white;
+	padding:0.5em;
+	border:1px solid lightgreen;
+}
+
+.review > form > .question_container > .answer > input[type=text] {
+	width:99.5%;
+	height:5em;
+}
+
+.review > form > input {
 }

@@ -18,7 +18,6 @@
         Description: {{ review.elaboration.challenge.description }}
       </div>
     </div>
-    <br>
 
     <div class="elaboration">
 
@@ -29,19 +28,17 @@
 
     <form action="./review_answer/" method="post">
       {% for question in questions %}
-        <br>
         <div class="question_container">
           <div class="question" id="{{ question.id }}">
-            Question: {{ question.text }}
+            {{ question.text }}
           </div>
           <div class="answer {% if question.boolean_answer %}boolean_answer{% endif %}" id="{{ question.id }}"
-               question_id="{{ question.id }}">
-            Answer:
+              question_id="{{ question.id }}">
             {% if question.boolean_answer %}
               <input type="radio" name="{{ question.id }}" value="yes"> Yes
               <input type="radio" name="{{ question.id }}" value="no" checked> No <br>
             {% else %}
-              <br><input type="text" name="answer">
+              <input type="text" name="answer">
             {% endif %}
             {% if not question.visible_to_author %}
               <i>Only the LVA-Team will be able to see this answer.</i>
@@ -49,11 +46,11 @@
           </div>
         </div>
       {% endfor %}
-      <br>
-      <input type="radio" name="appraisal" value="A"> Awesome
-      <input type="radio" name="appraisal" value="S" checked> Success
-      <input type="radio" name="appraisal" value="F"> Fail
-      <input type="radio" name="appraisal" value="N"> Not even trying<br><br>
+      What's your final verdict: <br>
+      <input type="radio" name="appraisal" value="A"> Great work
+      <input type="radio" name="appraisal" value="S" checked> Good work
+      <input type="radio" name="appraisal" value="F"> Barely acceptable work
+      <input type="radio" name="appraisal" value="N"> Unacceptable (*)<br><br>
 
       <input class="review_submit" type="submit" value="Submit">
     </form>

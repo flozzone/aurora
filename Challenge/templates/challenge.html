@@ -24,8 +24,8 @@
     <div class="comments">
       <span><b {% if not elaboration.is_submitted %}onclick="$('#qa').toggle('fast');"><i class="fa fa-toggle-down"></i{% endif %}> Challenge Q+A Section</b></span>
 
-      <div id="qa" class="challenge_comments"%        If you that the description of the challenge is unclear, use this section to ask questions. We will try to
-        answer as soon as possible.
+      <div id="qa" class="challenge_comments">If you have questions about the description of this challenge, post
+	  them here. The course organizers will answer as soon as possible.
         {% render_comment_list for challenge %}
       </div>
     </div>
