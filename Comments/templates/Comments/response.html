@@ -55,6 +55,7 @@
 		</p>
 		{% endif %}
 
+		<div class="response_actions">
 			{% if requester.is_staff or requester == response.author and response.deleter == None %}
 			<a class="flR" href="javascript:void(0)" id="edit_response_link_{{ response.id }}" class="edit_link">
 				edit&nbsp;&nbsp;
@@ -68,5 +69,6 @@
 				class="reply_link">
 				reply&nbsp;&nbsp;
 			</a>
+		</div>
 	</div>
 </div>

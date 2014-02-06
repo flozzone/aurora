@@ -28,6 +28,12 @@
    		 <div class="comment_score"> &nbsp; 0</div>
    	 </div>
             {{ form.as_p }}
+        {% if requester.is_staff %}
+            <a href="#" id="notify_about_comment">
+                <img src="/static/img/heart_empty.png" height="20" width="20">
+            </a>
+            <!--                <img src="/static/img/heart.png" height="20" width="20"> -->
+        {% endif %}
         <button id="button_add_comment">Add comment</button>
         <button id="button_cancel_comment">Cancel</button>
     </form>

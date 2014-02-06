@@ -13,16 +13,18 @@
     sudo: yes
   - apt: pkg=python3
     sudo: yes
+  - apt: pkg=python3-dev
+    sudo: yes
   - pip: name=virtualenv
     sudo: yes
   - name: create virtualenv
     command: virtualenv -p /usr/bin/python3 {{ py3env }}
              creates={{ py3env }}
-  - name: install django into virtualenv
-    pip: name=django
-         virtualenv={{ py3env }}
   - name: install ipython into virtualenv
     pip: name=ipython
+         virtualenv={{ py3env }}
+  - name: install project requirements
+    pip: requirements=/vagrant/requirements.txt
          virtualenv={{ py3env }}
 
   - name: add automatic activation of virtualenv to .bashrc
@@ -31,11 +33,15 @@
   - lineinfile: dest=/home/vagrant/.bashrc
                 line='cd /vagrant'
 
+#  - django_manage: app_path=/vagrant
+#                   command=syncdb
+#                   virtualenv={{ py3env }}
+#  - command: /home/vagrant/py3env/bin/python manage.py populate_demo_data
+#             chdir=/vagrant
+
 ### some requirements manually debugged/found and added, not sure if correct, just trial and error to get project working
-  - apt: pkg=python3-dev
-    sudo: yes
-  - pip: name=pillow
-         virtualenv={{ py3env }}
+#  - pip: name=pillow
+#         virtualenv={{ py3env }}
 
 #  - name: create project folder
 #    file: path={{ project_home }}
