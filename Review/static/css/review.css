@@ -60,8 +60,8 @@
 }
 
 .Verdict_Success {
-	background-color:rgb(186,201,0);
-	color:white;
+	background-color:rgb(170,220,170);
+	color:black;
 }
 
 .Verdict_Not {
@@ -75,7 +75,7 @@
 }
 
 .Verdict_Awesome {
-	background-color:rgb(58,201,88);
+	background-color:rgb(0,168,0);
 	color:white;
 }
 
