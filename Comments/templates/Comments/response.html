@@ -41,32 +41,34 @@
 		
         {% if response.bookmarked %}
             <a href='#' class="comment_unbookmark" data-comment_number="{{ response.id }}" title="Remove this comment from Bookmarks">
-				remember this
+                forget this
             </a>
         {% else %}
             <a href='#' class="comment_bookmark" data-comment_number="{{ response.id }}" title="Bookmark this comment">
-				forget this
+                remember this
             </a>
         {% endif %}
-		
-        {% if response.deleter != None %}
-		<p class="response_deleter">
-			deleted {{ response.delete_date | naturaltime }} by {{ response.deleter.display_name }}
-		</p>
-		{% endif %}
 
-			{% if requester.is_staff or requester == response.author and response.deleter == None %}
-			<a class="flR" href="javascript:void(0)" id="edit_response_link_{{ response.id }}" class="edit_link">
-				edit&nbsp;&nbsp;
-			</a>
-			<a class="flR" href="javascript:void(0)" id="delete_response_link_{{ response.id }}" data-delete_id="{{ response.id }}"
-			class="delete_response">
-			delete&nbsp;&nbsp;
-			</a>
-			{% endif %}
-			<a class="flR" href="javascript:void(0)" id="reply_comment_link_{{ response.id }}" data-reply_to="{{ comment.id }}"
-				class="reply_link">
-				reply&nbsp;&nbsp;
-			</a>
-	</div>
+        {% if response.deleter != None %}
+            <p class="response_deleter">
+                deleted {{ response.delete_date | naturaltime }} by {{ response.deleter.display_name }}
+            </p>
+        {% endif %}
+
+        {% if requester.is_staff or requester == response.author and response.deleter == None %}
+            <a class="flR" href="javascript:void(0)" id="edit_response_link_{{ response.id }}" class="edit_link">
+                edit&nbsp;&nbsp;
+            </a>
+            <a class="flR" href="javascript:void(0)" id="delete_response_link_{{ response.id }}"
+               data-delete_id="{{ response.id }}"
+               class="delete_response">
+                delete&nbsp;&nbsp;
+            </a>
+        {% endif %}
+        <a class="flR" href="javascript:void(0)" id="reply_comment_link_{{ response.id }}"
+           data-reply_to="{{ comment.id }}"
+           class="reply_link">
+            reply&nbsp;&nbsp;
+        </a>
+    </div>
 </div>

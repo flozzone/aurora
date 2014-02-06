@@ -21,7 +21,7 @@
 			 </a>
 			 {% endif %}
 		</div>
-		 <div class="comment_score" >{% if not comment.author = requester %}<a href='#' class="vote_up_on" data-comment_number="{{ comment.id }}" title="This comment is helpful"><i class="fa fa-arrow-up notBlack"></i></a> {% endif %}{% if comment.score > 0 %} +{% endif %}{{ comment.score }} {% if not comment.author = requester %}<a href='#' class="vote_down_on" data-comment_number="{{ comment.id }}" title="This comment is not helpful at all"><i class="fa fa-arrow-down notBlack"></i></a>{% endif %}</div>
+		 <div class="comment_score" >{% if comment.author != requester %}<a href='#' class="vote_up_on" data-comment_number="{{ comment.id }}" title="This comment is helpful"><i class="fa fa-arrow-up notBlack"></i></a> {% endif %}{% if comment.score > 0 %} +{% endif %}{{ comment.score }} {% if not comment.author = requester %}<a href='#' class="vote_down_on" data-comment_number="{{ comment.id }}" title="This comment is not helpful at all"><i class="fa fa-arrow-down notBlack"></i></a>{% endif %}</div>
 		 </div>
 
 
@@ -49,29 +49,26 @@
             </a>
         {% endif %}
  
- 
         {% if comment.deleter != None %}
             <p class="comment_deleter">
                 deleted {{ comment.delete_date | naturaltime }} by {{ comment.deleter.display_name }}
             </p>
         {% endif %}
-		
-		
 
-            {% if requester.is_staff and comment.deleter == None %}
-            {% endif %}
-            {% if requester.is_staff or requester == comment.author and comment.deleter == None %}
-                <a class="flR" href="javascript:void(0)" id="edit_comment_link_{{ comment.id }}" class="edit_link">
-                    edit
-                </a>
-                <a class="flR" href="javascript:void(0)" id="delete_comment_{{ comment.id }}" data-delete_id="{{ comment.id }}"
-                   class="delete_comment">
-                    delete&nbsp;&nbsp;
-                </a>
-            {% endif %}
-	        <a class="flR" href="javascript:void(0)" id="reply_comment_link_{{ comment.id }}" data-reply_to="{{ comment.id }}"
-	           class="reply_link">
-	            reply&nbsp;&nbsp;
-	        </a>
-	</div>
+        {% if requester.is_staff or requester == comment.author and comment.deleter == None %}
+            <a class="flR" href="javascript:void(0)" id="edit_comment_link_{{ comment.id }}" class="edit_link">
+                edit
+            </a>
+            <a class="flR" href="javascript:void(0)" id="delete_comment_{{ comment.id }}"
+               data-delete_id="{{ comment.id }}"
+               class="delete_comment">
+                delete&nbsp;&nbsp;
+            </a>
+        {% endif %}
+        <a class="flR" href="javascript:void(0)" id="reply_comment_link_{{ comment.id }}"
+           data-reply_to="{{ comment.id }}"
+           class="reply_link">
+            reply&nbsp;&nbsp;
+        </a>
+    </div>
 </div>

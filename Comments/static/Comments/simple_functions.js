@@ -5,7 +5,8 @@
  * e.g. vote up/down, promote, bookmark
  */
 
-function sendValueForComment(url, comment_number, value) { $.ajax({
+function sendValueForComment(url, comment_number, value) {
+    $.ajax({
         url: url,
         data: {comment_id: comment_number,
                value: value},
@@ -31,7 +32,7 @@ function registerPromoteLinksForCommentList($comment_list) {
         $(this).off();
         $(this).click( demote );
         $(this).toggleClass('comment_demote comment_promote');
-        $(this).html('1');
+        $(this).find('i').toggleClass('gold ungold');
 
         return false
     }
@@ -45,7 +46,7 @@ function registerPromoteLinksForCommentList($comment_list) {
         $(this).off();
         $(this).click( promote );
         $(this).toggleClass('comment_demote comment_promote');
-        $(this).html('0');
+        $(this).find('i').toggleClass('gold ungold');
 
         return false;
     }
@@ -66,7 +67,7 @@ function registerBookmarkLinksForCommentList($comment_list) {
         $(this).off();
         $(this).click( unbookmark );
         $(this).toggleClass('comment_unbookmark comment_bookmark');
-        $(this).text('unsave');
+        $(this).text('forget this');
 
         return false;
     }
@@ -76,12 +77,11 @@ function registerBookmarkLinksForCommentList($comment_list) {
 
         var comment_number = $(this).attr('data-comment_number');
         sendValueForComment(url, comment_number, false);
-        console.log(comment_number);
 
         $(this).off();
         $(this).click( bookmark );
         $(this).toggleClass('comment_unbookmark comment_bookmark');
-        $(this).text('save');
+        $(this).text('remember this');
 
         return false;
     }
