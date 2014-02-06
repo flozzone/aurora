@@ -8,51 +8,54 @@
     var stack_id = {{ stack_id }};
   </script>
   <div class="review" id="{{ review.id }}">
-    Challenge:
     <div class="challenge" id="{{ review.elaboration.challenge.id }}">
 
       <div class="title">
-        Title: {{ review.elaboration.challenge.title }}
+        {{ review.elaboration.challenge.title }}
       </div>
       <div class="description">
-        Description: {{ review.elaboration.challenge.description }}
+        {{ review.elaboration.challenge.description }}
       </div>
     </div>
 
     <div class="elaboration">
 
       <div class="elaboration_text">
-        Elaboration: {{ review.elaboration.elaboration_text |safe }}
+        {{ review.elaboration.elaboration_text |safe }}
       </div>
     </div>
 
+	<div class="betweentext"><i class="fa fa-arrow-right"></i> Please carefully examine the work shown above and answer the following questions</div>
     <form action="./review_answer/" method="post">
       {% for question in questions %}
         <div class="question_container">
+            {% if not question.visible_to_author %}
+              <i class="fa fa-arrow-right"></i>Only the course team will be able to see this answer
+            {% endif %}
           <div class="question" id="{{ question.id }}">
             {{ question.text }}
           </div>
           <div class="answer {% if question.boolean_answer %}boolean_answer{% endif %}" id="{{ question.id }}"
               question_id="{{ question.id }}">
             {% if question.boolean_answer %}
-              <input type="radio" name="{{ question.id }}" value="yes"> Yes
-              <input type="radio" name="{{ question.id }}" value="no" checked> No <br>
+              <input type="radio" name="{{ question.id }}" value="yes"> Yes <br>
+              <input type="radio" name="{{ question.id }}" value="no" checked> No
             {% else %}
-              <input type="text" name="answer">
-            {% endif %}
-            {% if not question.visible_to_author %}
-              <i>Only the LVA-Team will be able to see this answer.</i>
+              <textarea name="answer"></textarea>
             {% endif %}
           </div>
         </div>
       {% endfor %}
-      What's your final verdict: <br>
-      <input type="radio" name="appraisal" value="A"> Great work
-      <input type="radio" name="appraisal" value="S" checked> Good work
-      <input type="radio" name="appraisal" value="F"> Barely acceptable work
-      <input type="radio" name="appraisal" value="N"> Unacceptable (*)<br><br>
-
-      <input class="review_submit" type="submit" value="Submit">
+     	<div class="question">Your final verdict </div>
+  	  <div class="answer">
+      	<input type="radio" name="appraisal" value="A"> Great work <br>
+      	<input type="radio" name="appraisal" value="S" checked> Good work <br>
+      	<input type="radio" name="appraisal" value="F"> Barely acceptable work <br>
+      	<input type="radio" name="appraisal" value="N"> Unacceptable (*)<br><br>
+  	  </div>
+	  <div class="suButton">
+    	  <input class="button XL" style="padding-left:0.5em;" type="submit" value="Submit">
+  	  </div>
     </form>
   </div>
 {% else %}
