@@ -13,17 +13,15 @@
 {% block content %}
 
   <h1>Detailview</h1>
-
+  <div class="pagination">
+     {% if prev %}<div class="paginator prev" id="{{ prev }}"><i class="fa fa-angle-double-left"></i> prev</div>{% endif %}
+     {% if next %}<div class="paginator next" id="{{ next }}">next <i class="fa fa-angle-double-right"></i></div>{% endif %}
+ </div>
+ <br>
   <div class="detail_left">
-         <div class="pagination">
-            {% if prev %}<div class="paginator prev" id="{{ prev }}">previous</div>{% endif %}
-            {% if next %}<div class="paginator next" id="{{ next }}">next</div>{% endif %}
-        </div>
-        <div class="spacer"></div>
 
-        <img class="gravatar" src="../{{ elaboration.user.avatar.url }}">
-        {{ elaboration.user.username }}<br/>
-        {{ elaboration.user.first_name }} {{ elaboration.user.last_name }}
+        <img class="gravatar" src="../{{ elaboration.user.avatar.url }}" style="vertical-align:middle">
+        {{ elaboration.user.nickname }} ({{ elaboration.user.first_name }} {{ elaboration.user.last_name }}, {{ elaboration.user.username }})
         <div class="spacer"></div>
 
         <div class="file_upload" style="display: none">
@@ -37,10 +35,11 @@
         <div class="spacer"></div>
 
         {% if evaluation %}
+		Written feedback
             <form method="post">
                 {% csrf_token %}
                 {% if evaluation.submission_time %}
-                    <div class="evaluation">
+				    <div class="evaluation">
                         {{ evaluation.evaluation_text }}
                     </div>
                     points assigned<div class="points">{{ evaluation.evaluation_points }}</div>
@@ -53,16 +52,19 @@
                             onkeyup="DelayedAutoSave({{ elaboration.id }})">
                         {{ evaluation.evaluation_text }}{% if lock %}<div class="evaluation_lock">locked by {{ evaluation.tutor.username }}</div>{% endif %}
                     </div>
-                    points assigned<div class="points" {% if not lock %} contenteditable="true" {% endif %} onkeyup="DelayedAutoSave({{ elaboration.id }})">
+                    Points <div class="points" {% if not lock %} contenteditable="true" {% endif %} onkeyup="DelayedAutoSave({{ elaboration.id }})">
                         {% if evaluation.evaluation_points %}{{ evaluation.evaluation_points }}{% endif %}</div>
-                    {% if not lock %}<button class="submit_evaluation" id="{{ elaboration.id }}">evaluate</button>{% endif %}
+                    {% if not lock %}<button class="submit_evaluation XL" id="{{ elaboration.id }}">evaluate</button>{% endif %}
                 {% endif %}
             </form>
             <div class="spacer"></div>
         {% endif %}
 
         {% if elaboration %}
+		<div class="comments">
+			<b>Comment section: discussion with autor</b>
             {% render_comment_list for elaboration %}
+		</div>
         {% endif %}
 
         {% if reviews %}
