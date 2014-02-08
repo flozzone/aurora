@@ -1,3 +1,7 @@
+"""
+Challenge model method tests
+"""
+
 from datetime import datetime
 
 from django.test import TestCase
@@ -379,7 +383,8 @@ class ChallengeTest(TestCase):
         Review(elaboration=elaboration4, submission_time=datetime.now(), reviewer=user1,
                appraisal=Review.SUCCESS).save()
         assert challenge2.is_enabled_for_user(user1)
-        Review(elaboration=elaboration1, submission_time=datetime.now(), reviewer=user2, appraisal=Review.NOTHING).save()
+        Review(elaboration=elaboration1, submission_time=datetime.now(), reviewer=user2,
+               appraisal=Review.NOTHING).save()
         assert not challenge2.is_enabled_for_user(user1)
 
     def test_final_challenge_enabled(self):

@@ -81,7 +81,6 @@ class ElaborationTest(TestCase):
     def create_review(self, elaboration, reviewer):
         Review(elaboration=elaboration, submission_time=datetime.now(), reviewer=reviewer, appraisal='S').save()
 
-
     def test_get_review_candidate_multiple_reviews(self):
         """
         Tests that a review will not be assigned for a an elaboration that has already been reviewed by the reviewer

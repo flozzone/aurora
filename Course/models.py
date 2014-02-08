@@ -8,16 +8,18 @@ class Course(models.Model):
     description = models.TextField()
     course_number = models.CharField(max_length=100)
 
-    def get_course_challenges(course_short_title):
+    def get_course_challenges(self):
         challenges = []
-        ccrs = CourseChallengeRelation.objects.filter(course__short_title=course_short_title)
+        ccrs = CourseChallengeRelation.objects.filter(course=self)
         for ccr in ccrs:
             challenges.append(ccr.challenge)
         return challenges
 
+
 class CourseUserRelation(models.Model):
     user = models.ForeignKey('PortfolioUser.PortfolioUser')
     course = models.ForeignKey(Course)
+
 
 class CourseChallengeRelation(models.Model):
     challenge = models.ForeignKey('Challenge.Challenge')
