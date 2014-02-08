@@ -16,6 +16,7 @@ class Challenge(models.Model):
     # This is a comma separated list of mime types or file extensions. Eg.: image/*,application/pdf,.psd.
     accepted_files = models.CharField(max_length=100, default="image/*,application/pdf")
 
+    NOT_ENABLED = -1
     NOT_STARTED = 0
     NOT_SUBMITTED = 1
     USER_REVIEW_MISSING = 2
@@ -26,6 +27,7 @@ class Challenge(models.Model):
     EVALUATED = 7
 
     status_dict = {
+        -1: "Not enabled",
         0: "Not started",
         1: "Not submitted",
         2: "Review missing",
@@ -37,6 +39,7 @@ class Challenge(models.Model):
     }
 
     next_dict = {
+        -1: "Not enabled",
         0: "Start the next challenge",
         1: "Submit your elaboration once it is finished",
         2: "Write another review to proceed",
@@ -80,7 +83,7 @@ class Challenge(models.Model):
         return next_challenge
 
     def has_enough_user_reviews(self, user):
-        return len(self.get_reviews_written_by_user(user)) == 3
+        return len(self.get_reviews_written_by_user(user)) >= 3
 
     def submitted_by_user(self, user):
         elaboration = Elaboration.objects.filter(challenge=self, user=user)
@@ -160,6 +163,10 @@ class Challenge(models.Model):
         raise Exception("this case is not supposed to happen")
 
     def get_status(self, user):
+        # there is no proper status for challenges that are not enabled
+        if not self.is_enabled_for_user(user):
+            return self.NOT_ENABLED
+
         elaboration = self.get_elaboration(user)
 
         # user did not start to write an elaboration

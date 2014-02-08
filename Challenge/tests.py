@@ -1,26 +1,18 @@
-"""
-This file demonstrates writing tests using the unittest module. These will pass
-when you run "manage.py test".
-
-Replace this with more appropriate tests for your application.
-"""
+from datetime import datetime
 
 from django.test import TestCase
-from Elaboration.views import create_elaboration
+
 from PortfolioUser.models import PortfolioUser
 from Stack.models import Stack, StackChallengeRelation
 from Course.models import Course, CourseUserRelation, CourseChallengeRelation
 from Challenge.models import Challenge
 from ReviewQuestion.models import ReviewQuestion
 from Elaboration.models import Elaboration
-from datetime import datetime
+from Evaluation.models import Evaluation
 from Review.models import Review
-from Notification.models import Notification
+
 
 class SimpleTest(TestCase):
-
-
-
     def setUp(self):
         self.create_test_users(4)
         self.create_course()
@@ -164,23 +156,30 @@ class SimpleTest(TestCase):
         challenge2.prerequisite = challenge1
         challenge2.save()
         user1 = self.users[0]
-        elaboration1 = Elaboration(challenge=challenge1, user=user1, elaboration_text="test", submission_time=datetime.now())
+        elaboration1 = Elaboration(challenge=challenge1, user=user1, elaboration_text="test",
+                                   submission_time=datetime.now())
         elaboration1.save()
         user2 = self.users[1]
-        elaboration2 = Elaboration(challenge=challenge1, user=user2, elaboration_text="test", submission_time=datetime.now())
+        elaboration2 = Elaboration(challenge=challenge1, user=user2, elaboration_text="test",
+                                   submission_time=datetime.now())
         elaboration2.save()
         user3 = self.users[2]
-        elaboration3 = Elaboration(challenge=challenge1, user=user3, elaboration_text="test", submission_time=datetime.now())
+        elaboration3 = Elaboration(challenge=challenge1, user=user3, elaboration_text="test",
+                                   submission_time=datetime.now())
         elaboration3.save()
         user4 = self.users[3]
-        elaboration4 = Elaboration(challenge=challenge1, user=user4, elaboration_text="test", submission_time=datetime.now())
+        elaboration4 = Elaboration(challenge=challenge1, user=user4, elaboration_text="test",
+                                   submission_time=datetime.now())
         elaboration4.save()
         assert not challenge1.has_enough_user_reviews(user1)
-        Review(elaboration=elaboration2, submission_time=datetime.now(), reviewer=user1, appraisal=Review.SUCCESS).save()
+        Review(elaboration=elaboration2, submission_time=datetime.now(), reviewer=user1,
+               appraisal=Review.SUCCESS).save()
         assert not challenge1.has_enough_user_reviews(user1)
-        Review(elaboration=elaboration3, submission_time=datetime.now(), reviewer=user1, appraisal=Review.SUCCESS).save()
+        Review(elaboration=elaboration3, submission_time=datetime.now(), reviewer=user1,
+               appraisal=Review.SUCCESS).save()
         assert not challenge1.has_enough_user_reviews(user1)
-        Review(elaboration=elaboration4, submission_time=datetime.now(), reviewer=user1, appraisal=Review.SUCCESS).save()
+        Review(elaboration=elaboration4, submission_time=datetime.now(), reviewer=user1,
+               appraisal=Review.SUCCESS).save()
         assert challenge1.has_enough_user_reviews(user1)
 
     def test_submitted_by_user(self):
@@ -199,28 +198,35 @@ class SimpleTest(TestCase):
         challenge2.prerequisite = challenge1
         challenge2.save()
         user1 = self.users[0]
-        elaboration1 = Elaboration(challenge=challenge1, user=user1, elaboration_text="test", submission_time=datetime.now())
+        elaboration1 = Elaboration(challenge=challenge1, user=user1, elaboration_text="test",
+                                   submission_time=datetime.now())
         elaboration1.save()
         user2 = self.users[1]
-        elaboration2 = Elaboration(challenge=challenge1, user=user2, elaboration_text="test", submission_time=datetime.now())
+        elaboration2 = Elaboration(challenge=challenge1, user=user2, elaboration_text="test",
+                                   submission_time=datetime.now())
         elaboration2.save()
         user3 = self.users[2]
-        elaboration3 = Elaboration(challenge=challenge1, user=user3, elaboration_text="test", submission_time=datetime.now())
+        elaboration3 = Elaboration(challenge=challenge1, user=user3, elaboration_text="test",
+                                   submission_time=datetime.now())
         elaboration3.save()
         user4 = self.users[3]
-        elaboration4 = Elaboration(challenge=challenge1, user=user4, elaboration_text="test", submission_time=datetime.now())
+        elaboration4 = Elaboration(challenge=challenge1, user=user4, elaboration_text="test",
+                                   submission_time=datetime.now())
         elaboration4.save()
         assert len(challenge1.get_reviews_written_by_user(user1)) == 0
-        review1 = Review(elaboration=elaboration2, submission_time=datetime.now(), reviewer=user1, appraisal=Review.SUCCESS)
+        review1 = Review(elaboration=elaboration2, submission_time=datetime.now(), reviewer=user1,
+                         appraisal=Review.SUCCESS)
         review1.save()
         assert len(challenge1.get_reviews_written_by_user(user1)) == 1
         assert review1 in challenge1.get_reviews_written_by_user(user1)
-        review2 = Review(elaboration=elaboration3, submission_time=datetime.now(), reviewer=user1, appraisal=Review.SUCCESS)
+        review2 = Review(elaboration=elaboration3, submission_time=datetime.now(), reviewer=user1,
+                         appraisal=Review.SUCCESS)
         review2.save()
         assert len(challenge1.get_reviews_written_by_user(user1)) == 2
         assert review1 in challenge1.get_reviews_written_by_user(user1)
         assert review2 in challenge1.get_reviews_written_by_user(user1)
-        review3 = Review(elaboration=elaboration4, submission_time=datetime.now(), reviewer=user1, appraisal=Review.SUCCESS)
+        review3 = Review(elaboration=elaboration4, submission_time=datetime.now(), reviewer=user1,
+                         appraisal=Review.SUCCESS)
         review3.save()
         assert len(challenge1.get_reviews_written_by_user(user1)) == 3
         assert review1 in challenge1.get_reviews_written_by_user(user1)
@@ -281,20 +287,27 @@ class SimpleTest(TestCase):
         user2 = self.users[1]
         user3 = self.users[2]
         user4 = self.users[3]
-        elaboration1 = Elaboration(challenge=challenge1, user=user1, elaboration_text="test", submission_time=datetime.now())
+        elaboration1 = Elaboration(challenge=challenge1, user=user1, elaboration_text="test",
+                                   submission_time=datetime.now())
         elaboration1.save()
-        elaboration2 = Elaboration(challenge=challenge1, user=user2, elaboration_text="test", submission_time=datetime.now())
+        elaboration2 = Elaboration(challenge=challenge1, user=user2, elaboration_text="test",
+                                   submission_time=datetime.now())
         elaboration2.save()
-        elaboration3 = Elaboration(challenge=challenge1, user=user3, elaboration_text="test", submission_time=datetime.now())
+        elaboration3 = Elaboration(challenge=challenge1, user=user3, elaboration_text="test",
+                                   submission_time=datetime.now())
         elaboration3.save()
-        elaboration4 = Elaboration(challenge=challenge1, user=user4, elaboration_text="test", submission_time=datetime.now())
+        elaboration4 = Elaboration(challenge=challenge1, user=user4, elaboration_text="test",
+                                   submission_time=datetime.now())
         elaboration4.save()
         assert not challenge2.is_enabled_for_user(user1)
-        Review(elaboration=elaboration2, submission_time=datetime.now(), reviewer=user1, appraisal=Review.SUCCESS).save()
+        Review(elaboration=elaboration2, submission_time=datetime.now(), reviewer=user1,
+               appraisal=Review.SUCCESS).save()
         assert not challenge2.is_enabled_for_user(user1)
-        Review(elaboration=elaboration3, submission_time=datetime.now(), reviewer=user1, appraisal=Review.SUCCESS).save()
+        Review(elaboration=elaboration3, submission_time=datetime.now(), reviewer=user1,
+               appraisal=Review.SUCCESS).save()
         assert not challenge2.is_enabled_for_user(user1)
-        Review(elaboration=elaboration4, submission_time=datetime.now(), reviewer=user1, appraisal=Review.SUCCESS).save()
+        Review(elaboration=elaboration4, submission_time=datetime.now(), reviewer=user1,
+               appraisal=Review.SUCCESS).save()
         assert challenge2.is_enabled_for_user(user1)
 
     def test_if_stack_blocked_challenge_is_not_enabled(self):
@@ -311,17 +324,24 @@ class SimpleTest(TestCase):
         user2 = self.users[1]
         user3 = self.users[2]
         user4 = self.users[3]
-        elaboration1 = Elaboration(challenge=challenge1, user=user1, elaboration_text="test", submission_time=datetime.now())
+        elaboration1 = Elaboration(challenge=challenge1, user=user1, elaboration_text="test",
+                                   submission_time=datetime.now())
         elaboration1.save()
-        elaboration2 = Elaboration(challenge=challenge1, user=user2, elaboration_text="test", submission_time=datetime.now())
+        elaboration2 = Elaboration(challenge=challenge1, user=user2, elaboration_text="test",
+                                   submission_time=datetime.now())
         elaboration2.save()
-        elaboration3 = Elaboration(challenge=challenge1, user=user3, elaboration_text="test", submission_time=datetime.now())
+        elaboration3 = Elaboration(challenge=challenge1, user=user3, elaboration_text="test",
+                                   submission_time=datetime.now())
         elaboration3.save()
-        elaboration4 = Elaboration(challenge=challenge1, user=user4, elaboration_text="test", submission_time=datetime.now())
+        elaboration4 = Elaboration(challenge=challenge1, user=user4, elaboration_text="test",
+                                   submission_time=datetime.now())
         elaboration4.save()
-        Review(elaboration=elaboration2, submission_time=datetime.now(), reviewer=user1, appraisal=Review.SUCCESS).save()
-        Review(elaboration=elaboration3, submission_time=datetime.now(), reviewer=user1, appraisal=Review.SUCCESS).save()
-        Review(elaboration=elaboration4, submission_time=datetime.now(), reviewer=user1, appraisal=Review.SUCCESS).save()
+        Review(elaboration=elaboration2, submission_time=datetime.now(), reviewer=user1,
+               appraisal=Review.SUCCESS).save()
+        Review(elaboration=elaboration3, submission_time=datetime.now(), reviewer=user1,
+               appraisal=Review.SUCCESS).save()
+        Review(elaboration=elaboration4, submission_time=datetime.now(), reviewer=user1,
+               appraisal=Review.SUCCESS).save()
         assert challenge2.is_enabled_for_user(user1)
         Review(elaboration=elaboration1, submission_time=datetime.now(), reviewer=user2, appraisal=Review.FAIL).save()
         assert not challenge2.is_enabled_for_user(user1)
@@ -336,20 +356,29 @@ class SimpleTest(TestCase):
         user2 = self.users[1]
         user3 = self.users[2]
         user4 = self.users[3]
-        elaboration1 = Elaboration(challenge=challenge1, user=user1, elaboration_text="test", submission_time=datetime.now())
+        elaboration1 = Elaboration(challenge=challenge1, user=user1, elaboration_text="test",
+                                   submission_time=datetime.now())
         elaboration1.save()
-        elaboration2 = Elaboration(challenge=challenge1, user=user2, elaboration_text="test", submission_time=datetime.now())
+        elaboration2 = Elaboration(challenge=challenge1, user=user2, elaboration_text="test",
+                                   submission_time=datetime.now())
         elaboration2.save()
-        elaboration3 = Elaboration(challenge=challenge1, user=user3, elaboration_text="test", submission_time=datetime.now())
+        elaboration3 = Elaboration(challenge=challenge1, user=user3, elaboration_text="test",
+                                   submission_time=datetime.now())
         elaboration3.save()
-        elaboration4 = Elaboration(challenge=challenge1, user=user4, elaboration_text="test", submission_time=datetime.now())
+        elaboration4 = Elaboration(challenge=challenge1, user=user4, elaboration_text="test",
+                                   submission_time=datetime.now())
         elaboration4.save()
-        Review(elaboration=elaboration2, submission_time=datetime.now(), reviewer=user1, appraisal=Review.SUCCESS).save()
-        Review(elaboration=elaboration3, submission_time=datetime.now(), reviewer=user1, appraisal=Review.SUCCESS).save()
-        Review(elaboration=elaboration4, submission_time=datetime.now(), reviewer=user1, appraisal=Review.SUCCESS).save()
+        Review(elaboration=elaboration2, submission_time=datetime.now(), reviewer=user1,
+               appraisal=Review.SUCCESS).save()
+        Review(elaboration=elaboration3, submission_time=datetime.now(), reviewer=user1,
+               appraisal=Review.SUCCESS).save()
+        Review(elaboration=elaboration4, submission_time=datetime.now(), reviewer=user1,
+               appraisal=Review.SUCCESS).save()
         assert not challenge2.is_enabled_for_user(user1)
-        Review(elaboration=elaboration1, submission_time=datetime.now(), reviewer=user2, appraisal=Review.SUCCESS).save()
-        Review(elaboration=elaboration1, submission_time=datetime.now(), reviewer=user3, appraisal=Review.SUCCESS).save()
+        Review(elaboration=elaboration1, submission_time=datetime.now(), reviewer=user2,
+               appraisal=Review.SUCCESS).save()
+        Review(elaboration=elaboration1, submission_time=datetime.now(), reviewer=user3,
+               appraisal=Review.SUCCESS).save()
         assert challenge2.is_enabled_for_user(user1)
 
     def test_final_challenge_enabled_bug_issue_114(self):
@@ -366,28 +395,36 @@ class SimpleTest(TestCase):
         user2 = self.users[1]
         user3 = self.users[2]
         user4 = self.users[3]
-        elaboration1 = Elaboration(challenge=challenge1, user=user1, elaboration_text="test", submission_time=datetime.now())
+        elaboration1 = Elaboration(challenge=challenge1, user=user1, elaboration_text="test",
+                                   submission_time=datetime.now())
         elaboration1.save()
-        elaboration2 = Elaboration(challenge=challenge1, user=user2, elaboration_text="test", submission_time=datetime.now())
+        elaboration2 = Elaboration(challenge=challenge1, user=user2, elaboration_text="test",
+                                   submission_time=datetime.now())
         elaboration2.save()
-        elaboration3 = Elaboration(challenge=challenge1, user=user3, elaboration_text="test", submission_time=datetime.now())
+        elaboration3 = Elaboration(challenge=challenge1, user=user3, elaboration_text="test",
+                                   submission_time=datetime.now())
         elaboration3.save()
-        elaboration4 = Elaboration(challenge=challenge1, user=user4, elaboration_text="test", submission_time=datetime.now())
+        elaboration4 = Elaboration(challenge=challenge1, user=user4, elaboration_text="test",
+                                   submission_time=datetime.now())
         elaboration4.save()
-        Review(elaboration=elaboration2, submission_time=datetime.now(), reviewer=user1, appraisal=Review.SUCCESS).save()
-        Review(elaboration=elaboration3, submission_time=datetime.now(), reviewer=user1, appraisal=Review.SUCCESS).save()
-        Review(elaboration=elaboration4, submission_time=datetime.now(), reviewer=user1, appraisal=Review.SUCCESS).save()
+        Review(elaboration=elaboration2, submission_time=datetime.now(), reviewer=user1,
+               appraisal=Review.SUCCESS).save()
+        Review(elaboration=elaboration3, submission_time=datetime.now(), reviewer=user1,
+               appraisal=Review.SUCCESS).save()
+        Review(elaboration=elaboration4, submission_time=datetime.now(), reviewer=user1,
+               appraisal=Review.SUCCESS).save()
         assert not challenge3.is_enabled_for_user(user1)
-        Review(elaboration=elaboration1, submission_time=datetime.now(), reviewer=user2, appraisal=Review.SUCCESS).save()
-        Review(elaboration=elaboration1, submission_time=datetime.now(), reviewer=user3, appraisal=Review.SUCCESS).save()
+        Review(elaboration=elaboration1, submission_time=datetime.now(), reviewer=user2,
+               appraisal=Review.SUCCESS).save()
+        Review(elaboration=elaboration1, submission_time=datetime.now(), reviewer=user3,
+               appraisal=Review.SUCCESS).save()
 
         assert not challenge3.is_enabled_for_user(user1)
 
     def test_status_not_started(self):
         user = self.users[0]
-        assert self.challenge.is_enabled_for_user(user), "this challenge should be enabled for this user"
-        status = self.challenge.get_status(user)
-        assert status == 0, "status should be 0 but was %s" % status
+        assert self.challenge.is_enabled_for_user(user)
+        assert self.challenge.get_status(user) == Challenge.NOT_STARTED
 
     def test_status_not_submitted(self):
         challenge1 = self.challenge
@@ -396,31 +433,13 @@ class SimpleTest(TestCase):
         challenge2.prerequisite = challenge1
         challenge2.save()
         user = self.users[0]
+        assert challenge1.get_status(user) == Challenge.NOT_STARTED
         elaboration = Elaboration(challenge=challenge1, user=user, elaboration_text="test")
         elaboration.save()
-        assert challenge1.is_enabled_for_user(user), "this challenge should be enabled for this user"
-        status = challenge1.get_status(user)
-        assert status == 1, "status should be 1 but was %s" % status
-        assert not challenge2.is_enabled_for_user(user), "this challenge should not be enabled for this user"
-        status = challenge2.get_status(user)
-        assert status == 0, "status should be 0 but was %s" % status
-
-    def test_status_user_review_missing(self):
-        challenge1 = self.challenge
-        self.create_challenge()
-        challenge2 = self.challenge
-        challenge2.prerequisite = challenge1
-        challenge2.save()
-        user = self.users[0]
-        elaboration = Elaboration(challenge=challenge1, user=user, elaboration_text="test", submission_time=datetime.now())
-        elaboration.save()
-        assert challenge1.is_enabled_for_user(user), "this challenge should be enabled for this user"
-        status = challenge1.get_status(user)
-        assert status == 2, "status should be 2 but was %s" % status
-        assert not challenge2.is_enabled_for_user(user), "this challenge should not be enabled for this user"
-        status = challenge2.get_status(user)
-        assert status == 0, "status should be 0 but was %s" % status
-
+        assert challenge1.is_enabled_for_user(user)
+        assert challenge1.get_status(user) == Challenge.NOT_SUBMITTED
+        assert not challenge2.is_enabled_for_user(user)
+        assert challenge2.get_status(user) == Challenge.NOT_ENABLED
 
     def test_status_blocked_bad_review(self):
         challenge1 = self.challenge
@@ -428,27 +447,101 @@ class SimpleTest(TestCase):
         challenge2 = self.challenge
         challenge2.prerequisite = challenge1
         challenge2.save()
+        self.create_challenge()
+        challenge3 = self.challenge
+        challenge3.prerequisite = challenge2
+        challenge3.save()
         user1 = self.users[0]
-        elaboration1 = Elaboration(challenge=challenge1, user=user1, elaboration_text="test", submission_time=datetime.now())
-        elaboration1.save()
         user2 = self.users[1]
-        elaboration2 = Elaboration(challenge=challenge1, user=user2, elaboration_text="test", submission_time=datetime.now())
+        user3 = self.users[2]
+        user4 = self.users[3]
+        elaboration1 = Elaboration(challenge=challenge1, user=user1, elaboration_text="test",
+                                   submission_time=datetime.now())
+        elaboration1.save()
+        elaboration2 = Elaboration(challenge=challenge1, user=user2, elaboration_text="test",
+                                   submission_time=datetime.now())
         elaboration2.save()
-        Review(elaboration=elaboration1, submission_time=datetime.now(), reviewer=user2, appraisal=Review.FAIL).save()
-        assert challenge1.is_enabled_for_user(user1), "this challenge should be enabled for this user"
-        status = challenge1.get_status(user1)
-        assert status == 3, "status should be 3 but was %s" % status
-        assert not challenge2.is_enabled_for_user(user1), "this challenge should not be enabled for this user"
-        status = challenge2.get_status(user1)
-        assert status == 0, "status should be 0 but was %s" % status
+        elaboration3 = Elaboration(challenge=challenge1, user=user3, elaboration_text="test",
+                                   submission_time=datetime.now())
+        elaboration3.save()
+        elaboration4 = Elaboration(challenge=challenge1, user=user4, elaboration_text="test",
+                                   submission_time=datetime.now())
+        elaboration4.save()
+        assert not challenge2.is_enabled_for_user(user1)
+        assert challenge1.get_status(user1) == Challenge.USER_REVIEW_MISSING
+        assert challenge2.get_status(user1) == Challenge.NOT_ENABLED
+        bad_review = Review(elaboration=elaboration1, submission_time=datetime.now(), reviewer=user2,
+                            appraisal=Review.FAIL)
+        bad_review.save()
+        assert not challenge2.is_enabled_for_user(user1)
+        assert challenge1.get_status(user1) == Challenge.BLOCKED_BAD_REVIEW
+        assert challenge2.get_status(user1) == Challenge.NOT_ENABLED
+        bad_review.appraisal = Review.SUCCESS
+        bad_review.save()
+        Review(elaboration=elaboration2, submission_time=datetime.now(), reviewer=user1,
+               appraisal=Review.SUCCESS).save()
+        Review(elaboration=elaboration3, submission_time=datetime.now(), reviewer=user1,
+               appraisal=Review.SUCCESS).save()
+        Review(elaboration=elaboration4, submission_time=datetime.now(), reviewer=user1,
+               appraisal=Review.SUCCESS).save()
+        assert challenge1.has_enough_user_reviews(user1)
+        assert challenge1.get_status(user1) == Challenge.DONE_MISSING_PEER_REVIEW
 
-        assert challenge1.is_enabled_for_user(user2), "this challenge should be enabled for this user"
-        status = challenge1.get_status(user2)
-        assert status == 2, "status should be 2 but was %s" % status
-        assert not challenge2.is_enabled_for_user(user2), "this challenge should not be enabled for this user"
-        status = challenge2.get_status(user2)
-        assert status == 0, "status should be 0 but was %s" % status
+        assert challenge2.is_enabled_for_user(user1)
+        assert challenge2.get_status(user1) == Challenge.NOT_STARTED
+        bad_review.appraisal = Review.FAIL
+        bad_review.save()
+        assert not challenge2.is_enabled_for_user(user1)
+        assert challenge2.get_status(user1) == Challenge.NOT_ENABLED
 
+    def test_status_user_review_missing(self):
+        challenge1 = self.challenge
+        self.create_challenge()
+        challenge2 = self.challenge
+        challenge2.prerequisite = challenge1
+        challenge2.save()
+        self.create_challenge()
+        challenge3 = self.challenge
+        challenge3.prerequisite = challenge2
+        challenge3.save()
+        user1 = self.users[0]
+        user2 = self.users[1]
+        user3 = self.users[2]
+        user4 = self.users[3]
+        elaboration1 = Elaboration(challenge=challenge1, user=user1, elaboration_text="test",
+                                   submission_time=datetime.now())
+        elaboration1.save()
+        elaboration2 = Elaboration(challenge=challenge1, user=user2, elaboration_text="test",
+                                   submission_time=datetime.now())
+        elaboration2.save()
+        elaboration3 = Elaboration(challenge=challenge1, user=user3, elaboration_text="test",
+                                   submission_time=datetime.now())
+        elaboration3.save()
+        elaboration4 = Elaboration(challenge=challenge1, user=user4, elaboration_text="test",
+                                   submission_time=datetime.now())
+        elaboration4.save()
+        assert challenge1.is_enabled_for_user(user1)
+        assert challenge1.get_status(user1) == Challenge.USER_REVIEW_MISSING
+        assert not challenge2.is_enabled_for_user(user1)
+        assert challenge2.get_status(user1) == Challenge.NOT_ENABLED
+        Review(elaboration=elaboration2, submission_time=datetime.now(), reviewer=user1,
+               appraisal=Review.SUCCESS).save()
+        assert challenge1.is_enabled_for_user(user1)
+        assert challenge1.get_status(user1) == Challenge.USER_REVIEW_MISSING
+        assert not challenge2.is_enabled_for_user(user1)
+        assert challenge2.get_status(user1) == Challenge.NOT_ENABLED
+        Review(elaboration=elaboration3, submission_time=datetime.now(), reviewer=user1,
+               appraisal=Review.SUCCESS).save()
+        assert challenge1.is_enabled_for_user(user1)
+        assert challenge1.get_status(user1) == Challenge.USER_REVIEW_MISSING
+        assert not challenge2.is_enabled_for_user(user1)
+        assert challenge2.get_status(user1) == Challenge.NOT_ENABLED
+        Review(elaboration=elaboration4, submission_time=datetime.now(), reviewer=user1,
+               appraisal=Review.SUCCESS).save()
+        assert challenge1.is_enabled_for_user(user1)
+        assert challenge1.get_status(user1) == Challenge.DONE_MISSING_PEER_REVIEW
+        assert challenge2.is_enabled_for_user(user1)
+        assert challenge2.get_status(user1) == Challenge.NOT_STARTED
 
     def test_status_done_missing_peer_review(self):
         challenge1 = self.challenge
@@ -456,59 +549,85 @@ class SimpleTest(TestCase):
         challenge2 = self.challenge
         challenge2.prerequisite = challenge1
         challenge2.save()
+        self.create_challenge()
+        challenge3 = self.challenge
+        challenge3.prerequisite = challenge2
+        challenge3.save()
         user1 = self.users[0]
-        elaboration1 = Elaboration(challenge=challenge1, user=user1, elaboration_text="test", submission_time=datetime.now())
-        elaboration1.save()
         user2 = self.users[1]
-        elaboration2 = Elaboration(challenge=challenge1, user=user2, elaboration_text="test", submission_time=datetime.now())
-        elaboration2.save()
         user3 = self.users[2]
-        elaboration3 = Elaboration(challenge=challenge1, user=user3, elaboration_text="test", submission_time=datetime.now())
-        elaboration3.save()
         user4 = self.users[3]
-        elaboration4 = Elaboration(challenge=challenge1, user=user4, elaboration_text="test", submission_time=datetime.now())
+        elaboration1 = Elaboration(challenge=challenge1, user=user1, elaboration_text="test",
+                                   submission_time=datetime.now())
+        elaboration1.save()
+        elaboration2 = Elaboration(challenge=challenge1, user=user2, elaboration_text="test",
+                                   submission_time=datetime.now())
+        elaboration2.save()
+        elaboration3 = Elaboration(challenge=challenge1, user=user3, elaboration_text="test",
+                                   submission_time=datetime.now())
+        elaboration3.save()
+        elaboration4 = Elaboration(challenge=challenge1, user=user4, elaboration_text="test",
+                                   submission_time=datetime.now())
         elaboration4.save()
-        Review(elaboration=elaboration2, submission_time=datetime.now(), reviewer=user1, appraisal=Review.SUCCESS).save()
-        Review(elaboration=elaboration3, submission_time=datetime.now(), reviewer=user1, appraisal=Review.SUCCESS).save()
-        Review(elaboration=elaboration4, submission_time=datetime.now(), reviewer=user1, appraisal=Review.SUCCESS).save()
-        assert challenge1.is_enabled_for_user(user1), "this challenge should be enabled for this user"
-        status = challenge1.get_status(user1)
-        assert status == 4, "status should be 4 but was %s" % status
-        assert not challenge2.is_enabled_for_user(user1), "this challenge should not be enabled for this user"
-        status = challenge2.get_status(user1)
-        assert status == 0, "status should be 0 but was %s" % status
-        assert challenge1.is_first_challenge()
-        assert not challenge1.is_final_challenge()
-        assert not challenge2.is_first_challenge()
-        assert challenge2.is_final_challenge()
+        Review(elaboration=elaboration2, submission_time=datetime.now(), reviewer=user1,
+               appraisal=Review.SUCCESS).save()
+        Review(elaboration=elaboration3, submission_time=datetime.now(), reviewer=user1,
+               appraisal=Review.SUCCESS).save()
+        Review(elaboration=elaboration4, submission_time=datetime.now(), reviewer=user1,
+               appraisal=Review.SUCCESS).save()
+        assert challenge1.get_status(user1) == Challenge.DONE_MISSING_PEER_REVIEW
+        Review(elaboration=elaboration1, submission_time=datetime.now(), reviewer=user2,
+               appraisal=Review.SUCCESS).save()
+        assert challenge1.get_status(user1) == Challenge.DONE_MISSING_PEER_REVIEW
+        Review(elaboration=elaboration1, submission_time=datetime.now(), reviewer=user3,
+               appraisal=Review.SUCCESS).save()
+        assert challenge1.get_status(user1) == Challenge.DONE_PEER_REVIEWED
 
-        assert challenge1.is_enabled_for_user(user2), "this challenge should be enabled for this user"
-        status = challenge1.get_status(user2)
-        assert status == 2, "status should be 2 but was %s" % status
-        assert not challenge2.is_enabled_for_user(user2), "this challenge should not be enabled for this user"
-        status = challenge2.get_status(user2)
-        assert status == 0, "status should be 0 but was %s" % status
-
-    def test_status_done_peer_reviewed(self):
+    def test_status_final_challenge(self):
         challenge1 = self.challenge
         self.create_challenge()
         challenge2 = self.challenge
         challenge2.prerequisite = challenge1
         challenge2.save()
         user1 = self.users[0]
-        elaboration1 = Elaboration(challenge=challenge1, user=user1, elaboration_text="test", submission_time=datetime.now())
+        elaboration1 = Elaboration(challenge=challenge1, user=user1, elaboration_text="test",
+                                   submission_time=datetime.now())
         elaboration1.save()
         user2 = self.users[1]
-        elaboration2 = Elaboration(challenge=challenge1, user=user2, elaboration_text="test", submission_time=datetime.now())
+        elaboration2 = Elaboration(challenge=challenge1, user=user2, elaboration_text="test",
+                                   submission_time=datetime.now())
         elaboration2.save()
         user3 = self.users[2]
-        elaboration3 = Elaboration(challenge=challenge1, user=user3, elaboration_text="test", submission_time=datetime.now())
+        elaboration3 = Elaboration(challenge=challenge1, user=user3, elaboration_text="test",
+                                   submission_time=datetime.now())
         elaboration3.save()
         user4 = self.users[3]
-        elaboration4 = Elaboration(challenge=challenge1, user=user4, elaboration_text="test", submission_time=datetime.now())
+        elaboration4 = Elaboration(challenge=challenge1, user=user4, elaboration_text="test",
+                                   submission_time=datetime.now())
         elaboration4.save()
-        Review(elaboration=elaboration2, submission_time=datetime.now(), reviewer=user1, appraisal=Review.SUCCESS).save()
-        Review(elaboration=elaboration3, submission_time=datetime.now(), reviewer=user1, appraisal=Review.SUCCESS).save()
-        Review(elaboration=elaboration4, submission_time=datetime.now(), reviewer=user1, appraisal=Review.SUCCESS).save()
-        status = challenge1.get_status(user1)
-        assert status == 4, "status should be 4 but was %s" % status
+        Review(elaboration=elaboration2, submission_time=datetime.now(), reviewer=user1,
+               appraisal=Review.SUCCESS).save()
+        Review(elaboration=elaboration3, submission_time=datetime.now(), reviewer=user1,
+               appraisal=Review.SUCCESS).save()
+        Review(elaboration=elaboration4, submission_time=datetime.now(), reviewer=user1,
+               appraisal=Review.SUCCESS).save()
+        assert challenge1.get_status(user1) == Challenge.DONE_MISSING_PEER_REVIEW
+        assert challenge2.get_status(user1) == Challenge.NOT_ENABLED
+        Review(elaboration=elaboration1, submission_time=datetime.now(), reviewer=user2,
+               appraisal=Review.SUCCESS).save()
+        Review(elaboration=elaboration1, submission_time=datetime.now(), reviewer=user3,
+               appraisal=Review.SUCCESS).save()
+        assert challenge1.get_status(user1) == Challenge.DONE_PEER_REVIEWED
+        assert challenge2.get_status(user1) == Challenge.NOT_STARTED
+        final_elaboration = Elaboration(challenge=challenge2, user=user1, elaboration_text="test",
+                                        submission_time=datetime.now())
+        final_elaboration.save()
+        assert challenge2.get_status(user1) == Challenge.WAITING_FOR_EVALUATION
+        tutor = user4
+        tutor.staff = True
+        tutor.save()
+        Evaluation(submission=final_elaboration, tutor=tutor, evaluation_text="test evaluation", evaluation_points=10,
+                   submission_time=datetime.now()).save()
+        assert challenge2.get_status(user1) == Challenge.EVALUATED
+
+
