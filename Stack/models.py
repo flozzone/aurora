@@ -1,6 +1,4 @@
 from django.db import models
-from Evaluation.models import Evaluation
-from Elaboration.models import Elaboration
 
 
 class Stack(models.Model):
@@ -10,13 +8,8 @@ class Stack(models.Model):
 
     def get_final_challenge(self):
         for relation in StackChallengeRelation.objects.filter(stack=self):
-            if relation.challenge.prerequisite:
-                return relation.challenge
-
-    def get_root_challenge(self):
-        for relation in StackChallengeRelation.objects.filter(stack=self):
-            if not relation.challenge.prerequisite:
-                return relation.challenge
+            return relation.challenge.get_final_challenge()
+        return None
 
     def get_challenges(self):
         challenges = []
@@ -31,16 +24,14 @@ class Stack(models.Model):
         return challenge_image_urls
 
     def get_points(self, user):
-        for challenge in self.get_challenges():
-            if challenge.is_final_challenge():
-                elaboration = None
-                evaluation = None
-                elaboration = Elaboration.objects.filter(challenge=challenge, user=user)
-                if elaboration:
-                    evaluation = Evaluation.objects.filter(submission=elaboration[0])
-                if evaluation:
-                    return evaluation[0].evaluation_points
-        return 0
+        final_challenge = self.get_final_challenge()
+        elaboration = final_challenge.get_elaboration(user)
+        if not elaboration:
+            return 0
+        evaluation = elaboration.get_evaluation()
+        if not evaluation:
+            return 0
+        return evaluation.evaluation_points
 
     def get_last_available_challenge(self, user):
         available_challenge = None
@@ -71,6 +62,7 @@ class Stack(models.Model):
                 if not elaboration.is_reviewed_2times():
                     return False
         return True
+
 
 class StackChallengeRelation(models.Model):
     stack = models.ForeignKey('Stack.Stack')
