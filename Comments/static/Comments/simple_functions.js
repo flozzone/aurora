@@ -5,6 +5,16 @@
  * e.g. vote up/down, promote, bookmark
  */
 
+//"use strict";
+
+// TODO delete
+//var holyShit = {
+//    polling_interval: 5000,
+//    sendValueForComment: function (url, comment_number, value) {
+//        this.polling_interval;
+//    }
+//}
+
 function sendValueForComment(url, comment_number, value) {
     $.ajax({
         url: url,
@@ -34,7 +44,7 @@ function registerPromoteLinksForCommentList($comment_list) {
         $(this).toggleClass('comment_demote comment_promote');
         $(this).find('i').toggleClass('gold ungold');
 
-        return false
+        return false;
     }
 
     function demote(event) {
@@ -51,6 +61,44 @@ function registerPromoteLinksForCommentList($comment_list) {
         return false;
     }
 }
+
+var Bookmark = {
+    url: '/bookmark_comment/',
+
+    registerForCommentList: function ($comment_list) {
+        var that = this;
+        $comment_list.find('.comment_bookmark').click(function (event) { that.bookmark(event, $(this)) });
+        $comment_list.find('.comment_unbookmark').click(function (event) { that.unbookmark(event, $(this)) });
+    },
+
+    bookmark: function (event, $link) {
+        event.preventDefault();
+
+        var comment_number = $(this).attr('data-comment_number');
+        sendValueForComment(url, comment_number, true);
+
+        $link.off();
+        $link.click(this.unbookmark);
+        $link.toggleClass('comment_unbookmark comment_bookmark');
+        $link.text('forget this');
+
+        return false;
+    },
+
+    unbookmark: function (event, $link) {
+        event.preventDefault();
+
+        var comment_number = $link.attr('data-comment_number');
+        sendValueForComment(url, comment_number, false);
+
+        $link.off();
+        $link.click(this.bookmark);
+        $link.toggleClass('comment_unbookmark comment_bookmark');
+        $link.text('remember this');
+
+        return false;
+    }
+};
 
 function registerBookmarkLinksForCommentList($comment_list) {
     $comment_list.find('.comment_bookmark').click( bookmark );
@@ -72,7 +120,7 @@ function registerBookmarkLinksForCommentList($comment_list) {
         return false;
     }
 
-    function unbookmark(event){
+    function unbookmark(event) {
         event.preventDefault();
 
         var comment_number = $(this).attr('data-comment_number');
