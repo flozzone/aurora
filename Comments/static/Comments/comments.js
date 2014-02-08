@@ -7,12 +7,12 @@ var current_poll_timeout;
 var POLLING = {
     current_interval: 5000,
     active_interval: 5000,
-    idle_interval: 60000}
+    idle_interval: 60000};
 
 var state = {
     modifying: false,
     posting: false
-}
+};
 
 $(document).ready( function() {
     registerTestButton();

@@ -175,8 +175,7 @@ def vote_up_on(comment, voter):
 
         return
     except Vote.DoesNotExist:
-        vote = Vote(direction=Vote.UP, voter=voter, comment=comment)
-        vote.save()
+        Vote.objects.create(direction=Vote.UP, voter=voter, comment=comment)
         CommentListRevision.get_by_comment(comment).increment()
 
 
@@ -189,8 +188,7 @@ def vote_down_on(comment, voter):
 
         return
     except Vote.DoesNotExist:
-        vote = Vote(direction=Vote.DOWN, voter=voter, comment=comment)
-        vote.save()
+        Vote.objects.create(direction=Vote.DOWN, voter=voter, comment=comment)
         CommentListRevision.get_by_comment(comment).increment()
 
 

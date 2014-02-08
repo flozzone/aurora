@@ -18,6 +18,9 @@ class CommentListRevision(models.Model):
     object_id = models.PositiveIntegerField()
     content_object = generic.GenericForeignKey('content_type', 'object_id')
 
+    class Meta:
+        unique_together = ('content_type', 'object_id')
+
     @staticmethod
     def get_or_create(ref_object):
         ref_type = ContentType.objects.get_for_model(ref_object)
@@ -28,7 +31,6 @@ class CommentListRevision(models.Model):
                 object_id=ref_object.id)
         except CommentListRevision.DoesNotExist:
             revision = CommentListRevision.objects.create(content_object=ref_object)
-            revision.save()
 
         return revision
 
@@ -103,12 +105,10 @@ class Comment(models.Model):
         return responses
 
     def add_up_vote(self, voter):
-        vote = Vote(direction=Vote.UP, voter=voter, comment=self)
-        vote.save()
+        vote = Vote.objects.create(direction=Vote.UP, voter=voter, comment=self)
 
     def add_down_vote(self, voter):
-        vote = Vote(direction=Vote.DOWN, voter=voter, comment=self)
-        vote.save()
+        vote = Vote.objects.create(direction=Vote.DOWN, voter=voter, comment=self)
 
     def __str__(self):
         return str(self.id) + ": " + self.text[:30]
