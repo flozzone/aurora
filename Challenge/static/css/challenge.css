@@ -2,13 +2,10 @@
 	display:none;
 }
 
-
-/*
-#tinymce .mceContentBody p { 
+#tinymce p { 
 	font-family: Helvetica Neue, Arial, sans-serif !important; 
 	font-size:13px;
 }
-*/
 
 .nothere {
 	display:none;

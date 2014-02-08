@@ -4,7 +4,6 @@ $(function() {
         menubar: false,
         statusbar: false,
 		toolbar: false,
-		resize: true,
 	    plugins: "autoresize",
 		autoresize_min_height: 100,
 		autoresize_max_height: 800,
@@ -153,15 +152,20 @@ $(function() {
         if (answer_object.hasClass('boolean_answer')) {
             answer = answer_object.find('input').first().is(':checked');
         } else {
-            answer = answer_object.find('input').first().val();
+            if (!answer_object.hasClass('appraisal')) {
+                answer = $("textarea[name='answer']").val()
+            }
         }
-        data['answers'].push({
-            'question_id': answer_object.attr('question_id'),
-            'answer': answer
-        });
+        var question = answer_object.parent().find('.question').first();
+        var question_id = question.attr('id');
+        if (question_id) {
+            data['answers'].push({
+                'question_id': question_id,
+                'answer': answer
+            });
+        }
     });
     data['appraisal'] = $('input[name=appraisal]:checked').val();
-    data['awesome'] = $('input[name=awesome]').is(':checked');
     ajax_setup()
     var args = {
         type: "POST",
