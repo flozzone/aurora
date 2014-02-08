@@ -88,8 +88,8 @@ class Elaboration(models.Model):
         non_adequate_work = []
         for review in Review.objects.filter(appraisal=Review.FAIL):
             final_challenge = review.elaboration.challenge.get_final_challenge()
-            if final_challenge.get_submissions():
-                final_elaboration = final_challenge.get_submissions()[0]
+            final_elaboration = final_challenge.get_elaboration(review.elaboration.user)
+            if final_elaboration:
                 if final_elaboration.is_evaluated():
                     non_adequate_work.append(review.elaboration)
         return non_adequate_work
@@ -144,7 +144,7 @@ class Elaboration(models.Model):
     def get_stack_elaborations(stack):
         elaborations = []
         for challenge in stack.get_challenges():
-            for elaboration in challenge.get_submissions():
+            for elaboration in challenge.get_elaborations():
                 elaborations.append(elaboration)
         return elaborations
 
@@ -152,7 +152,7 @@ class Elaboration(models.Model):
     def get_course_elaborations(course):
         elaborations = []
         for challenge in course.get_course_challenges():
-            for elaboration in challenge.get_submissions():
+            for elaboration in challenge.get_elaborations():
                 elaborations.append(elaboration)
         return elaborations
 
