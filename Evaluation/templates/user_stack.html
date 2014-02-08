@@ -2,7 +2,7 @@
 
     <table>
     {% for elaboration in stack_elaborations %}
-        <tr onclick="load_reviews({{ elaboration.id }})">
+        <tr onclick="load_reviews({{ elaboration.id }})" class="{% cycle 'darkTableRow' 'lightTableRow' %}">
             <td><img src="{{ STATIC_URL }}img/{{ elaboration.challenge.image_url }}" width="32" height="32"></td>
             <td>{{ elaboration.challenge.title }}</td>
             <td>{{ elaboration.submission_time }}</td>

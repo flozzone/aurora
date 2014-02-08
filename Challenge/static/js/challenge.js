@@ -6,6 +6,9 @@ function challenge_loaded() {
         selector: "textarea#editor",
         menubar: false,
         statusbar: false,
+	    plugins: "autoresize",
+		autoresize_min_height: 200,
+		autoresize_max_height: 800,
         setup: function (editor) {
             editor.on('change', function (e) {
                 elaboration_autosave(e, challenge_id);

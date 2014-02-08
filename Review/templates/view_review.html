@@ -3,17 +3,23 @@
 {% block additional_headers %}
   <link rel="stylesheet" href="{{ STATIC_URL }}css/review.css" type="text/css" media="screen"/>
 {% endblock %}
-
-<div class="view_review">
-  {% for review_data in reviews %}
-    <br>
-    <div class="appraisal">Appraisal: {{ review_data.appraisal }}</div>
-    {% for question in review_data.questions %}
-      <div class="question">Q: {{ question.question }}</div>
-      <div class="answer">A: {{ question.answer }}</div>
-    {% endfor %}
-    <br>
-     {% render_comment_list for review_data.review %}
-    <br>
-  {% endfor %}
+<div class="all_reviews">
+	<div class="title">You received the following reviews for your work</div>
+	{% for review_data in reviews %}
+	<div class="view_review">
+		{% for question in review_data.questions %}
+		<div class="question">{{ question.question }}</div>
+		<div class="answer">{% if question.answer %}Yes{% else %}No{% endif %}</div>
+		{% endfor %}
+		<div class="appraisal Verdict_{{ review_data.appraisal }}"><i class="fa fa-arrow-right"></i> Final verdict: <b>{{ review_data.appraisal }}</b></div>
+	</div>	
+		<div class="comment_section">
+			<b>Comments</b><br>
+			If you find this review unacceptable, either if you disagree with what it says about your work, or if the review is banal or meaningless, you can voice your displeasure by posting a comment in this section. <br><br> 
+			<div class="comments">
+				{% render_comment_list for review_data.review %}
+			</div>
+		</div>
+	{% endfor %}
+	</div>
 </div>

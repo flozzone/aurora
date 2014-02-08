@@ -1,14 +1,14 @@
 {% block content %}
 
-    <table>
+    <table class="overview_table">
         <tr>
             <th>student</th>
             <th>elaboration</th>
-            <th>hand in</th>
+            <th>hand in date</th>
         </tr>
     {% for elaboration in elaborations %}
-        <tr onclick="load_details({{ elaboration.id }})">
-            <td><img class="gravatar" src="../{{ elaboration.user.avatar.url }}"></td>
+        <tr onclick="load_details({{ elaboration.id }})" class="{% cycle 'darkRow' 'lightRow' %}">
+            <td><img class="gravatar" src="../{{ elaboration.user.avatar.url }}" style="vertical-align:middle"> {{ elaboration.user.nickname }}</td>
             <td>{{ elaboration.challenge.title }}</td>
             <td>{{ elaboration.submission_time }}</td>
         </tr>

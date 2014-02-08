@@ -1,16 +1,30 @@
 
-.review {
+.all_reviews, .review {
 	max-width:940px;
 	padding:1em;
 }
 
-.review > .challenge > .title {
+.view_review {
+	padding:1em;
+	box-shadow: 0px 3px 6px #ccc inset;
+	overflow:hidden;
+}
+
+
+.challenge > .title {
 	font-weight:bold;
 	background:#eee;
 	padding:1em;
 	padding-bottom:0;
 }
 
+.all_reviews > .title{
+	font-weight:bold;
+	background:#eee;
+	padding:1em;
+}
+ 
+ 
 .challenge > .description {
 	font-size:90%;
 	background:#eee;
@@ -18,38 +32,101 @@
 }
 
 .review > .elaboration {
-	border:1px solid silver;
 	padding:1em;
 	background:#eee;
 	box-shadow: 0px 3px 6px #ccc inset;
 }
 
 .review > form {
-	margin-top:1em;
-	padding:1em;
 	border: 1px solid silver;
-	
 }
 
-.review > form > .question_container {
+.betweentext {
+	margin-top:2em;
+	padding:0.5em;
+	color:white;
+	background-color:rgb(58,201,88);
+}
+
+.question_container {
 	margin-bottom:1em;
 }
 
-.review > form > .question_container > .question {
-	background-color: lightgreen;
+.view_review .appraisal {
 	padding:0.5em;
+	padding-left:1.5em;
+	width:110%;
+	margin-left:-1em;
 }
 
-.review > form > .question_container > .answer {
-	background-color: white;
-	padding:0.5em;
-	border:1px solid lightgreen;
+.Verdict_Success {
+	background-color:rgb(170,220,170);
+	color:black;
 }
 
-.review > form > .question_container > .answer > input[type=text] {
-	width:99.5%;
+.Verdict_Not {
+	background-color:rgb(186,0,0);
+	color:white;
+}
+
+.Verdict_Fail {
+	background-color:rgb(255,227,0);
+	color:black;
+}
+
+.Verdict_Awesome {
+	background-color:rgb(0,168,0);
+	color:white;
+}
+
+.review .question, .view_review .question {
+	padding:0.5em;
+	padding-bottom:0;
+}
+
+.review .answer {
+	background-color: rgb(252,252,227);
+	padding:0.5em;
+	padding-top:0.25em;
+}
+
+.view_review .answer {
+	padding:0.5em;
+	padding-top:0.25em;
+	font-weight:bold;
+}
+
+.suButton {
+	border-top:1px solid silver;
+	background-color:rgb(58,201,88);
+}
+
+.question_container > .answer > textarea {
+	width:100%;
 	height:5em;
+	font-size:13px;
+	border:1px solid silver;
+	padding: 0.5em 0;
 }
 
-.review > form > input {
+.finalBlock {
+	padding-left:1em;
+}
+
+input[type=radio] {
+	margin-top:0.5em;
+	margin-right:0.5em;
+}
+
+input[type=submit] {
+	padding:0.5em;
+	border-left:1px solid white;
+	border-right:1px solid white;
+}
+
+.button {
+	color:white;
+	background-color:rgb(58,201,88);
+	position:relative;
+	left:90%;
 }
