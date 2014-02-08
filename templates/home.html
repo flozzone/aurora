@@ -1,7 +1,10 @@
 {% extends "base.html" %}
+{% load comments %}
 
 {% block content %}
-  <h1>This is not your home. There is no home, really - go somewhere!</h1>
+  <div id="comments_column_1">
+      {% render_comment_list for object %}
+  </div>
   {% if not user.is_staff %}
     {% include 'points.html' %}
   {% endif %}
