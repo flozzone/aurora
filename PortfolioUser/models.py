@@ -5,7 +5,7 @@ import urllib.request
 from django.db import models
 from django.contrib.auth.models import User, UserManager
 from Elaboration.models import Elaboration
-
+from django.conf import settings
 
 class PortfolioUser(User):
     nickname = models.CharField(max_length=100, null=True, blank=True)
@@ -25,11 +25,7 @@ class PortfolioUser(User):
         return elaborations
 
     def get_challenge_elaboration(self, challenge):
-        try:
-            elaboration = Elaboration.objects.get(user=self, challenge=challenge, submission_time__isnull=False)
-        except Elaboration.DoesNotExist:
-            elaboration = None
-        return elaboration
+        return challenge.get_elaboration(self)
 
     def get_stack_elaborations(self, stack):
         elaborations = []
@@ -39,12 +35,17 @@ class PortfolioUser(User):
         return elaborations
 
     def get_gravatar(self):
-        gravatarurl = "http://www.gravatar.com/avatar/" + hashlib.md5(self.email.lower().encode("utf-8")).hexdigest() + "?"
-        gravatarurl += urllib.parse.urlencode({'d': 'monsterid', 's': str(100)})
         filename = "avatar_" + str(self.id)
         if not os.path.isdir(self.upload_path):
             os.makedirs(self.upload_path)
-        urllib.request.urlretrieve(gravatarurl, os.path.join(self.upload_path, filename))
+        try:
+            gravatarurl = "http://www.gravatar.com/avatar/" + hashlib.md5(self.email.lower().encode("utf-8")).hexdigest() + "?"
+            gravatarurl += urllib.parse.urlencode({'d': 'monsterid', 's': str(500)})
+            urllib.request.urlretrieve(gravatarurl, os.path.join(self.upload_path, filename))
+            self.avatar = os.path.join(self.upload_path, filename)
+        except IOError:
+            from shutil import copyfile
+            copyfile(os.path.join('static', 'img', 'default_gravatar.png'), os.path.join(self.upload_path, filename))
         self.avatar = os.path.join(self.upload_path, filename)
         self.save()
 
