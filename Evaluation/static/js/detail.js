@@ -4,7 +4,6 @@ $(function() {
         menubar: false,
         statusbar: false,
 		toolbar: false,
-		resize: true,
 	    plugins: "autoresize",
 		autoresize_min_height: 100,
 		autoresize_max_height: 800,

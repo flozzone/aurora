@@ -6,7 +6,8 @@ function challenge_loaded() {
         selector: "textarea#editor",
         menubar: false,
         statusbar: false,
-	    plugins: "autoresize",
+		toolbar1: "undo redo | bold italic fontsizeselect | alignleft aligncenter | bullist numlist indent outdent | subscript superscript | table",
+	    plugins: "autoresize table",
 		autoresize_min_height: 200,
 		autoresize_max_height: 800,
         setup: function (editor) {
