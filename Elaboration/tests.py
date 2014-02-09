@@ -306,7 +306,6 @@ class ElaborationTest(TestCase):
         assert Elaboration.get_review_candidate(challenge1, user1) == elaboration3  # 3 because one review is missing
         Review(elaboration=elaboration3, submission_time=datetime.now(), reviewer=dummy_user1,
                appraisal=Review.SUCCESS).save()
-        print(Elaboration.get_review_candidate(challenge1, user1).user.username)
         # returns 2 because 2 has 0 reviews and 3 has already enough
         assert Elaboration.get_review_candidate(challenge1, user1) == elaboration2
         Review(elaboration=elaboration2, submission_time=datetime.now(), reviewer=dummy_user1,
