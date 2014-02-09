@@ -1,3 +1,15 @@
+.playaudio {
+	
+}
+
+.playaudio_cmd {
+	border:1px solid silver;
+	border-radius:3px;
+	padding:2px 6px;
+	background:linear-gradient(#eee,#ddd);
+	margin-left:3px;
+	margin-right:3px;	
+}
 .lectureFront {
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;

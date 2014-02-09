@@ -10,11 +10,13 @@
 	{% if slidecasting_mode == 'livecast' %}
 		<li>Livecast</li>
 	{% elif not slidecasting_mode == 'start' %}
-		<li id="flowplayer_controls_label">Play Audio</li>
-		<li id="flowplayer_controls_prev" class="button b_inactive">prev</li>
-		<li id="flowplayer_controls_play" class="button b_inactive">play</li>
-		<li id="flowplayer_controls_next" class="button b_inactive">next</li>
-		<li id="flowplay_controls_where_am_i" class="button b_inactive">where am i?</li>
+	<li>&nbsp;&nbsp;&nbsp;</li>
+		<li class="playaudio" id="flowplayer_controls_label">Audio Player </li>
+		<li class="playaudio_cmd" id="flowplayer_controls_prev" class="button b_inactive"><i class="fa fa-angle-double-left"></i></li>
+		<li class="playaudio_cmd" id="flowplayer_controls_play" class="button b_inactive">PLAY</li>
+		<li class="playaudio_cmd" id="flowplayer_controls_next" class="button b_inactive"><i class="fa fa-angle-double-right"></i></li>
+		<li>&nbsp;</li>
+		<li class="playaudio_cmd" id="flowplay_controls_where_am_i" class="button b_inactive">where am i?</li>
 	    <li id="load_all_comments" class="button {% if slidecasting_mode == 'start' %}b_inactive{% endif %}" onclick="loadAllComments()">load all comments</li>
 	{% endif %}
 	</ul>
