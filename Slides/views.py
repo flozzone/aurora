@@ -1,6 +1,7 @@
 import datetime
 from datetime import timedelta
 import re
+import sys
 
 from django.db.models import Count, Q
 from django.http import Http404, HttpResponse
@@ -11,7 +12,7 @@ from django.utils import simplejson
 from django.utils.timezone import utc
 
 from Course.models import Course
-from Slides.models import Lecture, Slide
+from Slides.models import Lecture, Slide, Stream
 from Slides.settings import LIVECAST_START
 
 """
@@ -65,7 +66,13 @@ def studio_lecture(request, lecture_id_relative):
         return redirect('livecast', course_short_title=course_short_title, lecture_id_relative=lecture_id_relative)
     slides = Slide.objects.filter(lecture=lecture)
     slides = _cache_slide_markers(slides)
+    slides_preparation = slides.filter(tags__contains='.preparation')
+    slides_preparation = _cache_slide_markers(slides_preparation)
+    videoclip_url, videoclip_name = _get_videoclip_url_name(lecture)
+    videoclip_chapters = _get_videoclip_chapters(lecture, slides, slides_preparation)
+    
     render_dict = {'slidecasting_mode': 'studio', 'course':course, 'lectures': lectures, 'lecture': lecture, 'slides': slides} 
+    render_dict.update({ 'videoclip_name': videoclip_name, 'videoclip_url': videoclip_url, 'videoclip_chapters': videoclip_chapters })
     return render_to_response('studio.html', render_dict, context_instance=RequestContext(request))
     
 
@@ -119,9 +126,23 @@ def mark_slide(request, slide_id, marker, value):
 
 
 def _get_contentbar_data(course):
-#    course = get_object_or_404(Course, short_title=course_short_title)
     lectures = Lecture.objects.filter(course=course, active=True)
     return lectures
+
+
+def _get_videoclip_url_name(lecture):
+    try:
+        return lecture.stream.url, lecture.stream.clipname
+    except Stream.DoesNotExist:
+        return "no_url", "no_videoclip"
+        
+        
+def _get_videoclip_chapters(lecture, slides, slides_preparation):
+    try:
+        offset = lecture.stream.offset
+        return [[slide.id, 1000 * ( offset + (slide.pub_date - lecture.start).seconds)] for slide in slides.exclude(id__in=slides_preparation)]
+    except Stream.DoesNotExist:
+        return []
 
 
 def _cache_slide_markers(slides):
