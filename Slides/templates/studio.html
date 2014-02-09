@@ -6,6 +6,7 @@
 <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.ba-throttle-debounce.min.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/shared.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/studio.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/videoplayer.js"></script>
 <link rel="stylesheet" href="{{ STATIC_URL }}css/slides_base.css" type="text/css" media="screen"/>
 {% endblock %}
 
@@ -14,6 +15,8 @@
 {% include "contentbar.html" %}
 
 <div id="contentblock">
+	<script>videoplayer = new Videoplayer("i am the videoplayer")</script>
+	
 	<script>
 	jQuery(document).ready(function($) {
 		$('#contentblock').scroll(scrollEnded);
@@ -71,6 +74,7 @@
 
 	});
 	</script>
+	
 
 	<br />
 	 <div id="flowplayer_invisible"></div>
