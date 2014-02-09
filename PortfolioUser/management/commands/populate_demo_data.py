@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
 
+import random
 from django.contrib.contenttypes.models import ContentType
 from django.core.management.base import BaseCommand
 
@@ -41,6 +42,7 @@ def init_data():
         user.first_name = 'Firstname_%s' % username
         user.last_name = 'Lastname_%s' % username
         user.nickname = 'Nickname_%s' % username
+        user.matriculation_number = "{0:0=2d}".format(i) + ''.join(["%s" % random.randint(0, 9) for num in range(0, 5)])
         user.is_staff = False
         user.is_superuser = False
         password = username

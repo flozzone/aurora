@@ -77,10 +77,18 @@ def profile_save(request):
 
     if 'file' in request.FILES:
         user.avatar = request.FILES['file']
+    if is_valid_study_code(request.POST['study_code']):
+        user.study_code = request.POST['study_code']
     user.save()
     data['nickname'] = user.nickname
     data['email'] = user.email
     return HttpResponse(json.dumps(data))
+
+
+def is_valid_study_code(study_code):
+    # TODO study_code validation
+    return True
+
 
 
 def is_valid_email(email):

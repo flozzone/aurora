@@ -1,90 +1,89 @@
 {% extends "base.html" %}
 
 {% block additional_headers %}
-  <script type="text/javascript" src="{{ STATIC_URL }}lightbox/js/lightbox-2.6.min.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/profile.js"></script>
-  <link rel="stylesheet" href="{{ STATIC_URL }}css/profile.css" type="text/css" media="screen"/>
-  <link rel="stylesheet" href="{{ STATIC_URL }}lightbox/css/lightbox.css" type="text/css" media="screen"/>
+<script type="text/javascript" src="{{ STATIC_URL }}lightbox/js/lightbox-2.6.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/profile.js"></script>
+<link rel="stylesheet" href="{{ STATIC_URL }}css/profile.css" type="text/css" media="screen"/>
+<link rel="stylesheet" href="{{ STATIC_URL }}lightbox/css/lightbox.css" type="text/css" media="screen"/>
 {% endblock %}
 
 {% block content %}
-  <div id="detail_area">
-    {% if error %}
-      <div class="error">{{ error }}</div>
-    {% endif %}
+<div id="detail_area">
+{% if error %}
+  <div class="error">{{ error }}</div>
+{% endif %}
+  <table id="profile">
+    <tr>
+      <td>
+        <label for="nickname">Nickname</label>
+      </td>
+      <td>
+        <input id="nickname" type="text" name="nickname" value="{{ user.nickname }}">
+      </td>
+		  <td class="legend">
+			  visible to everyone.
+		  </td>
+    </tr>
+    <tr>
+      <td>
+        <label for="name">Name</label>
+      </td>
+      <td>
+        <input id="name" type="text" name="name" value="{{ user.first_name }} {{ user.last_name }}" readonly tabindex=1000>
+      </td>
+		  <td class="legend">
+	  		private. cannot be changed.
+  		</td>
+    </tr>
+    <tr>
+      <td>
+        <label for="matriculation_number">Matriculation number</label>
+      </td>
+      <td>
+        <input id="matriculation_number" type="text" name="matriculation_number" value="{{ user.matriculation_number }}" readonly tabindex=1000>
+      </td>
+		  <td class="legend">
+	  		private. cannot be changed.
+  		</td>
+    </tr>
+    <tr>
+      <td>
+        <label for="study_code">Study code</label>
+      </td>
+      <td>
+        <input id="study_code" type="text" name="study_code" value="{{ user.study_code }}">
+      </td>
+      <td class="legend">
+        private.
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label for="email">E-Mail</label>
+      </td>
+      <td>
+        <input id="email" type="text" name="email" value="{{ user.email }}">
+      </td>
+      <td class="legend">
+        private.
+      </td>
+    </tr>
+    <tr>
+      <td class="avatar_label">
+        <label for="avatar">Avatar</label>
+      </td>
+      <td>
+        <div class="avatar"><img id="profile_avatar" class="avatar_img" src="/{{ user.avatar.url }}" alt="Avatar"> <div class="subtitle">(click to edit)</div></div>
 
-	<script language="javascript">
-	
-	</script>
-	
-    <table id="profile">
-
-      <tr>
-        <td>
-          <label for="nickname">Nickname</label>
-        </td>
-        <td>
-          <input id="nickname" type="text" name="nickname" value="{{ user.nickname }}">
-        </td>
-		<td class="legend">
-			visible to everyone.
-		</td>
-      </tr>
-
-      <tr>
-        <td>
-          <label for="name">Name</label>
-        </td>
-        <td>
-          <input id="name" type="text" name="name" value="{{ user.first_name }} {{ user.last_name }}" readonly tabindex=1000>
-        </td>
-		<td class="legend">
-			private. cannot be changed.
-		</td>
-      </tr>
-	  
-
-      <tr>
-        <td>
-          <label for="statement">Statement</label>
-        </td>
-        <td>
-          <input id="statement" type="text" name="statement" value="{{ user.statement }}">
-        </td>
-		<td class="legend">
-			write a sentence about yourself. visible to everyone. 
-		</td>
-      </tr>
-
-      <tr>
-        <td>
-          <label for="email">E-Mail</label>
-        </td>
-        <td>
-          <input id="email" type="text" name="email" value="{{ user.email }}">
-        </td>
-		<td class="legend">
-			private.
-		</td>
-      </tr>
-
-      <tr>
-        <td class="avatar_label">
-          <label for="avatar">Avatar</label>
-        </td>
-        <td>
-          <div class="avatar"><img id="profile_avatar" class="avatar_img" src="/{{ user.avatar.url }}" alt="Avatar"> <div class="subtitle">(click to edit)</div></div>
-
-          <form id="file_upload_form" action="/fileupload">
-            <input id="user_id" type="text" name="user_id" value="{{ user.id }}" hidden style="visibility:none">
-            <input id="file_upload_input" type="file" accept="image/*" hidden style="visibility:none">
-          </form>
-        </td>
-		<td class="legend avatar_label">
-			visible to everyone. 
-		</td>
-      </tr>
-
+        <form id="file_upload_form" action="/fileupload">
+          <input id="user_id" type="text" name="user_id" value="{{ user.id }}" hidden style="display:none">
+          <input id="file_upload_input" type="file" accept="image/*" hidden style="display:none">
+        </form>
+      </td>
+      <td class="legend avatar_label">
+        visible to everyone.
+      </td>
+    </tr>
     </table>
     <div id="error"></div>
   </div>

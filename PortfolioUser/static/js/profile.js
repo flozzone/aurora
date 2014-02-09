@@ -19,6 +19,7 @@ function input_change(event) {
             url: '/profile/save/',
             data: {
                 'nickname': $('#nickname').val(),
+                'study_code': $('#study_code').val(),
                 'email': $('#email').val()
             },
             success: function (data) {

@@ -46,6 +46,11 @@ input[type=text] {
 	background-color: white;
 }
 
+#matriculation_number {
+	box-shadow: none;
+	background-color: white;
+}
+
 .legend {
 	font-size:80%;
 	color:gray;
