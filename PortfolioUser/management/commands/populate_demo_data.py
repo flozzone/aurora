@@ -435,6 +435,27 @@ def init_data():
     print('Adding Sample Slides')
     Slide(
         lecture_id=1,
+        title="Preparation Slide #1 - Lecture 1",
+        pub_date=datetime(2013, 2, 10, 15, 21, 17, 345952),
+        filename="vo_10_02_13_1",
+        tags='.preparation',
+    ).save()
+    Slide(
+        lecture_id=1,
+        title="Preparation Slide #2 - Lecture 1",
+        pub_date=datetime(2013, 2, 10, 15, 22, 17, 345952),
+        filename="vo_10_02_13_2",
+        tags='.preparation',
+    ).save()
+    Slide(
+        lecture_id=1,
+        title="Preparation Slide #3 - Lecture 1",
+        pub_date=datetime(2013, 2, 10, 15, 23, 17, 345952),
+        filename="vo_10_02_13_3",
+        tags='.preparation',
+    ).save()        
+    Slide(
+        lecture_id=1,
         title="Super Sample Slide #1 - Lecture 1",
         pub_date=datetime(2013, 2, 15, 15, 20, 17, 345952),
         filename="vo_15_02_13_1",
@@ -522,7 +543,7 @@ def init_data():
         tags='.exercise',
     ).save()
     
-    print("creating sample stream")
+    print("Adding sample stream")
     Stream(
         lecture_id=1,
         url="rtmp://video.zserv.tuwien.ac.at/lecturetube_public",
