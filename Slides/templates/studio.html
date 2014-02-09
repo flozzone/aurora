@@ -21,7 +21,7 @@
 	jQuery(document).ready(function($) {
 		$('#contentblock').scroll(scrollEnded);
         $(window).resize(checkSlidesInView);
-		videoplayer = new Videoplayer("{{STATIC_URL}}flowplayer/flowplayer-3.2.16.swf", "{{videoclip_url}}", "{{videoclip_name}}", {{videoclip_chapters}})
+		videoplayer = new Videoplayer("{{STATIC_URL}}flowplayer/", "{{videoclip_url}}", "{{videoclip_name}}", {{videoclip_chapters}})
 		videoplayer.load();
 	});
 	</script>	

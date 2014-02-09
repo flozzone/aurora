@@ -1,10 +1,21 @@
 class @Videoplayer
-  constructor: (@player, @url, @clip, @chapters) ->
+  constructor: (@directory, @url, @clip, @chapters) ->
     console.log @player
   
   load: ->
     console.log("loading")
-    $f("flowplayer_invisible", @player)
+    $f "flowplayer_invisible", @directory + 'flowplayer-3.2.16.swf',
+      debug: false
+      clip:
+        url: @clip
+        debug: false
+        provider: 'rtmp'
+        autoPlay: true
+        autoBuffering: true
+      plugins:
+        rtmp:
+          url: @directory + 'flowplayer.rtmp-3.2.12.swf'
+          netConnectionUrl: @url
     
     
     
