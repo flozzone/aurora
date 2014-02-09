@@ -41,7 +41,7 @@ input[type=text] {
 	background-color: rgb(252,252,227);
 }
 
-#firstname, #lastname {
+#name {
 	box-shadow: none;	
 	background-color: white;
 }

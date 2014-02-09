@@ -16,6 +16,7 @@ class Challenge(models.Model):
     # This is a comma separated list of mime types or file extensions. Eg.: image/*,application/pdf,.psd.
     accepted_files = models.CharField(max_length=100, default="image/*,application/pdf")
 
+    NOT_ENABLED = -1
     NOT_STARTED = 0
     NOT_SUBMITTED = 1
     USER_REVIEW_MISSING = 2
@@ -26,6 +27,7 @@ class Challenge(models.Model):
     EVALUATED = 7
 
     status_dict = {
+        -1: "Not enabled",
         0: "Not started",
         1: "Not submitted",
         2: "Review missing",
@@ -37,6 +39,7 @@ class Challenge(models.Model):
     }
 
     next_dict = {
+        -1: "Not enabled",
         0: "Start the next challenge",
         1: "Submit your elaboration once it is finished",
         2: "Write another review to proceed",
@@ -79,6 +82,31 @@ class Challenge(models.Model):
             next_challenge = next_challenge.get_next()
         return next_challenge
 
+    def has_enough_user_reviews(self, user):
+        return len(self.get_reviews_written_by_user(user)) >= 3
+
+    def submitted_by_user(self, user):
+        elaboration = Elaboration.objects.filter(challenge=self, user=user)
+        if not elaboration:  # no elaboration for this user for this challenge
+            return False
+        return elaboration[0].is_submitted()
+
+    def get_reviews_written_by_user(self, user):
+        reviews = []
+        for review in Review.objects.filter(elaboration__challenge=self, reviewer=user):
+            reviews.append(review)
+        return reviews
+
+    def get_peer_review_questions(self):
+        peer_review_questions = []
+        for peer_review_question in ReviewQuestion.objects.filter(challenge=self).order_by('order'):
+            peer_review_questions.append(peer_review_question)
+        return peer_review_questions
+
+    def get_elaborations(self):
+        submissions = Elaboration.objects.filter(challenge=self)
+        return submissions
+
     def get_status_text(self, user):
         status = self.get_status(user)
         status_text = self.status_dict[status]
@@ -87,47 +115,6 @@ class Challenge(models.Model):
             'status': status_text,
             'next': next_text
         }
-
-    def has_enough_user_reviews(self, user):
-        return len(self.get_reviews_written_by_user(user)) == 3
-
-    def get_status(self, user):
-        elaboration = self.get_elaboration(user)
-
-        # user did not start to write an elaboration
-        if not elaboration:
-            return self.NOT_STARTED
-
-        # user started to write but did not yet submit an elaboration
-        if not elaboration.is_submitted():
-            return self.NOT_SUBMITTED
-
-        # for normal peer review challenges
-        if not self.is_final_challenge():
-            # user did not complete 3 user reviews for this challenge
-            if not self.has_enough_user_reviews(user):
-                return self.USER_REVIEW_MISSING
-
-            # user received at least one bad review for his submission
-            if not elaboration.is_passing_peer_review():
-                return self.BLOCKED_BAD_REVIEW
-
-            # user is done but needs peer reviews for final challenge
-            if not elaboration.is_reviewed_2times():
-                return self.DONE_MISSING_PEER_REVIEW
-
-            # user is done and passed at least 2 peer reviews
-            else:
-                return self.DONE_PEER_REVIEWED
-
-        # for the final challenge
-        else:
-            # final challenge not evaluated yet
-            if not elaboration.is_evaluated():
-                return self.WAITING_FOR_EVALUATION
-            # all done this stack is completed
-            else:
-                return self.EVALUATED
 
     def is_enabled_for_user(self, user):
         # first challenge is always enabled
@@ -175,24 +162,44 @@ class Challenge(models.Model):
                 return False
         raise Exception("this case is not supposed to happen")
 
-    def submitted_by_user(self, user):
-        elaboration = Elaboration.objects.filter(challenge=self, user=user)
-        if not elaboration:  # no elaboration for this user for this challenge
-            return False
-        return elaboration[0].is_submitted()
+    def get_status(self, user):
+        # there is no proper status for challenges that are not enabled
+        if not self.is_enabled_for_user(user):
+            return self.NOT_ENABLED
 
-    def get_reviews_written_by_user(self, user):
-        reviews = []
-        for review in Review.objects.filter(elaboration__challenge=self, reviewer=user):
-            reviews.append(review)
-        return reviews
+        elaboration = self.get_elaboration(user)
 
-    def get_peer_review_questions(self):
-        peer_review_questions = []
-        for peer_review_question in ReviewQuestion.objects.filter(challenge=self).order_by('order'):
-            peer_review_questions.append(peer_review_question)
-        return peer_review_questions
+        # user did not start to write an elaboration
+        if not elaboration:
+            return self.NOT_STARTED
 
-    def get_submissions(self):
-        submissions = Elaboration.objects.filter(challenge=self)
-        return submissions
+        # user started to write but did not yet submit an elaboration
+        if not elaboration.is_submitted():
+            return self.NOT_SUBMITTED
+
+        # for normal peer review challenges
+        if not self.is_final_challenge():
+            # user received at least one bad review for his submission
+            if not elaboration.is_passing_peer_review():
+                return self.BLOCKED_BAD_REVIEW
+
+            # user did not complete 3 user reviews for this challenge
+            if not self.has_enough_user_reviews(user):
+                return self.USER_REVIEW_MISSING
+
+            # user is done but needs peer reviews for final challenge
+            if not elaboration.is_reviewed_2times():
+                return self.DONE_MISSING_PEER_REVIEW
+
+            # user is done and passed at least 2 peer reviews
+            else:
+                return self.DONE_PEER_REVIEWED
+
+        # for the final challenge
+        else:
+            # final challenge not evaluated yet
+            if not elaboration.is_evaluated():
+                return self.WAITING_FOR_EVALUATION
+            # all done this stack is completed
+            else:
+                return self.EVALUATED

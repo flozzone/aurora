@@ -75,7 +75,7 @@ def review_answer(request):
             ).save()
         else:
             final_challenge = review.elaboration.challenge.get_final_challenge()
-            if final_challenge.get_status(review.elaboration.user) == 0:
+            if final_challenge.is_enabled_for_user(review.elaboration.user):
                 obj, created = Notification.objects.get_or_create(
                     user=review.elaboration.user,
                     course=course,

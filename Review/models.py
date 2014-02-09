@@ -29,7 +29,7 @@ class Review(models.Model):
     def get_open_review(challenge, user):
         open_reviews = Review.objects.filter(elaboration__challenge=challenge, submission_time__isnull=True)
         open_reviews = open_reviews.exclude(elaboration__user=user)
-        if (open_reviews):
+        if open_reviews:
             return open_reviews[0]
         else:
             return None
