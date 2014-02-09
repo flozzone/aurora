@@ -18,9 +18,7 @@ class Review(models.Model):
         (SUCCESS, 'Success'),
         (AWESOME, 'Awesome'),
     )
-    appraisal = models.CharField(max_length=1,
-                                 choices=APPRAISAL_CHOICES,
-                                 default=NOTHING)
+    appraisal = models.CharField(max_length=1, choices=APPRAISAL_CHOICES, null=True)
 
     def get_elaboration_author(self):
         return self.elaboration.user
@@ -36,7 +34,9 @@ class Review(models.Model):
 
     @staticmethod
     def get_review_amount(elaboration):
-        return len(Review.objects.filter(elaboration=elaboration).exclude(submission_time__isnull=True))
+        # TODO: evaluate if unsubmitted reviews should be excluded from the count
+        # .exclude(submission_time__isnull=True))
+        return len(Review.objects.filter(elaboration=elaboration))
 
     def get_comments(self):
         return Comment.objects.filter(content_type=ContentType.objects.get_for_model(Review), object_id=self.id)

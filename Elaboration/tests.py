@@ -324,3 +324,195 @@ class ElaborationTest(TestCase):
                appraisal=Review.SUCCESS).save()
         # should return 4 now because 2 and 3 both have more reviews
         assert Elaboration.get_review_candidate(challenge1, user1) == elaboration4
+
+    def test_get_review_candidate_sequential(self):
+        challenge1 = self.challenge
+        self.create_challenge()
+        challenge2 = self.challenge
+        challenge2.prerequisite = challenge1
+        challenge2.save()
+        self.create_challenge()
+        challenge3 = self.challenge
+        challenge3.prerequisite = challenge2
+        challenge3.save()
+        user1 = self.users[0]
+        user2 = self.users[1]
+        user3 = self.users[2]
+        user4 = self.users[3]
+        dummy_user1 = self.dummy_users[0]
+        dummy_user2 = self.dummy_users[1]
+        dummy_user3 = self.dummy_users[2]
+        dummy_elaboration1 = Elaboration(challenge=challenge1, user=dummy_user1, elaboration_text="test",
+                                         submission_time=datetime.now())
+        dummy_elaboration1.save()
+        dummy_elaboration2 = Elaboration(challenge=challenge1, user=dummy_user2, elaboration_text="test",
+                                         submission_time=datetime.now())
+        dummy_elaboration2.save()
+        dummy_elaboration3 = Elaboration(challenge=challenge1, user=dummy_user3, elaboration_text="test",
+                                         submission_time=datetime.now())
+        dummy_elaboration3.save()
+        # this is what a clean start would look like
+        # entering student 1
+        elaboration1 = Elaboration(challenge=challenge1, user=user1, elaboration_text="test",
+                                   submission_time=datetime.now())
+        elaboration1.save()
+        assert Elaboration.get_review_candidate(challenge1, user1) == dummy_elaboration1  # no elaborations there yet
+        Review(elaboration=Elaboration.get_review_candidate(challenge1, user1), submission_time=datetime.now(),
+               reviewer=user1, appraisal=Review.SUCCESS).save()
+        assert Elaboration.get_review_candidate(challenge1, user1) == dummy_elaboration2  # no elaborations there yet
+        Review(elaboration=Elaboration.get_review_candidate(challenge1, user1), submission_time=datetime.now(),
+               reviewer=user1, appraisal=Review.SUCCESS).save()
+        assert Elaboration.get_review_candidate(challenge1, user1) == dummy_elaboration3  # no elaborations there yet
+        Review(elaboration=Elaboration.get_review_candidate(challenge1, user1), submission_time=datetime.now(),
+               reviewer=user1, appraisal=Review.SUCCESS).save()
+        # entering student 2
+        elaboration2 = Elaboration(challenge=challenge1, user=user2, elaboration_text="test",
+                                   submission_time=datetime.now())
+        elaboration2.save()
+        assert Elaboration.get_review_candidate(challenge1, user2) == elaboration1  # get real user elaboration 1
+        Review(elaboration=Elaboration.get_review_candidate(challenge1, user2), submission_time=datetime.now(),
+               reviewer=user2, appraisal=Review.SUCCESS).save()
+        assert Elaboration.get_review_candidate(challenge1, user2) == dummy_elaboration1  # no elaborations left
+        Review(elaboration=Elaboration.get_review_candidate(challenge1, user2), submission_time=datetime.now(),
+               reviewer=user2, appraisal=Review.SUCCESS).save()
+        assert Elaboration.get_review_candidate(challenge1, user2) == dummy_elaboration2  # no elaborations left
+        Review(elaboration=Elaboration.get_review_candidate(challenge1, user2), submission_time=datetime.now(),
+               reviewer=user2, appraisal=Review.SUCCESS).save()
+        # entering student 3
+        elaboration3 = Elaboration(challenge=challenge1, user=user3, elaboration_text="test",
+                                   submission_time=datetime.now())
+        elaboration3.save()
+        assert Elaboration.get_review_candidate(challenge1, user3) == elaboration1  # get real user elaboration 1
+        Review(elaboration=Elaboration.get_review_candidate(challenge1, user3), submission_time=datetime.now(),
+               reviewer=user3, appraisal=Review.SUCCESS).save()
+        assert Elaboration.get_review_candidate(challenge1, user3) == elaboration2  # get real user elaboration 2
+        Review(elaboration=Elaboration.get_review_candidate(challenge1, user3), submission_time=datetime.now(),
+               reviewer=user3, appraisal=Review.SUCCESS).save()
+        assert Elaboration.get_review_candidate(challenge1, user3) == dummy_elaboration3  # one missing review
+        Review(elaboration=Elaboration.get_review_candidate(challenge1, user3), submission_time=datetime.now(),
+               reviewer=user3, appraisal=Review.SUCCESS).save()
+        # entering student 4 which will be the first one to not receive a dummy elaboration
+        elaboration4 = Elaboration(challenge=challenge1, user=user4, elaboration_text="test",
+                                   submission_time=datetime.now())
+        elaboration4.save()
+        assert Elaboration.get_review_candidate(challenge1, user4) == elaboration2  # one missing review
+        Review(elaboration=Elaboration.get_review_candidate(challenge1, user4), submission_time=datetime.now(),
+               reviewer=user4, appraisal=Review.SUCCESS).save()
+        assert Elaboration.get_review_candidate(challenge1, user4) == elaboration3  # less review
+        Review(elaboration=Elaboration.get_review_candidate(challenge1, user4), submission_time=datetime.now(),
+               reviewer=user4, appraisal=Review.SUCCESS).save()
+        assert Elaboration.get_review_candidate(challenge1, user4) == elaboration1  # last candidate left
+        Review(elaboration=Elaboration.get_review_candidate(challenge1, user4), submission_time=datetime.now(),
+               reviewer=user4, appraisal=Review.SUCCESS).save()
+
+    def test_get_review_candidate_parallel(self):
+        challenge1 = self.challenge
+        self.create_challenge()
+        challenge2 = self.challenge
+        challenge2.prerequisite = challenge1
+        challenge2.save()
+        self.create_challenge()
+        challenge3 = self.challenge
+        challenge3.prerequisite = challenge2
+        challenge3.save()
+        user1 = self.users[0]
+        user2 = self.users[1]
+        user3 = self.users[2]
+        user4 = self.users[3]
+        dummy_user1 = self.dummy_users[0]
+        dummy_user2 = self.dummy_users[1]
+        dummy_user3 = self.dummy_users[2]
+        dummy_elaboration1 = Elaboration(challenge=challenge1, user=dummy_user1, elaboration_text="test",
+                                         submission_time=datetime.now())
+        dummy_elaboration1.save()
+        dummy_elaboration2 = Elaboration(challenge=challenge1, user=dummy_user2, elaboration_text="test",
+                                         submission_time=datetime.now())
+        dummy_elaboration2.save()
+        dummy_elaboration3 = Elaboration(challenge=challenge1, user=dummy_user3, elaboration_text="test",
+                                         submission_time=datetime.now())
+        dummy_elaboration3.save()
+        # this is what a clean start would look like
+
+        # entering student 1 -------------------------------------------------------------------------------------------
+        elaboration1 = Elaboration(challenge=challenge1, user=user1, elaboration_text="test",
+                                   submission_time=datetime.now())
+        elaboration1.save()
+        assert Elaboration.get_review_candidate(challenge1, user1) == dummy_elaboration1
+        assert Elaboration.get_review_candidate(challenge1, user2) == elaboration1
+        assert Elaboration.get_review_candidate(challenge1, user3) == elaboration1
+        assert Elaboration.get_review_candidate(challenge1, user4) == elaboration1
+        # Review for dummy_elaboration1
+        Review(elaboration=Elaboration.get_review_candidate(challenge1, user1), submission_time=datetime.now(),
+               reviewer=user1, appraisal=Review.SUCCESS).save()
+        assert Elaboration.get_review_candidate(challenge1, user1) == dummy_elaboration2
+        assert Elaboration.get_review_candidate(challenge1, user2) == elaboration1
+        assert Elaboration.get_review_candidate(challenge1, user3) == elaboration1
+        assert Elaboration.get_review_candidate(challenge1, user4) == elaboration1
+        # opens review but does not submit it yet
+        # Review for dummy_elaboration2
+        Review(elaboration=Elaboration.get_review_candidate(challenge1, user1), reviewer=user1).save()
+        assert Elaboration.get_review_candidate(challenge1, user1) == dummy_elaboration3
+        assert Elaboration.get_review_candidate(challenge1, user2) == elaboration1
+        assert Elaboration.get_review_candidate(challenge1, user3) == elaboration1
+        assert Elaboration.get_review_candidate(challenge1, user4) == elaboration1
+
+        # entering student 2 -------------------------------------------------------------------------------------------
+        elaboration2 = Elaboration(challenge=challenge1, user=user2, elaboration_text="test",
+                                   submission_time=datetime.now())
+        elaboration2.save()
+        assert Elaboration.get_review_candidate(challenge1, user1) == elaboration2
+        assert Elaboration.get_review_candidate(challenge1, user2) == elaboration1
+        assert Elaboration.get_review_candidate(challenge1, user3) == elaboration1
+        assert Elaboration.get_review_candidate(challenge1, user4) == elaboration1
+        # Review for elaboration1
+        Review(elaboration=Elaboration.get_review_candidate(challenge1, user2), submission_time=datetime.now(),
+               reviewer=user2, appraisal=Review.SUCCESS).save()
+        assert Elaboration.get_review_candidate(challenge1, user1) == elaboration2
+        assert Elaboration.get_review_candidate(challenge1, user2) == dummy_elaboration1
+        assert Elaboration.get_review_candidate(challenge1, user3) == elaboration1
+        assert Elaboration.get_review_candidate(challenge1, user4) == elaboration1
+        # opens review but does not submit it yet
+        # Review for dummy_elaboration1
+        Review(elaboration=Elaboration.get_review_candidate(challenge1, user2), reviewer=user2).save()
+        assert Elaboration.get_review_candidate(challenge1, user1) == elaboration2
+        assert Elaboration.get_review_candidate(challenge1, user2) == dummy_elaboration2
+        assert Elaboration.get_review_candidate(challenge1, user3) == elaboration1
+        assert Elaboration.get_review_candidate(challenge1, user4) == elaboration1
+        # entering student 3 -------------------------------------------------------------------------------------------
+        elaboration3 = Elaboration(challenge=challenge1, user=user3, elaboration_text="test",
+                                   submission_time=datetime.now())
+        elaboration3.save()
+        assert Elaboration.get_review_candidate(challenge1, user1) == elaboration2
+        assert Elaboration.get_review_candidate(challenge1, user2) == elaboration3
+        assert Elaboration.get_review_candidate(challenge1, user3) == elaboration1
+        assert Elaboration.get_review_candidate(challenge1, user4) == elaboration1
+        # Review for elaboration1
+        Review(elaboration=Elaboration.get_review_candidate(challenge1, user3), submission_time=datetime.now(),
+               reviewer=user3, appraisal=Review.SUCCESS).save()
+        assert Elaboration.get_review_candidate(challenge1, user1) == elaboration2
+        assert Elaboration.get_review_candidate(challenge1, user2) == elaboration3
+        assert Elaboration.get_review_candidate(challenge1, user3) == elaboration2
+        assert Elaboration.get_review_candidate(challenge1, user4) == elaboration2
+        # opens review but does not submit it yet
+        # Review for elaborations2
+        Review(elaboration=Elaboration.get_review_candidate(challenge1, user3), reviewer=user3).save()
+        assert Elaboration.get_review_candidate(challenge1, user1) == elaboration2
+        assert Elaboration.get_review_candidate(challenge1, user2) == elaboration3
+        assert Elaboration.get_review_candidate(challenge1, user3) == dummy_elaboration2
+        assert Elaboration.get_review_candidate(challenge1, user4) == elaboration2
+
+        # entering student 4 which will be the first one to not receive a dummy elaboration ----------------------------
+        elaboration4 = Elaboration(challenge=challenge1, user=user4, elaboration_text="test",
+                                   submission_time=datetime.now())
+        elaboration4.save()
+        assert Elaboration.get_review_candidate(challenge1, user1) == elaboration2
+        assert Elaboration.get_review_candidate(challenge1, user2) == elaboration3
+        assert Elaboration.get_review_candidate(challenge1, user3) == elaboration4
+        assert Elaboration.get_review_candidate(challenge1, user4) == elaboration2
+        # opens review but does not submit it yet
+        # Review for elaborations2
+        Review(elaboration=Elaboration.get_review_candidate(challenge1, user4), reviewer=user4).save()
+        assert Elaboration.get_review_candidate(challenge1, user1) == elaboration3
+        assert Elaboration.get_review_candidate(challenge1, user2) == elaboration3
+        assert Elaboration.get_review_candidate(challenge1, user3) == elaboration4
+        assert Elaboration.get_review_candidate(challenge1, user4) == elaboration3

@@ -110,7 +110,8 @@ class SimpleTest(TestCase):
                 # each iteration, the amount of reviews should be + 1
                 assert review_amount == i
 
-    def test_get_review_amount_without_submission(self):
+    # TODO: enable this test if we decide that the review amount only counts submitted reviews
+    def get_review_amount_without_submission(self):
         for elaboration in self.elaborations:
             for user in self.users:
                 self.create_review_without_submission_date(elaboration=elaboration, reviewer=user)

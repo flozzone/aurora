@@ -53,6 +53,7 @@ class Stream(models.Model):
     lecture = models.OneToOneField('Lecture')
     type = models.CharField(max_length=32)
     url = models.CharField(max_length=512)
+    clipname = models.CharField(max_length=512)
     offset = models.IntegerField()
     
     def __unicode__(self):

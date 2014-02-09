@@ -14,6 +14,7 @@ function file_upload_loaded() {
         acceptedFiles: $('.file_upload').attr('accepted_files'),
         init: function () {
             this.on("success", function (file, response) {
+                revert_submit_clicked();
                 file.path = response;
                 var elaboration_id = $('#elaboration_id').val();
                 if (file.type === 'application/pdf') {
@@ -33,6 +34,7 @@ function file_upload_loaded() {
                 }
             });
             this.on("removedfile", function (file) {
+                revert_submit_clicked();
                 var url = '/fileupload/remove?url=' + file.path;
                 $.get(url, function (data) {
                 });

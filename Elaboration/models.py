@@ -121,9 +121,8 @@ class Elaboration(models.Model):
         elif self.user.is_staff and not candidate.user.is_staff:
             return candidate
         stack = self.challenge.get_stack()
-        stack_candidate = candidate.challenge.get_stack()
         blocked = stack.is_blocked(self.user)
-        blocked_candidate = stack_candidate.is_blocked(candidate.user)
+        blocked_candidate = stack.is_blocked(candidate.user)
         if not blocked and blocked_candidate:
             return self
         elif blocked and not blocked_candidate:
@@ -134,7 +133,6 @@ class Elaboration(models.Model):
             return self
         elif not one_missing and one_missing_candidate:
             return candidate
-
         if Review.get_review_amount(self) > Review.get_review_amount(candidate):
             return candidate
         return self
@@ -152,9 +150,10 @@ class Elaboration(models.Model):
         return Review.objects.filter(elaboration=self, appraisal=Review.AWESOME)
 
     def is_passing_peer_review(self):
-        return len(
-            Review.objects.filter(elaboration=self, appraisal=Review.NOTHING) | Review.objects.filter(elaboration=self,
-                                                                                                      appraisal=Review.FAIL)) == 0
+        nothing_reviews = Review.objects.filter(elaboration=self, appraisal=Review.NOTHING)
+        fail_reviews = Review.objects.filter(elaboration=self, appraisal=Review.FAIL)
+        return not nothing_reviews and not fail_reviews
+
 
     @staticmethod
     def get_non_adequate_reviews():

@@ -22,6 +22,7 @@ function challenge_loaded() {
 }
 
 function elaboration_autosave(e, challenge_id) {
+    revert_submit_clicked();
     var elaboration_text = tinyMCE.activeEditor.getContent().toString();
     var data = {
         challenge_id: challenge_id,
@@ -38,6 +39,12 @@ function submit_clicked(event) {
     $('.submit').hide();
     $('.submission_text').show();
 }
+
+function revert_submit_clicked() {
+    $('.submit').show();
+    $('.submission_text').hide();
+}
+
 function real_submit_clicked(event) {
     var challenge = $('.challenge');
     var challenge_id = challenge.attr('id');
