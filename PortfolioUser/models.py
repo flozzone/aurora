@@ -50,7 +50,7 @@ class PortfolioUser(User):
         try:
             gravatarurl = "http://www.gravatar.com/avatar/" + hashlib.md5(
                 self.email.lower().encode("utf-8")).hexdigest() + "?"
-            gravatarurl += urllib.parse.urlencode({'d': 'monsterid', 's': str(500)})
+            gravatarurl += urllib.parse.urlencode({'d': 'monsterid', 's': str(192)})
             urllib.request.urlretrieve(gravatarurl, os.path.join(self.upload_path, filename))
             self.avatar = os.path.join(self.upload_path, filename)
         except IOError:
