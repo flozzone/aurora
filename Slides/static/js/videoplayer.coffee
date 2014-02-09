@@ -1,9 +1,13 @@
 class @Videoplayer
   constructor: (@directory, @url, @clip, @chapters) ->
-    console.log @player
+    @active_chapter = -1
+    @loaded = false
+    @loading = false
+    $("#flowplayer_controls_play").click =>
+      @load(0)
+    #@prev = $("#flowplayer_controls_play")
   
-  load: ->
-    console.log("loading")
+  load: (chapter=0) ->
     $f "flowplayer_invisible", @directory + 'flowplayer-3.2.16.swf',
       debug: false
       clip:
@@ -12,11 +16,20 @@ class @Videoplayer
         provider: 'rtmp'
         autoPlay: true
         autoBuffering: true
+        onStart: =>
+          @loaded = true      
+          @setState("active")
+          @seekToChapter(chapter)
       plugins:
         rtmp:
           url: @directory + 'flowplayer.rtmp-3.2.12.swf'
           netConnectionUrl: @url
     
+  setState: (state) ->
+    console.log("setting to: " + state ) 
+      
+  seekToChapter: (chapter) ->
+    console.log("seeking to chapter: " + chapter)
     
     
     

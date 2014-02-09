@@ -6,11 +6,20 @@
       this.url = url;
       this.clip = clip;
       this.chapters = chapters;
-      console.log(this.player);
+      this.active_chapter = -1;
+      this.loaded = false;
+      this.loading = false;
+      $("#flowplayer_controls_play").click((function(_this) {
+        return function() {
+          return _this.load(0);
+        };
+      })(this));
     }
 
-    Videoplayer.prototype.load = function() {
-      console.log("loading");
+    Videoplayer.prototype.load = function(chapter) {
+      if (chapter == null) {
+        chapter = 0;
+      }
       return $f("flowplayer_invisible", this.directory + 'flowplayer-3.2.16.swf', {
         debug: false,
         clip: {
@@ -18,7 +27,14 @@
           debug: false,
           provider: 'rtmp',
           autoPlay: true,
-          autoBuffering: true
+          autoBuffering: true,
+          onStart: (function(_this) {
+            return function() {
+              _this.loaded = true;
+              _this.setState("active");
+              return _this.seekToChapter(chapter);
+            };
+          })(this)
         },
         plugins: {
           rtmp: {
@@ -27,6 +43,14 @@
           }
         }
       });
+    };
+
+    Videoplayer.prototype.setState = function(state) {
+      return console.log("setting to: " + state);
+    };
+
+    Videoplayer.prototype.seekToChapter = function(chapter) {
+      return console.log("seeking to chapter: " + chapter);
     };
 
     return Videoplayer;
