@@ -1,13 +1,15 @@
-import os
 import json
+import os
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.template import RequestContext
-
+from django.core.files import File
+from io import StringIO
+from tempfile import NamedTemporaryFile
+from PIL import ImageFile, Image, ImageOps
 from Elaboration.models import Elaboration
 from FileUpload.models import UploadFile
-
 
 @login_required()
 def file_upload(request):
@@ -18,8 +20,20 @@ def file_upload(request):
         upload_file.save()
     if 'user_id' in request.POST:
         request.FILES['file'].name = 'avatar_' + str(user.id)
-        print(request.FILES['file'])
-        user.avatar = request.FILES['file']
+        parser = ImageFile.Parser()
+        while 1:
+            chunk = request.FILES['file'].read(1024)
+            if not chunk:
+                break
+            parser.feed(chunk)
+        image = parser.close()
+        THUMBNAIL_SIZE = (500, 500)
+        image = ImageOps.fit(image, THUMBNAIL_SIZE, Image.ANTIALIAS, centering=(0.0, 0.0))
+        with NamedTemporaryFile() as tmp:
+            image.save(tmp, 'png')
+            tmp_file = File(tmp)
+            tmp_file.path = request.FILES['file'].name
+            user.avatar.save(request.FILES['file'].name, tmp_file, False)
         user.save()
         return HttpResponse(user.avatar.name)
     return HttpResponse(upload_file.upload_file.name)

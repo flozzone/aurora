@@ -84,7 +84,6 @@ def profile_save(request):
     data['email'] = user.email
     return HttpResponse(json.dumps(data))
 
-
 def is_valid_study_code(study_code):
     # TODO study_code validation
     return True

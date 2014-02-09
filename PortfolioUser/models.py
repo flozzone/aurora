@@ -7,11 +7,19 @@ from django.contrib.auth.models import User, UserManager
 from Elaboration.models import Elaboration
 
 
+def avatar_path(instance, filename):
+
+    name = 'avatar_%s' % instance.id
+    fullname = os.path.join(instance.upload_path, name)
+    if os.path.exists(fullname):
+        os.remove(fullname)
+    return fullname
+
 class PortfolioUser(User):
     nickname = models.CharField(max_length=100, null=True, blank=True)
     last_activity = models.DateTimeField(auto_now_add=True, blank=True)
     upload_path = 'static/img/avatar'
-    avatar = models.ImageField(upload_to=upload_path, null=True, blank=True)
+    avatar = models.ImageField(upload_to=avatar_path, null=True, blank=True)
     matriculation_number = models.CharField(max_length=100, null=True)
     study_code = models.CharField(max_length=100, null=True, blank=True, default="")
     last_selected_course = models.ForeignKey('Course.Course', null=True)
