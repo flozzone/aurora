@@ -15,7 +15,7 @@
 {% include "contentbar.html" %}
 
 <div id="contentblock">
-	<script>videoplayer = new Videoplayer("i am the videoplayer")</script>
+	<script>videoplayer = new Videoplayer("{{videoclip_url}}", "{{videoclip_name}}", {{videoclip_chapters}})</script>
 	
 	<script>
 	jQuery(document).ready(function($) {

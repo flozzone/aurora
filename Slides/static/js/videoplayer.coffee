@@ -1,6 +1,6 @@
 class @Videoplayer
-  constructor: (@name) ->
-    console.log "hello there: " + @name
+  constructor: (@url, @clip, @chapters) ->
+    console.log @url
+    console.log @clip
+    console.log @chapters
     
-#$ ->
-#  window.Videoplayer = Videoplayer
