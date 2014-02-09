@@ -119,46 +119,34 @@ class Challenge(models.Model):
     def is_enabled_for_user(self, user):
         # first challenge is always enabled
         if self.is_first_challenge():
-            print("is first challenge")
             return True
 
         # if challenge is already submitted it is enabled by default
         elaboration = self.get_elaboration(user)
         if elaboration:
-            print("has elaboration")
             if elaboration.is_submitted():
-                print("elaboration is submitted")
                 return True
 
         # if the stack is blocked the challenge is not available
         if self.get_stack().is_blocked(user):
-            print("stack is blocked")
             return False
 
         # if not final challenge the prerequisite must have enough (3) user reviews
         if not self.is_final_challenge():
-            print("is not final challenge")
             if self.prerequisite.has_enough_user_reviews(user):
-                print("prerequisite has enough user reviews")
                 return True
             else:
-                print("prerequisite has not enough user reviews")
                 return False
 
         # for the final challenge to be enabled
         # the prerequisite must have enough (3) user reviews
         # and the stack must have enough peer reviews
         else:
-            print("is final challenge")
             if not self.prerequisite.has_enough_user_reviews(user):
-                print("prerequisite has not enough user reviews")
                 return False
-            print("prerequisite has enough user reviews")
             if self.get_stack().has_enough_peer_reviews(user):
-                print("has enough peer reviews")
                 return True
             else:
-                print("has not enough peer reviews")
                 return False
         raise Exception("this case is not supposed to happen")
 
