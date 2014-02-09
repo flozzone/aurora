@@ -19,8 +19,12 @@ def create_context_review(request):
     if 'id' in request.GET:
         user = RequestContext(request)['user']
         challenge = Challenge.objects.get(pk=request.GET.get('id'))
+        if challenge.get_stack().is_blocked(user):
+            return None
         review = Review.get_open_review(challenge, user)
         if not review:
+            if challenge.has_enough_user_reviews(user):
+                return None
             review_candidate = Elaboration.get_review_candidate(challenge, user)
             if review_candidate:
                 review = Review(elaboration=review_candidate, reviewer=user)
