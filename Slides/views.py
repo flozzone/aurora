@@ -1,6 +1,7 @@
 import datetime
 from datetime import timedelta
 import re
+import sys
 
 from django.db.models import Count, Q
 from django.http import Http404, HttpResponse
@@ -65,7 +66,7 @@ def studio_lecture(request, lecture_id_relative):
         return redirect('livecast', course_short_title=course_short_title, lecture_id_relative=lecture_id_relative)
     slides = Slide.objects.filter(lecture=lecture)
     slides = _cache_slide_markers(slides)
-    slides_preparation = Slide.objects.filter(tags__contains='.preparation')
+    slides_preparation = slides.filter(tags__contains='.preparation')
     slides_preparation = _cache_slide_markers(slides_preparation)
     videoclip_url, videoclip_name = _get_videoclip_url_name(lecture)
     videoclip_chapters = _get_videoclip_chapters(lecture, slides, slides_preparation)
@@ -139,7 +140,7 @@ def _get_videoclip_url_name(lecture):
 def _get_videoclip_chapters(lecture, slides, slides_preparation):
     try:
         offset = lecture.stream.offset
-        return [1000 * ( offset + (slide.pub_date - lecture.start).seconds) for slide in slides if slide not in slides_preparation]
+        return [[slide.id, 1000 * ( offset + (slide.pub_date - lecture.start).seconds)] for slide in slides.exclude(id__in=slides_preparation)]
     except Stream.DoesNotExist:
         return []
 
