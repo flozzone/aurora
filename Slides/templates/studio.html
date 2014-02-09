@@ -7,6 +7,8 @@
 <script type="text/javascript" src="{{ STATIC_URL }}js/shared.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/studio.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/videoplayer.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}flowplayer/flowplayer-3.2.12.min.js"></script>
+
 <link rel="stylesheet" href="{{ STATIC_URL }}css/slides_base.css" type="text/css" media="screen"/>
 {% endblock %}
 
@@ -15,7 +17,12 @@
 {% include "contentbar.html" %}
 
 <div id="contentblock">
-	<script>videoplayer = new Videoplayer("{{videoclip_url}}", "{{videoclip_name}}", {{videoclip_chapters}})</script>
+	<script>
+	$(document).ready(function() {	
+		videoplayer = new Videoplayer("{{STATIC_URL}}flowplayer/flowplayer-3.2.16.swf", "{{videoclip_url}}", "{{videoclip_name}}", {{videoclip_chapters}})
+		videoplayer.load();
+	});
+	</script>
 	
 	<script>
 	jQuery(document).ready(function($) {
