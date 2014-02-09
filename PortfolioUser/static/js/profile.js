@@ -19,7 +19,6 @@ function input_change(event) {
             url: '/profile/save/',
             data: {
                 'nickname': $('#nickname').val(),
-                'statement': $('#statement').val(),
                 'email': $('#email').val()
             },
             success: function (data) {
@@ -27,7 +26,6 @@ function input_change(event) {
                 if (data.error) {
                     $('#error').html(data.error);
                     $('#nickname').val(data.nickname);
-                    $('#statement').val(data.statement);
                     $('#email').val(data.email);
                 } else {
                     $('#error').html('');

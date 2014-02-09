@@ -1,10 +1,13 @@
 from datetime import datetime, timedelta
+
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from django.db.models import Q
+
 from Comments.models import Comment
 from Evaluation.models import Evaluation
 from Review.models import Review
-from django.db.models import Q
+
 
 class Elaboration(models.Model):
     challenge = models.ForeignKey('Challenge.Challenge')
@@ -50,7 +53,8 @@ class Elaboration(models.Model):
 
     def get_others(self):
         if Elaboration.objects.filter(challenge=self.challenge, submission_time__isnull=False).exclude(pk=self.id):
-            return Elaboration.objects.filter(challenge=self.challenge, submission_time__isnull=False).exclude(pk=self.id)
+            return Elaboration.objects.filter(challenge=self.challenge, submission_time__isnull=False).exclude(
+                pk=self.id)
         return False
 
     @staticmethod
@@ -72,7 +76,7 @@ class Elaboration(models.Model):
         top_level_challenges = []
         for elaboration in Elaboration.objects.all():
             if elaboration.challenge.is_final_challenge() and not elaboration.is_evaluated():
-                    top_level_challenges.append(elaboration)
+                top_level_challenges.append(elaboration)
         return top_level_challenges
 
     @staticmethod
@@ -96,19 +100,44 @@ class Elaboration(models.Model):
 
     @staticmethod
     def get_review_candidate(challenge, user):
+        # get all elaborations not written by this user
         candidates = Elaboration.objects.filter(challenge=challenge).exclude(user=user)
-        if candidates:
-            best_candidate = None
-        else:
-            return None
+        best_candidate = None
+        if not candidates:
+            return best_candidate
         for candidate in candidates:
+            # if there is not already a review for this elaboration reviewed by this user
             if not Review.objects.filter(elaboration=candidate, reviewer=user):
+                # if there is already a valid candidate
                 if best_candidate:
-                    if Review.get_review_amount(candidate) < Review.get_review_amount(best_candidate):
-                        best_candidate = candidate
+                    best_candidate = best_candidate.get_better_candidate(candidate)
                 else:
                     best_candidate = candidate
         return best_candidate
+
+    def get_better_candidate(self, candidate):
+        if not self.user.is_staff and candidate.user.is_staff:
+            return self
+        elif self.user.is_staff and not candidate.user.is_staff:
+            return candidate
+        stack = self.challenge.get_stack()
+        stack_candidate = candidate.challenge.get_stack()
+        blocked = stack.is_blocked(self.user)
+        blocked_candidate = stack_candidate.is_blocked(candidate.user)
+        if not blocked and blocked_candidate:
+            return self
+        elif blocked and not blocked_candidate:
+            return candidate
+        one_missing = Review.get_review_amount(self) == 1
+        one_missing_candidate = Review.get_review_amount(candidate) == 1
+        if one_missing and not one_missing_candidate:
+            return self
+        elif not one_missing and one_missing_candidate:
+            return candidate
+
+        if Review.get_review_amount(self) > Review.get_review_amount(candidate):
+            return candidate
+        return self
 
     def get_success_reviews(self):
         return Review.objects.filter(elaboration=self, appraisal=Review.SUCCESS)
@@ -123,13 +152,15 @@ class Elaboration(models.Model):
         return Review.objects.filter(elaboration=self, appraisal=Review.AWESOME)
 
     def is_passing_peer_review(self):
-        return len(Review.objects.filter(elaboration=self, appraisal=Review.NOTHING) | Review.objects.filter(elaboration=self, appraisal=Review.FAIL)) == 0
+        return len(
+            Review.objects.filter(elaboration=self, appraisal=Review.NOTHING) | Review.objects.filter(elaboration=self,
+                                                                                                      appraisal=Review.FAIL)) == 0
 
     @staticmethod
     def get_non_adequate_reviews():
         elaborations = []
         for review in Review.objects.filter(Q(appraisal=Review.NOTHING) | Q(appraisal=Review.FAIL)):
-             if Comment.objects.filter(content_type=ContentType.objects.get_for_model(Review), object_id=review.id):
+            if Comment.objects.filter(content_type=ContentType.objects.get_for_model(Review), object_id=review.id):
                 elaborations.append(review.elaboration)
         return elaborations
 
@@ -159,19 +190,27 @@ class Elaboration(models.Model):
     def get_visible_comments(self):
         comments = []
         for review in Review.objects.filter(elaboration=self.id):
-            for comment in Comment.objects.filter(visibility=Comment.PUBLIC, content_type=ContentType.objects.get_for_model(Review), object_id=review.id):
+            for comment in Comment.objects.filter(visibility=Comment.PUBLIC,
+                                                  content_type=ContentType.objects.get_for_model(Review),
+                                                  object_id=review.id):
                 comments.append(comment)
         for elaboration in Elaboration.objects.filter(id=self.id):
-            for comment in Comment.objects.filter(visibility=Comment.PUBLIC, content_type=ContentType.objects.get_for_model(Elaboration), object_id=elaboration.id):
+            for comment in Comment.objects.filter(visibility=Comment.PUBLIC,
+                                                  content_type=ContentType.objects.get_for_model(Elaboration),
+                                                  object_id=elaboration.id):
                 comments.append(comment)
         return comments
 
     def get_invisible_comments(self):
         comments = []
         for review in Review.objects.filter(elaboration=self.id):
-            for comment in Comment.objects.filter(visibility=Comment.STAFF, content_type=ContentType.objects.get_for_model(Review), object_id=review.id):
+            for comment in Comment.objects.filter(visibility=Comment.STAFF,
+                                                  content_type=ContentType.objects.get_for_model(Review),
+                                                  object_id=review.id):
                 comments.append(comment)
         for elaboration in Elaboration.objects.filter(id=self.id):
-            for comment in Comment.objects.filter(visibility=Comment.STAFF, content_type=ContentType.objects.get_for_model(Elaboration), object_id=elaboration.id):
+            for comment in Comment.objects.filter(visibility=Comment.STAFF,
+                                                  content_type=ContentType.objects.get_for_model(Elaboration),
+                                                  object_id=elaboration.id):
                 comments.append(comment)
         return comments

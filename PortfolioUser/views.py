@@ -69,7 +69,6 @@ def profile_save(request):
             valid_nickname = False
     if valid_nickname:
         user.nickname = request.POST['nickname']
-    user.statement = request.POST['statement']
 
     if is_valid_email(request.POST['email']):
         user.email = request.POST['email']
@@ -81,7 +80,6 @@ def profile_save(request):
     user.save()
     data['nickname'] = user.nickname
     data['email'] = user.email
-    data['statement'] = user.statement
     return HttpResponse(json.dumps(data))
 
 
