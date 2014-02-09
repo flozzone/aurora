@@ -6,10 +6,15 @@
       this.url = url;
       this.clip = clip;
       this.chapters = chapters;
-      this.active_chapter = -1;
+      this.activeChapter = -1;
       this.loaded = false;
       this.loading = false;
-      $("#flowplayer_controls_play").click((function(_this) {
+      this.label = $("#flowplayer_controls_label");
+      this.play = $("#flowplayer_controls_play");
+      this.prev = $("#flowplayer_controls_prev");
+      this.next = $("#flowplayer_controls_next");
+      this.whereAmI = $("#flowplayer_controls_where_am_i");
+      this.play.click((function(_this) {
         return function() {
           return _this.load(0);
         };

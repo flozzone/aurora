@@ -1,10 +1,16 @@
 class @Videoplayer
   constructor: (@directory, @url, @clip, @chapters) ->
-    @active_chapter = -1
+    @activeChapter = -1
     @loaded = false
     @loading = false
-    $("#flowplayer_controls_play").click =>
+    @label = $("#flowplayer_controls_label")
+    @play = $("#flowplayer_controls_play")
+    @prev = $("#flowplayer_controls_prev")
+    @next = $("#flowplayer_controls_next")
+    @whereAmI = $("#flowplayer_controls_where_am_i")
+    @play.click =>
       @load(0)
+    
     #@prev = $("#flowplayer_controls_play")
   
   load: (chapter=0) ->
