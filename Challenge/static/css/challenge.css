@@ -179,7 +179,9 @@ h1 {
 }
 
 .dropzone .dz-default.dz-message {
-    top: 300px;
+    position: relative;
+    margin-top: 30px;
+    right: 50%;
 }
 
 .history_headline {
