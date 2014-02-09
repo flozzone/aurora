@@ -12,114 +12,113 @@
 		  Challenge: Master Accessibility
 	  </td>
   </tr>
-
-
 {% if user.is_staff %}
-
 {% for challenge_dict in challenges_active %}
-	<tr>
-		<td class="lineD"><img class="challenge_image active" src="{{ STATIC_URL }}img/{{ challenge_dict.challenge.image_url }}"></td>
-		<td class="challenge active lineL" challenge_id="{{ challenge_dict.challenge.id }}">
-  			 <div style="font-weight:bold">{{ challenge_dict.challenge.title }}</div>{{ challenge_dict.challenge.description }}
-  		</td>
- 	</tr>
-	{% endfor %}
-	{% for challenge in challenges_inactive %}
-	  <tr>
-	 	 <td class="lineD"><img class="challenge_image active" src="{{ STATIC_URL }}img/{{ challenge.image_url }}"></td>
-	 	 <td class="challenge active lineL" challenge_id="{{ challenge.id }}">
-  		 <div style="font-weight:bold">{{ challenge.title }}</div>{{ challenge.description }} </td>
-     </tr>
-	{% endfor %} 
-{% else %}
-
-  {% for challenge_dict in challenges_active %}
-  	  <tr>
-		  <td class="lineD"><img class="challenge_image active" src="{{ STATIC_URL }}img/{{ challenge_dict.challenge.image_url }}"></td>
-		  <td class="challenge active lineL" challenge_id="{{ challenge_dict.challenge.id }}">
-	  		 <div style="font-weight:bold">{{ challenge_dict.challenge.title }}</div>{{ challenge_dict.challenge.description }}
-	  </td>
   <tr>
-	  <td class="review_wrapper lineD">
-
-    {% if not challenge_dict.challenge.is_final_challenge %}
-        {% for review in challenge_dict.reviews %}
-          {% if review %}
-            {% if review.submitted %}
-              <div class="review_box done" challenge_id="{{ challenge_dict.challenge.id }}"><i class="fa fa-check-square-o fa-lg"></i></div>
-            {% else %}
-              <div class="review_box in_progress" challenge_id="{{ challenge_dict.challenge.id }}"><i class="fa fa-pencil-square-o fa-lg"></i></div>
-            {% endif %}
-          {% elif not challenge_dict.submitted %}
-            <div class="review_box inactive"></div>
-          {% else %}
-            <div class="review_box active" challenge_id="{{ challenge_dict.challenge.id }}"><i class="fa fa-pencil-square-o fa-lg"></i></div>
-          {% endif %}
-        {% endfor %}
-    {% endif %}
-</td>
-<td class="challenge lineD">
-  <b>Status:</b>
-  <span>{{ challenge_dict.status.status }}</span>
-  <br>
-  <b>Next:</b>
-  <span>{{ challenge_dict.status.next }}</span>
-{% if challenge_dict.points %}
-  <br>
-  <b>Points:</b>
-  <span>{{ challenge_dict.points }}</span>
+    <td class="lineD">
+      <img class="challenge_image active" src="{{ STATIC_URL }}img/{{ challenge_dict.challenge.image_url }}">
+    </td>
+    <td class="challenge active lineL" challenge_id="{{ challenge_dict.challenge.id }}">
+      <div style="font-weight:bold">{{ challenge_dict.challenge.title }}</div>{{ challenge_dict.challenge.description }}
+    </td>
+  </tr>
+{% endfor %}
+{% for challenge in challenges_inactive %}
+  <tr>
+    <td class="lineD"><img class="challenge_image active" src="{{ STATIC_URL }}img/{{ challenge.image_url }}"></td>
+    <td class="challenge active lineL" challenge_id="{{ challenge.id }}">
+      <div style="font-weight:bold">{{ challenge.title }}</div>{{ challenge.description }}</td>
+  </tr>
+{% endfor %}
+{% else %}
+{% for challenge_dict in challenges_active %}
+  <tr>
+    <td class="lineD">
+      <img class="challenge_image active" src="{{ STATIC_URL }}img/{{ challenge_dict.challenge.image_url }}">
+    </td>
+    <td class="challenge active lineL" challenge_id="{{ challenge_dict.challenge.id }}">
+      <div style="font-weight:bold">{{ challenge_dict.challenge.title }}</div>{{ challenge_dict.challenge.description }}
+    </td>
+  </tr>
+  <tr>
+    <td class="review_wrapper lineD">
+{% if not challenge_dict.challenge.is_final_challenge %}
+{% if not stack_blocked %}
+{% for review in challenge_dict.reviews %}
+{% if review %}
+{% if review.submitted %}
+      <div class="review_box done" challenge_id="{{ challenge_dict.challenge.id }}">
+        <i class="fa fa-check-square-o fa-lg"></i>
+      </div>
+{% else %}
+      <div class="review_box in_progress" challenge_id="{{ challenge_dict.challenge.id }}">
+        <i class="fa fa-pencil-square-o fa-lg"></i>
+      </div>
 {% endif %}
-  <div class="peer_reviews" challenge_id="{{ challenge_dict.challenge.id }}">
-    {% if challenge_dict.awesome %}
-    <span class="received_review">
-      {{ challenge_dict.awesome }} <span style="font-style:italic">Awesome</span> &nbsp;
-    </span>
-    {% endif %}
-    {% if challenge_dict.success %}
-    <span class="received_review">
+{% elif not challenge_dict.submitted %}
+      <div class="review_box inactive"></div>
+{% else %}
+      <div class="review_box active" challenge_id="{{ challenge_dict.challenge.id }}">
+        <i class="fa fa-pencil-square-o fa-lg"></i>
+      </div>
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endif %}
+    </td>
+
+    <td class="challenge lineD">
+      <b>Status:</b>
+      <span>{{ challenge_dict.status.status }}</span>
+      <br>
+      <b>Next:</b>
+      <span>{{ challenge_dict.status.next }}</span>
+{% if challenge_dict.points %}
+      <br>
+      <b>Points:</b>
+      <span>{{ challenge_dict.points }}</span>
+{% endif %}
+      <div class="peer_reviews" challenge_id="{{ challenge_dict.challenge.id }}">
+{% if challenge_dict.awesome %}
+        <span class="received_review">
+          {{ challenge_dict.awesome }} <span style="font-style:italic">Awesome</span> &nbsp;
+        </span>
+{% endif %}
+{% if challenge_dict.success %}
+        <span class="received_review">
           {{ challenge_dict.success }} <span style="font-style:italic">Success</span> &nbsp;
-      </span>
-    {% endif %}
-    {% if challenge_dict.nothing %}
+        </span>
+{% endif %}
+{% if challenge_dict.nothing %}
         <span class="received_review">
           {{ challenge_dict.nothing }} <span style="font-style:italic">»Lame«</span> &nbsp;
         </span>
-    {% endif %}
-    {% if challenge_dict.fail %}
+{% endif %}
+{% if challenge_dict.fail %}
         <span class="received_review">
           {{ challenge_dict.fail }} <span style="font-style:italic">Epic Fail</span> &nbsp;
         </span>
-    {% endif %}
-  </div>
-</td>
-
-</tr>
-<tr> <td> &nbsp; </td></tr>
-  {% endfor %}
-  
-</table>
-  {% if challenges_inactive %}
-    <div class="divider">&nbsp;<i class="fa fa-scissors" style="position:relative;top:-9px;left:200px;"></i></div>
-  {% endif %}
-
-  <table class="challenges_stack">
-  {% for challenge in challenges_inactive %}
-  <tr>
- 	 <td class="lineD below"><img class="challenge_image" src="{{ STATIC_URL }}img/{{ challenge.image_url }}"></td>
- 	 <td class="challenge below" challenge_id="{{ challenge.id }}">
-		 <div style="font-weight:bold">{{ challenge.title }}</div>{{ challenge.description }} </td>
-   </tr>
-	<!--
-    {% if not challenge.is_final_challenge %}
-      <div class="review_wrapper">
-        <div class="review_box inactive"></div>
-        <div class="review_box inactive"></div>
-        <div class="review_box inactive"></div>
+{% endif %}
       </div>
-    {% endif %}-->
-  {% endfor %}
-  {% endif %}
-  
+    </td>
+  </tr>
+  <tr><td>&nbsp;</td></tr>
+{% endfor %}
 </table>
-  </div>
+
+{% if challenges_inactive %}
+<div class="divider">&nbsp;
+  <i class="fa fa-scissors" style="position:relative;top:-9px;left:200px;"></i>
 </div>
+{% endif %}
+<table class="challenges_stack">
+{% for challenge in challenges_inactive %}
+  <tr>
+    <td class="lineD below"><img class="challenge_image" src="{{ STATIC_URL }}img/{{ challenge.image_url }}"></td>
+    <td class="challenge below" challenge_id="{{ challenge.id }}">
+      <div style="font-weight:bold">{{ challenge.title }}</div>{{ challenge.description }}
+    </td>
+  </tr>
+{% endfor %}
+{% endif %}
+</table>

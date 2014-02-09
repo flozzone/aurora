@@ -28,6 +28,7 @@ def create_context_stack(request):
     if 'id' in request.GET:
         user = RequestContext(request)['user']
         stack = Stack.objects.get(pk=request.GET.get('id'))
+        data['stack_blocked'] = stack.is_blocked(user)
         stack_challenges = StackChallengeRelation.objects.all().filter(stack=stack)
         challenges_active = []
         challenges_inactive = []

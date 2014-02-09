@@ -310,7 +310,7 @@ def init_data():
     for challenge in challenges:
         for dummy_user in dummy_users:
             if not challenge.is_final_challenge():
-                Elaboration(challenge=challenge, user=dummy_user, elaboration_text="dummy elaboration",
+                Elaboration(challenge=challenge, user=dummy_user, elaboration_text="dummy elaboration %s" % dummy_user.username,
                             submission_time='2013-11-01 10:00:00').save()
 
     print('adding final elaboration 1 for challenge 10')
