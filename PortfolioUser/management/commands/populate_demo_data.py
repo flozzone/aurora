@@ -521,7 +521,15 @@ def init_data():
         filename="vo_17_02_13_2",
         tags='.exercise',
     ).save()
-
+    
+    print("creating sample stream")
+    Stream(
+        lecture_id=1,
+        url="rtmp://video.zserv.tuwien.ac.at/lecturetube_public",
+        type="rtmp",
+        clipname="gsiss13e10",
+        offset=-656,
+    ).save()
 
 if __name__ == '__main__':
     init_data()
