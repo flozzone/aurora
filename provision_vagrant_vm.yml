@@ -9,6 +9,8 @@
     sudo: yes
   - apt: pkg=vim
     sudo: yes
+  - apt: pkg=libjpeg-dev
+    sudo: yes
   - apt: pkg=python-pip
     sudo: yes
   - apt: pkg=python3

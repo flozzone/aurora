@@ -7,6 +7,7 @@ sudo apt-get update
 sudo apt-get install -y python-software-properties
 sudo add-apt-repository -y ppa:rquillo/ansible
 sudo apt-get update
+sudo apt-get install libjpeg-dev
 sudo apt-get install -y ansible
 echo 'localhost              ansible_connection=local' > /home/vagrant/hosts
 #cp /vagrant/hosts /home/vagrant/
