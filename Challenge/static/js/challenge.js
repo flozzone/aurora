@@ -17,6 +17,19 @@ function challenge_loaded() {
         }
     });
 
+    tinymce.init({
+        // selector: "textarea#editor",
+        mode : "exact",
+        elements :"editor_challenge",
+        menubar: false,
+        statusbar: false,
+		toolbar: false,
+	    plugins: "autoresize",
+		autoresize_min_height: 100,
+		autoresize_max_height: 800,
+        readonly: 1
+    });
+
     $('.submit').click(submit_clicked);
     $('.real_submit').click(real_submit_clicked);
 }

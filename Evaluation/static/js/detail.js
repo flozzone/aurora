@@ -1,6 +1,8 @@
 $(function() {
     tinymce.init({
-        selector: "textarea#editor",
+        // selector: "textarea#editor",
+        mode : "exact",
+        elements :"editor_detail",
         menubar: false,
         statusbar: false,
 		toolbar: false,
@@ -22,7 +24,7 @@ $(function() {
 
 $(function() {
    $(".others").click(function(event) {
-       var url = '/others';
+        var url = '/others';
         $.get(url, function (data) {
             $('#info_area').html(data);
         });
@@ -36,15 +38,6 @@ $(function() {
             $('#info_area').html(data);
         });
    });
-});
-
-$(function() {
-    $(".paginator_others").click(function(event) {
-        var url = '/others?page=' + $(event.target).attr('id');
-        $.get(url, function (data) {
-            $('#info_area').html(data);
-        });
-    });
 });
 
 $(function() {
