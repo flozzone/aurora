@@ -30,7 +30,8 @@ input[type=file] {
 }
 
 input[type=text] {
-	font-size:14px;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size:1em;
 	height:18px;
 	margin-bottom:6px;
 	width: 387px;
@@ -52,6 +53,7 @@ input[type=text] {
 }
 
 .legend {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 	font-size:80%;
 	color:gray;
 }
@@ -75,9 +77,16 @@ td {
 }
 
 label {
-    padding-left: 0px;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size:1em;
+	padding:5px;
+	margin-bottom:6px;
     display: inline-block;
-    width: 100px;
+    width: 170px;
+}
+
+.currentRow {
+	background-color: rgb(252,252,227);
 }
 
 .avatar_label {

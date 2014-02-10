@@ -7,24 +7,41 @@
 <link rel="stylesheet" href="{{ STATIC_URL }}lightbox/css/lightbox.css" type="text/css" media="screen"/>
 {% endblock %}
 
+
+
+
 {% block content %}
+
+
+
+<script>
+$(function(){
+	('.focusable').focus(function(){
+		$(this).parents('.formRow').addClass("currentRow");
+	}).blur(function(){
+		$(this).parents('.formRow').removeClass("currentRow");
+	});
+});
+</script>
+
+
 <div id="detail_area">
 {% if error %}
   <div class="error">{{ error }}</div>
 {% endif %}
   <table id="profile">
-    <tr>
+    <tr class="formRow">
       <td>
         <label for="nickname">Nickname</label>
       </td>
       <td>
-        <input id="nickname" type="text" name="nickname" value="{{ user.nickname }}">
+        <input id="nickname" type="text" name="nickname" value="{{ user.nickname }}" class="focusable">
       </td>
 		  <td class="legend">
 			  visible to everyone.
 		  </td>
     </tr>
-    <tr>
+    <tr class="formRow">
       <td>
         <label for="name">Name</label>
       </td>
@@ -35,9 +52,9 @@
 	  		private. cannot be changed.
   		</td>
     </tr>
-    <tr>
+    <tr class="formRow">
       <td>
-        <label for="matriculation_number">Matriculation number</label>
+        <label for="matriculation_number">Matriculation Number</label>
       </td>
       <td>
         <input id="matriculation_number" type="text" name="matriculation_number" value="{{ user.matriculation_number }}" readonly tabindex=1000>
@@ -46,29 +63,40 @@
 	  		private. cannot be changed.
   		</td>
     </tr>
-    <tr>
+    <tr class="formRow">
       <td>
         <label for="study_code">Study code</label>
       </td>
       <td>
-        <input id="study_code" type="text" name="study_code" value="{{ user.study_code }}">
+        <input id="study_code" type="text" name="study_code" value="{{ user.study_code }}" class="focusable">
       </td>
       <td class="legend">
-        private.
+        eg. 033532. private. please make sure this is correct.
       </td>
     </tr>
-    <tr>
+    <tr class="formRow">
+      <td>
+        <label for="statement">Statement</label>
+      </td>
+      <td>
+        <input id="statement" type="text" name="statement" value="{{ user.statement }}" class="focusable">
+      </td>
+      <td class="legend">
+        A sentence about yourself. visible to everyone.
+      </td>
+    </tr>
+    <tr class="formRow">
       <td>
         <label for="email">E-Mail</label>
       </td>
       <td>
-        <input id="email" type="text" name="email" value="{{ user.email }}">
+        <input id="email" type="text" name="email" value="{{ user.email }}" class="focusable">
       </td>
       <td class="legend">
         private.
       </td>
     </tr>
-    <tr>
+    <tr class="formRow">
       <td class="avatar_label">
         <label for="avatar">Avatar</label>
       </td>
