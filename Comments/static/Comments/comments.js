@@ -41,7 +41,8 @@ function registerElementsForCommentList($comment_list) {
     registerDeleteLinksForCommentList($comment_list);
     registerVoteForCommentList($comment_list);
     registerPromoteLinksForCommentList($comment_list);
-    registerBookmarkLinksForCommentList($comment_list)
+//    registerBookmarkLinksForCommentList($comment_list);
+    Bookmarks.registerForCommentList($comment_list);
 }
 
 function registerPolling() {
@@ -259,6 +260,36 @@ function setCommentId($form, comment_number) {
     $form.find('#id_reference_type_id').attr('value', ref_obj.type);
 }
 
+var DeleteLinks = {
+    registerForCommentList: function($comment_list) {
+    },
+
+    deleteComment: function(comment_id) {
+        $.ajax({
+            url: '/delete_comment/',
+            data: { comment_id: comment_id },
+            type: 'POST',
+            dataType: 'json',
+            beforeSend: function (xhr, settings) {
+                var csrftoken = getCsrfToken();
+                xhr.setRequestHeader("X-CSRFToken", csrftoken)
+            },
+            complete: function (xhr, status) {
+                endDelete();
+            }
+        })
+    },
+
+    endDelete: function() {
+        $delete_buttons.hide();
+        $('#element_shelter').append($delete_buttons);
+        $actions.show();
+        state.modifying = false;
+        updateCommentList(false, true, $comment_list);
+        startPolling();
+    }
+}
+
 function registerDeleteLinksForCommentList($comment_list) {
     $comment_list.find('.delete_comment, .delete_response').click( function(event) {
         event.preventDefault();
@@ -277,13 +308,27 @@ function registerDeleteLinksForCommentList($comment_list) {
 
         var comment_number = $(this).attr('data-delete_id');
 
+        function deleteComment() {
+            $.ajax({
+                url: '/delete_comment/',
+                data: { comment_id: comment_number },
+                type: 'POST',
+                dataType: 'json',
+                beforeSend: function (xhr, settings) {
+                    var csrftoken = getCsrfToken();
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken)
+                },
+                complete: function (xhr, status) {
+                    endDelete();
+                }
+            })
+        }
+
         function endDelete() {
             $delete_buttons.hide();
             $('#element_shelter').append($delete_buttons);
-            $actions.show();
-            state.modifying = false;
-            updateCommentList(false, true, $comment_list);
             startPolling();
+            state.modifying = false;
         }
 
         var $delete_cancel = $('#delete_cancel');
@@ -291,6 +336,7 @@ function registerDeleteLinksForCommentList($comment_list) {
         $delete_cancel.click( function(event) {
             event.preventDefault();
             endDelete();
+            $actions.show();
             return false;
         });
 
@@ -298,26 +344,12 @@ function registerDeleteLinksForCommentList($comment_list) {
         $delete_confirm.off();
         $delete_confirm.click( function(event) {
             event.preventDefault();
-            deleteComment(comment_number);
-            endDelete();
+            deleteComment();
             return false;
         })
 
         return false;
     });
-}
-
-function deleteComment(comment_id) {
-    $.ajax({
-        url: '/delete_comment/',
-        data: { comment_id: comment_id },
-        type: 'POST',
-        dataType: 'json',
-        beforeSend: function(xhr, settings) {
-            var csrftoken = getCsrfToken();
-            xhr.setRequestHeader("X-CSRFToken", csrftoken)
-        }
-    })
 }
 
 function getCsrfToken() {

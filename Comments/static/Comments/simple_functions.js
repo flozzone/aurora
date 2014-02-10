@@ -5,7 +5,7 @@
  * e.g. vote up/down, promote, bookmark
  */
 
-//"use strict";
+"use strict";
 
 // TODO delete
 //var holyShit = {
@@ -62,7 +62,7 @@ function registerPromoteLinksForCommentList($comment_list) {
     }
 }
 
-var Bookmark = {
+var Bookmarks = {
     url: '/bookmark_comment/',
 
     registerForCommentList: function ($comment_list) {
