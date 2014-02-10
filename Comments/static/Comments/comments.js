@@ -493,8 +493,8 @@ function replaceCommentListWithHtml($comment_list, html) {
 }
 
 function stopPolling() {
-    stop_update_poll = true;
     clearTimeout(current_poll_timeout);
+    stop_update_poll = true;
 }
 
 function startPolling() {

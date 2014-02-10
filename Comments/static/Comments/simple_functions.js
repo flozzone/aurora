@@ -74,8 +74,8 @@ var Bookmark = {
     bookmark: function (event, $link) {
         event.preventDefault();
 
-        var comment_number = $(this).attr('data-comment_number');
-        sendValueForComment(url, comment_number, true);
+        var comment_number = $link.attr('data-comment_number');
+        sendValueForComment(this.url, comment_number, true);
 
         $link.off();
         $link.click(this.unbookmark);
@@ -89,7 +89,7 @@ var Bookmark = {
         event.preventDefault();
 
         var comment_number = $link.attr('data-comment_number');
-        sendValueForComment(url, comment_number, false);
+        sendValueForComment(this.url, comment_number, false);
 
         $link.off();
         $link.click(this.bookmark);
