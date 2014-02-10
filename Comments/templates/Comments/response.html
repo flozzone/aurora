@@ -56,18 +56,16 @@
         {% endif %}
 
         {% if requester.is_staff or requester == response.author and response.deleter == None %}
-            <a class="flR" href="javascript:void(0)" id="edit_response_link_{{ response.id }}" class="edit_link">
+            <a class="flR edit_link" href="javascript:void(0)" id="edit_response_link_{{ response.id }}">
                 edit&nbsp;&nbsp;
             </a>
-            <a class="flR" href="javascript:void(0)" id="delete_response_link_{{ response.id }}"
-               data-delete_id="{{ response.id }}"
-               class="delete_response">
+            <a class="flR delete_response" href="javascript:void(0)" id="delete_response_link_{{ response.id }}"
+               data-delete_id="{{ response.id }}">
                 delete&nbsp;&nbsp;
             </a>
         {% endif %}
-        <a class="flR" href="javascript:void(0)" id="reply_comment_link_{{ response.id }}"
-           data-reply_to="{{ comment.id }}"
-           class="reply_link">
+        <a class="flR reply_link" href="javascript:void(0)" id="reply_comment_link_{{ response.id }}"
+           data-reply_to="{{ comment.id }}">
             reply&nbsp;&nbsp;
         </a>
     </div>
