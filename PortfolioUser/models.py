@@ -18,6 +18,7 @@ def avatar_path(instance, filename):
 class PortfolioUser(User):
     nickname = models.CharField(max_length=100, null=True, blank=True)
     last_activity = models.DateTimeField(auto_now_add=True, blank=True)
+    statement = models.TextField()
     upload_path = 'static/img/avatar'
     avatar = models.ImageField(upload_to=avatar_path, null=True, blank=True)
     matriculation_number = models.CharField(max_length=100, null=True)

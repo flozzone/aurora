@@ -79,6 +79,7 @@ def profile_save(request):
         user.avatar = request.FILES['file']
     if is_valid_study_code(request.POST['study_code']):
         user.study_code = request.POST['study_code']
+    user.statement = request.POST['statement']
     user.save()
     data['nickname'] = user.nickname
     data['email'] = user.email

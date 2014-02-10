@@ -20,6 +20,7 @@ function input_change(event) {
             data: {
                 'nickname': $('#nickname').val(),
                 'study_code': $('#study_code').val(),
+                'statement': $('#statement').val(),
                 'email': $('#email').val()
             },
             success: function (data) {
