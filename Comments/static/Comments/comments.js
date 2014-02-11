@@ -4,7 +4,6 @@
 
 "use strict";
 
-var current_poll_timeout;
 var POLLING = {
     stopped: false,
     current_interval: 5000,
@@ -440,8 +439,8 @@ function updateCommentList(keepPolling, $comment_list) {
         },
         complete: function (xhr, status) {
             if (keepPolling == true && !POLLING.stopped) {
-                clearTimeout(current_poll_timeout);
-                current_poll_timeout = setTimeout('updateComments(true)', POLLING.current_interval);
+                clearTimeout(POLLING.current_timeout);
+                POLLING.current_timeout = setTimeout('updateComments(true)', POLLING.current_interval);
             }
         }
     })
@@ -493,7 +492,7 @@ function replaceCommentListWithHtml($comment_list, html) {
 }
 
 function stopPolling() {
-    clearTimeout(current_poll_timeout);
+    clearTimeout(POLLING.current_timeout);
     POLLING.stopped = true;
 }
 
@@ -520,10 +519,10 @@ function registerTestButton() {
 //        console.log($('#id_parent_comment').val());
 //        if(stop_update_poll) startPolling();
 //        else stopPolling();
-        alert('nothing assigned')
+        alert('nothing assigned');
 //        $('*').off();
         return false;
-    })
+    });
 }
 
 function findClosestRefObj($child) {

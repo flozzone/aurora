@@ -130,12 +130,8 @@ def render_comment_list_inclusion_tag(for_string, reference):
 def comments_boilerplate(context):
 
     form = CommentForm()
-    # form.fields['reference_id'].initial = ref_object.id
-    # form.fields['reference_type_id'].initial = ref_type.id
     form.fields['visibility'].initial = Comment.PUBLIC
     reply_form = ReplyForm()
-    # reply_form.fields['reference_id'].initial = ref_object.id
-    # reply_form.fields['reference_type_id'].initial = ref_type.id
     reply_form.fields['parent_comment'].initial = -1
     reply_form.fields['visibility'].initial = Comment.PUBLIC
 
