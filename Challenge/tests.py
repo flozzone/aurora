@@ -348,7 +348,8 @@ class ChallengeTest(TestCase):
                appraisal=Review.SUCCESS).save()
         assert challenge2.is_enabled_for_user(user1)
         Review(elaboration=elaboration1, submission_time=datetime.now(), reviewer=user2, appraisal=Review.FAIL).save()
-        assert not challenge2.is_enabled_for_user(user1)
+        # a failed review does not block the stack
+        assert challenge2.is_enabled_for_user(user1)
 
     def test_if_stack_blocked_challenge_is_not_enabled_nothing(self):
         challenge1 = self.challenge
@@ -515,7 +516,7 @@ class ChallengeTest(TestCase):
                             appraisal=Review.FAIL)
         bad_review.save()
         assert not challenge2.is_enabled_for_user(user1)
-        assert challenge1.get_status(user1) == Challenge.BLOCKED_BAD_REVIEW
+        assert challenge1.get_status(user1) == Challenge.USER_REVIEW_MISSING
         assert challenge2.get_status(user1) == Challenge.NOT_ENABLED
         bad_review.appraisal = Review.SUCCESS
         bad_review.save()
@@ -532,8 +533,8 @@ class ChallengeTest(TestCase):
         assert challenge2.get_status(user1) == Challenge.NOT_STARTED
         bad_review.appraisal = Review.FAIL
         bad_review.save()
-        assert not challenge2.is_enabled_for_user(user1)
-        assert challenge2.get_status(user1) == Challenge.NOT_ENABLED
+        assert challenge2.is_enabled_for_user(user1)
+        assert challenge2.get_status(user1) == Challenge.NOT_STARTED
 
     def test_status_blocked_bad_review_nothing(self):
         challenge1 = self.challenge
