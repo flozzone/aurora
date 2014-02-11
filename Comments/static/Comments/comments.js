@@ -2,9 +2,11 @@
  * Created by dan on 12/21/13.
  */
 
-var stop_update_poll = false;
+"use strict";
+
 var current_poll_timeout;
 var POLLING = {
+    stopped: false,
     current_interval: 5000,
     active_interval: 5000,
     idle_interval: 60000};
@@ -15,6 +17,8 @@ var state = {
 };
 
 $(document).ready( function() {
+    $('*').off();
+
     registerTestButton();
     registerStartPolling();
     registerStopPolling();
@@ -32,7 +36,8 @@ $(document).ready( function() {
 
     registerPolling();
 
-    updateComments(true, false);
+//    updateComments(true, false);
+    startPolling();
 });
 
 function registerElementsForCommentList($comment_list) {
@@ -51,15 +56,17 @@ function registerPolling() {
     })
     $(window).focus( function() {
         POLLING.current_interval = POLLING.active_interval;
+//        stopPolling();
+//        startPolling();
 
 //        following lines cause a race condition: if switching
 //        fast, multiple instances of startPolling might run at the same
 //        time and start multiple pollers
 
-//        if(!state.modifying && !state.posting) {
+        if(!state.modifying && !state.posting) {
 //            stopPolling();
-//            startPolling();
-//        }
+            startPolling();
+        }
     })
 }
 
@@ -94,7 +101,7 @@ function registerVoteForCommentList($comment_list) {
             type: 'GET',
             dataType: 'html',
             success: function(response) {
-                updateComments(false, false);
+                updateComments(false);
             }
         })
         return false;
@@ -260,36 +267,6 @@ function setCommentId($form, comment_number) {
     $form.find('#id_reference_type_id').attr('value', ref_obj.type);
 }
 
-var DeleteLinks = {
-    registerForCommentList: function($comment_list) {
-    },
-
-    deleteComment: function(comment_id) {
-        $.ajax({
-            url: '/delete_comment/',
-            data: { comment_id: comment_id },
-            type: 'POST',
-            dataType: 'json',
-            beforeSend: function (xhr, settings) {
-                var csrftoken = getCsrfToken();
-                xhr.setRequestHeader("X-CSRFToken", csrftoken)
-            },
-            complete: function (xhr, status) {
-                endDelete();
-            }
-        })
-    },
-
-    endDelete: function() {
-        $delete_buttons.hide();
-        $('#element_shelter').append($delete_buttons);
-        $actions.show();
-        state.modifying = false;
-        updateCommentList(false, true, $comment_list);
-        startPolling();
-    }
-}
-
 function registerDeleteLinksForCommentList($comment_list) {
     $comment_list.find('.delete_comment, .delete_response').click( function(event) {
         event.preventDefault();
@@ -434,25 +411,17 @@ function registerAddCommentButton() {
  * @param keepPolling   should updateComments keep polling for updates after call
  * @param force         force a reload of the comment_list
  */
-function updateComments(keepPolling, force) {
+function updateComments(keepPolling) {
     var $comment_lists = $('.comment_list')
-    updateCommentList(keepPolling, force, $comment_lists.first());
+    updateCommentList(keepPolling, $comment_lists.first());
     $comment_lists.not(':first').each( function() {
-        updateCommentList(false, force, $(this));
+        updateCommentList(false, $(this));
     });
 }
 
-function updateCommentList(keepPolling, force, $comment_list) {
+function updateCommentList(keepPolling, $comment_list) {
     var revision;
-    if (force) {
-        revision = {
-            ref_type: $comment_list.attr('data-ref_type'),
-            ref_id: $comment_list.attr('data-ref_id'),
-            id: -1
-        }
-    } else {
-        revision = getRevision($comment_list);
-    }
+    revision = getRevision($comment_list);
 
     $.ajax({
         url: '/update_comments/',
@@ -472,8 +441,9 @@ function updateCommentList(keepPolling, force, $comment_list) {
             }
         },
         complete: function (xhr, status) {
-            if (keepPolling == true && !stop_update_poll) {
-                current_poll_timeout = setTimeout('updateComments(true, false)', POLLING.current_interval);
+            if (keepPolling == true && !POLLING.stopped) {
+                clearTimeout(current_poll_timeout);
+                current_poll_timeout = setTimeout('updateComments(true)', POLLING.current_interval);
             }
         }
     })
@@ -526,16 +496,12 @@ function replaceCommentListWithHtml($comment_list, html) {
 
 function stopPolling() {
     clearTimeout(current_poll_timeout);
-    stop_update_poll = true;
+    POLLING.stopped = true;
 }
 
 function startPolling() {
-    if(stop_update_poll == false)
-        return
-
-    stop_update_poll = false;
-    clearTimeout(current_poll_timeout);
-    updateComments(true, false);
+    POLLING.stopped = false;
+    updateComments(true);
 }
 
 function registerTestButton() {
@@ -556,6 +522,7 @@ function registerTestButton() {
 //        if(stop_update_poll) startPolling();
 //        else stopPolling();
         alert('nothing assigned')
+//        $('*').off();
         return false;
     })
 }

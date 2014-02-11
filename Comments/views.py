@@ -205,10 +205,8 @@ def bookmark_comment(request):
         return HttpResponse('')
 
     if data['value'] == 'true':
-        print('bookmarking comment ' + data['comment_id'])
         comment.bookmarked_by.add(requester)
     else:
-        print('removing bookmark for comment ' + data['comment_id'])
         comment.bookmarked_by.remove(requester)
 
     comment.save()
