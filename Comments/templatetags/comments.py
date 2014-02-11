@@ -21,7 +21,8 @@ class CommentListNode(template.Node):
             ref_object = self.reference_var.resolve(context)
             ref_type = ContentType.objects.get_for_model(ref_object)
 
-            user = PortfolioUser.objects.get(id=context['user'].id)
+            # user = PortfolioUser.objects.get(id=context['user'].id)
+            user = context['user']
 
             queryset = Comment.query_top_level_sorted(ref_object.id, ref_type.id, user)
             revision = CommentListRevision.get_or_create(ref_object).number
@@ -57,6 +58,12 @@ class AdditionalCommentListNode(CommentListNode):
         self.template = 'Comments/additional_comments.html'
 
 
+class MultiCommentListNode(CommentListNode):
+    def __init__(self, reference):
+        self.reference_var = template.Variable(reference)
+        self.template = 'Comments/multi_comment.html'
+
+
 @register.tag
 # def render_comment_list_plain_tag(parser, token):
 def render_comment_list(parser, token):
@@ -68,6 +75,12 @@ def render_comment_list(parser, token):
 def render_additional_comment_list(parser, token):
     ref_token = handle_tokens(token)
     return AdditionalCommentListNode(ref_token)
+
+
+@register.tag
+def render_multi_comment_list(parser, token):
+    ref_token = handle_tokens(token)
+    return MultiCommentListNode(ref_token)
 
 
 def handle_tokens(token):
@@ -110,5 +123,30 @@ def render_comment_list_inclusion_tag(for_string, reference):
                'form': form,
                'ref_type': ref_type.id,
                'ref_id': reference.id}
+
+    return context
+
+@register.inclusion_tag('Comments/forms.html', takes_context=True)
+def comments_boilerplate(context):
+
+    form = CommentForm()
+    # form.fields['reference_id'].initial = ref_object.id
+    # form.fields['reference_type_id'].initial = ref_type.id
+    form.fields['visibility'].initial = Comment.PUBLIC
+    reply_form = ReplyForm()
+    # reply_form.fields['reference_id'].initial = ref_object.id
+    # reply_form.fields['reference_type_id'].initial = ref_type.id
+    reply_form.fields['parent_comment'].initial = -1
+    reply_form.fields['visibility'].initial = Comment.PUBLIC
+
+    user = context['user']
+
+    context.update({'form': form,
+                    'reply_form': reply_form,
+                    # 'ref_type': ref_type.id,
+                    # 'ref_id': ref_object.id,
+                    # 'id_suffix': id_suffix,
+                    'requester': user})
+                    # 'revision': revision}
 
     return context

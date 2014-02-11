@@ -17,13 +17,12 @@ var state = {
 };
 
 $(document).ready( function() {
-    $('*').off();
-
     registerTestButton();
     registerStartPolling();
     registerStopPolling();
 
     $('.comment_list').each( function () {
+        $(this).find('*').off();
         registerElementsForCommentList($(this))
     });
 
@@ -36,7 +35,6 @@ $(document).ready( function() {
 
     registerPolling();
 
-//    updateComments(true, false);
     startPolling();
 });
 
@@ -56,21 +54,15 @@ function registerPolling() {
     })
     $(window).focus( function() {
         POLLING.current_interval = POLLING.active_interval;
-//        stopPolling();
-//        startPolling();
-
-//        following lines cause a race condition: if switching
-//        fast, multiple instances of startPolling might run at the same
-//        time and start multiple pollers
 
         if(!state.modifying && !state.posting) {
-//            stopPolling();
             startPolling();
         }
     })
 }
 
 function registerStopPolling() {
+    $('#stopPolling').off();
     $('#stopPolling').click( function(event) {
         event.preventDefault();
         stopPolling();
@@ -79,6 +71,7 @@ function registerStopPolling() {
 }
 
 function registerStartPolling() {
+    $('#startPolling').off();
     $('#startPolling').click( function(event) {
         event.preventDefault();
         startPolling();
@@ -115,6 +108,7 @@ function registerAddCommentFormButtons() {
 }
 
 function registerAddCommentFormButton($button) {
+    $button.off();
     $button.click( function(event) {
         event.preventDefault();
 
@@ -334,6 +328,7 @@ function getCsrfToken() {
 }
 
 function registerReplyButton() {
+    $('#button_post_reply').off();
     $('#button_post_reply').click( function(event) {
         event.preventDefault();
         $.ajax({
@@ -353,6 +348,7 @@ function registerReplyButton() {
 }
 
 function registerCancelReplyButton() {
+    $('#button_cancel_reply').off();
     $('#button_cancel_reply').click( function(event) {
         event.preventDefault();
         $('#replyForm').hide();
@@ -371,6 +367,7 @@ function hideCommentForm() {
 }
 
 function registerCancelCommentButton() {
+    $('#button_cancel_comment').off();
     $('#button_cancel_comment').click( function(event) {
         event.preventDefault();
         hideCommentForm();
@@ -381,6 +378,7 @@ function registerCancelCommentButton() {
 }
 
 function registerAddCommentButton() {
+    $('#button_add_comment').off();
     $('#button_add_comment').click(function (event) {
         event.preventDefault();
 
@@ -505,6 +503,7 @@ function startPolling() {
 }
 
 function registerTestButton() {
+    $('#myTest').off();
     $('#myTest').on('click', function(){
 //        editElements.prop = 'bam';
 //        editElements();

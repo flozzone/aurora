@@ -82,7 +82,7 @@ class Comment(models.Model):
     VISIBILITY_CHOICES = (
         (PUBLIC, 'public'),
         (STAFF, 'staff only'),
-        (PRIVATE, 'private')
+        (PRIVATE, 'private note')
     )
 
     visibility = models.CharField(max_length=10,
