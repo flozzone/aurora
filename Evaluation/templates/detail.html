@@ -1,4 +1,6 @@
 {% load comments %}
+{% comments_boilerplate %}
+
 {% block additional_headers %}
   <script type="text/javascript" src="{{ STATIC_URL }}tinymce/tinymce.min.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}tinymce/jquery.tinymce.min.js"></script>
@@ -63,7 +65,7 @@
         {% if elaboration %}
 		<div class="comments">
 			<b>Comment section: discussion with autor</b>
-            {% render_comment_list for elaboration %}
+            {% render_multi_comment_list for elaboration %}
 		</div>
         {% endif %}
 
