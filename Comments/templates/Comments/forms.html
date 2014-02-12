@@ -18,7 +18,6 @@
         </div>
     </div>
 
-    <button id="button_add_comment_form{{ id_suffix }}" class="button_add_comment_form" data-ref_type="{{ ref_type }}" data-ref_id="{{ ref_id }}">add comment</button>
     <form method="post" class="comment_form  author_author" id="commentForm" style="display:none">{% csrf_token %}
    	 <div class="comment_top author_author" >
    		 <div class="comment_author">{{ requester.nickname }}</div>

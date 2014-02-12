@@ -4,12 +4,15 @@
 
 "use strict";
 
-var current_poll_timeout;
 var POLLING = {
     stopped: false,
     current_interval: 5000,
     active_interval: 5000,
-    idle_interval: 60000};
+    idle_interval: 60000,
+    increase_interval: function() {
+        POLLING.current_interval = Math.min(POLLING.current_interval * 2, POLLING.idle_interval);
+    }
+};
 
 var state = {
     modifying: false,
@@ -17,13 +20,12 @@ var state = {
 };
 
 $(document).ready( function() {
-    $('*').off();
-
     registerTestButton();
     registerStartPolling();
     registerStopPolling();
 
     $('.comment_list').each( function () {
+        $(this).find('*').off();
         registerElementsForCommentList($(this))
     });
 
@@ -36,7 +38,6 @@ $(document).ready( function() {
 
     registerPolling();
 
-//    updateComments(true, false);
     startPolling();
 });
 
@@ -56,21 +57,15 @@ function registerPolling() {
     })
     $(window).focus( function() {
         POLLING.current_interval = POLLING.active_interval;
-//        stopPolling();
-//        startPolling();
-
-//        following lines cause a race condition: if switching
-//        fast, multiple instances of startPolling might run at the same
-//        time and start multiple pollers
 
         if(!state.modifying && !state.posting) {
-//            stopPolling();
             startPolling();
         }
     })
 }
 
 function registerStopPolling() {
+    $('#stopPolling').off();
     $('#stopPolling').click( function(event) {
         event.preventDefault();
         stopPolling();
@@ -79,6 +74,7 @@ function registerStopPolling() {
 }
 
 function registerStartPolling() {
+    $('#startPolling').off();
     $('#startPolling').click( function(event) {
         event.preventDefault();
         startPolling();
@@ -115,6 +111,7 @@ function registerAddCommentFormButtons() {
 }
 
 function registerAddCommentFormButton($button) {
+    $button.off();
     $button.click( function(event) {
         event.preventDefault();
 
@@ -334,6 +331,7 @@ function getCsrfToken() {
 }
 
 function registerReplyButton() {
+    $('#button_post_reply').off();
     $('#button_post_reply').click( function(event) {
         event.preventDefault();
         $.ajax({
@@ -353,6 +351,7 @@ function registerReplyButton() {
 }
 
 function registerCancelReplyButton() {
+    $('#button_cancel_reply').off();
     $('#button_cancel_reply').click( function(event) {
         event.preventDefault();
         $('#replyForm').hide();
@@ -371,6 +370,7 @@ function hideCommentForm() {
 }
 
 function registerCancelCommentButton() {
+    $('#button_cancel_comment').off();
     $('#button_cancel_comment').click( function(event) {
         event.preventDefault();
         hideCommentForm();
@@ -381,6 +381,7 @@ function registerCancelCommentButton() {
 }
 
 function registerAddCommentButton() {
+    $('#button_add_comment').off();
     $('#button_add_comment').click(function (event) {
         event.preventDefault();
 
@@ -440,10 +441,13 @@ function updateCommentList(keepPolling, $comment_list) {
                 POLLING.idle_interval = json['polling_idle_interval'];
             }
         },
+        error: function (jqXHR, textStatus, errorThrown) {
+            POLLING.increase_interval();
+        },
         complete: function (xhr, status) {
             if (keepPolling == true && !POLLING.stopped) {
-                clearTimeout(current_poll_timeout);
-                current_poll_timeout = setTimeout('updateComments(true)', POLLING.current_interval);
+                clearTimeout(POLLING.current_timeout);
+                POLLING.current_timeout = setTimeout('updateComments(true)', POLLING.current_interval);
             }
         }
     })
@@ -495,7 +499,7 @@ function replaceCommentListWithHtml($comment_list, html) {
 }
 
 function stopPolling() {
-    clearTimeout(current_poll_timeout);
+    clearTimeout(POLLING.current_timeout);
     POLLING.stopped = true;
 }
 
@@ -505,6 +509,7 @@ function startPolling() {
 }
 
 function registerTestButton() {
+    $('#myTest').off();
     $('#myTest').on('click', function(){
 //        editElements.prop = 'bam';
 //        editElements();
@@ -521,10 +526,10 @@ function registerTestButton() {
 //        console.log($('#id_parent_comment').val());
 //        if(stop_update_poll) startPolling();
 //        else stopPolling();
-        alert('nothing assigned')
+        alert('nothing assigned');
 //        $('*').off();
         return false;
-    })
+    });
 }
 
 function findClosestRefObj($child) {

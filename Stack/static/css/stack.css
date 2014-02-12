@@ -1,6 +1,6 @@
 .challenge_image {
-	width:128px;
-	height:128px;
+	width:96px;
+	height:96px;
 }
 
 .challenge_image.active{
@@ -19,6 +19,7 @@
 .challenges_stack tr td{
 /*	border:1px dotted silver; */
 	vertical-align:top;
+	max-height:96px;
 }
 
 .singleChallenge {
@@ -26,7 +27,8 @@
 
 .challenge {
 	clear:both;
-	min-height:128px;
+	min-height:96px;
+	max-height:96px;
 	padding-left:16px;
 }
 
@@ -51,7 +53,7 @@
 }
 
 .row1 {
-	padding:16px 0 16px 0;
+	padding:16px 4px 16px 0;
 	font-size:20px;
 	font-weight:bold;
 }

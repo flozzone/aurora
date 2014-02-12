@@ -21,7 +21,7 @@
 		 </a>
 		 {% endif %}
 		 </div> 
-		 <div class="comment_score">{% if not response.author = requester %}<a href='#' class="vote_up_on" data-comment_number="{{ response.id }}" title="This comment is helpful"><i class="fa fa-arrow-up notBlack"></i></a>{% endif %} {% if response.score > 0%} +{% endif %}{{ response.score }} {% if not response.author = requester %}<a href='#' class="vote_down_on" data-comment_number="{{ response.id }}" title="This comment is not helpful at all"><i class="fa fa-arrow-down notBlack"></i></a>{% endif %}</div>
+		 <div class="comment_score">{% if response.author != requester %}<a href='#' class="vote_up_on" data-comment_number="{{ response.id }}" title="This comment is helpful"><i class="fa fa-arrow-up notBlack"></i></a>{% endif %} {% if response.score > 0%} +{% endif %}{{ response.score }} {% if response.author != requester %}<a href='#' class="vote_down_on" data-comment_number="{{ response.id }}" title="This comment is not helpful at all"><i class="fa fa-arrow-down notBlack"></i></a>{% endif %}</div>
 		 </div>
 
     <div class="response_body">
@@ -55,14 +55,16 @@
             </p>
         {% endif %}
 
-        {% if requester.is_staff or requester == response.author and response.deleter == None %}
-            <a class="flR edit_link" href="javascript:void(0)" id="edit_response_link_{{ response.id }}">
-                edit&nbsp;&nbsp;
-            </a>
-            <a class="flR delete_response" href="javascript:void(0)" id="delete_response_link_{{ response.id }}"
-               data-delete_id="{{ response.id }}">
-                delete&nbsp;&nbsp;
-            </a>
+        {% if requester.is_staff or requester == response.author %}
+            {% if response.deleter == None %}
+                <a class="flR edit_link" href="javascript:void(0)" id="edit_response_link_{{ response.id }}">
+                    edit&nbsp;&nbsp;
+                </a>
+                <a class="flR delete_response" href="javascript:void(0)" id="delete_response_link_{{ response.id }}"
+                   data-delete_id="{{ response.id }}">
+                    delete&nbsp;&nbsp;
+                </a>
+            {% endif %}
         {% endif %}
         <a class="flR reply_link" href="javascript:void(0)" id="reply_comment_link_{{ response.id }}"
            data-reply_to="{{ comment.id }}">

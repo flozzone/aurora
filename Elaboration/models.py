@@ -152,8 +152,7 @@ class Elaboration(models.Model):
 
     def is_passing_peer_review(self):
         nothing_reviews = Review.objects.filter(elaboration=self, appraisal=Review.NOTHING)
-        fail_reviews = Review.objects.filter(elaboration=self, appraisal=Review.FAIL)
-        return not nothing_reviews and not fail_reviews
+        return not nothing_reviews
 
 
     @staticmethod

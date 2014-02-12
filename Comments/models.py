@@ -82,7 +82,7 @@ class Comment(models.Model):
     VISIBILITY_CHOICES = (
         (PUBLIC, 'public'),
         (STAFF, 'staff only'),
-        (PRIVATE, 'private')
+        (PRIVATE, 'private note')
     )
 
     visibility = models.CharField(max_length=10,
@@ -103,12 +103,6 @@ class Comment(models.Model):
         responses = Comment.filter_visible(responses, self.requester)
         Comment.set_flags(responses, self.requester)
         return responses
-
-    def add_up_vote(self, voter):
-        vote = Vote.objects.create(direction=Vote.UP, voter=voter, comment=self)
-
-    def add_down_vote(self, voter):
-        vote = Vote.objects.create(direction=Vote.DOWN, voter=voter, comment=self)
 
     def __str__(self):
         return str(self.id) + ": " + self.text[:30]
