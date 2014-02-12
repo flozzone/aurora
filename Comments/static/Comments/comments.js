@@ -25,7 +25,7 @@ $(document).ready( function() {
     registerStopPolling();
 
     $('.comment_list').each( function () {
-        $(this).find('*').off();
+//        $(this).find('*').off();
         registerElementsForCommentList($(this))
     });
 
@@ -65,7 +65,7 @@ function registerPolling() {
 }
 
 function registerStopPolling() {
-    $('#stopPolling').off();
+//    $('#stopPolling').off();
     $('#stopPolling').click( function(event) {
         event.preventDefault();
         stopPolling();
@@ -74,7 +74,7 @@ function registerStopPolling() {
 }
 
 function registerStartPolling() {
-    $('#startPolling').off();
+//    $('#startPolling').off();
     $('#startPolling').click( function(event) {
         event.preventDefault();
         startPolling();
@@ -111,7 +111,7 @@ function registerAddCommentFormButtons() {
 }
 
 function registerAddCommentFormButton($button) {
-    $button.off();
+//    $button.off();
     $button.click( function(event) {
         event.preventDefault();
 
@@ -176,7 +176,7 @@ function registerEditLinksForCommentList($comment_list) {
         }
 
         var $cancel = $('#edit_cancel');
-        $cancel.off();
+//        $cancel.off();
         $cancel.click( function(event) {
             event.preventDefault();
 
@@ -188,7 +188,7 @@ function registerEditLinksForCommentList($comment_list) {
         });
 
         var $save = $('#edit_save');
-        $save.off();
+//        $save.off();
         $save.click( function(event) {
             event.preventDefault();
 
@@ -306,7 +306,7 @@ function registerDeleteLinksForCommentList($comment_list) {
         }
 
         var $delete_cancel = $('#delete_cancel');
-        $delete_cancel.off();
+//        $delete_cancel.off();
         $delete_cancel.click( function(event) {
             event.preventDefault();
             endDelete();
@@ -315,7 +315,7 @@ function registerDeleteLinksForCommentList($comment_list) {
         });
 
         var $delete_confirm = $('#delete_confirm');
-        $delete_confirm.off();
+//        $delete_confirm.off();
         $delete_confirm.click( function(event) {
             event.preventDefault();
             deleteComment();
@@ -331,7 +331,7 @@ function getCsrfToken() {
 }
 
 function registerReplyButton() {
-    $('#button_post_reply').off();
+//    $('#button_post_reply').off();
     $('#button_post_reply').click( function(event) {
         event.preventDefault();
         $.ajax({
@@ -351,7 +351,7 @@ function registerReplyButton() {
 }
 
 function registerCancelReplyButton() {
-    $('#button_cancel_reply').off();
+//    $('#button_cancel_reply').off();
     $('#button_cancel_reply').click( function(event) {
         event.preventDefault();
         $('#replyForm').hide();
@@ -370,7 +370,7 @@ function hideCommentForm() {
 }
 
 function registerCancelCommentButton() {
-    $('#button_cancel_comment').off();
+//    $('#button_cancel_comment').off();
     $('#button_cancel_comment').click( function(event) {
         event.preventDefault();
         hideCommentForm();
@@ -381,7 +381,7 @@ function registerCancelCommentButton() {
 }
 
 function registerAddCommentButton() {
-    $('#button_add_comment').off();
+//    $('#button_add_comment').off();
     $('#button_add_comment').click(function (event) {
         event.preventDefault();
 
@@ -509,7 +509,7 @@ function startPolling() {
 }
 
 function registerTestButton() {
-    $('#myTest').off();
+//    $('#myTest').off();
     $('#myTest').on('click', function(){
 //        editElements.prop = 'bam';
 //        editElements();
@@ -527,7 +527,6 @@ function registerTestButton() {
 //        if(stop_update_poll) startPolling();
 //        else stopPolling();
         alert('nothing assigned');
-//        $('*').off();
         return false;
     });
 }
