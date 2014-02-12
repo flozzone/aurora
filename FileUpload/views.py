@@ -28,7 +28,7 @@ def file_upload(request):
             parser.feed(chunk)
         image = parser.close()
         THUMBNAIL_SIZE = (192, 192)
-        image = ImageOps.fit(image, THUMBNAIL_SIZE, Image.ANTIALIAS, centering=(0.0, 0.0))
+        image = ImageOps.fit(image, THUMBNAIL_SIZE, Image.ANTIALIAS, centering=(0.5, 0.5))
         with NamedTemporaryFile() as tmp:
             image.save(tmp, 'png')
             tmp_file = File(tmp)
