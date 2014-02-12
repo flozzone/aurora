@@ -8,7 +8,11 @@ var POLLING = {
     stopped: false,
     current_interval: 5000,
     active_interval: 5000,
-    idle_interval: 60000};
+    idle_interval: 60000,
+    increase_interval: function() {
+        POLLING.current_interval = Math.min(POLLING.current_interval * 2, POLLING.idle_interval);
+    }
+};
 
 var state = {
     modifying: false,
@@ -436,6 +440,9 @@ function updateCommentList(keepPolling, $comment_list) {
             if (json['polling_idle_interval']) {
                 POLLING.idle_interval = json['polling_idle_interval'];
             }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            POLLING.increase_interval();
         },
         complete: function (xhr, status) {
             if (keepPolling == true && !POLLING.stopped) {
