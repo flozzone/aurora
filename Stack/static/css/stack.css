@@ -7,6 +7,10 @@
     cursor: pointer;
 }
 
+.challenge.active{
+    cursor: pointer;
+}
+
 .received_review {
     cursor: pointer;
 }
@@ -16,10 +20,27 @@
 	max-width:940px;
 }
 
+
+
+.challenges_stack tr {
+}
+
 .challenges_stack tr td{
 /*	border:1px dotted silver; */
 	vertical-align:top;
-	max-height:96px;
+}
+
+.challenge-headline {
+	font-weight:bold;
+}
+
+
+
+.challenge-description {
+	height:60px;
+	width:100%;
+	overflow:hidden;
+	position:relative;
 }
 
 .singleChallenge {

@@ -19,7 +19,17 @@
       <img class="challenge_image active" src="{{ STATIC_URL }}img/{{ challenge_dict.challenge.image_url }}">
     </td>
     <td class="challenge active lineL" challenge_id="{{ challenge_dict.challenge.id }}">
-      <div style="font-weight:bold">{{ challenge_dict.challenge.title }}</div>{{ challenge_dict.challenge.description }}
+      <div class="challenge-headline">{{ challenge_dict.challenge.title }}</div>
+	  <div class="challenge-description">
+		{% if challenge_dict.challenge.description|wordcount > 50 %}
+		 	{{ challenge_dict.challenge.description | truncatewords:50}} 
+			<div class="challenge-fulldescription">
+				{{challenge_dict.challenge.description}}
+			</div>
+		{% else %}
+			{{challenge_dict.challenge.description}}
+		{% endif %}
+	  </div>
     </td>
   </tr>
 {% endfor %}
@@ -27,7 +37,17 @@
   <tr>
     <td class="lineD"><img class="challenge_image active" src="{{ STATIC_URL }}img/{{ challenge.image_url }}"></td>
     <td class="challenge active lineL" challenge_id="{{ challenge.id }}">
-      <div style="font-weight:bold">{{ challenge.title }}</div>{{ challenge.description }}</td>
+        <div class="challenge-headline">{{ challenge.title }}</div>
+  	  <div class="challenge-description">
+    		{% if challenge.description|wordcount > 50 %}
+    		 	{{ challenge.description | truncatewords:50}}
+				<div class="challenge-fulldescription">
+					{{challenge.description}}
+				</div>
+    		{% else %}
+    			{{challenge.description}}
+    		{% endif %}
+	  </div>
   </tr>
 {% endfor %}
 {% else %}
@@ -37,7 +57,18 @@
       <img class="challenge_image active" src="{{ STATIC_URL }}img/{{ challenge_dict.challenge.image_url }}">
     </td>
     <td class="challenge active lineL" challenge_id="{{ challenge_dict.challenge.id }}">
-      <div style="font-weight:bold">{{ challenge_dict.challenge.title }}</div>{{ challenge_dict.challenge.description }}
+        <div class="challenge-headline">{{ challenge_dict.challenge.title }}</div>
+  	  <div class="challenge-description">
+  		{% if challenge_dict.challenge.description|wordcount > 50 %}
+  		 	{{ challenge_dict.challenge.description | truncatewords:50}}
+			<div class="challenge-fulldescription">
+				{{challenge_dict.challenge.description}}
+			</div>
+  		{% else %}
+  			{{challenge_dict.challenge.description}}
+  		{% endif %}
+  	  	
+  	  </div>
     </td>
   </tr>
   <tr>
@@ -81,22 +112,22 @@
       <div class="peer_reviews" challenge_id="{{ challenge_dict.challenge.id }}">
 {% if challenge_dict.awesome %}
         <span class="received_review">
-          {{ challenge_dict.awesome }} <span style="font-style:italic">Awesome</span> &nbsp;
+          {{ challenge_dict.awesome }} <span style="font-style:italic">&quot;Great work&quot;</span> &nbsp;
         </span>
 {% endif %}
 {% if challenge_dict.success %}
         <span class="received_review">
-          {{ challenge_dict.success }} <span style="font-style:italic">Success</span> &nbsp;
-        </span>
-{% endif %}
-{% if challenge_dict.nothing %}
-        <span class="received_review">
-          {{ challenge_dict.nothing }} <span style="font-style:italic">»Lame«</span> &nbsp;
+          {{ challenge_dict.success }} <span style="font-style:italic">&quot;Good Work&quot;</span> &nbsp;
         </span>
 {% endif %}
 {% if challenge_dict.fail %}
         <span class="received_review">
-          {{ challenge_dict.fail }} <span style="font-style:italic">Epic Fail</span> &nbsp;
+          {{ challenge_dict.fail }} <span style="font-style:italic;">&quot;Barely Acceptable&quot;</span> &nbsp;
+        </span>
+{% endif %}
+{% if challenge_dict.nothing %}
+        <span class="received_review">
+          {{ challenge_dict.nothing }} <span style="font-style:italic;">&quot;Unacceptable&quot;</span> &nbsp;
         </span>
 {% endif %}
       </div>
@@ -116,7 +147,17 @@
   <tr>
     <td class="lineD below"><img class="challenge_image" src="{{ STATIC_URL }}img/{{ challenge.image_url }}"></td>
     <td class="challenge below" challenge_id="{{ challenge.id }}">
-      <div style="font-weight:bold">{{ challenge.title }}</div>{{ challenge.description }}
+        <div class="challenge-headline">{{ challenge.title }}</div>
+    	  <div class="challenge-description">
+      		{% if challenge.description|wordcount > 50 %}
+      		 	{{ challenge.description | truncatewords:50}}
+				<div class="challenge-fulldescription">
+					{{challenge.description}}
+				</div>
+      		{% else %}
+      			{{challenge.description}}
+      		{% endif %}
+  	  </div>
     </td>
   </tr>
 {% endfor %}
