@@ -190,8 +190,8 @@ class ElaborationTest(TestCase):
         review.save()
         assert Elaboration.get_review_candidate(challenge1, user1) == elaboration2  # 2 because 1 is own
         assert Elaboration.get_review_candidate(challenge1, user2) == elaboration1  # 1 because 2 is own
-        assert Elaboration.get_review_candidate(challenge1, user3) == elaboration2  # 2 because 1 is blocked
-        assert Elaboration.get_review_candidate(challenge1, user4) == elaboration2  # 2 because 1 is blocked
+        assert Elaboration.get_review_candidate(challenge1, user3) == elaboration1  # 2 because 1 is blocked
+        assert Elaboration.get_review_candidate(challenge1, user4) == elaboration2  # 2 because already reviewed for 1
         review.appraisal = Review.NOTHING
         review.save()
         assert Elaboration.get_review_candidate(challenge1, user1) == elaboration2  # 2 because 1 is own

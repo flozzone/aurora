@@ -67,7 +67,8 @@ class Elaboration(models.Model):
     def get_missing_reviews():
         missing_reviews = []
         for elaboration in Elaboration.objects.all():
-            if not elaboration.is_reviewed_2times() and elaboration.is_older_3days() and not elaboration.challenge.is_final_challenge():
+            if not elaboration.is_reviewed_2times() and elaboration.is_older_3days() \
+                and not elaboration.challenge.is_final_challenge() and not elaboration.user.is_staff:
                 missing_reviews.append(elaboration)
         return missing_reviews
 
@@ -151,8 +152,7 @@ class Elaboration(models.Model):
 
     def is_passing_peer_review(self):
         nothing_reviews = Review.objects.filter(elaboration=self, appraisal=Review.NOTHING)
-        fail_reviews = Review.objects.filter(elaboration=self, appraisal=Review.FAIL)
-        return not nothing_reviews and not fail_reviews
+        return not nothing_reviews
 
 
     @staticmethod

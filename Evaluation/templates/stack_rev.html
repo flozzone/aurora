@@ -1,5 +1,9 @@
 {% load comments %}
 
+{% block additional_headers %}
+  <script type="text/javascript" src="{{ STATIC_URL }}js/info_area.js"></script>
+{% endblock %}
+
 {% block content %}
 
     <table>
@@ -15,8 +19,9 @@
         </tr>
     </table>
 
+    <textarea id="editor_stack_rev">{{ elaboration.elaboration_text }}</textarea>
     <div class="spacer"></div>
-    <div>{{ elaboration.elaboration_text }}</div>
+
     <div class="spacer"></div>
     {% if elaboration %}
         {% render_additional_comment_list for elaboration %}

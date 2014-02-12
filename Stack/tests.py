@@ -220,7 +220,7 @@ class StackTest(TestCase):
 
         assert not self.stack.is_blocked(user2)
         review = Review(elaboration=elaboration2, submission_time=datetime.now(), reviewer=user1,
-                        appraisal=Review.FAIL)
+                        appraisal=Review.NOTHING)
         review.save()
         assert self.stack.is_blocked(user2)
         review.appraisal = Review.SUCCESS
@@ -229,7 +229,7 @@ class StackTest(TestCase):
 
         assert not self.stack.is_blocked(user3)
         review = Review(elaboration=elaboration3, submission_time=datetime.now(), reviewer=user1,
-                        appraisal=Review.FAIL)
+                        appraisal=Review.NOTHING)
         review.save()
         assert self.stack.is_blocked(user3)
         review.appraisal = Review.SUCCESS
@@ -238,7 +238,7 @@ class StackTest(TestCase):
 
         assert not self.stack.is_blocked(user4)
         review = Review(elaboration=elaboration4, submission_time=datetime.now(), reviewer=user1,
-                        appraisal=Review.FAIL)
+                        appraisal=Review.NOTHING)
         review.save()
         assert self.stack.is_blocked(user4)
         review.appraisal = Review.SUCCESS
@@ -247,7 +247,7 @@ class StackTest(TestCase):
 
         assert not self.stack.is_blocked(user1)
         review = Review(elaboration=elaboration1, submission_time=datetime.now(), reviewer=user2,
-                        appraisal=Review.FAIL)
+                        appraisal=Review.NOTHING)
         review.save()
         assert self.stack.is_blocked(user1)
         review.appraisal = Review.SUCCESS
@@ -255,7 +255,7 @@ class StackTest(TestCase):
 
         assert not self.stack.is_blocked(user1)
         review = Review(elaboration=elaboration1, submission_time=datetime.now(), reviewer=user3,
-                        appraisal=Review.FAIL)
+                        appraisal=Review.NOTHING)
         review.save()
         assert self.stack.is_blocked(user1)
         review.appraisal = Review.SUCCESS
@@ -277,7 +277,7 @@ class StackTest(TestCase):
 
         assert not self.stack.is_blocked(user2)
         review = Review(elaboration=elaboration6, submission_time=datetime.now(), reviewer=user1,
-                        appraisal=Review.FAIL)
+                        appraisal=Review.NOTHING)
         review.save()
         assert self.stack.is_blocked(user2)
         review.appraisal = Review.SUCCESS
@@ -286,7 +286,7 @@ class StackTest(TestCase):
 
         assert not self.stack.is_blocked(user3)
         review = Review(elaboration=elaboration7, submission_time=datetime.now(), reviewer=user1,
-                        appraisal=Review.FAIL)
+                        appraisal=Review.NOTHING)
         review.save()
         assert self.stack.is_blocked(user3)
         review.appraisal = Review.SUCCESS
@@ -295,7 +295,7 @@ class StackTest(TestCase):
 
         assert not self.stack.is_blocked(user4)
         review = Review(elaboration=elaboration8, submission_time=datetime.now(), reviewer=user1,
-                        appraisal=Review.FAIL)
+                        appraisal=Review.NOTHING)
         review.save()
         assert self.stack.is_blocked(user4)
         review.appraisal = Review.SUCCESS
@@ -304,7 +304,7 @@ class StackTest(TestCase):
 
         assert not self.stack.is_blocked(user1)
         review = Review(elaboration=elaboration5, submission_time=datetime.now(), reviewer=user2,
-                        appraisal=Review.FAIL)
+                        appraisal=Review.NOTHING)
         review.save()
         assert self.stack.is_blocked(user1)
         review.appraisal = Review.SUCCESS
@@ -312,7 +312,7 @@ class StackTest(TestCase):
 
         assert not self.stack.is_blocked(user1)
         review = Review(elaboration=elaboration5, submission_time=datetime.now(), reviewer=user3,
-                        appraisal=Review.FAIL)
+                        appraisal=Review.NOTHING)
         review.save()
         assert self.stack.is_blocked(user1)
         review.appraisal = Review.SUCCESS

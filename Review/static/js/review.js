@@ -1,6 +1,19 @@
 $(review_loaded);
 
 function review_loaded() {
+    tinymce.init({
+        // selector: "textarea#editor",
+        mode : "exact",
+        elements :"editor_review",
+        menubar: false,
+        statusbar: false,
+		toolbar: false,
+	    plugins: "autoresize",
+		autoresize_min_height: 100,
+		autoresize_max_height: 800,
+        readonly: 1
+    });
+
     $('form').bind("keypress", function (e) {
         if (e.keyCode == 13) {
             e.preventDefault();

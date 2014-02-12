@@ -5,7 +5,7 @@
  * e.g. vote up/down, promote, bookmark
  */
 
-//"use strict";
+"use strict";
 
 // TODO delete
 //var holyShit = {
@@ -62,7 +62,8 @@ function registerPromoteLinksForCommentList($comment_list) {
     }
 }
 
-var Bookmark = {
+// TODO chose one implementation for bookmarks, delete the other :)
+var Bookmarks = {
     url: '/bookmark_comment/',
 
     registerForCommentList: function ($comment_list) {
@@ -74,11 +75,12 @@ var Bookmark = {
     bookmark: function (event, $link) {
         event.preventDefault();
 
-        var comment_number = $(this).attr('data-comment_number');
-        sendValueForComment(url, comment_number, true);
+        var comment_number = $link.attr('data-comment_number');
+        sendValueForComment(this.url, comment_number, true);
 
+        var that = this;
         $link.off();
-        $link.click(this.unbookmark);
+        $link.click(function(event) { that.unbookmark(event, $link) });
         $link.toggleClass('comment_unbookmark comment_bookmark');
         $link.text('forget this');
 
@@ -89,10 +91,11 @@ var Bookmark = {
         event.preventDefault();
 
         var comment_number = $link.attr('data-comment_number');
-        sendValueForComment(url, comment_number, false);
+        sendValueForComment(this.url, comment_number, false);
 
+        var that = this;
         $link.off();
-        $link.click(this.bookmark);
+        $link.click(function(event) { that.bookmark(event, $link) });
         $link.toggleClass('comment_unbookmark comment_bookmark');
         $link.text('remember this');
 

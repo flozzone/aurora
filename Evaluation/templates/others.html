@@ -1,5 +1,5 @@
 {% block additional_headers %}
-  <script type="text/javascript" src="{{ STATIC_URL }}js/detail.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/info_area.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -10,7 +10,7 @@
         {{ elaboration.user.first_name }} {{ elaboration.user.last_name }}
         <div class="spacer"></div>
 
-        <div class="elaboration">{{ elaboration.elaboration_text }}</div></br>
+        <textarea id="editor_others">{{ elaboration.elaboration_text }}</textarea>
         <div class="spacer"></div>
 
         <div class="pagination">

@@ -2,6 +2,7 @@
 {% load comments %}
 
 {% block content %}
+    {% comments_boilerplate %}
     <div>
         <button id="myTest">Test Button</button>
         <button id="stopPolling">Staahhp polling godamit</button>
@@ -9,9 +10,11 @@
         <a href="/bookmarks" class="bookmarks_tab">Bookmarks</a>
     </div>
     <div id="comments_column_1">
-        {% render_comment_list for object %}
+        {% render_multi_comment_list for object %}
+{#        {% render_comment_list for object %}#}
     </div>
     <div id="comments_column_2">
-        {% render_additional_comment_list for object2 %}
+        {% render_multi_comment_list for object2 %}
+{#        {% render_additional_comment_list for object2 %}#}
     </div>
 {% endblock content %}
