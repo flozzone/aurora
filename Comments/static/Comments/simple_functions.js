@@ -5,7 +5,7 @@
  * e.g. vote up/down, promote, bookmark
  */
 
-"use strict";
+//"use strict";
 
 // TODO delete
 //var holyShit = {
@@ -39,7 +39,7 @@ function registerPromoteLinksForCommentList($comment_list) {
         var comment_number = $(this).attr('data-comment_number');
         sendValueForComment('/promote_comment/', comment_number, true);
 
-//        $(this).off();
+        $(this).off();
         $(this).click( demote );
         $(this).toggleClass('comment_demote comment_promote');
         $(this).find('i').toggleClass('gold ungold');
@@ -53,7 +53,7 @@ function registerPromoteLinksForCommentList($comment_list) {
         var comment_number = $(this).attr('data-comment_number');
         sendValueForComment('/promote_comment/', comment_number, false);
 
-//        $(this).off();
+        $(this).off();
         $(this).click( promote );
         $(this).toggleClass('comment_demote comment_promote');
         $(this).find('i').toggleClass('gold ungold');
@@ -79,7 +79,7 @@ var Bookmarks = {
         sendValueForComment(this.url, comment_number, true);
 
         var that = this;
-//        $link.off();
+        $link.off();
         $link.click(function(event) { that.unbookmark(event, $link) });
         $link.toggleClass('comment_unbookmark comment_bookmark');
         $link.text('forget this');
@@ -94,7 +94,7 @@ var Bookmarks = {
         sendValueForComment(this.url, comment_number, false);
 
         var that = this;
-//        $link.off();
+        $link.off();
         $link.click(function(event) { that.bookmark(event, $link) });
         $link.toggleClass('comment_unbookmark comment_bookmark');
         $link.text('remember this');
@@ -115,7 +115,7 @@ function registerBookmarkLinksForCommentList($comment_list) {
         var comment_number = $(this).attr('data-comment_number');
         sendValueForComment(url, comment_number, true);
 
-//        $(this).off();
+        $(this).off();
         $(this).click( unbookmark );
         $(this).toggleClass('comment_unbookmark comment_bookmark');
         $(this).text('forget this');
@@ -129,7 +129,7 @@ function registerBookmarkLinksForCommentList($comment_list) {
         var comment_number = $(this).attr('data-comment_number');
         sendValueForComment(url, comment_number, false);
 
-//        $(this).off();
+        $(this).off();
         $(this).click( bookmark );
         $(this).toggleClass('comment_unbookmark comment_bookmark');
         $(this).text('remember this');
