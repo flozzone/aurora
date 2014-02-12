@@ -2,6 +2,7 @@ $(stack_loaded);
 
 function stack_loaded() {
     $(".challenge_image").click(challenge_clicked);
+	$(".challenge").click(challenge_clicked);
     $(".review_box.active").click(review_box_clicked);
     $(".review_box.in_progress").click(review_box_clicked);
     $(".received_review").click(received_review_clicked);

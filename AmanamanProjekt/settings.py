@@ -182,3 +182,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 "django.contrib.messages.context_processors.messages",
     "AmanamanProjekt.context_processor.general_context_processor",
 )
+
+try:
+    from local_settings import *
+except ImportError:
+    pass
