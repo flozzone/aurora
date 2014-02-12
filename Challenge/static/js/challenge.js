@@ -4,10 +4,16 @@ function challenge_loaded() {
     var challenge_id = $('.challenge').attr('id');
     tinymce.init({
         selector: "textarea#editor",
+		content_css : "../static/css/content.css",
+        paste_auto_cleanup_on_paste : true,
+		paste_retain_style_properties : "font-size,bold,italic",
+		paste_text_linebreaktype: "p",
         menubar: false,
+	    theme : 'modern',
         statusbar: false,
-		toolbar1: "undo redo | bold italic fontsizeselect | alignleft aligncenter | bullist numlist indent outdent | subscript superscript | table",
-	    plugins: "autoresize table",
+	    fontsize_formats: "0.8em 1em 1.2em 1.6em 2em",
+		toolbar1: "undo redo | bold italic | fontsizeselect | alignleft aligncenter | bullist numlist indent outdent | subscript superscript | table",
+	    plugins: "autoresize table paste",
 		autoresize_min_height: 200,
 		autoresize_max_height: 800,
         setup: function (editor) {

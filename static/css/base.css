@@ -273,6 +273,7 @@ button {
     appearance:none;
 	background-color:white;
 	border:none;
+	cursor:pointer;
 }
 
 .comment_section {

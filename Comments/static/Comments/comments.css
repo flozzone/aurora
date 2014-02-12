@@ -262,9 +262,20 @@
 
 
 #comments_column_1 {
-    float: left;
-    width: 400px;
+	float:left;
+    width: 680px;
     overflow: auto;
+	margin-left:2em;
+	margin-top:2em;
+}
+
+#info_column {
+	float:left;
+	width:450px;
+	margin-top:2em;
+	margin-left:1em;
+	padding-left:1em;
+	border-left:1px dashed silver;
 }
 
 #comments_column_2 {

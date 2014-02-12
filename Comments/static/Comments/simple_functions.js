@@ -5,7 +5,7 @@
  * e.g. vote up/down, promote, bookmark
  */
 
-"use strict";
+//"use strict";
 
 // TODO delete
 //var holyShit = {
