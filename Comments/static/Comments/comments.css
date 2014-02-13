@@ -8,7 +8,6 @@
 }
 
 
-
 .comment_form > p > textarea, .add_reply_form > p > textarea {
 	width:100%;
 	border:none;
@@ -30,6 +29,7 @@
  
 .comment_form, .add_reply_form{
 	margin-top:20px;
+	margin-bottom:20px;
 }
 
 .comment_form > p > label, .add_reply_form > p > label {
