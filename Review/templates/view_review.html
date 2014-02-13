@@ -11,7 +11,13 @@
 		<div class="question">{{ question.question }}</div>
 		<div class="answer">{% if question.answer %}Yes{% else %}No{% endif %}</div>
 		{% endfor %}
-		<div class="appraisal Verdict_{{ review_data.appraisal }}"><i class="fa fa-arrow-right"></i> Final verdict: <b>{{ review_data.appraisal }}</b></div>
+		<div class="appraisal Verdict_{{ review_data.appraisal }}"><i class="fa fa-arrow-right"></i> Final verdict: <b>
+		{% if review_data.appraisal = "Awesome" %} Great work 
+		{% elif review_data.appraisal = "Success" %} Good Work
+		{% elif review_data.appraisal = "Fail" %} Barely acceptable
+		{% elif review_data.appraisal = "Not even trying" %} Unacceptable
+		{% endif %}
+		</b></div>
 	</div>	
 		<div class="comment_section">
 			<b>Comments</b><br>
