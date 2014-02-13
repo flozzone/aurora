@@ -415,12 +415,12 @@ def init_data():
         end=datetime(2013, 2, 17, 17, 20, 17, 345952),
         active=True,
     ).save()
-    Lecture(
-        course=gsi,
-        start=datetime(2013, 2, 24, 15, 00, 17, 345952),
-        end=datetime(2014, 2, 24, 17, 20, 17, 345952),
-        active=True,
-    ).save()
+#    Lecture(
+#        course=gsi,
+#        start=datetime(2013, 2, 24, 15, 00, 17, 345952),
+#        end=datetime(2014, 2, 24, 17, 20, 17, 345952),
+#        active=True,
+#    ).save()
     Lecture(
         course=hci,
         start=datetime(2013, 1, 15, 15, 00, 17, 345952),
