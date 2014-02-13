@@ -28,8 +28,8 @@ class Command(BaseCommand):
 def init_data():
     CommentsConfig.setup()
 
-    number_of_users = 15
-    number_of_tutors = 15
+    number_of_users = 50
+    number_of_tutors = 50
     users = []
     dummy_users = []
     tutors = []
