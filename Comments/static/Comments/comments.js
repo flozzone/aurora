@@ -193,7 +193,10 @@ function registerEditLinksForCommentList($comment_list) {
             event.preventDefault();
 
             var text = $commentText.html().trim()
-            text = text.replace(/(<br><\/br>)|(<br>)|(<br \/>)|(<p>)|(<\/p>)|(<div>)|(<\/div>)/g, "\r\n");
+            text = text.replace(/<div>[\s\r\n]*<br>[\s\r\n]*<\/div>/g, "<br>");
+            text = text.replace(/(<\/p>)|(<\/div>)/g, "");
+            text = text.replace(/(<br><\/br>)|(<br>)|(<br \/>)|(<p>)|(<div>)/g, "\r\n");
+//            text = text.replace(/(<br><\/br>)|(<br>)|(<br \/>)|(<p>)|(<\/p>)|(<div>)|(<\/div>)/g, "\r\n");
 
             var data = {comment_id: $comment.attr('data-comment_number'),
                         text: text}
