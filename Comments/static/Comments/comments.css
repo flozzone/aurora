@@ -7,6 +7,11 @@
 	color:red;
 }
 
+.bookmark_list {
+	padding:1em;
+	width:680px;
+}
+
 
 .comment_form > p > textarea, .add_reply_form > p > textarea {
 	width:100%;
@@ -280,7 +285,7 @@
 	float:left;
     width: 680px;
     overflow: auto;
-	margin-left:2em;
+	margin-left:1em;
 	margin-top:2em;
 }
 

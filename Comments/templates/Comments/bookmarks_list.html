@@ -8,9 +8,13 @@
 {% endblock %}
 
 {% block content %}
-Bookmarks :)
 
-<div id="comments{{ id_suffix }}" class="comment_list" data-ref_type="{{ ref_type }}" data-ref_id="{{ ref_id }}" data-revision="{{ revision }}">
+<div class="bookmark_list">
+
+	<div style="background:black;color:white; margin-bottom:0.25em;padding:0.1em"><b>Plain (experimental) list of bookmarked comments</b></div> 
+	<span style="color:gray">You can Bookmark comments by clicking<span class="button">REMEMBER THIS</span> in the bottom toolbar of a comment </span>
+
+	<div id="comments{{ id_suffix }}" class="comment_list" data-ref_type="{{ ref_type }}" data-ref_id="{{ ref_id }}" data-revision="{{ revision }}">
     {% for comment in comment_list %}
 {#        <div class="comment_with_responses">#}
             {% include 'Comments/comment.html' %}
@@ -19,5 +23,6 @@ Bookmarks :)
 {#            {% endfor %}#}
 {#        </div>#}
     {% endfor %}
+	</div>
 </div>
 {% endblock content %}
