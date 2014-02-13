@@ -64,7 +64,7 @@ function submit_form(event) {
 
 
 $(function(){
-	('.focusable').focus(function(){
+	$('.focusable').focus(function(){
 		$(this).parents('.formRow').addClass("currentRow");
 	}).blur(function(){
 		$(this).parents('.formRow').removeClass("currentRow");
