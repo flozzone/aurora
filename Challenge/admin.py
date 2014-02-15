@@ -1,4 +1,22 @@
 from django.contrib import admin
 from Challenge.models import *
 
-admin.site.register(Challenge)
+class ChallengeAdmin(admin.ModelAdmin):
+    fieldsets = [
+        (
+            None, {
+                'fields': [
+                    'title',
+                    'subtitle',
+                    'prerequisite',
+                    'description',
+                    'image_url',
+                    'accepted_files',
+                ]
+            }
+        ),
+    ]
+    list_display = ('id', 'title', 'subtitle', 'prerequisite', 'description', 'image_url', 'accepted_files', )
+
+admin.site.register(Challenge, ChallengeAdmin)
+

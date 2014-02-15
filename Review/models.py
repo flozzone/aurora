@@ -20,6 +20,9 @@ class Review(models.Model):
     )
     appraisal = models.CharField(max_length=1, choices=APPRAISAL_CHOICES, null=True)
 
+    def __unicode__(self):
+        return str(self.id)
+
     def get_elaboration_author(self):
         return self.elaboration.user
 

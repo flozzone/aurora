@@ -50,6 +50,9 @@ class Challenge(models.Model):
         7: "Evaluation received this stack is completed"
     }
 
+    def __unicode__(self):
+        return str(self.title)
+
     def get_next(self):
         next_challenges = Challenge.objects.filter(prerequisite=self)
         if next_challenges:

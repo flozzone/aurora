@@ -16,6 +16,9 @@ class Elaboration(models.Model):
     elaboration_text = models.TextField(null=True)
     submission_time = models.DateTimeField(null=True)
 
+    def __unicode__(self):
+        return str(self.id)
+
     def is_submitted(self):
         if self.submission_time:
             return True
