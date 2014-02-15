@@ -7,6 +7,7 @@ from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
+from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import CharField
 from django.db.models import Q
@@ -32,6 +33,12 @@ def evaluation(request):
         if not puser.avatar:
             puser.get_gravatar()
 
+    if request.session.get('selection'):
+        elaborations = []
+        for serialized_elaboration in serializers.deserialize('json', request.session.get('elaborations', {})):
+            elaborations.append(serialized_elaboration.object)
+        overview = render_to_string('overview.html', {'elaborations': elaborations})
+
     challenges = Challenge.objects.all()
     return render_to_response('evaluation.html',
                               {'challenges': challenges,
@@ -41,7 +48,8 @@ def evaluation(request):
                                'evaluated_non_adequate_work': Elaboration.get_evaluated_non_adequate_work(),
                                'non_adequate_reviews': Elaboration.get_non_adequate_reviews(),
                                'complaints': Elaboration.get_non_adequate_reviews(),
-                               'awesome': Elaboration.get_awesome()
+                               'awesome': Elaboration.get_awesome(),
+                               'overview': overview,
                               },
                               context_instance=RequestContext(request))
 
