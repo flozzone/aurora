@@ -33,6 +33,7 @@ def evaluation(request):
         if not puser.avatar:
             puser.get_gravatar()
 
+    overview = ""
     if request.session.get('selection'):
         elaborations = []
         for serialized_elaboration in serializers.deserialize('json', request.session.get('elaborations', {})):
