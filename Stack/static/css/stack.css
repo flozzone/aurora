@@ -1,3 +1,16 @@
+.review_token {
+	padding:0px 8px;
+	border-radius:20px;
+	background-color:#C5FFB6;
+	border:1px solid #359440;
+}
+
+.review_token.red {
+	color:white;
+	background-color:red;
+	border:1px solid darkred;
+}
+
 .challenge_image {
 	width:96px;
 	height:96px;

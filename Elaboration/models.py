@@ -16,6 +16,9 @@ class Elaboration(models.Model):
     elaboration_text = models.TextField(null=True)
     submission_time = models.DateTimeField(null=True)
 
+    def __unicode__(self):
+        return str(self.id)
+
     def is_submitted(self):
         if self.submission_time:
             return True
@@ -83,7 +86,7 @@ class Elaboration(models.Model):
     @staticmethod
     def get_non_adequate_work():
         non_adequate_work = []
-        for review in Review.objects.filter(appraisal=Review.FAIL):
+        for review in Review.objects.filter(appraisal=Review.NOTHING):
             if not review.elaboration.is_evaluated():
                 non_adequate_work.append(review.elaboration)
         return non_adequate_work
@@ -91,7 +94,7 @@ class Elaboration(models.Model):
     @staticmethod
     def get_evaluated_non_adequate_work():
         non_adequate_work = []
-        for review in Review.objects.filter(appraisal=Review.FAIL):
+        for review in Review.objects.filter(appraisal=Review.NOTHING):
             final_challenge = review.elaboration.challenge.get_final_challenge()
             final_elaboration = final_challenge.get_elaboration(review.elaboration.user)
             if final_elaboration:

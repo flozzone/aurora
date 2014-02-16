@@ -4,6 +4,12 @@
 	height:1em;
 }
 
+.pagination_others {
+	clear:both;
+	width:99%;
+	height:1em;
+}
+
 .comments {
 	border-top:1px dashed silver;
 	border-bottom:1px dashed silver;
@@ -313,4 +319,11 @@ th {
 .gravatar {
 	width:32px;
 	height:32px;
+}
+
+.back {
+	cursor:pointer;
+    width: auto;
+    float: left;
+    margin-right: 5px;
 }

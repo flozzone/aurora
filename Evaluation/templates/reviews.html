@@ -14,10 +14,10 @@
         {{ review.reviewer.first_name }} {{ review.reviewer.last_name }}
 
         <div class="appraisal">
-            <input type="radio" name="reviewgroup{{ stack }}{{ review.id }}" onclick="set_appraisal({{ review.id }}, 'A')" {% if review.appraisal == 'A' %} checked {% endif %}>Awesome</input>
-            <input type="radio" name="reviewgroup{{ stack }}{{ review.id }}" onclick="set_appraisal({{ review.id }}, 'S')" {% if review.appraisal == 'S' %} checked {% endif %}>Success</input>
-            <input type="radio" name="reviewgroup{{ stack }}{{ review.id }}" onclick="set_appraisal({{ review.id }}, 'F')" {% if review.appraisal == 'F' %} checked {% endif %}>Fail</input>
-            <input type="radio" name="reviewgroup{{ stack }}{{ review.id }}" onclick="set_appraisal({{ review.id }}, 'N')" {% if review.appraisal == 'N' %} checked {% endif %}>Not even trying</input>
+            <input type="radio" name="reviewgroup{{ stack }}{{ review.id }}" onclick="set_appraisal({{ review.id }}, 'A')" {% if review.appraisal == 'A' %} checked {% endif %}>Great work</input>
+            <input type="radio" name="reviewgroup{{ stack }}{{ review.id }}" onclick="set_appraisal({{ review.id }}, 'S')" {% if review.appraisal == 'S' %} checked {% endif %}>Good work</input>
+            <input type="radio" name="reviewgroup{{ stack }}{{ review.id }}" onclick="set_appraisal({{ review.id }}, 'F')" {% if review.appraisal == 'F' %} checked {% endif %}>Barely acceptable work</input>
+            <input type="radio" name="reviewgroup{{ stack }}{{ review.id }}" onclick="set_appraisal({{ review.id }}, 'N')" {% if review.appraisal == 'N' %} checked {% endif %}>Unacceptable</input>
         </div>
 
         {% if review %}

@@ -6,11 +6,11 @@
             <td><img src="{{ STATIC_URL }}img/{{ elaboration.challenge.image_url }}" width="32" height="32"></td>
             <td>{{ elaboration.challenge.title }}</td>
             <td>{{ elaboration.submission_time }}</td>
-            <td><div title="Success" class="success_reviews">{{ elaboration.get_success_reviews|length }}</div></td>
-            <td><div title="Not even trying" class="notry_reviews">{{ elaboration.get_nothing_reviews|length }}</div></td>
-            <td><div title="Fail" class="fail_reviews">{{ elaboration.get_fail_reviews|length }}</div></td>
-            <td><div title="Public Comments" class="visible_comments">{{ elaboration.get_visible_comments|length }}</div></td>
-            <td><div title="Private Comments" class="invisible_comments">{{ elaboration.get_invisible_comments|length }}</div></td>
+            <td><div title="Good work" class="success_reviews">{{ elaboration.get_success_reviews|length }}</div></td>
+            <td><div title="Barely acceptable work" class="fail_reviews">{{ elaboration.get_fail_reviews|length }}</div></td>
+            <td><div title="Unacceptable" class="notry_reviews">{{ elaboration.get_nothing_reviews|length }}</div></td>
+            <td><div title="Public comments" class="visible_comments">{{ elaboration.get_visible_comments|length }}</div></td>
+            <td><div title="Private comments" class="invisible_comments">{{ elaboration.get_invisible_comments|length }}</div></td>
         </tr>
     {% endfor %}
     </table>

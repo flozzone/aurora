@@ -14,6 +14,12 @@ $(function() {
 });
 
 $(function() {
+   $(".back").click(function(event) {
+       window.location.href = "/evaluation/";
+   });
+});
+
+$(function() {
    $(".stack").click(function(event) {
        var url = '/stack';
         $.get(url, function (data) {

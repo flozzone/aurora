@@ -8,6 +8,9 @@ class Course(models.Model):
     description = models.TextField()
     course_number = models.CharField(max_length=100)
 
+    def __unicode__(self):
+        return str(self.title)
+
     def get_course_challenges(self):
         challenges = []
         ccrs = CourseChallengeRelation.objects.filter(course=self)

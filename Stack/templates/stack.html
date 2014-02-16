@@ -112,22 +112,22 @@
       <div class="peer_reviews" challenge_id="{{ challenge_dict.challenge.id }}">
 {% if challenge_dict.awesome %}
         <span class="received_review">
-          {{ challenge_dict.awesome }} <span style="font-style:italic">&quot;Great work&quot;</span> &nbsp;
+          {{ challenge_dict.awesome }} x <span class="review_token">Great work</span> &nbsp;
         </span>
 {% endif %}
 {% if challenge_dict.success %}
         <span class="received_review">
-          {{ challenge_dict.success }} <span style="font-style:italic">&quot;Good Work&quot;</span> &nbsp;
+          {{ challenge_dict.success }} x <span class="review_token">Good Work</span> &nbsp;
         </span>
 {% endif %}
 {% if challenge_dict.fail %}
         <span class="received_review">
-          {{ challenge_dict.fail }} <span style="font-style:italic;">&quot;Barely Acceptable&quot;</span> &nbsp;
+          {{ challenge_dict.fail }} x <span class="review_token">Barely Acceptable</span> &nbsp;
         </span>
 {% endif %}
 {% if challenge_dict.nothing %}
         <span class="received_review">
-          {{ challenge_dict.nothing }} <span style="font-style:italic;color:white; background-color:red;">&quot;Unacceptable&quot;</span> &nbsp;
+          {{ challenge_dict.nothing }} x <span class="review_token red">Unacceptable</span> &nbsp;
         </span>
 {% endif %}
       </div>

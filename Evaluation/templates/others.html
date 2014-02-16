@@ -1,3 +1,5 @@
+{% load comments %}
+
 {% block additional_headers %}
   <script type="text/javascript" src="{{ STATIC_URL }}js/info_area.js"></script>
 {% endblock %}
@@ -13,9 +15,14 @@
         <textarea id="editor_others">{{ elaboration.elaboration_text }}</textarea>
         <div class="spacer"></div>
 
-        <div class="pagination">
-            {% if prev != None %}<div class="paginator_others prev" id="{{ prev }}">previous</div>{% endif %}
-            {% if next %}<div class="paginator_others next" id="{{ next }}">next</div>{% endif %}
+        <div class="spacer"></div>
+        {% if elaboration %}
+            {% render_multi_comment_list for elaboration %}
+        {% endif %}
+
+        <div class="pagination_others">
+            {% if prev != None %}<div class="paginator_others prev" id="{{ prev }}"><i class="fa fa-angle-double-left"></i> previous</div>{% endif %}
+            {% if next %}<div class="paginator_others next" id="{{ next }}">next <i class="fa fa-angle-double-right"></i></div>{% endif %}
         </div>
     {% endif %}
 
