@@ -7,6 +7,7 @@
 	
     <div id="comments_column_1">
 		<div style="background:black;color:white; margin-bottom:1em;padding:0.1em"><b>Open Newsfeed </b></div>
+        <div>This feed has {% comments_count for object %} visible and undeleted comments for you</div>
         {% render_multi_comment_list for object %}
     </div>
 	<div id="info_column">

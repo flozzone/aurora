@@ -118,7 +118,7 @@ class Comment(models.Model):
             object_id=ref_object_id)
 
         visible = Comment.filter_visible(queryset_all, requester)
-        visible = Comment.filter_deleted(visible)
+        visible = Comment.filter_deleted_trees(visible)
         visible = visible.order_by('-post_date')
 
         # Only when all query actions are done we can set custom properties to
@@ -140,6 +140,11 @@ class Comment(models.Model):
         # Comment.set_permission_flags(visible_comments, requester)
         Comment.set_flags(visible_comments, requester)
         return visible_comments
+
+    @staticmethod
+    def query_number_of_all(ref_object_id, ref_type_id, requester):
+        queryset = Comment.query_all(ref_object_id, ref_type_id, requester)
+        return queryset.filter(deleter=None).count()
 
     @staticmethod
     def query_bookmarks(requester):
@@ -192,7 +197,7 @@ class Comment(models.Model):
                 comment.deletable = False
 
     @staticmethod
-    def filter_deleted(comment_set):
+    def filter_deleted_trees(comment_set):
         # for every deleted parent
         for comment in comment_set.exclude(deleter=None):
             # if not deleted responses <= 0

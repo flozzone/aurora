@@ -83,6 +83,13 @@ def render_multi_comment_list(parser, token):
     return MultiCommentListNode(ref_token)
 
 
+@register.simple_tag(takes_context=True)
+def comments_count(context, for_string, ref_obj):
+    ref_id, ref_type = ref_object_to_id_type(ref_obj)
+    requester = context['user']
+    return Comment.query_number_of_all(ref_id, ref_type, requester)
+
+
 def handle_tokens(token):
     tokens = token.split_contents()
     usage = 'template tag has to look like this: {% ' \
@@ -97,10 +104,18 @@ def handle_tokens(token):
     return tokens[2]
 
 
-def get_reference_type_pk(ref_object):
+def token_to_ref_id_type(token, context):
+    reference_var = template.Variable(token)
+    ref_object = reference_var.resolve(context)
+    ref_type = ContentType.objects.get_for_model(ref_object)
+    ref_id = ref_type.id
+    return ref_id, ref_type
+
+
+def ref_object_to_id_type(ref_object):
     object_type = ContentType.objects.get_for_model(ref_object)
     object_pk = ref_object.id
-    return object_type, object_pk
+    return object_pk, object_type.id
 
 
 @register.inclusion_tag('Comments/comments_with_forms.html')

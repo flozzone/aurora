@@ -9,4 +9,4 @@ sudo apt-get install -y python-software-properties
 sudo apt-get install -y ansible
 
 echo 'localhost              ansible_connection=local' > /home/vagrant/hosts
-ansible-playbook /vagrant/provision_vagrant_vm.yml -i /home/vagrant/hosts
+PYTHONUNBUFFERED=1 ansible-playbook /vagrant/provision_vagrant_vm.yml -i /home/vagrant/hosts
