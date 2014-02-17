@@ -23,7 +23,9 @@
 
   <div class="qa_section">
     <div class="comments">
-      <span><b {% if not elaboration.is_submitted %}onclick="$('#qa').toggle('fast');"><i class="fa fa-toggle-down"></i{% endif %}> Challenge Q+A Section</b></span>
+      <span><b {% if not elaboration.is_submitted %}onclick="$('#qa').toggle('fast');"><i class="fa fa-toggle-down"></i{% endif %}> 
+		  Challenge Q+A Section</b> - {% comments_count for challenge %} comments so far
+	  </span>
 
       <div id="qa" class="challenge_comments">If you have questions about the description of this challenge, post
 	  them here. The course organizers will answer as soon as possible.
@@ -91,20 +93,20 @@
     {% endif %}
 {#    <div class="elaboration_text">{{ elaboration.elaboration_text |safe }}</div> <!-- TODO: this has to be secure -->#}
     <textarea id="editor_challenge">{{ elaboration.elaboration_text|safe }}</textarea>
-  {% endif %}
-  {% if evaluation %}
+    {% if evaluation %}
     <div class="comments">
       <div class="evaluation_text">Evaluation text: {{ evaluation.evaluation_text }}</div>
     </div>
+    {% endif %}
     <div class="comment_section">
       <div class="comments">
         <div class="elaboration_comments">
-          <b>Discuss with LVA team</b>
+          <b>Discuss with LVA team</b> - {% comments_count for elaboration %} comments so far
           {% render_additional_comment_list for elaboration %}
         </div>
       </div>
     </div>
-  {% endif %}
-  {% endif %}
+    {% endif %}
+{% endif %}
   
 </div>
