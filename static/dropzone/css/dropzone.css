@@ -157,8 +157,6 @@
   min-height: 170px;
   border-radius: 0px;
   padding: 23px;
-  backgr
-  box-shadow: inset 0px 10px 10px -10px rgba(0,0,0,0.8), inset 0px -10px 10px -10px rgba(0,0,0,0.8);
 }
 
 .dropzone .dz-default.dz-message {

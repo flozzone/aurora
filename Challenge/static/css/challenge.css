@@ -174,12 +174,14 @@ h1 {
 .dropzone {
     margin-top: 15px;
     margin-bottom: 15px;
-    min-height: 250px;
-    background-color: grey;
+    min-height: 150px;
+    background-color: #ddd;
+	box-shadow: inset 0px 4px 10px 1px rgba(0,0,0,0.8);
 }
 
 .dropzone .dz-default.dz-message {
-    top: 300px;
+    top: 275px;
+	left:200px;
 }
 
 .history_headline {
