@@ -1,15 +1,14 @@
 $(stack_loaded);
 
 function stack_loaded() {
-    $(".challenge_image").click(challenge_clicked);
-	$(".challenge").click(challenge_clicked);
+	$(".one_challenge").click(challenge_clicked);
     $(".review_box.active").click(review_box_clicked);
     $(".review_box.in_progress").click(review_box_clicked);
     $(".received_review").click(received_review_clicked);
 }
 
 function challenge_clicked(event) {
-    var challenge = $(event.target).parent().parent().find('.challenge');
+    var challenge = $(event.target);
     if (!challenge.hasClass("active")) {
         return;
     }
