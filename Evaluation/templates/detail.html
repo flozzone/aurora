@@ -40,7 +40,7 @@
         <div class="spacer"></div>
 
         {% if evaluation %}
-		Written feedback
+		Written feedback<div class="error"></div>
             <form method="post">
                 {% csrf_token %}
                 {% if evaluation.submission_time %}

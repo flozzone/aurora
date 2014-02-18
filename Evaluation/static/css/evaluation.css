@@ -253,7 +253,7 @@ th {
     -moz-box-sizing: border-box;
 }
 
-.success_reviews, .notry_reviews, .fail_reviews {
+.awesome_reviews, .success_reviews, .notry_reviews, .fail_reviews {
     border-radius: 3px;
     height: 25px;
     padding-top: 3px;
@@ -262,17 +262,22 @@ th {
     margin-right: 3px;
 }
 
+.awesome_reviews {
+    border: 1px solid darkmagenta;
+    background-color: magenta;
+}
+
 .success_reviews {
     border: 1px solid green;
     background-color: greenyellow;
 }
 
-.notry_reviews {
+.fail_reviews {
     border: 1px solid orangered;
     background-color: orange;
 }
 
-.fail_reviews {
+.notry_reviews {
     border: 1px solid red;
     background-color: #F08080;
 }
@@ -286,7 +291,7 @@ th {
 }
 
 .visible_comments, .invisible_comments {
-    border-radius: 10px;
+    border-radius: 3px;
     height: 25px;
     padding-top: 3px;
     text-align: center;
@@ -326,4 +331,9 @@ th {
     width: auto;
     float: left;
     margin-right: 5px;
+}
+
+.error {
+    color: red;
+    float: right;
 }
