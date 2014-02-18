@@ -58,6 +58,20 @@ $(function() {
 $(function() {
    $(".submit_evaluation").click(function(event) {
         event.preventDefault();
+
+        if ($.trim($(".evaluation").text()).length == 0) {
+            $(".error").html("you forgot feedback!");
+            return;
+        }
+        if ($.trim($(".points").text()).length == 0) {
+            $(".error").html("you forgot points!");
+            return;
+        }
+        if (!$.isNumeric($.trim($(".points").text()))) {
+            $(".error").html("points must be numeric!");
+            return;
+        }
+
         var data = {
             elaboration_id: $(event.target).attr('id'),
             evaluation_text: $(".evaluation").text(),
@@ -120,6 +134,11 @@ function DelayedAutoSave(elaboration_id) {
 }
 
 function AutoSave(elaboration_id) {
+    if (!$.isNumeric($.trim($(".points").text()))) {
+        $(".error").html("points must be numeric!");
+        return;
+    }
+
     var data = {
         elaboration_id: elaboration_id,
         evaluation_text: $(".evaluation").text().replace(/\n|<.*?>/g,' '),
