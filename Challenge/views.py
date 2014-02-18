@@ -92,6 +92,7 @@ def create_context_challenge(request):
         if Elaboration.objects.filter(challenge=challenge, user=user).exists():
             elaboration = Elaboration.objects.get(challenge=challenge, user=user)
             data['elaboration'] = elaboration
+            data['accepted'] = elaboration.is_started()
             data['success'] = elaboration.get_success_reviews()
             data['nothing'] = elaboration.get_nothing_reviews()
             data['fail'] = elaboration.get_fail_reviews()

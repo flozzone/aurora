@@ -7,6 +7,7 @@ from django.db.models import Q
 from Comments.models import Comment
 from Evaluation.models import Evaluation
 from Review.models import Review
+from FileUpload.models import UploadFile
 
 
 class Elaboration(models.Model):
@@ -18,6 +19,13 @@ class Elaboration(models.Model):
 
     def __unicode__(self):
         return str(self.id)
+
+    def is_started(self):
+        if self.elaboration_text:
+            return True
+        if UploadFile.objects.filter(elaboration=self):
+            return True
+        return False
 
     def is_submitted(self):
         if self.submission_time:
