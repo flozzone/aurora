@@ -18,6 +18,7 @@
 	<div class="challenge_list">
 		{% for challenge_dict in challenges_active %}
 			<div class="one_challenge active" challenge_id="{{ challenge_dict.challenge.id }}">
+				<div class="challenge_top_bracket">&nbsp;</div>
 				<div class="challenge_image_container" challenge_id="{{ challenge_dict.challenge.id }}">
 		    		<img class="challenge_image active" src="{{ STATIC_URL }}img/{{ challenge_dict.challenge.image_url }}">
 				</div>
