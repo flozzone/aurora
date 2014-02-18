@@ -11,6 +11,7 @@ function file_upload_loaded() {
     var read_write_options = {
         maxFilesize: 100, // MB
         addRemoveLinks: true,
+		dictRemoveFile: 'REMOVE',
         acceptedFiles: $('.file_upload').attr('accepted_files'),
         init: function () {
             this.on("success", function (file, response) {
