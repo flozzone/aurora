@@ -14,26 +14,53 @@
 .challenge_image {
 	width:96px;
 	height:96px;
+	border-radius: 64px;
+	border:1px solid silver;
+	pointer-events:none;
 }
 
-.challenge_image.active{
-    cursor: pointer;
-}
-
-.challenge.active{
-    cursor: pointer;
+.challenge_image_container {
+	float:left;
+	pointer-events:none
 }
 
 .received_review {
     cursor: pointer;
 }
 
+.go_challenge {
+	position:absolute;
+	top:78px;
+	right:10px;
+}
+
+.review_space {
+	
+}
+
+.status_space {
+	margin-left:120px;
+	cursor: default;
+}
+
 .challenges_stack {
 	margin-left:16px;
 	max-width:940px;
+	padding:1em;
 }
 
+.info_title {
+	font-size:1.5em;
+	font-weight:bold;
+}
 
+.info_description {
+	margin-top:1em;
+}
+
+.challenge_list {
+	margin-top:1em;
+}
 
 .challenges_stack tr {
 }
@@ -45,16 +72,37 @@
 
 .challenge-headline {
 	font-weight:bold;
+	pointer-events:none;
+}
+
+.inactive {
+	opacity:0.5;
 }
 
 
+.one_challenge {
+	clear:both;
+	cursor:pointer;
+	position:relative;
+	margin-top:2em;
+}
 
 .challenge-description {
-	height:60px;
-	width:100%;
-	overflow:hidden;
+	height:96px;
 	position:relative;
+	overflow:hidden;
+	margin-left:120px;
+	margin-bottom:1em;
+	pointer-events:none;
+	padding:0.25em;
 }
+
+.challenge_footer {
+	padding:0.5em 0.25em 0.5em 0.25em;
+	border-radius: 0 0 0.5em 0.5em;
+	background-color:#eee;
+}
+
 
 .singleChallenge {
 }
