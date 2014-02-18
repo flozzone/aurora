@@ -285,24 +285,24 @@ def init_data():
     # create stacks
     print('adding stack accessibility')
     accessibility = Stack(
-        title='Accessibility',
-        description='Learn about Accessibility issues...',
+        title='Universal Design',
+        description='In diesem Block setzen sie sich mit »Unversal Design« auseinander. Universal Design (Universelles Design) ist ein internationales Design-Konzept, das Produkte, Geräte, Umgebungen und Systeme derart gestaltet, dass sie für so viele Menschen wie möglich ohne weitere Anpassung oder Spezialisierung nutzbar sind. In der Informatik bedeutet das im allgemeinen, Systeme so zu gestalten, dass sie von Menschen mit Behinderungen, insbesondere blinde Menschen, auch benutzt werden können.',
         course=gsi,
     )
     accessibility.save()
 
     print('adding stack digital life')
     digitallife = Stack(
-        title='Digital life',
-        description='Learn about Digital life...',
+        title='Copyleft vs. Business',
+        description='In diesem Block geht es um die Suche nach neuen Business-Modellen für die geänderten Bedingngen, die durch neue Technologien geschaffen wurden. Viele traditionelel Business-Modelle gehen dabei den Bach runter, neue Ansätze sind gefragt.',
         course=gsi,
     )
     digitallife.save()
 
     print('adding stack gtav')
     gtav = Stack(
-        title='GTAV',
-        description='Play some GTAV...',
+        title='Geschichte der Informatik',
+        description='Dieser Block führt sie in die Geschichte der Informatik, zurück zu den Anfängen des interaktiven Computers. Sie setzen sich damit auseinander, welche Vorstellungen von Interaktivität im Laufe der Geschichte entstanden, probiert und wieder verworfen wurden. Dabei werden Darstellungen in Film und Fernsehen ebenso aufgearbeitet wie die Visionen der Techniker und wissenschaftliche Diskussionen.',
         course=gsi,
     )
     gtav.save()
