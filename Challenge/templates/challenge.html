@@ -43,7 +43,7 @@
 
   {% if not elaboration.is_submitted %}
 
-    {% if not elaboration.elaboration_text %}
+    {% if not accepted %}
       <div id="Caccept" class="button XL"
            onclick="$('.elaboration_block').toggle('fast');$('#Caccept').toggle('fast');$('#qa').toggle('fast');">
         accept challenge
