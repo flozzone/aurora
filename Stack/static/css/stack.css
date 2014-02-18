@@ -1,8 +1,25 @@
 .review_token {
 	padding:0px 8px;
 	border-radius:20px;
+	font-size:80%;
 	background-color:#C5FFB6;
 	border:1px solid #359440;
+}
+
+
+.review_token.yellow {
+	background-color:yellow;
+	border:1px solid orange;
+	
+}
+
+.review_token.green {
+	color:white;
+	background-color:#00B700;
+	border:1px solid darkgreen;
+	box-shadow: 0 0 15px 1px #FFE8AA;
+	font-weight:bold;
+	color:#FFE8AA;
 }
 
 .review_token.red {

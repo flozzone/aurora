@@ -252,7 +252,9 @@ button {
     appearance:none;
 	background-color:transparent;
 	border:none;
+	white-space: nowrap;
 }
+
 
 .XL {
 	font-size:16px !important;
@@ -275,6 +277,7 @@ button {
 	background-color:white;
 	border:none;
 	cursor:pointer;
+	white-space: nowrap;
 }
 
 .comment_section {

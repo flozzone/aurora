@@ -34,8 +34,8 @@
 		  	  </div> 
 <!-- writing reviews -->
 			  {% if not user.is_staff %}
+			  <div class="challenge_footer">
 				  {% if not challenge_dict.challenge.is_final_challenge %}
-				  <div class="challenge_footer">
 				  	{% if not stack_blocked %}
 						<div class="review_space">
 				  		{% for review in challenge_dict.reviews %}
@@ -57,13 +57,14 @@
 				  			</div>
 				  			{% endif %}
 				  		{% endfor %}
-						</div>
 				  	{% endif %}
+				</div>
 				  {% endif %}
 <!-- status -->
 				  <div class="status_space">
 				  <b>Status:</b>
 				  <span>{{ challenge_dict.status.status }}</span>
+				  {% if challenge_dict.status.status = "Evaluated" %} (Click ENTER for full evaluation information) {% endif %}
 				  <br>
 				  <b>Next:</b>
 				  <span>{{ challenge_dict.status.next }}</span>
@@ -80,7 +81,7 @@
 
 					  {% if challenge_dict.awesome %}
 					  <span class="received_review">
-						  {{ challenge_dict.awesome }} x <span class="review_token">Great work</span> &nbsp;
+						  {{ challenge_dict.awesome }} x <span class="review_token green">Great work</span> &nbsp;
 					  </span>
 					  {% endif %}
 					  {% if challenge_dict.success %}
@@ -90,7 +91,7 @@
 					  {% endif %}
 					  {% if challenge_dict.fail %}
 					  <span class="received_review">
-						  {{ challenge_dict.fail }} x <span class="review_token">Barely Acceptable</span> &nbsp;
+						  {{ challenge_dict.fail }} x <span class="review_token yellow">Barely Acceptable</span> &nbsp;
 					  </span>
 					  {% endif %}
 					  {% if challenge_dict.nothing %}
