@@ -9,22 +9,27 @@
 
   <div id="detail_area">
 
-    <h1>Available Stacks</h1>
-
+	  <div class="stack">
+		  Zur Zeit stehen folgende &Uuml;bungsbl&ouml;cke zur Verf&uuml;gung. Mehr Bl&ouml;cke werden im Laufe des Semesters hinzugef&uuml;gt. Bitte beachten sie die auf der Startseite angef&uuml;hren allgemeinen Regeln.   
+	  </div>
     {% for stack in course_stacks %}
       <div class="stack {% cycle 'lineD' 'lineL' %}" id="{{ stack.stack.id }}">
-        <div class="title">{{ stack.stack.title }}</div>
+		<div class="title">
+			<b>{{ stack.stack.title }}:</b> {{ stack.stack.get_challenge_image_urls|length }} Challenges
+			<div class="stack_icons">
+        		{% for image_url in stack.stack.get_challenge_image_urls %}
+        		<img class="stack_icon" src="{{ STATIC_URL }}img/{{ image_url }}"></img>
+        		{% endfor %}
+       	 	</div>
+		</div>
         <div class="description">{{ stack.stack.description }}</div>
-        <div class="legend">Challenges in this stack:</div>
-        <ul class="stack_imgs">
-          {% for image_url in stack.stack.get_challenge_image_urls %}
-            <li><img class="stack_img" src="{{ STATIC_URL }}img/{{ image_url }}"></li>
-          {% endfor %}
-        </ul>
-        <span><b>{{ stack.status.status }}</b> ({{ stack.status.next }})</span>
-        <br>
-        <b>Points:</b>
-        <span>{{ stack.points }}</span>
+        <div class="stack_status">Status: <b>{{ stack.status.status }}.</b>
+		<div class="stack_action button XL">{{ stack.status.next }}</div>
+		</div>
+        {% if stack.points != 0 %}
+			<b>Points:</b>
+    		<span>{{ stack.points }}</span>
+		{% endif %}
       </div>
     {% endfor %}
 

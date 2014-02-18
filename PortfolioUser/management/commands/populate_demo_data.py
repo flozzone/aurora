@@ -173,7 +173,7 @@ def init_data():
                             title='rage-comic',
                             subtitle='rage-comic',
                             prerequisite=challenge_1,
-                            description='finden sie einen rage-comic, den sie lustig finden, und beschreiben sie kurz, warum sie ihn lustig finden. laden sie dazu den rage-comic als bild hoch, und beschreiben sie in einem satz mit genau 5 worten, warum dieser rage-comic zum schreien komisch ist.',
+                            description='finden sie einen rage-comic, den sie lustig finden, und beschreiben sie kurz, warum sie ihn lustig finden. laden sie dazu den rage-comic als bild hoch, und beschreiben sie in einem satz mit genau 5 worten, warum dieser rage-comic zum schreien komisch ist. finden sie einen rage-comic, den sie lustig finden, und beschreiben sie kurz, warum sie ihn lustig finden. laden sie dazu den rage-comic als bild hoch, und beschreiben sie in einem satz mit genau 5 worten, warum dieser rage-comic zum schreien komisch ist. finden sie einen rage-comic, den sie lustig finden, und beschreiben sie kurz, warum sie ihn lustig finden. laden sie dazu den rage-comic als bild hoch, und beschreiben sie in einem satz mit genau 5 worten, warum dieser rage-comic zum schreien komisch ist. finden sie einen rage-comic, den sie lustig finden, und beschreiben sie kurz, warum sie ihn lustig finden. laden sie dazu den rage-comic als bild hoch, und beschreiben sie in einem satz mit genau 5 worten, warum dieser rage-comic zum schreien komisch ist.',
                             image_url='2.png',
                             accepted_files='image/*'
     )
