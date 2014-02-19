@@ -23,13 +23,12 @@
        	 	</div>
 		</div>
         <div class="description">{{ stack.stack.description }}</div>
-        <div class="stack_status">Status: <b>{{ stack.status.status }}.</b>
-		<div class="stack_action button XL">{{ stack.status.next }}</div>
+{#       Status: <b>{{ stack.status.status }}.</b>#}
+		<div class="stack_status">
+			 <div class="stack_action button XL">do it</div>
+			 <div class="stack_next">Status: <b>{{ stack.status.next }} {% if stack.points != 0 %}{{ stack.points }}{% endif %}</b></div>
 		</div>
-        {% if stack.points != 0 %}
-			<b>Points:</b>
-    		<span>{{ stack.points }}</span>
-		{% endif %}
+ 
       </div>
     {% endfor %}
 

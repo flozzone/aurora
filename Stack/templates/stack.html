@@ -63,20 +63,16 @@
 <!-- status -->
 				  <div class="status_space">
 				  <b>Status:</b>
-				  <span>{{ challenge_dict.status.status }}</span>
-				  {% if challenge_dict.status.status = "Evaluated" %} (Click ENTER for full evaluation information) {% endif %}
-				  <br>
-				  <b>Next:</b>
-				  <span>{{ challenge_dict.status.next }}</span>
-				  {% if challenge_dict.points %}
-				  <br>
-				  <b>Points:</b>
-				  <span>{{ challenge_dict.points }}</span>
+				  <span>{{ challenge_dict.status.status }}.</span>
+				  {% if challenge_dict.points %}You received
+				  <span style="font-weight:bold;">{{ challenge_dict.points }}</span> Points
+				  {% if challenge_dict.status.status = "Evaluated" %}. Full evaluation result inside. {% endif %}
 				  {% endif %}
+				  
 <!-- review results -->
 				  <div class="peer_reviews" challenge_id="{{ challenge_dict.challenge.id }}">
 					  {% if challenge_dict.awesome or challenge_dict.success or challenge_dict.fail or challenge_dict.nothing %}
-					  	  <b>Your work has been reviewed: </b>
+					  	  Reviews are in: 
 					  {% endif %}
 
 					  {% if challenge_dict.awesome %}
@@ -100,7 +96,8 @@
 					  </span>
 					  {% endif %}
 					  {% if challenge_dict.awesome or challenge_dict.success or challenge_dict.fail or challenge_dict.nothing %}
-					  <span class="button received_review"><span>see reviews</span></span>
+					 <!-- <span class="button received_review"><span>see reviews</span></span> -->
+					 <span>Full review results inside.</span>
 					  {% endif %}
 					  
 				  </div>

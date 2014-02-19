@@ -39,15 +39,15 @@ class Challenge(models.Model):
     }
 
     next_dict = {
-        -1: "Not enabled",
-        0: "Start the next challenge",
-        1: "Submit your elaboration once it is finished",
-        2: "Write another review to proceed",
-        3: "You received a bad review this stack will be blocked until the issue is resolved",
-        4: "Done. This submission did not pass the peer review yet (needed to enable final challenge)",
-        5: "Congratulations, this challenge passed all peer reviews",
-        6: "Your submission will be evaluated by a tutor soon",
-        7: "Evaluation received this stack is completed"
+        -1: "Not enabled...",
+        0: "Start a challenge.",
+        1: "Finish and submit your work.",
+        2: "Write a review.",
+        3: "Blocked by negative review.",
+        4: "Waiting for more reviews.",
+        5: "All reviews are in, you can start the final challenge.",
+        6: "Still waiting for evaluation",
+        7: "Final evaluation in. Points received: "
     }
 
     def __unicode__(self):
