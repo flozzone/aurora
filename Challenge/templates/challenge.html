@@ -19,7 +19,7 @@
   </div>
 
   <div class="challenge_description{% if elaboration.is_submitted %} nothere{% endif %}" >
-    {{ challenge.description }}
+    {{ challenge.description|safe }}
 
   <div class="qa_section">
     <div class="comments">
