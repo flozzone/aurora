@@ -4,7 +4,8 @@
   <link rel="stylesheet" href="{{ STATIC_URL }}css/review.css" type="text/css" media="screen"/>
 {% endblock %}
 <div class="all_reviews">
-	<div class="title">You received the following reviews for your work</div>
+	<div class="title">You received the following reviews for your work</div>		<div>&nbsp;</div>
+
 	{% for review_data in reviews %}
 	<div class="view_review">
 		{% for question in review_data.questions %}
@@ -26,6 +27,7 @@
 				{% render_comment_list for review_data.review %}
 			</div>
 		</div>
+		<div>&nbsp;</div>
 	{% endfor %}
 	</div>
 </div>

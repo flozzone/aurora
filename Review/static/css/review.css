@@ -5,25 +5,52 @@
 }
 
 .view_review {
-	padding:1em;
-	box-shadow: 0px 3px 6px #ccc inset;
-	overflow:hidden;
+	padding:1em 0.5em;
+	position:relative;
+/*	box-shadow: 0px 3px 6px #ccc inset; */
+	box-shadow: 0px 1px 3px rgba(0,0,0,0.3);
+	background-color:#f8f8f8;
 }
 
 
+.view_review:before, .view_review:after  {
+  z-index: -1;
+  position: absolute;
+  content: "";
+  bottom: 15px;
+  left: 10px;
+  width: 50%;
+  top: 80%;
+  max-width:300px;
+  background: #777;
+  box-shadow: 0 10px 5px #777;
+  -webkit-transform: rotate(-3deg);
+  -moz-transform: rotate(-3deg);
+  -o-transform: rotate(-3deg);
+  -ms-transform: rotate(-3deg);
+  transform: rotate(-3deg);
+}
+
+.view_review:after {
+  -webkit-transform: rotate(3deg);
+  -moz-transform: rotate(3deg);
+  -o-transform: rotate(3deg);
+  -ms-transform: rotate(3deg);
+  transform: rotate(3deg);
+  right: 10px;
+  left: auto;
+}
+
 .challenge > .title {
 	font-weight:bold;
-	background:#eee;
 	padding:1em;
 	padding-bottom:0;
 }
 
 .all_reviews > .title{
 	font-weight:bold;
-	background:#eee;
 	padding:1em;
 }
- 
  
 .challenge > .description {
 	font-size:90%;
@@ -53,29 +80,53 @@
 }
 
 .view_review .appraisal {
+	position:relative;
+	border-radius: 0 20px 20px 0;
 	padding:0.5em;
 	padding-left:1.5em;
-	width:110%;
+	width:33%;
+	margin-top:0.5em;
 	margin-left:-1em;
+	box-shadow: 0 1px 2px rgba(0,0,0,0.2), 0 1px 2px rgba(255,255,255,0.5) inset;
+	
+}
+
+.view_review .appraisal:before{
+	content: '';
+	display: block;
+	position: absolute;
+	left: 0;
+	bottom: -14px;
+	z-index: -1;
+	width: 0;
+	height: 0;
+	border-right: 19px solid gray;
+	border-top: 14px solid rgba(0, 0, 0, 0);
+	border-bottom: 14px solid rgba(0, 0, 0, 0);
+	
 }
 
 .Verdict_Success {
-	background-color:rgb(170,220,170);
+	background-color:#AADCAA;
+	background:linear-gradient(to right,#A1D0A1,#AADCAA,#B4E9B4);
 	color:black;
 }
 
 .Verdict_Not {
-	background-color:rgb(186,0,0);
+	background-color:#BA0000;
+	background:linear-gradient(to right,#A90000,#BA0000,#C60000);
 	color:white;
 }
 
 .Verdict_Fail {
-	background-color:rgb(255,227,0);
+	background-color:#FFE300;
+	background:linear-gradient(to right,#F4D700,#FFE300,#FFE76E);
 	color:black;
 }
 
 .Verdict_Awesome {
-	background-color:rgb(0,168,0);
+	background-color:#1B9915;
+	background:linear-gradient(to right,#188A13,#1B9915,#1EA917);
 	color:white;
 }
 

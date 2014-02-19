@@ -211,6 +211,11 @@ th {
     margin-top: 15px;
 }
 
+.appraisal input {
+	margin-right:0.25em;
+	margin-left:0.5em;
+}
+
 .review_head {
 	padding:0.25em;
 	margin:-0.5em;

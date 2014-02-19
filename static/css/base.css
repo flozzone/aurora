@@ -284,7 +284,7 @@ button {
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	background-color:rgb(242,255,242);
-	padding:8px;
+	padding:0.75em;
 	margin:8px 0 8px 0;
 	width:100%;
 	border-top:1px dashed silver;
