@@ -4,6 +4,7 @@
   <link rel="stylesheet" href="{{ STATIC_URL }}css/review.css" type="text/css" media="screen"/>
 {% endblock %}
 <div class="all_reviews">
+    {% comments_boilerplate %}
 	<div class="title">You received the following reviews for your work</div>		<div>&nbsp;</div>
 
 	{% for review_data in reviews %}
@@ -24,7 +25,7 @@
 			<b>Comments</b><br>
 			If you find this review unacceptable, either if you disagree with what it says about your work, or if the review is banal or meaningless, you can voice your displeasure by posting a comment in this section. <br><br> 
 			<div class="comments">
-				{% render_comment_list for review_data.review %}
+				{% render_multi_comment_list for review_data.review %}
 			</div>
 		</div>
 		<div>&nbsp;</div>
