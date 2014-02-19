@@ -163,11 +163,12 @@ def init_data():
     )
     challenge_1.save()
 
-    ReviewQuestion(challenge=challenge_1, order=1, text="Do you think the submission was funny?",
-                   boolean_answer=True).save()
-    ReviewQuestion(challenge=challenge_1, order=2, text="Was this submission original?", boolean_answer=True).save()
+    ReviewQuestion(challenge=challenge_1, order=1, text="Erfüllt diese Arbeit die gestellte Aufgabe?".boolean_answer=True).save()
+    ReviewQuestion(challenge=challenge_1, order=2, text="Falls nicht: Was fehlt? Was sollte anders sein? Was ist zuviel?").save()
     ReviewQuestion(challenge=challenge_1, order=3,
-                   text="Can you find any additional material not included in this submission?").save()
+                   text="Ist die Arbeit inhaltlich bzw. faktisch richtig? Können sie zb. weitere Quellen finden, die die Aussagen dieser Arbeit bestätigen oder widerlegen?").save()
+    ReviewQuestion(challenge=challenge_1, order=4,
+                   text="Ist die Arbeit inhaltlich vollständig? Fehlen wesentliche Aspekte, ohne die die Arbeit einseitig oder in Richtung bestimmter Interessen gefärbt erscheint?").save()
 
     challenge_2 = Challenge(id=2,
                             title='rage-comic',
