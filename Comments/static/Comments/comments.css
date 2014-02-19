@@ -259,17 +259,15 @@
     background-color: rgb(245,247,252);
 }
 
+/* self-yellow */
 .author_author > .comment_top, .author_author > .response_top {
 	background-color: rgb(251, 249, 149);
 }
 
 .author_author > .comment_body, .author_author > .response_body {
-	background-color: rgb(252,252,227);
+	background-color: #F6F8CE; /* was rgb(252,252,227);*/
 }
 
- {
-	background-color: rgb(251, 249, 149);
-}
 
 .private_visibility {
 	color:gray;

@@ -38,18 +38,22 @@ input[type=text] {
 	padding:5px;
 	appearance:none;
 	-webkit-appearance:none;
-	border:none;
-	background-color: rgb(252,252,227);
+	background-color: #F6F8CE;
+    border: none;
+		border-radius:3px;
+	box-shadow: 0px 0px 5px -1px rgba(0,0,0,0.2) inset;
 }
 
 #name {
 	box-shadow: none;	
 	background-color: white;
+	border:none;
 }
 
 #matriculation_number {
 	box-shadow: none;
 	background-color: white;
+	border:none;
 }
 
 .legend {

@@ -122,16 +122,16 @@
 .challenge_top_bracket {
 	border-radius: 1em 1em 0 0;
 	background-color:#eee;
-	background: linear-gradient(#f8f8f8,white);
-	border-top:1px solid #eee;
+	background: linear-gradient(#f0f0f0,white);
+	border-top:1px solid ddd;
 }
 
 .challenge_footer {
 	padding:0em 0.25em 0.5em 0.25em;
 	border-radius: 0 0 1em 1em;
 	background-color:#eee;
-	background: linear-gradient(white,#f8f8f8);
-	border-bottom:1px solid #eee;
+	background: linear-gradient(white,#f0f0f0);
+	border-bottom:1px solid ddd;
 }
 
 

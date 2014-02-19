@@ -166,6 +166,7 @@ h1 {
 	border-radius:3px;
     float: left;
 	margin-left:10px;
+	margin-top:10px;
 }
 
 .review_box.inactive {
@@ -174,14 +175,17 @@ h1 {
 }
 
 .review_box.done {	
+	background-color:rgb(251, 249, 149);
 }
 
 .review_box.in_progress {
     cursor: pointer;
+	background-color:rgba(58,201,88,0.5);
 }
 
 .review_box.active {
     cursor: pointer;
+	background-color:rgba(58,201,88,0.5);
 }
 
 .dropzone {

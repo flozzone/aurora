@@ -25,9 +25,9 @@
 		  	  <div class="challenge-description">
   		        <div class="challenge-headline">{{ challenge_dict.challenge.title }}</div>
 		  		{% if challenge_dict.challenge.description|wordcount > 50 %}
-		  		 	{{ challenge_dict.challenge.description | truncatewords:50}} 
+		  		 	{{ challenge_dict.challenge.description|safe | truncatewords:50}} 
 		  		{% else %}
-		  			{{challenge_dict.challenge.description}}
+		  			{{challenge_dict.challenge.description|safe}}
 		  		{% endif %}
 			  	<div class="go_challenge button XL">
 				  ENTER
@@ -111,8 +111,8 @@
 			</div>
 			
 		{% endfor %}
-		<div>&nbsp;</div>
 	</div>
+	<div style="box-shadow:0;">&nbsp;</div>
 	{% if challenges_inactive %}
 	<div class="divider">&nbsp;
 	  <i class="fa fa-scissors" style="position:relative;top:-9px;left:200px;"></i>

@@ -19,7 +19,7 @@
   </div>
 
   <div class="challenge_description{% if elaboration.is_submitted %} nothere{% endif %}" >
-    {{ challenge.description|safe }}
+    {{ challenge.description|safe|urlize }}
 
   <div class="qa_section">
     <div class="comments">
@@ -91,7 +91,7 @@
         </form>
       </div>
     {% endif %}
-{#    <div class="elaboration_text">{{ elaboration.elaboration_text |safe }}</div> <!-- TODO: this has to be secure -->#}
+{#    <div class="elaboration_text">{{ elaboration.elaboration_text|safe }}</div> <!-- TODO: this has to be secure -->#}
     <textarea id="editor_challenge">{{ elaboration.elaboration_text|safe }}</textarea>
     {% if evaluation %}
     <div class="comments">
