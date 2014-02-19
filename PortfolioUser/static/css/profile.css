@@ -15,13 +15,9 @@
 .avatar_img {
     width: 96px;
     height: 96px;
+	cursor:pointer;
 }
 
-.avatar:hover .subtitle {
-	background-color:rgba(0,0,0,0.5);
-	color:rgba(255,255,255,0.9);
-	
-}
 
 input[type=file] {
 	height:24px;
@@ -100,11 +96,22 @@ label {
 }
 
 .subtitle {
-	height:19px;
+	height:14px;
 	position:absolute;
 	bottom:0px;
 	background-color:rgba(0,0,0,0.1);
-	color:rgba(255,255,255,0.7);
 	width:96px;
 	text-align:center;
+    font-size: 0.6em;
+	text-decoration:none;
+	text-transform:uppercase;
+	color:rgba(58,201,88,0.5);
+	
 }
+
+.avatar:hover .subtitle {
+	background-color:rgba(255,255,255,0.95);
+	color:rgba(58,201,88,0.9);
+	pointer-events:none;
+}
+

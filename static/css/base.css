@@ -131,9 +131,9 @@ abbr, acronym {
     bottom:3px;
     right: 106px;
 	border:none;
-    font-size: 18px;
 	background-color:rgba(0,0,0,0);
 	color:white;
+    font-size: 18px;
     font-family: 'yanone_kaffeesatz_rgregular';
 	cursor:pointer;
 }
@@ -155,13 +155,12 @@ abbr, acronym {
 
 .user_info > a > img {
 	height:100%;
-	image-rendering: optimizeSpeed;
 	vertical-align:middle;
 }
 
 .user_name:hover > span {
-	background-color: rgba(255,255,255,0.8);
-	color:black;
+	background-color: rgba(0,0,0,0.6);
+	color:white;
 }
 
 .user_name > span {
@@ -169,14 +168,15 @@ abbr, acronym {
 	position:absolute;
 	bottom:0px;
 	width:100%;
+	padding-bottom:7px;
 	overflow:hidden;
-	color:white;
+	color:rgba(0,0,0,0);
     font-family: 'yanone_kaffeesatz_rgregular';
 }
 
 .user_name {
 	position:relative;
-	font-size:50%;
+	font-size:18px;
 	height:96px;
 	width:96px;
 	top:-100%;
