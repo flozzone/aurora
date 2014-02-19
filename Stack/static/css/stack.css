@@ -115,7 +115,6 @@
 	position:relative;
 	overflow:hidden;
 	margin-left:120px;
-	margin-bottom:1em;
 	pointer-events:none;
 	padding:0.25em;
 }
@@ -128,7 +127,7 @@
 }
 
 .challenge_footer {
-	padding:0.5em 0.25em 0.5em 0.25em;
+	padding:0em 0.25em 0.5em 0.25em;
 	border-radius: 0 0 1em 1em;
 	background-color:#eee;
 	background: linear-gradient(white,#f8f8f8);
@@ -145,8 +144,6 @@
 }
 
 
-.challenge_description {
-}
 
 .below {
 	opacity:0.6;
