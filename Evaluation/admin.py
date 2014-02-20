@@ -8,6 +8,7 @@ class EvaluationAdmin(admin.ModelAdmin):
                 'fields': [
                     'submission',
                     'tutor',
+                    'creation_date',
                     'evaluation_text',
                     'evaluation_points',
                     'submission_time',
@@ -16,6 +17,7 @@ class EvaluationAdmin(admin.ModelAdmin):
             }
         ),
     ]
-    list_display = ('id', 'submission', 'tutor', 'evaluation_text', 'evaluation_points', 'submission_time', 'lock_time', )
+    list_display = ('id', 'submission', 'tutor', 'creation_date', 'evaluation_text', 'evaluation_points', 'submission_time', 'lock_time', )
+    readonly_fields = ("creation_date",)
 
 admin.site.register(Evaluation, EvaluationAdmin)
