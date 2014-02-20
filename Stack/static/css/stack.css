@@ -57,11 +57,13 @@
 
 .review_space {
 	margin-left:0.5em;
+	padding-top:0.25em;
 }
 
 .status_space {
 	margin-left:120px;
 	cursor: default;
+	margin-top:2px;
 }
 
 .challenges_stack {
@@ -98,6 +100,7 @@
 
 .inactive {
 	opacity:0.5;
+	filter:alpha(opacity=50); /* For IE8 and earlier */
 }
 
 
@@ -107,7 +110,7 @@
 	position:relative;
 	margin-top:1em;
 	border-radius:1em;
-	box-shadow:0px 1px 2px rgba(0,0,0,0.1);
+	box-shadow:0px 2px 7px rgba(0,0,0,0.1);
 }
 
 .challenge-description {
@@ -117,21 +120,22 @@
 	margin-left:120px;
 	pointer-events:none;
 	padding:0.25em;
+	padding-bottom:0;
 }
 
 .challenge_top_bracket {
 	border-radius: 1em 1em 0 0;
 	background-color:#eee;
 	background: linear-gradient(#f0f0f0,white);
-	border-top:1px solid ddd;
+	border-top:1px solid #e8e8e8;
 }
 
 .challenge_footer {
 	padding:0em 0.25em 0.5em 0.25em;
 	border-radius: 0 0 1em 1em;
 	background-color:#eee;
-	background: linear-gradient(white,#f0f0f0);
-	border-bottom:1px solid ddd;
+	background: linear-gradient(#fafafa,#eee);
+	border-bottom:1px solid #e8e8e8;
 }
 
 

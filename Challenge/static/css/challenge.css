@@ -111,6 +111,7 @@ h1 {
 	width:128px;
 	height:128px;
 	opacity: 0.1;
+	filter:alpha(opacity=10); /* For IE8 and earlier */
 }
 
 
@@ -169,11 +170,13 @@ h1 {
 	border-radius:3px;
     float: left;
 	margin-left:10px;
+	margin-top:0.2em;
 }
 
 .review_box.inactive {
     background-color: #555555;
-    opacity: 0.6;
+    opacity: 0.2;
+	filter:alpha(opacity=20); /* For IE8 and earlier */
 }
 
 .review_box.done {	
