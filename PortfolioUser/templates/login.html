@@ -3,52 +3,38 @@
   <script type="text/javascript">
   var next = "{{ next }}";
   </script>
-  <div>
-    <br>
-
-    <div>
-      <div class="login">
-
-        <form>
-          <div>
-            <label for="inputEmail">Username</label>
-
-            <div>
-              <input id="username" type="text" id="inputEmail" placeholder="Username">
-            </div>
-          </div>
-          <div style="padding-top:5px;">
-            <label for="inputPassword">Password</label>
-
-            <div>
-              <input id="password" type="password" id="inputPassword" placeholder="Password">
-              <button id="button_sign_in" class="button XL">Sign in</button>
-			
-            </div>
-            
-          </div>
-          <div>
-            <div style="padding-top:5px;">
-                <label>
-                  <input id="checkbox_remember" type="checkbox">Remember me
-                </label><br><br>
-            </div>
-          </div>
-
-        </form>
-      </div>
-    </div>
-    <div>
-
-      <div>
-
-        <div id="error"style="display:none;">
-          <strong id="error_message"></strong>
-        </div>
-
-      </div>
-    </div>
-  </div>
+	<div class="login_background">
+		<div class="login"  id="loginXL">
+			<form>
+				<div class="title">
+					Welcome to Aurora
+				</div>
+				<div>
+<!--            	<label for="inputEmail">Username</label>
+					<div> -->
+              		  <input id="username" type="text" id="inputEmail" placeholder="Username">
+<!--            	</div> -->
+				</div>
+				<div style="padding-top:5px;">
+<!--            	<label for="inputPassword">Password</label>
+					<div>-->
+						<input id="password" type="password" id="inputPassword" placeholder="Password">
+						<div class="remember_me">
+							<label>
+								<input id="checkbox_remember" type="checkbox">Remember me
+							</label>
+						</div>
+						<button id="button_sign_in" class="loginButton">Sign in</button>
+<!--				</div>-->
+				</div>
+			</form>
+		</div>
+		<div>
+			<div id="error"style="display:none;">
+				<strong id="error_message"></strong>
+			</div>
+		</div>
+	</div>
 
 
 {% endblock %}

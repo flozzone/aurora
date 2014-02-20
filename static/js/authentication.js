@@ -76,6 +76,7 @@ function ajax_setup() {
     });
 }
 
+
 function sign_in() {
     ajax_setup();
     var username = $('#username').val();
