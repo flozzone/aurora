@@ -89,7 +89,9 @@ abbr, acronym {
 .login input{
     font: 1.5em Helvetica Neue, Arial, sans-serif;
 	color:white;
-	background:rgba(255,255,255,0.3);
+/*	background:rgba(255,255,255,0.3); */
+	background:none;
+	box-shadow: 0 0 20px rgba(58,201,88,0.8) inset;
 	width:500px;
 	border:none;
 	border-radius:0.5em;
@@ -139,11 +141,14 @@ input:-moz-placeholder { color:rgb(58,201,88); }
     -webkit-appearance:none;
     -moz-appearance:none;
     appearance:none;
-	background-color:rgba(255,255,255,0.3);
+	box-shadow: 0 0 20px rgb(58,201,88);
+	background:none;
 	border:none;
 	white-space: nowrap;
 	border-radius:0.5em;
 	padding:0.4em;
+	margin-top:0.5em;
+	margin-right:0.1em;
 	float:right;
 }
 
@@ -154,6 +159,7 @@ input:-moz-placeholder { color:rgb(58,201,88); }
 	width:50%;
 	height:1em;
 	float:left;
+	margin-top:1em;
 }
 
 #checkbox_remember {
