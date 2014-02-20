@@ -163,7 +163,7 @@ def init_data():
     )
     challenge_1.save()
 
-    ReviewQuestion(challenge=challenge_1, order=1, text="Erfüllt diese Arbeit die gestellte Aufgabe?".boolean_answer=True).save()
+    ReviewQuestion(challenge=challenge_1, order=1, text="Erfüllt diese Arbeit die gestellte Aufgabe?", boolean_answer=True).save()
     ReviewQuestion(challenge=challenge_1, order=2, text="Falls nicht: Was fehlt? Was sollte anders sein? Was ist zuviel?").save()
     ReviewQuestion(challenge=challenge_1, order=3,
                    text="Ist die Arbeit inhaltlich bzw. faktisch richtig? Können sie zb. weitere Quellen finden, die die Aussagen dieser Arbeit bestätigen oder widerlegen?").save()
