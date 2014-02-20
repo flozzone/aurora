@@ -1,0 +1,13 @@
+{% load comments %}
+
+{% block content %}
+
+    {% for challenge in challenges %}
+        {{ challenge.title }}
+        {{ challenge.description }}
+        <div class="comments">
+            {% render_comment_list for challenge %}
+        </div>
+    {% endfor %}
+
+{% endblock %}

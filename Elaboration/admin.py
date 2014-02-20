@@ -6,13 +6,16 @@ class ElaborationAdmin(admin.ModelAdmin):
         (
             None, {
                 'fields': [
+                    'challenge',
                     'user',
+                    'creation_time',
                     'elaboration_text',
                     'submission_time',
                 ]
             }
         ),
     ]
-    list_display = ('id', 'user', 'elaboration_text', 'submission_time', )
+    list_display = ('id', 'challenge', 'user', 'creation_time', 'elaboration_text', 'submission_time', )
+    readonly_fields = ("creation_time",)
 
 admin.site.register(Elaboration, ElaborationAdmin)

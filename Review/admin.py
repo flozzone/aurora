@@ -7,12 +7,14 @@ class ReviewAdmin(admin.ModelAdmin):
             None, {
                 'fields': [
                     'elaboration',
+                    'creation_time',
                     'submission_time',
                     'reviewer',
                 ]
             }
         ),
     ]
-    list_display = ('id', 'elaboration', 'submission_time', 'reviewer', )
+    list_display = ('id', 'elaboration', 'creation_time', 'submission_time', 'reviewer', )
+    readonly_fields = ("creation_time", )
 
 admin.site.register(Review, ReviewAdmin)

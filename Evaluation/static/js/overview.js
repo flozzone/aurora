@@ -45,7 +45,10 @@ $(function() {
 
 $(function() {
    $(".questions").click(function(event) {
-       alert("TODO: questions");
+       var url = '/questions';
+       $.get(url, function (data) {
+            $('#overview').html(data);
+       });
    });
 });
 

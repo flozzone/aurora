@@ -9,10 +9,12 @@ class ReviewAnswerAdmin(admin.ModelAdmin):
                     'review',
                     'review_question',
                     'text',
+                    'creation_time'
                 ]
             }
         ),
     ]
-    list_display = ('id', 'review', 'review_question', 'text' )
+    list_display = ('id', 'review', 'review_question', 'text', 'creation_time' )
+    readonly_fields = ("creation_time", )
 
 admin.site.register(ReviewAnswer, ReviewAnswerAdmin)

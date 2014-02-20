@@ -1,4 +1,6 @@
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from Comments.models import Comment
 from Stack.models import StackChallengeRelation
 from ReviewQuestion.models import ReviewQuestion
 from Review.models import Review
@@ -10,11 +12,11 @@ class Challenge(models.Model):
 
     title = models.CharField(max_length=100)
     subtitle = models.CharField(max_length=100)
-    prerequisite = models.ForeignKey('self', null=True)
+    prerequisite = models.ForeignKey('self', null=True, blank=True)
     description = models.TextField()
     image_url = models.CharField(max_length=100)
     # This is a comma separated list of mime types or file extensions. Eg.: image/*,application/pdf,.psd.
-    accepted_files = models.CharField(max_length=100, default="image/*,application/pdf")
+    accepted_files = models.CharField(max_length=100, default="image/*,application/pdf", blank=True)
 
     NOT_ENABLED = -1
     NOT_STARTED = 0
@@ -194,3 +196,11 @@ class Challenge(models.Model):
             # all done this stack is completed
             else:
                 return self.EVALUATED
+
+    @staticmethod
+    def get_questions():
+        challenges = []
+        for challenge in Challenge.objects.all():
+            if Comment.objects.filter(content_type=ContentType.objects.get_for_model(Challenge), object_id=challenge.id):
+                challenges.append(challenge)
+        return challenges
