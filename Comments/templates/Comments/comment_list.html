@@ -2,9 +2,11 @@
     {% for comment in comment_list %}
         <div class="comment_with_responses">
             {% include 'Comments/comment.html' %}
+			<div class="r_comment_{{comment.id}} r_list">
             {% for response in comment.responses %}
                 {% include 'Comments/response.html' %}
             {% endfor %}
+			</div>
         </div>
     {% endfor %}
 </div>

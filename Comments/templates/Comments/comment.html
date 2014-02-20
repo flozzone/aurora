@@ -3,7 +3,7 @@
 <div class="comment{% if comment.author.is_staff %} staff_author{% endif %} {{ comment.visibility }}_visibility {% if comment.author == requester %} author_author{% endif %}"
      id="comment_{{ comment.id }}" data-comment_number="{{ comment.id }}"
      data-comment_author="{{ comment.author.display_name }}">
-	 <div class="comment_top">
+	 <div class="comment_top {% if comment.score < 0 %}neg0{% endif %} {% if comment.score < -5 %}neg5{% endif %}" onclick="$(this).next().toggle().next().toggle();$('.r_'+$(this).parent().attr('id')).toggle()">
 		 <div class="comment_author">{{ comment.author.display_name }}</div>
 		 <div class="comment_time">({{ comment.post_date | naturaltime }})</div>
 		 <div class="comment_award">    
@@ -41,11 +41,11 @@
     <div class="comment_actions">
         {% if comment.bookmarked %}
             <a href='#' class="comment_unbookmark" data-comment_number="{{ comment.id }}" title="Remove this comment from Bookmarks">
-				forget this
+				unbookmark
             </a>
         {% else %}
             <a href='#' class="comment_bookmark" data-comment_number="{{ comment.id }}" title="Bookmark this comment">
-				remember this
+				bookmark
             </a>
         {% endif %}
  
