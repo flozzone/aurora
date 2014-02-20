@@ -342,3 +342,50 @@ th {
     color: red;
     float: right;
 }
+
+.one_challenge {
+	position:relative;
+	margin-top:1em;
+	border-radius:1em;
+	box-shadow:0px 2px 7px rgba(0,0,0,0.1);
+    padding-bottom: 20px;
+}
+
+.challenge-description {
+	height:96px;
+	position:relative;
+	overflow:hidden;
+	margin-left:120px;
+	pointer-events:none;
+	padding:0.25em;
+	padding-bottom:0;
+}
+
+.challenge_top_bracket {
+	border-radius: 1em 1em 0 0;
+	background-color:#eee;
+	background: linear-gradient(#f0f0f0,white);
+	border-top:1px solid #e8e8e8;
+}
+
+.challenge-headline {
+	font-weight:bold;
+	pointer-events:none;
+}
+
+.challenge_image {
+	width:96px;
+	height:96px;
+	border-radius: 64px;
+	pointer-events:none;
+}
+
+.challenge_image_container {
+	margin-left:0.5em;
+	float:left;
+	width:96px;
+	height:96px;
+	pointer-events:none;
+	border-radius: 64px;
+	border:1px solid silver;
+}
