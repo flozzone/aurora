@@ -1,4 +1,6 @@
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from Comments.models import Comment
 from Stack.models import StackChallengeRelation
 from ReviewQuestion.models import ReviewQuestion
 from Review.models import Review
@@ -194,3 +196,11 @@ class Challenge(models.Model):
             # all done this stack is completed
             else:
                 return self.EVALUATED
+
+    @staticmethod
+    def get_questions():
+        challenges = []
+        for challenge in Challenge.objects.all():
+            if Comment.objects.filter(content_type=ContentType.objects.get_for_model(Challenge), object_id=challenge.id):
+                challenges.append(challenge)
+        return challenges

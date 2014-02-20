@@ -49,6 +49,7 @@ def evaluation(request):
                                'evaluated_non_adequate_work': Elaboration.get_evaluated_non_adequate_work(),
                                'non_adequate_reviews': Elaboration.get_non_adequate_reviews(),
                                'complaints': Elaboration.get_non_adequate_reviews(),
+                               'questions': Challenge.get_questions(),
                                'awesome': Elaboration.get_awesome(),
                                'overview': overview,
                               },
@@ -95,6 +96,14 @@ def update_overview(request):
     request.session['selection'] = request.GET.get('data', '')
 
     html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
+    return html
+
+
+@login_required()
+def questions(request):
+    print("loading questions...")
+    challenges = Challenge.get_questions()
+    html = render_to_response('questions.html', {'challenges': challenges}, RequestContext(request))
     return html
 
 
