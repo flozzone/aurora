@@ -16,8 +16,8 @@
 .review_token.green {
 	color:white;
 	background-color:#00B700;
-	border:1px solid darkgreen;
-	box-shadow: 0 0 5px 1px #FFE8AA;
+	border:1px solid #829B04;
+	box-shadow: 0 0 4px 0px #FFBE46;
 	font-weight:bold;
 	color:#FFE8AA;
 }
