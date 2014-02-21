@@ -166,6 +166,12 @@ class Comment(models.Model):
             # comment.set_visibility_flag(requester)
             comment.bookmarked = True if comment.bookmarked_by.filter(pk=requester.id).exists() else False
 
+            try:
+                vote = Vote.objects.get(comment=comment, voter=requester)
+                comment.voted = 'upvoted' if vote.direction == vote.UP else 'downvoted'
+            except Vote.DoesNotExist:
+                comment.voted = ''
+
     def set_visibility_flag(self, requester):
         self.visible = False
         if self.visibility == Comment.PUBLIC:

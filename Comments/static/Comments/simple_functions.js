@@ -82,7 +82,7 @@ var Bookmarks = {
         $link.off();
         $link.click(function(event) { that.unbookmark(event, $link) });
         $link.toggleClass('comment_unbookmark comment_bookmark');
-        $link.text('forget this');
+        $link.text('unbookmark');
 
         return false;
     },
@@ -97,7 +97,7 @@ var Bookmarks = {
         $link.off();
         $link.click(function(event) { that.bookmark(event, $link) });
         $link.toggleClass('comment_unbookmark comment_bookmark');
-        $link.text('remember this');
+        $link.text('bookmark');
 
         return false;
     }
@@ -118,7 +118,7 @@ function registerBookmarkLinksForCommentList($comment_list) {
         $(this).off();
         $(this).click( unbookmark );
         $(this).toggleClass('comment_unbookmark comment_bookmark');
-        $(this).text('forget this');
+        $(this).text('unbookmark');
 
         return false;
     }
@@ -132,7 +132,7 @@ function registerBookmarkLinksForCommentList($comment_list) {
         $(this).off();
         $(this).click( bookmark );
         $(this).toggleClass('comment_unbookmark comment_bookmark');
-        $(this).text('remember this');
+        $(this).text('bookmark');
 
         return false;
     }
