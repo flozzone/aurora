@@ -78,19 +78,46 @@ abbr, acronym {
 
 }
 
+.login input[type="checkbox"] {
+    display:none;
+}
+
+.login input[type="checkbox"] + label  {
+	text-decoration:none;
+	text-transform:uppercase;
+/*	color:rgb(58,201,88);*/
+	color:rgba(0,0,0,0);
+	font-size:1.5em;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	padding:0.4em;
+	text-shadow: 0 0 3px rgba(58,201,88,0.5);
+	background:none;
+    vertical-align:middle;
+    background:url(check_radio_sheet.png) left top no-repeat;
+    cursor:pointer;
+	border-radius:0.5em;
+	padding:0.4em;
+	margin-top:1em;
+}
+
+.login input[type="checkbox"]:checked + label  {
+/*    background-color:rgba(58,201,88,0.8);*/
+	color:rgb(58,201,88);
+	text-shadow: 0 0 8px rgba(58,201,88,1);
+/*	box-shadow: 0 0 20px rgb(58,201,88);*/
+}
 
 .login .title {
     font-family: 'yanone_kaffeesatzthin';
+	color:rgb(58,201,88);
 	font-size:2.5em;
-	color:white;
 	margin-bottom:1em;
 }
 
 .login input{
     font: 1.5em Helvetica Neue, Arial, sans-serif;
-	color:white;
-/*	background:rgba(255,255,255,0.3); */
 	background:none;
+	color:white;
 	box-shadow: 0 0 20px rgba(58,201,88,0.8) inset;
 	width:500px;
 	border:none;
@@ -147,9 +174,14 @@ input:-moz-placeholder { color:rgb(58,201,88); }
 	white-space: nowrap;
 	border-radius:0.5em;
 	padding:0.4em;
-	margin-top:0.5em;
+	margin-top:0.3em;
 	margin-right:0.1em;
 	float:right;
+}
+
+.loginButton:active {
+    background-color:rgba(58,201,88,0.8);
+	color:white;
 }
 
 .remember_me {
