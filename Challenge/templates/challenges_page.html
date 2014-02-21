@@ -18,7 +18,7 @@
 			<b>{{ stack.stack.title }}:</b> {{ stack.stack.get_challenge_image_urls|length }} Levels
 			<div class="stack_icons" style="float:right">
         		{% for image_url in stack.stack.get_challenge_image_urls %}
-        		<img class="stack_icon" src="{{ STATIC_URL }}img/{{ image_url }}"></img>
+        		<img class="stack_icon" src="{{ STATIC_URL }}img/{{ image_url }}" alt="{{stack.}}"></img>
         		{% endfor %}
        	 	</div>
 		</div>
