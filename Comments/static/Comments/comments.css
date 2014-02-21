@@ -246,6 +246,25 @@
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+.upvoted, .upvoted .vote_up_on .fa {
+	color:#FF8B60;
+	cursor:default;
+}
+
+.upvoted .vote_down_on .fa {
+	color:silver;
+}
+
+.downvoted, .downvoted .vote_down_on .fa {
+    color: #9494FF;
+	cursor:default;
+}
+
+.downvoted .vote_up_on .fa {
+    color: silver;
+}
+
+
 .vote_up_on .vote_down_on {
     cursor: pointer;
 }

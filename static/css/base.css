@@ -117,7 +117,7 @@ abbr, acronym {
 .login input{
     font: 1.5em Helvetica Neue, Arial, sans-serif;
 	background:none;
-	color:white;
+	color:rgba(58,201,88,1);
 	box-shadow: 0 0 20px rgba(58,201,88,0.8) inset;
 	width:500px;
 	border:none;
@@ -128,10 +128,10 @@ abbr, acronym {
 	-moz-box-sizing: border-box;
 }
 
-::-webkit-input-placeholder { color:rgb(58,201,88); }
-::-moz-placeholder { color:rgb(58,201,88); } /* firefox 19+ */
-:-ms-input-placeholder { color:rgb(58,201,88); } /* ie */
-input:-moz-placeholder { color:rgb(58,201,88); }
+::-webkit-input-placeholder { color:rgba(58,201,88,0);	text-shadow: 0 0 2px rgba(58,201,88,0.8); }
+::-moz-placeholder { color:rgba(58,201,88,0);	text-shadow: 0 0 2px rgba(58,201,88,0.8); } /* firefox 19+ */
+:-ms-input-placeholder { color:rgba(58,201,88,0);	text-shadow: 0 0 2px rgba(58,201,88,0.8); } /* ie */
+input:-moz-placeholder { color:rgba(58,201,88,0);	text-shadow: 0 0 2px rgba(58,201,88,0.8); }
 
 .login {
     color: black;
