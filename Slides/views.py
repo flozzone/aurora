@@ -10,10 +10,12 @@ from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.utils import simplejson
 from django.utils.timezone import utc
+from django.views.decorators.csrf import csrf_exempt
 
 from Course.models import Course
 from Slides.models import Lecture, Slide, Stream
 from Slides.settings import LIVECAST_START
+from Slides.settings import SLIDE_SECRET
 
 """
 - slidecasting_mode
@@ -42,18 +44,23 @@ def start(request):
     render_dict = {'slidecasting_mode': 'start', 'course':course, 'lectures': lectures}
     return render_to_response('start.html', render_dict, context_instance=RequestContext(request))
 
-
+@csrf_exempt
 def livecast_new_slide(request, course_id):
-    try:
-        course = Course.objects.get(id=course_id)
-    except (Course.DoesNotExist, Course.MultipleObjectsReturned):
-        raise Http404
-    #now = datetime.datetime.now()
-    #lecture_right_now = Lecture.objects.filter(course=course, start__lte=now, end__gte=now, active=True)
-    if _livecast_now(course):
-        return HttpResponse('lecture right now -> livecast')
+    if request.method == 'POST' and request.POST['secret'] == SLIDE_SECRET:
+        try:
+            course = Course.objects.get(id=course_id)
+        except (Course.DoesNotExist, Course.MultipleObjectsReturned):
+            raise Http404
+        if _livecast_now(course):
+            now = datetime.datetime.now()
+            lecture = Lecture.objects.get(start__lte=now, end__gte=now, course=course)
+            slide = Slide(title=request.POST['title'], pub_date=now, filename=request.POST['filename'], lecture=lecture)
+            slide.save()
+            return HttpResponse("")
+        else:
+            return HttpResponse('no lecture right now -> prep slides. ')
     else:
-        return HttpResponse('no lecture right now -> prep slides. ')
+        return HttpResponse('must post')
 
 
 def livecast_update_slide(request, lecture_id_relative, slide_id, client_timestamp):
