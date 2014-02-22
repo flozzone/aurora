@@ -55,7 +55,6 @@ def livecast_new_slide(request, course_id):
             else:
                 lecture = Lecture.objects.filter(end__gte=now, course=course, active=True).order_by('start')[0]
                 tags = ".preparation"
-
             slide = Slide(title=request.POST['title'], pub_date=now, filename=request.POST['filename'], lecture=lecture, tags=tags)
             slide.save()            
             return HttpResponse("")
@@ -83,7 +82,7 @@ def livecast(request, lecture_id_relative):
     lectures = _get_contentbar_data(course)
     lecture = get_object_or_404(Lecture, course=course, active=True, id_relative=lecture_id_relative)
     if not _livecast_now(lecture):
-        return redirect('studio_lecture', course_short_title=course_short_title, lecture_id_relative=lecture_id_relative)
+        return redirect('/slides/studio/' + lecture_id_relative) # FIXME: no hardcoded urls
     render_dict = {'slidecasting_mode': 'livecast', 'course':course, 'lectures': lectures, 'lecture': lecture }
     return render_to_response('livecast.html', render_dict, context_instance=RequestContext(request))
 
@@ -93,7 +92,7 @@ def studio_lecture(request, lecture_id_relative):
     lectures = _get_contentbar_data(course)
     lecture = get_object_or_404(Lecture, course=course, active=True, id_relative=lecture_id_relative)
     if _livecast_now(lecture):
-        return redirect('livecast', lecture_id_relative=lecture_id_relative)
+        return redirect('/slides/livecast/' + str(lecture_id_relative)) # FIXME: no hardcoded urls 
     slides = Slide.objects.filter(lecture=lecture)
     slides = _cache_slide_markers(slides)
     slides_preparation = slides.filter(tags__contains='.preparation')
