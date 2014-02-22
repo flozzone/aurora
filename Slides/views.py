@@ -2,6 +2,7 @@ import datetime
 from datetime import timedelta
 import re
 import sys
+import time
 
 from django.db.models import Count, Q
 from django.http import Http404, HttpResponse
@@ -73,7 +74,8 @@ def livecast_update_slide(request, client_timestamp):
     if slides.count() > 0:
         json_response = { 'update': True, 'slide_id': slides.reverse()[0].id }
     else: 
-        json_response = { 'update': False}
+        json_response = { 'update': False }
+    json_response.update({ 'last_update': int(time.time()) })
     return HttpResponse(simplejson.dumps(json_response), mimetype='application/javascript')
 
 
@@ -83,7 +85,7 @@ def livecast(request, lecture_id_relative):
     lecture = get_object_or_404(Lecture, course=course, active=True, id_relative=lecture_id_relative)
     if not _livecast_now(lecture):
         return redirect('/slides/studio/' + lecture_id_relative) # FIXME: no hardcoded urls
-    render_dict = {'slidecasting_mode': 'livecast', 'course':course, 'lectures': lectures, 'lecture': lecture }
+    render_dict = {'slidecasting_mode': 'livecast', 'course':course, 'lectures': lectures, 'lecture': lecture, 'last_update': int(time.time()) }
     return render_to_response('livecast.html', render_dict, context_instance=RequestContext(request))
 
 
