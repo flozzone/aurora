@@ -28,7 +28,7 @@ def create_comment(text, author, reference_object, parent=None, days=0, minutes=
     post_date = timezone.now() + delta
     comment = Comment.objects.create(text=text, author=author, parent=parent, post_date=post_date,
                                      content_object=reference_object)
-    comment.save()
+    # comment.save()
     return comment
 
 
@@ -60,6 +60,38 @@ def dummy_comment_generator():
 #         self.assertEqual(c.post_date_relative, "2 days ago")
 
 
+class ModelMethodTests(TestCase):
+    def setUp(self):
+        user_generator = dummy_user_generator()
+        self.u1 = next(user_generator)
+        self.u1.save()
+        self.u2 = next(user_generator)
+        self.u2.save()
+        self.u3 = next(user_generator)
+        self.u3.save()
+
+        self.ref_object = CommentReferenceObject()
+
+        self.t1 = "text1"
+        self.c1 = create_comment(self.t1, self.u1, self.ref_object)
+        self.rt1 = "response text1"
+        self.r1 = create_comment(self.rt1, self.u2, self.ref_object, parent=self.c1)
+        self.t2 = "text2"
+        self.c2 = create_comment(self.t2, self.u2, self.ref_object)
+        self.t3 = "text3"
+        self.c3 = create_comment(self.t3, self.u2, self.ref_object)
+        self.rt2 = "response text2"
+        self.r2 = create_comment(self.rt1, self.u1, self.ref_object, parent=self.c3)
+        self.rt3 = "response text3"
+        self.r3 = create_comment(self.rt1, self.u3, self.ref_object, parent=self.c3)
+        self.t4 = "text4"
+        self.c4 = create_comment(self.t4, self.u3, self.ref_object)
+
+    def test_query_comments_without_responses(self):
+        queryset = Comment.query_comments_without_responses(self, self.ref_object, self.requester)
+        self.assertTrue(list(queryset) == [self.c2, self.c4])
+
+
 class TagTests(TestCase):
     def setUp(self):
         user_generator = dummy_user_generator()
@@ -70,43 +102,43 @@ class TagTests(TestCase):
         self.u3 = next(user_generator)
         self.u3.save()
 
-    @staticmethod
-    def call_render(temp, context):
-        t = Template('{% load comments %}' + temp)
-        c = Context(context)
-        return t.render(c)
-
-    def no_test_render_comment_list_tag_without_parameter(self):
-        temp = "{% render_comment_list for %}"
-        context = {}
-        with self.assertRaises(template.TemplateSyntaxError):
-            self.call_render(temp, context)
-
-    def no_test_render_comment_list_tag_without_for(self):
-        temp = "{% render_comment_list is bar %}"
-        context = {}
-        with self.assertRaises(template.TemplateSyntaxError):
-            self.call_render(temp, context)
-
-    def test_render_comment_list_as_feed(self):
-        ref_object = CommentReferenceObject()
-        ref_object.save()
-        text_c1 = "telephone booth is magic"
-        c1 = create_comment(text_c1, self.u1, ref_object, days=5)
-        c1.save()
-        text_a1 = "yeah, i can even see the star dust"
-        a1 = create_comment(text_a1, self.u2, ref_object, parent=c1, days=2)
-        a1.save()
-        text_a2 = "i am also like this huge fan of phone booths"
-        a2 = create_comment(text_a2, self.u3, ref_object, parent=c1, minutes=20)
-        a2.save()
-        temp = "{% render_comment_list for reference %}"
-        context = {'reference': ref_object}
-        rendered = self.call_render(temp, context)
-        print(rendered)
-        self.assertTrue(text_c1 in rendered)
-        self.assertTrue(text_a1 in rendered)
-        self.assertTrue(text_a2 in rendered)
+    # @staticmethod
+    # def call_render(temp, context):
+    #     t = Template('{% load comments %}' + temp)
+    #     c = Context(context)
+    #     return t.render(c)
+    #
+    # def no_test_render_comment_list_tag_without_parameter(self):
+    #     temp = "{% render_comment_list for %}"
+    #     context = {}
+    #     with self.assertRaises(template.TemplateSyntaxError):
+    #         self.call_render(temp, context)
+    #
+    # def no_test_render_comment_list_tag_without_for(self):
+    #     temp = "{% render_comment_list is bar %}"
+    #     context = {}
+    #     with self.assertRaises(template.TemplateSyntaxError):
+    #         self.call_render(temp, context)
+    #
+    # def test_render_comment_list_as_feed(self):
+    #     ref_object = CommentReferenceObject()
+    #     ref_object.save()
+    #     text_c1 = "telephone booth is magic"
+    #     c1 = create_comment(text_c1, self.u1, ref_object, days=5)
+    #     c1.save()
+    #     text_a1 = "yeah, i can even see the star dust"
+    #     a1 = create_comment(text_a1, self.u2, ref_object, parent=c1, days=2)
+    #     a1.save()
+    #     text_a2 = "i am also like this huge fan of phone booths"
+    #     a2 = create_comment(text_a2, self.u3, ref_object, parent=c1, minutes=20)
+    #     a2.save()
+    #     temp = "{% render_comment_list for reference %}"
+    #     context = {'reference': ref_object}
+    #     rendered = self.call_render(temp, context)
+    #     print(rendered)
+    #     self.assertTrue(text_c1 in rendered)
+    #     self.assertTrue(text_a1 in rendered)
+    #     self.assertTrue(text_a2 in rendered)
 
 
 class PersistentTestData:

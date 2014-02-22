@@ -1,4 +1,5 @@
 {% load comments %}
+{% load render_uploads %}
 
 {% block additional_headers %}
   <script type="text/javascript" src="{{ STATIC_URL }}js/info_area.js"></script>
@@ -11,6 +12,8 @@
         {{ elaboration.user.username }}<br/>
         {{ elaboration.user.first_name }} {{ elaboration.user.last_name }}
         <div class="spacer"></div>
+
+        {% render_uploads elaboration %}
 
         <textarea id="editor_others">{{ elaboration.elaboration_text }}</textarea>
         <div class="spacer"></div>
