@@ -31,13 +31,6 @@
         {{ elaboration.user.nickname }} ({{ elaboration.user.first_name }} {{ elaboration.user.last_name }}, {{ elaboration.user.username }})
         <div class="spacer"></div>
 
-        <div class="file_upload" style="display: none">
-          <form action="/fileupload" class="dropzone dz-clickable is_submitted" id="dropzone">
-            <input id="elaboration_id" type="hidden" name="elaboration_id" value="{{ elaboration.id }}"/>
-            {% csrf_token %}
-          </form>
-        </div>
-
         {% render_uploads elaboration %}
 
         <textarea id="editor_detail">{{ elaboration.elaboration_text }}</textarea>
