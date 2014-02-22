@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% load url from future %}
+
+{% block additional_headers %}
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.ba-throttle-debounce.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/shared.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/livecast.js"></script>
+<link rel="stylesheet" href="{{ STATIC_URL }}css/slides_base.css" type="text/css" media="screen"/>
+{% endblock %}
+
+{% block content %}
+
+{% include "contentbar.html" %}
+
+<script>
+	var last_update = {{last_update}};
+	var UPDATE_SLIDES_URL = '/slides/livecast_update_slide/';
+</script>
+
+<div id="contentblock">
+	<br /> <br />
+	hello livecast.
+</div>
+
+{% endblock %}

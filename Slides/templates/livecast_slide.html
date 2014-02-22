@@ -1,0 +1,20 @@
+<div id="livecast_slide_{{slide.id}}">
+
+<div class="glass" style="margin:0 2em 0.25em 2.5em;padding:0.25em;">
+<span id="livecast_form_title">{{slide.title}}</span>
+</div>
+
+<div class="oneBB leftBBlive over" onClick="markSlide(this, '{% url 'mark_slide' course.short_title slide.id 'liked' 'xxx' %}')">
+	<img id="like_{{slide.id}}_img" src="{{ STATIC_URL }}img/liked{% if customuser in slide.liked.all %}_slide_marked{%endif%}.png">
+	<div class="liveBBcount">{{slide.liked.all.count}}</div>
+</div>
+<div class="oneBB middleBBlive over " onClick="markSlide(this, '{% url 'mark_slide' course.short_title slide.id 'important' 'xxx' %}')">
+	<img id="important_{{slide.id}}_img" src="{{ STATIC_URL }}img/important{% if customuser in slide.important.all %}_slide_marked{%endif%}.png" > 
+	<div class="liveBBcount">{{slide.important.all.count}}</div>
+</div>
+<div class="oneBB rightBBlive over " onClick="markSlide(this, '{% url 'mark_slide' course.short_title slide.id 'confusing' 'xxx' %}')">
+	<img id="confused_{{slide.id}}_img" src="{{ STATIC_URL }}img/confusing{% if customuser in slide.confusing.all %}_slide_marked{%endif%}.png" > 
+	<div class="liveBBcount">{{slide.confused.all.count}}</div>
+</div>
+
+</div>

@@ -2,6 +2,7 @@ import datetime
 from datetime import timedelta
 import re
 import sys
+import time
 
 from django.db.models import Count, Q
 from django.http import Http404, HttpResponse
@@ -9,7 +10,6 @@ from django.shortcuts import get_object_or_404, render_to_response, redirect
 from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.utils import simplejson
-from django.utils.timezone import utc
 from django.views.decorators.csrf import csrf_exempt
 
 from Course.models import Course
@@ -56,7 +56,6 @@ def livecast_new_slide(request, course_id):
             else:
                 lecture = Lecture.objects.filter(end__gte=now, course=course, active=True).order_by('start')[0]
                 tags = ".preparation"
-
             slide = Slide(title=request.POST['title'], pub_date=now, filename=request.POST['filename'], lecture=lecture, tags=tags)
             slide.save()            
             return HttpResponse("")
@@ -68,13 +67,16 @@ def livecast_new_slide(request, course_id):
         return HttpResponse('must post')
 
 
-def livecast_update_slide(request, lecture_id_relative, slide_id, client_timestamp):
-    # TODO
-    # check for new slide
-    # render marker_div
-    render_dict = {}
-    json_return_dict = {'hello': 'world'}
-    return HttpResponse('<html><body>' + str(json_return_dict) + '</body></html>')
+def livecast_update_slide(request, client_timestamp):
+    course = RequestContext(request)['last_selected_course']
+    client_time = datetime.datetime.fromtimestamp(int(client_timestamp))
+    slides = Slide.objects.filter(lecture__course=course, lecture__active=True, pub_date__gte=client_time)
+    if slides.count() > 0:
+        json_response = { 'update': True, 'slide_id': slides.reverse()[0].id }
+    else: 
+        json_response = { 'update': False }
+    json_response.update({ 'last_update': int(time.time()) })
+    return HttpResponse(simplejson.dumps(json_response), mimetype='application/javascript')
 
 
 def livecast(request, lecture_id_relative):
@@ -82,8 +84,8 @@ def livecast(request, lecture_id_relative):
     lectures = _get_contentbar_data(course)
     lecture = get_object_or_404(Lecture, course=course, active=True, id_relative=lecture_id_relative)
     if not _livecast_now(lecture):
-        return redirect('studio_lecture', course_short_title=course_short_title, lecture_id_relative=lecture_id_relative)
-    render_dict = {'slidecasting_mode': 'livecast', 'course':course, 'lectures': lectures, 'lecture': lecture }
+        return redirect('/slides/studio/' + lecture_id_relative) # FIXME: no hardcoded urls
+    render_dict = {'slidecasting_mode': 'livecast', 'course':course, 'lectures': lectures, 'lecture': lecture, 'last_update': int(time.time()) }
     return render_to_response('livecast.html', render_dict, context_instance=RequestContext(request))
 
 
@@ -92,7 +94,7 @@ def studio_lecture(request, lecture_id_relative):
     lectures = _get_contentbar_data(course)
     lecture = get_object_or_404(Lecture, course=course, active=True, id_relative=lecture_id_relative)
     if _livecast_now(lecture):
-        return redirect('livecast', lecture_id_relative=lecture_id_relative)
+        return redirect('/slides/livecast/' + str(lecture_id_relative)) # FIXME: no hardcoded urls 
     slides = Slide.objects.filter(lecture=lecture)
     slides = _cache_slide_markers(slides)
     slides_preparation = slides.filter(tags__contains='.preparation')
@@ -193,7 +195,7 @@ def _livecast_now(lecture_or_course):
             return False
     elif type(lecture_or_course) == Course:
         course = lecture_or_course
-        lecture_right_now = Lecture.objects.filter(course=course, start__lte=now, end__gte=now, active=True)
+        lecture_right_now = Lecture.objects.filter(course=course, start__lte=(now + timedelta(minutes=LIVECAST_START)), end__gte=now, active=True)
         if lecture_right_now.count() == 1:
             return True
         else:
