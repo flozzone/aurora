@@ -36,7 +36,7 @@ def file_upload(request):
             user.avatar.save(request.FILES['file'].name, tmp_file, False)
         user.save()
         return HttpResponse(user.avatar.name)
-    return HttpResponse(upload_file.upload_file.name)
+    return HttpResponse(upload_file.upload_file.url)
 
 
 @login_required()
@@ -61,6 +61,6 @@ def all_files(request):
             data.append({
                 'name': os.path.basename(upload_file.upload_file.name),
                 'size': upload_file.upload_file.size,
-                'path': upload_file.upload_file.name,
+                'path': upload_file.upload_file.url,
             })
     return HttpResponse(json.dumps(data))

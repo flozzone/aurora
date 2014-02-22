@@ -15,13 +15,15 @@ from ReviewQuestion.models import ReviewQuestion
 from Slides.models import *
 from Comments.models import Comment, CommentsConfig
 from Notification.models import Notification
+from AmanamanProjekt.settings import STATIC_ROOT
+import os
+from django.core.files import File
 
 
 class Command(BaseCommand):
     help = 'Populates database with demo data'
 
     def handle(self, *args, **options):
-        print("Test")
         init_data()
 
 
@@ -158,9 +160,9 @@ def init_data():
                             title='meine meinung',
                             subtitle='meine meinung',
                             description='posten sie ihre meinung zu irgendwas in drei sätzen. dabei müssen sie lediglich darauf achten, dass die drei sätze alle mit demselben buchstaben beginnen.',
-                            image_url='1.png',
                             accepted_files=''
     )
+    challenge_1.image.save('1.png', File(open(os.path.join(STATIC_ROOT, 'img', '1.png'), 'rb')))
     challenge_1.save()
 
     ReviewQuestion(challenge=challenge_1, order=1, text="Erfüllt diese Arbeit die gestellte Aufgabe?", boolean_answer=True).save()
@@ -175,9 +177,9 @@ def init_data():
                             subtitle='rage-comic',
                             prerequisite=challenge_1,
                             description='finden sie einen rage-comic, den sie lustig finden, und beschreiben sie kurz, warum sie ihn lustig finden. laden sie dazu den rage-comic als bild hoch, und beschreiben sie in einem satz mit genau 5 worten, warum dieser rage-comic zum schreien komisch ist. finden sie einen rage-comic, den sie lustig finden, und beschreiben sie kurz, warum sie ihn lustig finden. laden sie dazu den rage-comic als bild hoch, und beschreiben sie in einem satz mit genau 5 worten, warum dieser rage-comic zum schreien komisch ist. finden sie einen rage-comic, den sie lustig finden, und beschreiben sie kurz, warum sie ihn lustig finden. laden sie dazu den rage-comic als bild hoch, und beschreiben sie in einem satz mit genau 5 worten, warum dieser rage-comic zum schreien komisch ist. finden sie einen rage-comic, den sie lustig finden, und beschreiben sie kurz, warum sie ihn lustig finden. laden sie dazu den rage-comic als bild hoch, und beschreiben sie in einem satz mit genau 5 worten, warum dieser rage-comic zum schreien komisch ist.',
-                            image_url='2.png',
                             accepted_files='image/*'
     )
+    challenge_2.image.save('2.png', File(open(os.path.join(STATIC_ROOT, 'img', '2.png'), 'rb')))
     challenge_2.save()
 
     ReviewQuestion(challenge=challenge_2, order=1, text="Do you think the submission was funny?",
@@ -192,9 +194,9 @@ def init_data():
                             subtitle='wikipedia',
                             prerequisite=challenge_2,
                             description='kopieren sie 4 absätze aus einem langweiligen wikipedia-artikel und geben sie sie ab. selbst schreiben ist verboten - das würde als plagiat gewertet!',
-                            image_url='3.png',
                             accepted_files=''
     )
+    challenge_3.image.save('3.png', File(open(os.path.join(STATIC_ROOT, 'img', '3.png'), 'rb')))
     challenge_3.save()
 
     challenge_4 = Challenge(id=4,
@@ -202,18 +204,18 @@ def init_data():
                             subtitle='wissenschaft',
                             prerequisite=challenge_3,
                             description='finden sie einen pseudowissenschaftlichen artikel und laden sie ihn hier hoch.',
-                            image_url='4.png',
                             accepted_files='application/pdf'
     )
+    challenge_4.image.save('4.png', File(open(os.path.join(STATIC_ROOT, 'img', '4.png'), 'rb')))
     challenge_4.save()
 
     challenge_5 = Challenge(id=5,
                             title='ping',
                             subtitle='ping',
                             description='laden sie ein bild im png-format hoch. das bild muss allerdings genau quadratisch sein. schreiben sie nichts dazu (geht ja auch nicht).',
-                            image_url='5.png',
                             accepted_files='image/png'
     )
+    challenge_5.image.save('5.png', File(open(os.path.join(STATIC_ROOT, 'img', '5.png'), 'rb')))
     challenge_5.save()
 
     challenge_6 = Challenge(id=6,
@@ -221,9 +223,9 @@ def init_data():
                             subtitle='advice animal',
                             prerequisite=challenge_5,
                             description='finden sie ein »advice animal« bild, das hier überhaupt nicht dazupasst. laden sie das bild hoch, und posten sie einen text dazu, der stattdessen auf dem bild stehen sollte. der muss auch gar nicht witzig sein.',
-                            image_url='6.png',
                             accepted_files='image/*'
     )
+    challenge_6.image.save('6.png', File(open(os.path.join(STATIC_ROOT, 'img', '6.png'), 'rb')))
     challenge_6.save()
 
     challenge_7 = Challenge(id=7,
@@ -231,9 +233,9 @@ def init_data():
                             subtitle='animated gif',
                             prerequisite=challenge_6,
                             description='suchen sie ein lustiges animated gif und posten sie es. schreiben sie als text 10 x das wort "lustig" dazu.',
-                            image_url='7.png',
                             accepted_files='image/gif'
     )
+    challenge_7.image.save('7.png', File(open(os.path.join(STATIC_ROOT, 'img', '7.png'), 'rb')))
     challenge_7.save()
 
     challenge_8 = Challenge(id=8,
@@ -241,28 +243,28 @@ def init_data():
                             subtitle='das bin ich',
                             prerequisite=challenge_7,
                             description='posten sie drei bilder von sich, und beschreiben sie kurz, wer auf den fotos zu sehen ist. die bilder von sich brauchen auch gar nicht wirklich von ihnen zu sein, sondern einfach nur von irgendwem, der ihnen ähnlich schaut. oder auch nicht.',
-                            image_url='8.png',
                             accepted_files='image/*'
     )
+    challenge_8.image.save('8.png', File(open(os.path.join(STATIC_ROOT, 'img', '8.png'), 'rb')))
     challenge_8.save()
 
     challenge_9 = Challenge(id=9,
                             title='sherlock',
                             subtitle='sherlock',
                             description='finden sie einen ausschnitt der britischen fernsehserie »sherlock« auf youtube und posten sie ihn hier. schreiben sie ausserdem dazu, dass sie sherlock saucool finden (in eigenen worten!)',
-                            image_url='9.png',
                             accepted_files=''
     )
+    challenge_9.image.save('9.png', File(open(os.path.join(STATIC_ROOT, 'img', '9.png'), 'rb')))
     challenge_9.save()
-
     challenge_10 = Challenge(id=10,
                              title='schmetterling',
                              subtitle='schmetterling',
                              prerequisite=challenge_9,
                              description='laden sie zwei bilder von schmetterlingen hoch, und schreiben sie eine kleine geschichte (max. 10 worte), in denen die schmetterlinge vorkommen.',
-                             image_url='4.png',
+
                              accepted_files='image/*'
     )
+    challenge_10.image.save('4.png', File(open(os.path.join(STATIC_ROOT, 'img', '4.png'), 'rb')))
     challenge_10.save()
 
     # create course-challenge relations

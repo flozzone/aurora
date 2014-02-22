@@ -20,7 +20,7 @@
 			<div class="one_challenge active" challenge_id="{{ challenge_dict.challenge.id }}">
 				<div class="challenge_top_bracket">&nbsp;</div>
 				<div class="challenge_image_container" challenge_id="{{ challenge_dict.challenge.id }}">
-		    		<img class="challenge_image active" src="{{ STATIC_URL }}img/{{ challenge_dict.challenge.image_url }}">
+		    		<img class="challenge_image active" src="/{{ challenge_dict.challenge.image.url }}">
 				</div>
 		  	  <div class="challenge-description">
   		        <div class="challenge-headline">{{ challenge_dict.challenge.title }}</div>
@@ -66,7 +66,7 @@
 				  <span>{{ challenge_dict.status.status }}.</span>
 				  {% if challenge_dict.points %}You received
 				  <span style="font-weight:bold;">{{ challenge_dict.points }}</span> Points
-				  {% if challenge_dict.status.status = "Evaluated" %}. Full evaluation result inside. {% endif %}
+				  {% if challenge_dict.status.status == "Evaluated" %}. Full evaluation result inside. {% endif %}
 				  {% endif %}
 				  
 <!-- review results -->
@@ -121,7 +121,7 @@
 		{% for challenge in challenges_inactive %}
 			<div class="one_challenge">
 				<div class="challenge_image_container">
-		    		<img class="challenge_image active" src="{{ STATIC_URL }}img/{{ challenge.image_url }}">
+		    		<img class="challenge_image active" src="/{{ challenge.image.url }}">
 				</div>
 		  	  <div class="challenge-description">
   		        <div class="challenge-headline">{{ challenge.title }}</div>
