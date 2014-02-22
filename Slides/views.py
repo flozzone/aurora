@@ -9,7 +9,6 @@ from django.shortcuts import get_object_or_404, render_to_response, redirect
 from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.utils import simplejson
-from django.utils.timezone import utc
 from django.views.decorators.csrf import csrf_exempt
 
 from Course.models import Course
@@ -68,13 +67,15 @@ def livecast_new_slide(request, course_id):
         return HttpResponse('must post')
 
 
-def livecast_update_slide(request, lecture_id_relative, slide_id, client_timestamp):
-    # TODO
-    # check for new slide
-    # render marker_div
-    render_dict = {}
-    json_return_dict = {'hello': 'world'}
-    return HttpResponse('<html><body>' + str(json_return_dict) + '</body></html>')
+def livecast_update_slide(request, client_timestamp):
+    course = RequestContext(request)['last_selected_course']
+    client_time = datetime.datetime.fromtimestamp(int(client_timestamp))
+    slides = Slide.objects.filter(lecture__course=course, lecture__active=True, pub_date__gte=client_time)
+    if slides.count() > 0:
+        json_response = { 'update': True, 'slide_id': slides.reverse()[0].id }
+    else: 
+        json_response = { 'update': False}
+    return HttpResponse(simplejson.dumps(json_response), mimetype='application/javascript')
 
 
 def livecast(request, lecture_id_relative):
@@ -193,7 +194,7 @@ def _livecast_now(lecture_or_course):
             return False
     elif type(lecture_or_course) == Course:
         course = lecture_or_course
-        lecture_right_now = Lecture.objects.filter(course=course, start__lte=(now + timedelta(minutes=LIVECAST_START), end__gte=now, active=True)
+        lecture_right_now = Lecture.objects.filter(course=course, start__lte=(now + timedelta(minutes=LIVECAST_START)), end__gte=now, active=True)
         if lecture_right_now.count() == 1:
             return True
         else:
