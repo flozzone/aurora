@@ -53,12 +53,16 @@ def livecast_new_slide(request, course_id):
             raise Http404
         if _livecast_now(course):
             now = datetime.datetime.now()
-            lecture = Lecture.objects.get(start__lte=now, end__gte=now, course=course)
+            lecture = Lecture.objects.get(start__lte=now, end__gte=now, course=course, active=True)
             slide = Slide(title=request.POST['title'], pub_date=now, filename=request.POST['filename'], lecture=lecture)
             slide.save()
             return HttpResponse("")
         else:
-            return HttpResponse('no lecture right now -> prep slides. ')
+            now = datetime.datetime.now()
+            lecture = Lecture.objects.filter(end__gte=now, course=course, active=True).order_by('start')[0]
+            slide = Slide(title=request.POST['title'], pub_date=now, filename=request.POST['filename'], lecture=lecture, tags='.preparation')
+            slide.save()
+            return HttpResponse("")
     else:
         return HttpResponse('must post')
 
