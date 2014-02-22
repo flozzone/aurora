@@ -28,7 +28,6 @@ def create_comment(text, author, reference_object, parent=None, days=0, minutes=
     post_date = timezone.now() + delta
     comment = Comment.objects.create(text=text, author=author, parent=parent, post_date=post_date,
                                      content_object=reference_object)
-    # comment.save()
     return comment
 
 
@@ -70,8 +69,10 @@ class ModelMethodTests(TestCase):
         self.u3 = next(user_generator)
         self.u3.save()
 
-        self.ref_object = CommentReferenceObject()
+        self.ref_object = CommentReferenceObject.objects.create()
 
+        # self.comment = Comment.objects.create(text='inTests', parent=None, author=self.u1, post_date=timezone.now(),
+                                              # content_object=self.ref_object)
         self.t1 = "text1"
         self.c1 = create_comment(self.t1, self.u1, self.ref_object)
         self.rt1 = "response text1"
@@ -88,8 +89,8 @@ class ModelMethodTests(TestCase):
         self.c4 = create_comment(self.t4, self.u3, self.ref_object)
 
     def test_query_comments_without_responses(self):
-        queryset = Comment.query_comments_without_responses(self, self.ref_object, self.requester)
-        self.assertTrue(list(queryset) == [self.c2, self.c4])
+        queryset = Comment.query_comments_without_responses(self.ref_object, self.u2)
+        self.assertTrue(list(queryset) == [self.c4, self.c2])
 
 
 class TagTests(TestCase):

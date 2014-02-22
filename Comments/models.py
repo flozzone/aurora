@@ -119,15 +119,15 @@ class Comment(models.Model):
     #     return challenges
 
     @staticmethod
-    def query_comments_without_responses(self, ref_object, requester):
+    def query_comments_without_responses(ref_object, requester):
         ref_id, ref_type = Comment.ref_obj_to_id_type(ref_object)
 
-        queryset = Comment.object.filter(
+        queryset = Comment.objects.annotate(num_children=Count('children')).filter(
             parent=None,
-            num_childer=Count('children'),
+            num_children=0,
             content_type__pk=ref_type,
             object_id=ref_id
-        ).filter(num_children=0)
+        )
 
         visible = Comment.filter_visible(queryset, requester)
         Comment.filter_deleted_trees(visible)
