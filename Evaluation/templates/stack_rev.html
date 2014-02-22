@@ -1,4 +1,5 @@
 {% load comments %}
+{% load render_uploads %}
 
 {% block additional_headers %}
   <script type="text/javascript" src="{{ STATIC_URL }}js/info_area.js"></script>
@@ -19,6 +20,8 @@
             <td><div title="Private comments" class="invisible_comments">{{ elaboration.get_invisible_comments|length }}</div></td>
         </tr>
     </table>
+
+    {% render_uploads elaboration %}
 
     <textarea id="editor_stack_rev">{{ elaboration.elaboration_text }}</textarea>
     <div class="spacer"></div>

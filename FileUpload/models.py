@@ -2,11 +2,11 @@ from django.db import models
 import os
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
+from AmanamanProjekt.settings import MEDIA_ROOT
 
 
 def get_upload_path(instance, filename):
-    return os.path.join("static", "upload", str(instance.user.id), str(UploadFile.objects.all().count()) + '_' + filename)
-
+    return os.path.join(MEDIA_ROOT, "upload", str(instance.user.id), str(UploadFile.objects.all().count()) + '_' + filename)
 
 class UploadFile(models.Model):
     user = models.ForeignKey('PortfolioUser.PortfolioUser')
