@@ -49,7 +49,7 @@ def evaluation(request):
                                'evaluated_non_adequate_work': Elaboration.get_evaluated_non_adequate_work(),
                                'non_adequate_reviews': Elaboration.get_non_adequate_reviews(),
                                'complaints': Elaboration.get_non_adequate_reviews(),
-                               'questions': Challenge.get_questions(),
+                               'questions': Challenge.get_questions(RequestContext(request)),
                                'awesome': Elaboration.get_awesome(),
                                'overview': overview,
                               },
@@ -102,7 +102,7 @@ def update_overview(request):
 @login_required()
 def questions(request):
     print("loading questions...")
-    challenges = Challenge.get_questions()
+    challenges = Challenge.get_questions(RequestContext(request))
     html = render_to_response('questions.html', {'challenges': challenges}, RequestContext(request))
     return html
 
