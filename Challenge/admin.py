@@ -10,13 +10,13 @@ class ChallengeAdmin(admin.ModelAdmin):
                     'subtitle',
                     'prerequisite',
                     'description',
-                    'image_url',
+                    'image',
                     'accepted_files',
                 ]
             }
         ),
     ]
-    list_display = ('id', 'title', 'subtitle', 'prerequisite', 'description', 'image_url', 'accepted_files', )
+    list_display = ('id', 'title', 'subtitle', 'prerequisite', 'description', 'image', 'accepted_files', )
 
 admin.site.register(Challenge, ChallengeAdmin)
 

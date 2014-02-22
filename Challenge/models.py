@@ -5,16 +5,23 @@ from Stack.models import StackChallengeRelation
 from ReviewQuestion.models import ReviewQuestion
 from Review.models import Review
 from Elaboration.models import Elaboration
+import os
 
+def challenge_image_path(instance, filename):
+    name = 'challenge_%s' % instance.id
+    fullname = os.path.join(instance.upload_path, name)
+    if os.path.exists(fullname):
+        os.remove(fullname)
+    return fullname
 
 class Challenge(models.Model):
     reviews_per_challenge = 3
-
+    upload_path = 'challenge'
     title = models.CharField(max_length=100)
     subtitle = models.CharField(max_length=100)
     prerequisite = models.ForeignKey('self', null=True, blank=True)
     description = models.TextField()
-    image_url = models.CharField(max_length=100)
+    image = models.ImageField(upload_to=challenge_image_path, null=True, blank=True)
     # This is a comma separated list of mime types or file extensions. Eg.: image/*,application/pdf,.psd.
     accepted_files = models.CharField(max_length=100, default="image/*,application/pdf", blank=True)
 

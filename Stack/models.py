@@ -20,7 +20,7 @@ class Stack(models.Model):
     def get_challenge_image_urls(self):
         challenge_image_urls = []
         for challenge in self.get_challenges():
-            challenge_image_urls.append(challenge.image_url)
+            challenge_image_urls.append(challenge.image.url)
         return challenge_image_urls
 
     def get_points(self, user):

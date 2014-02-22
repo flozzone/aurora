@@ -13,7 +13,6 @@ from ReviewQuestion.models import ReviewQuestion
 from ReviewAnswer.models import ReviewAnswer
 from Notification.models import Notification
 
-
 def create_context_review(request):
     data = {}
     if 'id' in request.GET:
@@ -74,7 +73,7 @@ def review_answer(request):
                 user=review.elaboration.user,
                 course=course,
                 text=Notification.BAD_REVIEW + review.elaboration.challenge.title,
-                image_url='/static/img/' + review.elaboration.challenge.image_url,
+                image_url=review.elaboration.challenge.image.url,
                 link="review=" + str(review.elaboration.challenge.id)
             ).save()
         else:
@@ -84,11 +83,10 @@ def review_answer(request):
                     user=review.elaboration.user,
                     course=course,
                     text=Notification.ENOUGH_PEER_REVIEWS + final_challenge.title,
-                    image_url='/static/img/' + final_challenge.image_url,
+                    image_url=final_challenge.image.url,
                     link="stack=" + str(review.elaboration.challenge.get_stack().id)
                 )
     return HttpResponse()
-
 
 def create_context_view_review(request):
     data = {}

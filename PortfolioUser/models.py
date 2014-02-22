@@ -4,11 +4,12 @@ from urllib.parse import urlparse
 import urllib.request
 from django.db import models
 from django.contrib.auth.models import User, UserManager
+from AmanamanProjekt.settings import STATIC_ROOT
 from Elaboration.models import Elaboration
+from django.core.files import File
 
 
 def avatar_path(instance, filename):
-
     name = 'avatar_%s' % instance.id
     fullname = os.path.join(instance.upload_path, name)
     if os.path.exists(fullname):
@@ -52,11 +53,11 @@ class PortfolioUser(User):
             gravatarurl = "http://www.gravatar.com/avatar/" + hashlib.md5(
                 self.email.lower().encode("utf-8")).hexdigest() + "?"
             gravatarurl += urllib.parse.urlencode({'d': 'monsterid', 's': str(192)})
-            urllib.request.urlretrieve(gravatarurl, os.path.join(self.upload_path, filename))
-            self.avatar = os.path.join(self.upload_path, filename)
+            result = urllib.request.urlretrieve(gravatarurl)
+            self.avatar.save(avatar_path(self, ''), File(open(result[0], 'rb')))
         except IOError:
             from shutil import copyfile
-            copyfile(os.path.join('static', 'img', 'default_gravatar.png'), os.path.join(self.upload_path, filename))
+            copyfile(os.path.join(STATIC_ROOT, 'img', 'default_gravatar.png'), os.path.join(self.upload_path, filename))
         self.avatar = os.path.join(self.upload_path, filename)
         self.save()
 
