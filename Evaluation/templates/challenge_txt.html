@@ -6,6 +6,6 @@
     <div class="description"> {{ challenge.description }} </div>
     <div class="spacer"></div>
 
-    <img class="challenge_image" src="{{ STATIC_URL }}img/{{ challenge.image_url }}">
+    <img class="challenge_image" src="{{ challenge.image.url }}">
 
 {% endblock %}

@@ -143,7 +143,7 @@ def create_comment(form, request):
                     user=user,
                     course=context['last_selected_course'],
                     text=Notification.NEW_MESSAGE + elaboration.challenge.title,
-                    image_url='/static/img/' + elaboration.challenge.image_url,
+                    image_url='/static/img/' + elaboration.challenge.image.url,
                     link="challenge=" + str(elaboration.challenge.id)
                 )
 
