@@ -89,7 +89,6 @@
       </td>
       <td>
         <div class="avatar"><img id="profile_avatar" class="avatar_img" src="/{{ user.avatar.url }}" alt="Avatar"> <div class="subtitle">(click to edit)</div></div>
-
         <form id="file_upload_form" action="/fileupload">
           <input id="user_id" type="text" name="user_id" value="{{ user.id }}" hidden style="display:none">
           <input id="file_upload_input" type="file" accept="image/*" hidden style="display:none">
@@ -102,7 +101,7 @@
     <tr class="formRow">
       <td></td>
 	  <td align="right"><input class="button XL" type="button" value="SAVE" onclick="$('#saved_message').delay(150).fadeIn(250).delay(250).fadeOut(2000)"></td>
-	  <td><div class="hidden_text" id="saved_message"><i class="fa fa-check green"></i></div></tdr>
+	  <td><div class="hidden_text" id="saved_message"><i class="fa fa-check green"></i></div></td>
 	</tr>
     </table>
     <div id="error"></div>

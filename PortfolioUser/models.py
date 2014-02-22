@@ -19,7 +19,7 @@ class PortfolioUser(User):
     nickname = models.CharField(max_length=100, null=True, blank=True)
     last_activity = models.DateTimeField(auto_now_add=True, blank=True)
     statement = models.TextField()
-    upload_path = 'static/img/avatar'
+    upload_path = 'avatar'
     avatar = models.ImageField(upload_to=avatar_path, null=True, blank=True)
     matriculation_number = models.CharField(max_length=100, null=True)
     study_code = models.CharField(max_length=100, null=True, blank=True, default="")
@@ -56,7 +56,6 @@ class PortfolioUser(User):
             self.avatar = os.path.join(self.upload_path, filename)
         except IOError:
             from shutil import copyfile
-
             copyfile(os.path.join('static', 'img', 'default_gravatar.png'), os.path.join(self.upload_path, filename))
         self.avatar = os.path.join(self.upload_path, filename)
         self.save()
