@@ -13,6 +13,6 @@ def render_uploads(elaboration):
     for upload_file in UploadFile.objects.filter(user=elaboration.user, elaboration__id=elaboration.id):
         files.append([os.path.basename(upload_file.upload_file.name),
                       upload_file.upload_file.size,
-                      upload_file.upload_file.name])
+                      upload_file.upload_file.url])
 
     return {'files' : files}
