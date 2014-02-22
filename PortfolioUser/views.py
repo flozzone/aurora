@@ -4,8 +4,9 @@ from django.http import HttpResponse
 from django.contrib.auth import authenticate, login as django_login, logout
 from django.template import RequestContext
 from django.shortcuts import render_to_response
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from PortfolioUser.models import PortfolioUser
+
 from Course.models import Course
 
 
@@ -50,8 +51,8 @@ def login(request):
     else:
         return render_to_response('login.html', {'next': '/'}, context_instance=RequestContext(request))
 
-
-@login_required()
+@login_required
+@ensure_csrf_cookie
 def profile(request):
     user = RequestContext(request)['user']
     return render_to_response('profile.html', {'user': user}, context_instance=RequestContext(request))
@@ -61,6 +62,8 @@ def profile(request):
 def profile_save(request):
     data = {}
     user = RequestContext(request)['user']
+    if 'nickname' in request.POST and request.POST['nickname'] == "":
+        data['error'] = "empty nickname not allowed"
     valid_nickname = True
     users_with_same_nickname = PortfolioUser.objects.filter(nickname=request.POST['nickname'])
     for user_with_same_nickname in users_with_same_nickname:
