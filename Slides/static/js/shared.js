@@ -50,36 +50,6 @@ $.ajaxSetup({
 // end of csrf stuff.
 
 
-// contentbar stuff
-function getX(oElement ) {
-	var iReturnValue = 0;
-	while( oElement != null ) {
-		iReturnValue += oElement.offsetLeft;
-		oElement = oElement.offsetParent;
-	}
-	return iReturnValue;
-}
-
-function toggleMenu(menuHead, menu) {
-	var a = document.getElementById(menu);
-	if (a.style.visibility == 'hidden'){
-		var z = getX(menuHead);
-		z = z - 7;
-		z = z + "px";
-		a.style.left = z; //getX(menuHead);
-		a.style.visibility='visible'; 
-	} else {
-		a.style.visibility='hidden'; 
-	}
-}
-
-function closeMenu(menu) {
-	var a = document.getElementById(menu);
-	a.style.visibility='hidden'; 
-}
-// end of contentbar stuff.
-
-
 // takes care of marking slides as confusing/important/
 function markSlide(button_div, url) {
     var marker_button = $(button_div);
