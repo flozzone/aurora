@@ -1,7 +1,7 @@
 from django.db import models as models
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
-from django.db.models import Q
+from django.db.models import Q, Count
 
 
 class Tag(models.Model):
@@ -109,6 +109,32 @@ class Comment(models.Model):
 
     def __unicode__(self):
         return str(self.id) + ": " + self.text[:30]
+
+    # @staticmethod
+    # def get_questions():
+    #     challenges = []
+    #     for challenge in Challenge.objects.all():
+    #         if Comment.objects.filter(content_type=ContentType.objects.get_for_model(Challenge), object_id=challenge.id):
+    #             challenges.append(challenge)
+    #     return challenges
+
+    @staticmethod
+    def query_comments_without_responses(self, ref_object, requester):
+        ref_id, ref_type = Comment.ref_obj_to_id_type(ref_object)
+
+        queryset = Comment.object.filter(
+            parent=None,
+            num_childer=Count('children'),
+            content_type__pk=ref_type,
+            object_id=ref_id
+        ).filter(num_children=0)
+
+        visible = Comment.filter_visible(queryset, requester)
+        Comment.filter_deleted_trees(visible)
+        visible = visible.order_by('-post_date')
+
+        Comment.set_flags(visible, requester)
+        return visible
 
     @staticmethod
     def query_top_level_sorted(ref_object_id, ref_type_id, requester):
@@ -221,6 +247,11 @@ class Comment(models.Model):
 
         return non_private_or_authored.filter(
             ~Q(visibility=Comment.STAFF) | Q(author=requester) | Q(parent__author=requester))
+
+    @staticmethod
+    def ref_obj_to_id_type(ref_object):
+        ref_type = ContentType.objects.get_for_model(ref_object)
+        return ref_object.id, ref_type.id
 
 
 class CommentsConfig(models.Model):
