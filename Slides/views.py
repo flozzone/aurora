@@ -10,10 +10,12 @@ from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.utils import simplejson
 from django.utils.timezone import utc
+from django.views.decorators.csrf import csrf_exempt
 
 from Course.models import Course
 from Slides.models import Lecture, Slide, Stream
 from Slides.settings import LIVECAST_START
+from Slides.settings import SLIDE_SECRET
 
 """
 - slidecasting_mode
@@ -28,6 +30,11 @@ that are used by slidecasting), it has one of the following values:
     * 'discourses'
     * 'search_results'
     * 'create_pdf'
+    
+- tags
+the following tags can be attached to slides:
+    * .preparation
+    * .exercise
 """
 
 
@@ -37,6 +44,29 @@ def start(request):
     render_dict = {'slidecasting_mode': 'start', 'course':course, 'lectures': lectures}
     return render_to_response('start.html', render_dict, context_instance=RequestContext(request))
 
+@csrf_exempt
+def livecast_new_slide(request, course_id):
+    if request.method == 'POST' and request.POST['secret'] == SLIDE_SECRET:
+        try:
+            now = datetime.datetime.now()
+            course = Course.objects.get(id=course_id)
+            if _livecast_now(course):
+                lecture = Lecture.objects.get(start__lte=now, end__gte=now, course=course, active=True)
+                tags = ""
+            else:
+                lecture = Lecture.objects.filter(end__gte=now, course=course, active=True).order_by('start')[0]
+                tags = ".preparation"
+
+            slide = Slide(title=request.POST['title'], pub_date=now, filename=request.POST['filename'], lecture=lecture, tags=tags)
+            slide.save()            
+            return HttpResponse("")
+        except (Course.DoesNotExist, Course.MultipleObjectsReturned):
+            return HttpResponse('course error.')
+        except (Lecture.DoesNotExist, Lecture.MultipleObjectsReturned, IndexError):
+            return HttpResposne('lecture error.')
+    else:
+        return HttpResponse('must post')
+
 
 def livecast_update_slide(request, lecture_id_relative, slide_id, client_timestamp):
     # TODO
@@ -44,7 +74,6 @@ def livecast_update_slide(request, lecture_id_relative, slide_id, client_timesta
     # render marker_div
     render_dict = {}
     json_return_dict = {'hello': 'world'}
-    # return HttpResponse(simplejson.dumps({'hello': 'world'}), mimetype='application/javascript')
     return HttpResponse('<html><body>' + str(json_return_dict) + '</body></html>')
 
 
@@ -63,7 +92,7 @@ def studio_lecture(request, lecture_id_relative):
     lectures = _get_contentbar_data(course)
     lecture = get_object_or_404(Lecture, course=course, active=True, id_relative=lecture_id_relative)
     if _livecast_now(lecture):
-        return redirect('livecast', course_short_title=course_short_title, lecture_id_relative=lecture_id_relative)
+        return redirect('livecast', lecture_id_relative=lecture_id_relative)
     slides = Slide.objects.filter(lecture=lecture)
     slides = _cache_slide_markers(slides)
     slides_preparation = slides.filter(tags__contains='.preparation')
@@ -71,7 +100,7 @@ def studio_lecture(request, lecture_id_relative):
     videoclip_url, videoclip_name = _get_videoclip_url_name(lecture)
     videoclip_chapters = _get_videoclip_chapters(lecture, slides, slides_preparation)
     
-    render_dict = {'slidecasting_mode': 'studio', 'course':course, 'lectures': lectures, 'lecture': lecture, 'slides': slides} 
+    render_dict = {'slidecasting_mode': 'studio', 'course':course, 'lectures': lectures, 'lecture': lecture, 'slides': slides, 'slides_preparation': slides_preparation } 
     render_dict.update({ 'videoclip_name': videoclip_name, 'videoclip_url': videoclip_url, 'videoclip_chapters': videoclip_chapters })
     return render_to_response('studio.html', render_dict, context_instance=RequestContext(request))
     
@@ -110,7 +139,7 @@ def mark_slide(request, slide_id, marker, value):
     if request.method == 'POST':
         try:
             slide = Slide.objects.get(id=slide_id)
-        except (Slide.DoesNotExist, MultipleObjectsReturned): 
+        except (Slide.DoesNotExist, Slide.MultipleObjectsReturned): 
             return HttpResponse(simplejson.dumps({'success': False}), mimetype='application/javascript')
         if value == 'xxx':
             return HttpResponse(simplejson.dumps({'success': False}), mimetype='application/javascript')
@@ -153,11 +182,22 @@ def _cache_slide_markers(slides):
     return slides.annotate(count_confusing=Count('confusing')).annotate(count_important=Count('important')).annotate(count_liked=Count('liked')).prefetch_related('confusing').prefetch_related('important').prefetch_related('liked')
 
 
-def _livecast_now(lecture):
+def _livecast_now(lecture_or_course):
     now = datetime.datetime.now()
-    lecture_livecast_start = lecture.start - timedelta(minutes=LIVECAST_START)
-    if now > lecture_livecast_start and now < lecture.end:
-        return True
+    if type(lecture_or_course) == Lecture:
+        lecture = lecture_or_course
+        lecture_livecast_start = lecture.start - timedelta(minutes=LIVECAST_START)
+        if now > lecture_livecast_start and now < lecture.end:
+            return True
+        else:
+            return False
+    elif type(lecture_or_course) == Course:
+        course = lecture_or_course
+        lecture_right_now = Lecture.objects.filter(course=course, start__lte=now, end__gte=now, active=True)
+        if lecture_right_now.count() == 1:
+            return True
+        else:
+            return False
     else:
         return False
     
