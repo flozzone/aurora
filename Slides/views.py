@@ -193,7 +193,7 @@ def _livecast_now(lecture_or_course):
             return False
     elif type(lecture_or_course) == Course:
         course = lecture_or_course
-        lecture_right_now = Lecture.objects.filter(course=course, start__lte=now, end__gte=now, active=True)
+        lecture_right_now = Lecture.objects.filter(course=course, start__lte=(now + timedelta(minutes=LIVECAST_START), end__gte=now, active=True)
         if lecture_right_now.count() == 1:
             return True
         else:
