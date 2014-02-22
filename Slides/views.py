@@ -48,21 +48,22 @@ def start(request):
 def livecast_new_slide(request, course_id):
     if request.method == 'POST' and request.POST['secret'] == SLIDE_SECRET:
         try:
+            now = datetime.datetime.now()
             course = Course.objects.get(id=course_id)
+            if _livecast_now(course):
+                lecture = Lecture.objects.get(start__lte=now, end__gte=now, course=course, active=True)
+                tags = ""
+            else:
+                lecture = Lecture.objects.filter(end__gte=now, course=course, active=True).order_by('start')[0]
+                tags = ".preparation"
+
+            slide = Slide(title=request.POST['title'], pub_date=now, filename=request.POST['filename'], lecture=lecture, tags=tags)
+            slide.save()            
+            return HttpResponse("")
         except (Course.DoesNotExist, Course.MultipleObjectsReturned):
-            raise Http404
-        if _livecast_now(course):
-            now = datetime.datetime.now()
-            lecture = Lecture.objects.get(start__lte=now, end__gte=now, course=course, active=True)
-            slide = Slide(title=request.POST['title'], pub_date=now, filename=request.POST['filename'], lecture=lecture)
-            slide.save()
-            return HttpResponse("")
-        else:
-            now = datetime.datetime.now()
-            lecture = Lecture.objects.filter(end__gte=now, course=course, active=True).order_by('start')[0]
-            slide = Slide(title=request.POST['title'], pub_date=now, filename=request.POST['filename'], lecture=lecture, tags='.preparation')
-            slide.save()
-            return HttpResponse("")
+            return HttpResponse('course error.')
+        except (Lecture.DoesNotExist, Lecture.MultipleObjectsReturned, IndexError):
+            return HttpResposne('lecture error.')
     else:
         return HttpResponse('must post')
 
@@ -99,7 +100,7 @@ def studio_lecture(request, lecture_id_relative):
     videoclip_url, videoclip_name = _get_videoclip_url_name(lecture)
     videoclip_chapters = _get_videoclip_chapters(lecture, slides, slides_preparation)
     
-    render_dict = {'slidecasting_mode': 'studio', 'course':course, 'lectures': lectures, 'lecture': lecture, 'slides': slides} 
+    render_dict = {'slidecasting_mode': 'studio', 'course':course, 'lectures': lectures, 'lecture': lecture, 'slides': slides, 'slides_preparation': slides_preparation } 
     render_dict.update({ 'videoclip_name': videoclip_name, 'videoclip_url': videoclip_url, 'videoclip_chapters': videoclip_chapters })
     return render_to_response('studio.html', render_dict, context_instance=RequestContext(request))
     
