@@ -1,0 +1,21 @@
+<div class="file_upload" style="">
+    <div id="dropzone" class="dropzone is_submitted dz-started">
+
+    {% for file in files %}
+    <div class="dz-preview dz-image-preview">
+        <div class="dz-details">
+            <div class="dz-filename">
+                <span data-dz-name="">{{ file.0 }}</span>
+            </div>
+            <div class="dz-size" data-dz-size="">
+                <strong>{{ file.1 }}</strong>
+            </div>
+            <a title="{{ file.0 }}" data-lightbox="preview" href="/{{ file.2 }}">
+                <img class="preview" alt="{{ file.0 }}" src="/{{ file.2 }}"></img>
+            </a>
+        </div>
+        <div class="fig">{{ file.1 }}</div>
+    </div>
+    {% endfor %}
+    </div>
+</div>
