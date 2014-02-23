@@ -71,8 +71,6 @@ class ModelMethodTests(TestCase):
 
         self.ref_object = CommentReferenceObject.objects.create()
 
-        # self.comment = Comment.objects.create(text='inTests', parent=None, author=self.u1, post_date=timezone.now(),
-                                              # content_object=self.ref_object)
         self.t1 = "text1"
         self.c1 = create_comment(self.t1, self.u1, self.ref_object)
         self.rt1 = "response text1"

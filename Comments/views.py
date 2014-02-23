@@ -239,37 +239,48 @@ def promote_comment(request):
 @require_GET
 @login_required
 def update_comments(request):
-    client_revision = request.GET
-    ref_type = client_revision['ref_type']
-    ref_id = client_revision['ref_id']
-    user = RequestContext(request)['user']
+    print(request.GET)
+    test = json.loads(request.body)
+    print(test)
+    # client_revisions = request.GET.getlist('revisions[]')
+    # client_revisions = json.loads(request.GET.get('revisions'))
+    # client_revisions = json.loads(request.GET)
 
-    revision = CommentListRevision.get_by_ref_numbers(ref_id, ref_type).number
+    # print(client_revisions)
 
-    polling_active, polling_idle = CommentsConfig.get_polling_interval()
+    # for client_revision in client_revisions:
+    #     print(client_revision)
 
-    response_data = {'polling_active_interval': polling_active,
-                     'polling_idle_interval': polling_idle}
-
-    if revision > int(client_revision['id']):
-        comment_list = Comment.query_top_level_sorted(ref_id, ref_type, user)
-        id_suffix = "_" + str(ref_id) + "_" + str(ref_type)
-
-        context = {'comment_list': comment_list,
-                   'ref_type': ref_type,
-                   'ref_id': ref_id,
-                   'id_suffix': id_suffix,
-                   'requester': user,
-                   'revision': revision}
-
-        response_data.update(
-            {'comment_list': render_to_string('Comments/comment_list.html', context)}
-        )
-        template_response = json.dumps(response_data)
-            # render_to_response('Comments/comment_list.html', context))
-        return HttpResponse(template_response, content_type="application/json")
-    else:
-        return HttpResponse(json.dumps(response_data))
+    # client_revision = request.GET
+    # ref_type = client_revision['ref_type']
+    # ref_id = client_revision['ref_id']
+    # user = RequestContext(request)['user']
+    #
+    # revision = CommentListRevision.get_by_ref_numbers(ref_id, ref_type).number
+    #
+    # polling_active, polling_idle = CommentsConfig.get_polling_interval()
+    #
+    # response_data = {'polling_active_interval': polling_active,
+    #                  'polling_idle_interval': polling_idle}
+    #
+    # if revision > int(client_revision['id']):
+    #     comment_list = Comment.query_top_level_sorted(ref_id, ref_type, user)
+    #     id_suffix = "_" + str(ref_id) + "_" + str(ref_type)
+    #
+    #     context = {'comment_list': comment_list,
+    #                'ref_type': ref_type,
+    #                'ref_id': ref_id,
+    #                'id_suffix': id_suffix,
+    #                'requester': user,
+    #                'revision': revision}
+    #
+    #     response_data.update(
+    #         {'comment_list': render_to_string('Comments/comment_list.html', context)}
+    #     )
+    #     template_response = json.dumps(response_data)
+    #     return HttpResponse(template_response, content_type="application/json")
+    # else:
+    #     return HttpResponse(json.dumps(response_data))
 
 
 @login_required

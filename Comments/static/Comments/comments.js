@@ -97,7 +97,7 @@ function registerVoteForCommentList($comment_list) {
             type: 'GET',
             dataType: 'html',
             success: function(response) {
-                updateComments(false);
+                updateCommentLists(false);
             }
         })
         return false;
@@ -434,10 +434,11 @@ function registerAddCommentButton() {
     })
 }
 
+//(function() {
 /**
  * updates a comment_list by sending highest comment id to server and replacinng the div with the answer if one is
  * being received
- * @param keepPolling   should updateComments keep polling for updates after call
+ * @param keepPolling   should updateCommentLists keep polling for updates after call
  * @param force         force a reload of the comment_list
  */
 function updateComments(keepPolling) {
@@ -448,19 +449,18 @@ function updateComments(keepPolling) {
     });
 }
 
-function updateCommentList(keepPolling, $comment_list) {
-    var revision;
-    revision = getRevision($comment_list);
+function updateCommentLists(keepPolling) {
+    var data = {revisions: getRevisions()};
 
     $.ajax({
         url: '/update_comments/',
-        data: revision,
+        data: revisions,
         type: 'GET',
         dataType: 'json',
         success: function (json) {
-            var html = json['comment_list'];
-            if (html) {
-                replaceCommentListWithHtml($comment_list, html)
+            var comment_list_updates = json['comment_list_updates'];
+            if(comment_list_updates.length > 0) {
+                handleCommentListUpdates(comment_list_updates);
             }
             if (json['polling_active_interval']) {
                 POLLING.active_interval = json['polling_active_interval'];
@@ -475,7 +475,7 @@ function updateCommentList(keepPolling, $comment_list) {
         complete: function (xhr, status) {
             if (keepPolling == true && !POLLING.stopped) {
                 clearTimeout(POLLING.current_timeout);
-                POLLING.current_timeout = setTimeout('updateComments(true)', POLLING.current_interval);
+                POLLING.current_timeout = setTimeout('updateCommentLists(true)', POLLING.current_interval);
             }
         }
     })
@@ -484,6 +484,20 @@ function updateCommentList(keepPolling, $comment_list) {
 function findCommentListByRef(ref_id, ref_type) {
     return $('.comment_list').filter('[data-ref_type=' + ref_type + ']')
         .filter('[data-ref_id=' + ref_id + ']');
+}
+
+function handleCommentListUpdates(comment_list_updates) {
+    var ref_id, ref_type, html;
+    var $comment_list;
+
+    for(var i = 0; i < comment_list_updates.length; i++) {
+        ref_id = comment_list_updates[i].ref_id;
+        ref_type = comment_list_updates[i].ref_type;
+        html = comment_list_updates[i].comment_list;
+
+        $comment_list = findCommentListByRef(ref_id,  ref_type);
+        replaceCommentListWithHtml($comment_list, html)
+    }
 }
 
 function replaceCommentListWithHtml($comment_list, html) {
@@ -533,7 +547,31 @@ function stopPolling() {
 
 function startPolling() {
     POLLING.stopped = false;
-    updateComments(true);
+    updateCommentLists(true);
+}
+
+//});
+
+function getRevisions() {
+    var revisions = [];
+
+    var $comment_lists = $('.comment_list')
+    $comment_lists.each(function () {
+        var $this = $(this);
+        revisions.push({
+            number: $this.attr('data-revision'),
+            ref_type: $this.attr('data-ref_type'),
+            ref_id: $this.attr('data-ref_id')
+        });
+    });
+
+    return revisions;
+}
+
+function getRevision($comment_list) {
+    return {id: $comment_list.attr('data-revision'),
+        ref_type: $comment_list.attr('data-ref_type'),
+        ref_id: $comment_list.attr('data-ref_id')}
 }
 
 function registerTestButton() {
@@ -564,10 +602,4 @@ function findClosestRefObj($child) {
     var ref_type = $child.closest('[data-ref_type]').attr('data-ref_type');
     var ref_id = $child.closest('[data-ref_id]').attr('data-ref_id');
     return { type: ref_type, id: ref_id }
-}
-
-function getRevision($comment_list) {
-    return {id: $comment_list.attr('data-revision'),
-            ref_type: $comment_list.attr('data-ref_type'),
-            ref_id: $comment_list.attr('data-ref_id')}
 }
