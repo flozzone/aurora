@@ -4,7 +4,10 @@
   <link rel="stylesheet" href="{{ STATIC_URL }}dropzone/css/basic.css" type="text/css" media="screen"/>
   <link rel="stylesheet" href="{{ STATIC_URL }}dropzone/css/dropzone.css" type="text/css" media="screen"/>
 {% endblock %}
-
+<script>
+  var static_url = "{{ STATIC_URL }}";
+  var media_url = "{{ MEDIA_URL }}";
+</script>
 <div>
   <div class="pagehead">
     <div class="headline">
