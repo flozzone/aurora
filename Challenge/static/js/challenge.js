@@ -4,7 +4,6 @@ function challenge_loaded() {
     var challenge_id = $('.challenge').attr('id');
     tinymce.init({
         selector: "textarea#editor",
-		content_css : "../static/css/content.css",
         paste_auto_cleanup_on_paste : true,
 		paste_retain_style_properties : "font-size,bold,italic",
 		paste_text_linebreaktype: "p",
