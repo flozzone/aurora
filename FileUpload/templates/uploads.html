@@ -9,13 +9,13 @@
                         <span data-dz-name="">{{ file.0 }}</span>
                     </div>
                     <div class="dz-size" data-dz-size="">
-                        <strong>{{ file.1 }}</strong>
+                        <strong>{{ file.1 }}MB</strong>
                     </div>
                     <a title="{{ file.0 }}" data-lightbox="preview" href="/{{ file.2 }}">
                         <img class="preview" alt="{{ file.0 }}" src="/{{ file.2 }}"/>
                     </a>
                 </div>
-                <div class="fig">{{ file.1 }}</div>
+                <div class="fig">{{ file.0 }}</div>
             </div>
     {% if forloop.last %}
         </div>
