@@ -11,9 +11,15 @@
                     <div class="dz-size" data-dz-size="">
                         <strong>{{ file.1 }}MB</strong>
                     </div>
-                    <a title="{{ file.0 }}" data-lightbox="preview" href="/{{ file.2 }}">
-                        <img class="preview" alt="{{ file.0 }}" src="/{{ file.2 }}"/>
-                    </a>
+                    {% if '.pdf' in file.0|slice:"-4:" %}
+                        <a title="{{ file.0 }}" href="/{{ file.2 }}" target="_blank">
+                            <img class="preview" alt="{{ file.0 }}" src="/static/img/pdf_icon.jpg"/>
+                        </a>
+                    {% else %}
+                        <a title="{{ file.0 }}" data-lightbox="preview" href="/{{ file.2 }}">
+                            <img class="preview" alt="{{ file.0 }}" src="/{{ file.2 }}"/>
+                        </a>
+                    {% endif %}
                 </div>
                 <div class="fig">{{ file.0 }}</div>
             </div>
