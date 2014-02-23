@@ -31,7 +31,9 @@
 
         {% render_uploads elaboration %}
 
-        <textarea id="editor_detail">{{ elaboration.elaboration_text }}</textarea>
+        {% if elaboration.elaboration_text|length != 0 %}
+            <textarea id="editor_detail">{{ elaboration.elaboration_text|safe }}</textarea>
+        {% endif %}
         <div class="spacer"></div>
 
         {% if evaluation %}
