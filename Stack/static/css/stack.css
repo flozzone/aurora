@@ -52,8 +52,8 @@
 
 .go_challenge {
 	position:absolute;
-	top:78px;
-	right:10px;
+	bottom:9px;
+	right:12px;
 }
 
 .review_space {
@@ -118,6 +118,7 @@
 	height:96px;
 	position:relative;
 	overflow:hidden;
+	text-overflow: ellipsis;
 	margin-left:120px;
 	pointer-events:none;
 	padding:0.25em;
