@@ -4,6 +4,7 @@
 
 {% block additional_headers %}
     <script type="text/javascript" src="{% static "Comments/feed.js" %}"></script>
+    <link rel="stylesheet" href="{{ STATIC_URL }}Comments/feed.css" type="text/css" media="screen"/>
 {% endblock %}
 
 {% block content %}
@@ -13,12 +14,12 @@
     <div id="comments_column_1">
 		<div style="background:black;color:white;padding:0.1em"><b>Open Newsfeed (Currently {% comments_count for object %} Comments)</b></div>
 		<ul class="toolbar">
-			<li><i class="fa fa-eye" style="color:gray"></i></li>
-			<li class="button" onclick="filter(1);">All Comments</li>
-			<li class="button"  onclick="filter(2);">Only Lecturer-Comments</li>
-			<li class="button" onclick="filter(-1);">Hide Comments below 0</li>
-			<li class="button" onclick="filter(-5);">Hide Comments below -5</li>
-			<li class="button" onclick="filter(0)">No Comments</li>
+			<li><i class="fa fa-eye"></i></li>
+			<li class="button filterbtn" id="1" onclick="filter(this.id);">All Comments</li>
+			<li class="button filterbtn" id="2" onclick="filter(this.id);">Only Lecturer-Comments</li>
+			<li class="button filterbtn" id="-1" onclick="filter(this.id);">Hide Comments below 0</li>
+			<li class="button filterbtn" id="-5" onclick="filter(this.id);">Hide Comments below -5</li>
+			<li class="button filterbtn" id="0" onclick="filter(this.id)">No Comments</li>
 		</ul>
         {% render_multi_comment_list for object %}
     </div>

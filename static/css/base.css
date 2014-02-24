@@ -406,15 +406,6 @@ button {
 	border-bottom:1px dashed silver;	
 }
 
-.toolbar > li {
-    display:inline;
-	margin-left:0.75em;
-}
-
-.toolbar {
-	background-color:#eee;
-	
-}
 
 /*!
  *  Font Awesome 4.0.3 by @davegandy - http://fontawesome.io - @fontawesome
