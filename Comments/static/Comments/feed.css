@@ -1,0 +1,50 @@
+.toolbar > li {
+    display:inline;
+	padding:1px 0.65em;
+	border-radius:1em;
+	margin-left:0;
+}
+
+.toolbar {
+	background-color:#ddd;
+	padding-bottom:4px;
+	padding-left:0.5em;
+}
+
+.toolbar .fa {
+	color:gray;
+	font-size:120%;
+}
+
+.hilited {
+	color:white;
+	background-color: rgb(58,201,88);
+}
+
+.hided .comment_body, .hided .response_body {
+	display:none;
+}
+
+.hided .comment_top, .hided .response_top {
+	opacity:0.3;
+	background-color:#d8d8d8;
+}
+
+.hided .comment_top {
+}
+
+.hided .comment_actions, .hided .response_actions {
+	display:none;	
+}
+
+.hided .comment_numreplies {
+	display:inline;
+}
+
+.deepHided {
+	display:none !important;
+}
+
+.hided.r_list {
+	display:none;
+}
