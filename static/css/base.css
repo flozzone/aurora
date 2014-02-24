@@ -252,49 +252,53 @@ input:-moz-placeholder { color:rgba(58,201,88,0);	text-shadow: 0 0 2px rgba(58,2
 	cursor:pointer;
 }
 
-.user_info a {
-    position: absolute;
-    top: 0px;
-    right: 0px;
-	height:100%;
-	opacity:0.2;
+.user_info {
+	cursor:pointer;
+	position:absolute;
+	top:0px;
+	right:0px;
+	height:96px;
+	width:96px;
+	opacity: 0.2;
 	filter:alpha(opacity=20); /* For IE8 and earlier */	
+	background-size:96px 96px;
+	background-position: 0 0;
 }
 
-.user_info:hover a {
+
+.user_info:hover {
 	opacity:1;
 	filter:alpha(opacity=100); /* For IE8 and earlier */	
 }
 
-
-.user_info > a > img {
-	height:100%;
-	vertical-align:middle;
-}
-
-.user_name:hover > span {
-	background-color: rgba(0,0,0,0.6);
-	color:white;
-}
-
-.user_name > span {
-	display:block;
+.user_info .user_nick {
+	display:none;
 	position:absolute;
+	width:96px;
 	bottom:0px;
-	width:100%;
-	padding-bottom:7px;
-	overflow:hidden;
-	color:rgba(0,0,0,0);
+	left:0px;
+    font-size: 18px;
     font-family: 'yanone_kaffeesatz_rgregular';
+	color:white;
+	text-shadow: 0px 0px 2px black;
+	text-align:center;
+	padding-bottom:0.4em;
 }
 
-.user_name {
-	position:relative;
-	font-size:18px;
-	height:96px;
+.user_info:hover .user_nick, .user_info:hover .profile_link {
+	display:block;
+}
+
+.user_info .profile_link {
+	display:none;
+	position:absolute;
 	width:96px;
-	top:-100%;
-	vertical-align:bottom;
+	top:96px;
+	left:0px;
+	font-size:11px;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	text-transform:uppercase;
+	color:rgb(58,201,88);
 	text-align:center;
 }
 
