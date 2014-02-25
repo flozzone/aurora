@@ -61,7 +61,6 @@ class CourseTest(TestCase):
             title='test_title',
             subtitle='test_subtitle',
             description='test_description',
-            image_url='test_image_url',
         )
         self.challenge.save()
         CourseChallengeRelation(course=self.course, challenge=self.challenge).save()
