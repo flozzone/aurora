@@ -209,7 +209,7 @@ input:-moz-placeholder { color:rgba(58,201,88,0);	text-shadow: 0 0 2px rgba(58,2
 	background-position: 0 10%;
     min-height: 96px;
     color: white;
-    font-size: 30px;
+    font-size: 32px;
     vertical-align: bottom;
     width: 100%;
 }
@@ -227,7 +227,7 @@ input:-moz-placeholder { color:rgba(58,201,88,0);	text-shadow: 0 0 2px rgba(58,2
 }
 
 .pagehead ul li {
-    font-size: 18px;
+    font-size: 20px;
     display: inline;
     font-family: 'yanone_kaffeesatz_rgregular';
     margin-right: 10px;
@@ -247,7 +247,7 @@ input:-moz-placeholder { color:rgba(58,201,88,0);	text-shadow: 0 0 2px rgba(58,2
 	border:none;
 	background-color:rgba(0,0,0,0);
 	color:white;
-    font-size: 18px;
+    font-size: 20px;
     font-family: 'yanone_kaffeesatz_rgregular';
 	cursor:pointer;
 }
@@ -277,7 +277,7 @@ input:-moz-placeholder { color:rgba(58,201,88,0);	text-shadow: 0 0 2px rgba(58,2
 	width:96px;
 	bottom:0px;
 	left:0px;
-    font-size: 18px;
+    font-size: 20px;
     font-family: 'yanone_kaffeesatz_rgregular';
 	color:white;
 	text-shadow: 0px 0px 2px black;
@@ -320,7 +320,8 @@ input:-moz-placeholder { color:rgba(58,201,88,0);	text-shadow: 0 0 2px rgba(58,2
 }
 
 .glow {
-	background-color:rgba(255,255,255,0.3);
+	box-shadow: 0 0 15px rgba(58,201,88,1),0 0 15px rgba(58,201,88,1);
+	
 	border:none;
 	color:black;
 }
