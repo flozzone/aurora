@@ -47,7 +47,7 @@ def evaluation(request):
                                'top_level_challenges': Elaboration.get_top_level_challenges(),
                                'non_adequate_work': Elaboration.get_non_adequate_work(),
                                'evaluated_non_adequate_work': Elaboration.get_evaluated_non_adequate_work(),
-                               'complaints': Elaboration.get_complaints(),
+                               'complaints': Elaboration.get_complaints(RequestContext(request)),
                                'questions': Challenge.get_questions(RequestContext(request)),
                                'awesome': Elaboration.get_awesome(),
                                'overview': overview,
@@ -77,12 +77,9 @@ def update_overview(request):
     if request.GET.get('data', '') == "non_adequate_work":
         print("loading non adequate work...")
         elaborations = Elaboration.get_non_adequate_work()
-    if request.GET.get('data', '') == "non_adequate_reviews":
-        print("loading non adequate reviews...")
-        elaborations = Elaboration.get_non_adequate_reviews()
     if request.GET.get('data', '') == "complaints":
         print("loading complaints...")
-        elaborations = Elaboration.get_complaints()
+        elaborations = Elaboration.get_complaints(RequestContext(request))
     if request.GET.get('data', '') == "awesome":
         print("loading awesome work...")
         elaborations = Elaboration.get_awesome()

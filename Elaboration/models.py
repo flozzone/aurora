@@ -166,10 +166,10 @@ class Elaboration(models.Model):
         return not nothing_reviews
 
     @staticmethod
-    def get_complaints():
+    def get_complaints(context):
         elaborations = []
         for review in Review.objects.all():
-            if Comment.objects.filter(content_type=ContentType.objects.get_for_model(Review), object_id=review.id):
+            if Comment.query_comments_without_responses(review, context['user']):
                 elaborations.append(review.elaboration)
         return elaborations
 
