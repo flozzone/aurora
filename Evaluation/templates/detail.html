@@ -7,8 +7,6 @@
   <script type="text/javascript" src="{{ STATIC_URL }}tinymce/jquery.tinymce.min.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/detail.js"></script>
   <link rel="stylesheet" href="{{ STATIC_URL }}css/evaluation.css" type="text/css" media="screen"/>
-  <link rel="stylesheet" href="{{ STATIC_URL }}css/file_upload.css" type="text/css" media="screen"/>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/file_upload.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}lightbox/js/lightbox-2.6.min.js"></script>
   <link rel="stylesheet" href="{{ STATIC_URL }}lightbox/css/lightbox.css" type="text/css" media="screen"/>
 {% endblock %}
@@ -33,7 +31,9 @@
 
         {% render_uploads elaboration %}
 
-        <textarea id="editor_detail">{{ elaboration.elaboration_text }}</textarea>
+        {% if elaboration.elaboration_text|length != 0 %}
+            <textarea id="editor_detail">{{ elaboration.elaboration_text|safe }}</textarea>
+        {% endif %}
         <div class="spacer"></div>
 
         {% if evaluation %}

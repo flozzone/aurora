@@ -1,7 +1,11 @@
 $(stack_loaded);
 
+
+
+
 function stack_loaded() {
 	$(".one_challenge").click(challenge_clicked);
+	$(".go_challenge").click(challenge_clicked)
     $(".review_box.active").click(review_box_clicked);
     $(".review_box.in_progress").click(review_box_clicked);
     $(".received_review").click(received_review_clicked);
@@ -26,3 +30,4 @@ function received_review_clicked(event) {
     var challenge_id = challenge.attr('challenge_id');
     window.location.href = './received_challenge_reviews?id=' + challenge_id;
 }
+

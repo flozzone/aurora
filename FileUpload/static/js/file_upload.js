@@ -16,27 +16,27 @@ function file_upload_loaded() {
         init: function () {
             this.on("success", function (file, response) {
                 revert_submit_clicked();
-                file.path = response;
+                file.server_path = response;
                 var elaboration_id = $('#elaboration_id').val();
                 if (file.type === 'application/pdf') {
                     $(file.previewElement).addClass('dz-image-preview');
                     $(file.previewElement).find('img').show();
                     $(file.previewElement).find('img').attr('src', '/static/img/pdf_icon.jpg');
-                    $(file.previewElement).find('img').attr('alt', file.path);
+                    $(file.previewElement).find('img').attr('alt', file.server_path);
                     $(file.previewElement).find('img').wrap(function () {
-                        return "<a href='/" + file.path + "' title='" + file.name + "'></div>";
+                        return "<a href='/" + file.server_path + "' title='" + file.name + "'></div>";
                     });
                 } else {
                     $(file.previewElement).find('img').wrap(function () {
-                        return "<a href='/" + file.path + "' data-lightbox='preview' title='" + file.name + "'></div>";
+                        return "<a href='/" + file.server_path + "' data-lightbox='preview' title='" + file.name + "'></div>";
                     });
-                    $(file.previewElement).find('img').attr('src', '/' + file.path);
+                    $(file.previewElement).find('img').attr('src', '/' + file.server_path);
                     $(file.previewElement).append('<div class="fig">Fig: ' + dropzone_instance.files.length + '</div>');
                 }
             });
             this.on("removedfile", function (file) {
                 revert_submit_clicked();
-                var url = '/fileupload/remove?url=' + file.path;
+                var url = '/fileupload/remove?url=' + file.server_path;
                 $.get(url, function (data) {
                 });
                 var i = 0;

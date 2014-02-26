@@ -170,6 +170,16 @@
     border-bottom: 1px solid #ddd;
 }
 
+.comment_numreplies {
+	height:15px;
+	font-weight:normal;
+	float:left;
+	padding:2px;
+	font-size:12px;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	display:none;
+}
+
 .comment_actions, .response_actions {
 	height:20px;
 	width:100%;
@@ -196,6 +206,7 @@
 .flR {
 	float:right;
 }
+
 .comment_award { 
 	height:15px;
 	float:right;
@@ -204,8 +215,13 @@
 }
 
 .gold {
-	color:rgb(231,205,0);
-    text-shadow: 0 0 1px black,0 0 1px black;
+	font-size:15px;
+	position:relative;
+	bottom:3px;
+	right:2px;
+	margin-left:4px;
+	color: #E7CD00;
+    text-shadow: 0 0 1px green,0 0 1px orange;
 }
 
 .ungold {

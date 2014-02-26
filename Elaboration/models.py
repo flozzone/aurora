@@ -165,12 +165,11 @@ class Elaboration(models.Model):
         nothing_reviews = Review.objects.filter(elaboration=self, appraisal=Review.NOTHING)
         return not nothing_reviews
 
-
     @staticmethod
-    def get_non_adequate_reviews():
+    def get_complaints(context):
         elaborations = []
-        for review in Review.objects.filter(Q(appraisal=Review.NOTHING) | Q(appraisal=Review.FAIL)):
-            if Comment.objects.filter(content_type=ContentType.objects.get_for_model(Review), object_id=review.id):
+        for review in Review.objects.all():
+            if Comment.query_comments_without_responses(review, context['user']):
                 elaborations.append(review.elaboration)
         return elaborations
 

@@ -42,7 +42,6 @@
   {% else %}
 
   {% if not elaboration.is_submitted %}
-
     {% if not accepted %}
       <div id="Caccept" class="button XL"
            onclick="$('.elaboration_block').toggle('fast');$('#Caccept').toggle('fast');$('#qa').toggle('fast');">
@@ -50,7 +49,7 @@
       </div>
     {% endif %}
 
-    <div class="elaboration_block{% if not elaboration.elaboration_text %} unstarted{% endif %}">
+    <div class="elaboration_block{% if not accepted %} unstarted{% endif %}">
       {% if challenge.accepted_files %}
         <div class="file_upload" accepted_files="{{ challenge.accepted_files }}">
           <form action="/fileupload"

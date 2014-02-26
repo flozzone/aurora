@@ -2,6 +2,7 @@
   <script type="text/javascript" src="{{ STATIC_URL }}tinymce/tinymce.min.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}tinymce/jquery.tinymce.min.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/stack.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.FastEllipsis.js"></script>
   <link rel="stylesheet" href="{{ STATIC_URL }}css/challenge.css" type="text/css" media="screen"/>
   <link rel="stylesheet" href="{{ STATIC_URL }}css/stack.css" type="text/css" media="screen"/>
 {% endblock %}
@@ -24,15 +25,17 @@
 				</div>
 		  	  <div class="challenge-description">
   		        <div class="challenge-headline">{{ challenge_dict.challenge.title }}</div>
-		  		{% if challenge_dict.challenge.description|wordcount > 50 %}
-		  		 	{{ challenge_dict.challenge.description|safe | truncatewords:50}} 
-		  		{% else %}
-		  			{{challenge_dict.challenge.description|safe}}
-		  		{% endif %}
-			  	<div class="go_challenge button XL">
+				<p>
+			  		{% if challenge_dict.challenge.description|wordcount > 50 %}
+			  		 	{{ challenge_dict.challenge.description|safe | truncatewords:50}} 
+			  		{% else %}
+			  			{{challenge_dict.challenge.description|safe}}
+			  		{% endif %}
+				</p>
+		  	  </div> 
+			  	<div class="go_challenge button XL active" challenge_id="{{ challenge_dict.challenge.id }}">
 				  ENTER
 			  	</div>
-		  	  </div> 
 <!-- writing reviews -->
 			  {% if not user.is_staff %}
 			  <div class="challenge_footer">
@@ -125,11 +128,13 @@
 				</div>
 		  	  <div class="challenge-description">
   		        <div class="challenge-headline">{{ challenge.title }}</div>
-	      		{% if challenge.description|wordcount > 50 %}
-      		 		{{ challenge.description | truncatewords:50}}
-		  		{% else %}
-					{{challenge.description}}
-		  		{% endif %}
+				<p>
+			  		{% if challenge.description|wordcount > 50 %}
+			  		 	{{ challenge.description|safe | truncatewords:50}} 
+			  		{% else %}
+			  			{{challenge.description|safe}}
+			  		{% endif %}
+				</p>
 		  	  </div>
 			</div>
 		{% endfor %}

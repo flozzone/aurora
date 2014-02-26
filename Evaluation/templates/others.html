@@ -15,7 +15,9 @@
 
         {% render_uploads elaboration %}
 
-        <textarea id="editor_others">{{ elaboration.elaboration_text }}</textarea>
+        {% if elaboration.elaboration_text|length != 0 %}
+            <textarea id="editor_others">{{ elaboration.elaboration_text|safe }}</textarea>
+        {% endif %}
         <div class="spacer"></div>
 
         <div class="spacer"></div>

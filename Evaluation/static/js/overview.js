@@ -17,15 +17,6 @@ $(function() {
 });
 
 $(function() {
-   $(".non_adequate_reviews").click(function(event) {
-       var url = '/update_overview?data=non_adequate_reviews';
-       $.get(url, function (data) {
-            $('#overview').html(data);
-       });
-   });
-});
-
-$(function() {
    $(".top_level_challenges").click(function(event) {
        var url = '/update_overview?data=top_level_challenges';
        $.get(url, function (data) {
@@ -36,7 +27,7 @@ $(function() {
 
 $(function() {
    $(".complaints").click(function(event) {
-       var url = '/update_overview?data=non_adequate_reviews';
+       var url = '/update_overview?data=complaints';
        $.get(url, function (data) {
             $('#overview').html(data);
        });

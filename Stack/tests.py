@@ -58,7 +58,6 @@ class StackTest(TestCase):
             title='test_title',
             subtitle='test_subtitle',
             description='test_description',
-            image_url='test_image_url',
         )
         self.challenge.save()
         CourseChallengeRelation(course=self.course, challenge=self.challenge).save()
@@ -91,25 +90,6 @@ class StackTest(TestCase):
         assert challenge1 in self.stack.get_challenges()
         assert challenge2 in self.stack.get_challenges()
         assert challenge3 in self.stack.get_challenges()
-
-    def test_get_challenge_image_urls(self):
-        challenge1 = self.challenge
-        assert 'test_image_url' in self.stack.get_challenge_image_urls()
-        self.create_challenge()
-        challenge2 = self.challenge
-        challenge2.prerequisite = challenge1
-        challenge2.image_url = "test_image_url2"
-        challenge2.save()
-        assert 'test_image_url' in self.stack.get_challenge_image_urls()
-        assert 'test_image_url2' in self.stack.get_challenge_image_urls()
-        self.create_challenge()
-        challenge3 = self.challenge
-        challenge3.prerequisite = challenge2
-        challenge3.image_url = "test_image_url3"
-        challenge3.save()
-        assert 'test_image_url' in self.stack.get_challenge_image_urls()
-        assert 'test_image_url2' in self.stack.get_challenge_image_urls()
-        assert 'test_image_url3' in self.stack.get_challenge_image_urls()
 
     def test_get_points(self):
         user = self.users[0]
