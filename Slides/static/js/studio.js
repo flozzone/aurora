@@ -13,7 +13,9 @@ function checkSlidesInView() {
         var first_slide = Math.floor( Math.abs( (window_position_left - table_offset) / slide_width));
         var last_slide = Math.floor( Math.abs( (window_position_left + window_width - table_offset) / slide_width));
         var slide, slide_id;
-        //var render_slides_url = base_url + "slidecasting/ajax_render_comments/";        
+        //var render_slides_url = base_url + "slidecasting/ajax_render_comments/";
+
+        setActivePollingObjects(first_slide + 1, last_slide + 1);
         for (var i=first_slide; i<=last_slide; i++ ) {
             /* TODO: insert loading of comments here.
                      * ich hab den alten code da gelassen. das erste ist eine abfrage obs schon 

@@ -11,7 +11,9 @@ var POLLING = {
     idle_interval: 60000,
     increase_interval: function() {
         POLLING.current_interval = Math.min(POLLING.current_interval * 2, POLLING.idle_interval);
-    }
+    },
+    firstRefId: null,
+    lastRefId: null
 };
 
 var state = {
@@ -52,9 +54,11 @@ function registerElementsForCommentList($comment_list) {
 }
 
 function registerPolling() {
+    $(window).off('blur');
     $(window).blur( function() {
         POLLING.current_interval = POLLING.idle_interval;
     })
+    $(window).off('focus');
     $(window).focus( function() {
         POLLING.current_interval = POLLING.active_interval;
 
@@ -550,18 +554,36 @@ function startPolling() {
     updateCommentLists(true);
 }
 
+function setActivePollingObjects(firstRefId, lastRefId) {
+    POLLING.firstRefId = firstRefId;
+    POLLING.lastRefId = lastRefId;
+
+    console.log('firstRefId: ' + firstRefId.toString());
+    console.log('lastRefId: ' + lastRefId.toString());
+
+    updateCommentLists(false);
+}
+
 //});
 
 function getRevisions() {
     var revisions = [];
+    var ref_id;
 
     var $comment_lists = $('.comment_list')
     $comment_lists.each(function () {
         var $this = $(this);
+        ref_id = $this.attr('data-ref_id');
+        if(POLLING.firstRefId !== null) {
+            if(ref_id < POLLING.firstRefId || ref_id > POLLING.lastRefId) {
+                return true;
+            }
+        }
+
         revisions.push({
             number: $this.attr('data-revision'),
             ref_type: $this.attr('data-ref_type'),
-            ref_id: $this.attr('data-ref_id')
+            ref_id: ref_id
         });
     });
 
