@@ -465,6 +465,7 @@ function updateCommentLists(keepPolling) {
             var comment_list_updates = json['comment_list_updates'];
             if(comment_list_updates.length > 0) {
                 handleCommentListUpdates(comment_list_updates);
+                loadFilter();
             }
             if (json['polling_active_interval']) {
                 POLLING.active_interval = json['polling_active_interval'];
