@@ -495,7 +495,7 @@ function handleCommentListUpdates(comment_list_updates) {
         ref_type = comment_list_updates[i].ref_type;
         html = comment_list_updates[i].comment_list;
 
-        $comment_list = findCommentListByRef(ref_id,  ref_type);
+        $comment_list = findCommentListByRef(ref_id, ref_type);
         replaceCommentListWithHtml($comment_list, html)
     }
 }

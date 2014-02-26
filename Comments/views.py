@@ -240,48 +240,65 @@ def promote_comment(request):
 @require_GET
 @login_required
 def update_comments(request):
-    print(request.GET)
-    # test = json.loads(request.body)
-    # print(test)
-    # client_revisions = request.GET.getlist('revisions[]')
-    # client_revisions = json.loads(request.GET.get('revisions'))
-    # client_revisions = json.loads(request.GET)
+    polling_active, polling_idle = CommentsConfig.get_polling_interval()
 
-    # print(client_revisions)
+    response_data = {'polling_active_interval': polling_active,
+                     'polling_idle_interval': polling_idle}
 
-    # for client_revision in client_revisions:
-    #     print(client_revision)
+    client_revisions = unpack_revisions(request.GET)
 
-    # client_revision = request.GET
-    # ref_type = client_revision['ref_type']
-    # ref_id = client_revision['ref_id']
-    # user = RequestContext(request)['user']
-    #
-    # revision = CommentListRevision.get_by_ref_numbers(ref_id, ref_type).number
-    #
-    # polling_active, polling_idle = CommentsConfig.get_polling_interval()
-    #
-    # response_data = {'polling_active_interval': polling_active,
-    #                  'polling_idle_interval': polling_idle}
-    #
-    # if revision > int(client_revision['id']):
-    #     comment_list = Comment.query_top_level_sorted(ref_id, ref_type, user)
-    #     id_suffix = "_" + str(ref_id) + "_" + str(ref_type)
-    #
-    #     context = {'comment_list': comment_list,
-    #                'ref_type': ref_type,
-    #                'ref_id': ref_id,
-    #                'id_suffix': id_suffix,
-    #                'requester': user,
-    #                'revision': revision}
-    #
-    #     response_data.update(
-    #         {'comment_list': render_to_string('Comments/comment_list.html', context)}
-    #     )
-    #     template_response = json.dumps(response_data)
-    #     return HttpResponse(template_response, content_type="application/json")
-    # else:
-    #     return HttpResponse(json.dumps(response_data))
+    comment_lists = []
+    for client_revision in client_revisions:
+        comment_list = get_comment_list_update(request, client_revision)
+        if comment_list is not None:
+            comment_lists.append(comment_list)
+
+    response_data.update({'comment_list_updates': comment_lists})
+    template_response = json.dumps(response_data)
+    return HttpResponse(template_response, content_type="application/json")
+
+
+def get_comment_list_update(request, client_revision):
+    ref_type = client_revision['ref_type']
+    ref_id = client_revision['ref_id']
+    user = RequestContext(request)['user']
+
+    revision = CommentListRevision.get_by_ref_numbers(ref_id, ref_type).number
+
+    if revision > int(client_revision['number']):
+        comment_list = Comment.query_top_level_sorted(ref_id, ref_type, user)
+        id_suffix = "_" + str(ref_id) + "_" + str(ref_type)
+
+        context = {'comment_list': comment_list,
+                   'ref_type': ref_type,
+                   'ref_id': ref_id,
+                   'id_suffix': id_suffix,
+                   'requester': user,
+                   'revision': revision}
+
+        return {
+            'ref_id': ref_id,
+            'ref_type': ref_type,
+            'comment_list': render_to_string('Comments/comment_list.html', context)
+        }
+    return None
+
+
+def unpack_revisions(revisions):
+    keys = revisions.keys()
+    revisions_array = []
+    i = 0
+    while True:
+        if 'revisions[' + str(i) + '][number]' not in keys:
+            break
+        revisions_array.append({
+            'number': revisions['revisions[' + str(i) + '][number]'],
+            'ref_id': revisions['revisions[' + str(i) + '][ref_id]'],
+            'ref_type': revisions['revisions[' + str(i) + '][ref_type]']
+        })
+        i += 1
+
+    return revisions_array
 
 
 @login_required
