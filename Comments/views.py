@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.template.loader import render_to_string
+from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST, require_GET
 
 from django.views.generic import ListView
@@ -240,8 +241,8 @@ def promote_comment(request):
 @login_required
 def update_comments(request):
     print(request.GET)
-    test = json.loads(request.body)
-    print(test)
+    # test = json.loads(request.body)
+    # print(test)
     # client_revisions = request.GET.getlist('revisions[]')
     # client_revisions = json.loads(request.GET.get('revisions'))
     # client_revisions = json.loads(request.GET)

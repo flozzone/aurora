@@ -454,7 +454,7 @@ function updateCommentLists(keepPolling) {
 
     $.ajax({
         url: '/update_comments/',
-        data: revisions,
+        data: data,
         type: 'GET',
         dataType: 'json',
         success: function (json) {
