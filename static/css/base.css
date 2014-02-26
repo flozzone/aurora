@@ -209,6 +209,7 @@ input:-moz-placeholder { color:rgba(58,201,88,0);	text-shadow: 0 0 2px rgba(58,2
 	background-position: 0 10%;
     min-height: 96px;
     color: white;
+	padding-left:12px;
     font-size: 32px;
     vertical-align: bottom;
     width: 100%;
@@ -411,6 +412,10 @@ button {
 	border-bottom:1px dashed silver;	
 }
 
+.nothing_to_see_move_on {
+	display:none;
+	visibility:hidden;
+}
 
 /*!
  *  Font Awesome 4.0.3 by @davegandy - http://fontawesome.io - @fontawesome

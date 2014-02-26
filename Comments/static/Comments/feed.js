@@ -9,12 +9,12 @@ $(window).load( function() {
 })
 
 function loadFilter() {
-	filter(getCookie('filtercookie'));
+	filter(getCookie('filtercookie'+$('#the_username').data('username')));
 }
 
 
-function filter(fx) {
-	document.cookie = "filtercookie="+fx+"; expires=Tue, 18 Jan 2038 03:14:06 GMT";
+function filter(fx,usr) {
+	if(typeof usr != 'undefined') {document.cookie = "filtercookie"+usr+"="+fx+"; expires=Tue, 18 Jan 2038 03:14:06 GMT";}
 	if (typeof fx == "string") {fx = parseInt(fx);}
 	$('.filterbtn').removeClass('hilited')
 	$('#'+fx).addClass('hilited')
