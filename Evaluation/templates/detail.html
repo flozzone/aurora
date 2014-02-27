@@ -22,6 +22,7 @@
 	     {% if next %}<div class="paginator next" id="{{ next }}">next <i class="fa fa-angle-double-right"></i></div>{% else %}<div class="no-paginator next">no next</div>{% endif %}
 	 </div>
      <div class="spacer"></div>
+	 <div class="elab_title">{{elaboration.challenge.title}}</div>
         <img class="gravatar" src="../{{ elaboration.user.avatar.url }}" style="vertical-align:middle">
         {{ elaboration.user.nickname }} ({{ elaboration.user.first_name }} {{ elaboration.user.last_name }}, {{ elaboration.user.username }})
         <div class="spacer"></div>
@@ -61,7 +62,7 @@
 
         {% if elaboration %}
 		<div class="comments">
-			<b>Comment section: discussion with autor</b>
+			<b>Discuss this work with {{ elaboration.user.first_name }} {{ elaboration.user.last_name }} ({{ elaboration.user.nickname }})</b>
             {% render_multi_comment_list for elaboration %}
 		</div>
         {% endif %}
