@@ -206,7 +206,8 @@ function registerEditLinksForCommentList($comment_list) {
                     rv += getText(n.childNodes[i]);
                 }
                 var d = getComputedStyle(n).getPropertyValue('display');
-                if (d.match(/^block/) || d.match(/list/) || n.tagName == 'BR') {
+//                if (d.match(/^block/) || d.match(/list/) || n.tagName == 'BR') {
+                if (d.match(/list/) || n.tagName == 'BR') {
                     rv += "\n";
                 }
             }
@@ -225,7 +226,9 @@ function registerEditLinksForCommentList($comment_list) {
 //            text = text.replace(/(<br><\/br>)|(<br>)|(<br \/>)|(<p>)|(<div>)/g, "\r\n");
 //            text = text.replace(/(<br><\/br>)|(<br>)|(<br \/>)|(<p>)|(<\/p>)|(<div>)|(<\/div>)/g, "\r\n");
 
-            var text = getText($commentText.get(0)).trim();
+//            var text = getText($commentText.get(0)).trim();
+            var text = $commentText.html();
+            console.log(text);
 
             var data = {comment_id: $comment.attr('data-comment_number'),
                         text: text}
@@ -365,6 +368,13 @@ function getCsrfToken() {
 function registerReplyButton() {
     $('#button_post_reply').off();
     $('#button_post_reply').click( function(event) {
+
+        // hacky as hell. better use some empty contenteditable <div> instead of Textarea form
+        // this is done in addComment as well of course
+        var text = $("#replyTextarea").val();
+        text = '<pre>' + text + '</pre>';
+        $("#replyTextarea").val(text);
+
         event.preventDefault();
         $.ajax({
             url: '/post_reply/',
@@ -417,6 +427,12 @@ function registerAddCommentButton() {
     $('#button_add_comment').click(function (event) {
         event.preventDefault();
 
+        // hacky as hell. better use some empty contenteditable <div> instead of Textarea form
+        // this is done in reply as well of course
+        var text = $("#commentTextarea").val();
+        text = '<pre>' + text + '</pre>';
+        $("#commentTextarea").val(text);
+
         $.ajax({
             url: "/post_comment/",
             data: $("#commentForm").serialize(),
@@ -438,7 +454,6 @@ function registerAddCommentButton() {
     })
 }
 
-//(function() {
 /**
  * updates a comment_list by sending highest comment id to server and replacinng the div with the answer if one is
  * being received
@@ -564,8 +579,6 @@ function setActivePollingObjects(firstRefId, lastRefId) {
 
     updateCommentLists(false);
 }
-
-//});
 
 function getRevisions() {
     var revisions = [];
