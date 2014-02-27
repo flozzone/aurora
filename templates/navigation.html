@@ -14,13 +14,13 @@
     <div class="headline">
       <a href="/">Aurora</a>
       {% if available_courses %}
-        <select id="course_select">
+	  <div class="course_selected" onclick="$('#course_select').toggle(100);"> {{last_selected_course.title}} <i class="fa fa-angle-down"></i>
+        <ul id="course_select">
           {% for course in available_courses %}
-            <option value="{{ course.short_title }}"
-                    {% if course == last_selected_course %}selected{% endif %}>{{ course.title }}</option>
+            <li class="ct_menu {% if course == last_selected_course %}selected{% endif %}" data-shortname="{{ course.short_title }}" >{{course.title}}</li>
           {% endfor %}
-        </select>
-	  <i class="fa fa-angle-down shiftLeft"></i>
+        </ul>
+	  </div>
       {% endif %}
     </div>
 
