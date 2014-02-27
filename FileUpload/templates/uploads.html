@@ -6,22 +6,22 @@
             <div class="dz-preview dz-image-preview">
                 <div class="dz-details">
                     <div class="dz-filename">
-                        <span data-dz-name="">{{ file.0 }}</span>
+                        <span data-dz-name="">{{ file.3 }}</span>
                     </div>
                     <div class="dz-size" data-dz-size="">
                         <strong>{{ file.1 }}MB</strong>
                     </div>
                     {% if '.pdf' in file.0|slice:"-4:" %}
-                        <a title="{{ file.0 }}" href="/{{ file.2 }}" target="_blank">
-                            <img class="preview" alt="{{ file.0 }}" src="/static/img/pdf_icon.jpg"/>
+                        <a title="{{ file.3 }}" href="/{{ file.2 }}" target="_blank">
+                            <img class="preview" alt="{{ file.3 }}" src="/static/img/pdf_icon.jpg"/>
                         </a>
                     {% else %}
-                        <a title="{{ file.0 }}" data-lightbox="preview" href="/{{ file.2 }}">
-                            <img class="preview" alt="{{ file.0 }}" src="/{{ file.2 }}"/>
+                        <a title="{{ file.3 }}" data-lightbox="preview" href="/{{ file.2 }}">
+                            <img class="preview" alt="{{ file.3 }}" src="/{{ file.2 }}"/>
                         </a>
                     {% endif %}
                 </div>
-                <div class="fig">{{ file.0 }}</div>
+                <div class="fig">{{ file.3 }}</div>
             </div>
     {% if forloop.last %}
         </div>
