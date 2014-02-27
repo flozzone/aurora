@@ -1,4 +1,5 @@
 {% load comments %}
+{% load render_review_answers %}
 
 <div class="reviews">
 
@@ -15,10 +16,8 @@
     			{{ review.reviewer.username }}
         		{{ review.reviewer.first_name }} {{ review.reviewer.last_name }}
 			</div>
-			{% for question in review.questions %}
-				<div class="question">{{ question.question }}</div>
-				<div class="answer">{% if question.answer %}Yes{% else %}No{% endif %}</div>
-			{% endfor %}
+
+            {% render_review_answers review.id %}
 			
         	<div class="appraisal">
             	<input type="radio" name="reviewgroup{{ stack }}{{ review.id }}" onclick="set_appraisal({{ review.id }}, 'A')" {% if review.appraisal == 'A' %} checked {% endif %}>Great work</input>
