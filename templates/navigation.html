@@ -7,6 +7,7 @@
 <script>
   var static_url = "{{ STATIC_URL }}";
   var media_url = "{{ MEDIA_URL }}";
+  
 </script>
 <div>
   <div class="pagehead">
@@ -23,7 +24,11 @@
       {% endif %}
     </div>
 
-
+	<script>
+		$('.pagehead').css('background-position','0 '+getCookie("AuroraP")+'%'); 
+	</script>
+	
+	
     {% if user.is_authenticated %}
 
       <ul>
