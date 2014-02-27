@@ -79,7 +79,7 @@ class Elaboration(models.Model):
         missing_reviews = []
         for elaboration in Elaboration.objects.all():
             if not elaboration.is_reviewed_2times() and elaboration.is_older_3days() \
-                and not elaboration.challenge.is_final_challenge() and not elaboration.user.is_staff:
+                and not elaboration.challenge.is_final_challenge() and not elaboration.user.is_staff and elaboration.is_submitted():
                 missing_reviews.append(elaboration)
         return missing_reviews
 
@@ -87,7 +87,7 @@ class Elaboration(models.Model):
     def get_top_level_challenges():
         top_level_challenges = []
         for elaboration in Elaboration.objects.all():
-            if elaboration.challenge.is_final_challenge() and not elaboration.is_evaluated():
+            if elaboration.challenge.is_final_challenge() and elaboration.is_submitted() and not elaboration.is_evaluated():
                 top_level_challenges.append(elaboration)
         return top_level_challenges
 
@@ -95,7 +95,7 @@ class Elaboration(models.Model):
     def get_non_adequate_work():
         non_adequate_work = []
         for review in Review.objects.filter(appraisal=Review.NOTHING):
-            if not review.elaboration.is_evaluated():
+            if not review.elaboration.is_evaluated() and review.elaboration.is_submitted():
                 non_adequate_work.append(review.elaboration)
         return non_adequate_work
 
