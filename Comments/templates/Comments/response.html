@@ -38,11 +38,12 @@
 
 
         <div class="response_text">
-        {% if response.deleter == None %}
-            {{ response.text | linebreaksbr }}
-        {% else %}
-            [deleted]
-        {% endif %}
+            {% if response.deleter == None %}
+                {#            {{ response.text | linebreaksbr }}#}
+                {{ response.text | safe }}
+            {% else %}
+                [deleted]
+            {% endif %}
         </div>
     </div>
 
