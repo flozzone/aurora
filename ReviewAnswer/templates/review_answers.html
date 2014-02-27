@@ -9,7 +9,7 @@
             <input type="radio" value="yes" {% if review_answer.text == 'True' %}checked{% endif %}> Yes<br>
             <input type="radio" value="no" {% if review_answer.text == 'False' %}checked{% endif %}> No
         {% else %}
-            <textarea id="text_answer" name="answer">{{ review_answer.text }}</textarea>
+            <textarea>{{ review_answer.text }}</textarea>
         {% endif %}
         </div>
     </div>
