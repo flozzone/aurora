@@ -1,12 +1,16 @@
 .pagination {
-	clear:both;
-	width:49%;
 	height:1.5em;
-	border-radius:1000px;
-	background:#eee;
+	background:#fff;
 	padding:3px 10px;
+	margin-left:-10px;
+	margin-right:-10px;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
+}
+
+.pagination:after {
+	content:"";
+	clear:both;
 }
 
 .pagination_others {
@@ -83,7 +87,7 @@ input[type=submit] {
     background-color: #E7FFCF;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-	border-radius: 4px;
+	border-radius: 9px;
 }
 
 .overview_left {
@@ -288,32 +292,38 @@ th {
 }
 
 .awesome_reviews, .success_reviews, .notry_reviews, .fail_reviews {
-    border-radius: 3px;
-    height: 25px;
-    padding-top: 3px;
+    border-radius: 20px;
+    height:25px;
+	padding: 3px 0 3px 0 ;
     text-align: center;
     -moz-box-sizing: border-box;
-    margin-right: 3px;
+    margin-right: 6px;	
+	
 }
 
 .awesome_reviews {
-    border: 1px solid darkmagenta;
-    background-color: magenta;
+	background-color:#00B700;
+	border:1px solid #829B04;
+	box-shadow: 0 0 4px 0px #FFBE46;
+	font-weight:bold;
+	color:#FFE8AA;
 }
 
 .success_reviews {
-    border: 1px solid green;
-    background-color: greenyellow;
+	background-color:#C5FFB6;
+	border:1px solid #359440;
 }
 
 .fail_reviews {
-    border: 1px solid orangered;
-    background-color: orange;
+	background-color:yellow;
+	border:1px solid orange;
+	color:black;
 }
 
 .notry_reviews {
-    border: 1px solid red;
-    background-color: #F08080;
+	color:white;
+	background-color:red;
+	border:1px solid darkred;
 }
 
 .evaluation_lock {
@@ -325,22 +335,24 @@ th {
 }
 
 .visible_comments, .invisible_comments {
-    border-radius: 3px;
+    border-radius: 0px;
     height: 25px;
-    padding-top: 3px;
+    padding: 3px 2px 0 2px;
     text-align: center;
     -moz-box-sizing: border-box;
-    margin-right: 3px;
+    margin-right: 6px;
 }
 
 .visible_comments {
-    border: 1px solid darkblue;
-    background-color: cornflowerblue;
+	border-top:1px solid gray;
+	border-bottom:1px solid gray;
+    background-color: white;
 }
 
 .invisible_comments {
-    border: 1px solid gray;
-    background-color: darkgray;
+	border-top:1px dashed gray;
+	border-bottom:1px dashed gray;
+    background-color: white;
 }
 
 
