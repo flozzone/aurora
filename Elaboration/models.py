@@ -96,7 +96,8 @@ class Elaboration(models.Model):
         non_adequate_work = []
         for review in Review.objects.filter(appraisal=Review.NOTHING):
             if not review.elaboration.is_evaluated() and review.elaboration.is_submitted():
-                non_adequate_work.append(review.elaboration)
+                    if not review.elaboration in non_adequate_work:
+                        non_adequate_work.append(review.elaboration)
         return non_adequate_work
 
     @staticmethod
@@ -107,7 +108,8 @@ class Elaboration(models.Model):
             final_elaboration = final_challenge.get_elaboration(review.elaboration.user)
             if final_elaboration:
                 if final_elaboration.is_evaluated():
-                    non_adequate_work.append(review.elaboration)
+                    if not review.elaboration in non_adequate_work:
+                        non_adequate_work.append(review.elaboration)
         return non_adequate_work
 
     @staticmethod
@@ -170,14 +172,16 @@ class Elaboration(models.Model):
         elaborations = []
         for review in Review.objects.all():
             if Comment.query_comments_without_responses(review, context['user']):
-                elaborations.append(review.elaboration)
+                if not review.elaboration in elaborations:
+                    elaborations.append(review.elaboration)
         return elaborations
 
     @staticmethod
     def get_awesome():
         awesome = []
         for review in Review.objects.filter(appraisal=Review.AWESOME):
-            awesome.append(review.elaboration)
+            if not review.elaboration in awesome:
+                awesome.append(review.elaboration)
         return awesome
 
     @staticmethod
