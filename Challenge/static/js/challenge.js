@@ -56,6 +56,7 @@ function elaboration_autosave(e, challenge_id) {
 function submit_clicked(event) {
     $('.submit').hide();
     $('.submission_text').show();
+	window.scrollBy(0,200);
 }
 
 function revert_submit_clicked() {
