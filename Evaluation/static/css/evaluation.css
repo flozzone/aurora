@@ -1,7 +1,12 @@
 .pagination {
 	clear:both;
 	width:49%;
-	height:1em;
+	height:1.5em;
+	border-radius:1000px;
+	background:#eee;
+	padding:3px 10px;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 .pagination_others {
@@ -172,6 +177,14 @@ th {
 .paginator, .paginator_others {
     cursor: pointer;
     margin-bottom: 10px;
+	text-transform:uppercase;
+	color:rgb(58,201,88);
+}
+
+.no-paginator {
+    margin-bottom: 10px;
+	text-transform:uppercase;
+	color:gray;
 }
 
 .prev {
@@ -183,18 +196,34 @@ th {
 }
 
 .stack, .others, .challenge_txt {
-    float: left;
-    width: 33%;
+	text-transform:uppercase;
+	margin-right:0.5em;
     text-align: center;
-    padding-top: 10px;
+	color:rgb(58,201,88);
+	cursor:pointer;
+	display:inline;
+	padding:1px 0.5em;
+	border-radius:1em;
+}
+
+.stack.selected, .others.selected, .challenge_txt.selected {
+	background-color:rgb(58,201,88);
+	color:white;
 }
 
 .menu {
-    height: 10px;
+    height: 20px;
+	background:#eee;
+	padding:1px 6px;
+	border-radius:1px;
 }
 
+.notblack {
+	color:gray;
+}
+
+
 #info_area {
-    padding: 0 10px 10px 10px;
 }
 
 .submission_date {
@@ -335,7 +364,10 @@ th {
 	cursor:pointer;
     width: auto;
     float: left;
-    margin-right: 5px;
+    margin-right: 1em;
+
+	color:rgb(58,201,88);
+	text-transform:uppercase;
 }
 
 .error {

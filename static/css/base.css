@@ -206,7 +206,9 @@ input:-moz-placeholder { color:rgba(58,201,88,0);	text-shadow: 0 0 2px rgba(58,2
     background-image: url("../img/auroraH.png");
 	background-clip: border-box;
 	background-origin: border-box;
-	background-position: 0 10%;
+	background-position: 0 0%;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
     min-height: 96px;
     color: white;
 	padding-left:12px;
