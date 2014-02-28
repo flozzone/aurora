@@ -2,17 +2,31 @@
  * Created by dan on 12/21/13.
  */
 
-var COMMENTS = (function (my) {
+var COMMENTS = (function (my, $, loadFilter) {
     "use strict";
 
     $(document).ready(function () {
+        myAss();
+        my.ass();
+        registerAllTheElements();
+    });
+
+    function myAss() {
+        console.log('tp for my bunghole');
+    }
+
+    my.ass = function() {
+        console.log('titikaka');
+    }
+
+    function registerAllTheElements() {
         my.registerTestButton();
         my.registerStartPolling();
         my.registerStopPolling();
 
         $('.comment_list').each(function () {
             $(this).find('*').off();
-            my.registerElementsForCommentList($(this))
+            my.registerElementsForCommentList($(this));
         });
 
         my.registerReplyButton();
@@ -25,7 +39,7 @@ var COMMENTS = (function (my) {
         my.registerPolling();
 
         my.startPolling();
-    });
+    }
 
     my.POLLING = {
         stopped: false,
@@ -94,8 +108,12 @@ var COMMENTS = (function (my) {
         $comment_list.find('.vote_down_on, .vote_up_on').click(function (event) {
             event.preventDefault();
             var direction;
-            if ($(this).attr('class') == 'vote_up_on') direction = 'up';
-            else direction = 'down';
+            if ($(this).attr('class') === 'vote_up_on') {
+                direction = 'up';
+            }
+            else {
+                direction = 'down';
+            }
             $.ajax({
                 url: '/vote_on_comment/',
                 data: {
@@ -104,7 +122,7 @@ var COMMENTS = (function (my) {
                 },
                 type: 'GET',
                 dataType: 'html',
-                success: function (response) {
+                success: function () {
                     my.updateCommentLists(false);
                 }
             });
@@ -123,8 +141,9 @@ var COMMENTS = (function (my) {
         $button.click(function (event) {
             event.preventDefault();
 
-            if (my.state.modifying)
+            if (my.state.modifying) {
                 return false;
+            }
             my.state.posting = true;
 
             my.stopPolling();
@@ -141,7 +160,7 @@ var COMMENTS = (function (my) {
             }
             $(this).after($commentForm);
             var reply_text = $replyForm.find('textarea').val();
-            if (reply_text != '') {
+            if (reply_text !== '') {
                 reply_text = reply_text.replace(/(@[^ ]+\s|^)/, '');
                 $commentForm.find('textarea').val(reply_text);
             }
@@ -149,15 +168,16 @@ var COMMENTS = (function (my) {
             $(this).hide();
 
             return false;
-        })
+        });
     };
 
     my.registerEditLinksForCommentList = function($comment_list) {
         $comment_list.find('.edit_link').click(function (event) {
             event.preventDefault();
 
-            if (my.state.posting || my.state.modifying)
+            if (my.state.posting || my.state.modifying) {
                 return false;
+            }
             my.state.modifying = true;
 
             var $editButtons = $('#edit_buttons');
@@ -204,7 +224,7 @@ var COMMENTS = (function (my) {
             function getText(n) {
                 var rv = '';
 
-                if (n.nodeType == 3) {
+                if (n.nodeType === 3) {
                     rv = n.nodeValue;
                 } else {
                     for (var i = 0; i < n.childNodes.length; i++) {
@@ -212,7 +232,7 @@ var COMMENTS = (function (my) {
                     }
                     var d = getComputedStyle(n).getPropertyValue('display');
 //                if (d.match(/^block/) || d.match(/list/) || n.tagName == 'BR') {
-                    if (d.match(/list/) || n.tagName == 'BR') {
+                    if (d.match(/list/) || n.tagName === 'BR') {
                         rv += "\n";
                     }
                 }
@@ -233,13 +253,12 @@ var COMMENTS = (function (my) {
 
 //            var text = getText($commentText.get(0)).trim();
                 var text = $commentText.html();
-                console.log(text);
 
                 var data = {comment_id: $comment.attr('data-comment_number'),
                     text: text};
 
                 $.ajax({
-                    beforeSend: function (xhr, settings) {
+                    beforeSend: function (xhr) {
                         xhr.setRequestHeader("X-CSRFToken", my.getCsrfToken());
                     },
                     url: '/edit_comment/',
@@ -247,7 +266,7 @@ var COMMENTS = (function (my) {
                     data: data,
                     type: 'POST',
                     dataType: 'html',
-                    success: function (response) {
+                    success: function () {
                         endEdit();
                     },
                     complete: function (xhr, status) {
@@ -265,8 +284,9 @@ var COMMENTS = (function (my) {
         $comment_list.find('[id^=reply_comment_link_]').click(function (event) {
             event.preventDefault();
 
-            if (my.state.modifying)
+            if (my.state.modifying) {
                 return false;
+            }
             my.state.posting = true;
 
             my.stopPolling();
@@ -281,7 +301,7 @@ var COMMENTS = (function (my) {
 
             var $commentTextarea = $('#commentTextarea');
             var $replyTextarea = $('#replyTextarea');
-            if ($commentTextarea.val() != '') {
+            if ($commentTextarea.val() !== '') {
                 new_text = $commentTextarea.val();
             } else {
                 new_text = $replyTextarea.val();
@@ -309,8 +329,9 @@ var COMMENTS = (function (my) {
         $comment_list.find('.delete_comment, .delete_response').click(function (event) {
             event.preventDefault();
 
-            if (my.state.modifying || my.state.posting)
+            if (my.state.modifying || my.state.posting) {
                 return false;
+            }
 
             my.stopPolling();
             my.state.modifying = true;
@@ -329,14 +350,14 @@ var COMMENTS = (function (my) {
                     data: { comment_id: comment_number },
                     type: 'POST',
                     dataType: 'json',
-                    beforeSend: function (xhr, settings) {
+                    beforeSend: function (xhr) {
                         var csrftoken = my.getCsrfToken();
-                        xhr.setRequestHeader("X-CSRFToken", csrftoken)
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
                     },
-                    complete: function (xhr, status) {
+                    complete: function () {
                         endDelete();
                     }
-                })
+                });
             }
 
             function endDelete() {
@@ -389,7 +410,7 @@ var COMMENTS = (function (my) {
                 data: $(this).closest('form').serialize(),
                 type: 'POST',
                 dataType: 'html',
-                success: function (response) {
+                success: function () {
                     $('#replyForm').hide();
                     $("#replyTextarea").val('');
                     my.startPolling();
@@ -397,7 +418,7 @@ var COMMENTS = (function (my) {
                 }
             });
             return false;
-        })
+        });
     };
 
     my.registerCancelReplyButton = function() {
@@ -410,7 +431,7 @@ var COMMENTS = (function (my) {
             my.state.posting = false;
             my.startPolling();
             return false;
-        })
+        });
     };
 
     my.hideCommentForm = function() {
@@ -429,7 +450,7 @@ var COMMENTS = (function (my) {
             my.state.posting = false;
             my.startPolling();
             return false;
-        })
+        });
     };
 
     my.registerAddCommentButton = function() {
@@ -451,7 +472,7 @@ var COMMENTS = (function (my) {
                 type: "POST",
                 // the type of data we expect back
                 dataType: 'html',
-                success: function (response) {
+                success: function () {
                     my.hideCommentForm();
                     my.startPolling();
                 },
@@ -463,7 +484,7 @@ var COMMENTS = (function (my) {
 
             my.state.posting = false;
             return false;
-        })
+        });
     };
 
     my.updateCommentLists = function(keepPolling) {
@@ -475,28 +496,28 @@ var COMMENTS = (function (my) {
             type: 'GET',
             dataType: 'json',
             success: function (json) {
-                var comment_list_updates = json['comment_list_updates'];
+                var comment_list_updates = json.comment_list_updates;
                 if (comment_list_updates.length > 0) {
                     my.handleCommentListUpdates(comment_list_updates);
                     loadFilter();
                 }
-                if (json['polling_active_interval']) {
-                    my.POLLING.active_interval = json['polling_active_interval'];
+                if (json.polling_active_interval) {
+                    my.POLLING.active_interval = json.polling_active_interval;
                 }
-                if (json['polling_idle_interval']) {
-                    my.POLLING.idle_interval = json['polling_idle_interval'];
+                if (json.polling_idle_interval) {
+                    my.POLLING.idle_interval = json.polling_idle_interval;
                 }
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 my.POLLING.increase_interval();
             },
             complete: function (xhr, status) {
-                if (keepPolling == true && !my.POLLING.stopped) {
+                if (keepPolling === true && !my.POLLING.stopped) {
                     clearTimeout(my.POLLING.current_timeout);
-                    my.POLLING.current_timeout = setTimeout(function() {my.updateCommentLists(true)}, my.POLLING.current_interval);
+                    my.POLLING.current_timeout = setTimeout(function() {my.updateCommentLists(true);}, my.POLLING.current_interval);
                 }
             }
-        })
+        });
     };
 
     my.findCommentListByRef = function(ref_id, ref_type) {
@@ -514,7 +535,7 @@ var COMMENTS = (function (my) {
             html = comment_list_updates[i].comment_list;
 
             $comment_list = my.findCommentListByRef(ref_id, ref_type);
-            my.replaceCommentListWithHtml($comment_list, html)
+            my.replaceCommentListWithHtml($comment_list, html);
         }
     };
 
@@ -606,7 +627,8 @@ var COMMENTS = (function (my) {
     my.getRevision = function($comment_list) {
         return {id: $comment_list.attr('data-revision'),
             ref_type: $comment_list.attr('data-ref_type'),
-            ref_id: $comment_list.attr('data-ref_id')}
+            ref_id: $comment_list.attr('data-ref_id')
+        };
     };
 
     my.registerTestButton = function() {
@@ -637,8 +659,8 @@ var COMMENTS = (function (my) {
     my.findClosestRefObj = function($child) {
         var ref_type = $child.closest('[data-ref_type]').attr('data-ref_type');
         var ref_id = $child.closest('[data-ref_id]').attr('data-ref_id');
-        return { type: ref_type, id: ref_id }
+        return { type: ref_type, id: ref_id };
     };
 
     return my;
-}(COMMENTS || {}));
+}(COMMENTS || {}, jQuery, loadFilter));

@@ -5,7 +5,7 @@
  * e.g. vote up/down, promote, bookmark
  */
 
-var COMMENTS = (function (my) {
+var COMMENTS = (function (my, $) {
     "use strict";
 
     my.sendValueForComment = function(url, comment_number, value) {
@@ -17,7 +17,7 @@ var COMMENTS = (function (my) {
             dataType: 'json',
             beforeSend: function (xhr) {
                 var csrftoken = my.getCsrfToken();
-                xhr.setRequestHeader("X-CSRFToken", csrftoken)
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
             }
         });
     };
@@ -62,10 +62,10 @@ var COMMENTS = (function (my) {
         registerForCommentList: function ($comment_list) {
             var that = this;
             $comment_list.find('.comment_bookmark').click(function (event) {
-                that.bookmark(event, $(this))
+                that.bookmark(event, $(this));
             });
             $comment_list.find('.comment_unbookmark').click(function (event) {
-                that.unbookmark(event, $(this))
+                that.unbookmark(event, $(this));
             });
         },
 
@@ -78,7 +78,7 @@ var COMMENTS = (function (my) {
             var that = this;
             $link.off();
             $link.click(function (event) {
-                that.unbookmark(event, $link)
+                that.unbookmark(event, $link);
             });
             $link.toggleClass('comment_unbookmark comment_bookmark');
             $link.text('unbookmark');
@@ -95,7 +95,7 @@ var COMMENTS = (function (my) {
             var that = this;
             $link.off();
             $link.click(function (event) {
-                that.bookmark(event, $link)
+                that.bookmark(event, $link);
             });
             $link.toggleClass('comment_unbookmark comment_bookmark');
             $link.text('bookmark');
@@ -140,4 +140,4 @@ var COMMENTS = (function (my) {
     };
 
     return my;
-}(COMMENTS || {}));
+}(COMMENTS || {}, jQuery));
