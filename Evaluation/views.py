@@ -452,7 +452,6 @@ def review_answer(request):
         review.submission_time = datetime.now()
         review.save()
         for answer in answers:
-            print("question id: ", answer['question_id'])
             question_id = answer['question_id']
             text = answer['answer']
             review_question = ReviewQuestion.objects.get(pk=question_id)
