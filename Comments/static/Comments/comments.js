@@ -2,24 +2,18 @@
  * Created by dan on 12/21/13.
  */
 
-var COMMENTS = (function (my, $, loadFilter) {
+var purgsLoadFilter;
+
+if(typeof(loadFilter) === 'undefined') {
+    purgsLoadFilter = function() {};
+} else {
+    purgsLoadFilter = loadFilter;
+}
+
+var COMMENTS = (function (my, $, purgsLoadFilter) {
     "use strict";
 
-    $(document).ready(function () {
-        myAss();
-        my.ass();
-        registerAllTheElements();
-    });
-
-    function myAss() {
-        console.log('tp for my bunghole');
-    }
-
-    my.ass = function() {
-        console.log('titikaka');
-    }
-
-    function registerAllTheElements() {
+    my.registerAllTheElements = function() {
         my.registerTestButton();
         my.registerStartPolling();
         my.registerStopPolling();
@@ -39,7 +33,7 @@ var COMMENTS = (function (my, $, loadFilter) {
         my.registerPolling();
 
         my.startPolling();
-    }
+    };
 
     my.POLLING = {
         stopped: false,
@@ -118,7 +112,7 @@ var COMMENTS = (function (my, $, loadFilter) {
                 url: '/vote_on_comment/',
                 data: {
                     direction: direction,
-                    comment_id: $(this).attr('data-comment_number')
+                    comment_id: $(this).data('comment_number')
                 },
                 type: 'GET',
                 dataType: 'html',
@@ -150,8 +144,8 @@ var COMMENTS = (function (my, $, loadFilter) {
             var $replyForm = $('#replyForm');
             $replyForm.hide();
 
-            var ref_id = $(this).attr('data-ref_id');
-            var ref_type = $(this).attr('data-ref_type');
+            var ref_id = $(this).data('ref_id');
+            var ref_type = $(this).data('ref_type');
             var $commentForm = $('#commentForm');
             $commentForm.find('#id_reference_id').val(ref_id);
             $commentForm.find('#id_reference_type_id').val(ref_type);
@@ -254,7 +248,7 @@ var COMMENTS = (function (my, $, loadFilter) {
 //            var text = getText($commentText.get(0)).trim();
                 var text = $commentText.html();
 
-                var data = {comment_id: $comment.attr('data-comment_number'),
+                var data = {comment_id: $comment.data('comment_number'),
                     text: text};
 
                 $.ajax({
@@ -294,10 +288,10 @@ var COMMENTS = (function (my, $, loadFilter) {
             var $replyForm = $('#replyForm');
             var new_text;
 
-            var comment_number = $(this).attr('data-reply_to');
+            var comment_number = $(this).data('reply_to');
             my.setCommentId($replyForm, comment_number);
 
-            var user = $(this).closest('.comment, .response').attr('data-comment_author');
+            var user = $(this).closest('.comment, .response').data('comment_author');
 
             var $commentTextarea = $('#commentTextarea');
             var $replyTextarea = $('#replyTextarea');
@@ -342,7 +336,7 @@ var COMMENTS = (function (my, $, loadFilter) {
             $actions.hide();
             $delete_buttons.show();
 
-            var comment_number = $(this).attr('data-delete_id');
+            var comment_number = $(this).data('delete_id');
 
             function deleteComment() {
                 $.ajax({
@@ -508,10 +502,10 @@ var COMMENTS = (function (my, $, loadFilter) {
                     my.POLLING.idle_interval = json.polling_idle_interval;
                 }
             },
-            error: function (jqXHR, textStatus, errorThrown) {
+            error: function () {
                 my.POLLING.increase_interval();
             },
-            complete: function (xhr, status) {
+            complete: function () {
                 if (keepPolling === true && !my.POLLING.stopped) {
                     clearTimeout(my.POLLING.current_timeout);
                     my.POLLING.current_timeout = setTimeout(function() {my.updateCommentLists(true);}, my.POLLING.current_interval);
@@ -540,8 +534,8 @@ var COMMENTS = (function (my, $, loadFilter) {
     };
 
     my.replaceCommentListWithHtml = function($comment_list, html) {
-        var ref_type = $comment_list.attr('data-ref_type');
-        var ref_id = $comment_list.attr('data-ref_id');
+        var ref_type = $comment_list.data('ref_type');
+        var ref_id = $comment_list.data('ref_id');
 
         // reply form replacement & conservation
         var $replyForm = $comment_list.find('#replyForm');
@@ -613,8 +607,8 @@ var COMMENTS = (function (my, $, loadFilter) {
             }
 
             revisions.push({
-                number: $this.attr('data-revision'),
-                ref_type: $this.attr('data-ref_type'),
+                number: $this.data('revision'),
+                ref_type: $this.data('ref_type'),
                 ref_id: ref_id
             });
 
@@ -625,9 +619,9 @@ var COMMENTS = (function (my, $, loadFilter) {
     };
 
     my.getRevision = function($comment_list) {
-        return {id: $comment_list.attr('data-revision'),
-            ref_type: $comment_list.attr('data-ref_type'),
-            ref_id: $comment_list.attr('data-ref_id')
+        return {id: $comment_list.data('revision'),
+            ref_type: $comment_list.data('ref_type'),
+            ref_id: $comment_list.data('ref_id')
         };
     };
 
@@ -650,7 +644,7 @@ var COMMENTS = (function (my, $, loadFilter) {
 //        console.log($('#id_parent_comment').val());
 //        if(stop_update_poll) startPolling();
 //        else stopPolling();
-            alert('nothing assigned');
+//            alert('nothing assigned');
 //        $('*').off();
             return false;
         });
@@ -662,5 +656,9 @@ var COMMENTS = (function (my, $, loadFilter) {
         return { type: ref_type, id: ref_id };
     };
 
+    $(document).ready(function () {
+        my.registerAllTheElements();
+    });
+
     return my;
-}(COMMENTS || {}, jQuery, loadFilter));
+}(COMMENTS || {}, jQuery, purgsLoadFilter));

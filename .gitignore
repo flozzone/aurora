@@ -10,3 +10,4 @@ vagrant_ansible_inventory_default
 .DS_Store
 Slides/settings.py
 fixgit.sh
+.jshintrc

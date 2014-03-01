@@ -29,7 +29,7 @@ var COMMENTS = (function (my, $) {
         function promote(event) {
             event.preventDefault();
 
-            var comment_number = $(this).attr('data-comment_number');
+            var comment_number = $(this).data('comment_number');
             my.sendValueForComment('/promote_comment/', comment_number, true);
 
             $(this).off();
@@ -43,7 +43,7 @@ var COMMENTS = (function (my, $) {
         function demote(event) {
             event.preventDefault();
 
-            var comment_number = $(this).attr('data-comment_number');
+            var comment_number = $(this).data('comment_number');
             my.sendValueForComment('/promote_comment/', comment_number, false);
 
             $(this).off();
@@ -72,7 +72,7 @@ var COMMENTS = (function (my, $) {
         bookmark: function (event, $link) {
             event.preventDefault();
 
-            var comment_number = $link.attr('data-comment_number');
+            var comment_number = $link.data('comment_number');
             my.sendValueForComment(this.url, comment_number, true);
 
             var that = this;
@@ -89,7 +89,7 @@ var COMMENTS = (function (my, $) {
         unbookmark: function (event, $link) {
             event.preventDefault();
 
-            var comment_number = $link.attr('data-comment_number');
+            var comment_number = $link.data('comment_number');
             my.sendValueForComment(this.url, comment_number, false);
 
             var that = this;
@@ -113,7 +113,7 @@ var COMMENTS = (function (my, $) {
         function bookmark(event) {
             event.preventDefault();
 
-            var comment_number = $(this).attr('data-comment_number');
+            var comment_number = $(this).data('comment_number');
             my.sendValueForComment(url, comment_number, true);
 
             $(this).off();
@@ -127,7 +127,7 @@ var COMMENTS = (function (my, $) {
         function unbookmark(event) {
             event.preventDefault();
 
-            var comment_number = $(this).attr('data-comment_number');
+            var comment_number = $(this).data('comment_number');
             my.sendValueForComment(url, comment_number, false);
 
             $(this).off();
