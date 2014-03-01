@@ -41,8 +41,9 @@ class PortfolioUser(User):
     def get_stack_elaborations(self, stack):
         elaborations = []
         for challenge in stack.get_challenges():
-            if self.get_challenge_elaboration(challenge):
-                elaborations.append(self.get_challenge_elaboration(challenge))
+            elaboration = self.get_challenge_elaboration(challenge)
+            if elaboration and elaboration.is_submitted():
+                elaborations.append(elaboration)
         return elaborations
 
     def get_gravatar(self):

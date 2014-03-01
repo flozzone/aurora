@@ -1,8 +1,12 @@
+{% load render_uploads %}
+
 {% block additional_headers %}
   <link rel="stylesheet" href="{{ STATIC_URL }}css/review.css" type="text/css" media="screen"/>
   <script type="text/javascript" src="{{ STATIC_URL }}tinymce/tinymce.min.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}tinymce/jquery.tinymce.min.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/review.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}lightbox/js/lightbox-2.6.min.js"></script>
+  <link rel="stylesheet" href="{{ STATIC_URL }}lightbox/css/lightbox.css" type="text/css" media="screen"/>
 {% endblock %}
 
 {% if review %}
@@ -19,6 +23,8 @@
         {{ review.elaboration.challenge.description }}
       </div>
     </div>
+
+    {% render_uploads review.elaboration %}
 
     <div class="elaboration">
       <textarea id="editor_review">{{ review.elaboration.elaboration_text|safe }}</textarea>

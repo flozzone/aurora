@@ -1,11 +1,13 @@
 {% block content %}
 
-    <div class="title"> {{ challenge.title }} </div>
-    <div class="spacer"></div>
+<img class="evc_challenge_image" src="/{{ challenge.image.url }}">
 
-    <div class="description"> {{ challenge.description }} </div>
-    <div class="spacer"></div>
+    <div class="evc_title"> {{ challenge.title }} </div>
 
-    <img class="challenge_image" src="/{{ challenge.image.url }}">
+    <div class="evc_description">
+		 {{ challenge.description }} 
+	 </div>
+		 
+    
 
 {% endblock %}

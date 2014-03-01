@@ -3,11 +3,11 @@ $(homepage_loaded);
 function homepage_loaded() {
     $('#button_sign_in').click(sign_in);
     $('#button_sign_out').click(sign_out);
-    $('#course_select').change(course_change);
+    $('.ct_menu').click(course_change);
     if ($('#unread_notifications').length) {
         notifications_refresh();
     }
-}
+} 
 
 function notifications_refresh() {
     (function refresh_worker() {
@@ -40,8 +40,10 @@ function getCookie(name) {
 }
 
 function course_change(event) {
+	$('.ct_menu').removeClass('selected');
+	$(event.target).addClass('selected');
     ajax_setup();
-    var short_title = $('#course_select').find(":selected").attr('value');
+    var short_title = $(event.target).data('shortname');
     $.post("/course/",
         {
             'short_title': short_title

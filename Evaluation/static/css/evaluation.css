@@ -251,11 +251,34 @@ th {
 
 .review_head {
 	padding:0.25em;
+	padding-left:0.5em;
 	margin:-0.5em;
 	margin-bottom:0.5em;
     border-radius: 4px 4px 0 0;
-	
+	color:white;
 	background-color:silver;
+}
+
+.between_reviews {
+	height:1em;
+	background-color:silver;
+	margin-bottom:0.5em;
+}
+
+.review_staff {
+    background-color: rgb(229, 235, 253);
+}
+
+.review_body.review_staff {
+	background-color: rgb(245,247,252);
+}
+
+.review_body {
+	padding-bottom:0.5em;
+}
+
+.greenish {
+	background-color:rgb(58,201,88);
 }
 
 .missing_reviews, .non_adequate_work, .non_adequate_reviews, .top_level_challenges, .complaints, .questions, .awesome, .search_btn, .evaluated_non_adequate_work {
@@ -355,18 +378,6 @@ th {
     background-color: white;
 }
 
-
-.dropzone {
-    margin-top: 15px;
-    margin-bottom: 15px;
-    min-height: 200px;
-    background-color: grey;
-}
-
-.dropzone .dz-default.dz-message {
-    top: 300px;
-}
-
 .gravatar {
 	width:32px;
 	height:32px;
@@ -393,6 +404,28 @@ th {
 	border-radius:1em;
 	box-shadow:0px 2px 7px rgba(0,0,0,0.1);
     padding-bottom: 20px;
+}
+
+.elab_title {
+	font-weight:bold;
+	margin-bottom: 1em;
+}
+
+.evc_description {
+	
+}
+
+.evc_challenge_image {
+	width:96px;
+	height:96px;
+	border-radius: 64px;
+	border:1px solid #eee;
+	float:left;
+	margin-right:1em;
+}
+
+.evc_title {
+	font-weight:bold;
 }
 
 .challenge-description {
@@ -439,7 +472,7 @@ th {
     margin-bottom: 15px;
     min-height: 10px;
     background-color: #fff;
-	box-shadow: inset 0px 1px 3px  rgba(0,0,0,0.4);
+	box-shadow: 0px 1px 3px  rgba(0,0,0,0.4) inset;
 }
 
 .dropzone .dz-preview, .dropzone-previews .dz-preview {
@@ -494,4 +527,12 @@ th {
 
 .fig {
 	margin-top:2px;
+}
+
+.review_answer {
+   width: 100%;
+   height: 5em;
+   font-size: 13px;
+   border: 1px solid silver;
+   padding: 0.5em 0px;
 }

@@ -164,25 +164,24 @@ $(function() {
     event.preventDefault();
     var data = {};
     data['answers'] = [];
-    $(".answer").each(function (index) {
-        var answer_object = $(this);
+    $(".question_container").each(function (index) {
+        var answer_object = $(this).find('.answer');
         var answer = null;
         if (answer_object.hasClass('boolean_answer')) {
             answer = answer_object.find('input').first().is(':checked');
         } else {
-            if (!answer_object.hasClass('appraisal')) {
-                answer = $("textarea[name='answer']").val()
-            }
+            answer = answer_object.find('#text_answer').val();
         }
         var question = answer_object.parent().find('.question').first();
         var question_id = question.attr('id');
         if (question_id) {
             data['answers'].push({
-                'question_id': question_id,
+                'question_id': answer_object.parent().find('.question').first().attr('id'),
                 'answer': answer
             });
         }
     });
+
     data['appraisal'] = $('input[name=appraisal]:checked').val();
     ajax_setup()
     var args = {

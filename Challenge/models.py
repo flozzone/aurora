@@ -36,15 +36,15 @@ class Challenge(models.Model):
     EVALUATED = 7
 
     status_dict = {
-        -1: "Not enabled",
-        0: "Not started",
-        1: "Not submitted",
-        2: "Review missing",
-        3: "Bad review",
-        4: "Done, missing peer review", # can proceed but will be a problem for final challenge
-        5: "Done, peer reviewed",
-        6: "Waiting for evaluation",
-        7: "Evaluated"
+        -1: "Not enabled.",
+        0: "Not started.",
+        1: "Not submitted.",
+        2: "Review missing.",
+        3: "Bad review.",
+        4: "Done, waiting for reviews by others.", # can proceed but will be a problem for final challenge
+        5: "Done, peer reviewed.",
+        6: "Waiting for evaluation.",
+        7: "Evaluated."
     }
 
     next_dict = {
