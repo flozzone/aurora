@@ -93,7 +93,7 @@ def edit_comment(request):
     except Comment.DoesNotExist:
         return HttpResponse('')
 
-    if comment.author != requester and not requester.is_staff:
+    if comment.author != requester:
         return HttpResponseForbidden('You shall not edit!')
 
     text = data['text']

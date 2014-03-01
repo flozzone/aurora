@@ -493,7 +493,7 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
                 var comment_list_updates = json.comment_list_updates;
                 if (comment_list_updates.length > 0) {
                     my.handleCommentListUpdates(comment_list_updates);
-                    loadFilter();
+                    purgsLoadFilter();
                 }
                 if (json.polling_active_interval) {
                     my.POLLING.active_interval = json.polling_active_interval;

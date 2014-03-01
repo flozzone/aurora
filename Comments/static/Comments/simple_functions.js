@@ -23,33 +23,44 @@ var COMMENTS = (function (my, $) {
     };
 
     my.registerPromoteLinksForCommentList = function($comment_list) {
-        $comment_list.find('.comment_promote').click(promote);
-        $comment_list.find('.comment_demote').click(demote);
+        $comment_list.find('.comment_promote').click(function(event) {
+            var $this = $(this);
+            promote($this, event);
+        });
 
-        function promote(event) {
+        $comment_list.find('.comment_demote').click(function(event) {
+            var $this = $(this);
+            demote($this, event);
+        });
+
+        function promote($this, event) {
             event.preventDefault();
 
-            var comment_number = $(this).data('comment_number');
+            var comment_number = $this.data('comment_number');
             my.sendValueForComment('/promote_comment/', comment_number, true);
 
-            $(this).off();
-            $(this).click(demote);
-            $(this).toggleClass('comment_demote comment_promote');
-            $(this).find('i').toggleClass('gold ungold');
+            $this.off();
+            $this.click(function(event){
+                demote($this, event);
+            });
+            $this.toggleClass('comment_demote comment_promote');
+            $this.find('i').toggleClass('gold ungold');
 
             return false;
         }
 
-        function demote(event) {
+        function demote($this, event) {
             event.preventDefault();
 
-            var comment_number = $(this).data('comment_number');
+            var comment_number = $this.data('comment_number');
             my.sendValueForComment('/promote_comment/', comment_number, false);
 
-            $(this).off();
-            $(this).click(promote);
-            $(this).toggleClass('comment_demote comment_promote');
-            $(this).find('i').toggleClass('gold ungold');
+            $this.off();
+            $this.click(function(event) {
+                promote($this, event);
+            });
+            $this.toggleClass('comment_demote comment_promote');
+            $this.find('i').toggleClass('gold ungold');
 
             return false;
         }
@@ -71,6 +82,10 @@ var COMMENTS = (function (my, $) {
 
         bookmark: function (event, $link) {
             event.preventDefault();
+
+//            console.log(window.location.href);
+//            console.log(window.location);
+            console.log(location.protocol + '//' + location.host + location.pathname);
 
             var comment_number = $link.data('comment_number');
             my.sendValueForComment(this.url, comment_number, true);
@@ -105,35 +120,42 @@ var COMMENTS = (function (my, $) {
     };
 
     my.registerBookmarkLinksForCommentList = function($comment_list) {
-        $comment_list.find('.comment_bookmark').click(bookmark);
-        $comment_list.find('.comment_unbookmark').click(unbookmark);
+        $comment_list.find('.comment_bookmark').click(function(event) {
+            var $this = $(this);
+            bookmark($this, event);
+        });
+
+        $comment_list.find('.comment_unbookmark').click(function(event) {
+            var $this = $(this);
+            unbookmark($this, event);
+        });
 
         var url = '/bookmark_comment/';
 
-        function bookmark(event) {
+        function bookmark($this, event) {
             event.preventDefault();
 
-            var comment_number = $(this).data('comment_number');
+            var comment_number = $this.data('comment_number');
             my.sendValueForComment(url, comment_number, true);
 
-            $(this).off();
-            $(this).click(unbookmark);
-            $(this).toggleClass('comment_unbookmark comment_bookmark');
-            $(this).text('unbookmark');
+            $this.off();
+            $this.click(unbookmark);
+            $this.toggleClass('comment_unbookmark comment_bookmark');
+            $this.text('unbookmark');
 
             return false;
         }
 
-        function unbookmark(event) {
+        function unbookmark($this, event) {
             event.preventDefault();
 
-            var comment_number = $(this).data('comment_number');
+            var comment_number = $this.data('comment_number');
             my.sendValueForComment(url, comment_number, false);
 
-            $(this).off();
-            $(this).click(bookmark);
-            $(this).toggleClass('comment_unbookmark comment_bookmark');
-            $(this).text('bookmark');
+            $this.off();
+            $this.click(bookmark);
+            $this.toggleClass('comment_unbookmark comment_bookmark');
+            $this.text('bookmark');
 
             return false;
         }

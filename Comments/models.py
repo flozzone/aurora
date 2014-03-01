@@ -152,7 +152,6 @@ class Comment(models.Model):
         # it's just order_by() the Instances and their custom non persistent properties
         # will be overwritten.
 
-        # Comment.set_permission_flags(visible, requester)
         Comment.set_flags(visible, requester)
         return visible
 
@@ -163,7 +162,6 @@ class Comment(models.Model):
             object_id=ref_object_id)
 
         visible_comments = Comment.filter_visible(queryset, requester)
-        # Comment.set_permission_flags(visible_comments, requester)
         Comment.set_flags(visible_comments, requester)
         return visible_comments
 

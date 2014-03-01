@@ -64,11 +64,13 @@
             </p>
         {% endif %}
 
-        {% if requester.is_staff or requester == comment.author %}
-            {% if comment.deleter == None %}
+        {% if comment.deleter == None %}
+            {% if requester == comment.author %}
                 <a class="flR edit_link" href="javascript:void(0)" id="edit_comment_link_{{ comment.id }}">
-                    edit
+                    edit&nbsp;&nbsp;
                 </a>
+            {% endif %}
+            {% if requester.is_staff or requester == comment.author %}
                 <a class="flR delete_comment" href="javascript:void(0)" id="delete_comment_{{ comment.id }}"
                    data-delete_id="{{ comment.id }}">
                     delete&nbsp;&nbsp;

@@ -65,11 +65,13 @@
             </p>
         {% endif %}
 
-        {% if requester.is_staff or requester == response.author %}
-            {% if response.deleter == None %}
+        {% if response.deleter == None %}
+            {% if requester == response.author %}
                 <a class="flR edit_link" href="javascript:void(0)" id="edit_response_link_{{ response.id }}">
                     edit&nbsp;&nbsp;
                 </a>
+            {% endif %}
+            {% if requester.is_staff or requester == response.author %}
                 <a class="flR delete_response" href="javascript:void(0)" id="delete_response_link_{{ response.id }}"
                    data-delete_id="{{ response.id }}">
                     delete&nbsp;&nbsp;
