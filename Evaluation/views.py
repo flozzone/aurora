@@ -35,10 +35,11 @@ def evaluation(request):
 
     overview = ""
     if request.session.get('selection'):
-        elaborations = []
-        for serialized_elaboration in serializers.deserialize('json', request.session.get('elaborations', {})):
-            elaborations.append(serialized_elaboration.object)
-        overview = render_to_string('overview.html', {'elaborations': elaborations})
+        if request.session.get('selection') != 'questions':
+            elaborations = []
+            for serialized_elaboration in serializers.deserialize('json', request.session.get('elaborations', {})):
+                elaborations.append(serialized_elaboration.object)
+            overview = render_to_string('overview.html', {'elaborations': elaborations})
 
     challenges = Challenge.objects.all()
     return render_to_response('evaluation.html',
@@ -103,6 +104,11 @@ def questions(request):
     print("loading questions...")
     challenges = Challenge.get_questions(RequestContext(request))
     html = render_to_response('questions.html', {'challenges': challenges}, RequestContext(request))
+
+    # store selected elaborations in session
+    elaborations = []
+    request.session['elaborations'] = elaborations
+    request.session['selection'] = 'questions'
     return html
 
 
