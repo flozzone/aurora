@@ -310,24 +310,6 @@ def set_appraisal(request):
     review.appraisal = appraisal
     review.save()
 
-    selection = request.session.get('selection', 'error')
-    if selection == "missing_reviews":
-        elaborations = Elaboration.get_missing_reviews()
-    if selection == "top_level_challenges":
-        elaborations = Elaboration.get_top_level_challenges()
-    if selection == "non_adequate_work":
-        elaborations = Elaboration.get_non_adequate_work()
-    if selection == "complaints":
-        elaborations = Elaboration.get_complaints(RequestContext(request))
-    if selection == "awesome":
-        elaborations = Elaboration.get_awesome()
-    if selection == "evaluated_non_adequate_work":
-        elaborations = Elaboration.get_evaluated_non_adequate_work()
-
-    # update overview
-    elaborations.sort(key=lambda elaboration: elaboration.submission_time)
-    request.session['elaborations'] = serializers.serialize('json', elaborations)
-
     return HttpResponse()
 
 
@@ -475,4 +457,27 @@ def review_answer(request):
         elaborations = Elaboration.get_missing_reviews()
         elaborations.sort(key=lambda elaboration: elaboration.submission_time)
         request.session['elaborations'] = serializers.serialize('json', elaborations)
+    return HttpResponse()
+
+
+@login_required()
+def back(request):
+    selection = request.session.get('selection', 'error')
+    if selection == "missing_reviews":
+        elaborations = Elaboration.get_missing_reviews()
+    if selection == "top_level_challenges":
+        elaborations = Elaboration.get_top_level_challenges()
+    if selection == "non_adequate_work":
+        elaborations = Elaboration.get_non_adequate_work()
+    if selection == "complaints":
+        elaborations = Elaboration.get_complaints(RequestContext(request))
+    if selection == "awesome":
+        elaborations = Elaboration.get_awesome()
+    if selection == "evaluated_non_adequate_work":
+        elaborations = Elaboration.get_evaluated_non_adequate_work()
+
+    # update overview
+    elaborations.sort(key=lambda elaboration: elaboration.submission_time)
+    request.session['elaborations'] = serializers.serialize('json', elaborations)
+
     return HttpResponse()

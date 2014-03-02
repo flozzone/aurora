@@ -15,7 +15,10 @@ $(function() {
 
 $(function() {
    $(".back").click(function(event) {
-       window.location.href = "/evaluation/";
+        var url = '/back';
+        $.get(url, function (data) {
+            window.location.href = "/evaluation/";
+        });
    });
 });
 
