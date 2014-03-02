@@ -35,10 +35,11 @@ def evaluation(request):
 
     overview = ""
     if request.session.get('selection'):
-        elaborations = []
-        for serialized_elaboration in serializers.deserialize('json', request.session.get('elaborations', {})):
-            elaborations.append(serialized_elaboration.object)
-        overview = render_to_string('overview.html', {'elaborations': elaborations})
+        if request.session.get('selection') != 'questions':
+            elaborations = []
+            for serialized_elaboration in serializers.deserialize('json', request.session.get('elaborations', {})):
+                elaborations.append(serialized_elaboration.object)
+            overview = render_to_string('overview.html', {'elaborations': elaborations})
 
     challenges = Challenge.objects.all()
     return render_to_response('evaluation.html',
@@ -103,6 +104,11 @@ def questions(request):
     print("loading questions...")
     challenges = Challenge.get_questions(RequestContext(request))
     html = render_to_response('questions.html', {'challenges': challenges}, RequestContext(request))
+
+    # store selected elaborations in session
+    elaborations = []
+    request.session['elaborations'] = elaborations
+    request.session['selection'] = 'questions'
     return html
 
 
@@ -149,9 +155,6 @@ def detail(request):
         params = {'evaluation': evaluation, 'lock': lock}
     if selection == "non_adequate_work":
         print('selection: non_adequate_work')
-        params = {}
-    if selection == "non_adequate_reviews":
-        print('selection: non_adequate_reviews')
         params = {}
     if selection == "complaints":
         print('selection: complaints')
@@ -237,7 +240,6 @@ def save_evaluation(request):
     evaluation_text = request.POST['evaluation_text']
     evaluation_points = request.POST['evaluation_points']
 
-    print("autosaving evaluation...")
     elaboration = Elaboration.objects.get(pk=elaboration_id)
     evaluation = Evaluation.objects.get(submission=elaboration)
 
@@ -456,4 +458,32 @@ def review_answer(request):
             text = answer['answer']
             review_question = ReviewQuestion.objects.get(pk=question_id)
             ReviewAnswer(review=review, review_question=review_question, text=text).save()
+
+        # update overview
+        elaborations = Elaboration.get_missing_reviews()
+        elaborations.sort(key=lambda elaboration: elaboration.submission_time)
+        request.session['elaborations'] = serializers.serialize('json', elaborations)
+    return HttpResponse()
+
+
+@login_required()
+def back(request):
+    selection = request.session.get('selection', 'error')
+    if selection == "missing_reviews":
+        elaborations = Elaboration.get_missing_reviews()
+    if selection == "top_level_challenges":
+        elaborations = Elaboration.get_top_level_challenges()
+    if selection == "non_adequate_work":
+        elaborations = Elaboration.get_non_adequate_work()
+    if selection == "complaints":
+        elaborations = Elaboration.get_complaints(RequestContext(request))
+    if selection == "awesome":
+        elaborations = Elaboration.get_awesome()
+    if selection == "evaluated_non_adequate_work":
+        elaborations = Elaboration.get_evaluated_non_adequate_work()
+
+    # update overview
+    elaborations.sort(key=lambda elaboration: elaboration.submission_time)
+    request.session['elaborations'] = serializers.serialize('json', elaborations)
+
     return HttpResponse()

@@ -11,9 +11,10 @@ class Tag(models.Model):
         return self.name
 
 
-class CommentListRevision(models.Model):
-    number = models.BigIntegerField(default=0)
+class CommentList(models.Model):
+    revision = models.BigIntegerField(default=0)
 
+    uri = models.CharField(max_length=200, null=True)
     content_type = models.ForeignKey(ContentType)
     object_id = models.PositiveIntegerField()
     content_object = generic.GenericForeignKey('content_type', 'object_id')
@@ -26,26 +27,32 @@ class CommentListRevision(models.Model):
         ref_type = ContentType.objects.get_for_model(ref_object)
 
         try:
-            revision = CommentListRevision.objects.get(
+            revision = CommentList.objects.get(
                 content_type__pk=ref_type.id,
                 object_id=ref_object.id)
-        except CommentListRevision.DoesNotExist:
-            revision = CommentListRevision.objects.create(content_object=ref_object)
+        except CommentList.DoesNotExist:
+            revision = CommentList.objects.create(content_object=ref_object)
 
         return revision
 
     @staticmethod
     def get_by_ref_numbers(ref_id, ref_type):
-        return CommentListRevision.objects.get(
-            content_type__pk=ref_type,
-            object_id=ref_id)
+        try:
+            comment_list = CommentList.objects.get(
+                content_type__pk=ref_type,
+                object_id=ref_id)
+        except CommentList.DoesNotExist:
+            ref_obj = Comment.ref_id_type_to_obj(ref_id, ref_type)
+            comment_list = CommentList.objects.create(content_object=ref_obj)
+
+        return comment_list
 
     @staticmethod
     def get_by_comment(comment):
-        return CommentListRevision.get_by_ref_numbers(comment.object_id, comment.content_type.id)
+        return CommentList.get_by_ref_numbers(comment.object_id, comment.content_type.id)
 
     def increment(self):
-        self.number += 1
+        self.revision += 1
         self.save()
 
 
@@ -190,6 +197,8 @@ class Comment(models.Model):
             # comment.set_visibility_flag(requester)
             comment.bookmarked = True if comment.bookmarked_by.filter(pk=requester.id).exists() else False
 
+            comment.uri = CommentList.get_by_comment(comment).uri
+
             try:
                 vote = Vote.objects.get(comment=comment, voter=requester)
                 comment.voted = 'upvoted' if vote.direction == vote.UP else 'downvoted'
@@ -250,6 +259,11 @@ class Comment(models.Model):
     def ref_obj_to_id_type(ref_object):
         ref_type = ContentType.objects.get_for_model(ref_object)
         return ref_object.id, ref_type.id
+
+    @staticmethod
+    def ref_id_type_to_obj(ref_id, ref_type):
+        ref_obj_model = ContentType.objects.get_for_id(ref_type).model_class()
+        return ref_obj_model.objects.get(id=ref_id)
 
 
 class CommentsConfig(models.Model):
