@@ -36,18 +36,18 @@ def file_upload(request):
             user.avatar.save(request.FILES['file'].name, tmp_file, False)
         user.save()
         return HttpResponse(user.avatar.name)
-    return HttpResponse(upload_file.upload_file.url)
+    response = {'id': upload_file.id, 'url': upload_file.upload_file.url}
+    return HttpResponse(json.dumps(response))
 
 
 @login_required()
 def file_remove(request):
     user = RequestContext(request)['user']
-    if 'url' in request.GET:
-        url = request.GET.get('url')
-        files = UploadFile.objects.filter(user=user)
-        for file in files:
-            if file.upload_file.name == url:
-                file.delete()
+    if 'id' in request.GET:
+        id = request.GET.get('id')
+        file = UploadFile.objects.get(pk=id)
+        if file.user.id == user.id:
+            file.delete()
     return HttpResponse("OK")
 
 
@@ -61,6 +61,7 @@ def all_files(request):
             data.append({
                 'name': os.path.basename(upload_file.upload_file.name),
                 'size': upload_file.upload_file.size,
-                'path': upload_file.upload_file.url,
+                'url': upload_file.upload_file.url,
+                'id': upload_file.id,
             })
     return HttpResponse(json.dumps(data))
