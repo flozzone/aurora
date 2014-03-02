@@ -27,7 +27,7 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         my.registerCancelReplyButton();
 
         my.registerAddCommentFormButtons();
-        my.registerAddCommentButton();
+        my.registerSubmitCommentButton();
         my.registerCancelCommentButton();
 
         my.registerPolling();
@@ -149,6 +149,7 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
             var $commentForm = $('#commentForm');
             $commentForm.find('#id_reference_id').val(ref_id);
             $commentForm.find('#id_reference_type_id').val(ref_type);
+//            $commentForm.find('#id_uri').val(uri);
             if ($commentForm.is(':visible')) {
                 $commentForm.prev().show();
             }
@@ -382,10 +383,6 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         });
     };
 
-    my.getCsrfToken = function() {
-        return $('[name=csrfmiddlewaretoken]').first().val();
-    };
-
     my.registerReplyButton = function() {
         var $button_post_reply = $('#button_post_reply');
         $button_post_reply.off();
@@ -447,7 +444,7 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         });
     };
 
-    my.registerAddCommentButton = function() {
+    my.registerSubmitCommentButton = function() {
         var $button_add_comment = $('#button_add_comment');
         $button_add_comment.off();
         $button_add_comment.click(function (event) {

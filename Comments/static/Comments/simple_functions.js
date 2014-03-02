@@ -8,11 +8,10 @@
 var COMMENTS = (function (my, $) {
     "use strict";
 
-    my.sendValueForComment = function(url, comment_number, value) {
+    my.post = function(url, data) {
         $.ajax({
             url: url,
-            data: {comment_id: comment_number,
-                value: value},
+            data: data,
             type: 'POST',
             dataType: 'json',
             beforeSend: function (xhr) {
@@ -20,6 +19,10 @@ var COMMENTS = (function (my, $) {
                 xhr.setRequestHeader("X-CSRFToken", csrftoken);
             }
         });
+    };
+
+    my.getCsrfToken = function() {
+        return $('[name=csrfmiddlewaretoken]').first().val();
     };
 
     my.registerPromoteLinksForCommentList = function($comment_list) {
@@ -37,7 +40,7 @@ var COMMENTS = (function (my, $) {
             event.preventDefault();
 
             var comment_number = $this.data('comment_number');
-            my.sendValueForComment('/promote_comment/', comment_number, true);
+            my.post('/promote_comment/', comment_number, {comment_id: comment_number, value: true});
 
             $this.off();
             $this.click(function(event){
@@ -53,7 +56,7 @@ var COMMENTS = (function (my, $) {
             event.preventDefault();
 
             var comment_number = $this.data('comment_number');
-            my.sendValueForComment('/promote_comment/', comment_number, false);
+            my.post('/promote_comment/', comment_number, {comment_id: comment_number, value: false});
 
             $this.off();
             $this.click(function(event) {
@@ -85,10 +88,19 @@ var COMMENTS = (function (my, $) {
 
 //            console.log(window.location.href);
 //            console.log(window.location);
-            console.log(location.protocol + '//' + location.host + location.pathname);
+//            console.log(location.protocol + '//' + location.host + location.pathname);
+            var uri = location.href.replace(/#.*/,'');
+            if(uri.contains('bookmarks')) {
+                uri = '';
+            }
 
             var comment_number = $link.data('comment_number');
-            my.sendValueForComment(this.url, comment_number, true);
+            var data = {
+                comment_id: comment_number,
+                bookmark: true,
+                uri: uri
+            };
+            my.post(this.url, data);
 
             var that = this;
             $link.off();
@@ -105,7 +117,11 @@ var COMMENTS = (function (my, $) {
             event.preventDefault();
 
             var comment_number = $link.data('comment_number');
-            my.sendValueForComment(this.url, comment_number, false);
+            var data = {
+                comment_id: comment_number,
+                bookmark: false
+            };
+            my.post(this.url, data);
 
             var that = this;
             $link.off();
@@ -136,7 +152,12 @@ var COMMENTS = (function (my, $) {
             event.preventDefault();
 
             var comment_number = $this.data('comment_number');
-            my.sendValueForComment(url, comment_number, true);
+            var data = {
+                comment_id: comment_number,
+                bookmark: true,
+                uri: location.href.replace(/#.*/,'')
+            };
+            my.post(url, data);
 
             $this.off();
             $this.click(unbookmark);
@@ -150,7 +171,11 @@ var COMMENTS = (function (my, $) {
             event.preventDefault();
 
             var comment_number = $this.data('comment_number');
-            my.sendValueForComment(url, comment_number, false);
+            var data = {
+                comment_id: comment_number,
+                bookmark: false
+            };
+            my.post(url, data);
 
             $this.off();
             $this.click(bookmark);

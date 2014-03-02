@@ -14,7 +14,7 @@ from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidde
 from django.contrib.contenttypes.models import ContentType
 import json
 
-from Comments.models import Comment, CommentsConfig, CommentListRevision, Vote
+from Comments.models import Comment, CommentsConfig, CommentList, Vote
 from Elaboration.models import Elaboration
 from Notification.models import Notification
 from Comments.tests import CommentReferenceObject
@@ -34,6 +34,7 @@ from Comments.tests import CommentReferenceObject
 class CommentForm(forms.Form):
     reference_type_id = forms.IntegerField(widget=forms.HiddenInput)
     reference_id = forms.IntegerField(widget=forms.HiddenInput)
+    # uri = forms.CharField(widget=forms.HiddenInput, max_length=200, required=False)
     text = forms.CharField(widget=forms.Textarea(attrs={'id': 'commentTextarea'}), label='')
     visibility = forms.ChoiceField(choices=Comment.VISIBILITY_CHOICES)
 
@@ -42,6 +43,7 @@ class ReplyForm(forms.Form):
     reference_type_id = forms.IntegerField(widget=forms.HiddenInput)
     reference_id = forms.IntegerField(widget=forms.HiddenInput)
     parent_comment = forms.IntegerField(widget=forms.HiddenInput)
+    # uri = forms.CharField(widget=forms.HiddenInput, max_length=200, required=False)
     text = forms.CharField(widget=forms.Textarea(attrs={'id': 'replyTextarea'}), label='')
     visibility = forms.ChoiceField(choices=Comment.VISIBILITY_CHOICES)
 
@@ -68,7 +70,7 @@ def delete_comment(request):
     comment.deleter = deleter
     comment.delete_date = timezone.now()
     comment.save()
-    CommentListRevision.get_by_comment(comment).increment()
+    CommentList.get_by_comment(comment).increment()
 
     return HttpResponse('')
 
@@ -102,7 +104,7 @@ def edit_comment(request):
 
     comment.text = data['text']
     comment.save()
-    CommentListRevision.get_by_comment(comment).increment()
+    CommentList.get_by_comment(comment).increment()
 
     return HttpResponse('')
 
@@ -134,7 +136,9 @@ def create_comment(form, request):
                                          visibility=visibility)
 
         comment.save()
-        CommentListRevision.get_by_comment(comment).increment()
+        # comment.uri = form.cleaned_data['uri']
+        # print('uri: ' + comment.uri)
+        CommentList.get_by_comment(comment).increment()
 
         if parent_comment is not None:
             if ref_obj_model == Elaboration:
@@ -172,12 +176,12 @@ def vote_up_on(comment, voter):
         vote = comment.votes.get(voter=voter)
         if vote.direction == Vote.DOWN:
             vote.delete()
-            CommentListRevision.get_by_comment(comment).increment()
+            CommentList.get_by_comment(comment).increment()
 
         return
     except Vote.DoesNotExist:
         Vote.objects.create(direction=Vote.UP, voter=voter, comment=comment)
-        CommentListRevision.get_by_comment(comment).increment()
+        CommentList.get_by_comment(comment).increment()
 
 
 def vote_down_on(comment, voter):
@@ -185,12 +189,12 @@ def vote_down_on(comment, voter):
         vote = comment.votes.get(voter=voter)
         if vote.direction == Vote.UP:
             vote.delete()
-            CommentListRevision.get_by_comment(comment).increment()
+            CommentList.get_by_comment(comment).increment()
 
         return
     except Vote.DoesNotExist:
         Vote.objects.create(direction=Vote.DOWN, voter=voter, comment=comment)
-        CommentListRevision.get_by_comment(comment).increment()
+        CommentList.get_by_comment(comment).increment()
 
 
 @require_POST
@@ -205,13 +209,17 @@ def bookmark_comment(request):
     except Comment.DoesNotExist:
         return HttpResponse('')
 
-    if data['value'] == 'true':
+    if data['bookmark'] == 'true':
         comment.bookmarked_by.add(requester)
+        comment_list = CommentList.get_by_comment(comment)
+        if data['uri'] != '':
+            comment_list.uri = data['uri']
+        comment_list.save()
     else:
         comment.bookmarked_by.remove(requester)
 
     comment.save()
-    CommentListRevision.get_by_comment(comment).increment()
+    CommentList.get_by_comment(comment).increment()
 
     return HttpResponse('')
 
@@ -232,7 +240,7 @@ def promote_comment(request):
 
     comment.promoted = True if data['value'] == 'true' else False
     comment.save()
-    CommentListRevision.get_by_comment(comment).increment()
+    CommentList.get_by_comment(comment).increment()
 
     return HttpResponse('')
 
@@ -263,7 +271,7 @@ def get_comment_list_update(request, client_revision):
     ref_id = client_revision['ref_id']
     user = RequestContext(request)['user']
 
-    revision = CommentListRevision.get_by_ref_numbers(ref_id, ref_type).number
+    revision = CommentList.get_by_ref_numbers(ref_id, ref_type).revision
 
     if revision > int(client_revision['number']):
         comment_list = Comment.query_top_level_sorted(ref_id, ref_type, user)
