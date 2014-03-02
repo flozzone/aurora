@@ -4,17 +4,35 @@ function challenge_loaded() {
     var challenge_id = $('.challenge').attr('id');
     tinymce.init({
         selector: "textarea#editor",
-        paste_auto_cleanup_on_paste : true,
-		paste_retain_style_properties : "font-size,bold,italic",
-		paste_text_linebreaktype: "p",
+        paste_retain_style_properties: "font-size,bold,italic",
+        paste_text_linebreaktype: "p",
+        valid_elements: "p,strong,em,span,ul,ol,li,sub,br,sup,table,tbody,tr,td,div",
+        paste_preprocess: function (plugins, args) { // remove all links
+            var content;
+            try {
+                content = $(args.content);
+                if (content.selector === "") {
+                content.find('a').replaceWith(function () {
+                    return $(this).text()
+                });
+                var fullHtml = "";
+                $(content).each(function () {
+                    fullHtml += '<p>' + $(this).html() + '</p>';
+                });
+                args.content = fullHtml;
+            }
+            } catch (error) {
+                // in case the content is not a valid markup
+            }
+        },
         menubar: false,
-	    theme : 'modern',
+        theme: 'modern',
         statusbar: false,
-	    fontsize_formats: "0.8em 1em 1.2em 1.6em 2em",
-		toolbar1: "undo redo | bold italic | fontsizeselect | alignleft aligncenter | bullist numlist indent outdent | subscript superscript | table",
-	    plugins: "autoresize table paste",
-		autoresize_min_height: 200,
-		autoresize_max_height: 800,
+        fontsize_formats: "0.8em 1em 1.2em 1.6em 2em",
+        toolbar1: "undo redo | bold italic | fontsizeselect | alignleft aligncenter | bullist numlist indent outdent | subscript superscript | table",
+        plugins: "autoresize table paste",
+        autoresize_min_height: 200,
+        autoresize_max_height: 800,
         setup: function (editor) {
             editor.on('change', function (e) {
                 elaboration_autosave(e, challenge_id);
@@ -24,15 +42,19 @@ function challenge_loaded() {
 
     tinymce.init({
         // selector: "textarea#editor",
-        mode : "exact",
-        elements :"editor_challenge",
+        mode: "exact",
+        elements: "editor_challenge",
         menubar: false,
         statusbar: false,
-		toolbar: false,
-	    plugins: "autoresize",
-		autoresize_min_height: 100,
-		autoresize_max_height: 800,
-        readonly: 1
+        toolbar: false,
+        plugins: "autoresize",
+        autoresize_min_height: 100,
+        autoresize_max_height: 800,
+        readonly: 1,
+        oninit: function () {
+            var height = $('#editor_challenge_ifr').height() + 50;
+            $('#editor_challenge_ifr').height(height);
+        }
     });
 
     $('.submit').click(submit_clicked);
@@ -56,7 +78,7 @@ function elaboration_autosave(e, challenge_id) {
 function submit_clicked(event) {
     $('.submit').hide();
     $('.submission_text').show();
-	window.scrollBy(0,200);
+    window.scrollBy(0, 200);
 }
 
 function revert_submit_clicked() {
