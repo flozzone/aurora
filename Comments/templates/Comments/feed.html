@@ -16,9 +16,9 @@
 		<ul class="toolbar">
 			<li class="button filterbtn" id="1" onclick="filter(this.id,'{{user.username}}');"><i class="fa fa-eye"></i> All</li>
 			<li class="button filterbtn" id="2" onclick="filter(this.id,'{{user.username}}');"><i class="fa fa-eye"></i> Lecturer Comments</li>
-			<li class="button filterbtn" id="-1" onclick="filter(this.id,'{{user.username}}');"><i class="fa fa-eye-slash"></i> upvoted comments</li>
-			<li class="button filterbtn" id="-5" onclick="filter(this.id,'{{user.username}}');"><i class="fa fa-eye-slash"></i> decent comments (>-5)</li>
-			<li class="button filterbtn" id="0" onclick="markT('{{user.username}}');filter(this.id,'{{user.username}}')"><i class="fa fa-eye"></i> only new</li>
+			<li class="button filterbtn" id="-1" onclick="filter(this.id,'{{user.username}}');"><i class="fa fa-eye"></i> upvoted comments</li>
+			<li class="button filterbtn" id="-5" onclick="filter(this.id,'{{user.username}}');"><i class="fa fa-eye"></i> &quot;decent&quot; comments</li>
+			<li class="button filterbtn" id="0" onclick="markT('{{user.username}}');filter(this.id,'{{user.username}}')"><i class="fa fa-eye"></i> new</li>
 		</ul>
         {% render_multi_comment_list for object %}
     </div>
