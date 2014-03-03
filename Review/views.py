@@ -74,7 +74,7 @@ def review_answer(request):
                 course=course,
                 text=Notification.BAD_REVIEW + review.elaboration.challenge.title,
                 image_url=review.elaboration.challenge.image.url,
-                link="review=" + str(review.elaboration.challenge.id)
+                link="/challenges/received_challenge_reviews/?id=" + str(review.elaboration.challenge.id)
             ).save()
         else:
             final_challenge = review.elaboration.challenge.get_final_challenge()
@@ -84,7 +84,7 @@ def review_answer(request):
                     course=course,
                     text=Notification.ENOUGH_PEER_REVIEWS + final_challenge.title,
                     image_url=final_challenge.image.url,
-                    link="stack=" + str(review.elaboration.challenge.get_stack().id)
+                    link="/challenges/stack?id=" + str(review.elaboration.challenge.get_stack().id)
                 )
     return HttpResponse()
 
