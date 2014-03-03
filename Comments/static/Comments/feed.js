@@ -10,7 +10,6 @@ $(window).load( function() {
 
 function loadFilter() {
     "use strict";
-
 	filter(getCookie('filtercookie.'+$('#the_username').data('username')));
 }
 
@@ -52,6 +51,24 @@ function filter(fx,usr) {
         case 0:
             $('.response,.comment,.r_list').addClass('hided');
             $('.r_list').addClass('hided');
+			var cookieName = 'filterTimeCookie.'+$('#the_username').data('username');
+			var x = getCookie(cookieName);
+			$('.comment').each(function(i){
+				var c = $(this).data('date');
+				if (c > x) {
+					$(this).removeClass('hided');
+					$('.filterbtn').removeClass('hilited');
+				}
+			});
+			$('.response').each(function(i){
+				var c = $(this).data('date');
+				if (c > x) {
+					$('#'+$(this).data('comment')).removeClass('hided');
+					$('.r_'+$(this).data('comment')).removeClass('hided');
+					$(this).removeClass('hided');
+					$('.filterbtn').removeClass('hilited');
+				}
+			});
             break;
     }
 }
@@ -70,3 +87,17 @@ function headClick(aDiv) {
 		}
 	}
 }
+
+
+function markT(usr) {
+	s = Date.now() /1000 |0;
+	a = "filterTimeCookie." + usr + "=" + s.toString() + "; expires=Tue, 18 Jan 2038 03:14:06 GMT";
+	document.cookie = a;
+}
+
+
+function toTimestamp(strDate){
+	var dat = Date.parse(strDate);
+	return dat/1000;
+}
+

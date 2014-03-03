@@ -12,13 +12,13 @@
 	
 	
     <div id="comments_column_1">
-		<div style="background:black;color:white;padding:0.1em"><b>Open Newsfeed (Currently {% comments_count for object %} Comments)</b></div>
+		<div style="background:black;color:white;padding:0.1em"><b>Open Newsfeed</b></div>
 		<ul class="toolbar">
 			<li class="button filterbtn" id="1" onclick="filter(this.id,'{{user.username}}');"><i class="fa fa-eye"></i> All</li>
-			<li class="button filterbtn" id="2" onclick="filter(this.id,'{{user.username}}');"><i class="fa fa-eye"></i> Only Lecturer Comments</li>
-			<li class="button filterbtn" id="-1" onclick="filter(this.id,'{{user.username}}');"><i class="fa fa-eye-slash"></i> unpopular comments</li>
-			<li class="button filterbtn" id="-5" onclick="filter(this.id,'{{user.username}}');"><i class="fa fa-eye-slash"></i> really unpopular comments</li>
-			<li class="button filterbtn" id="0" onclick="filter(this.id,'{{user.username}}')"><i class="fa fa-eye-slash"></i> All</li>
+			<li class="button filterbtn" id="2" onclick="filter(this.id,'{{user.username}}');"><i class="fa fa-eye"></i> Lecturer Comments</li>
+			<li class="button filterbtn" id="-1" onclick="filter(this.id,'{{user.username}}');"><i class="fa fa-eye-slash"></i> upvoted comments</li>
+			<li class="button filterbtn" id="-5" onclick="filter(this.id,'{{user.username}}');"><i class="fa fa-eye-slash"></i> decent comments (>-5)</li>
+			<li class="button filterbtn" id="0" onclick="markT('{{user.username}}');filter(this.id,'{{user.username}}')"><i class="fa fa-eye"></i> only new</li>
 		</ul>
         {% render_multi_comment_list for object %}
     </div>
