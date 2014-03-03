@@ -167,9 +167,10 @@ def create_comment(form, request):
                 )
 
 
+@require_POST
 @login_required
 def vote_on_comment(request):
-    data = request.GET
+    data = request.POST
 
     comment = Comment.objects.get(id=data['comment_id'])
     user = RequestContext(request)['user']

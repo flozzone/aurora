@@ -35,18 +35,6 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         my.startPolling();
     };
 
-    my.POLLING = {
-        stopped: false,
-        current_interval: 5000,
-        active_interval: 5000,
-        idle_interval: 60000,
-        increase_interval: function () {
-            my.POLLING.current_interval = Math.min(my.POLLING.current_interval * 2, my.POLLING.idle_interval);
-        },
-        firstRefId: null,
-        lastRefId: null
-    };
-
     my.state = {
         modifying: false,
         posting: false
@@ -99,29 +87,63 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
     };
 
     my.registerVoteForCommentList = function($comment_list) {
-        $comment_list.find('.vote_down_on, .vote_up_on').click(function (event) {
+        $comment_list.find('.vote_up_on').click(function (event) {
             event.preventDefault();
-            var direction;
-            if ($(this).attr('class') === 'vote_up_on') {
-                direction = 'up';
-            }
-            else {
-                direction = 'down';
-            }
-            $.ajax({
-                url: '/vote_on_comment/',
-                data: {
-                    direction: direction,
-                    comment_id: $(this).data('comment_number')
-                },
-                type: 'GET',
-                dataType: 'html',
-                success: function () {
-                    my.updateCommentLists(false);
-                }
-            });
+
+            vote($(this), 'up', 1);
+
             return false;
         });
+
+        $comment_list.find('.vote_down_on').click(function (event) {
+            event.preventDefault();
+
+            vote($(this), 'down', -1);
+
+            return false;
+        });
+
+        function vote($link, direction, scorediff) {
+            var $parent = $link.parent();
+            var classname = direction + 'voted';
+            var oppositeClass;
+
+            if(direction === 'up') {
+                oppositeClass = 'downvoted';
+            } else {
+                oppositeClass = 'upvoted';
+            }
+
+            if($parent.hasClass(classname)) {
+                return false;
+            }
+
+            my.POLLING.resetTimer();
+
+            if($parent.hasClass(oppositeClass)) {
+                $parent.removeClass(oppositeClass);
+            } else {
+                $parent.addClass(classname);
+            }
+
+            $parent.find(oppositeClass);
+
+
+            var $score = $parent.find('.comment_score_value');
+            var newscore = +$score.html() + scorediff;
+            if(newscore > 0) {
+                newscore = '+' + newscore.toString();
+            }
+            $score.html(newscore);
+
+            var url = '/vote_on_comment/';
+            var data = {
+                direction: direction,
+                comment_id: $link.data('comment_number')
+            };
+
+            my.post(url, data);
+        }
     };
 
     my.registerAddCommentFormButtons = function() {
@@ -484,6 +506,25 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         });
     };
 
+    my.POLLING = {
+        stopped: false,
+        current_interval: 5000,
+        active_interval: 5000,
+        idle_interval: 60000,
+        increase_interval: function () {
+            my.POLLING.current_interval = Math.min(my.POLLING.current_interval * 2, my.POLLING.idle_interval);
+        },
+        firstRefId: null,
+        lastRefId: null,
+
+        resetTimer: function() {
+            if (!my.POLLING.stopped) {
+                clearTimeout(my.POLLING.current_timeout);
+                my.POLLING.current_timeout = setTimeout(function() {my.updateCommentLists(true);}, my.POLLING.current_interval);
+            }
+        }
+    };
+
     my.updateCommentLists = function(keepPolling) {
         var data = {revisions: my.getRevisions()};
 
@@ -509,9 +550,8 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
                 my.POLLING.increase_interval();
             },
             complete: function () {
-                if (keepPolling === true && !my.POLLING.stopped) {
-                    clearTimeout(my.POLLING.current_timeout);
-                    my.POLLING.current_timeout = setTimeout(function() {my.updateCommentLists(true);}, my.POLLING.current_interval);
+                if (keepPolling === true) {
+                    my.POLLING.resetTimer();
                 }
             }
         });

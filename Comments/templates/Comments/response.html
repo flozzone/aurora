@@ -22,11 +22,11 @@
 		 {% endif %}
 		 </div>
 
-         <div class="comment_score {{ comment.voted }}">
+         <div class="comment_score {{ response.voted }}">
              {% if response.author != requester %}
                  <a href='#' class="vote_up_on" data-comment_number="{{ response.id }}" title="This comment is helpful"><i class="fa fa-arrow-up notBlack"></i></a>
              {% endif %}
-             {% if response.score > 0 %} +{% endif %}{{ response.score }}
+             <span class="comment_score_value">{% if response.score > 0 %} +{% endif %}{{ response.score }}</span>
              {% if response.author != requester %}
                  <a href='#' class="vote_down_on" data-comment_number="{{ response.id }}" title="This comment is not helpful at all"><i class="fa fa-arrow-down notBlack"></i></a>
              {% endif %}
