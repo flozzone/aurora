@@ -90,6 +90,7 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         $comment_list.find('.vote_up_on').click(function (event) {
             event.preventDefault();
 
+            my.POLLING.resetTimer();
             vote($(this), 'up', 1);
 
             return false;
@@ -98,6 +99,7 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         $comment_list.find('.vote_down_on').click(function (event) {
             event.preventDefault();
 
+            my.POLLING.resetTimer();
             vote($(this), 'down', -1);
 
             return false;
@@ -117,8 +119,6 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
             if($parent.hasClass(classname)) {
                 return false;
             }
-
-            my.POLLING.resetTimer();
 
             if($parent.hasClass(oppositeClass)) {
                 $parent.removeClass(oppositeClass);
