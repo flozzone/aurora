@@ -10,12 +10,13 @@
   <div id="detail_area">
 
 	  <div class="stack">
-		  Zur Zeit stehen folgende &Uuml;bungsbl&ouml;cke zur Verf&uuml;gung. Mehr Bl&ouml;cke werden im Laufe des Semesters hinzugef&uuml;gt. Bitte beachten sie die auf der Startseite angef&uuml;hren allgemeinen Regeln.   
+		  Zur Zeit stehen folgende Herausforderungen zur Verf&uuml;gung. Mehr werden im Laufe des Semesters hinzugef&uuml;gt. Bitte beachten sie die auf der Startseite angef&uuml;hren allgemeinen Regeln.   
 	  </div>
     {% for stack in course_stacks %}
       <div class="stack {% cycle 'lineD' 'lineL' %}" id="{{ stack.stack.id }}">
+  		<div class="stack_done" {% if stack.points != 0 %}style="display:block;"{% endif %}><i class="fa fa-check"></i></div>
 		<div class="title">
-			<b>{{ stack.stack.title }}:</b> {{ stack.stack.get_challenge_image_urls|length }} Levels
+			<b>{{ stack.stack.title }}:</b> {{ stack.stack.get_challenge_image_urls|length }} Tasks
 			<div class="stack_icons" style="float:right">
         		{% for image_url in stack.stack.get_challenge_image_urls %}
         		<img class="stack_icon" src="/{{ image_url }}"/>
@@ -25,7 +26,7 @@
         <div class="description">{{ stack.stack.description }}</div>
 {#       Status: <b>{{ stack.status.status }}.</b>#}
 		<div class="stack_status">
-			 <div class="stack_action button XL">do it</div>
+			 <div class="stack_action button XL">ENTER CHALLENGE</div>
 			 <div class="stack_next">Status: <b>{{ stack.status.next }} {% if stack.points != 0 %}{{ stack.points }}{% endif %}</b></div>
 		</div>
  

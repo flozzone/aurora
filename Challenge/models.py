@@ -50,13 +50,13 @@ class Challenge(models.Model):
     next_dict = {
         -1: "Not enabled...",
         0: "Start a new level.",
-        1: "Finish and submit your current level.",
+        1: "Finish and submit your current task.",
         2: "Write a review.",
         3: "Blocked by negative review.",
         4: "Waiting for more reviews.",
-        5: "All reviews are in, you can start the final level.",
-        6: "Still waiting for evaluation of final level.",
-        7: "Final level evaluated. Points received: "
+        5: "All reviews are in, you can start the final task.",
+        6: "Still waiting for evaluation of final task.",
+        7: "Final task evaluated. Points received: "
     }
 
     def __unicode__(self):
