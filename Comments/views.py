@@ -140,9 +140,7 @@ def create_comment(form, request):
 
         comment_list.increment()
 
-        print(context['last_selected_course'])
         if parent_comment is not None and parent_comment.author != comment.author:
-            print('creating notification')
             obj, created = Notification.objects.get_or_create(
                 user=parent_comment.author,
                 course=context['last_selected_course'],
