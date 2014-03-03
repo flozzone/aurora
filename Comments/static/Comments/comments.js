@@ -271,8 +271,8 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
 //            text = text.replace(/(<br><\/br>)|(<br>)|(<br \/>)|(<p>)|(<div>)/g, "\r\n");
 //            text = text.replace(/(<br><\/br>)|(<br>)|(<br \/>)|(<p>)|(<\/p>)|(<div>)|(<\/div>)/g, "\r\n");
 
-//            var text = getText($commentText.get(0)).trim();
-                var text = $commentText.html();
+            var text = getText($commentText.get(0)).trim();
+//                var text = $commentText.html();
 
                 var data = {comment_id: $comment.data('comment_number'),
                     text: text};
@@ -421,7 +421,7 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
             // this is done in addComment as well of course
             var $replyTextarea = $('#replyTextarea');
             var text = $replyTextarea.val();
-            text = '<pre>' + text + '</pre>';
+//            text = '<pre>' + text + '</pre>';
             $replyTextarea.val(text);
 
             $.ajax({
@@ -482,7 +482,7 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
             // this is done in reply as well of course
             var $commentTextarea = $("#commentTextarea");
             var text = $commentTextarea.val();
-            text = '<pre>' + text + '</pre>';
+//            text = '<pre>' + text + '</pre>';
             $commentTextarea.val(text);
 
             $.ajax({
