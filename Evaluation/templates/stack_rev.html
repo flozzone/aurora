@@ -9,7 +9,7 @@
 
     <table>
         <tr class="{% cycle 'darkTableRow' 'lightTableRow' %}">
-            <td><img src="/{{ elaboration.challenge.image.url }}" width="32" height="32"></td>
+            <td><img src="{{ elaboration.challenge.image.url }}" width="32" height="32"></td>
             <td>{{ elaboration.challenge.title }}</td>
             <td>{{ elaboration.submission_time }}</td>
             <td><div title="Great work" class="awesome_reviews">{{ elaboration.get_awesome_reviews|length }}</div></td>
