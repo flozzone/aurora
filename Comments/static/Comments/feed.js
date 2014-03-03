@@ -63,10 +63,10 @@ function headClick(aDiv) {
 	$(aDiv).toggleClass('hided');
 	if ($(aDiv).hasClass('comment')) {
 		if ($(aDiv).hasClass('hided')) {
-			$('.r_'+$(aDiv).attr('id')).addClass('hided')
+			$('.r_'+$(aDiv).attr('id')).addClass('hided');
 		}
 		else {
-			$('.r_'+$(aDiv).attr('id')).removeClass('hided')
+			$('.r_'+$(aDiv).attr('id')).removeClass('hided');
 		}
 	}
 }
