@@ -144,27 +144,15 @@ def create_comment(form, request):
             obj, created = Notification.objects.get_or_create(
                 user=parent_comment.author,
                 course=context['last_selected_course'],
-                text=Notification.NEW_MESSAGE + "You've received a reply to one of your comments",
+                text="You've received a reply to one of your comments",
                 image_url=comment.author.avatar.url,
-                link=comment_list.uri
+                link=comment_list.uri + '#comment_' + str(parent_comment.id)
             )
 
             if not created:
                 obj.creation_time = timezone.now()
                 obj.read = False
                 obj.save()
-
-        # if parent_comment is not None:
-        #     if ref_obj_model == Elaboration:
-        #         elaboration = ref_obj
-        #         user = parent_comment.author
-        #         obj, created = Notification.objects.get_or_create(
-        #             user=user,
-        #             course=context['last_selected_course'],
-        #             text=Notification.NEW_MESSAGE + elaboration.challenge.title,
-        #             image_url=elaboration.challenge.image.url,
-        #             link="challenge=" + str(elaboration.challenge.id)
-        #         )
 
 
 @require_POST
