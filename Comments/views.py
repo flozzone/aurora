@@ -151,6 +151,11 @@ def create_comment(form, request):
                 link=comment_list.uri
             )
 
+            if not created:
+                obj.creation_time = timezone.now()
+                obj.read = False
+                obj.save()
+
         # if parent_comment is not None:
         #     if ref_obj_model == Elaboration:
         #         elaboration = ref_obj
