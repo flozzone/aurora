@@ -19,7 +19,8 @@ def notifications(request):
         notification.save()
 
         if 'link' in request.GET:
-            redirect(request.GET['link'])
+            return redirect(request.GET['link'])
+
         return redirect('/notifications')
     notifications = Notification.objects.filter(user=user, course=course).order_by('-creation_time')
     data['notifications'] = notifications
