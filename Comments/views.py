@@ -34,7 +34,7 @@ from Comments.tests import CommentReferenceObject
 class CommentForm(forms.Form):
     reference_type_id = forms.IntegerField(widget=forms.HiddenInput)
     reference_id = forms.IntegerField(widget=forms.HiddenInput)
-    # uri = forms.CharField(widget=forms.HiddenInput, max_length=200, required=False)
+    uri = forms.CharField(widget=forms.HiddenInput, max_length=200)
     text = forms.CharField(widget=forms.Textarea(attrs={'id': 'commentTextarea'}), label='')
     visibility = forms.ChoiceField(choices=Comment.VISIBILITY_CHOICES)
 
@@ -43,7 +43,7 @@ class ReplyForm(forms.Form):
     reference_type_id = forms.IntegerField(widget=forms.HiddenInput)
     reference_id = forms.IntegerField(widget=forms.HiddenInput)
     parent_comment = forms.IntegerField(widget=forms.HiddenInput)
-    # uri = forms.CharField(widget=forms.HiddenInput, max_length=200, required=False)
+    uri = forms.CharField(widget=forms.HiddenInput, max_length=200)
     text = forms.CharField(widget=forms.Textarea(attrs={'id': 'replyTextarea'}), label='')
     visibility = forms.ChoiceField(choices=Comment.VISIBILITY_CHOICES)
 
@@ -136,9 +136,23 @@ def create_comment(form, request):
                                          visibility=visibility)
 
         comment.save()
-        # comment.uri = form.cleaned_data['uri']
-        # print('uri: ' + comment.uri)
-        CommentList.get_by_comment(comment).increment()
+
+        comment_list = CommentList.get_by_comment(comment)
+        comment_list.uri = form.cleaned_data['uri']
+        comment_list.save()
+
+        comment_list.increment()
+
+        # print(context['last_selected_course'])
+        # if parent_comment is not None and parent_comment.author != comment.author:
+        #     print('creating notification')
+        #     obj, created = Notification.objects.get_or_create(
+        #         user=parent_comment.author,
+        #         course=context['last_selected_course'],
+        #         text=Notification.NEW_MESSAGE + "You've received a reply to one of your comments",
+        #         image_url=comment.author.avatar.url,
+        #         link=comment_list.uri
+        #     )
 
         if parent_comment is not None:
             if ref_obj_model == Elaboration:
@@ -211,10 +225,6 @@ def bookmark_comment(request):
 
     if data['bookmark'] == 'true':
         comment.bookmarked_by.add(requester)
-        comment_list = CommentList.get_by_comment(comment)
-        if data['uri'] != '':
-            comment_list.uri = data['uri']
-        comment_list.save()
     else:
         comment.bookmarked_by.remove(requester)
 

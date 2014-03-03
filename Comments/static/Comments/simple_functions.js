@@ -86,19 +86,10 @@ var COMMENTS = (function (my, $) {
         bookmark: function (event, $link) {
             event.preventDefault();
 
-//            console.log(window.location.href);
-//            console.log(window.location);
-//            console.log(location.protocol + '//' + location.host + location.pathname);
-            var uri = location.href.replace(/#.*/,'');
-            if(uri.contains('bookmarks')) {
-                uri = '';
-            }
-
             var comment_number = $link.data('comment_number');
             var data = {
                 comment_id: comment_number,
-                bookmark: true,
-                uri: uri
+                bookmark: true
             };
             my.post(this.url, data);
 
@@ -154,8 +145,7 @@ var COMMENTS = (function (my, $) {
             var comment_number = $this.data('comment_number');
             var data = {
                 comment_id: comment_number,
-                bookmark: true,
-                uri: location.href.replace(/#.*/,'')
+                bookmark: true
             };
             my.post(url, data);
 

@@ -149,7 +149,10 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
             var $commentForm = $('#commentForm');
             $commentForm.find('#id_reference_id').val(ref_id);
             $commentForm.find('#id_reference_type_id').val(ref_type);
-//            $commentForm.find('#id_uri').val(uri);
+
+            var uri = location.pathname + location.search;
+            $commentForm.find('#id_uri').val(uri);
+
             if ($commentForm.is(':visible')) {
                 $commentForm.prev().show();
             }
@@ -291,6 +294,9 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
 
             var comment_number = $(this).data('reply_to');
             my.setCommentId($replyForm, comment_number);
+
+            var uri = location.pathname + location.search;
+            $replyForm.find('#id_uri').val(uri);
 
             var user = $(this).closest('.comment, .response').data('comment_author');
 
