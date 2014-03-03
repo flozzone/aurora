@@ -12,13 +12,13 @@
 	
 	
     <div id="comments_column_1">
-		<div style="background:black;color:white;padding:0.1em"><b>Open Newsfeed (Currently {% comments_count for object %} Comments)</b></div>
+		<div style="background:black;color:white;padding:0.1em"><b>Open Newsfeed</b></div>
 		<ul class="toolbar">
 			<li class="button filterbtn" id="1" onclick="filter(this.id,'{{user.username}}');"><i class="fa fa-eye"></i> All</li>
-			<li class="button filterbtn" id="2" onclick="filter(this.id,'{{user.username}}');"><i class="fa fa-eye"></i> Only Lecturer Comments</li>
-			<li class="button filterbtn" id="-1" onclick="filter(this.id,'{{user.username}}');"><i class="fa fa-eye-slash"></i> unpopular comments</li>
-			<li class="button filterbtn" id="-5" onclick="filter(this.id,'{{user.username}}');"><i class="fa fa-eye-slash"></i> really unpopular comments</li>
-			<li class="button filterbtn" id="0" onclick="filter(this.id,'{{user.username}}')"><i class="fa fa-eye-slash"></i> All</li>
+			<li class="button filterbtn" id="2" onclick="filter(this.id,'{{user.username}}');"><i class="fa fa-eye"></i> Lecturer Comments</li>
+			<li class="button filterbtn" id="-1" onclick="filter(this.id,'{{user.username}}');"><i class="fa fa-eye"></i> upvoted comments</li>
+			<li class="button filterbtn" id="-5" onclick="filter(this.id,'{{user.username}}');"><i class="fa fa-eye"></i> &quot;decent&quot; comments</li>
+			<li class="button filterbtn" id="0" onclick="markT('{{user.username}}');filter(this.id,'{{user.username}}')"><i class="fa fa-eye"></i> new</li>
 		</ul>
         {% render_multi_comment_list for object %}
     </div>
@@ -50,7 +50,7 @@
 		<p><b>Frequently Asked Questions</b></p>
 		<br>
 		<p><i>Q: Wie unterscheidet sich der Modus zu dem des Vorjahres?</i></p>
-		<p>A: Anstatt vieler kleiner, isolierter Activities sind die Arbeiten dieses Jahr in &raquo;Stacks&laquo; organisiert, die aus &raquo;Challenges&laquo; bestehen. Punkte k&ouml;nnen sie nur f&uuml;r die letzte Challenge eines Stacks bekommen. Um diese abgeben zu k&ouml;nnen, m&uuml;ssen sie jedoch zuerst alle anderen Challenges dieses Stacks ausarbeiten, die dann in einem &raquo;Double Blind Peer Review&laquo; &uuml;berpr&uuml;ft werden. <br>Konkret bedeutet das, dass Sie zu Arbeiten ihrer Kolleg/innen anonym Feedback verfassen, und entsprechend anonymes Feedback von Kolleg/innen bekommen werden.</p>
+		<p>A: Anstatt vieler kleiner, isolierter Activities sind die Arbeiten dieses Jahr in &raquo;Challenges&laquo; organisiert, die aus &raquo;Tasks&laquo; bestehen. Punkte k&ouml;nnen sie nur f&uuml;r den letzten Task einer Challenge bekommen. Um diese abgeben zu k&ouml;nnen, m&uuml;ssen sie jedoch zuerst alle anderen Tasks dieses Stacks bearbeiten, die dann in einem &raquo;Double Blind Peer Review&laquo; &uuml;berpr&uuml;ft werden. <br>Konkret bedeutet das, dass Sie zu Arbeiten ihrer Kolleg/innen anonym Feedback verfassen, und entsprechend anonymes Feedback von Kolleg/innen bekommen werden.</p>
 		<br>
 		<p><i>Q: Ich kenn mich nicht aus, wo kann ich fragen stellen?</i></p>
 		<p>A: Bevor sie eine Frage stellen, schauen sie bitte, ob diese schon von wem anderen vor ihnen im Newsfeed gestellt hat, 

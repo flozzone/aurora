@@ -1,6 +1,9 @@
 {% load humanize %}
 
 <div class="response{% if response.author.is_staff %} staff_author{% endif %} {{ response.visibility }}_visibility {% if response.author == requester %} author_author{% endif %} comment_{{comment.id}} {% if response.score < 0 %}neg0{% endif %} {% if response.score < -5 %}neg5{% endif %}"
+	 data-Cdate="{{ comment.post_date|date:'U' }}"
+	 data-date="{{ response.post_date|date:'U' }}"
+	 data-comment="comment_{{comment.id}}"
      id="comment_response_{{ response.id }}" data-comment_number="{{ response.id }}"
      data-comment_author="{{ response.author.display_name }}">
 	 <div class="response_top" onclick="headClick(this.parentNode)" >
@@ -22,11 +25,11 @@
 		 {% endif %}
 		 </div>
 
-         <div class="comment_score {{ comment.voted }}">
+         <div class="comment_score {{ response.voted }}">
              {% if response.author != requester %}
                  <a href='#' class="vote_up_on" data-comment_number="{{ response.id }}" title="This comment is helpful"><i class="fa fa-arrow-up notBlack"></i></a>
              {% endif %}
-             {% if response.score > 0 %} +{% endif %}{{ response.score }}
+             <span class="comment_score_value">{% if response.score > 0 %} +{% endif %}{{ response.score }}</span>
              {% if response.author != requester %}
                  <a href='#' class="vote_down_on" data-comment_number="{{ response.id }}" title="This comment is not helpful at all"><i class="fa fa-arrow-down notBlack"></i></a>
              {% endif %}
@@ -65,11 +68,13 @@
             </p>
         {% endif %}
 
-        {% if requester.is_staff or requester == response.author %}
-            {% if response.deleter == None %}
+        {% if response.deleter == None %}
+            {% if requester == response.author %}
                 <a class="flR edit_link" href="javascript:void(0)" id="edit_response_link_{{ response.id }}">
                     edit&nbsp;&nbsp;
                 </a>
+            {% endif %}
+            {% if requester.is_staff or requester == response.author %}
                 <a class="flR delete_response" href="javascript:void(0)" id="delete_response_link_{{ response.id }}"
                    data-delete_id="{{ response.id }}">
                     delete&nbsp;&nbsp;

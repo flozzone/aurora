@@ -143,11 +143,24 @@ h1 {
     font-size: 1.6em;
 }
 
+.stack_done {
+	display:none;
+	position:absolute;
+	top:-60px;
+	left:-20px;
+	opacity:0.15;
+	margin-left:10px;
+	font-size:240px;
+	color:rgb(58,201,88);
+}
+
+
 .stack {	
 	clear:both;
 	position:relative;
 	padding: 1em;
 	cursor:pointer;
+	overflow:hidden;
 }
 
 .stack .description {

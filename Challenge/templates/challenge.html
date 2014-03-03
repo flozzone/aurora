@@ -24,10 +24,10 @@
   <div class="qa_section">
     <div class="comments">
       <span><b {% if not elaboration.is_submitted %}onclick="$('#qa').toggle('fast');"><i class="fa fa-toggle-down"></i{% endif %}> 
-		  Challenge Q+A Section</b> - {% comments_count for challenge %} comments so far
+		  Task Q+A Section</b> - {% comments_count for challenge %} comments so far
 	  </span>
 
-      <div id="qa" class="challenge_comments">If you have questions about the description of this challenge, post
+      <div id="qa" class="challenge_comments">If you have questions about the description of this task, post
 	  them here. The course organizers will answer as soon as possible.
         {% render_comment_list for challenge %}
       </div>
@@ -36,7 +36,7 @@
 </div>
 
   {% if user.is_staff %}
-	  [you are admin. you cannot accept challenges]
+	  [you are admin. you cannot accept tasks]
   <!-- admin corner -->
   <!-- xxxxxxxxxxxx -->  
   {% else %}
@@ -45,7 +45,7 @@
     {% if not accepted %}
       <div id="Caccept" class="button XL"
            onclick="$('.elaboration_block').toggle('fast');$('#Caccept').toggle('fast');$('#qa').toggle('fast');">
-        start this level
+        start this task
       </div>
     {% endif %}
 

@@ -1,7 +1,6 @@
 {% load humanize %}
 
-<div class="comment{% if comment.author.is_staff %} staff_author{% endif %} {{ comment.visibility }}_visibility {% if comment.author == requester %} author_author{% endif %} {% if comment.score < 1 %}neg0{% endif %} {% if comment.score < -5 %}neg5{% endif %}"
-	 data-date="{{ comment.post_date|date:'U' }}"
+<div class="comment{% if comment.author.is_staff %} staff_author{% endif %} {{ comment.visibility }}_visibility {% if comment.author == requester %} author_author{% endif %} {% if comment.score < 0 %}neg0{% endif %} {% if comment.score < -5 %}neg5{% endif %}"
      id="comment_{{ comment.id }}" data-comment_number="{{ comment.id }}"
      data-comment_author="{{ comment.author.display_name }}">
 	 <div class="comment_top" onclick="headClick(this.parentNode)">
@@ -22,12 +21,12 @@
 				 <i class="fa fa-star fa-lg ungold"></i>
 			 </a>
 			 {% endif %}
-         </div>
-         <div class="comment_score {{ comment.voted }}">
+		</div>
+		 <div class="comment_score {{ comment.voted }}" >
              {% if comment.author != requester %}
                  <a href='#' class="vote_up_on" data-comment_number="{{ comment.id }}" title="This comment is helpful"><i class="fa fa-arrow-up notBlack"></i></a>
              {% endif %}
-             <span class="comment_score_value">{% if comment.score > 0 %} +{% endif %}{{ comment.score }}</span>
+             {% if comment.score > 0 %} +{% endif %}{{ comment.score }}
              {% if comment.author != requester %}
                  <a href='#' class="vote_down_on" data-comment_number="{{ comment.id }}" title="This comment is not helpful at all"><i class="fa fa-arrow-down notBlack"></i></a>
              {% endif %}
@@ -41,7 +40,7 @@
         <div class="comment_text">
             {% if comment.deleter == None %}
                 {#            {{ comment.text | linebreaksbr }}#}
-                {{ comment.text }}
+                {{ comment.text | safe }}
             {% else %}
                 [deleted]
             {% endif %}
@@ -58,29 +57,23 @@
 				bookmark
             </a>
         {% endif %}
- 
+
         {% if comment.deleter != None %}
             <p class="comment_deleter">
                 deleted {{ comment.delete_date | naturaltime }} by {{ comment.deleter.display_name }}
             </p>
         {% endif %}
 
-        {% if comment.deleter == None %}
-            {% if requester == comment.author %}
-                <a class="flR edit_link" href="javascript:void(0)" id="edit_comment_link_{{ comment.id }}">
-                    edit&nbsp;&nbsp;
-                </a>
-            {% endif %}
-            {% if requester.is_staff or requester == comment.author %}
-                <a class="flR delete_comment" href="javascript:void(0)" id="delete_comment_{{ comment.id }}"
-                   data-delete_id="{{ comment.id }}">
-                    delete&nbsp;&nbsp;
-                </a>
-            {% endif %}
+        {% if comment.parent == None %}
+            <a href="{{ comment.uri }}#comment_{{ comment.id }}" class="backlink">
+{#            <a href="{{ comment.uri }}#comment_{{ comment.id }}">#}
+                Go to original post&nbsp;&nbsp;
+            </a>
+        {% else %}
+            <a href="{{ comment.uri }}#comment_response_{{ comment.id }}" class="backlink">
+{#            <a href="{{ comment.uri }}#comment_response_{{ comment.id }}">#}
+                Go to original post&nbsp;&nbsp;
+            </a>
         {% endif %}
-        <a class="flR reply_link" href="javascript:void(0)" id="reply_comment_link_{{ comment.id }}"
-           data-reply_to="{{ comment.id }}">
-            reply&nbsp;&nbsp;
-        </a>
     </div>
 </div>

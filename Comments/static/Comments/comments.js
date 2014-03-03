@@ -27,24 +27,12 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         my.registerCancelReplyButton();
 
         my.registerAddCommentFormButtons();
-        my.registerAddCommentButton();
+        my.registerSubmitCommentButton();
         my.registerCancelCommentButton();
 
         my.registerPolling();
 
         my.startPolling();
-    };
-
-    my.POLLING = {
-        stopped: false,
-        current_interval: 5000,
-        active_interval: 5000,
-        idle_interval: 60000,
-        increase_interval: function () {
-            my.POLLING.current_interval = Math.min(my.POLLING.current_interval * 2, my.POLLING.idle_interval);
-        },
-        firstRefId: null,
-        lastRefId: null
     };
 
     my.state = {
@@ -99,29 +87,63 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
     };
 
     my.registerVoteForCommentList = function($comment_list) {
-        $comment_list.find('.vote_down_on, .vote_up_on').click(function (event) {
+        $comment_list.find('.vote_up_on').click(function (event) {
             event.preventDefault();
-            var direction;
-            if ($(this).attr('class') === 'vote_up_on') {
-                direction = 'up';
-            }
-            else {
-                direction = 'down';
-            }
-            $.ajax({
-                url: '/vote_on_comment/',
-                data: {
-                    direction: direction,
-                    comment_id: $(this).data('comment_number')
-                },
-                type: 'GET',
-                dataType: 'html',
-                success: function () {
-                    my.updateCommentLists(false);
-                }
-            });
+
+            my.POLLING.resetTimer();
+            vote($(this), 'up', 1);
+
             return false;
         });
+
+        $comment_list.find('.vote_down_on').click(function (event) {
+            event.preventDefault();
+
+            my.POLLING.resetTimer();
+            vote($(this), 'down', -1);
+
+            return false;
+        });
+
+        function vote($link, direction, scorediff) {
+            var $parent = $link.parent();
+            var classname = direction + 'voted';
+            var oppositeClass;
+
+            if(direction === 'up') {
+                oppositeClass = 'downvoted';
+            } else {
+                oppositeClass = 'upvoted';
+            }
+
+            if($parent.hasClass(classname)) {
+                return false;
+            }
+
+            if($parent.hasClass(oppositeClass)) {
+                $parent.removeClass(oppositeClass);
+            } else {
+                $parent.addClass(classname);
+            }
+
+            $parent.find(oppositeClass);
+
+
+            var $score = $parent.find('.comment_score_value');
+            var newscore = +$score.html() + scorediff;
+            if(newscore > 0) {
+                newscore = '+' + newscore.toString();
+            }
+            $score.html(newscore);
+
+            var url = '/vote_on_comment/';
+            var data = {
+                direction: direction,
+                comment_id: $link.data('comment_number')
+            };
+
+            my.post(url, data);
+        }
     };
 
     my.registerAddCommentFormButtons = function() {
@@ -149,6 +171,10 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
             var $commentForm = $('#commentForm');
             $commentForm.find('#id_reference_id').val(ref_id);
             $commentForm.find('#id_reference_type_id').val(ref_type);
+
+            var uri = location.pathname + location.search;
+            $commentForm.find('#id_uri').val(uri);
+
             if ($commentForm.is(':visible')) {
                 $commentForm.prev().show();
             }
@@ -291,6 +317,9 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
             var comment_number = $(this).data('reply_to');
             my.setCommentId($replyForm, comment_number);
 
+            var uri = location.pathname + location.search;
+            $replyForm.find('#id_uri').val(uri);
+
             var user = $(this).closest('.comment, .response').data('comment_author');
 
             var $commentTextarea = $('#commentTextarea');
@@ -382,10 +411,6 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         });
     };
 
-    my.getCsrfToken = function() {
-        return $('[name=csrfmiddlewaretoken]').first().val();
-    };
-
     my.registerReplyButton = function() {
         var $button_post_reply = $('#button_post_reply');
         $button_post_reply.off();
@@ -447,7 +472,7 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         });
     };
 
-    my.registerAddCommentButton = function() {
+    my.registerSubmitCommentButton = function() {
         var $button_add_comment = $('#button_add_comment');
         $button_add_comment.off();
         $button_add_comment.click(function (event) {
@@ -481,6 +506,25 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         });
     };
 
+    my.POLLING = {
+        stopped: false,
+        current_interval: 5000,
+        active_interval: 5000,
+        idle_interval: 60000,
+        increase_interval: function () {
+            my.POLLING.current_interval = Math.min(my.POLLING.current_interval * 2, my.POLLING.idle_interval);
+        },
+        firstRefId: null,
+        lastRefId: null,
+
+        resetTimer: function() {
+            if (!my.POLLING.stopped) {
+                clearTimeout(my.POLLING.current_timeout);
+                my.POLLING.current_timeout = setTimeout(function() {my.updateCommentLists(true);}, my.POLLING.current_interval);
+            }
+        }
+    };
+
     my.updateCommentLists = function(keepPolling) {
         var data = {revisions: my.getRevisions()};
 
@@ -493,7 +537,7 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
                 var comment_list_updates = json.comment_list_updates;
                 if (comment_list_updates.length > 0) {
                     my.handleCommentListUpdates(comment_list_updates);
-                    loadFilter();
+                    purgsLoadFilter();
                 }
                 if (json.polling_active_interval) {
                     my.POLLING.active_interval = json.polling_active_interval;
@@ -506,9 +550,8 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
                 my.POLLING.increase_interval();
             },
             complete: function () {
-                if (keepPolling === true && !my.POLLING.stopped) {
-                    clearTimeout(my.POLLING.current_timeout);
-                    my.POLLING.current_timeout = setTimeout(function() {my.updateCommentLists(true);}, my.POLLING.current_interval);
+                if (keepPolling === true) {
+                    my.POLLING.resetTimer();
                 }
             }
         });

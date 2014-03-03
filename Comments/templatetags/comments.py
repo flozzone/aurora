@@ -1,6 +1,6 @@
 from django import template
 from django.contrib.contenttypes.models import ContentType
-from Comments.models import Comment, CommentListRevision
+from Comments.models import Comment, CommentList
 from Comments.views import CommentForm, ReplyForm
 from django.template.loader import render_to_string
 from PortfolioUser.models import PortfolioUser
@@ -25,7 +25,7 @@ class CommentListNode(template.Node):
             user = context['user']
 
             queryset = Comment.query_top_level_sorted(ref_object.id, ref_type.id, user)
-            revision = CommentListRevision.get_or_create(ref_object).number
+            revision = CommentList.get_or_create(ref_object).revision
 
             form = CommentForm()
             form.fields['reference_id'].initial = ref_object.id

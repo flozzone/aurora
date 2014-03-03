@@ -1,12 +1,15 @@
-from django.db import models
-from AmanamanProjekt.settings import STATIC_ROOT
 import os
+
+from django.db import models
+
+from AmanamanProjekt.settings import STATIC_URL
+
 
 class Notification(models.Model):
     user = models.ForeignKey('PortfolioUser.PortfolioUser')
     course = models.ForeignKey('Course.Course')
     text = models.CharField(max_length=100)
-    image_url = models.CharField(max_length=100, default=os.path.join(STATIC_ROOT, 'img', 'info.jpg'))
+    image_url = models.CharField(max_length=100, default=os.path.join(STATIC_URL, 'img', 'info.jpg'))
     link = models.CharField(max_length=100, default="")
     creation_time = models.DateTimeField(auto_now_add=True)
     read = models.BooleanField(default=False)

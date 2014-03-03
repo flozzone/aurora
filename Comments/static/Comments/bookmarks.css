@@ -2,6 +2,10 @@
 	display:none;
 }
 
+.backlink {
+    float:right;
+}
+
 .bookmark_list .comment_score {
 	display:none;
 }

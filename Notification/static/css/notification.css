@@ -5,10 +5,10 @@
 
 .notification {
     min-height: 30px;
-	width:740px;
+	width:920px;
 	margin-left:24px;
     overflow: hidden;	
-	border-bottom:1px solid #f8f8f8;
+	border-bottom:1px solid #eee;
 }
 
 .notification.read {
@@ -37,14 +37,16 @@
 
 .notification img {
     width: 30px;
+	height:30px;
     float: left;
+	vertical-align:middle;
 }
 
 .notification_text {
 	padding:5px;
     overflow: hidden;
 	line-height:20px;
-	max-width:500px;
+	max-width:650px;
 	float:left;
 }
 
