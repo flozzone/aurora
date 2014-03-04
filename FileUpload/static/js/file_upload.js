@@ -40,7 +40,7 @@ function file_upload_loaded() {
                     }
                     console.log(dropzone_instance.files.length - errors);
                 });
-                $(file.previewElement).append('<div class="fig">Fig: ' + (dropzone_instance.files.length - errors) + '</div>');
+                $(file.previewElement).append('<div class="fig">Fig: ' + (dropzone_instance.files.indexOf(file)+1) + '</div>');
             });
             this.on("removedfile", function (file) {
                 revert_submit_clicked();
