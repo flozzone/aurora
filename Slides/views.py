@@ -62,7 +62,7 @@ def livecast_new_slide(request, course_id):
         except (Course.DoesNotExist, Course.MultipleObjectsReturned):
             return HttpResponse('course error.')
         except (Lecture.DoesNotExist, Lecture.MultipleObjectsReturned, IndexError):
-            return HttpResposne('lecture error.')
+            return HttpResponse('lecture error.')
     else:
         return HttpResponse('must post')
 
