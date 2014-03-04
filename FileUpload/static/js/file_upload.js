@@ -22,16 +22,12 @@ function file_upload_loaded() {
                 if (file.type === 'application/pdf') {
                     $(file.previewElement).addClass('dz-image-preview');
                     $(file.previewElement).find('img').show();
-                    console.log(static_url);
-                    console.log(data.url);
                     $(file.previewElement).find('img').attr('src', static_url + 'img/pdf_icon.jpg');
                     $(file.previewElement).find('img').attr('alt', data.url);
                     $(file.previewElement).find('img').wrap(function () {
                         return "<a href='/" + data.url + "' title='" + file.name + "'></div>";
                     });
                 } else {
-                    console.log(static_url);
-                    console.log(data.url);
                     $(file.previewElement).find('img').wrap(function () {
                         return "<a href='" + data.url + "' data-lightbox='preview' title='" + file.name + "'></div>";
                     });

@@ -277,7 +277,7 @@ def submit_evaluation(request):
         course=course,
         text=Notification.SUBMISSION_EVALUATED + elaboration.challenge.title,
         image_url= elaboration.challenge.image.url,
-        link="stack=" + str(elaboration.challenge.get_stack().id)
+        link="/challenges/stack?id=" + str(elaboration.challenge.get_stack().id)
     )
     obj.read = False
     obj.save
@@ -299,7 +299,7 @@ def reopen_evaluation(request):
         course=course,
         text=Notification.SUBMISSION_EVALUATED + evaluation.submission.challenge.title,
         image_url=evaluation.submission.challenge.image.url,
-        link="stack=" + str(evaluation.submission.challenge.get_stack().id)
+        link="/challenges/stack?id=" + str(evaluation.submission.challenge.get_stack().id)
     )
     obj.creation_time = datetime.now()
     obj.read = False
