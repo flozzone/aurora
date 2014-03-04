@@ -62,15 +62,12 @@ $(function() {
    $(".submit_evaluation").click(function(event) {
         event.preventDefault();
 
+        var points = Math.abs(parseInt($(".points").text()) || 0);
         if ($.trim($(".evaluation").text()).length == 0) {
             $(".error").html("you forgot feedback!");
             return;
         }
-        if ($.trim($(".points").text()).length == 0) {
-            $(".error").html("you forgot points!");
-            return;
-        }
-        if (!$.isNumeric($.trim($(".points").text()))) {
+        if (points == 0) {
             $(".error").html("points must be numeric!");
             return;
         }
@@ -78,7 +75,7 @@ $(function() {
         var data = {
             elaboration_id: $(event.target).attr('id'),
             evaluation_text: $(".evaluation").text(),
-            evaluation_points: $(".points").text()
+            evaluation_points: points
         };
         var args = { type: "POST", url: "/submit_evaluation/", data: data,
             error: function () {
@@ -137,15 +134,11 @@ function DelayedAutoSave(elaboration_id) {
 }
 
 function AutoSave(elaboration_id) {
-    if (!$.isNumeric($.trim($(".points").text()))) {
-        $(".error").html("points must be numeric!");
-        return;
-    }
-
+    var points = Math.abs(parseInt($(".points").text()) || 0);
     var data = {
         elaboration_id: elaboration_id,
         evaluation_text: $(".evaluation").text().replace(/\n|<.*?>/g,' '),
-        evaluation_points: $.trim($(".points").text())
+        evaluation_points: points
     };
     var args = { type: "POST", url: "/save_evaluation/", data: data,
         error: function () {
