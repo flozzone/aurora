@@ -215,20 +215,23 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
 //            document.execCommand("insertBrOnReturn", false, true);
 //
 //            $comment.on("keydown", "[contenteditable=true]", function (e) {
-//            $comment.on("keydown", function (e) {
-//                var lineBreak;
+            $comment.on("keydown", function (e) {
+                var lineBreak;
 
-//                if (e.which === 13 && !e.shiftKey) {
-//                    e.preventDefault();
+                if (e.which === 13 && !e.shiftKey) {
+                    e.preventDefault();
 
 //                    console.log('adding br');
 //                    lineBreak = "<br />";
-//                    lineBreak = "<br />&nbsp";
-//                    document.execCommand("insertHTML", false, '<br>');
+                    lineBreak = "<br />&nbsp";
+                    document.execCommand("insertHTML", false, lineBreak);
+//                    document.execCommand("forwardDelete");
+                    document.execCommand("delete");
+//                    document.execCommand("insertText", false, '\n');
 //
-//                    return false;
-//                }
-//            });
+                    return false;
+                }
+            });
 
 //            Very good solution, only produces some blanks in chromium
 //            $('div[contenteditable="true"]').keypress(function (event) {
@@ -268,6 +271,7 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
 
             /*inline-block; makes chromium not create <div> and <p> on return*/
             /*[contenteditable=true] {*/
+            /*width: 100%;*/
             /*display: inline-block;*/
             /*}*/
 
@@ -351,7 +355,8 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
 //                console.log($commentText.text());
 
                 var text = $commentText.html().trim()
-                    .replace(/<br(\s*)\/*>/ig, '\n'); // replace single line-breaks
+                    .replace(/<br(\s*)\/*>/ig, '\n') // replace single line-breaks
+                    .replace(/&nbsp;?/ig, ' ');
 //                    .replace(/<[p|div]\s/ig, '\n$0') // add a line break before all div and p tags
 //                    .replace(/(<([^>]+)>)/ig, "");   // remove any remaining tags
 
