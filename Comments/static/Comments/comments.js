@@ -212,28 +212,72 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
 
             $commentText.attr('contenteditable', true);
 
+//            document.execCommand("insertBrOnReturn", false, true);
+//
 //            $comment.on("keydown", "[contenteditable=true]", function (e) {
 //            $comment.on("keydown", function (e) {
 //                var lineBreak;
-//
+
 //                if (e.which === 13 && !e.shiftKey) {
 //                    e.preventDefault();
-//
+
 //                    console.log('adding br');
 //                    lineBreak = "<br />";
 //                    lineBreak = "<br />&nbsp";
-//                    document.execCommand("insertHTML", false, lineBreak);
+//                    document.execCommand("insertHTML", false, '<br>');
 //
 //                    return false;
 //                }
 //            });
 
+//            Very good solution, only produces some blanks in chromium
+//            $('div[contenteditable="true"]').keypress(function (event) {
+//
+//                if (event.which !== 13)
+//                    return true;
+//
+//                var docFragment = document.createDocumentFragment();
+//
+//                add a new line
+//                var newEle = document.createTextNode('\n');
+//                docFragment.appendChild(newEle);
+//
+//                add the br, or p, or something else
+//                newEle = document.createElement('br');
+//                docFragment.appendChild(newEle);
+//
+//                make the br replace selection
+//                var range = window.getSelection().getRangeAt(0);
+//                range.deleteContents();
+//                range.insertNode(docFragment);
+//
+//                create a new range
+//                range = document.createRange();
+//                range.setStartAfter(newEle);
+//                range.collapse(true);
+//
+//                make the cursor there
+//                var sel = window.getSelection();
+//                sel.removeAllRanges();
+//                sel.addRange(range);
+//
+//                return false;
+//            });
+
+//          weird solution via CSS:
+
+            /*inline-block; makes chromium not create <div> and <p> on return*/
+            /*[contenteditable=true] {*/
+            /*display: inline-block;*/
+            /*}*/
+
+
             $(document).keydown(handleHotkeys);
             function handleHotkeys(e) {
-                if(e.which === 27) {
+                if (e.which === 27) {
                     cancelEdit(e);
                 }
-                if(e.which === 13 && e.shiftKey) {
+                if (e.which === 13 && e.shiftKey) {
                     saveEdit(e);
                 }
             }
