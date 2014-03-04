@@ -298,5 +298,7 @@ class CommentReferenceObject(models.Model):
     If there is no other Object available this Model can be used to create
     reference Objects. Comments can then be attached to that reference Object.
     """
+    name = models.CharField(max_length=50, unique=True)
+
     def __unicode__(self):
         return str(self.id)

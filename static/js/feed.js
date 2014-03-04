@@ -10,6 +10,7 @@ $(window).load( function() {
 
 function loadFilter() {
     "use strict";
+
 	filter(getCookie('filtercookie.'+$('#the_username').data('username')));
 }
 
@@ -90,14 +91,17 @@ function headClick(aDiv) {
 
 
 function markT(usr) {
-	s = Date.now() /1000 |0;
-	a = "filterTimeCookie." + usr + "=" + s.toString() + "; expires=Tue, 18 Jan 2038 03:14:06 GMT";
+    "use strict";
+
+	var s = Date.now() /1000 || 0;
+	var a = "filterTimeCookie." + usr + "=" + s.toString() + "; expires=Tue, 18 Jan 2038 03:14:06 GMT";
 	document.cookie = a;
 }
 
 
 function toTimestamp(strDate){
+    "use strict";
+
 	var dat = Date.parse(strDate);
 	return dat/1000;
 }
-
