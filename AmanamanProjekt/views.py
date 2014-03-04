@@ -27,11 +27,8 @@ def home(request):
             o = CommentReferenceObject(name='newsfeed')
             o.save()
 
-        context = RequestContext(request, {'newsfeed': o}) # .update({'newsfeed': o})
-        # context.append({'newsfeed': o})
-        # print(context)
+        context = RequestContext(request, {'newsfeed': o})
 
-        # return render_to_response('home.html', data, context_instance=RequestContext(request))
         return render_to_response('home.html', data, context)
     else:
         return redirect('/login')

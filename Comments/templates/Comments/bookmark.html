@@ -39,8 +39,7 @@
 
         <div class="comment_text">
             {% if comment.deleter == None %}
-                {#            {{ comment.text | linebreaksbr }}#}
-                {{ comment.text | safe }}
+                {{ comment.text | linebreaksbr }}
             {% else %}
                 [deleted]
             {% endif %}
