@@ -29,7 +29,7 @@ function challenge_loaded() {
         theme: 'modern',
         statusbar: false,
         fontsize_formats: "0.8em 1em 1.2em 1.6em 2em",
-        toolbar1: "undo redo | bold italic | fontsizeselect | alignleft aligncenter | bullist numlist indent outdent | subscript superscript | table",
+        toolbar1: "undo redo | bold italic | fontsizeselect | alignleft aligncenter | bullist numlist indent outdent ",
         plugins: "autoresize table paste",
         autoresize_min_height: 200,
         autoresize_max_height: 800,
@@ -47,10 +47,11 @@ function challenge_loaded() {
         menubar: false,
         statusbar: false,
         toolbar: false,
-        plugins: "autoresize",
-        autoresize_min_height: 100,
+		height:300,
+//        plugins: "autoresize",
+        autoresize_min_height: 300,
         autoresize_max_height: 800,
-        readonly: 1,
+        readonly: 1 ,
         oninit: function () {
             var height = $('#editor_challenge_ifr').height() + 25;
             $('#editor_challenge_ifr').height(height);
