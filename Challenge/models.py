@@ -104,9 +104,10 @@ class Challenge(models.Model):
         return elaboration[0].is_submitted()
 
     def get_reviews_written_by_user(self, user):
-        reviews = []
-        for review in Review.objects.filter(elaboration__challenge=self, reviewer=user):
-            reviews.append(review)
+        # all reviews for this elaboration written by this user
+        reviews = Review.objects.filter(elaboration__challenge=self, reviewer=user)
+        # exclude the reviews that are not submitted
+        reviews = reviews.exclude(submission_time__isnull=True)
         return reviews
 
     def get_peer_review_questions(self):
