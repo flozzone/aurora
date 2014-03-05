@@ -52,7 +52,7 @@ function challenge_loaded() {
         autoresize_max_height: 800,
         readonly: 1,
         oninit: function () {
-            var height = $('#editor_challenge_ifr').height() + 50;
+            var height = $('#editor_challenge_ifr').height() + 25;
             $('#editor_challenge_ifr').height(height);
         }
     });

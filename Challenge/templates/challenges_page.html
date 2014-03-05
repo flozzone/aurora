@@ -14,7 +14,6 @@
 	  </div>
     {% for stack in course_stacks %}
       <div class="stack {% cycle 'lineD' 'lineL' %}" id="{{ stack.stack.id }}">
-  		<div class="stack_done" {% if stack.points != 0 %}style="display:block;"{% endif %}><i class="fa fa-check"></i></div>
 		<div class="title">
 			<b>{{ stack.stack.title }}:</b> {{ stack.stack.get_challenge_image_urls|length }} Tasks
 			<div class="stack_icons" style="float:right">
@@ -29,6 +28,7 @@
 			 <div class="stack_action button XL">ENTER CHALLENGE</div>
 			 <div class="stack_next">Status: <b>{{ stack.status.next }} {% if stack.points != 0 %}{{ stack.points }}{% endif %}</b></div>
 		</div>
+		<div class="stack_done" {% if stack.points != 0 %}style="display:block;"{% endif %}><i class="fa fa-check"></i></div>
  
       </div>
     {% endfor %}
