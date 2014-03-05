@@ -56,12 +56,12 @@ def review_answer(request):
     if request.POST:
         data = request.body.decode(encoding='UTF-8')
         data = json.loads(data)
+        import pprint
+        pprint(data)
         review_id = data['review_id']
         answers = data['answers']
         review = Review.objects.get(pk=review_id)
         review.appraisal = data['appraisal']
-        review.submission_time = datetime.now()
-        review.save()
         for answer in answers:
             question_id = answer['question_id']
             text = answer['answer']
@@ -86,6 +86,8 @@ def review_answer(request):
                     image_url=final_challenge.image.url,
                     link="/challenges/stack?id=" + str(review.elaboration.challenge.get_stack().id)
                 )
+        review.submission_time = datetime.now()
+        review.save()
     return HttpResponse()
 
 def create_context_view_review(request):
