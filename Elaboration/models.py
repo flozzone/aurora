@@ -115,7 +115,7 @@ class Elaboration(models.Model):
     @staticmethod
     def get_review_candidate(challenge, user):
         # get all elaborations not written by this user
-        candidates = Elaboration.objects.filter(challenge=challenge).exclude(user=user)
+        candidates = Elaboration.objects.filter(challenge=challenge).exclude(user=user).exclude(submission_time__isnull=True)
         best_candidate = None
         if not candidates:
             return best_candidate
