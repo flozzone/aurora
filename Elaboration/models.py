@@ -114,8 +114,12 @@ class Elaboration(models.Model):
 
     @staticmethod
     def get_review_candidate(challenge, user):
-        # get all elaborations not written by this user
-        candidates = Elaboration.objects.filter(challenge=challenge).exclude(user=user).exclude(submission_time__isnull=True)
+        # get all elaborations
+        candidates = Elaboration.objects.filter(challenge=challenge)
+        # exclude all that are not written by the user
+        candidates = candidates.exclude(user=user)
+        # exclude all not submitted elaborations
+        candidates = candidates.exclude(submission_time__isnull=True)
         best_candidate = None
         if not candidates:
             return best_candidate
@@ -124,12 +128,16 @@ class Elaboration(models.Model):
             if not Review.objects.filter(elaboration=candidate, reviewer=user):
                 # if there is already a valid candidate
                 if best_candidate:
+                    # try to get a better candidate
                     best_candidate = best_candidate.get_better_candidate(candidate)
                 else:
+                    # set best candidate for the first time
                     best_candidate = candidate
         return best_candidate
 
     def get_better_candidate(self, candidate):
+        # if one of the candidates is written by staff (dummy user) and the other not
+        # return the one that is not written by staff (dummy user)
         if not self.user.is_staff and candidate.user.is_staff:
             return self
         elif self.user.is_staff and not candidate.user.is_staff:

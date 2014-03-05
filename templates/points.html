@@ -10,12 +10,8 @@
 
 <div class="points_table">
     <table>
-        <tr class="header">
-            <td>Stack</td>
-            <td>Points</td>
-        </tr>
         {% for stack in course_stacks %}
-            <tr class="{% cycle 'lineD' 'lineL' %}">
+            <tr>
                 <td class="stack_name">{{ stack.stack.title }}</td>
                 <td>{{ stack.points }}</td>
             </tr>

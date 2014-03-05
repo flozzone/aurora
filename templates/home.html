@@ -5,11 +5,12 @@
 
     <div id="info_column">
         {% if not user.is_staff %}
-            <div style="background:black;color:white;padding:0.1em"><b>Current Points</b></div>
+            <div class="feed_header"><b>Current Points</b></div>
             {% include 'points.html' %}
         {% endif %}
 
-        <div style="background:black;color:white;padding:0.1em"><b>Herzlich Willkommen! </b></div>
+        <div class="feed_header">
+			<b>Herzlich Willkommen! </b></div>
         <br>
 
         <p>Um in dieser Test-Session eine Belohnung zu bekommen, m&uuml;ssen sie zwei der drei &raquo;Stacks&laquo; in &raquo;Gesellschaftliche Spannungsfelder der Informatik&laquo; erfolgreich abschliessen.</p>
