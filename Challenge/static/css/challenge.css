@@ -90,11 +90,11 @@ h1 {
 }
 
 .lineL {
-    background-color: #FFF;
+    background-color: #f0f0f0;
 }
 
 .lineD {
-    background-color: #eee;
+    background-color: #f0f0f0;
 }
 
 #detail_area {
@@ -123,7 +123,7 @@ h1 {
 	height:24px;
 	width:24px;
 	border:1px solid gray;
-	border-radius:12px;
+	border-radius:3px;
 	position:relative;
 	top:4px;
 }
@@ -154,13 +154,26 @@ h1 {
 	color:rgb(58,201,88);
 }
 
+.not_stack {
+	clear:both;
+	position:relative;
+	padding: 1em;
+	margin-left:0.5em;
+	border-radius:0.5em;
+	cursor:pointer;
+	overflow:hidden;
+	margin-bottom:0.5em;
+}
 
 .stack {	
 	clear:both;
 	position:relative;
 	padding: 1em;
+	margin-left:1.5em;
+	border-radius:0.5em;
 	cursor:pointer;
 	overflow:hidden;
+	margin-bottom:0.5em;
 }
 
 .stack .description {
@@ -193,7 +206,7 @@ h1 {
 }
 
 .review_box.done {	
-	background-color:rgb(251, 249, 149);
+/*	background-color:rgb(251, 249, 149);*/
 }
 
 .review_box.in_progress {
