@@ -81,23 +81,39 @@ class SimpleTest(TestCase):
     def create_review(self, elaboration, reviewer):
         Review(elaboration=elaboration, reviewer=reviewer, submission_time=datetime.now(), appraisal='S').save()
 
-
     def test_get_open_review(self):
         user1 = self.users[0]
         user2 = self.users[2]
         elaboration = self.elaborations[0]
         self.create_review_without_submission_date(elaboration=elaboration, reviewer=user1)
+
+        # there should be an open review for user1
         review = Review.get_open_review(self.challenge, user1)
-        # there should be no open review for user1
-        assert not review
-        review = Review.get_open_review(self.challenge, user2)
-        # there should be an open review for user2 and it should not have a submission time
-        assert not review.submission_time
+        assert review
+        assert review.reviewer == user1
+        assert review.elaboration == elaboration
+
+        # there should be no open review for user1 since the review is already submitted
         review.submission_time = datetime.now()
         review.save()
-        review = Review.get_open_review(self.challenge, user2)
-        # there should be no open review for user2
+        review = Review.get_open_review(self.challenge, user1)
         assert not review
+
+        # there should be no open review for user2
+        review = Review.get_open_review(self.challenge, user2)
+        assert not review
+
+        # user1 and user2 both have separate open reviews
+        self.create_review_without_submission_date(elaboration=elaboration, reviewer=user1)
+        self.create_review_without_submission_date(elaboration=elaboration, reviewer=user2)
+        review1 = Review.get_open_review(self.challenge, user1)
+        review2 = Review.get_open_review(self.challenge, user2)
+        assert review1
+        assert review2
+        assert review1.id != review2.id
+        assert review1.reviewer == user1
+        assert review2.reviewer == user2
+        assert review1.elaboration == elaboration and review2.elaboration == elaboration
 
     def test_get_review_amount(self):
         for elaboration in self.elaborations:
