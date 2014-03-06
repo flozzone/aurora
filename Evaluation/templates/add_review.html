@@ -15,7 +15,7 @@
                 question_id="{{ question.id }}">
               {% if question.boolean_answer %}
                 <input type="radio" name="{{ question.id }}" value="yes"> Yes <br>
-                <input type="radio" name="{{ question.id }}" value="no" checked> No
+                <input type="radio" name="{{ question.id }}" value="no"> No
               {% else %}
                 <textarea id="text_answer" name="answer"></textarea>
               {% endif %}
@@ -25,7 +25,7 @@
    	<div>Your final verdict </div>
 	  <div class="appraisal">
       <input type="radio" name="appraisal" value="A"> Great work<br>
-      <input type="radio" name="appraisal" value="S" checked> Good work <br>
+      <input type="radio" name="appraisal" value="S"> Good work <br>
       <input type="radio" name="appraisal" value="F"> Barely acceptable work <br>
       <input type="radio" name="appraisal" value="N"> Unacceptable<br><br>
    </div>
