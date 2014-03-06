@@ -29,6 +29,8 @@ function input_change(event) {
                     $('#error').html(data.error);
                     $('#nickname').val(data.nickname);
                     $('#email').val(data.email);
+                    $('#study_code').val(data.study_code);
+                    $('#statement').val(data.statement);
                 } else {
                     $('#error').html('');
                 }
