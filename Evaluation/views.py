@@ -489,6 +489,8 @@ def review_answer(request):
 @staff_member_required
 def back(request):
     selection = request.session.get('selection', 'error')
+    if selection == "search":
+        return HttpResponse()
     if selection == "missing_reviews":
         elaborations = Elaboration.get_missing_reviews()
     if selection == "top_level_challenges":
