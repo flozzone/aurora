@@ -102,6 +102,20 @@ abbr, acronym {
 	margin-top:1em;
 }
 
+#error {
+	font-size:1.5em;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	text-shadow: 0 0 5px rgba(255,0,0,0.5),0 0 2px rgba(255,0,0,0.5);
+	background:none;
+    cursor:default;
+	padding-top:3em;
+	padding-left:0.25em;
+	color:rgba(0,0,0,0);
+	clear:both;
+	
+}
+
+
 .login input[type="checkbox"]:checked + label  {
 /*    background-color:rgba(58,201,88,0.8);*/
 	color:rgb(58,201,88);
