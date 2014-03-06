@@ -111,15 +111,17 @@ def studio_lecture(request, lecture_id_relative):
 
 def studio_marker(request, marker):
     course = RequestContext(request)['last_selected_course']
+    user = RequestContext(request)['user']
     lectures = _get_contentbar_data(course)
     if marker == 'confusing':
-        slides = Slide.objects.filter(confusing=request.user.customuser, lecture__course__short_title=course_short_title)
+        slides = Slide.objects.filter(confusing=user, lecture__course=course)
     elif marker == 'important':
-        slides = Slide.objects.filter(important=request.user.customuser, lecture__course__short_title=course_short_title)
+        slides = Slide.objects.filter(important=user, lecture__course=course)
     elif marker == 'liked':
-        slides = Slide.objects.filter(liked=request.user.customuser, lecture__course__short_title=course_short_title)
+        slides = Slide.objects.filter(liked=user, lecture__course=course)
     slides = _cache_slide_markers(slides)
-    render_dict = {'slidecasting_mode': 'marked_slides', 'marker': marker, 'course':course, 'lectures': lectures, 'slides': slides}
+    render_dict = {'slidecasting_mode': 'marked_slides', 'marker': marker, 'course':course, } 
+    render_dict.update({'lectures': lectures, 'slides': slides, 'user': user })
     return render_to_response('studio.html', render_dict, context_instance=RequestContext(request))
 
 
