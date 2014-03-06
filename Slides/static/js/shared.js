@@ -52,6 +52,7 @@ $.ajaxSetup({
 
 // takes care of marking slides as confusing/important/
 function markSlide(button_div, url) {
+    console.log("marking slide: " + url)
     var marker_button = $(button_div);
     var img_src = marker_button.children("img").attr("src");
     // we know that the user has previously clicked on the marker if the

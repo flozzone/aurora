@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 
-{% load url from future %}
 {% load comments %}
 
 {% block additional_headers %}
@@ -44,18 +43,18 @@
 				    <a href = "{# {{slide.get_filepath}}pdf/{{ slide.filename }}.pdf #}" target="_blank">{{ slide.title }}</a>
 	                <div>
 						{% with marker='liked' count=slide.count_liked %}
-						<div class="oneBB leftBB {% if slide.count_liked > 0 %}somebody{% else %}nobody{% endif %}" title="{% include 'marker_title.html' %}" onClick="markSlide(this, '{# {% url 'Slides:mark_slide' course.short_title slide.id 'liked' 'xxx' %} #}')">
-							<img src="{{ STATIC_URL }}img/liked{% if customuser in slide.liked.all %}_slide_marked{%endif%}.png" > 
+						<div class="oneBB leftBB {% if slide.count_liked > 0 %}somebody{% else %}nobody{% endif %}" title="{% include 'marker_title.html' %}" onClick="markSlide(this, '{% url 'Slides:mark_slide' slide.id 'liked' 'xxx' %}')">
+							<img src="{{ STATIC_URL }}img/liked{% if slide.count_liked > 0 and user in slide.liked.all %}_slide_marked{%endif%}.png" > 
 						</div>
 						{% endwith %}
 						{% with marker='important' count=slide.count_important %}
-						<div class="oneBB middleBB {% if slide.count_important > 0 %}somebody{% else %}nobody{% endif %}" title="{% include 'marker_title.html' %}" onClick="markSlide(this, '{# {% url 'Slides:mark_slide' course.short_title slide.id 'important' 'xxx' %} #}')">
-							<img src="{{ STATIC_URL }}img/important{% if customuser in slide.important.all %}_slide_marked{%endif%}.png" > 
+						<div class="oneBB middleBB {% if slide.count_important > 0 %}somebody{% else %}nobody{% endif %}" title="{% include 'marker_title.html' %}" onClick="markSlide(this, '{% url 'Slides:mark_slide' slide.id 'important' 'xxx' %}')">
+							<img src="{{ STATIC_URL }}img/important{% if slide.count_important > 0 and user in slide.important.all %}_slide_marked{%endif%}.png" > 
 						</div>
 						{% endwith %}
 						{% with marker='confusing' count=slide.count_confusing %}
-						<div class="oneBB rightBB {% if slide.count_confusing > 0 %}somebody{% else %}nobody{% endif %}" title="{% include 'marker_title.html' %}" onClick="markSlide(this, '{# {% url 'Slides:mark_slide' course.short_title slide.id 'confusing' 'xxx' %} #}')">
-							<img src="{{ STATIC_URL }}img/confusing{% if customuser in slide.confusing.all %}_slide_marked{%endif%}.png" > 
+						<div class="oneBB rightBB {% if slide.count_confusing > 0 %}somebody{% else %}nobody{% endif %}" title="{% include 'marker_title.html' %}" onClick="markSlide(this, '{% url 'Slides:mark_slide' slide.id 'confusing' 'xxx' %}')">
+							<img src="{{ STATIC_URL }}img/confusing{% if slide.count_confusing > 0 and user in slide.confusing.all %}_slide_marked{%endif%}.png" > 
 						</div>
 						{% endwith %}
 					</div>
