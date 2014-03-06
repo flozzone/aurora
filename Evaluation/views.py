@@ -1,5 +1,6 @@
 from datetime import datetime
 import json
+from django.contrib.contenttypes.models import ContentType
 
 from django.core import serializers
 from django.db.models import TextField
@@ -377,11 +378,6 @@ def search(request):
 
                 results = md.objects.filter(qs)
                 for result in results:
-                    if isinstance(result, PortfolioUser):
-                        print("PortfolioUser: ", result)
-                        for elaboration in result.get_elaborations():
-                            if elaboration not in elaborations:
-                                elaborations.append(elaboration)
                     if isinstance(result, Elaboration):
                         print("Elaboration: ", result)
                         if result not in elaborations:
@@ -412,10 +408,28 @@ def search(request):
                             elaborations.append(result.elaboration)
                     if isinstance(result, ReviewAnswer):
                         print("ReviewAnswer: ", result)
+                        if result.review.elaboration not in elaborations:
+                            elaborations.append(result.review.elaboration)
                     if isinstance(result, ReviewQuestion):
                         print("ReviewQuestion: ", result)
                     if isinstance(result, Comment):
                         print("Comments: ", result)
+                        print(result.content_object)
+                        if result.content_type == ContentType.objects.get_for_model(Challenge):
+                            if Elaboration.get_sel_challenge_elaborations(result.content_object):
+                                for elaboration in Elaboration.get_sel_challenge_elaborations(result.content_object):
+                                    if elaboration not in elaborations:
+                                        elaborations.append(elaboration)
+                        if result.content_type == ContentType.objects.get_for_model(Elaboration):
+                            if result.content_object not in elaborations:
+                                elaborations.append(result.content_object)
+                        if result.content_type == ContentType.objects.get_for_model(Review):
+                            if result.content_object.elaboration not in elaborations:
+                                elaborations.append(result.content_object.elaboration)
+                        if result.content_type == ContentType.objects.get_for_model(ReviewAnswer):
+                            if result.content_object.review.elaboration not in elaborations:
+                                elaborations.append(result.content_object.review.elaboration)
+
 
     html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
 
