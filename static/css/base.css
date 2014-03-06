@@ -85,6 +85,10 @@ abbr, acronym {
     display:none;
 }
 
+.login input:focus {
+  outline: none;
+}
+
 .login input[type="checkbox"] + label  {
 	text-decoration:none;
 	text-transform:uppercase;

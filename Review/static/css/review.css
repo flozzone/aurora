@@ -41,6 +41,14 @@
   left: auto;
 }
 
+.comment_section {
+	margin-top:0px;
+	border-top:0px;
+	border-right:4px solid white;
+	border-left:4px solid white;
+}
+
+
 .challenge > .title {
 	font-weight:bold;
 	padding:1em;
