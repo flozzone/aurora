@@ -91,6 +91,7 @@ def livecast(request, lecture_id_relative):
 
 def studio_lecture(request, lecture_id_relative):
     course = RequestContext(request)['last_selected_course']
+    user = RequestContext(request)['user']
     lectures = _get_contentbar_data(course)
     lecture = get_object_or_404(Lecture, course=course, active=True, id_relative=lecture_id_relative)
     if _livecast_now(lecture):
@@ -102,7 +103,8 @@ def studio_lecture(request, lecture_id_relative):
     videoclip_url, videoclip_name = _get_videoclip_url_name(lecture)
     videoclip_chapters = _get_videoclip_chapters(lecture, slides, slides_preparation)
     
-    render_dict = {'slidecasting_mode': 'studio', 'course':course, 'lectures': lectures, 'lecture': lecture, 'slides': slides, 'slides_preparation': slides_preparation } 
+    render_dict = {'slidecasting_mode': 'studio', 'course':course, 'lectures': lectures, 'lecture': lecture} 
+    render_dict.update({'slides': slides, 'slides_preparation': slides_preparation, 'user': user } )
     render_dict.update({ 'videoclip_name': videoclip_name, 'videoclip_url': videoclip_url, 'videoclip_chapters': videoclip_chapters })
     return render_to_response('studio.html', render_dict, context_instance=RequestContext(request))
     
@@ -138,6 +140,7 @@ def studio_search(request):
 
 def mark_slide(request, slide_id, marker, value):
     course = RequestContext(request)['last_selected_course']
+    user = RequestContext(request)['user']
     if request.method == 'POST':
         try:
             slide = Slide.objects.get(id=slide_id)
@@ -146,9 +149,9 @@ def mark_slide(request, slide_id, marker, value):
         if value == 'xxx':
             return HttpResponse(simplejson.dumps({'success': False}), mimetype='application/javascript')
         elif value == 'true':
-            slide.set_marker(request.user.customuser, marker, True)
+            slide.set_marker(user, marker, True)
         else:
-            slide.set_marker(request.user.customuser, marker, False)
+            slide.set_marker(user, marker, False)
         count = slide.get_marker_count(marker)
         new_title = render_to_string('marker_title.html', {'count': count, 'marker': marker})
         json_return_dict = {'success': True, 'count': count, 'new_title': new_title}
