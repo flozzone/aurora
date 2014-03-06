@@ -1,8 +1,6 @@
 {% block additional_headers %}
   <script type="text/javascript" src="{{ STATIC_URL }}js/authentication.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}dropzone/dropzone.js"></script>
   <link rel="stylesheet" href="{{ STATIC_URL }}dropzone/css/basic.css" type="text/css" media="screen"/>
-  <link rel="stylesheet" href="{{ STATIC_URL }}dropzone/css/dropzone.css" type="text/css" media="screen"/>
 {% endblock %}
 <script>
   var static_url = "{{ STATIC_URL }}";
@@ -32,8 +30,8 @@
     {% if user.is_authenticated %}
 
       <ul>
-         <li id="points-li">
-            <a href="/">Points</a>
+         <li id="feed-li">
+            <a href="/">Newsfeed</a>
          </li>
 
         <li id="challenges-li">
@@ -42,10 +40,6 @@
 
         <li id="slides-li">
           <a href="/slides">Slides</a>
-        </li>
-
-        <li id="feed-li">
-          <a href="/feed">Feed</a>
         </li>
 
         <li id="challenges-li">

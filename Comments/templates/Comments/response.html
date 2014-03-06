@@ -37,13 +37,12 @@
      </div>
 
     <div class="response_body">
-		<img src="/{{ response.author.avatar.url }}">
+		<img src="{{ response.author.avatar.url }}">
 
 
         <div class="response_text">
             {% if response.deleter == None %}
-                {#            {{ response.text | linebreaksbr }}#}
-                {{ response.text | safe }}
+                {{ response.text | linebreaksbr }}
             {% else %}
                 [deleted]
             {% endif %}

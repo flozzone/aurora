@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Welcome to Aurora, {{user.nickname}}</title>
+  <title>Welcome to Aurora, {{ user.nickname }}</title>
   <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-2.0.3.js"></script>
   <link rel="stylesheet" href="{{ STATIC_URL }}css/base.css" type="text/css" media="screen"/>
   <link rel="stylesheet" href="{{ STATIC_URL }}css/ui-lightness/jquery-ui-1.10.3.custom.css">
@@ -19,8 +19,8 @@
 {% block content %}
 {% endblock %}
 
-<div class="nothing_to_see_move_on" data-username="{{user.username}}" id="the_username">
-	<div class="nothing_to_see_move_on" data-points="{{sum}}" id="the_points">
+  <div class="nothing_to_see_move_on" data-username="{{ user.username }}" id="the_username"></div>
+  <div class="nothing_to_see_move_on" data-points="{{ sum }}" id="the_points"></div>
 
 </body>
 </html>

@@ -22,16 +22,16 @@ function file_upload_loaded() {
                 if (file.type === 'application/pdf') {
                     $(file.previewElement).addClass('dz-image-preview');
                     $(file.previewElement).find('img').show();
-                    $(file.previewElement).find('img').attr('src', '/static/img/pdf_icon.jpg');
+                    $(file.previewElement).find('img').attr('src', static_url + 'img/pdf_icon.jpg');
                     $(file.previewElement).find('img').attr('alt', data.url);
                     $(file.previewElement).find('img').wrap(function () {
                         return "<a href='/" + data.url + "' title='" + file.name + "'></div>";
                     });
                 } else {
                     $(file.previewElement).find('img').wrap(function () {
-                        return "<a href='/" + data.url + "' data-lightbox='preview' title='" + file.name + "'></div>";
+                        return "<a href='" + data.url + "' data-lightbox='preview' title='" + file.name + "'></div>";
                     });
-                    $(file.previewElement).find('img').attr('src', '/' + data.url);
+                    $(file.previewElement).find('img').attr('src', data.url);
                 }
                 var errors = 0;
                 dropzone_instance.files.forEach(function (check_file) {
@@ -40,7 +40,7 @@ function file_upload_loaded() {
                     }
                     console.log(dropzone_instance.files.length - errors);
                 });
-                $(file.previewElement).append('<div class="fig">Fig: ' + (dropzone_instance.files.length - errors) + '</div>');
+                $(file.previewElement).append('<div class="fig">Fig: ' + (dropzone_instance.files.indexOf(file)+1) + '</div>');
             });
             this.on("removedfile", function (file) {
                 revert_submit_clicked();
@@ -110,7 +110,7 @@ function load_files(elaboration_id, is_submitted) {
                     return "<a href='/" + file.url + "' title='" + file.name + "'></div>";
                 });
             } else {
-                dropzone_instance.emit("thumbnail", mockFile, '/' + file.url);
+                dropzone_instance.emit("thumbnail", mockFile, file.url);
                 $(mockFile.previewElement).find('img').wrap(function () {
                     return "<a href='/" + file.url + "' data-lightbox='preview' title='" + file.name + "'></div>";
                 });

@@ -56,12 +56,13 @@ def review_answer(request):
     if request.POST:
         data = request.body.decode(encoding='UTF-8')
         data = json.loads(data)
+        import pprint
+        pprint.pprint(data)
         review_id = data['review_id']
         answers = data['answers']
         review = Review.objects.get(pk=review_id)
         review.appraisal = data['appraisal']
-        review.submission_time = datetime.now()
-        review.save()
+
         for answer in answers:
             question_id = answer['question_id']
             text = answer['answer']
@@ -74,7 +75,7 @@ def review_answer(request):
                 course=course,
                 text=Notification.BAD_REVIEW + review.elaboration.challenge.title,
                 image_url=review.elaboration.challenge.image.url,
-                link="review=" + str(review.elaboration.challenge.id)
+                link="/challenges/received_challenge_reviews/?id=" + str(review.elaboration.challenge.id)
             ).save()
         else:
             final_challenge = review.elaboration.challenge.get_final_challenge()
@@ -84,8 +85,10 @@ def review_answer(request):
                     course=course,
                     text=Notification.ENOUGH_PEER_REVIEWS + final_challenge.title,
                     image_url=final_challenge.image.url,
-                    link="stack=" + str(review.elaboration.challenge.get_stack().id)
+                    link="/challenges/stack?id=" + str(review.elaboration.challenge.get_stack().id)
                 )
+    review.submission_time = datetime.now()
+    review.save()
     return HttpResponse()
 
 def create_context_view_review(request):

@@ -6,9 +6,7 @@ $(function() {
         menubar: false,
         statusbar: false,
 		toolbar: false,
-	    plugins: "autoresize",
-		autoresize_min_height: 100,
-		autoresize_max_height: 800,
+		height:300,
         readonly: 1
     });
 });

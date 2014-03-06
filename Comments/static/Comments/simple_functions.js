@@ -42,7 +42,7 @@ var COMMENTS = (function (my, $) {
             my.POLLING.resetTimer();
 
             var comment_number = $this.data('comment_number');
-            my.post('/promote_comment/', comment_number, {comment_id: comment_number, value: true});
+            my.post('/promote_comment/', {comment_id: comment_number, value: true});
 
             $this.off();
             $this.click(function(event){
@@ -60,7 +60,7 @@ var COMMENTS = (function (my, $) {
             my.POLLING.resetTimer();
 
             var comment_number = $this.data('comment_number');
-            my.post('/promote_comment/', comment_number, {comment_id: comment_number, value: false});
+            my.post('/promote_comment/', {comment_id: comment_number, value: false});
 
             $this.off();
             $this.click(function(event) {

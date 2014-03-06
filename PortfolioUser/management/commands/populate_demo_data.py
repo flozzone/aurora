@@ -159,7 +159,7 @@ def init_data():
     challenge_1 = Challenge(id=1,
                             title='meine meinung',
                             subtitle='meine meinung',
-                            description='posten sie ihre meinung zu irgendwas in drei sätzen. dabei müssen sie lediglich darauf achten, dass die drei sätze alle mit demselben buchstaben beginnen.',
+                            description='gehen sie nach derstandard.at, suchen sie einen beliebigen artikel, und posten sie den text dieses artikels hier.',
                             accepted_files=''
     )
     challenge_1.image.save('1.png', File(open(os.path.join(STATIC_ROOT, 'img', '1.png'), 'rb')))
@@ -167,37 +167,36 @@ def init_data():
 
     ReviewQuestion(challenge=challenge_1, order=1, text="Erfüllt diese Arbeit die gestellte Aufgabe?", boolean_answer=True).save()
     ReviewQuestion(challenge=challenge_1, order=2, text="Falls nicht: Was fehlt? Was sollte anders sein? Was ist zuviel?").save()
-    ReviewQuestion(challenge=challenge_1, order=3,
-                   text="Ist die Arbeit inhaltlich bzw. faktisch richtig? Können sie zb. weitere Quellen finden, die die Aussagen dieser Arbeit bestätigen oder widerlegen?").save()
-    ReviewQuestion(challenge=challenge_1, order=4,
-                   text="Ist die Arbeit inhaltlich vollständig? Fehlen wesentliche Aspekte, ohne die die Arbeit einseitig oder in Richtung bestimmter Interessen gefärbt erscheint?").save()
 
     challenge_2 = Challenge(id=2,
                             title='rage-comic',
                             subtitle='rage-comic',
                             prerequisite=challenge_1,
-                            description='finden sie einen rage-comic, den sie lustig finden, und beschreiben sie kurz, warum sie ihn lustig finden. laden sie dazu den rage-comic als bild hoch, und beschreiben sie in einem satz mit genau 5 worten, warum dieser rage-comic zum schreien komisch ist. finden sie einen rage-comic, den sie lustig finden, und beschreiben sie kurz, warum sie ihn lustig finden. laden sie dazu den rage-comic als bild hoch, und beschreiben sie in einem satz mit genau 5 worten, warum dieser rage-comic zum schreien komisch ist. finden sie einen rage-comic, den sie lustig finden, und beschreiben sie kurz, warum sie ihn lustig finden. laden sie dazu den rage-comic als bild hoch, und beschreiben sie in einem satz mit genau 5 worten, warum dieser rage-comic zum schreien komisch ist. finden sie einen rage-comic, den sie lustig finden, und beschreiben sie kurz, warum sie ihn lustig finden. laden sie dazu den rage-comic als bild hoch, und beschreiben sie in einem satz mit genau 5 worten, warum dieser rage-comic zum schreien komisch ist.',
+                            description='finden sie einen web-comic, den sie lustig finden, und laden sie ihn hier hoch. beschreiben sie kurz, wie lange sie diesen webcomic schon lesen.',
                             accepted_files='image/*'
     )
     challenge_2.image.save('2.png', File(open(os.path.join(STATIC_ROOT, 'img', '2.png'), 'rb')))
     challenge_2.save()
 
-    ReviewQuestion(challenge=challenge_2, order=1, text="Do you think the submission was funny?",
+    ReviewQuestion(challenge=challenge_2, order=1, text="Erfüllt diese Arbeit die gestellte Aufgabe?", boolean_answer=True).save()
+    ReviewQuestion(challenge=challenge_2, order=2, text="Falls nicht: Was fehlt? Was sollte anders sein? Was ist zuviel?").save()
+    ReviewQuestion(challenge=challenge_2, order=3, text="Ist der Webcomic lustig?",
                    boolean_answer=True).save()
-    ReviewQuestion(challenge=challenge_2, order=2, text="Was this submission original?", boolean_answer=True,
+    ReviewQuestion(challenge=challenge_2, order=4, text="Ist dieser Webcomic interessant?", boolean_answer=True,
                    visible_to_author=False).save()
-    ReviewQuestion(challenge=challenge_2, order=3,
-                   text="Can you find any additional material not included in this submission?").save()
 
     challenge_3 = Challenge(id=3,
                             title='wikipedia',
                             subtitle='wikipedia',
                             prerequisite=challenge_2,
-                            description='kopieren sie 4 absätze aus einem langweiligen wikipedia-artikel und geben sie sie ab. selbst schreiben ist verboten - das würde als plagiat gewertet!',
+                            description='kopieren sie 4 absätze aus einem  wikipedia-artikel und geben sie sie ab! setzen sie ans ende der arbeit den link auf den wikipedia-artikel!',
                             accepted_files=''
     )
     challenge_3.image.save('3.png', File(open(os.path.join(STATIC_ROOT, 'img', '3.png'), 'rb')))
     challenge_3.save()
+
+    ReviewQuestion(challenge=challenge_3, order=1, text="Erfüllt diese Arbeit die gestellte Aufgabe?", boolean_answer=True).save()
+    ReviewQuestion(challenge=challenge_3, order=2, text="Falls nicht: Was fehlt? Was sollte anders sein? Was ist zuviel?").save()
 
     challenge_4 = Challenge(id=4,
                             title='wissenschaft',
@@ -209,63 +208,80 @@ def init_data():
     challenge_4.image.save('4.png', File(open(os.path.join(STATIC_ROOT, 'img', '4.png'), 'rb')))
     challenge_4.save()
 
+    ReviewQuestion(challenge=challenge_4, order=1, text="Erfüllt diese Arbeit die gestellte Aufgabe?", boolean_answer=True).save()
+    ReviewQuestion(challenge=challenge_4, order=2, text="Falls nicht: Was fehlt? Was sollte anders sein? Was ist zuviel?").save()
+
     challenge_5 = Challenge(id=5,
                             title='ping',
                             subtitle='ping',
-                            description='laden sie ein bild im png-format hoch. das bild muss allerdings genau quadratisch sein. schreiben sie nichts dazu (geht ja auch nicht).',
+                            description='laden sie drei bilder im png-format hoch. beschreiben sie dann kurz, was auf diesen bildern zu sehen ist.',
                             accepted_files='image/png'
     )
     challenge_5.image.save('5.png', File(open(os.path.join(STATIC_ROOT, 'img', '5.png'), 'rb')))
     challenge_5.save()
+    ReviewQuestion(challenge=challenge_5, order=1, text="Erfüllt diese Arbeit die gestellte Aufgabe?", boolean_answer=True).save()
+    ReviewQuestion(challenge=challenge_5, order=2, text="Falls nicht: Was fehlt? Was sollte anders sein? Was ist zuviel?").save()
 
     challenge_6 = Challenge(id=6,
                             title='advice animal',
                             subtitle='advice animal',
                             prerequisite=challenge_5,
-                            description='finden sie ein »advice animal« bild, das hier überhaupt nicht dazupasst. laden sie das bild hoch, und posten sie einen text dazu, der stattdessen auf dem bild stehen sollte. der muss auch gar nicht witzig sein.',
+                            description='suchen sie ein »advice animal« bild und posten sie es hier. geben sie die quelle dazu an.',
                             accepted_files='image/*'
     )
     challenge_6.image.save('6.png', File(open(os.path.join(STATIC_ROOT, 'img', '6.png'), 'rb')))
     challenge_6.save()
+    ReviewQuestion(challenge=challenge_6, order=1, text="Erfüllt diese Arbeit die gestellte Aufgabe?", boolean_answer=True).save()
+    ReviewQuestion(challenge=challenge_6, order=2, text="Falls nicht: Was fehlt? Was sollte anders sein? Was ist zuviel?").save()
 
     challenge_7 = Challenge(id=7,
                             title='animated gif',
                             subtitle='animated gif',
                             prerequisite=challenge_6,
-                            description='suchen sie ein lustiges animated gif und posten sie es. schreiben sie als text 10 x das wort "lustig" dazu.',
+                            description='suchen sie ein animated gif und posten sie es. geben sie die quelle dazu an.',
                             accepted_files='image/gif'
     )
     challenge_7.image.save('7.png', File(open(os.path.join(STATIC_ROOT, 'img', '7.png'), 'rb')))
     challenge_7.save()
+    ReviewQuestion(challenge=challenge_7, order=1, text="Erfüllt diese Arbeit die gestellte Aufgabe?", boolean_answer=True).save()
+    ReviewQuestion(challenge=challenge_7, order=2, text="Falls nicht: Was fehlt? Was sollte anders sein? Was ist zuviel?").save()
 
     challenge_8 = Challenge(id=8,
-                            title='das bin ich',
-                            subtitle='das bin ich',
+                            title='zwei menschen',
+                            subtitle='zwei menschen',
                             prerequisite=challenge_7,
-                            description='posten sie drei bilder von sich, und beschreiben sie kurz, wer auf den fotos zu sehen ist. die bilder von sich brauchen auch gar nicht wirklich von ihnen zu sein, sondern einfach nur von irgendwem, der ihnen ähnlich schaut. oder auch nicht.',
+                            description='laden sie zwei bilder von zwei verschiedenen menschen hoch. erklären sie dann, wer diese beiden menschen sind. vergessen sie nicht auf die quellenangabe!',
                             accepted_files='image/*'
     )
     challenge_8.image.save('8.png', File(open(os.path.join(STATIC_ROOT, 'img', '8.png'), 'rb')))
     challenge_8.save()
 
+    ReviewQuestion(challenge=challenge_8, order=1, text="Erfüllt diese Arbeit die gestellte Aufgabe?", boolean_answer=True).save()
+    ReviewQuestion(challenge=challenge_8, order=2, text="Falls nicht: Was fehlt? Was sollte anders sein? Was ist zuviel?").save()
+
     challenge_9 = Challenge(id=9,
-                            title='sherlock',
-                            subtitle='sherlock',
-                            description='finden sie einen ausschnitt der britischen fernsehserie »sherlock« auf youtube und posten sie ihn hier. schreiben sie ausserdem dazu, dass sie sherlock saucool finden (in eigenen worten!)',
+                            title='youtube',
+                            subtitle='youtube',
+                            description='suchen sie ein gutes youtube-video und posten sie den link hier. wenn sherlock holmes darin vorkommt, dann können sie auch einen extrapunkt bekommen.',
                             accepted_files=''
     )
     challenge_9.image.save('9.png', File(open(os.path.join(STATIC_ROOT, 'img', '9.png'), 'rb')))
     challenge_9.save()
+    ReviewQuestion(challenge=challenge_9, order=1, text="Erfüllt diese Arbeit die gestellte Aufgabe?", boolean_answer=True).save()
+    ReviewQuestion(challenge=challenge_9, order=2, text="Falls nicht: Was fehlt? Was sollte anders sein? Was ist zuviel?").save()
+     
     challenge_10 = Challenge(id=10,
                              title='schmetterling',
                              subtitle='schmetterling',
                              prerequisite=challenge_9,
-                             description='laden sie zwei bilder von schmetterlingen hoch, und schreiben sie eine kleine geschichte (max. 10 worte), in denen die schmetterlinge vorkommen.',
+                             description='suchen sie in google image search schmetterlingsbilder und laden sie diese hier hoch. vergessen sie nicht auf die quellenangaben!',
 
                              accepted_files='image/*'
     )
     challenge_10.image.save('4.png', File(open(os.path.join(STATIC_ROOT, 'img', '4.png'), 'rb')))
     challenge_10.save()
+    ReviewQuestion(challenge=challenge_10, order=1, text="Erfüllt diese Arbeit die gestellte Aufgabe?", boolean_answer=True).save()
+    ReviewQuestion(challenge=challenge_10, order=2, text="Falls nicht: Was fehlt? Was sollte anders sein? Was ist zuviel?").save()
 
     # create course-challenge relations
     print('adding course-challenge relations')

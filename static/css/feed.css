@@ -1,3 +1,18 @@
+.feed_header {
+	background:#243D2A;
+    background-image: url("../img/auroraH.png");
+	background-clip: border-box;
+	background-origin: border-box;
+	background-position: 33% 33%;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	
+	border-bottom:1px solid black;
+	color:white;
+	padding:0.2em 0.5em;
+	border-radius: 4px 4px 1px 1px;
+}
+
 .toolbar > li {
     display:inline;
 	padding:1px 0.65em;

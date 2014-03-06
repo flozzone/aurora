@@ -8,7 +8,7 @@
 {% block content %}
 
     {% if elaboration %}
-        <img class="gravatar" src="../{{ elaboration.user.avatar.url }}">
+        <img class="gravatar" src="{{ elaboration.user.avatar.url }}">
         {{ elaboration.user.username }}<br/>
         {{ elaboration.user.first_name }} {{ elaboration.user.last_name }}
         <div class="spacer"></div>

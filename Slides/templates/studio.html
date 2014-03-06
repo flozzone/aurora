@@ -62,7 +62,7 @@
 	            </div>
 				<div class="studio_slide_medium">
 					<a href="{{slide.get_filepath}}/jpg/{{slide.filename}}.jpg" class="lightbox_trigger">
-						<img onError="this.src='{{ STATIC_URL }}img/white_medium.jpg'" class="studio_slide" src="{{ STATIC_URL}}slides/{{ slide.course.short_title }}/thumb/{{slide.filename}}_thumb.jpg" alt="{{slide.title}}"/ >
+						<img onError="this.src='{{ STATIC_URL }}img/white_medium.jpg'" class="studio_slide" src="{{ STATIC_URL}}slides/{{ course.short_title }}/thumb/{{slide.filename}}_thumb.jpg" alt="{{slide.title}}"/ >
 					</a>
 				</div>
 				<div id="lazyload_{{slide.id}}" class="lazyload">comments will load on demand</div>

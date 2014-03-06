@@ -90,11 +90,11 @@ h1 {
 }
 
 .lineL {
-    background-color: #FFF;
+    background-color: #f0f0f0;
 }
 
 .lineD {
-    background-color: #eee;
+    background-color: #f0f0f0;
 }
 
 #detail_area {
@@ -123,7 +123,7 @@ h1 {
 	height:24px;
 	width:24px;
 	border:1px solid gray;
-	border-radius:12px;
+	border-radius:3px;
 	position:relative;
 	top:4px;
 }
@@ -141,6 +141,8 @@ h1 {
 
 .stack .title {
     font-size: 1.6em;
+	z-index:210;
+	position:relative;
 }
 
 .stack_done {
@@ -148,24 +150,44 @@ h1 {
 	position:absolute;
 	top:-60px;
 	left:-20px;
-	opacity:0.15;
 	margin-left:10px;
 	font-size:240px;
-	color:rgb(58,201,88);
+	color:white;
+	z-index:101;
+	/*color:rgb(58,201,88);*/
 }
 
+.not_stack {
+	clear:both;
+	position:relative;
+	padding: 1em;
+	margin-left:0.5em;
+	border-radius:0.5em;
+	cursor:pointer;
+	overflow:hidden;
+	margin-bottom:0.5em;
+}
 
 .stack {	
 	clear:both;
 	position:relative;
 	padding: 1em;
+	margin-left:1.5em;
+	border-radius:0.5em;
 	cursor:pointer;
 	overflow:hidden;
+	margin-bottom:1em;
+	z-index:100;
+	box-shadow:0px 2px 7px rgba(0,0,0,0.1);
+	border-top:1px solid #e8e8e8;
+	border-top:1px solid #e8e8e8;
 }
 
 .stack .description {
 	margin-bottom:1em;
 	margin-top:1em;
+	z-index:190;
+	position:relative;
 }
 
 .stack .legend {
@@ -193,7 +215,7 @@ h1 {
 }
 
 .review_box.done {	
-	background-color:rgb(251, 249, 149);
+/*	background-color:rgb(251, 249, 149);*/
 }
 
 .review_box.in_progress {

@@ -1,34 +1,29 @@
+
 {% block additional_headers %}
   <link rel="stylesheet" href="{{ STATIC_URL }}css/points.css" type="text/css" media="screen"/>
 {% endblock %}
 
 <script>
-	document.cookie = "AuroraP={{ sum }}"+"; expires=Tue, 18 Jan 2038 03:14:06 GMT";
-	$('.pagehead').css('background-position','0 {{sum}}%'); 
+    document.cookie = "AuroraP={{ sum }}" + "; expires=Tue, 18 Jan 2038 03:14:06 GMT";
+    $('.pagehead').css('background-position', '0 {{sum}}%');
 </script>
 
-<div class="points_table" >
-  <table>
-    <tr class="header">
-      <td>Stack</td>
-      <td>Points</td>
-    </tr>
-    {% for stack in course_stacks %}
-      <tr class="{% cycle 'lineD' 'lineL' %}">
-        <td class="stack_name">{{ stack.stack.title }}</td>
-        <td>{{ stack.points }}</td>
-      </tr>
-    {% endfor %}
+<div class="points_table">
+    <table>
+        {% for stack in course_stacks %}
+            <tr>
+                <td class="stack_name">{{ stack.stack.title }}</td>
+                <td>{{ stack.points }}</td>
+            </tr>
+        {% endfor %}
 
-    <tr class="slides">
-      <td>Slide Special Points</td>
-      <td>(inactive)</td>
-    </tr>
-    <tr class="sum">
-      <td style="border-bottom:0;">Total</td>
-	  <td style="border-bottom:0;">{{ sum }}</td>
-    </tr>
-  </table>
+        <tr class="slides">
+            <td>Slide Special Points</td>
+            <td>(inactive)</td>
+        </tr>
+        <tr class="sum">
+            <td style="border-bottom:0;">Total</td>
+            <td style="border-bottom:0;">{{ sum }}</td>
+        </tr>
+    </table>
 </div>
-
-

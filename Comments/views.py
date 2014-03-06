@@ -3,10 +3,8 @@ from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.template.loader import render_to_string
-from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST, require_GET
 
-from django.views.generic import ListView
 from django.contrib.auth.decorators import login_required
 from django import forms
 from django.utils import timezone
@@ -15,7 +13,6 @@ from django.contrib.contenttypes.models import ContentType
 import json
 
 from Comments.models import Comment, CommentsConfig, CommentList, Vote
-from Elaboration.models import Elaboration
 from Notification.models import Notification
 from Comments.tests import CommentReferenceObject
 
@@ -143,28 +140,19 @@ def create_comment(form, request):
 
         comment_list.increment()
 
-        # print(context['last_selected_course'])
-        # if parent_comment is not None and parent_comment.author != comment.author:
-        #     print('creating notification')
-        #     obj, created = Notification.objects.get_or_create(
-        #         user=parent_comment.author,
-        #         course=context['last_selected_course'],
-        #         text=Notification.NEW_MESSAGE + "You've received a reply to one of your comments",
-        #         image_url=comment.author.avatar.url,
-        #         link=comment_list.uri
-        #     )
+        if parent_comment is not None and parent_comment.author != comment.author:
+            obj, created = Notification.objects.get_or_create(
+                user=parent_comment.author,
+                course=context['last_selected_course'],
+                text="You've received a reply to one of your comments",
+                image_url=comment.author.avatar.url,
+                link=comment_list.uri + '#comment_' + str(parent_comment.id)
+            )
 
-        if parent_comment is not None:
-            if ref_obj_model == Elaboration:
-                elaboration = ref_obj
-                user = parent_comment.author
-                obj, created = Notification.objects.get_or_create(
-                    user=user,
-                    course=context['last_selected_course'],
-                    text=Notification.NEW_MESSAGE + elaboration.challenge.title,
-                    image_url=elaboration.challenge.image.url,
-                    link="challenge=" + str(elaboration.challenge.id)
-                )
+            if not created:
+                obj.creation_time = timezone.now()
+                obj.read = False
+                obj.save()
 
 
 @require_POST

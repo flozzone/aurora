@@ -1,0 +1,27 @@
+{% load staticfiles %}
+{% load comments %}
+
+{% block additional_headers %}
+    <script type="text/javascript" src="{% static "js/feed.js" %}"></script>
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/feed.css" type="text/css" media="screen"/>
+{% endblock %}
+
+{% block content %}
+    {% comments_boilerplate %}
+	
+	
+    <div id="comments_column_1">
+		<div class="feed_header"><b>Open Newsfeed</b></div>
+		<ul class="toolbar">
+			<li class="button filterbtn" id="1" data-tooltip-direction="bottom" title="Show all comments" onclick="filter(this.id,'{{user.username}}');"><i class="fa fa-eye"></i> All</li>
+			<li class="button filterbtn" id="2" data-tooltip-direction="bottom" title="Show only comments posted by lecturers, tutors or yourself" onclick="filter(this.id,'{{user.username}}');"><i class="fa fa-eye"></i> Lecturer Comments</li>
+			<li class="button filterbtn" id="-1" data-tooltip-direction="bottom" title="Show only comments with a positive rating, and your own comments" onclick="filter(this.id,'{{user.username}}');"><i class="fa fa-eye"></i> upvoted comments</li>
+			<li class="button filterbtn" id="-5" data-tooltip-direction="bottom" title="Show only comments rated higher than -5, and your own comments" onclick="filter(this.id,'{{user.username}}');"><i class="fa fa-eye"></i> &quot;decent&quot; comments</li>
+			<li class="button filterbtn" id="0" data-tooltip-direction="bottom" title="Show only comments posted after you activate this filter" onclick="markT('{{user.username}}');filter(this.id,'{{user.username}}')"><i class="fa fa-eye"></i> new</li>
+		</ul>
+        {% render_multi_comment_list for newsfeed %}
+    </div>
+{% endblock content %}
+
+
+

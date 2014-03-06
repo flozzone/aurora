@@ -1,9 +1,10 @@
 .points_table {
-    width: 20%;
-	margin-top:1em;
-	margin-left:1em;
-    margin-right: 40px;
+    width: 100%;
+	/*margin-top:1em;*/
+	/*margin-left:1em;*/
+    /*margin-right: 40px;*/
 	border:0px;
+	margin-bottom:1em;
 }
 
 .points_table table {
@@ -45,4 +46,12 @@
 
 .sum td {
 	font-weight:bold;
+}
+
+.lineD {
+	background:#ddd;
+}
+
+.lineH {
+	
 }

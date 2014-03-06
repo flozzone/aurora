@@ -29,7 +29,7 @@ function challenge_loaded() {
         theme: 'modern',
         statusbar: false,
         fontsize_formats: "0.8em 1em 1.2em 1.6em 2em",
-        toolbar1: "undo redo | bold italic | fontsizeselect | alignleft aligncenter | bullist numlist indent outdent | subscript superscript | table",
+        toolbar1: "undo redo | bold italic | fontsizeselect | alignleft aligncenter | bullist numlist indent outdent ",
         plugins: "autoresize table paste",
         autoresize_min_height: 200,
         autoresize_max_height: 800,
@@ -47,12 +47,13 @@ function challenge_loaded() {
         menubar: false,
         statusbar: false,
         toolbar: false,
-        plugins: "autoresize",
-        autoresize_min_height: 100,
+		height:300,
+//        plugins: "autoresize",
+        autoresize_min_height: 300,
         autoresize_max_height: 800,
-        readonly: 1,
+        readonly: 1 ,
         oninit: function () {
-            var height = $('#editor_challenge_ifr').height() + 50;
+            var height = $('#editor_challenge_ifr').height() + 25;
             $('#editor_challenge_ifr').height(height);
         }
     });
@@ -63,6 +64,10 @@ function challenge_loaded() {
 
 function elaboration_autosave(e, challenge_id) {
     revert_submit_clicked();
+    elaboration_save(challenge_id);
+}
+
+function elaboration_save(challenge_id, submit) {
     var elaboration_text = tinyMCE.activeEditor.getContent().toString();
     var data = {
         challenge_id: challenge_id,
@@ -71,7 +76,15 @@ function elaboration_autosave(e, challenge_id) {
     var args = { type: "POST", url: "./autosave/", data: data,
         error: function () {
             alert('error elaboration autosave');
-        } };
+        },
+        success: function () {
+            console.log("saved");
+            if (submit) {
+                console.log("submit");
+                send_submit();
+            }
+        }
+    };
     $.ajax(args);
 }
 
@@ -89,8 +102,15 @@ function revert_submit_clicked() {
 function real_submit_clicked(event) {
     var challenge = $('.challenge');
     var challenge_id = challenge.attr('id');
+    elaboration_save(challenge_id, true);
+}
+
+function send_submit() {
+    var challenge = $('.challenge');
+    var challenge_id = challenge.attr('id');
     var stack_id = challenge.attr('stack');
     var url = './submit?id=' + challenge_id;
+    //TODO: change to post
     $.get(url, function (data) {
         window.location.href = "/challenges/stack?id=" + stack_id;
     });

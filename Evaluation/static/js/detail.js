@@ -6,9 +6,7 @@ $(function() {
         menubar: false,
         statusbar: false,
 		toolbar: false,
-	    plugins: "autoresize",
-		autoresize_min_height: 100,
-		autoresize_max_height: 800,
+		height:300,
         readonly: 1
     });
 });
@@ -62,15 +60,12 @@ $(function() {
    $(".submit_evaluation").click(function(event) {
         event.preventDefault();
 
+        var points = Math.abs(parseInt($(".points").text()) || 0);
         if ($.trim($(".evaluation").text()).length == 0) {
             $(".error").html("you forgot feedback!");
             return;
         }
-        if ($.trim($(".points").text()).length == 0) {
-            $(".error").html("you forgot points!");
-            return;
-        }
-        if (!$.isNumeric($.trim($(".points").text()))) {
+        if (points == 0) {
             $(".error").html("points must be numeric!");
             return;
         }
@@ -78,7 +73,7 @@ $(function() {
         var data = {
             elaboration_id: $(event.target).attr('id'),
             evaluation_text: $(".evaluation").text(),
-            evaluation_points: $(".points").text()
+            evaluation_points: points
         };
         var args = { type: "POST", url: "/submit_evaluation/", data: data,
             error: function () {
@@ -137,15 +132,11 @@ function DelayedAutoSave(elaboration_id) {
 }
 
 function AutoSave(elaboration_id) {
-    if (!$.isNumeric($.trim($(".points").text()))) {
-        $(".error").html("points must be numeric!");
-        return;
-    }
-
+    var points = Math.abs(parseInt($(".points").text()) || 0);
     var data = {
         elaboration_id: elaboration_id,
         evaluation_text: $(".evaluation").text().replace(/\n|<.*?>/g,' '),
-        evaluation_points: $.trim($(".points").text())
+        evaluation_points: points
     };
     var args = { type: "POST", url: "/save_evaluation/", data: data,
         error: function () {
@@ -167,14 +158,20 @@ $(function() {
     event.preventDefault();
     var data = {};
     data['answers'] = [];
+    var missing_answer = false;
     $(".question_container").each(function (index) {
         var answer_object = $(this).find('.answer');
         var answer = null;
         if (answer_object.hasClass('boolean_answer')) {
-            answer = answer_object.find('input').first().is(':checked');
+            answer = answer_object.find('input:checked')
+            if (answer.length === 0) {
+                missing_answer = true;
+            }
+            answer = answer.val();
         } else {
             answer = answer_object.find('#text_answer').val();
         }
+
         var question = answer_object.parent().find('.question').first();
         var question_id = question.attr('id');
         if (question_id) {
@@ -185,7 +182,16 @@ $(function() {
         }
     });
 
-    data['appraisal'] = $('input[name=appraisal]:checked').val();
+    var appraisal = $('input[name=appraisal]:checked');
+    if (appraisal.length === 0) {
+        missing_answer = true
+    }
+
+    if (missing_answer) {
+        alert("please fill out all answers");
+        return;
+    }
+    data['appraisal'] = appraisal.val();
     ajax_setup()
     var args = {
         type: "POST",

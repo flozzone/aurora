@@ -12,12 +12,12 @@
                         <strong>{{ file.1 }}MB</strong>
                     </div>
                     {% if '.pdf' in file.0|slice:"-4:" %}
-                        <a title="{{ file.3 }}" href="/{{ file.2 }}" target="_blank">
-                            <img class="preview" alt="{{ file.3 }}" src="/static/img/pdf_icon.jpg"/>
+                        <a title="{{ file.3 }}" href="{{ file.2 }}" target="_blank">
+                            <img class="preview" alt="{{ file.3 }}" src="{{ STATIC_URL }}img/pdf_icon.jpg"/>
                         </a>
                     {% else %}
-                        <a title="{{ file.3 }}" data-lightbox="preview" href="/{{ file.2 }}">
-                            <img class="preview" alt="{{ file.3 }}" src="/{{ file.2 }}"/>
+                        <a title="{{ file.3 }}" data-lightbox="preview" href="{{ file.2 }}">
+                            <img class="preview" alt="{{ file.3 }}" src="{{ file.2 }}"/>
                         </a>
                     {% endif %}
                 </div>

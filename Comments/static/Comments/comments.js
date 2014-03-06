@@ -4,8 +4,9 @@
 
 var purgsLoadFilter;
 
-if(typeof(loadFilter) === 'undefined') {
-    purgsLoadFilter = function() {};
+if (typeof(loadFilter) === 'undefined') {
+    purgsLoadFilter = function () {
+    };
 } else {
     purgsLoadFilter = loadFilter;
 }
@@ -13,7 +14,7 @@ if(typeof(loadFilter) === 'undefined') {
 var COMMENTS = (function (my, $, purgsLoadFilter) {
     "use strict";
 
-    my.registerAllTheElements = function() {
+    my.registerAllTheElements = function () {
         my.registerTestButton();
         my.registerStartPolling();
         my.registerStopPolling();
@@ -40,7 +41,7 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         posting: false
     };
 
-    my.registerElementsForCommentList = function($comment_list) {
+    my.registerElementsForCommentList = function ($comment_list) {
         my.registerReplyLinksForCommentList($comment_list);
         my.registerEditLinksForCommentList($comment_list);
         my.registerDeleteLinksForCommentList($comment_list);
@@ -50,7 +51,7 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         my.Bookmarks.registerForCommentList($comment_list);
     };
 
-    my.registerPolling = function() {
+    my.registerPolling = function () {
         var $window = $(window);
         $window.off('blur');
         $window.blur(function () {
@@ -66,7 +67,7 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         });
     };
 
-    my.registerStopPolling = function() {
+    my.registerStopPolling = function () {
         var $stopPolling = $('#stopPolling');
         $stopPolling.off();
         $stopPolling.click(function (event) {
@@ -76,7 +77,7 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         });
     };
 
-    my.registerStartPolling = function() {
+    my.registerStartPolling = function () {
         var $startPolling = $('#startPolling');
         $startPolling.off();
         $startPolling.click(function (event) {
@@ -86,7 +87,7 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         });
     };
 
-    my.registerVoteForCommentList = function($comment_list) {
+    my.registerVoteForCommentList = function ($comment_list) {
         $comment_list.find('.vote_up_on').click(function (event) {
             event.preventDefault();
 
@@ -110,17 +111,17 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
             var classname = direction + 'voted';
             var oppositeClass;
 
-            if(direction === 'up') {
+            if (direction === 'up') {
                 oppositeClass = 'downvoted';
             } else {
                 oppositeClass = 'upvoted';
             }
 
-            if($parent.hasClass(classname)) {
+            if ($parent.hasClass(classname)) {
                 return false;
             }
 
-            if($parent.hasClass(oppositeClass)) {
+            if ($parent.hasClass(oppositeClass)) {
                 $parent.removeClass(oppositeClass);
             } else {
                 $parent.addClass(classname);
@@ -131,7 +132,7 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
 
             var $score = $parent.find('.comment_score_value');
             var newscore = +$score.html() + scorediff;
-            if(newscore > 0) {
+            if (newscore > 0) {
                 newscore = '+' + newscore.toString();
             }
             $score.html(newscore);
@@ -146,13 +147,13 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         }
     };
 
-    my.registerAddCommentFormButtons = function() {
+    my.registerAddCommentFormButtons = function () {
         $('.button_add_comment_form').each(function () {
             my.registerAddCommentFormButton($(this));
         });
     };
 
-    my.registerAddCommentFormButton = function($button) {
+    my.registerAddCommentFormButton = function ($button) {
         $button.off();
         $button.click(function (event) {
             event.preventDefault();
@@ -172,8 +173,8 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
             $commentForm.find('#id_reference_id').val(ref_id);
             $commentForm.find('#id_reference_type_id').val(ref_type);
 
-            var uri = location.pathname + location.search;
-            $commentForm.find('#id_uri').val(uri);
+            var comment_list_uri = location.pathname + location.search;
+            $commentForm.find('#id_uri').val(comment_list_uri);
 
             if ($commentForm.is(':visible')) {
                 $commentForm.prev().show();
@@ -191,7 +192,7 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         });
     };
 
-    my.registerEditLinksForCommentList = function($comment_list) {
+    my.registerEditLinksForCommentList = function ($comment_list) {
         $comment_list.find('.edit_link').click(function (event) {
             event.preventDefault();
 
@@ -210,6 +211,81 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
             var oldCommentText = $commentText.html();
 
             $commentText.attr('contenteditable', true);
+
+//            document.execCommand("insertBrOnReturn", false, true);
+//
+//            $comment.on("keydown", "[contenteditable=true]", function (e) {
+            $comment.on("keydown", function (e) {
+                var lineBreak;
+
+                if (e.which === 13 && !e.shiftKey) {
+                    e.preventDefault();
+
+//                    console.log('adding br');
+//                    lineBreak = "<br />";
+                    lineBreak = "<br />&nbsp";
+                    document.execCommand("insertHTML", false, lineBreak);
+//                    document.execCommand("forwardDelete");
+                    document.execCommand("delete");
+//                    document.execCommand("insertText", false, '\n');
+//
+                    return false;
+                }
+            });
+
+//            Very good solution, only produces some blanks in chromium
+//            $('div[contenteditable="true"]').keypress(function (event) {
+//
+//                if (event.which !== 13)
+//                    return true;
+//
+//                var docFragment = document.createDocumentFragment();
+//
+//                add a new line
+//                var newEle = document.createTextNode('\n');
+//                docFragment.appendChild(newEle);
+//
+//                add the br, or p, or something else
+//                newEle = document.createElement('br');
+//                docFragment.appendChild(newEle);
+//
+//                make the br replace selection
+//                var range = window.getSelection().getRangeAt(0);
+//                range.deleteContents();
+//                range.insertNode(docFragment);
+//
+//                create a new range
+//                range = document.createRange();
+//                range.setStartAfter(newEle);
+//                range.collapse(true);
+//
+//                make the cursor there
+//                var sel = window.getSelection();
+//                sel.removeAllRanges();
+//                sel.addRange(range);
+//
+//                return false;
+//            });
+
+//          weird solution via CSS:
+
+            /*inline-block; makes chromium not create <div> and <p> on return*/
+            /*[contenteditable=true] {*/
+            /*width: 100%;*/
+            /*display: inline-block;*/
+            /*}*/
+
+
+            $(document).keydown(handleHotkeys);
+            function handleHotkeys(e) {
+                if (e.which === 27) {
+                    cancelEdit(e);
+                }
+                if (e.which === 13 && e.shiftKey) {
+                    saveEdit(e);
+                }
+            }
+
             $actions.after($editButtons);
             $actions.hide();
             $editButtons.show();
@@ -220,13 +296,15 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
                 $editButtons.hide();
                 $commentText.attr('contenteditable', false);
 
+                $(document).off('keydown', handleHotkeys);
                 my.state.modifying = false;
                 my.startPolling();
             }
 
             var $cancel = $('#edit_cancel');
             $cancel.off();
-            $cancel.click(function (event) {
+            $cancel.click(cancelEdit);
+            function cancelEdit(event) {
                 event.preventDefault();
 
                 $commentText.html(oldCommentText);
@@ -234,7 +312,7 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
                 endEdit();
 
                 return false;
-            });
+            }
 
             /**
              *
@@ -262,7 +340,8 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
 
             var $save = $('#edit_save');
             $save.off();
-            $save.click(function (event) {
+            $save.click(saveEdit);
+            function saveEdit(event) {
                 event.preventDefault();
 
 //            var text = $commentText.html().trim()
@@ -272,7 +351,17 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
 //            text = text.replace(/(<br><\/br>)|(<br>)|(<br \/>)|(<p>)|(<\/p>)|(<div>)|(<\/div>)/g, "\r\n");
 
 //            var text = getText($commentText.get(0)).trim();
-                var text = $commentText.html();
+//                var text = $commentText.html();
+//                console.log($commentText.text());
+
+                var text = $commentText.html().trim()
+                    .replace(/<br(\s*)\/*>/ig, '\n') // replace single line-breaks
+                    .replace(/&nbsp;?/ig, ' ');
+//                    .replace(/<[p|div]\s/ig, '\n$0') // add a line break before all div and p tags
+//                    .replace(/(<([^>]+)>)/ig, "");   // remove any remaining tags
+
+//                var text = $commentText[0].innerText;
+                console.log(text);
 
                 var data = {comment_id: $comment.data('comment_number'),
                     text: text};
@@ -294,13 +383,13 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
                 });
 
                 return false;
-            });
+            }
 
             return false;
         });
     };
 
-    my.registerReplyLinksForCommentList = function($comment_list) {
+    my.registerReplyLinksForCommentList = function ($comment_list) {
         $comment_list.find('[id^=reply_comment_link_]').click(function (event) {
             event.preventDefault();
 
@@ -339,7 +428,7 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         });
     };
 
-    my.setCommentId = function($form, comment_number) {
+    my.setCommentId = function ($form, comment_number) {
         $form.find('#id_parent_comment').attr('value', comment_number);
 
         var $comment = $('[data-comment_number=' + comment_number + ']');
@@ -348,7 +437,7 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         $form.find('#id_reference_type_id').attr('value', ref_obj.type);
     };
 
-    my.registerDeleteLinksForCommentList = function($comment_list) {
+    my.registerDeleteLinksForCommentList = function ($comment_list) {
         $comment_list.find('.delete_comment, .delete_response').click(function (event) {
             event.preventDefault();
 
@@ -411,7 +500,7 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         });
     };
 
-    my.registerReplyButton = function() {
+    my.registerReplyButton = function () {
         var $button_post_reply = $('#button_post_reply');
         $button_post_reply.off();
         $button_post_reply.click(function (event) {
@@ -421,7 +510,7 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
             // this is done in addComment as well of course
             var $replyTextarea = $('#replyTextarea');
             var text = $replyTextarea.val();
-            text = '<pre>' + text + '</pre>';
+//            text = '<pre>' + text + '</pre>';
             $replyTextarea.val(text);
 
             $.ajax({
@@ -440,7 +529,7 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         });
     };
 
-    my.registerCancelReplyButton = function() {
+    my.registerCancelReplyButton = function () {
         var $button_cancel_reply = $('#button_cancel_reply');
         $button_cancel_reply.off();
         $button_cancel_reply.click(function (event) {
@@ -453,14 +542,14 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         });
     };
 
-    my.hideCommentForm = function() {
+    my.hideCommentForm = function () {
         var $form = $('#commentForm');
         $form.hide();
         $('#commentTextarea').val('');
         $form.prev().show();
     };
 
-    my.registerCancelCommentButton = function() {
+    my.registerCancelCommentButton = function () {
         var $button_cancel_comment = $('#button_cancel_comment');
         $button_cancel_comment.off();
         $button_cancel_comment.click(function (event) {
@@ -472,7 +561,7 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         });
     };
 
-    my.registerSubmitCommentButton = function() {
+    my.registerSubmitCommentButton = function () {
         var $button_add_comment = $('#button_add_comment');
         $button_add_comment.off();
         $button_add_comment.click(function (event) {
@@ -482,7 +571,7 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
             // this is done in reply as well of course
             var $commentTextarea = $("#commentTextarea");
             var text = $commentTextarea.val();
-            text = '<pre>' + text + '</pre>';
+//            text = '<pre>' + text + '</pre>';
             $commentTextarea.val(text);
 
             $.ajax({
@@ -517,15 +606,17 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         firstRefId: null,
         lastRefId: null,
 
-        resetTimer: function() {
+        resetTimer: function () {
             if (!my.POLLING.stopped) {
                 clearTimeout(my.POLLING.current_timeout);
-                my.POLLING.current_timeout = setTimeout(function() {my.updateCommentLists(true);}, my.POLLING.current_interval);
+                my.POLLING.current_timeout = setTimeout(function () {
+                    my.updateCommentLists(true);
+                }, my.POLLING.current_interval);
             }
         }
     };
 
-    my.updateCommentLists = function(keepPolling) {
+    my.updateCommentLists = function (keepPolling) {
         var data = {revisions: my.getRevisions()};
 
         $.ajax({
@@ -557,12 +648,12 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         });
     };
 
-    my.findCommentListByRef = function(ref_id, ref_type) {
+    my.findCommentListByRef = function (ref_id, ref_type) {
         return $('.comment_list').filter('[data-ref_type=' + ref_type + ']')
             .filter('[data-ref_id=' + ref_id + ']');
     };
 
-    my.handleCommentListUpdates = function(comment_list_updates) {
+    my.handleCommentListUpdates = function (comment_list_updates) {
         var ref_id, ref_type, html;
         var $comment_list;
 
@@ -576,7 +667,7 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         }
     };
 
-    my.replaceCommentListWithHtml = function($comment_list, html) {
+    my.replaceCommentListWithHtml = function ($comment_list, html) {
         var ref_type = $comment_list.data('ref_type');
         var ref_id = $comment_list.data('ref_id');
 
@@ -615,17 +706,17 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         my.registerElementsForCommentList($comment_list);
     };
 
-    my.stopPolling = function() {
+    my.stopPolling = function () {
         clearTimeout(my.POLLING.current_timeout);
         my.POLLING.stopped = true;
     };
 
-    my.startPolling = function() {
+    my.startPolling = function () {
         my.POLLING.stopped = false;
         my.updateCommentLists(true);
     };
 
-    my.setActivePollingObjects = function(firstRefId, lastRefId) {
+    my.setActivePollingObjects = function (firstRefId, lastRefId) {
         my.POLLING.firstRefId = firstRefId;
         my.POLLING.lastRefId = lastRefId;
 
@@ -635,7 +726,7 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         my.updateCommentLists(false);
     };
 
-    my.getRevisions = function() {
+    my.getRevisions = function () {
         var revisions = [];
         var ref_id;
 
@@ -661,14 +752,14 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         return revisions;
     };
 
-    my.getRevision = function($comment_list) {
+    my.getRevision = function ($comment_list) {
         return {id: $comment_list.data('revision'),
             ref_type: $comment_list.data('ref_type'),
             ref_id: $comment_list.data('ref_id')
         };
     };
 
-    my.registerTestButton = function() {
+    my.registerTestButton = function () {
         var $myTest = $('#myTest');
         $myTest.off();
         $myTest.on('click', function () {
@@ -693,7 +784,7 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         });
     };
 
-    my.findClosestRefObj = function($child) {
+    my.findClosestRefObj = function ($child) {
         var ref_type = $child.closest('[data-ref_type]').attr('data-ref_type');
         var ref_id = $child.closest('[data-ref_id]').attr('data-ref_id');
         return { type: ref_type, id: ref_id };

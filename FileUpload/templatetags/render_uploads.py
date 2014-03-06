@@ -3,11 +3,12 @@ from django import template
 from django.http import request
 from Elaboration.models import Elaboration
 from FileUpload.models import UploadFile
+from django.template import RequestContext
 
 register = template.Library()
 
-@register.inclusion_tag('uploads.html')
-def render_uploads(elaboration):
+@register.inclusion_tag('uploads.html', takes_context=True)
+def render_uploads(context, elaboration):
     elaboration = Elaboration.objects.get(id=elaboration.id)
     files = []
     index = 0
@@ -19,5 +20,5 @@ def render_uploads(elaboration):
                       round((upload_file.upload_file.size/1048576),2),
                       upload_file.upload_file.url,
                       figure])
-
-    return {'files' : files}
+    context.update( {'files':files} )
+    return context

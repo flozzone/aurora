@@ -31,17 +31,17 @@
 .challenge_image {
 	width:96px;
 	height:96px;
-	border-radius: 64px;
+	border-radius: 6px;
 	pointer-events:none;
 }
 
 .challenge_image_container {
-	margin-left:0.5em;
+	margin-left:1em;
 	float:left;
 	width:96px;
 	height:96px;
 	pointer-events:none;
-	border-radius: 64px;
+	border-radius: 6px;
 	border:1px solid silver;
 }
 
@@ -55,8 +55,13 @@
 	right:12px;
 }
 
+.no_clicksed {
+	pointer-events:none;
+	font-size:150%;
+}
+
 .review_space {
-	margin-left:0.5em;
+	margin-left:1em;
 	padding-top:0.25em;
 }
 
@@ -67,7 +72,7 @@
 }
 
 .challenges_stack {
-	margin-left:16px;
+	margin-left:0.5em;
 	max-width:940px;
 	padding:1em;
 }
@@ -109,8 +114,12 @@
 	cursor:pointer;
 	position:relative;
 	margin-top:1em;
-	border-radius:1em;
+	border-radius:0.5em;
 	box-shadow:0px 2px 7px rgba(0,0,0,0.1);
+	background:#eee;
+}
+
+.more_high {
 }
 
 .challenge-description {
@@ -122,21 +131,20 @@
 	pointer-events:none;
 	padding:0.25em;
 	padding-bottom:0;
+	padding-left:0.75em;
 }
 
 .challenge_top_bracket {
 	border-radius: 1em 1em 0 0;
-	background-color:#eee;
-	background: linear-gradient(#f0f0f0,white);
 	border-top:1px solid #e8e8e8;
 }
 
 .challenge_footer {
 	padding:0em 0.25em 0.5em 0.25em;
 	border-radius: 0 0 1em 1em;
-	background-color:#eee;
-	background: linear-gradient(#fafafa,#eee);
+/*	background: linear-gradient(#fafafa,#eee);*/
 	border-bottom:1px solid #e8e8e8;
+	cursor:default;
 }
 
 
@@ -148,7 +156,20 @@
 	clear:both;
 }
 
+.task_done {
+	display:none;
+	position:absolute;
+	top:-20px;
+	left:20px;
+	font-size:130px;
+	color:rgba(58,201,88,0.3);
+	pointer-events:none;
+	text-shadow:0 0 0 rgba(255,255,255,0.6);
+}
 
+.final_task {
+	box-shadow:0px 2px 7px rgba(0,0,0,0.1), 0 0 6px 6px rgba(255,212,30,0.2);
+}
 
 .below {
 	opacity:0.6;
