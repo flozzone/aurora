@@ -8,7 +8,6 @@ from AmanamanProjekt.settings import STATIC_ROOT
 from Elaboration.models import Elaboration
 from django.core.files import File
 
-
 def avatar_path(instance, filename):
     name = 'avatar_%s' % instance.id
     fullname = os.path.join(instance.upload_path, name)
@@ -51,6 +50,7 @@ class PortfolioUser(User):
         if not os.path.isdir(self.upload_path):
             os.makedirs(self.upload_path)
         try:
+            print("\a")
             gravatarurl = "http://www.gravatar.com/avatar/" + hashlib.md5(
                 self.email.lower().encode("utf-8")).hexdigest() + "?"
             gravatarurl += urllib.parse.urlencode({'d': 'monsterid', 's': str(192)})
