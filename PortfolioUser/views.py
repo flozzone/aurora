@@ -57,47 +57,56 @@ def profile(request):
     user = RequestContext(request)['user']
     return render_to_response('profile.html', {'user': user}, context_instance=RequestContext(request))
 
-
 @login_required()
 def profile_save(request):
     data = {}
     user = RequestContext(request)['user']
+    text_limit = 100
+    valid_nickname = True
     if 'nickname' in request.POST and request.POST['nickname'] == "":
         data['error'] = "empty nickname not allowed"
-    valid_nickname = True
+        valid_nickname = False
+    nickname_limit = 30
+    if len(request.POST['nickname']) > nickname_limit:
+        data['error'] = "nickname too long (%s character limit)" % nickname_limit
+        valid_nickname = False
+
     users_with_same_nickname = PortfolioUser.objects.filter(nickname=request.POST['nickname'])
     for user_with_same_nickname in users_with_same_nickname:
         if user.id is not user_with_same_nickname.id:
             data['error'] = "nickname already taken"
             valid_nickname = False
+
     if valid_nickname:
         user.nickname = request.POST['nickname']
 
-    if is_valid_email(request.POST['email']):
+    if is_valid_email(request.POST['email'], text_limit):
         user.email = request.POST['email']
     else:
         data['error'] = "not a valid email address"
 
     if 'file' in request.FILES:
         user.avatar = request.FILES['file']
-    if is_valid_study_code(request.POST['study_code']):
+    if len(request.POST['study_code']) < text_limit:
         user.study_code = request.POST['study_code']
-    user.statement = request.POST['statement']
+    else:
+        data['error'] = "not a valid study code"
+    if len(request.POST['statement']) < text_limit:
+        user.statement = request.POST['statement']
+    else:
+        data['error'] = "statement too long (%s character limit)" % text_limit
     user.save()
     data['nickname'] = user.nickname
     data['email'] = user.email
+    data['study_code'] = user.study_code
+    data['statement'] = user.statement
     return HttpResponse(json.dumps(data))
 
-def is_valid_study_code(study_code):
-    # TODO study_code validation
-    return True
-
-
-
-def is_valid_email(email):
+def is_valid_email(email, text_limit):
     from django.core.validators import validate_email
     from django.core.exceptions import ValidationError
-
+    if len(email) > text_limit:
+        return False
     try:
         validate_email(email)
         return True
