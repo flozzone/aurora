@@ -127,11 +127,11 @@ def studio_marker(request, marker):
 
 def studio_search(request):
     course = RequestContext(request)['last_selected_course']
-    lectures = _get_contentbar_data(coursee)
+    lectures = _get_contentbar_data(course)
     search_text = request.GET.get('search_text', '')
     if search_text.strip():
         search_query = _get_query(search_text, ['title', 'tags']) # TODO: we'll need to search the comments here too.
-        slides = Slide.objects.filter(lecture__course__short_title=course_short_title).filter(search_query).distinct()
+        slides = Slide.objects.filter(lecture__course=course).filter(search_query).distinct()
         slides = _cache_slide_markers(slides)
         render_dict = {'slidecasting_mode': 'search_results', 'course':course, 'lectures': lectures, 'slides': slides, 
                         'search_text': search_text}
