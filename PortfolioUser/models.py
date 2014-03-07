@@ -4,7 +4,7 @@ from urllib.parse import urlparse
 import urllib.request
 from django.db import models
 from django.contrib.auth.models import User, UserManager
-from AmanamanProjekt.settings import STATIC_ROOT
+from AmanamanProjekt.settings import STATIC_ROOT, MEDIA_ROOT
 from Elaboration.models import Elaboration
 from django.core.files import File
 
