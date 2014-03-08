@@ -1,13 +1,19 @@
+from django.views.decorators.http import require_GET
 import json
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login as django_login, logout
 from django.template import RequestContext
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, redirect
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from PortfolioUser.models import PortfolioUser
+from datetime import datetime
 
 from Course.models import Course
+
+import hashlib
+import hmac
+from local_settings import SSO_SHARED_SECRET, SSO_URI
 
 
 @csrf_exempt
@@ -50,6 +56,42 @@ def login(request):
         return render_to_response('login.html', {'next': request.GET['next']}, context_instance=RequestContext(request))
     else:
         return render_to_response('login.html', {'next': '/'}, context_instance=RequestContext(request))
+
+
+def sso_auth_redirect():
+    return redirect(SSO_URI)
+
+
+@require_GET
+def sso_auth_callback(request):
+    values = request.GET
+    if sso_authenticate(values):
+        # TODO set up session here
+        pass
+
+
+def sso_authenticate(params):
+    if 'sKey' in params.keys():
+        hmac_received = params['sKey']
+    elif 'logout' in params.keys():
+        hmac_received = params['logout']
+
+    values = ''
+    for key in ['oid', 'mn', 'firstName', 'lastName', 'mail']:
+        values += params[key]
+
+    shared_secret = SSO_SHARED_SECRET.encode(encoding='latin1')
+    now = datetime.utcnow() - datetime.datetime(1970, 1, 1).total_seconds()
+    for offset in [0, -1, 1, -2, 2]:
+        values_string = values + str(now + offset)
+        values_string = values_string.encode(encoding='latin1')
+        hmac_calced = hmac.new(shared_secret, values_string, hashlib.sha1).hexdigest()
+
+        if hmac_calced == hmac_received:
+            return True
+
+    return False
+
 
 @login_required
 @ensure_csrf_cookie
