@@ -259,3 +259,8 @@ input[type=submit] {
 .fig {
 	margin-top:2px;
 }
+
+.explanation {
+	color:darkgray;
+	margin-left:10px;
+}
