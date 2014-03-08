@@ -50,7 +50,6 @@ class PortfolioUser(User):
         if not os.path.isdir(self.upload_path):
             os.makedirs(self.upload_path)
         try:
-            print("\a")
             gravatarurl = "http://www.gravatar.com/avatar/" + hashlib.md5(
                 self.email.lower().encode("utf-8")).hexdigest() + "?"
             gravatarurl += urllib.parse.urlencode({'d': 'monsterid', 's': str(192)})
