@@ -63,6 +63,9 @@
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+#button_post_reply,#button_cancel_reply,#id_visibility,#edit_save,#edit_cancel {
+	cursor:pointer;
+}
 
 .comment_form > button,#edit_save,#edit_cancel, .add_reply_form > button {
 	float:right;

@@ -2,16 +2,12 @@ $(review_loaded);
 
 function review_loaded() {
     tinymce.init({
-        // selector: "textarea#editor",
         mode : "exact",
         elements :"editor_review",
         menubar: false,
         statusbar: false,
 		toolbar: false,
 		height: 300,
-//	    plugins: "autoresize",
-//		autoresize_min_height: 100,
-//		autoresize_max_height: 800,
         readonly: 1
     });
 
@@ -34,14 +30,20 @@ function submit_clicked(event) {
     data['challenge_id'] = challenge_id;
     data['review_id'] = review_id;
     data['answers'] = [];
+    var missing_answer = false;
     $(".question_container").each(function (index) {
         var answer_object = $(this).find('.answer');
         var answer = null;
         if (answer_object.hasClass('boolean_answer')) {
-            answer = answer_object.find('input').first().is(':checked');
+            answer = answer_object.find('input:checked')
+            if (answer.length === 0) {
+                missing_answer = true;
+            }
+            answer = answer.val();
         } else {
             answer = answer_object.find('#text_answer').val();
         }
+
         var question = answer_object.parent().find('.question').first();
         var question_id = question.attr('id');
         if (question_id) {
@@ -51,10 +53,18 @@ function submit_clicked(event) {
             });
         }
     });
-    data['appraisal'] = $('input[name=appraisal]:checked').val();
 
+    var appraisal = $('input[name=appraisal]:checked');
+    if (appraisal.length === 0) {
+        missing_answer = true
+    }
+
+    if (missing_answer) {
+        alert("please fill out all answers");
+        return;
+    }
+    data['appraisal'] = appraisal.val();
     ajax_setup()
-    console.log(data);
     var args = {
         type: "POST",
         url: "/challenges/challenge_review/review_answer/",
