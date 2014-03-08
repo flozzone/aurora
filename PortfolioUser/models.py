@@ -4,7 +4,7 @@ from urllib.parse import urlparse
 import urllib.request
 from django.db import models
 from django.contrib.auth.models import User, UserManager
-from AmanamanProjekt.settings import STATIC_ROOT
+from AmanamanProjekt.settings import STATIC_ROOT, MEDIA_ROOT
 from Elaboration.models import Elaboration
 from django.core.files import File
 
@@ -47,8 +47,8 @@ class PortfolioUser(User):
 
     def get_gravatar(self):
         filename = "avatar_" + str(self.id)
-        if not os.path.isdir(self.upload_path):
-            os.makedirs(self.upload_path)
+        if not os.path.isdir(os.path.join(MEDIA_ROOT,self.upload_path)):
+            os.makedirs(os.path.join(MEDIA_ROOT,self.upload_path))
         try:
             gravatarurl = "http://www.gravatar.com/avatar/" + hashlib.md5(
                 self.email.lower().encode("utf-8")).hexdigest() + "?"

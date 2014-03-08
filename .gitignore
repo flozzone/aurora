@@ -11,3 +11,4 @@ vagrant_ansible_inventory_default
 Slides/settings.py
 fixgit.sh
 .jshintrc
+reload
