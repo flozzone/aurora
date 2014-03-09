@@ -66,7 +66,7 @@ def create_context_stack(request):
 
 
 @login_required()
-def challenges_page(request):
+def challenges(request):
     data = {}
     user = RequestContext(request)['user']
     course = RequestContext(request)['last_selected_course']
@@ -78,7 +78,7 @@ def challenges_page(request):
             'status': stack.get_status_text(user),
             'points': stack.get_points(user)
         })
-    return render_to_response('challenges_page.html', data, context_instance=RequestContext(request))
+    return render_to_response('challenges.html', data, context_instance=RequestContext(request))
 
 
 def create_context_challenge(request):
@@ -105,15 +105,6 @@ def challenge(request):
     if 'elaboration' in data:
         data = create_context_view_review(request, data)
     return render_to_response('challenge.html', data, context_instance=RequestContext(request))
-
-
-@login_required()
-def challenge_page(request):
-    data = create_context_challenge(request)
-    if 'elaboration' in data:
-        data = create_context_view_review(request, data)
-    return render_to_response('challenge_page.html', data, context_instance=RequestContext(request))
-
 
 def create_context_view_review(request, data):
     if 'id' in request.GET:
