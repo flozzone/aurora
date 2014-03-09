@@ -19,6 +19,8 @@ def create_context_review(request):
     if 'id' in request.GET:
         user = RequestContext(request)['user']
         challenge = Challenge.objects.get(pk=request.GET.get('id'))
+        if challenge.get_status(user) == Challenge.BLOCKED_BAD_REVIEW:
+            raise Http404
         if not challenge.is_enabled_for_user(user):
             raise Http404
         if challenge.has_enough_user_reviews(user):
