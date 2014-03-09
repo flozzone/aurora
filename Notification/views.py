@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
@@ -14,7 +14,13 @@ def notifications(request):
     course = RequestContext(request)['last_selected_course']
 
     if 'id' in request.GET:
-        notification = Notification.objects.get(pk=request.GET['id'])
+        try:
+            notification = Notification.objects.get(pk=request.GET['id'])
+            if not notification.user == user:
+                raise Http404
+        except:
+            raise Http404
+
         notification.read = True
         notification.save()
 
@@ -33,6 +39,8 @@ def read(request):
     course = RequestContext(request)['last_selected_course']
     notifications = Notification.objects.filter(user=user, course=course)
     for notification in notifications:
+        if not notification.user == user:
+            raise Http404
         notification.read = True
         notification.save()
     return HttpResponse()
