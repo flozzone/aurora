@@ -21,13 +21,6 @@ def stack(request):
     data = create_context_stack(request)
     return render_to_response('stack.html', data, context_instance=RequestContext(request))
 
-
-@login_required()
-def stack_page(request):
-    data = create_context_stack(request)
-    return render_to_response('stack_page.html', data, context_instance=RequestContext(request))
-
-
 def create_context_stack(request):
     data = {}
     if 'id' in request.GET:
