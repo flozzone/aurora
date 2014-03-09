@@ -9,6 +9,11 @@ from PortfolioUser.models import PortfolioUser
 from Stack.models import Stack, StackChallengeRelation
 from Evaluation.models import Evaluation
 from FileUpload.models import UploadFile
+from Review.models import Review
+from Elaboration.models import Elaboration
+from Challenge.models import Challenge
+from ReviewQuestion.models import ReviewQuestion
+from ReviewAnswer.models import ReviewAnswer
 
 
 @login_required()
@@ -104,10 +109,37 @@ def create_context_challenge(request):
 @login_required()
 def challenge(request):
     data = create_context_challenge(request)
+    if 'elaboration' in data:
+        data = create_context_view_review(request, data)
     return render_to_response('challenge.html', data, context_instance=RequestContext(request))
 
 
 @login_required()
 def challenge_page(request):
     data = create_context_challenge(request)
+    if 'elaboration' in data:
+        data = create_context_view_review(request, data)
     return render_to_response('challenge_page.html', data, context_instance=RequestContext(request))
+
+
+def create_context_view_review(request, data):
+    if 'id' in request.GET:
+        user = RequestContext(request)['user']
+        challenge = Challenge.objects.get(pk=request.GET.get('id'))
+        elaboration = Elaboration.objects.filter(challenge=challenge, user=user)[0]
+        reviews = Review.objects.filter(elaboration=elaboration).order_by("appraisal")
+        data['reviews'] = []
+        for review in reviews:
+            review_data = {}
+            review_data['review_id'] = review.id
+            review_data['review'] = review
+            review_data['appraisal'] = review.get_appraisal_display()
+            review_data['questions'] = []
+            for review_question in ReviewQuestion.objects.filter(challenge=challenge).order_by("order"):
+                question_data = {}
+                review_answer = ReviewAnswer.objects.filter(review=review, review_question=review_question)[0]
+                question_data['question'] = review_question.text
+                question_data['answer'] = review_answer.text
+                review_data['questions'].append(question_data)
+            data['reviews'].append(review_data)
+    return data
