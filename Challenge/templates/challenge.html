@@ -1,108 +1,128 @@
 {% load comments %}
 {% load render_uploads %}
+{% load render_review_answers %}
 
 {% block additional_headers %}
-  <script type="text/javascript" src="{{ STATIC_URL }}tinymce/tinymce.min.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}tinymce/jquery.tinymce.min.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/challenge.js"></script>
-  {% if not elaboration.is_submitted %}
-  <script type="text/javascript" src="{{ STATIC_URL }}dropzone/dropzone.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/file_upload.js"></script>
-  <link rel="stylesheet" href="{{ STATIC_URL }}dropzone/css/dropzone.css" type="text/css" media="screen"/>
-  {% endif %}
-  <script type="text/javascript" src="{{ STATIC_URL }}lightbox/js/lightbox-2.6.min.js"></script>
-  <link rel="stylesheet" href="{{ STATIC_URL }}css/challenge.css" type="text/css" media="screen"/>
-  <link rel="stylesheet" href="{{ STATIC_URL }}lightbox/css/lightbox.css" type="text/css" media="screen"/>
+<script type="text/javascript" src="{{ STATIC_URL }}tinymce/tinymce.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}tinymce/jquery.tinymce.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/challenge.js"></script>
+{% if not elaboration.is_submitted %}
+<script type="text/javascript" src="{{ STATIC_URL }}dropzone/dropzone.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/file_upload.js"></script>
+{% endif %}
+<link rel="stylesheet" href="{{ STATIC_URL }}css/review.css" type="text/css" media="screen"/>
+<script type="text/javascript" src="{{ STATIC_URL }}lightbox/js/lightbox-2.6.min.js"></script>
+<link rel="stylesheet" href="{{ STATIC_URL }}css/challenge.css" type="text/css" media="screen"/>
+<link rel="stylesheet" href="{{ STATIC_URL }}lightbox/css/lightbox.css" type="text/css" media="screen"/>
 {% endblock %}
 
 <div id="{{ challenge.id }}" class="challenge" stack="{{ challenge.get_stack.id }}">
-
-   <div class="challenge_title" {% if elaboration.is_submitted %}onclick="$('.challenge_description').toggle('fast');" {% endif %}>
-	   {% if elaboration.is_submitted %}<i class="fa fa-toggle-down"></i>{% endif %}
-    {{ challenge.title }}
+  <div class="challenge_title" {% if elaboration.is_submitted %}onclick="$('.challenge_description').toggle('fast');"{% endif %}>
+{% if elaboration.is_submitted %}
+  <i class="fa fa-toggle-down"></i>
+{% endif %}
+  {{ challenge.title }}
   </div>
-
   <div class="challenge_description{% if elaboration.is_submitted %} nothere{% endif %}" >
     {{ challenge.description|safe|urlize }}
-
-  <div class="qa_section">
-    <div class="comments">
-      <span><b {% if not elaboration.is_submitted %}onclick="$('#qa').toggle('fast');"><i class="fa fa-toggle-down"></i{% endif %}> 
-		  Task Q+A Section</b> - {% comments_count for challenge %} comments so far
-	  </span>
-
-      <div id="qa" class="challenge_comments">If you have questions about the description of this task, post
-	  them here. The course organizers will answer as soon as possible.
-        {% render_comment_list for challenge %}
+    <div class="qa_section">
+      <div class="comments">
+        <span><b {% if not elaboration.is_submitted %}onclick="$('#qa').toggle('fast');"><i class="fa fa-toggle-down"></i{% endif %}>
+		      Task Q+A Section</b> - {% comments_count for challenge %} comments so far
+	      </span>
+        <div id="qa" class="challenge_comments">If you have questions about the description of this task, post
+	        them here. The course organizers will answer as soon as possible.
+{% render_comment_list for challenge %}
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-  {% if user.is_staff %}
-	  [you are admin. you cannot accept tasks]
-  <!-- admin corner -->
-  <!-- xxxxxxxxxxxx -->  
-  {% else %}
-
-  {% if not elaboration.is_submitted %}
-    {% if not accepted %}
-      <div id="Caccept" class="button XL"
-           onclick="$('.elaboration_block').toggle('fast');$('#Caccept').toggle('fast');$('#qa').toggle('fast');">
-        start this task
-      </div>
-    {% endif %}
-
-    <div class="elaboration_block{% if not accepted %} unstarted{% endif %}">
-      {% if challenge.accepted_files %}
-        <div class="file_upload" accepted_files="{{ challenge.accepted_files }}">
-          <form action="/fileupload"
-                class="dropzone dz-clickable{% if elaboration.is_submitted %} is_submitted{% endif %}"
-                id="dropzone">
-            <input id="elaboration_id" type="hidden" name="elaboration_id" value="{{ elaboration.id }}"/>
-            {% csrf_token %}
-          </form>
-	  	  <div style="font-size:80%">Note: use »Fig.X« in your text to reference to uploaded images.</div>
-        </div>
-      {% endif %}
-
-      <form method="post">
-        <textarea id="editor">{{ elaboration.elaboration_text }}</textarea>
-      </form>
-      <button class="submit XL R">Enter work for Evaluation</button>
-      <div class="submission_text" hidden>
-        <div>
-          I certify that the work presented here is, to the best of my knowledge and belief, original and the result of
-          my
-          own investigations and creation, except as acknowledged, and has not been submitted, either in part or whole,
-          for
-          a degree at this or any other University.
-        </div>
-        <div>
-          <button class="real_submit XL R" id="{{ challenge.id }}">Submit work</button>
-        </div>
-      </div>
-    </div>
-  {% else %}
-    {% if challenge.accepted_files %}
-      {% render_uploads elaboration %}
-    {% endif %}
-{#    <div class="elaboration_text">{{ elaboration.elaboration_text|safe }}</div> <!-- TODO: this has to be secure -->#}
-    <textarea id="editor_challenge">{{ elaboration.elaboration_text|safe }}</textarea>
-    {% if evaluation %}
-    <div class="comments">
-      <div class="evaluation_text">Evaluation text: {{ evaluation.evaluation_text }}</div>
-    </div>
-    {% endif %}
-    <div class="comment_section">
-      <div class="comments">
-        <div class="elaboration_comments">
-          <b>Discuss with LVA team</b> - {% comments_count for elaboration %} comments so far
-          {% render_additional_comment_list for elaboration %}
-        </div>
-      </div>
-    </div>
-    {% endif %}
+{% if user.is_staff %}
+  [you are admin. you cannot accept tasks]
+{% else %}
+{% if not elaboration.is_submitted %}
+{% if not accepted %}
+  <div id="Caccept" class="button XL"
+    onclick="$('.elaboration_block').toggle('fast');$('#Caccept').toggle('fast');$('#qa').toggle('fast');">
+    start this task
+  </div>
 {% endif %}
-  
+  <div class="elaboration_block{% if not accepted %} unstarted{% endif %}">
+{% if challenge.accepted_files %}
+  <div class="file_upload" accepted_files="{{ challenge.accepted_files }}">
+    <form action="/fileupload"
+      class="dropzone dz-clickable{% if elaboration.is_submitted %} is_submitted{% endif %}"
+      id="dropzone">
+      <input id="elaboration_id" type="hidden" name="elaboration_id" value="{{ elaboration.id }}"/>
+{% csrf_token %}
+    </form>
+    <div style="font-size:80%">Note: use »Fig.X« in your text to reference to uploaded images.</div>
+  </div>
+{% endif %}
+  <form method="post">
+    <textarea id="editor">{{ elaboration.elaboration_text }}</textarea>
+  </form>
+  <button class="submit XL R">Enter work for Evaluation</button>
+    <div class="submission_text" hidden>
+      <div>
+        I certify that the work presented here is, to the best of my knowledge and belief, original and the result of
+        my
+        own investigations and creation, except as acknowledged, and has not been submitted, either in part or whole,
+        for
+        a degree at this or any other University.
+      </div>
+      <div>
+        <button class="real_submit XL R" id="{{ challenge.id }}">Submit work</button>
+      </div>
+    </div>
+  </div>
+{% else %}
+{% if challenge.accepted_files %}
+{% render_uploads elaboration %}
+{% endif %}
+  <textarea id="editor_challenge">{{ elaboration.elaboration_text|safe }}</textarea>
+{% if evaluation %}
+  <div class="comments">
+    <div class="evaluation_text">Evaluation text: {{ evaluation.evaluation_text }}</div>
+  </div>
+{% endif %}
+  <div class="comment_section">
+    <div class="comments">
+      <div class="elaboration_comments">
+        <b>Discuss with LVA team</b> - {% comments_count for elaboration %} comments so far
+{% render_additional_comment_list for elaboration %}
+      </div>
+    </div>
+  </div>
+  <div class="all_reviews">
+{% comments_boilerplate %}
+{% if reviews %}
+    <div class="title">You received the following reviews for your work</div>
+    <div>&nbsp;</div>
+{% for review_data in reviews %}
+    <div class="view_review">
+{% render_review_answers review_data.review_id %}
+      <div class="appraisal Verdict_{{ review_data.appraisal }}"><i class="fa fa-arrow-right"></i> Final verdict: <b>
+{% if review_data.appraisal == "Awesome" %} Great work
+{% elif review_data.appraisal == "Success" %} Good Work
+{% elif review_data.appraisal == "Fail" %} Barely acceptable
+{% elif review_data.appraisal == "Not even trying" %} Unacceptable
+{% endif %}
+        </b>
+      </div>
+    </div>
+    <div class="comment_section">
+      <b>Comments</b><br>
+      If you find this review unacceptable, either if you disagree with what it says about your work, or if the review is banal or meaningless, you can voice your displeasure by posting a comment in this section. <br><br>
+      <div class="comments">
+{% render_multi_comment_list for review_data.review %}
+      </div>
+    </div>
+    <div>&nbsp;</div>
+{% endfor %}
+  </div>
+{% endif %}
+{% endif %}
+{% endif %}
 </div>

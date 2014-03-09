@@ -12,6 +12,7 @@ urlpatterns = patterns('',
                        url(r'^course/$', 'PortfolioUser.views.course'),
                        url(r'^profile/$', 'PortfolioUser.views.profile'),
                        url(r'^profile/save/$', 'PortfolioUser.views.profile_save'),
+                       url(r'^secret_test/$', 'PortfolioUser.views.dat_secret_test'),
 )
 
 

@@ -114,4 +114,15 @@ function send_submit() {
     $.get(url, function (data) {
         window.location.href = "/challenges/stack?id=" + stack_id;
     });
+
+//    var submitData = { id: challenge_id };
+//    $.post('./submit', function (data) {
+//        window.location.href = "/challenges/stack?id=" + stack_id;
+//    });
 }
+
+//var UTIL = {
+//    getCsfr: function() {
+//        filter(getCookie('filtercookie.'+$('#the_username').data('username')));
+//    }
+//}

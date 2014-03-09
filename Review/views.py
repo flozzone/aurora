@@ -13,6 +13,7 @@ from ReviewQuestion.models import ReviewQuestion
 from ReviewAnswer.models import ReviewAnswer
 from Notification.models import Notification
 
+
 def create_context_review(request):
     data = {}
     if 'id' in request.GET:
@@ -56,8 +57,6 @@ def review_answer(request):
     if request.POST:
         data = request.body.decode(encoding='UTF-8')
         data = json.loads(data)
-        import pprint
-        pprint.pprint(data)
         review_id = data['review_id']
         answers = data['answers']
         review = Review.objects.get(pk=review_id)
@@ -90,38 +89,3 @@ def review_answer(request):
     review.submission_time = datetime.now()
     review.save()
     return HttpResponse()
-
-def create_context_view_review(request):
-    data = {}
-    if 'id' in request.GET:
-        user = RequestContext(request)['user']
-        challenge = Challenge.objects.get(pk=request.GET.get('id'))
-        elaboration = Elaboration.objects.filter(challenge=challenge, user=user)[0]
-        reviews = Review.objects.filter(elaboration=elaboration).order_by("appraisal")
-        data['reviews'] = []
-        for review in reviews:
-            review_data = {}
-            review_data['review_id'] = review.id
-            review_data['review'] = review
-            review_data['appraisal'] = review.get_appraisal_display()
-            review_data['questions'] = []
-            for review_question in ReviewQuestion.objects.filter(challenge=challenge).order_by("order"):
-                question_data = {}
-                review_answer = ReviewAnswer.objects.filter(review=review, review_question=review_question)[0]
-                question_data['question'] = review_question.text
-                question_data['answer'] = review_answer.text
-                review_data['questions'].append(question_data)
-            data['reviews'].append(review_data)
-    return data
-
-
-@login_required()
-def received_challenge_reviews(request):
-    data = create_context_view_review(request)
-    return render(request, 'view_review.html', data)
-
-
-@login_required()
-def received_challenge_reviews_page(request):
-    data = create_context_view_review(request)
-    return render(request, 'view_review_page.html', data)
