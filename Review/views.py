@@ -20,27 +20,28 @@ def create_context_review(request):
         user = RequestContext(request)['user']
         challenge = Challenge.objects.get(pk=request.GET.get('id'))
         if not challenge.is_enabled_for_user(user):
-            return Http404
+            raise Http404
+        if challenge.has_enough_user_reviews(user):
+            raise Http404
         review = Review.get_open_review(challenge, user)
         if not review:
-            if challenge.has_enough_user_reviews(user):
-                return Http404
             review_candidate = Elaboration.get_review_candidate(challenge, user)
             if review_candidate:
                 review = Review(elaboration=review_candidate, reviewer=user)
                 review.save()
             else:
-                return Http404
+                raise Http404
         data['review'] = review
         data['stack_id'] = challenge.get_stack().id
         review_questions = ReviewQuestion.objects.filter(challenge=challenge).order_by("order")
         data['questions'] = review_questions
     return data
 
-
 @login_required()
 def review(request):
     data = create_context_review(request)
+    import pprint
+    pprint.pprint(data)
     return render_to_response('review.html', data, context_instance=RequestContext(request))
 
 
