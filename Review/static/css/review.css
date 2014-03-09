@@ -191,6 +191,13 @@ input[type=submit] {
 	border-right:1px solid white;
 }
 
+.submitButton {
+ 	color:white;
+ 	background-color:rgb(58,201,88);
+ 	position:relative;
+ 	left:90%;
+ }
+
 .explanation {
 	color:darkgray;
 	margin-left:10px;
