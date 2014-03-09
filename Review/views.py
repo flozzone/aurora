@@ -45,12 +45,6 @@ def review(request):
 
 
 @login_required()
-def review_page(request):
-    data = create_context_review(request)
-    return render_to_response('review_page.html', data, context_instance=RequestContext(request))
-
-
-@login_required()
 def review_answer(request):
     user = RequestContext(request)['user']
     course = RequestContext(request)['last_selected_course']
