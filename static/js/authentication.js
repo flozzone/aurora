@@ -14,10 +14,10 @@ function notifications_refresh() {
         $.ajax({
             url: '/notifications/refresh',
             success: function (data) {
-                $('#unread_notifications').html(data);
-            },
-            complete: function () {
-                setTimeout(refresh_worker, 60000);
+                if ($.isNumeric(data)) {
+                    $('#unread_notifications').html(data);
+                    setTimeout(refresh_worker, 60000);
+                }
             }
         });
     })();
