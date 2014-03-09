@@ -10,16 +10,25 @@ from tempfile import NamedTemporaryFile
 from PIL import ImageFile, Image, ImageOps
 from Elaboration.models import Elaboration
 from FileUpload.models import UploadFile
+from django.http import Http404
 
 @login_required()
 def file_upload(request):
     user = RequestContext(request)['user']
     if 'elaboration_id' in request.POST:
         elaboration_id = request.POST.get('elaboration_id')
+        try:
+            elaboration = Elaboration.objects.get(pk=elaboration_id)
+            if not elaboration.user == user:
+                raise Http404
+        except:
+            raise Http404
         upload_file = UploadFile(user=user, elaboration_id=elaboration_id, upload_file=request.FILES['file'])
         upload_file.save()
     if 'user_id' in request.POST:
         request.FILES['file'].name = 'avatar_' + str(user.id)
+        if not request.POST.get('user_id') == str(user.id):
+            raise Http404
         parser = ImageFile.Parser()
         while 1:
             chunk = request.FILES['file'].read(1024)
@@ -48,14 +57,22 @@ def file_remove(request):
         file = UploadFile.objects.get(pk=id)
         if file.user.id == user.id:
             file.delete()
+        else:
+            raise Http404
     return HttpResponse("OK")
 
 
 @login_required()
 def all_files(request):
+    user = RequestContext(request)['user']
     if 'elaboration_id' in request.GET:
         elaboration_id = request.GET.get('elaboration_id')
-        elaboration = Elaboration.objects.get(id=elaboration_id)
+        try:
+            elaboration = Elaboration.objects.get(pk=elaboration_id)
+            if not elaboration.user == user:
+                raise Http404
+        except:
+            raise Http404
         data = []
         for upload_file in UploadFile.objects.filter(user=elaboration.user, elaboration__id=elaboration_id):
             data.append({
