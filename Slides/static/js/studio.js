@@ -1,3 +1,4 @@
+
 var scrollEnded = $.debounce(500, false, function () {
     setTimeout(checkSlidesInView, 1000);
 });
