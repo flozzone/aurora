@@ -19,7 +19,7 @@
     border-bottom: 1px solid #eee;
 	padding:2px;
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-	font-size:13px;
+	font-size:14px;
 	line-height:17px;
 	padding-top:4px;
 	height:60px;
@@ -93,6 +93,34 @@
 	width:95%;
 }
 
+.author_detail {
+	clear:both;
+	font-size:12px;
+	color:#333;
+	padding:6px;
+	height:88px;
+	box-shadow:0 2px 4px rgba(0,0,0,0.3) inset;
+	background-color:#ddd;
+	cursor:pointer;
+	position:relative;
+	top:-1px;
+}
+
+.hidden_detail {
+	display:none;
+}
+
+.author_detail .nick {
+	font-weight:bold;
+}
+.author_detail img {
+	height:96px;
+	position:absolute;
+	top:2px;
+	right:2px;
+	box-shadow:0 2px 4px rgba(0,0,0,0.3) inset;	
+}
+
 .response_body, .comment_body {
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
@@ -109,6 +137,7 @@
 	height:32px;
 	float:left;
 	margin-right:4px;
+	cursor:pointer;
 }
 
 
@@ -165,7 +194,7 @@
 }
 
 .comment_top, .response_top {
-    background-color: #f8f8f8;
+    background-color: #eee;
 	height:17px;
 	width:100%;
 	vertical-align:bottom;
@@ -302,6 +331,10 @@
 
 .staff_author > .comment_body, .staff_author > .response_body {
     background-color: rgb(245,247,252);
+}
+
+.comment_body, .response_body {
+	background: #f8f8f8;
 }
 
 /* self-yellow */
