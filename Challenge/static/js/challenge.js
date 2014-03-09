@@ -78,9 +78,7 @@ function elaboration_save(challenge_id, submit) {
             alert('error elaboration autosave');
         },
         success: function () {
-            console.log("saved");
             if (submit) {
-                console.log("submit");
                 send_submit();
             }
         }
