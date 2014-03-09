@@ -38,7 +38,6 @@ function file_upload_loaded() {
                     if (check_file.status === "error") {
                         errors++;
                     }
-                    console.log(dropzone_instance.files.length - errors);
                 });
                 $(file.previewElement).append('<div class="fig">Fig: ' + (dropzone_instance.files.indexOf(file)+1) + '</div>');
             });

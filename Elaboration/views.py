@@ -9,6 +9,7 @@ from Challenge.models import Challenge
 from Elaboration.models import Elaboration
 from PortfolioUser.models import PortfolioUser
 from Course.models import Course
+from django.http import Http404
 
 @csrf_exempt
 def save_elaboration(request):
@@ -16,6 +17,8 @@ def save_elaboration(request):
     elaboration_text = request.POST['elaboration_text']
     challenge = Challenge.objects.get(id=challenge_id)
     user = RequestContext(request)['user']
+    if not challenge.is_enabled_for_user(user):
+        raise Http404
 
     # check if elaboration exists
     if Elaboration.objects.filter(challenge=challenge, user=user).exists():
@@ -33,6 +36,8 @@ def create_elaboration(request):
     challenge_id = request.GET['id']
     challenge = Challenge.objects.get(id=challenge_id)
     user = RequestContext(request)['user']
+    if not challenge.is_enabled_for_user(user):
+        raise Http404
     elaboration, created = Elaboration.objects.get_or_create(user=user, challenge=challenge);
     if created:
         elaboration.elaboration_text = ""
@@ -45,6 +50,8 @@ def submit_elaboration(request):
         course = RequestContext(request)['last_selected_course']
         challenge = Challenge.objects.get(id=request.GET['id'])
         user = RequestContext(request)['user']
+        if not challenge.is_enabled_for_user(user):
+            raise Http404
         elaboration, created = Elaboration.objects.get_or_create(challenge=challenge, user=user)
         elaboration.submission_time = datetime.now()
         elaboration.save()

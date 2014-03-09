@@ -14,6 +14,7 @@ from Course.models import Course
 import hashlib
 import hmac
 from django.conf import settings
+from django.http import Http404
 
 
 @require_POST
@@ -179,9 +180,13 @@ def course(request):
     user = RequestContext(request)['user']
     response_data = {}
     if request.method == 'POST':
-        course = Course.objects.filter(short_title=request.POST['short_title'])
+        try:
+            course = Course.objects.get(short_title=request.POST['short_title'])
+            if not course.user_is_enlisted(user):
+                raise Http404
+        except:
+            raise Http404
         if course:
-            course = course[0]
             user.last_selected_course = course
             user.save()
         response_data['success'] = True

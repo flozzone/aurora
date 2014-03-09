@@ -48,12 +48,9 @@ function course_change(event) {
         {
             'short_title': short_title
         }).done(function (data) {
-            console.log(data);
             if (data.success === true) {
-                console.log(data.success);
                 location.href = '/';
             } else {
-                console.log("test failed");
                 $('#password').val("")
                 $('#error_message').html(data.message);
                 $('#error').show();
@@ -84,13 +81,6 @@ function sign_in() {
     var username = $('#username').val();
     var password = $('#password').val();
     var remember = $('#checkbox_remember').prop('checked');
-    console.log(next);
-    console.log({
-        'username': username,
-        'password': password,
-        'remember': remember
-    });
-
     $.post("/signin/",
         {
             'username': username,

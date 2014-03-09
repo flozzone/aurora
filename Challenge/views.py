@@ -14,19 +14,12 @@ from Elaboration.models import Elaboration
 from Challenge.models import Challenge
 from ReviewQuestion.models import ReviewQuestion
 from ReviewAnswer.models import ReviewAnswer
-
+from django.http import Http404
 
 @login_required()
 def stack(request):
     data = create_context_stack(request)
     return render_to_response('stack.html', data, context_instance=RequestContext(request))
-
-
-@login_required()
-def stack_page(request):
-    data = create_context_stack(request)
-    return render_to_response('stack_page.html', data, context_instance=RequestContext(request))
-
 
 def create_context_stack(request):
     data = {}
@@ -73,7 +66,7 @@ def create_context_stack(request):
 
 
 @login_required()
-def challenges_page(request):
+def challenges(request):
     data = {}
     user = RequestContext(request)['user']
     course = RequestContext(request)['last_selected_course']
@@ -85,7 +78,7 @@ def challenges_page(request):
             'status': stack.get_status_text(user),
             'points': stack.get_points(user)
         })
-    return render_to_response('challenges_page.html', data, context_instance=RequestContext(request))
+    return render_to_response('challenges.html', data, context_instance=RequestContext(request))
 
 
 def create_context_challenge(request):
@@ -93,6 +86,8 @@ def create_context_challenge(request):
     if 'id' in request.GET:
         challenge = Challenge.objects.get(pk=request.GET.get('id'))
         user = RequestContext(request)['user']
+        if not challenge.is_enabled_for_user(user):
+            raise Http404
         data['challenge'] = challenge
         if Elaboration.objects.filter(challenge=challenge, user=user).exists():
             elaboration = Elaboration.objects.get(challenge=challenge, user=user)
@@ -112,15 +107,6 @@ def challenge(request):
     if 'elaboration' in data:
         data = create_context_view_review(request, data)
     return render_to_response('challenge.html', data, context_instance=RequestContext(request))
-
-
-@login_required()
-def challenge_page(request):
-    data = create_context_challenge(request)
-    if 'elaboration' in data:
-        data = create_context_view_review(request, data)
-    return render_to_response('challenge_page.html', data, context_instance=RequestContext(request))
-
 
 def create_context_view_review(request, data):
     if 'id' in request.GET:
