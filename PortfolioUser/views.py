@@ -1,4 +1,4 @@
-from django.views.decorators.http import require_GET
+from django.views.decorators.http import require_GET, require_POST
 import json
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
@@ -13,36 +13,53 @@ from Course.models import Course
 
 import hashlib
 import hmac
-from local_settings import SSO_SHARED_SECRET, SSO_URI
+from django.conf import settings
 
 
-@csrf_exempt
+@require_POST
 def signin(request):
-    if request.method == 'POST':
-        if 'username' in request.POST and 'password' in request.POST and 'remember' in request.POST:
-            if request.POST['remember'] == 'false':
-                request.session.set_expiry(0)
-            username = request.POST['username']
-            password = request.POST['password']
-            user = authenticate(username=username, password=password)
-
-            if user is not None:
-                if user.is_active:
-                    django_login(request, user)
-                    response_data = {'success': True}
-                    # fetch gravatar img on first login
-                    if not PortfolioUser.objects.all().get(id=user.id).avatar:
-                        PortfolioUser.objects.all().get(id=user.id).get_gravatar()
-                    return HttpResponse(json.dumps(response_data), content_type="application/json")
-                else:
-                    response_data = {'success': False, 'message': 'Your account has been disabled!'}
-                    return HttpResponse(json.dumps(response_data), content_type="application/json")
-            else:
-                response_data = {'success': False, 'message': 'Your username and password were incorrect.'}
-                return HttpResponse(json.dumps(response_data), content_type="application/json")
-    else:
-        response_data = {'success': False, 'message': 'only POST allowed for this url'}
+    if 'username' not in request.POST or 'password' not in request.POST or 'remember' not in request.POST:
+        response_data = {'success': False, 'message': 'Something went wrong. Please contact the LVA team'}
         return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+    if request.POST['remember'] == 'false':
+        request.session.set_expiry(0)
+
+    username = request.POST['username']
+    password = request.POST['password']
+    user = authenticate(username=username, password=password)
+
+    if user is None:
+        response_data = {'success': False, 'message': 'Your username or password was incorrect.'}
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+    if not user.is_active:
+        response_data = {'success': False, 'message': 'Your account has been disabled!'}
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+    django_login(request, user)
+
+    # fetch gravatar img on first login
+    if not PortfolioUser.objects.all().get(id=user.id).avatar:
+        PortfolioUser.objects.all().get(id=user.id).get_gravatar()
+
+    response_data = {'success': True}
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+
+# TODO delete
+def dat_secret_test(request):
+    mn = '0302857'
+    fname = 'Daniel'
+    lname = 'Domberger'
+
+    try:
+        user = PortfolioUser.objects.get(matriculation_number=mn, first_name=fname, last_name=lname)
+    except PortfolioUser.DoesNotExist:
+        user = PortfolioUser.objects.create(username=mn, matriculation_number=mn, first_name=fname, last_name=lname)
+
+    user = authenticate(username=mn)
+    django_login(request, user)
 
 
 def signout(request):
@@ -51,6 +68,7 @@ def signout(request):
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 
+@ensure_csrf_cookie
 def login(request):
     if 'next' in request.GET:
         return render_to_response('login.html', {'next': request.GET['next']}, context_instance=RequestContext(request))
@@ -59,7 +77,7 @@ def login(request):
 
 
 def sso_auth_redirect():
-    return redirect(SSO_URI)
+    return redirect(settings.SSO_URI)
 
 
 @require_GET
@@ -80,7 +98,7 @@ def sso_authenticate(params):
     for key in ['oid', 'mn', 'firstName', 'lastName', 'mail']:
         values += params[key]
 
-    shared_secret = SSO_SHARED_SECRET.encode(encoding='latin1')
+    shared_secret = settings.SSO_SHARED_SECRET.encode(encoding='latin1')
     now = datetime.utcnow() - datetime.datetime(1970, 1, 1).total_seconds()
     for offset in [0, -1, 1, -2, 2]:
         values_string = values + str(now + offset)
