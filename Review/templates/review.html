@@ -53,11 +53,12 @@
       {% endfor %}
      	<div class="question">Your final verdict </div>
   	  <div class="answer">
-      	<input type="radio" name="appraisal" value="A"> Great work <br>
-      	<input type="radio" name="appraisal" value="S"> Good work <br>
-      	<input type="radio" name="appraisal" value="F"> Barely acceptable work <br>
-      	<input type="radio" name="appraisal" value="N"> Unacceptable (*)<br><br>
+      	<input type="radio" name="appraisal" value="A"> Great work <span class="explanation">Please only use for really outstanding work.</span><br>
+      	<input type="radio" name="appraisal" value="S"> Good work <span class="explanation">The Author took the task serious and delivered acceptable work</span><br>
+      	<input type="radio" name="appraisal" value="F"> Barely acceptable work <span class="explanation">The Author did the bare minimum to fulfill the task, handed in incomplete work or missed the point.</span><br>
+      	<input type="radio" name="appraisal" value="N"> Unacceptable <span class="explanation">Please use only if the author tried to cheat (eg. plagiarize) or handed in »blind text« quality work</span><br><br>
   	  </div>
+		  
 	  <div class="suButton">
     	  <input id="submit_button" class="button XL" style="padding-left:0.5em;" type="submit" value="Submit">
   	  </div>
