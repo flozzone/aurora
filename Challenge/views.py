@@ -14,7 +14,7 @@ from Elaboration.models import Elaboration
 from Challenge.models import Challenge
 from ReviewQuestion.models import ReviewQuestion
 from ReviewAnswer.models import ReviewAnswer
-
+from django.http import Http404
 
 @login_required()
 def stack(request):
@@ -86,6 +86,8 @@ def create_context_challenge(request):
     if 'id' in request.GET:
         challenge = Challenge.objects.get(pk=request.GET.get('id'))
         user = RequestContext(request)['user']
+        if not challenge.is_enabled_for_user(user):
+            raise Http404
         data['challenge'] = challenge
         if Elaboration.objects.filter(challenge=challenge, user=user).exists():
             elaboration = Elaboration.objects.get(challenge=challenge, user=user)

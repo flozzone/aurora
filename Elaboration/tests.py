@@ -142,6 +142,43 @@ class ElaborationTest(TestCase):
         assert Elaboration.get_review_candidate(challenge1, user3) == elaboration1
         assert Elaboration.get_review_candidate(challenge1, user4) == elaboration1
 
+    def test_get_review_candidate_real_scenario(self):
+        user1 = self.users[0]
+        user2 = self.users[1]
+        dummy_user1 = self.dummy_users[0]
+        dummy_user2 = self.dummy_users[1]
+        dummy_user3 = self.dummy_users[2]
+        dummy_elaboration1 = Elaboration(challenge=self.challenge, user=dummy_user1, elaboration_text="test",
+                                         submission_time=datetime.now())
+        dummy_elaboration1.save()
+        dummy_elaboration2 = Elaboration(challenge=self.challenge, user=dummy_user2, elaboration_text="test",
+                                         submission_time=datetime.now())
+        dummy_elaboration2.save()
+        dummy_elaboration3 = Elaboration(challenge=self.challenge, user=dummy_user3, elaboration_text="test",
+                                         submission_time=datetime.now())
+        dummy_elaboration3.save()
+        # first user writes an elaboration
+        elaboration1 = Elaboration(challenge=self.challenge, user=user1, elaboration_text="test",
+                                   submission_time=datetime.now())
+        elaboration1.save()
+        assert Elaboration.get_review_candidate(self.challenge, user1) == dummy_elaboration1
+        Review(elaboration=dummy_elaboration1, reviewer=user1, appraisal='S', submission_time=datetime.now()).save()
+        assert Elaboration.get_review_candidate(self.challenge, user1) == dummy_elaboration2
+        Review(elaboration=dummy_elaboration2, reviewer=user1, appraisal='S', submission_time=datetime.now()).save()
+        assert Elaboration.get_review_candidate(self.challenge, user1) == dummy_elaboration3
+        Review(elaboration=dummy_elaboration3, reviewer=user1, appraisal='S', submission_time=datetime.now()).save()
+        # second user writes an elaboration
+        elaboration2 = Elaboration(challenge=self.challenge, user=user2, elaboration_text="test",
+                                   submission_time=datetime.now())
+        elaboration2.save()
+        assert Elaboration.get_review_candidate(self.challenge, user2) == elaboration1
+        Review(elaboration=elaboration1, reviewer=user2, appraisal='S', submission_time=datetime.now()).save()
+        assert Elaboration.get_review_candidate(self.challenge, user2) == dummy_elaboration1
+        Review(elaboration=dummy_elaboration1, reviewer=user2, appraisal='S', submission_time=datetime.now()).save()
+        assert Elaboration.get_review_candidate(self.challenge, user2) == dummy_elaboration2
+        Review(elaboration=dummy_elaboration2, reviewer=user2, appraisal='S', submission_time=datetime.now()).save()
+
+
     def test_get_review_candidate_non_blocked_users(self):
         challenge1 = self.challenge
         self.create_challenge()

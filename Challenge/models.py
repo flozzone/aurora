@@ -1,10 +1,10 @@
-from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from Comments.models import Comment
 from Stack.models import StackChallengeRelation
 from ReviewQuestion.models import ReviewQuestion
 from Review.models import Review
 from Elaboration.models import Elaboration
+from Course.models import CourseChallengeRelation
 import os
 
 def challenge_image_path(instance, filename):
@@ -130,6 +130,12 @@ class Challenge(models.Model):
         }
 
     def is_enabled_for_user(self, user):
+        # if user is not enlisted for the course the challenge is in,
+        # the challenge can not be enabled for the user
+        course = CourseChallengeRelation.objects.filter(challenge=self)[0].course
+        if not course.user_is_enlisted(user):
+            return False
+
         # first challenge is always enabled
         if self.is_first_challenge():
             return True

@@ -1,5 +1,4 @@
 from django.db import models
-from Challenge.models import Challenge
 
 
 class Course(models.Model):
@@ -17,6 +16,13 @@ class Course(models.Model):
         for ccr in ccrs:
             challenges.append(ccr.challenge)
         return challenges
+
+    def user_is_enlisted(self, user):
+        try:
+            CourseUserRelation.objects.get(user=user, course=self)
+            return True
+        except CourseUserRelation.DoesNotExist:
+            return False
 
 
 class CourseUserRelation(models.Model):

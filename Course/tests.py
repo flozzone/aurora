@@ -66,6 +66,30 @@ class CourseTest(TestCase):
         CourseChallengeRelation(course=self.course, challenge=self.challenge).save()
         StackChallengeRelation(stack=self.stack, challenge=self.challenge).save()
 
+    def test_user_is_enlisted(self):
+        # created users should be enlisted in to the course
+        assert self.course.user_is_enlisted(self.users[0])
+        # created users should not be enlisted in any course yet
+        user = self.create_test_user("test_user")
+        course1 = self.course
+        course2 = Course(
+            title='test_title2',
+            short_title='test_short_title2',
+            description='test_description2',
+            course_number='test_course_number2',
+        )
+        course2.save()
+        assert not course1.user_is_enlisted(user)
+        assert not course2.user_is_enlisted(user)
+        # user should be enlisted in course1
+        CourseUserRelation(course=course1, user=user).save()
+        assert course1.user_is_enlisted(user)
+        assert not course2.user_is_enlisted(user)
+        # user should be enlisted in both courses
+        CourseUserRelation(course=course2, user=user).save()
+        assert course1.user_is_enlisted(user)
+        assert course2.user_is_enlisted(user)
+
     def test_get_course_challenges(self):
         challenge1 = self.challenge
         assert len(self.course.get_course_challenges()) == 1
