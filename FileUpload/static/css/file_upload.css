@@ -1,30 +1,39 @@
-.preview {
+.uploadzone {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    min-height: 10px;
+    background-color: rgb(255, 255, 255);
+    box-shadow: inset 0px 2px 5px  rgba(0,0,0,0.8), inset 0px 70px 70px -70px rgba(0,0,0,0.2), inset 0px -70px 70px -70px rgba(0,0,0,0.1);
+}
+
+.uploadzone .upload_preview {
+    background: none repeat scroll 0% rgba(255, 255, 255, 0.8);
+    position: relative;
+    display: inline-block;
+    margin: 17px;
+    vertical-align: top;
+    border: 1px solid rgb(172, 172, 172);
+    box-shqdow: 1px 1px 4px rgba(0, 0, 0, 0.16);
+    font-size: 14px;
+    -moz-box-sizing: border-box;
+}
+
+.uploadzone .upload_preview .upload_details {
+    width: 100px;
+    height: 100px;
+    position: relative;
+}
+
+.uploadzone .upload_preview .upload_details img {
+    position: absolute;
     top: 0px;
     left: 0px;
     width: 100px;
     height: 100px;
 }
 
-.dropzone {
-    margin-top: 15px;
-    margin-bottom: 15px;
-    min-height: 10px;
-    background-color: #fff;
-	box-shadow: inset 0px 2px 5px  rgba(0,0,0,0.8), inset 0px 70px 70px -70px rgba(0,0,0,0.2), inset 0px -70px 70px -70px rgba(0,0,0,0.1);
-}
-
-.dropzone .dz-preview, .dropzone-previews .dz-preview {
-	margin-top:0;
-}
-
-.dropzone .dz-default.dz-message {
-	position:relative;
-	left:300px;
-	height:81px;
-}
-
-.dropzone .dz-preview .dz-details .dz-size {
-	background:rgba(0,0,0,0.7);
+.upload_size {
+	background:rgba(0,0,0,0.698);
 	color:white;
 	font-size:80%;
 	padding:2px;
@@ -32,33 +41,17 @@
 	width:auto;
 	line-height:12px;
 	position:absolute;
-	bottom:5px;
+	bottom:7px;
 	right:5px;
 	left:auto;
 	text-align:center;
 	border-radius:3px;
 }
 
-.dropzone a.dz-remove, .dropzone-previews a.dz-remove {
-	text-transform:uppercase;
-	border:0;
-	background:0;
-	padding:0;
-	margin:0;
-	font-size:80%;
-	color:rgb(58,201,88);
-}
-
-.dropzone a.dz-remove, .dropzone-previews a.dz-remove {
-	margin-top:5px;
-	float:right;
-}
-
-.dropzone .dz-preview .dz-details, .dropzone-previews .dz-preview .dz-details {
-	margin-bottom:0;
-}
-
-.dz-filename {
-	visibility:hidden;
-	display:none;
+.upload_title {
+    -mow-box-sizing: border:box;
+    margin: 0px;
+    padding: 6px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
 }
