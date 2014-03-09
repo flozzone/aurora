@@ -84,7 +84,10 @@ def challenges(request):
 def create_context_challenge(request):
     data = {}
     if 'id' in request.GET:
-        challenge = Challenge.objects.get(pk=request.GET.get('id'))
+        try:
+            challenge = Challenge.objects.get(pk=request.GET.get('id'))
+        except:
+            raise Http404
         user = RequestContext(request)['user']
         if not challenge.is_enabled_for_user(user):
             raise Http404
