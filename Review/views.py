@@ -4,7 +4,7 @@ from datetime import datetime
 from django.shortcuts import render, render_to_response
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 
 from Review.models import Review
 from Elaboration.models import Elaboration
@@ -19,18 +19,18 @@ def create_context_review(request):
     if 'id' in request.GET:
         user = RequestContext(request)['user']
         challenge = Challenge.objects.get(pk=request.GET.get('id'))
-        if challenge.get_stack().is_blocked(user):
-            return None
+        if not challenge.is_enabled_for_user(user):
+            return Http404
         review = Review.get_open_review(challenge, user)
         if not review:
             if challenge.has_enough_user_reviews(user):
-                return None
+                return Http404
             review_candidate = Elaboration.get_review_candidate(challenge, user)
             if review_candidate:
                 review = Review(elaboration=review_candidate, reviewer=user)
                 review.save()
             else:
-                return None
+                return Http404
         data['review'] = review
         data['stack_id'] = challenge.get_stack().id
         review_questions = ReviewQuestion.objects.filter(challenge=challenge).order_by("order")
@@ -53,7 +53,15 @@ def review_answer(request):
         data = json.loads(data)
         review_id = data['review_id']
         answers = data['answers']
-        review = Review.objects.get(pk=review_id)
+        try:
+            review = Review.objects.get(pk=review_id)
+            challenge = review.elaboration.challenge
+            if not challenge.is_enabled_for_user(user):
+                raise Http404
+            if not review == Review.get_open_review(challenge, user):
+                raise Http404
+        except:
+            raise Http404
         review.appraisal = data['appraisal']
 
         for answer in answers:
@@ -68,7 +76,7 @@ def review_answer(request):
                 course=course,
                 text=Notification.BAD_REVIEW + review.elaboration.challenge.title,
                 image_url=review.elaboration.challenge.image.url,
-                link="/challenges/received_challenge_reviews/?id=" + str(review.elaboration.challenge.id)
+                link="/challenges/challenge?id=" + str(review.elaboration.challenge.id)
             ).save()
         else:
             final_challenge = review.elaboration.challenge.get_final_challenge()
