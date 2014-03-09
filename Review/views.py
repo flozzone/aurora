@@ -70,7 +70,7 @@ def review_answer(request):
             review_question = ReviewQuestion.objects.get(pk=question_id)
             ReviewAnswer(review=review, review_question=review_question, text=text).save()
             # send notifications
-        if review.appraisal == review.FAIL or review.appraisal == review.NOTHING:
+        if review.appraisal == review.NOTHING:
             Notification(
                 user=review.elaboration.user,
                 course=course,
