@@ -329,7 +329,10 @@ def set_appraisal(request):
     review = Review.objects.get(pk=review_id)
     review.appraisal = appraisal
     review.save()
-
+    if review.appraisal == review.NOTHING:
+        Notification.bad_review(review)
+    else:
+        Notification.enough_peer_reviews(review)
     return HttpResponse()
 
 
@@ -491,7 +494,10 @@ def review_answer(request):
             text = answer['answer']
             review_question = ReviewQuestion.objects.get(pk=question_id)
             ReviewAnswer(review=review, review_question=review_question, text=text).save()
-
+        if review.appraisal == review.NOTHING:
+            Notification.bad_review(review)
+        else:
+            Notification.enough_peer_reviews(review)
         # update overview
         elaborations = Elaboration.get_missing_reviews()
         elaborations.sort(key=lambda elaboration: elaboration.submission_time)

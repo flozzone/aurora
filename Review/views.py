@@ -71,23 +71,10 @@ def review_answer(request):
             ReviewAnswer(review=review, review_question=review_question, text=text).save()
             # send notifications
         if review.appraisal == review.NOTHING:
-            Notification(
-                user=review.elaboration.user,
-                course=course,
-                text=Notification.BAD_REVIEW + review.elaboration.challenge.title,
-                image_url=review.elaboration.challenge.image.url,
-                link="/challenges/challenge?id=" + str(review.elaboration.challenge.id)
-            ).save()
+            Notification.bad_review(review)
         else:
-            final_challenge = review.elaboration.challenge.get_final_challenge()
-            if final_challenge.is_enabled_for_user(review.elaboration.user):
-                obj, created = Notification.objects.get_or_create(
-                    user=review.elaboration.user,
-                    course=course,
-                    text=Notification.ENOUGH_PEER_REVIEWS + final_challenge.title,
-                    image_url=final_challenge.image.url,
-                    link="/challenges/stack?id=" + str(review.elaboration.challenge.get_stack().id)
-                )
+            Notification.enough_peer_reviews(review)
+
     review.submission_time = datetime.now()
     review.save()
     return HttpResponse()
