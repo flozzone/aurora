@@ -114,7 +114,10 @@ class ZidSSOBackend():
                 try:
                     user = PortfolioUser.objects.get(matriculation_number=params['mn'])
                 except PortfolioUser.DoesNotExist:
-                    user = None
+                    try:
+                        user = PortfolioUser.objects.get(oid=params['oid'])
+                    except PortfolioUser.DoesNotExist:
+                        user = None
 
         print('authenticate returns user: ' + str(user))
         return user
