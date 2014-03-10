@@ -61,7 +61,7 @@ def init_data():
         dummy_user.first_name = 'Firstname_%s' % username
         dummy_user.last_name = 'Lastname_%s' % username
         dummy_user.nickname = 'Nickname_%s' % username
-        dummy_user.is_staff = True
+        dummy_user.is_staff = False
         dummy_user.is_superuser = False
         password = username
         dummy_user.set_password(password)
@@ -109,6 +109,16 @@ def init_data():
         CourseUserRelation(course=hci, user=user).save()
         Notification(user=user, course=gsi, text="Welcome to GSI!").save()
         Notification(user=user, course=hci, text="Welcome to HCI!").save()
+
+    # create course-user relations
+    print('adding course-user relations for dummy users')
+    CourseUserRelation(course=gsi, user=d1).save()
+    CourseUserRelation(course=hci, user=d1).save()
+    CourseUserRelation(course=gsi, user=d2).save()
+    CourseUserRelation(course=hci, user=d2).save()
+    CourseUserRelation(course=gsi, user=d3).save()
+    CourseUserRelation(course=hci, user=d3).save()
+
 
     # create challenges
     print('adding challenges')
