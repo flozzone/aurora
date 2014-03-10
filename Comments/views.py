@@ -17,17 +17,6 @@ from Notification.models import Notification
 from Comments.tests import CommentReferenceObject
 
 
-# class BookmarkedView(ListView):
-#     queryset = Comment.query_bookmarked()
-#
-    # def get_context_data(self, **kwargs):
-    #     context = super(BookmarkedView, self).get_context_data(**kwargs)
-    #     context['form'] = CommentForm()
-        # context['reply_form'] = ReplyForm()
-        # context['form_action'] = '/post/'
-        # return context
-
-
 class CommentForm(forms.Form):
     reference_type_id = forms.IntegerField(widget=forms.HiddenInput)
     reference_id = forms.IntegerField(widget=forms.HiddenInput)

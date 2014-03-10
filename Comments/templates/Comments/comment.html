@@ -70,6 +70,11 @@
         {% endif %}
 
         {% if comment.deleter == None %}
+            {% if comment.edited_date != None %}
+                <p class="comment_deleter">
+                    edited {{ comment.edited_date | naturaltime }}
+                </p>
+            {% endif %}
             {% if requester == comment.author %}
                 <a class="flR edit_link" href="javascript:void(0)" id="edit_comment_link_{{ comment.id }}">
                     edit&nbsp;&nbsp;
