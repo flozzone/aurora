@@ -58,6 +58,8 @@ def signout(request):
 def login(request):
     if 'next' in request.GET:
         return render_to_response('login.html', {'next': request.GET['next']}, context_instance=RequestContext(request))
+    elif 'error_message' in request.GET:
+        return render_to_response('login.html', {'next': '/', 'error_message': request.GET['error_message']}, context_instance=RequestContext(request))
     else:
         return render_to_response('login.html', {'next': '/'}, context_instance=RequestContext(request))
 
@@ -73,10 +75,12 @@ def sso_auth_callback(request):
     user = authenticate(params=values)
 
     if user is None:
-        return render_to_response('login.html', {'error_message': 'Your user is not enrolled with us'}, context_instance=RequestContext(request))
+        return redirect('login/')
+        # return render_to_response('login.html', {'error_message': 'Your user is not enrolled with this system'}, context_instance=RequestContext(request))
 
     if not user.is_active:
-        return render_to_response('login.html', {'error_message': 'Your user has been deactivated'}, context_instance=RequestContext(request))
+        return redirect('login/')
+        # return render_to_response('login.html', {'error_message': 'Your user has been deactivated'}, context_instance=RequestContext(request))
 
     django_login(request, user)
 
@@ -114,7 +118,10 @@ class ZidSSOBackend():
                 try:
                     user = PortfolioUser.objects.get(matriculation_number=params['mn'])
                 except PortfolioUser.DoesNotExist:
-                    user = None
+                    try:
+                        user = PortfolioUser.objects.get(oid=params['oid'])
+                    except PortfolioUser.DoesNotExist:
+                        user = None
 
         print('authenticate returns user: ' + str(user))
         return user

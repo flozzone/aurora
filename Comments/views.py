@@ -100,6 +100,7 @@ def edit_comment(request):
         return HttpResponse('')
 
     comment.text = data['text']
+    comment.edited_date = timezone.now()
     comment.save()
     CommentList.get_by_comment(comment).increment()
 

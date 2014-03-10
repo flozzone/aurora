@@ -24,6 +24,7 @@ class PortfolioUser(User):
     matriculation_number = models.CharField(max_length=100, null=True)
     study_code = models.CharField(max_length=100, null=True, blank=True, default="")
     last_selected_course = models.ForeignKey('Course.Course', null=True)
+    oid = models.CharField(max_length=30, null=True)
 
     # Use UserManager to get the create_user method, etc.
     objects = UserManager()
