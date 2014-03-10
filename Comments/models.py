@@ -253,7 +253,7 @@ class Comment(models.Model):
             return non_private_or_authored
 
         return non_private_or_authored.filter(
-            ~Q(visibility=Comment.STAFF) | Q(author=requester) | Q(parent__author=requester))
+            ~Q(visibility=Comment.STAFF) | Q(author=requester))
 
     @staticmethod
     def ref_obj_to_id_type(ref_object):
