@@ -39,7 +39,9 @@ var COMMENTS = (function (my, $) {
         function promote($this, event) {
             event.preventDefault();
 
-            my.POLLING.resetTimer();
+            if(typeof my.POLLING !== 'undefined') {
+                my.POLLING.resetTimer();
+            }
 
             var comment_number = $this.data('comment_number');
             my.post('/promote_comment/', {comment_id: comment_number, value: true});
@@ -57,7 +59,9 @@ var COMMENTS = (function (my, $) {
         function demote($this, event) {
             event.preventDefault();
 
-            my.POLLING.resetTimer();
+            if(typeof my.POLLING !== 'undefined') {
+                my.POLLING.resetTimer();
+            }
 
             var comment_number = $this.data('comment_number');
             my.post('/promote_comment/', {comment_id: comment_number, value: false});
@@ -90,7 +94,9 @@ var COMMENTS = (function (my, $) {
         bookmark: function (event, $link) {
             event.preventDefault();
 
-            my.POLLING.resetTimer();
+            if(typeof my.POLLING !== 'undefined') {
+                my.POLLING.resetTimer();
+            }
 
             var comment_number = $link.data('comment_number');
             var data = {
@@ -113,7 +119,9 @@ var COMMENTS = (function (my, $) {
         unbookmark: function (event, $link) {
             event.preventDefault();
 
-            my.POLLING.resetTimer();
+            if(typeof my.POLLING !== 'undefined') {
+                my.POLLING.resetTimer();
+            }
 
             var comment_number = $link.data('comment_number');
             var data = {
@@ -150,7 +158,9 @@ var COMMENTS = (function (my, $) {
         function bookmark($this, event) {
             event.preventDefault();
 
-            my.POLLING.resetTimer();
+            if(typeof my.POLLING !== 'undefined') {
+                my.POLLING.resetTimer();
+            }
 
             var comment_number = $this.data('comment_number');
             var data = {
@@ -170,7 +180,9 @@ var COMMENTS = (function (my, $) {
         function unbookmark($this, event) {
             event.preventDefault();
 
-            my.POLLING.resetTimer();
+            if(typeof my.POLLING !== 'undefined') {
+                my.POLLING.resetTimer();
+            }
 
             var comment_number = $this.data('comment_number');
             var data = {
