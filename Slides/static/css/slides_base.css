@@ -2,11 +2,18 @@
 	display:none;
 }
 
+
+#load_all_comments {
+	display:none !important;
+}
+
 .playaudio {
 	opacity:0.3;
+	display:none !important;
 }
 
 .playaudio_cmd {
+	display:none !important;
 	opacity:0.3;
 	border:1px solid silver;
 	border-radius:3px;
@@ -15,6 +22,7 @@
 	margin-left:3px;
 	margin-right:3px;	
 }
+
 .lectureFront {
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
