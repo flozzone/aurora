@@ -89,10 +89,10 @@ def sso_auth_callback(request):
     user = authenticate(params=values)
 
     if user is None:
-        return redirect('login/')
+        return render_to_response('login.html', {'error_message': 'Your user is not enrolled with us'}, context_instance=RequestContext(request))
 
     if not user.is_active:
-        return redirect('login/')
+        return render_to_response('login.html', {'error_message': 'Your user has been deactivated'}, context_instance=RequestContext(request))
 
     django_login(request, user)
 
@@ -127,7 +127,6 @@ class ZidSSOBackend():
                 try:
                     user = PortfolioUser.objects.get(matriculation_number=params['mn'])
                 except PortfolioUser.DoesNotExist:
-                    # TODO authentication successful but user not in database (not enrolled?)
                     user = None
 
         print('authenticate returns user: ' + str(user))
