@@ -11,8 +11,8 @@ from datetime import datetime
 
 from Course.models import Course
 
-import hashlib
-import hmac
+from hashlib import sha1
+from hmac import new as hmac_new
 from django.conf import settings
 from django.http import Http404
 
@@ -29,6 +29,7 @@ def signin(request):
     username = request.POST['username']
     password = request.POST['password']
     user = authenticate(username=username, password=password)
+    # user = authenticate(params='blablu')
 
     if user is None:
         response_data = {'success': False, 'message': 'Your username or password was incorrect.'}
@@ -84,32 +85,65 @@ def sso_auth_redirect():
 @require_GET
 def sso_auth_callback(request):
     values = request.GET
-    if sso_authenticate(values):
-        # TODO set up session here
-        pass
+
+    user = authenticate(params=values)
+
+    if user is None:
+        return redirect('login.html')
+
+    if not user.is_active:
+        return redirect('login.html')
+
+    django_login(request, user)
+
+    return redirect('/')
 
 
-def sso_authenticate(params):
-    if 'sKey' in params.keys():
-        hmac_received = params['sKey']
-    elif 'logout' in params.keys():
-        hmac_received = params['logout']
+class ZidSSOBackend():
+    def authenticate(self, params):
+        print('ZidSSOBackend.authenticate() was called')
 
-    values = ''
-    for key in ['oid', 'mn', 'firstName', 'lastName', 'mail']:
-        values += params[key]
+        if 'sKey' in params.keys():
+            hmac_received = params['sKey']
+        elif 'logout' in params.keys():
+            hmac_received = params['logout']
+        else:
+            return None
 
-    shared_secret = settings.SSO_SHARED_SECRET.encode(encoding='latin1')
-    now = datetime.utcnow() - datetime.datetime(1970, 1, 1).total_seconds()
-    for offset in [0, -1, 1, -2, 2]:
-        values_string = values + str(now + offset)
-        values_string = values_string.encode(encoding='latin1')
-        hmac_calced = hmac.new(shared_secret, values_string, hashlib.sha1).hexdigest()
+        values = ''
+        for key in ['oid', 'mn', 'firstName', 'lastName', 'mail']:
+            values += params[key]
 
-        if hmac_calced == hmac_received:
-            return True
+        shared_secret = settings.SSO_SHARED_SECRET.encode(encoding='latin1')
+        utc_now = (datetime.utcnow() - datetime(1970, 1, 1)).total_seconds()
+        now = int(utc_now / 10)
+        for offset in [0, -1, 1, -2, 2]:
+            values_string = values + str(now + offset)
+            values_string = values_string.encode(encoding='latin1')
+            hmac_calced = hmac_new(shared_secret, values_string, sha1).hexdigest()
 
-    return False
+            if hmac_calced == hmac_received:
+                try:
+                    user = PortfolioUser.objects.get(matriculation_number=params['mn'])
+                except PortfolioUser.DoesNotExist:
+                    user = None
+
+        print('authenticated user: ' + str(user))
+        return user
+
+    def get_user(self, user_id):
+        try:
+            user = PortfolioUser.objects.get(pk=user_id)
+        except PortfolioUser.DoesNotExist:
+            user = None
+
+        return user
+
+    def __str__(self):
+        return('ZidSSOBackend')
+
+    def __unicode__(self):
+        return('ZidSSOBackend')
 
 
 @login_required

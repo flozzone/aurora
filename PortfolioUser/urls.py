@@ -13,6 +13,7 @@ urlpatterns = patterns('',
                        url(r'^profile/$', 'PortfolioUser.views.profile'),
                        url(r'^profile/save/$', 'PortfolioUser.views.profile_save'),
                        url(r'^secret_test/$', 'PortfolioUser.views.dat_secret_test'),
+                       url(r'^sso_auth_callback$', 'PortfolioUser.views.sso_auth_callback'),
 )
 
 
