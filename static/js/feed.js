@@ -2,6 +2,7 @@
  * Created by peterpur on 22.2.2014.
  */
 
+var updateNew_Timer;
 
 $(window).load( function() {
     "use strict";
@@ -28,6 +29,7 @@ function filter(fx,usr) {
 
 	$('.filterbtn').removeClass('hilited');
 	$('#'+fx).addClass('hilited');
+	$('#new_date').text(''); clearTimeout(updateNew_Timer);
 
     switch (fx) {
         case 1:
@@ -73,8 +75,21 @@ function filter(fx,usr) {
 					$(this).removeClass('hided');
 				}
 			});
+			updateNew();
             break;
     }
+}
+
+function updateNew() {
+	var cookieName = 'filterTimeCookie.'+$('#the_username').data('username');
+	var x = getCookie(cookieName);
+	var y = Math.round(Date.now()/60000 - x/60);
+	if (y<2) {y = ''}
+	else if (y<60) {y = '(' + y + ' mins)'}
+	else if (y<1440) {y = '(' + Math.round(y/60) + ' hours)'}
+	else {y = '(' + Math.round(y/1440) + ' days)'}
+	$('#new_date').text(y);
+	updateNew_Timer = setTimeout(function(){updateNew()},60000);
 }
 
 function headClick(aDiv) {
