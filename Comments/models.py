@@ -5,7 +5,7 @@ from django.db.models import Q, Count
 
 
 class Tag(models.Model):
-    name = models.CharField(max_length=10)
+    name = models.CharField(max_length=30)
 
     def __unicode__(self):
         return self.name
@@ -73,7 +73,8 @@ class Comment(models.Model):
     text = models.TextField()
     author = models.ForeignKey('PortfolioUser.PortfolioUser')
     post_date = models.DateTimeField('date posted')
-    delete_date = models.DateTimeField('date posted', null=True)
+    delete_date = models.DateTimeField('date deleted', null=True)
+    edited_date = models.DateTimeField('date edited', null=True)
     deleter = models.ForeignKey('PortfolioUser.PortfolioUser', related_name='deleted_comments_set', null=True)
     parent = models.ForeignKey('self', null=True, related_name='children')
     promoted = models.BooleanField(default=False)
