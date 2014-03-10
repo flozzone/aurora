@@ -14,8 +14,8 @@
             <div class="answer {% if question.boolean_answer %}boolean_answer{% endif %}" id="{{ question.id }}"
                 question_id="{{ question.id }}">
               {% if question.boolean_answer %}
-                <input type="radio" name="{{ question.id }}" value="yes"> Yes <br>
-                <input type="radio" name="{{ question.id }}" value="no"> No
+                <input type="radio" name="{{ question.id }}" value="True"> Yes <br>
+                <input type="radio" name="{{ question.id }}" value="False"> No
               {% else %}
                 <textarea id="text_answer" name="answer"></textarea>
               {% endif %}
