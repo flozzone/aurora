@@ -179,6 +179,35 @@ input:-moz-placeholder { color:rgba(58,201,88,0);	text-shadow: 0 0 2px rgba(58,2
 	height:100%;
 }
 
+.alternate_login {
+	text-decoration:none;
+	text-transform:uppercase;
+	color:rgb(58,201,88);
+	font-size:1.5em;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	margin-top:2em;
+}
+
+.alternate_login a {
+	text-decoration:none;
+	color:rgb(58,201,88);
+	box-shadow: 0 0 20px rgb(58,201,88);
+	border-radius:0.5em;
+	float:right;
+	padding:0.4em;
+}
+
+.alternate_login span {
+	padding:0.4em;
+	display:block;
+	color:rgba(58,201,88,0.25);
+	text-shadow: 0 0 5px rgba(58,201,88,0.5),0 0 2px rgba(58,201,88,0.5);
+}
+
+.login hr {
+	box-shadow: 0 0 5px rgba(58,201,88,0.5),0 0 2px rgba(58,201,88,0.5);
+	border:1px solid rgba(58,201,88,0.25);
+}
 .loginButton {
 	text-decoration:none;
 	text-transform:uppercase;
