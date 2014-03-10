@@ -110,6 +110,16 @@ def init_data():
         Notification(user=user, course=gsi, text="Welcome to GSI!").save()
         Notification(user=user, course=hci, text="Welcome to HCI!").save()
 
+    # create course-user relations
+    print('adding course-user relations for dummy users')
+    CourseUserRelation(course=gsi, user=d1).save()
+    CourseUserRelation(course=hci, user=d1).save()
+    CourseUserRelation(course=gsi, user=d2).save()
+    CourseUserRelation(course=hci, user=d2).save()
+    CourseUserRelation(course=gsi, user=d3).save()
+    CourseUserRelation(course=hci, user=d3).save()
+
+
     # create challenges
     print('adding challenges')
     challenge_1 = Challenge(id=1,
