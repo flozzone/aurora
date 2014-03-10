@@ -135,8 +135,10 @@ def create_comment(form, request):
         comment.save()
 
         comment_list = CommentList.get_by_comment(comment)
-        comment_list.uri = form.cleaned_data['uri']
-        comment_list.save()
+
+        if comment_list.uri is None or 'evaluation' in comment_list.uri:
+            comment_list.uri = form.cleaned_data['uri']
+            comment_list.save()
 
         comment_list.increment()
 
