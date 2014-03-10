@@ -61,7 +61,7 @@
 	            </h1>
 	            </div>
 				<div class="studio_slide_medium">
-					<a href="{{slide.get_filepath}}/jpg/{{slide.filename}}.jpg" class="lightbox_trigger">
+					<a href="{{ STATIC_URL}}slides/{{ course.short_title }}/jpg/{{slide.filename}}.jpg" class="lightbox_trigger">
 						<img onError="this.src='{{ STATIC_URL }}img/white_medium.jpg'" class="studio_slide" src="{{ STATIC_URL}}slides/{{ course.short_title }}/thumb/{{slide.filename}}_thumb.jpg" alt="{{slide.title}}"/ >
 					</a>
 				</div>
