@@ -29,7 +29,6 @@ def signin(request):
     username = request.POST['username']
     password = request.POST['password']
     user = authenticate(username=username, password=password)
-    # user = authenticate(params='blablu')
 
     if user is None:
         response_data = {'success': False, 'message': 'Your username or password was incorrect.'}
@@ -47,21 +46,6 @@ def signin(request):
 
     response_data = {'success': True}
     return HttpResponse(json.dumps(response_data), content_type="application/json")
-
-
-# TODO delete
-def dat_secret_test(request):
-    mn = '0302857'
-    fname = 'Daniel'
-    lname = 'Domberger'
-
-    try:
-        user = PortfolioUser.objects.get(matriculation_number=mn, first_name=fname, last_name=lname)
-    except PortfolioUser.DoesNotExist:
-        user = PortfolioUser.objects.create(username=mn, matriculation_number=mn, first_name=fname, last_name=lname)
-
-    user = authenticate(username=mn)
-    django_login(request, user)
 
 
 def signout(request):
@@ -89,12 +73,15 @@ def sso_auth_callback(request):
     user = authenticate(params=values)
 
     if user is None:
-        return redirect('login/')
+        return render_to_response('login.html', {'error_message': 'Your user is not enrolled with us'}, context_instance=RequestContext(request))
 
     if not user.is_active:
-        return redirect('login/')
+        return render_to_response('login.html', {'error_message': 'Your user has been deactivated'}, context_instance=RequestContext(request))
 
     django_login(request, user)
+
+    if not user.avatar:
+        user.get_gravatar()
 
     return redirect('/')
 
@@ -127,7 +114,6 @@ class ZidSSOBackend():
                 try:
                     user = PortfolioUser.objects.get(matriculation_number=params['mn'])
                 except PortfolioUser.DoesNotExist:
-                    # TODO authentication successful but user not in database (not enrolled?)
                     user = None
 
         print('authenticate returns user: ' + str(user))

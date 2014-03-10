@@ -19,6 +19,7 @@
 {% endblock %}
 
 {% block content %}
+{% comments_boilerplate %}
 <div id="detail_area">
 
   <div id="{{ challenge.id }}" class="challenge" stack="{{ challenge.get_stack.id }}">
@@ -37,7 +38,7 @@
           </span>
           <div id="qa" class="challenge_comments">If you have questions about the description of this task, post
             them here. The course organizers will answer as soon as possible.
-{% render_comment_list for challenge %}
+{% render_multi_comment_list for challenge %}
           </div>
         </div>
       </div>
@@ -96,12 +97,11 @@
       <div class="comments">
         <div class="elaboration_comments">
           <b>Discuss with LVA team</b> - {% comments_count for elaboration %} comments so far
-{% render_additional_comment_list for elaboration %}
+{% render_multi_comment_list for elaboration %}
         </div>
       </div>
     </div>
     <div class="all_reviews">
-{% comments_boilerplate %}
 {% if reviews %}
       <div class="title">You received the following reviews for your work</div>
       <div>&nbsp;</div>
