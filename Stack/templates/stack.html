@@ -17,7 +17,7 @@
           {{ stack.title }}
         </div>
       <div class="info_description">
-          {{stack.description}}
+          {{ stack.description|safe|urlize }}
       </div>
     </div>
     <div class="challenge_list">

@@ -22,7 +22,7 @@
         		{% endfor %}
        	 	</div>
 		</div>
-        <div class="description">{{ stack.stack.description }}</div>
+        <div class="description">{{ stack.stack.description|safe|urlize }}</div>
 {#       Status: <b>{{ stack.status.status }}.</b>#}
 		<div class="stack_status">
 			 <div class="stack_action button XL">ENTER CHALLENGE</div>
