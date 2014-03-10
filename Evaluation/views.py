@@ -31,11 +31,6 @@ from Notification.models import Notification
 @login_required()
 @staff_member_required
 def evaluation(request):
-    # TODO: delete this snippet, fetches gravatar images for every user only for test cases.
-    for puser in PortfolioUser.objects.all():
-        if not puser.avatar:
-            puser.get_gravatar()
-
     overview = ""
     if request.session.get('selection'):
         if request.session.get('selection') != 'questions':
