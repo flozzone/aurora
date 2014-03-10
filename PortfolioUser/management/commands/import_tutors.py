@@ -51,8 +51,6 @@ def import_tutors():
                     student.nickname = first_name
                     student.is_staff = True
                     student.is_superuser = False
-                    seed = matriculation_number + email + str(datetime.now())
-                    seed = seed.encode('utf-8')
                     student.set_password(username)
                     student.save()
                     for course in courses:
