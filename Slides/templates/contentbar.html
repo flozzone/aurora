@@ -10,7 +10,7 @@
 	{% if slidecasting_mode == 'livecast' %}
 		<li>Livecast</li>
 	{% elif not slidecasting_mode == 'start' %}
-	<li>&nbsp;&nbsp;&nbsp;</li>
+		<li>&nbsp;&nbsp;&nbsp;</li>
 		<li class="playaudio" id="flowplayer_controls_label">Audio Player </li>
 		<li class="playaudio_cmd" id="flowplayer_controls_prev" class="button b_inactive"><i class="fa fa-angle-double-left"></i></li>
 		<li class="playaudio_cmd" id="flowplayer_controls_play" class="button b_inactive">PLAY</li>
@@ -23,7 +23,7 @@
 
 	<ul>
 	   	<li id="search_slides_li">
-    		<form action="{% url 'Slides:studio_search' %}" method="GET"><input class="rounded_field search_field" name="search_text" type="text" placeholder="search slides & comments" /></form>
+    		<form action="{% url 'Slides:studio_search' %}" method="GET"><input class="rounded_field search_field" name="search_text" type="text" placeholder="search slides & comments"/></form>
     	</li>
 
 	</ul>
