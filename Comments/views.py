@@ -244,7 +244,7 @@ def promote_comment(request):
     return HttpResponse('')
 
 
-@require_GET
+@require_POST
 @login_required
 def update_comments(request):
     polling_active, polling_idle = CommentsConfig.get_polling_interval()
@@ -252,7 +252,7 @@ def update_comments(request):
     response_data = {'polling_active_interval': polling_active,
                      'polling_idle_interval': polling_idle}
 
-    client_revisions = unpack_revisions(request.GET)
+    client_revisions = unpack_revisions(request.POST)
 
     comment_lists = []
     for client_revision in client_revisions:

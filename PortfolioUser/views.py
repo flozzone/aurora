@@ -89,10 +89,10 @@ def sso_auth_callback(request):
     user = authenticate(params=values)
 
     if user is None:
-        return redirect('login.html')
+        return redirect('login/')
 
     if not user.is_active:
-        return redirect('login.html')
+        return redirect('login/')
 
     django_login(request, user)
 
@@ -117,6 +117,7 @@ class ZidSSOBackend():
         shared_secret = settings.SSO_SHARED_SECRET.encode(encoding='latin1')
         utc_now = (datetime.utcnow() - datetime(1970, 1, 1)).total_seconds()
         now = int(utc_now / 10)
+        user = None
         for offset in [0, -1, 1, -2, 2]:
             values_string = values + str(now + offset)
             values_string = values_string.encode(encoding='latin1')
@@ -126,9 +127,10 @@ class ZidSSOBackend():
                 try:
                     user = PortfolioUser.objects.get(matriculation_number=params['mn'])
                 except PortfolioUser.DoesNotExist:
+                    # TODO authentication successful but user not in database (not enrolled?)
                     user = None
 
-        print('authenticated user: ' + str(user))
+        print('authenticate returns user: ' + str(user))
         return user
 
     def get_user(self, user_id):

@@ -15,6 +15,3 @@ urlpatterns = patterns('',
                        url(r'^secret_test/$', 'PortfolioUser.views.dat_secret_test'),
                        url(r'^sso_auth_callback$', 'PortfolioUser.views.sso_auth_callback'),
 )
-
-
-

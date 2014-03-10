@@ -622,7 +622,7 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         $.ajax({
             url: '/update_comments/',
             data: data,
-            type: 'GET',
+            type: 'POST',
             dataType: 'json',
             success: function (json) {
                 var comment_list_updates = json.comment_list_updates;
@@ -644,6 +644,10 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
                 if (keepPolling === true) {
                     my.POLLING.resetTimer();
                 }
+            },
+            beforeSend: function (xhr) {
+                var csrftoken = my.getCsrfToken();
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
             }
         });
     };
