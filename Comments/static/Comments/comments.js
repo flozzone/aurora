@@ -212,69 +212,19 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
 
             $commentText.attr('contenteditable', true);
 
-//            document.execCommand("insertBrOnReturn", false, true);
-//
-//            $comment.on("keydown", "[contenteditable=true]", function (e) {
             $comment.on("keydown", function (e) {
                 var lineBreak;
 
                 if (e.which === 13 && !e.shiftKey) {
                     e.preventDefault();
 
-//                    console.log('adding br');
-//                    lineBreak = "<br />";
                     lineBreak = "<br />&nbsp";
                     document.execCommand("insertHTML", false, lineBreak);
-//                    document.execCommand("forwardDelete");
                     document.execCommand("delete");
-//                    document.execCommand("insertText", false, '\n');
-//
+
                     return false;
                 }
             });
-
-//            Very good solution, only produces some blanks in chromium
-//            $('div[contenteditable="true"]').keypress(function (event) {
-//
-//                if (event.which !== 13)
-//                    return true;
-//
-//                var docFragment = document.createDocumentFragment();
-//
-//                add a new line
-//                var newEle = document.createTextNode('\n');
-//                docFragment.appendChild(newEle);
-//
-//                add the br, or p, or something else
-//                newEle = document.createElement('br');
-//                docFragment.appendChild(newEle);
-//
-//                make the br replace selection
-//                var range = window.getSelection().getRangeAt(0);
-//                range.deleteContents();
-//                range.insertNode(docFragment);
-//
-//                create a new range
-//                range = document.createRange();
-//                range.setStartAfter(newEle);
-//                range.collapse(true);
-//
-//                make the cursor there
-//                var sel = window.getSelection();
-//                sel.removeAllRanges();
-//                sel.addRange(range);
-//
-//                return false;
-//            });
-
-//          weird solution via CSS:
-
-            /*inline-block; makes chromium not create <div> and <p> on return*/
-            /*[contenteditable=true] {*/
-            /*width: 100%;*/
-            /*display: inline-block;*/
-            /*}*/
-
 
             $(document).keydown(handleHotkeys);
             function handleHotkeys(e) {
@@ -314,54 +264,18 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
                 return false;
             }
 
-            /**
-             *
-             * @param n the node to convert to string with '\n'
-             * @returns {string}
-             */
-            function getText(n) {
-                var rv = '';
-
-                if (n.nodeType === 3) {
-                    rv = n.nodeValue;
-                } else {
-                    for (var i = 0; i < n.childNodes.length; i++) {
-                        rv += getText(n.childNodes[i]);
-                    }
-                    var d = getComputedStyle(n).getPropertyValue('display');
-//                if (d.match(/^block/) || d.match(/list/) || n.tagName == 'BR') {
-                    if (d.match(/list/) || n.tagName === 'BR') {
-                        rv += "\n";
-                    }
-                }
-
-                return rv;
-            }
-
             var $save = $('#edit_save');
             $save.off();
             $save.click(saveEdit);
             function saveEdit(event) {
                 event.preventDefault();
 
-//            var text = $commentText.html().trim()
-//            text = text.replace(/<div>[\s\r\n]*<br>[\s\r\n]*<\/div>/g, "<br>");
-//            text = text.replace(/(<\/p>)|(<\/div>)/g, "");
-//            text = text.replace(/(<br><\/br>)|(<br>)|(<br \/>)|(<p>)|(<div>)/g, "\r\n");
-//            text = text.replace(/(<br><\/br>)|(<br>)|(<br \/>)|(<p>)|(<\/p>)|(<div>)|(<\/div>)/g, "\r\n");
-
-//            var text = getText($commentText.get(0)).trim();
-//                var text = $commentText.html();
-//                console.log($commentText.text());
-
                 var text = $commentText.html().trim()
                     .replace(/<br(\s*)\/*>/ig, '\n') // replace single line-breaks
-                    .replace(/&nbsp;?/ig, ' ');
-//                    .replace(/<[p|div]\s/ig, '\n$0') // add a line break before all div and p tags
-//                    .replace(/(<([^>]+)>)/ig, "");   // remove any remaining tags
-
-//                var text = $commentText[0].innerText;
-                console.log(text);
+                    .replace(/&nbsp;?/ig, ' ')
+                    .replace(/&lt;?/ig, '<')
+                    .replace(/&gt;?/ig, '>')
+                    .replace(/&amp;?/ig, '&');
 
                 var data = {comment_id: $comment.data('comment_number'),
                     text: text};
