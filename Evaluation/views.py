@@ -337,10 +337,14 @@ def set_appraisal(request):
 def select_challenge(request):
     selected_challenge = request.POST['selected_challenge']
 
+    print("SLECTED_CHALLENGE: ", selected_challenge)
+
     elaborations = []
-    challenge = Challenge.objects.get(title=selected_challenge)
-    if Elaboration.get_sel_challenge_elaborations(challenge):
-        elaborations = Elaboration.get_sel_challenge_elaborations(challenge)
+    challenges = Challenge.objects.filter(title=selected_challenge)
+    for challenge in challenges:
+        if Elaboration.get_sel_challenge_elaborations(challenge):
+            for elaboration in Elaboration.get_sel_challenge_elaborations(challenge):
+                elaborations.append(elaboration)
 
     html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
 
