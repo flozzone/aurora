@@ -21,7 +21,7 @@ class PortfolioUser(User):
     statement = models.TextField(blank=True)
     upload_path = 'avatar'
     avatar = models.ImageField(upload_to=avatar_path, null=True, blank=True)
-    matriculation_number = models.CharField(max_length=100, null=True, unique=True)
+    matriculation_number = models.CharField(max_length=100, null=True, unique=True, blank=True)
     study_code = models.CharField(max_length=100, null=True, blank=True, default="")
     last_selected_course = models.ForeignKey('Course.Course', null=True, blank=True)
     oid = models.CharField(max_length=30, null=True, unique=True, blank=True)
