@@ -53,8 +53,8 @@ def init_data():
     s0 = users[0]
 
     # create the three dummy users for jumpstarting the peer review process
-    for i in range(3):
-        print("adding dummy user %s of %s" % (i, 3))
+    for i in range(4):
+        print("adding dummy user %s of %s" % (i, 4))
         username = "d%s" % i
         dummy_user = PortfolioUser(username=username)
         dummy_user.email = '%s@student.tuwien.ac.at' % username
@@ -70,6 +70,7 @@ def init_data():
     d1 = dummy_users[0]
     d2 = dummy_users[1]
     d3 = dummy_users[2]
+    d4 = dummy_users[3]
 
 
     # create an admin user with password amanaman
@@ -123,7 +124,8 @@ def init_data():
     CourseUserRelation(course=hci, user=d2).save()
     CourseUserRelation(course=gsi, user=d3).save()
     CourseUserRelation(course=hci, user=d3).save()
-
+    CourseUserRelation(course=gsi, user=d4).save()
+    CourseUserRelation(course=hci, user=d4).save()
 
     # create challenges
     print('adding challenges')
