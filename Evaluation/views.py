@@ -454,8 +454,8 @@ def autocomplete_challenge(request):
 def autocomplete_user(request):
     term = request.GET.get('term', '')
     studies = PortfolioUser.objects.all().filter(
-        Q(username__istartswith=term) | Q(first_name__istartswith=term) | Q(last_name__istartswith=term))
-    names = [(studi.username + ' ' + studi.first_name + ' ' + studi.last_name) for studi in studies]
+        Q(username__istartswith=term) | Q(first_name__istartswith=term) | Q(last_name__istartswith=term) | Q(nickname__istartswith=term))
+    names = [(studi.username + ' ' + studi.nickname + ' ' + studi.last_name) for studi in studies]
     response_data = json.dumps(names, ensure_ascii=False)
     return HttpResponse(response_data, mimetype='application/json; charset=utf-8')
 
