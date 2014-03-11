@@ -13,6 +13,7 @@ from django.contrib.contenttypes.models import ContentType
 import json
 
 from Comments.models import Comment, CommentsConfig, CommentList, Vote
+from Course.models import Course
 from Notification.models import Notification
 from Comments.tests import CommentReferenceObject
 
@@ -132,10 +133,16 @@ def create_comment(form, request):
 
         comment_list.increment()
 
+        # TODO extremely borken fix, remove this ASAP
+        course = context['last_selected_course']
+        if course is None:
+            course = Course.objects.get(short_title='gsi')
+        # TODO endof extremely borken fix
+
         if parent_comment is not None and parent_comment.author != comment.author:
             obj, created = Notification.objects.get_or_create(
                 user=parent_comment.author,
-                course=context['last_selected_course'],
+                course=course,
                 text="You've received a reply to one of your comments",
                 image_url=comment.author.avatar.url,
                 link=comment_list.uri + '#comment_' + str(parent_comment.id)
