@@ -337,8 +337,6 @@ def set_appraisal(request):
 def select_challenge(request):
     selected_challenge = request.POST['selected_challenge']
 
-    print("SLECTED_CHALLENGE: ", selected_challenge)
-
     elaborations = []
     challenges = Challenge.objects.filter(title=selected_challenge)
     for challenge in challenges:
