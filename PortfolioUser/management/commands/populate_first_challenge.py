@@ -232,6 +232,110 @@ def init_data():
     challenge_6.save()
 
 
+
+    challenge_7 = Challenge(id=7,
+                            title='Personalisieren',
+                            subtitle='Personalisieren',
+                            description='Setzen sie in ihrem Profil ein Avatar-Bild, das ein anderes ist als der Default. Achten sie dabei bitte darauf, dass die Abbildungen'
+                                        ' weder rassistisch noch sexistisch sind. Es muss allerdings auch kein Foto von ihnen sein. Machen sie dann einen Screenshot, auf dem'
+                                        ' ihr Avatar-Bild gut zu sehen ist, laden sie ihn hoch und geben sie das für diesen Task ab. Achten sie bitte darauf, dass ausser ihrem'
+                                        ' Nickname keine anderen persönlichen Daten zu sehen sind.<br/><br/>'
+                                        'Anmerkung: so ein Screenshot muss nicht ihren ganzen Bildschirm zeigen. Es genügt, wenn man den für den Task jeweils wesentlichen '
+                                        'Ausschnitt sieht.',
+                            accepted_files='image/*'
+    )
+    challenge_7.image.save('1.png', File(open(os.path.join(STATIC_ROOT, 'img', '1.png'), 'rb')))
+    challenge_7.save()
+
+    ReviewQuestion(challenge=challenge_7, order=1, text="Wurde die Aufgabe im wesentlichen erfüllt?", boolean_answer=True).save()
+    ReviewQuestion(challenge=challenge_7, order=2, text="Falls nein: Beschreiben sie, warum die Aufgabe nicht erfüllt wurde!").save()
+    ReviewQuestion(challenge=challenge_7, order=3, text="Finden sie den Avatar nett?", boolean_answer=True).save()
+
+    challenge_8 = Challenge(id=8,
+                            title='Kommentieren',
+                            subtitle='Kommentieren',
+                            prerequisite=challenge_7,
+                            description='Posten sie einen Kommentar zu den Folien der ersten Vorlesung. Dieser soll entweder einen inhaltlichen Bezug zum Inhalt einer Folie'
+                                        ' bzw. des entsprechenden Vorlesungsteils haben, oder auf den Kommentar einer Kollegin oder eines Kollegen antworten.<br/>'
+                                        'Achten sie auch hier darauf, dass ihre Äusserungen nicht rassistisch oder sexistisch sind, und streben sie ein dem universitären '
+                                        'Umfeld entsprechendes Anspruchsniveau an. Auch wenn Diskussionen hitzig und/oder emotional sind, sollten gewisse Grenzen (Beleidigung, '
+                                        'Herabwürdigung, Beschimpfung etc.) nicht überschritten werden.<br/><br/>'
+                                        'Machen sie dann einen Screenshot ihres Kommentars, laden sieh ihn für diesen Task hoch und geben sie ihn ab. Geben sie ausserdem '
+                                        'den Titel der Folie an, zu der sie den Kommentar gepostet haben.',
+                            accepted_files='image/*'
+    )
+    challenge_8.image.save('2.png', File(open(os.path.join(STATIC_ROOT, 'img', '2.png'), 'rb')))
+    challenge_8.save()
+
+    ReviewQuestion(challenge=challenge_8, order=1, text="Wurde die Aufgabe im wesentlichen erfüllt?", boolean_answer=True).save()
+    ReviewQuestion(challenge=challenge_8, order=2, text="Falls nein: Beschreiben sie, warum die Aufgabe nicht erfüllt wurde!").save()
+    ReviewQuestion(challenge=challenge_8, order=3,
+                   text="Gibt es inzwischen Antworten auf den Kommentar? Gehen sie dazu zu der angegebenen Folie, und schauen sie, ob der Kommetnar zum Zeitpunkt ihres Reviews"
+                        " schon eine Antwort bekommen hat.",
+                   boolean_answer=True).save()
+
+    challenge_9 = Challenge(id=9,
+                            title='Markieren',
+                            subtitle='Markieren',
+                            prerequisite=challenge_8,
+                            description='Markieren Sie Folien! Im Bereich »Slides« gibt es bei jeder Folie rechts oben drei »Lesezeichen«-Symbole, mit denen sie verwirrende '
+                                        'Folien [??], wichtige Folien [!] und Folien, die ihnen gefallen [*], markieren können.<br/><br/>'
+                                        'Markieren sie aus der ersten Vorlesung jeweils mindestens eine Folie als [??], [!] und [*]. Öffnen sie dann die drei '
+                                        '»Lesezeichen«-Seiten (direkt im Slides-Bereich, zweite Zeile) und machen sie drei Screenshots, die die so markierten Folien zeigen.<br/>'
+                                        'Geben sie diese drei Screenshots ab.',
+                            accepted_files='image/*'
+    )
+    challenge_9.image.save('3.png', File(open(os.path.join(STATIC_ROOT, 'img', '3.png'), 'rb')))
+    challenge_9.save()
+
+    ReviewQuestion(challenge=challenge_9, order=1, text="Wurde die Aufgabe im wesentlichen erfüllt?", boolean_answer=True).save()
+    ReviewQuestion(challenge=challenge_9, order=2, text="Falls nein: Beschreiben sie, warum die Aufgabe nicht erfüllt wurde!").save()
+
+    challenge_10 = Challenge(id=10,
+                            title='Bewerten',
+                            subtitle='Bewerten',
+                            prerequisite=challenge_9,
+                            description='Bewerten sie einen oder mehrere Kommentare in den Slides mit Hilfe der Bewertungspfeile rechts oben im Kommentar. '
+                                        'Setzen sie diese Funktion ein, um auszudrücken, ob sie den Kommentar inhaltlich lesenswert finden - oder eben nicht.<br/><br/>'
+                                        'Machen sie einen Screenshot von einem Kommentar, den sie bewertet haben, und geben sie diesen ab.',
+                            accepted_files='image/*'
+    )
+    challenge_10.image.save('4.png', File(open(os.path.join(STATIC_ROOT, 'img', '4.png'), 'rb')))
+    challenge_10.save()
+
+    ReviewQuestion(challenge=challenge_10, order=1, text="Wurde die Aufgabe im wesentlichen erfüllt?", boolean_answer=True).save()
+    ReviewQuestion(challenge=challenge_10, order=2, text="Falls nein: Beschreiben sie, warum die Aufgabe nicht erfüllt wurde!").save()
+
+    challenge_11 = Challenge(id=11,
+                            title='Vormerken',
+                            subtitle='Vormerken',
+                            prerequisite=challenge_10,
+                            description='Markieren sie Kommentare! Möchten sie einen Kommentar vormerken, zB. weil er wichtige Informationen enthält, oder weil'
+                                        ' sie ihn weiter verfolgen möchten? Markieren sie mindestens einen Kommentar (im Newsfeed, in den Kommentaren, oder überall,'
+                                        ' wo es Kommentare gibt) mit Hilfe der »BOOKMARK«-Funktion links unter dem Kommentar.<br/><br/>'
+                                        'Öffnen sie dann die »Bookmarks«-Seite (Hauptnavigation), und machen sie einen Screenshot von der Sammlung vorgemerkter '
+                                        'Kommentare. Geben sie diesen Screenshot ab.',
+                            accepted_files='image/*'
+    )
+    challenge_11.image.save('5.png', File(open(os.path.join(STATIC_ROOT, 'img', '5.png'), 'rb')))
+    challenge_11.save()
+    ReviewQuestion(challenge=challenge_11, order=1, text="Wurde die Aufgabe im wesentlichen erfüllt?", boolean_answer=True).save()
+    ReviewQuestion(challenge=challenge_11, order=2, text="Falls nein: Beschreiben sie, warum die Aufgabe nicht erfüllt wurde!").save()
+    ReviewQuestion(challenge=challenge_11, order=3, text="Schätzen sie: wurden hier sinnvolle Kommentare markiert?", boolean_answer=True).save()
+
+    challenge_12 = Challenge(id=12,
+                            title='Erwarten',
+                            subtitle='Erwarten',
+                            prerequisite=challenge_11,
+                            description='Was erwarten Sie sich von dieser Lehrveranstaltung? Was, meinen sie, werden sie hier lernen? Schreiben sie etwa einen Absatz'
+                                        ' Text über ihre <b>inhaltlichen</b> Erwartungen an diese LVA.  Schreiben sie als Abschluss einen Satz zu anderen Erwartungen'
+                                        ' zu dieser Lehrveranstaltung (Organisation, Experience, Unterhaltungswert, etc.).',
+                            accepted_files=''
+    )
+    challenge_12.image.save('6.png', File(open(os.path.join(STATIC_ROOT, 'img', '6.png'), 'rb')))
+    challenge_12.save()
+
+
     # create course-challenge relations
     print('adding course-challenge relations')
     CourseChallengeRelation(course=gsi, challenge_id=1).save()
@@ -241,12 +345,12 @@ def init_data():
     CourseChallengeRelation(course=gsi, challenge_id=5).save()
     CourseChallengeRelation(course=gsi, challenge_id=6).save()
 
-    CourseChallengeRelation(course=hci, challenge_id=1).save()
-    CourseChallengeRelation(course=hci, challenge_id=2).save()
-    CourseChallengeRelation(course=hci, challenge_id=3).save()
-    CourseChallengeRelation(course=hci, challenge_id=4).save()
-    CourseChallengeRelation(course=hci, challenge_id=5).save()
-    CourseChallengeRelation(course=hci, challenge_id=6).save()
+    CourseChallengeRelation(course=hci, challenge_id=7).save()
+    CourseChallengeRelation(course=hci, challenge_id=8).save()
+    CourseChallengeRelation(course=hci, challenge_id=9).save()
+    CourseChallengeRelation(course=hci, challenge_id=10).save()
+    CourseChallengeRelation(course=hci, challenge_id=11).save()
+    CourseChallengeRelation(course=hci, challenge_id=12).save()
 
 
     # create stacks
@@ -282,12 +386,12 @@ def init_data():
     StackChallengeRelation(stack=aurora_gsi, challenge=challenge_5).save()
     StackChallengeRelation(stack=aurora_gsi, challenge=challenge_6).save()
 
-    StackChallengeRelation(stack=aurora_hci, challenge=challenge_1).save()
-    StackChallengeRelation(stack=aurora_hci, challenge=challenge_2).save()
-    StackChallengeRelation(stack=aurora_hci, challenge=challenge_3).save()
-    StackChallengeRelation(stack=aurora_hci, challenge=challenge_4).save()
-    StackChallengeRelation(stack=aurora_hci, challenge=challenge_5).save()
-    StackChallengeRelation(stack=aurora_hci, challenge=challenge_6).save()
+    StackChallengeRelation(stack=aurora_hci, challenge=challenge_7).save()
+    StackChallengeRelation(stack=aurora_hci, challenge=challenge_8).save()
+    StackChallengeRelation(stack=aurora_hci, challenge=challenge_9).save()
+    StackChallengeRelation(stack=aurora_hci, challenge=challenge_10).save()
+    StackChallengeRelation(stack=aurora_hci, challenge=challenge_11).save()
+    StackChallengeRelation(stack=aurora_hci, challenge=challenge_12).save()
 
 
     print('Adding Sample Lectures')
