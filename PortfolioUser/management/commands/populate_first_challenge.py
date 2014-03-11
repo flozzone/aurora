@@ -84,9 +84,10 @@ def init_data():
     amanaman.is_superuser = True
     amanaman.save()
 
-
     # create courses "GSI" and "HCI"
-    if not Course.objects.filter(short_title='gsi').exists():
+    if Course.objects.filter(short_title='gsi').exists():
+        gsi = Course.objects.get(short_title='gsi')
+    else:
         print('adding course gsi')
         gsi = Course(
             title='Gesellschaftliche Spannungsfelder der Informatik',
@@ -96,7 +97,11 @@ def init_data():
         )
         gsi.save()
 
-    if not Course.objects.filter(short_title='bhci').exists() and not Course.objects.filter(short_title='hci').exists():
+    if Course.objects.filter(short_title='bhci').exists():
+        hci = Course.objects.get(short_title='bhci')
+    elif Course.objects.filter(short_title='hci').exists():
+        hci = Course.objects.get(short_title='hci')
+    else:
         print('adding course hci')
         hci = Course(
             title='Human Computer Interaction',
