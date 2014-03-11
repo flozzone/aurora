@@ -86,23 +86,25 @@ def init_data():
 
 
     # create courses "GSI" and "HCI"
-    print('adding course gsi')
-    gsi = Course(
-        title='Gesellschaftliche Spannungsfelder der Informatik',
-        short_title='gsi',
-        description='GSI Description',
-        course_number='123.456',
-    )
-    gsi.save()
+    if not Course.objects.filter(short_title='gsi').exists():
+        print('adding course gsi')
+        gsi = Course(
+            title='Gesellschaftliche Spannungsfelder der Informatik',
+            short_title='gsi',
+            description='GSI Description',
+            course_number='187.237',
+        )
+        gsi.save()
 
-    print('adding course hci')
-    hci = Course(
-        title='Human Computer Interaction',
-        short_title='hci',
-        description='HCI Description',
-        course_number='123.457',
-    )
-    hci.save()
+    if not Course.objects.filter(short_title='bhci').exists() and not Course.objects.filter(short_title='hci').exists():
+        print('adding course hci')
+        hci = Course(
+            title='Human Computer Interaction',
+            short_title='hci',
+            description='HCI Description',
+            course_number='187.A21',
+        )
+        hci.save()
 
     for user in users:
         CourseUserRelation(course=gsi, user=user).save()

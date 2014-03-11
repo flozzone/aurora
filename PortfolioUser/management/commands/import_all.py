@@ -9,6 +9,15 @@ class Command(BaseCommand):
 
 
 def import_all():
+    """
+    To import everything, there have to be some files present:
+    courses are hardcoded
+    tutors in /tmp/tutors.csv
+    students have to be in /tmp/<coursename>.csv (i.e. bhci.csv and gsi.csv)
+
+    when files are placed correctly call:
+    python manage.py import_all
+    """
     print("import all")
     call_command('import_courses')
     call_command('import_tutors')

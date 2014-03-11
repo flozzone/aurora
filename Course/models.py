@@ -2,12 +2,15 @@ from django.db import models
 
 
 class Course(models.Model):
-    title = models.CharField(max_length=100)
-    short_title = models.CharField(max_length=10)
+    title = models.CharField(max_length=100, unique=True)
+    short_title = models.CharField(max_length=10, unique=True)
     description = models.TextField()
-    course_number = models.CharField(max_length=100)
+    course_number = models.CharField(max_length=100, unique=True)
 
     def __unicode__(self):
+        return str(self.title)
+
+    def __str__(self):
         return str(self.title)
 
     def get_course_challenges(self):
