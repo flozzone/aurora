@@ -114,8 +114,6 @@ def init_data():
     for user in users:
         CourseUserRelation(course=gsi, user=user).save()
         CourseUserRelation(course=hci, user=user).save()
-        Notification(user=user, course=gsi, text="Welcome to GSI!").save()
-        Notification(user=user, course=hci, text="Welcome to HCI!").save()
 
     # create course-user relations
     print('adding course-user relations for dummy users')
@@ -271,15 +269,6 @@ def init_data():
         course=hci,
     )
     aurora_hci.save()
-
-
-    # create dummy elaborations
-    challenges = Challenge.objects.all()
-    for challenge in challenges:
-        for dummy_user in dummy_users:
-            if not challenge.is_final_challenge():
-                Elaboration(challenge=challenge, user=dummy_user, elaboration_text="dummy elaboration %s" % dummy_user.username,
-                            submission_time='2013-11-01 10:00:00').save()
 
 
     # create stack-challenge relations
