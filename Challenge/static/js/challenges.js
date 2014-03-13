@@ -1,3 +1,9 @@
+$(function() {
+	$('.course_selected').removeClass('irrelevant');
+	$('#challenges-li').addClass('uRhere');
+});
+
+
 $(challenges_loaded);
 
 function challenges_loaded() {

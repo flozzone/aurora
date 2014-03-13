@@ -81,6 +81,15 @@ abbr, acronym {
 
 }
 
+
+.irrelevant {
+	opacity:0.3;
+}
+
+.uRhere {
+	border-bottom:3px solid rgba(255,255,255,0.3);
+}
+
 .login input[type="checkbox"] {
     display:none;
 }
