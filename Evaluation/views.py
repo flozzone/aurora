@@ -20,6 +20,7 @@ from Comments.models import Comment
 from Course.models import Course, CourseChallengeRelation
 from Elaboration.models import Elaboration
 from Evaluation.models import Evaluation
+from ObjectState.models import ObjectState
 from PortfolioUser.models import PortfolioUser
 from Review.models import Review
 from ReviewAnswer.models import ReviewAnswer
@@ -32,7 +33,7 @@ from Notification.models import Notification
 @staff_member_required
 def evaluation(request):
     # TODO: delete this snippet, fetches gravatar images for every user only for test cases.
-    # for puser in PortfolioUser.objects.all():
+    #for puser in PortfolioUser.objects.all():
     #    if not puser.avatar:
     #        puser.get_gravatar()
 
@@ -54,6 +55,7 @@ def evaluation(request):
                                'complaints': Elaboration.get_complaints(RequestContext(request)),
                                'questions': Challenge.get_questions(RequestContext(request)),
                                'awesome': Elaboration.get_awesome(),
+                               'expired': Elaboration.get_expired(),
                                'overview': overview,
                               },
                               context_instance=RequestContext(request))
@@ -89,6 +91,9 @@ def update_overview(request):
     if request.GET.get('data', '') == "awesome":
         print("loading awesome work...")
         elaborations = Elaboration.get_awesome()
+    if request.GET.get('data', '') == "expired":
+        print("loading expired work...")
+        elaborations = Elaboration.get_expired()
     if request.GET.get('data', '') == "evaluated_non_adequate_work":
         print("loading evaluated non adequate work...")
         elaborations = Elaboration.get_evaluated_non_adequate_work()
@@ -168,6 +173,9 @@ def detail(request):
         params = {}
     if selection == "awesome":
         print('selection: awesome')
+        params = {}
+    if selection == "expired":
+        print('selection: expired')
         params = {}
     if selection == "evaluated_non_adequate_work":
         print('selection: evaluated_non_adequate_work')
@@ -347,7 +355,8 @@ def select_challenge(request):
     for challenge in challenges:
         if Elaboration.get_sel_challenge_elaborations(challenge):
             for elaboration in Elaboration.get_sel_challenge_elaborations(challenge):
-                elaborations.append(elaboration)
+                if not ObjectState.get_expired(elaboration):
+                    elaborations.append(elaboration)
 
     html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
 
@@ -523,6 +532,43 @@ def back(request):
         elaborations = Elaboration.get_complaints(RequestContext(request))
     if selection == "awesome":
         elaborations = Elaboration.get_awesome()
+    if selection == "expired":
+        elaborations = Elaboration.get_expired()
+    if selection == "evaluated_non_adequate_work":
+        elaborations = Elaboration.get_evaluated_non_adequate_work()
+
+    # update overview
+    elaborations.sort(key=lambda elaboration: elaboration.submission_time)
+    request.session['elaborations'] = serializers.serialize('json', elaborations)
+
+    return HttpResponse()
+
+
+@login_required()
+@staff_member_required
+def expire(request):
+
+    if not 'elaboration_id' in request.GET:
+        return False;
+
+    elaboration = Elaboration.objects.get(pk=request.GET.get('elaboration_id', ''))
+    ObjectState.set_expired(elaboration, True)
+
+    selection = request.session.get('selection', 'error')
+    if selection == "search":
+        return HttpResponse()
+    if selection == "missing_reviews":
+        elaborations = Elaboration.get_missing_reviews()
+    if selection == "top_level_challenges":
+        elaborations = Elaboration.get_top_level_challenges()
+    if selection == "non_adequate_work":
+        elaborations = Elaboration.get_non_adequate_work()
+    if selection == "complaints":
+        elaborations = Elaboration.get_complaints(RequestContext(request))
+    if selection == "awesome":
+        elaborations = Elaboration.get_awesome()
+    if selection == "expired":
+        elaborations = Elaboration.get_expired()
     if selection == "evaluated_non_adequate_work":
         elaborations = Elaboration.get_evaluated_non_adequate_work()
 
