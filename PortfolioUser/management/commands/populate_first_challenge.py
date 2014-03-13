@@ -166,7 +166,7 @@ def init_data():
     ReviewQuestion(challenge=challenge_2, order=1, text="Wurde die Aufgabe im wesentlichen erfüllt?", boolean_answer=True).save()
     ReviewQuestion(challenge=challenge_2, order=2, text="Falls nein: Beschreiben sie, warum die Aufgabe nicht erfüllt wurde!").save()
     ReviewQuestion(challenge=challenge_2, order=3,
-                   text="Gibt es inzwischen Antworten auf den Kommentar? Gehen sie dazu zu der angegebenen Folie, und schauen sie, ob der Kommetnar zum Zeitpunkt ihres Reviews"
+                   text="Gibt es inzwischen Antworten auf den Kommentar? Gehen sie dazu zu der angegebenen Folie, und schauen sie, ob der Kommentar zum Zeitpunkt ihres Reviews"
                         " schon eine Antwort bekommen hat.",
                    boolean_answer=True).save()
 
@@ -270,7 +270,7 @@ def init_data():
     ReviewQuestion(challenge=challenge_8, order=1, text="Wurde die Aufgabe im wesentlichen erfüllt?", boolean_answer=True).save()
     ReviewQuestion(challenge=challenge_8, order=2, text="Falls nein: Beschreiben sie, warum die Aufgabe nicht erfüllt wurde!").save()
     ReviewQuestion(challenge=challenge_8, order=3,
-                   text="Gibt es inzwischen Antworten auf den Kommentar? Gehen sie dazu zu der angegebenen Folie, und schauen sie, ob der Kommetnar zum Zeitpunkt ihres Reviews"
+                   text="Gibt es inzwischen Antworten auf den Kommentar? Gehen sie dazu zu der angegebenen Folie, und schauen sie, ob der Kommentar zum Zeitpunkt ihres Reviews"
                         " schon eine Antwort bekommen hat.",
                    boolean_answer=True).save()
 
