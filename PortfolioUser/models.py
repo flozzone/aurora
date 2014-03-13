@@ -31,7 +31,7 @@ class PortfolioUser(User):
 
     def get_elaborations(self):
         elaborations = []
-        for elaboration in Elaboration.objects.filter(user=self):
+        for elaboration in Elaboration.objects.filter(user=self, submission_time__isnull=False):
             elaborations.append(elaboration)
         return elaborations
 
