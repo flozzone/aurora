@@ -318,11 +318,15 @@ th {
 .awesome_reviews, .success_reviews, .notry_reviews, .fail_reviews {
     border-radius: 20px;
     height:25px;
-	padding: 3px 0 3px 0 ;
+	padding: 3px 1px 3px 1px;
     text-align: center;
     -moz-box-sizing: border-box;
-    margin-right: 6px;	
-	
+    margin-right: 6px;		
+}
+
+.zero_reviews {
+	opacity:0.5;
+	filter:alpha(opacity=50); /* For IE8 and earlier */	
 }
 
 .awesome_reviews {

@@ -1,4 +1,10 @@
 $(function() {
+	$('.course_selected').addClass('irrelevant');
+	$('#evaluate-li').addClass('uRhere');
+});
+
+
+$(function() {
    $(".missing_reviews").click(function(event) {
        var url = '/update_overview?data=missing_reviews';
        $.get(url, function (data) {

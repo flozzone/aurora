@@ -2,6 +2,11 @@
  * Created by peterpur on 22.2.2014.
  */
 
+$(function() {
+	$('.course_selected').addClass('irrelevant');
+	$('#feed-li').addClass('uRhere');
+});
+
 var updateNew_Timer;
 
 $(window).load( function() {
