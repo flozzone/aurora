@@ -38,8 +38,10 @@ function file_upload_loaded() {
                     if (check_file.status === "error") {
                         errors++;
                     }
+                    if (file === check_file) {
+                        $(file.previewElement).append('<div class="fig">Fig: ' + (dropzone_instance.files.indexOf(file) + 1 - errors) + '</div>');
+                    }
                 });
-                $(file.previewElement).append('<div class="fig">Fig: ' + (dropzone_instance.files.indexOf(file)+1) + '</div>');
             });
             this.on("removedfile", function (file) {
                 revert_submit_clicked();
