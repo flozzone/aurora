@@ -186,7 +186,7 @@ def detail(request):
                 evaluation = Evaluation.objects.get(submission=elaboration)
                 params = {'evaluation': evaluation}
 
-    reviews = Review.objects.filter(elaboration=elaboration)
+    reviews = Review.objects.filter(elaboration=elaboration, submission_time__isnull=False)
 
     next = prev = None
     index = elaborations.index(elaboration)
@@ -481,7 +481,7 @@ def load_reviews(request):
         return False;
 
     elaboration = Elaboration.objects.get(pk=request.GET.get('elaboration_id', ''))
-    reviews = Review.objects.filter(elaboration=elaboration)
+    reviews = Review.objects.filter(elaboration=elaboration, submission_time__isnull=False)
 
     return render_to_response('stack_rev.html', {'elaboration': elaboration, 'reviews': reviews, 'stack': 'stack'},
                               RequestContext(request))
