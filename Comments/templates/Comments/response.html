@@ -38,7 +38,7 @@
 	 <div id="detail_r{{response.id}}" class="author_detail hidden_detail" onClick="$(this).addClass('hidden_detail')">
 		 <img src='{{response.author.avatar.url}}'>
 		 <span class="nick">{{response.author.display_name}}</span><br>
-		 &quot;{{response.author.statement}}&quot;
+		 &quot;{{response.author.statement | urlizetrunc:50}}&quot;
 		 
 	 </div>
 

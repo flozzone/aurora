@@ -37,7 +37,9 @@
 	 <div id="detail_{{comment.id}}" class="author_detail hidden_detail" onClick="$(this).addClass('hidden_detail')">
 		 <img src='{{comment.author.avatar.url}}'>
 		 <span class="nick">{{comment.author.display_name}}</span><br>
-		 &quot;{{comment.author.statement}}&quot;
+		 &quot;{{comment.author.statement|urlizetrunc:50}}&quot;<br>
+		 {% if requester.is_staff %}{{comment.author.matriculation_number}} - {{comment.author.first_name}} {{comment.author.last_name}}<br>
+		 <a href="mailto:{{comment.author.email}}">{{comment.author.email}}</a>{% endif %}
 		 
 	 </div>
     <div class="comment_body">
