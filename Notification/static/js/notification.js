@@ -1,6 +1,6 @@
 function notifications_loaded() {
     $('#read_all_button').click(read_all_button_clicked);
-	$('.course_selected').addClass('irrelevant');
+	$('.course_selected').removeClass('irrelevant');
 	$('#notifications-li').addClass('uRhere');
 	window.document.title="Aurora: Notifications"
 }
