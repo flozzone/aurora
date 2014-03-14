@@ -64,6 +64,7 @@ def file_remove(request):
 
 @login_required()
 def all_files(request):
+    print("requesting all files")
     user = RequestContext(request)['user']
     if 'elaboration_id' in request.GET:
         elaboration_id = request.GET.get('elaboration_id')
@@ -74,7 +75,7 @@ def all_files(request):
         except:
             raise Http404
         data = []
-        for upload_file in UploadFile.objects.filter(user=elaboration.user, elaboration__id=elaboration_id):
+        for upload_file in UploadFile.objects.filter(user=elaboration.user, elaboration__id=elaboration_id).order_by('creation_time'):
             data.append({
                 'name': os.path.basename(upload_file.upload_file.name),
                 'size': upload_file.upload_file.size,
