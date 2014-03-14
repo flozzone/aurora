@@ -11,7 +11,7 @@ def render_uploads(context, elaboration):
     elaboration = Elaboration.objects.get(id=elaboration.id)
     files = []
     index = 0
-    for upload_file in UploadFile.objects.filter(user=elaboration.user, elaboration__id=elaboration.id):
+    for upload_file in UploadFile.objects.filter(user=elaboration.user, elaboration__id=elaboration.id).order_by('creation_time'):
         index = index + 1
         figure = 'Fig. ' + str(index)
         files.append([os.path.basename(upload_file.upload_file.name),

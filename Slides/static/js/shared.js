@@ -4,6 +4,7 @@
 $(function() {
 	$('.course_selected').removeClass('irrelevant');
 	$('#slides-li').addClass('uRhere');
+	window.document.title="Aurora: Slides"
 });
 
 
