@@ -76,8 +76,15 @@ input:-moz-placeholder { color:gray; }
 	background-size:160px 90px;
 }
 
+.isButton {
+	color:rgb(58,201,88);
+	text-decoration:none;
+	font-size:90%;
+}
+
 .content_navigation_bar{
-	border-bottom:1px solid rgb(58,201,88);
+	border-bottom:1px solid gray;
+	background:color:rgba(255,255,255,0.5);
     height:2em;
     position:fixed;
     top:6.0em;
