@@ -325,8 +325,8 @@ th {
 }
 
 .zero_reviews {
-	opacity:0.5;
-	filter:alpha(opacity=50); /* For IE8 and earlier */	
+	opacity:0.35;
+	filter:alpha(opacity=35); /* For IE8 and earlier */	
 }
 
 .awesome_reviews {
