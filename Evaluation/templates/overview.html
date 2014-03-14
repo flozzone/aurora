@@ -10,7 +10,7 @@
     {% for elaboration in elaborations %}
         <tr class="{% cycle 'darkRow' 'lightRow' %}">
             <td onclick="load_details({{ elaboration.id }})"><img class="gravatar" src="{{ elaboration.user.avatar.url }}" style="vertical-align:middle"> {{ elaboration.user.nickname }}</td>
-            <td onclick="load_details({{ elaboration.id }})">{{ elaboration.challenge.title }}</td>
+            <td onclick="load_details({{ elaboration.id }})">{{ elaboration.challenge.title }}, {{elaboration.lecture}}</td>
             <td onclick="load_details({{ elaboration.id }})">{{ elaboration.submission_time }}</td>
             <td onclick="set_expired({{ elaboration.id }})"><input type="checkbox" /></td>
         </tr>

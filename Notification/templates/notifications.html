@@ -7,7 +7,7 @@
 
 {% block content %}
 {% load humanize %}
-  {% if notifications|length > 0 %}<button id="read_all_button" class="irrelevant">Mark all as read</button>{% else %} nothing here {% endif %}
+  {% if notifications|length > 0 %}<button id="read_all_button" class="irrelevant">Mark all as read</button>{% else %} <button class="irrelevant" style="color:black">nothing here</button> {% endif %}
   <div class="notificationList">
   {% for notification in notifications %}
     <a href="/notifications?id={{ notification.id }}{% if notification.link %}&link={{ notification.link }}{% endif %}">
