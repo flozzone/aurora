@@ -40,6 +40,7 @@ function getCookie(name) {
 }
 
 function course_change(event) {
+	var selMen = $('.uRhere').text().trim().toLowerCase();
 	$('.ct_menu').removeClass('selected');
 	$(event.target).addClass('selected');
     ajax_setup();
@@ -49,7 +50,7 @@ function course_change(event) {
             'short_title': short_title
         }).done(function (data) {
             if (data.success === true) {
-                location.href = '/';
+                location.href = '/'+selMen+'/';
             } else {
                 $('#password').val("")
                 $('#error_message').html(data.message);
