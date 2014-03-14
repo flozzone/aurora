@@ -11,14 +11,17 @@
   <div class="pagehead">
     <div class="headline">
       <a href="/">Aurora</a>
-      {% if available_courses %}
-	  <div class="course_selected" onclick="$('#course_select').toggle(100);"> {{last_selected_course.title}} <i class="fa fa-angle-down"></i>
+      {% if available_courses|length > 1 %}
+	  <div class="course_selected" onclick="if(!$(this).hasClass('irrelevant')){$('#course_select').toggle(100);}"> {{last_selected_course.title}} <i class="fa fa-angle-down"></i>
         <ul id="course_select">
           {% for course in available_courses %}
             <li class="ct_menu {% if course == last_selected_course %}selected{% endif %}" data-shortname="{{ course.short_title }}" >{{course.title}}</li>
           {% endfor %}
         </ul>
 	  </div>
+	  {% else %}
+		  <div class="course_selected"> {{last_selected_course.title}}</div>
+
       {% endif %}
     </div>
 
