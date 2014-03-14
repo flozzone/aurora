@@ -5,6 +5,7 @@
 $(function() {
 	$('.course_selected').addClass('irrelevant');
 	$('#feed-li').addClass('uRhere');
+	window.document.title="Aurora: Newsfeed"
 });
 
 var updateNew_Timer;
