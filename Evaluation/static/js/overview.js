@@ -1,6 +1,6 @@
 $(function() {
 	$('.course_selected').addClass('irrelevant');
-	$('#evaluate-li').addClass('uRhere');
+	$('#evaluation-li').addClass('uRhere');
 });
 
 
