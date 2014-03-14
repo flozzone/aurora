@@ -116,7 +116,7 @@ def create_context_view_review(request, data):
         user = RequestContext(request)['user']
         challenge = Challenge.objects.get(pk=request.GET.get('id'))
         elaboration = Elaboration.objects.filter(challenge=challenge, user=user)[0]
-        reviews = Review.objects.filter(elaboration=elaboration).order_by("appraisal")
+        reviews = Review.objects.filter(elaboration=elaboration, submission_time__isnull=False).order_by("appraisal")
         data['reviews'] = []
         for review in reviews:
             review_data = {}
