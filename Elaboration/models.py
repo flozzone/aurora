@@ -47,7 +47,7 @@ class Elaboration(models.Model):
         return None
 
     def is_reviewed_2times(self):
-        if Review.objects.filter(elaboration=self).count() < 2:
+        if Review.objects.filter(elaboration=self, submission_time__isnull=False).count() < 2:
             return False
         return True
 
