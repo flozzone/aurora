@@ -15,7 +15,6 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
     "use strict";
 
     my.registerAllTheElements = function () {
-        my.registerTestButton();
         my.registerStartPolling();
         my.registerStopPolling();
 
@@ -32,8 +31,6 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         my.registerCancelCommentButton();
 
         my.registerPolling();
-
-        my.startPolling();
     };
 
     my.state = {
@@ -420,11 +417,8 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         $button_post_reply.click(function (event) {
             event.preventDefault();
 
-            // hacky as hell. better use some empty contenteditable <div> instead of Textarea form
-            // this is done in addComment as well of course
             var $replyTextarea = $('#replyTextarea');
             var text = $replyTextarea.val();
-//            text = '<pre>' + text + '</pre>';
             $replyTextarea.val(text);
 
             $.ajax({
@@ -481,11 +475,8 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         $button_add_comment.click(function (event) {
             event.preventDefault();
 
-            // hacky as hell. better use some empty contenteditable <div> instead of Textarea form
-            // this is done in reply as well of course
             var $commentTextarea = $("#commentTextarea");
             var text = $commentTextarea.val();
-//            text = '<pre>' + text + '</pre>';
             $commentTextarea.val(text);
 
             $.ajax({
@@ -638,9 +629,6 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         my.POLLING.firstRefId = firstRefId;
         my.POLLING.lastRefId = lastRefId;
 
-        console.log('firstRefId: ' + firstRefId.toString());
-        console.log('lastRefId: ' + lastRefId.toString());
-
         my.updateCommentLists(false);
     };
 
@@ -677,31 +665,6 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         };
     };
 
-    my.registerTestButton = function () {
-        var $myTest = $('#myTest');
-        $myTest.off();
-        $myTest.on('click', function () {
-//        editElements.prop = 'bam';
-//        editElements();
-//    $('#myTest').click(function () {
-//    updateComments(false);
-//    alert(x.toString() + " # " + y.toString());
-//    var currentId = $('.comment').first().attr('id');
-//    console.log(currentId);
-//        updateComments(false, true);
-//        $('#commentForm').toggle();
-//        console.log($('#id_parent_comment').val());
-//        $('#replyForm').toggle();
-//        $('#replyForm').hide();
-//        console.log($('#id_parent_comment').val());
-//        if(stop_update_poll) startPolling();
-//        else stopPolling();
-//            alert('nothing assigned');
-//        $('*').off();
-            return false;
-        });
-    };
-
     my.findClosestRefObj = function ($child) {
         var ref_type = $child.closest('[data-ref_type]').attr('data-ref_type');
         var ref_id = $child.closest('[data-ref_id]').attr('data-ref_id');
@@ -710,6 +673,14 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
 
     $(document).ready(function () {
         my.registerAllTheElements();
+    });
+
+    $(window).load(function() {
+        if(typeof(checkSlidesInView) !== 'undefined') {
+            checkSlidesInView();
+        }
+
+        my.startPolling();
     });
 
     return my;

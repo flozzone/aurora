@@ -10,13 +10,16 @@
 <script type="text/javascript" src="{{ STATIC_URL }}flowplayer/flowplayer-3.2.12.min.js"></script>
 
 <link rel="stylesheet" href="{{ STATIC_URL }}css/slides_base.css" type="text/css" media="screen"/>
+
+<script type="text/javascript" src="{{ STATIC_URL }}Comments/simple_functions.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}Comments/comments.js"></script>
+<link rel="stylesheet" href="{{ STATIC_URL }}Comments/comments.css" type="text/css" media="screen"/>
 {% endblock %}
 
 {% block content %}
 
 {% include "contentbar.html" %}
 {% comments_boilerplate %}
-
 
 <div id="contentblock">
 	<script>
@@ -67,7 +70,8 @@
 				</div>
 				<div id="lazyload_{{slide.id}}" class="lazyload">comments will load on demand</div>
 				<div id="comments_{{slide.id}}">
-					{% render_multi_comment_list for slide %}
+{#					{% render_multi_comment_list for slide %}#}
+                    {% render_additional_comment_list for slide %}
 				</div>
 			</td>
 	     {% endfor %}
