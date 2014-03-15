@@ -54,7 +54,7 @@ class Elaboration(models.Model):
     def is_older_3days(self):
         if not self.is_submitted():
             return False
-        if self.submission_time + timedelta(3) < datetime.now():
+        if self.submission_time + timedelta(3) > datetime.now():
             return False
         return True
 
