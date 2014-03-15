@@ -18,7 +18,7 @@ function checkSlidesInView() {
         //var render_slides_url = base_url + "slidecasting/ajax_render_comments/";
 
         COMMENTS.setActivePollingObjects(first_slide + 1, last_slide + 1);
-        for (var i=first_slide; i<=last_slide; i++ ) {
+//        for (var i=first_slide; i<=last_slide; i++ ) {
             /* TODO: insert loading of comments here.
                      * ich hab den alten code da gelassen. das erste ist eine abfrage obs schon 
                        kommentare gibt, das muss natuerlich auch in der neuen variante passieren-
@@ -26,9 +26,10 @@ function checkSlidesInView() {
                      * wenn du noch fragen hast, meld dich einfach.
             */
             // for every slide...
-            slide = $($("table tbody tr td")[i]);
-            slide_id = slide.attr("id").split("_")[1];
-            console.log("loading comments for slide with id: " + slide_id);
+//            slide = $($("table tbody tr td")[i]);
+//            slide_id = slide.attr("id").split("_")[1];
+//            console.log("loading comments for slide with id: " + slide_id);
+
             /*
             if (slide.children(".header_comments").length == 0 && slide.children(".loading_circle_image").length == 0) {
                 slide.append("<img class='loading_circle_image' src='" + loading_circle_image + "'>");                
@@ -39,7 +40,7 @@ function checkSlidesInView() {
                 }, 'json');
             }
             */
-        }
+//        }
     }
 }
 
