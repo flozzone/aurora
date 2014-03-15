@@ -4,10 +4,9 @@ from urllib.parse import urlparse
 import urllib.request
 from django.db import models
 from django.contrib.auth.models import User, UserManager
-from AmanamanProjekt.settings import STATIC_ROOT
+from AmanamanProjekt.settings import STATIC_ROOT, MEDIA_ROOT
 from Elaboration.models import Elaboration
 from django.core.files import File
-
 
 def avatar_path(instance, filename):
     name = 'avatar_%s' % instance.id
@@ -19,19 +18,20 @@ def avatar_path(instance, filename):
 class PortfolioUser(User):
     nickname = models.CharField(max_length=100, null=True, blank=True)
     last_activity = models.DateTimeField(auto_now_add=True, blank=True)
-    statement = models.TextField()
+    statement = models.TextField(blank=True)
     upload_path = 'avatar'
     avatar = models.ImageField(upload_to=avatar_path, null=True, blank=True)
-    matriculation_number = models.CharField(max_length=100, null=True)
+    matriculation_number = models.CharField(max_length=100, null=True, unique=True, blank=True)
     study_code = models.CharField(max_length=100, null=True, blank=True, default="")
-    last_selected_course = models.ForeignKey('Course.Course', null=True)
+    last_selected_course = models.ForeignKey('Course.Course', null=True, blank=True)
+    oid = models.CharField(max_length=30, null=True, unique=True, blank=True)
 
     # Use UserManager to get the create_user method, etc.
     objects = UserManager()
 
     def get_elaborations(self):
         elaborations = []
-        for elaboration in Elaboration.objects.filter(user=self):
+        for elaboration in Elaboration.objects.filter(user=self, submission_time__isnull=False):
             elaborations.append(elaboration)
         return elaborations
 
@@ -48,8 +48,8 @@ class PortfolioUser(User):
 
     def get_gravatar(self):
         filename = "avatar_" + str(self.id)
-        if not os.path.isdir(self.upload_path):
-            os.makedirs(self.upload_path)
+        if not os.path.isdir(os.path.join(MEDIA_ROOT,self.upload_path)):
+            os.makedirs(os.path.join(MEDIA_ROOT,self.upload_path))
         try:
             gravatarurl = "http://www.gravatar.com/avatar/" + hashlib.md5(
                 self.email.lower().encode("utf-8")).hexdigest() + "?"

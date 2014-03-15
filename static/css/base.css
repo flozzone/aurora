@@ -81,8 +81,26 @@ abbr, acronym {
 
 }
 
+
+.irrelevant {
+	opacity:0.3;
+	cursor:default!important;
+}
+
+.irrelevant .fa {
+	display:none;
+}
+
+.uRhere {
+	border-bottom:3px solid rgba(255,255,255,0.3);
+}
+
 .login input[type="checkbox"] {
     display:none;
+}
+
+.login input:focus {
+  outline: none;
 }
 
 .login input[type="checkbox"] + label  {
@@ -101,6 +119,20 @@ abbr, acronym {
 	padding:0.4em;
 	margin-top:1em;
 }
+
+#error {
+	font-size:1.5em;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	text-shadow: 0 0 5px rgba(255,0,0,0.5),0 0 2px rgba(255,0,0,0.5);
+	background:none;
+    cursor:default;
+	padding-top:3em;
+	padding-left:0.25em;
+	color:rgba(0,0,0,0);
+	clear:both;
+	
+}
+
 
 .login input[type="checkbox"]:checked + label  {
 /*    background-color:rgba(58,201,88,0.8);*/
@@ -141,7 +173,7 @@ input:-moz-placeholder { color:rgba(58,201,88,0);	text-shadow: 0 0 2px rgba(58,2
 	width:500px;
 	height:300px;
 	left:50%;
-	top:50%;
+	top:36%;
 	margin-left:-250px;
 	margin-top:-200px;
     text-align: left;
@@ -161,6 +193,35 @@ input:-moz-placeholder { color:rgba(58,201,88,0);	text-shadow: 0 0 2px rgba(58,2
 	height:100%;
 }
 
+.alternate_login {
+	text-decoration:none;
+	text-transform:uppercase;
+	color:rgb(58,201,88);
+	font-size:1.5em;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	margin-top:2em;
+}
+
+.alternate_login a {
+	text-decoration:none;
+	color:rgb(58,201,88);
+	box-shadow: 0 0 20px rgb(58,201,88);
+	border-radius:0.5em;
+	float:right;
+	padding:0.4em;
+}
+
+.alternate_login span {
+	padding:0.4em;
+	display:block;
+	color:rgba(58,201,88,0.25);
+	text-shadow: 0 0 5px rgba(58,201,88,0.5),0 0 2px rgba(58,201,88,0.5);
+}
+
+.login hr {
+	box-shadow: 0 0 5px rgba(58,201,88,0.5),0 0 2px rgba(58,201,88,0.5);
+	border:1px solid rgba(58,201,88,0.25);
+}
 .loginButton {
 	text-decoration:none;
 	text-transform:uppercase;
@@ -441,6 +502,23 @@ button {
 .nothing_to_see_move_on {
 	display:none;
 	visibility:hidden;
+}
+
+.month {
+	width:60px;
+}
+
+.day {
+	width:40px;
+	text-align:right;
+}
+
+.maybe {
+	color:darkgray;
+}
+
+.not {
+	color:#e8e8e8;
 }
 
 /*!

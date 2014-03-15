@@ -1,8 +1,25 @@
+::-webkit-input-placeholder { color:gray; }
+::-moz-placeholder { color:gray; } /* firefox 19+ */
+:-ms-input-placeholder { color:gray; } /* ie */
+input:-moz-placeholder { color:gray; }
+
+
+.lazyload {
+	display:none;
+}
+
+
+#load_all_comments {
+	display:none !important;
+}
+
 .playaudio {
 	opacity:0.3;
+	display:none !important;
 }
 
 .playaudio_cmd {
+	display:none !important;
 	opacity:0.3;
 	border:1px solid silver;
 	border-radius:3px;
@@ -11,6 +28,7 @@
 	margin-left:3px;
 	margin-right:3px;	
 }
+
 .lectureFront {
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
@@ -58,8 +76,15 @@
 	background-size:160px 90px;
 }
 
+.isButton {
+	color:rgb(58,201,88);
+	text-decoration:none;
+	font-size:90%;
+}
+
 .content_navigation_bar{
-	border-bottom:1px solid rgb(58,201,88);
+	border-bottom:1px solid gray;
+	background:color:rgba(255,255,255,0.5);
     height:2em;
     position:fixed;
     top:6.0em;
@@ -406,6 +431,7 @@ ul.content_navigation_list li {
 .oneBB > img {
 	position:absolute;
 	top:-2px;
+	cursor:pointer;
 }
 
 .myBB {
@@ -415,8 +441,8 @@ ul.content_navigation_list li {
 }
 
 .nobody {
-	opacity:0.20;
-	filter:alpha(opacity=20);
+	opacity:0.40;
+	filter:alpha(opacity=40);
 }
 
 .somebody {
@@ -522,6 +548,7 @@ ul.content_navigation_list li {
 .studio_slide_medium {
     position: relative;
 }
+
 
 /* LIVECAST */
 .leftBBlive {

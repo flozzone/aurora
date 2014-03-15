@@ -1,5 +1,15 @@
 // making jquery work with django csrf protection.
 // see: https://docs.djangoproject.com/en/1.4/ref/contrib/csrf/#ajax
+
+$(function() {
+	$('.course_selected').removeClass('irrelevant');
+	$('#slides-li').addClass('uRhere');
+	window.document.title="Aurora: Slides"
+});
+
+
+
+
 var csrftoken = getCookie('csrftoken');
 
 function getCookie(name) {
@@ -52,6 +62,7 @@ $.ajaxSetup({
 
 // takes care of marking slides as confusing/important/
 function markSlide(button_div, url) {
+    console.log("marking slide: " + url)
     var marker_button = $(button_div);
     var img_src = marker_button.children("img").attr("src");
     // we know that the user has previously clicked on the marker if the

@@ -1,155 +1,154 @@
+{% extends "base.html" %}
+
 {% block additional_headers %}
-  <script type="text/javascript" src="{{ STATIC_URL }}tinymce/tinymce.min.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}tinymce/jquery.tinymce.min.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/stack.js"></script>
-  <link rel="stylesheet" href="{{ STATIC_URL }}css/challenge.css" type="text/css" media="screen"/>
-  <link rel="stylesheet" href="{{ STATIC_URL }}css/stack.css" type="text/css" media="screen"/>
+<script type="text/javascript" src="{{ STATIC_URL }}tinymce/tinymce.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}tinymce/jquery.tinymce.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/stack.js"></script>
+<link rel="stylesheet" href="{{ STATIC_URL }}css/challenge.css" type="text/css" media="screen"/>
+<link rel="stylesheet" href="{{ STATIC_URL }}css/stack.css" type="text/css" media="screen"/>
 {% endblock %}
 
-<div class="challenges_stack">
-	<div class="stack_info">
-		<div class="info_title">
-  		  {{ stack.title }}
-	  	</div>
-		<div class="info_description">
-  		  {{stack.description}}
-		</div>
-	</div>
-	<div class="challenge_list">
-		{% for challenge_dict in challenges_active %}
-		<div class="one_challenge active{% if challenge_dict.challenge.is_final_challenge %} final_task{% endif %}" 
-			challenge_id="{{ challenge_dict.challenge.id }}">
-	  		<div class="task_done" {% if challenge_dict.status.status = "Done, peer reviewed." %}style="display:block;"{% endif %}><i class="fa fa-check"></i></div>
-			<div class="challenge_top_bracket">&nbsp;</div>
-			<div class="challenge_image_container" challenge_id="{{ challenge_dict.challenge.id }}">
-		    	<img class="challenge_image active" src="{{ challenge_dict.challenge.image.url }}">
-			</div>
-		  	<div class="challenge-description">
-  		        <div class="challenge-headline">{{ challenge_dict.challenge.title }}</div>
-				<p>
-			  		{% if challenge_dict.challenge.description|wordcount > 50 %}
-			  		 	{{ challenge_dict.challenge.description|safe | truncatewords:50}} 
-			  		{% else %}
-			  			{{challenge_dict.challenge.description|safe}}
-			  		{% endif %}
-				</p>
-		  	</div> 
-			<div class="go_challenge button XL active" challenge_id="{{ challenge_dict.challenge.id }}">
-				<i class="fa fa-chevron-circle-right no_clicksed"></i>
-			</div>
-<!-- writing reviews -->
-			{% if not user.is_staff %}
-			<div class="challenge_footer">
-				<div class="review_space">
-				{% if not challenge_dict.challenge.is_final_challenge %}
-				{% if not stack_blocked %}
-				 {% for review in challenge_dict.reviews %}
-				  {% if review %}
-				   {% if review.submitted %}
-				  	<div class="review_box done" challenge_id="{{ challenge_dict.challenge.id }}">
-				  		<i class="fa fa-check-square-o fa-lg"></i>
-				  	</div>
-				   {% else %}
-				  	<div class="review_box in_progress" challenge_id="{{ challenge_dict.challenge.id }}">
-				  		<i class="fa fa-pencil-square-o fa-lg"></i>
-				  	</div>
-				   {% endif %}
-				  {% elif not challenge_dict.submitted %} <!-- if review -->
-				  	<div class="review_box inactive"></div>
-				  {% else %} <!-- if review -->
-				  	<div class="review_box active" challenge_id="{{ challenge_dict.challenge.id }}">
-				  		<i class="fa fa-pencil-square-o fa-lg"></i>
-				  	</div>
-				  {% endif %} <!-- if review -->
-				 {% endfor %} <!-- for review in challenge_dict.reviews -->
-			  {% endif %} <!-- not stack_blocked -->
-			 {% endif %} <!-- if not challenge_dict.challenge.is_final_challenge -->
+{% block content %}
 
-<!-- status -->
+<div id="detail_area">
+  <div class="challenges_stack">
+	  <div class="stack_info">
+      <div class="info_title">
+          {{ stack.title }}
+        </div>
+      <div class="info_description">
+          {{ stack.description|safe|urlize }}
+      </div>
+    </div>
+    <div class="challenge_list">
+      {% for challenge_dict in challenges_active %}
+      <div class="one_challenge active{% if challenge_dict.challenge.is_final_challenge %} final_task{% endif %}"
+        challenge_id="{{ challenge_dict.challenge.id }}">
+          <div class="task_done" {% if challenge_dict.status.status == "Done, peer reviewed." or challenge_dict.status.status == "Evaluated." %}style="display:block;"{% endif %}><i class="fa fa-check"></i></div>
+        <div class="challenge_top_bracket">&nbsp;</div>
+        <div class="challenge_image_container" challenge_id="{{ challenge_dict.challenge.id }}">
+            <img class="challenge_image active" src="{{ challenge_dict.challenge.image.url }}">
+        </div>
+          <div class="challenge-description">
+                <div class="challenge-headline">{{ challenge_dict.challenge.title }}</div>
+          <p>
+              {% if challenge_dict.challenge.description|wordcount > 50 %}
+                {{ challenge_dict.challenge.description|safe | truncatewords:50}}
+              {% else %}
+                {{challenge_dict.challenge.description|safe}}
+              {% endif %}
+          </p>
+          </div>
+        <div class="go_challenge button XL active" challenge_id="{{ challenge_dict.challenge.id }}">
+          <i class="fa fa-chevron-circle-right no_clicksed"></i>
+        </div>
+  <!-- writing reviews -->
+        {% if not user.is_staff %}
+        <div class="challenge_footer">
+          <div class="review_space">
+          {% if not challenge_dict.challenge.is_final_challenge %}
+          {% if not stack_blocked %}
+           {% for review in challenge_dict.reviews %}
+            {% if review %}
+             {% if review.submitted %}
+              <div class="review_box done" challenge_id="{{ challenge_dict.challenge.id }}">
+                <i class="fa fa-check-square-o fa-lg"></i>
+              </div>
+             {% else %}
+              <div class="review_box in_progress" challenge_id="{{ challenge_dict.challenge.id }}">
+                <i class="fa fa-pencil-square-o fa-lg"></i>
+              </div>
+             {% endif %}
+            {% elif not challenge_dict.submitted %} <!-- if review -->
+              <div class="review_box inactive"></div>
+            {% else %} <!-- if review -->
+              <div class="review_box active" challenge_id="{{ challenge_dict.challenge.id }}">
+                <i class="fa fa-pencil-square-o fa-lg"></i>
+              </div>
+            {% endif %} <!-- if review -->
+           {% endfor %} <!-- for review in challenge_dict.reviews -->
+          {% endif %} <!-- not stack_blocked -->
+         {% endif %} <!-- if not challenge_dict.challenge.is_final_challenge -->
 
-					<div class="status_space">
-						<b>Status:</b>
-						<span>{{ challenge_dict.status.status }}</span>
-						{% if challenge_dict.points %}You received
-							<span style="font-weight:bold;">{{ challenge_dict.points }}</span> Points.
-							Full evaluation result inside.
-						{% endif %}
-				  
-<!-- review results -->
+  <!-- status -->
 
-						<div class="peer_reviews" challenge_id="{{ challenge_dict.challenge.id }}">
-							{% if challenge_dict.awesome or challenge_dict.success or challenge_dict.fail or challenge_dict.nothing %}
-							  Reviews are in: 
-							{% endif %}
+            <div class="status_space">
+              <b>Status:</b>
+              <span>{{ challenge_dict.status.status }}</span>
+              {% if challenge_dict.points %}You received
+                <span style="font-weight:bold;">{{ challenge_dict.points }}</span> Points.
+                Full evaluation result inside.
+              {% endif %}
 
-							{% if challenge_dict.awesome %}
-							<span class="received_review">
-								{{ challenge_dict.awesome }} x <span class="review_token green effect6">Great work</span> &nbsp;
-							</span>
-							{% endif %}
-							{% if challenge_dict.success %}
-							<span class="received_review">
-								  {{ challenge_dict.success }} x <span class="review_token">Good Work</span> &nbsp;
-							</span>
-							{% endif %}
-							{% if challenge_dict.fail %}
-							<span class="received_review">
-								{{ challenge_dict.fail }} x <span class="review_token yellow">Barely Acceptable</span> &nbsp;
-							</span>
-							{% endif %}
-							{% if challenge_dict.nothing %}
-							<span class="received_review">
-								{{ challenge_dict.nothing }} x <span class="review_token red">Unacceptable</span> &nbsp;
-							</span>
-							{% endif %}
-							{% if challenge_dict.awesome or challenge_dict.success or challenge_dict.fail or challenge_dict.nothing %}
-								<span>Full review results inside.</span>
-							{% endif %}
-					  
-						</div> <!-- peer reviews -->
-					</div> <!-- status space -->
-				</div> <!-- review-space -->
-			</div> <!-- challenge_footer -->
-			{% endif %}  
-		</div> <!-- one_challenge -->
-		
-			
-		{% endfor %}
-	</div> <!-- challenge list -->
-	<div>&nbsp;</div>
-	{% if challenges_inactive %}
-	<div class="divider">&nbsp;
-	  <i class="fa fa-scissors" style="position:relative;top:-9px;left:200px;"></i>
-	</div>
-	{% endif %}
-	
-	<div class="challenge_list inactive">
-		{% for challenge in challenges_inactive %}
-			<div class="one_challenge more_high {% if challenge.is_final_challenge %} final_task{% endif %}">
-				<div class="challenge_image_container">
-		    		<img class="challenge_image active" src="{{ challenge.image.url }}">
-				</div>
-		  	  <div class="challenge-description">
-  		        <div class="challenge-headline">{{ challenge.title }}</div>
-				<p>
-			  		{% if challenge.description|wordcount > 50 %}
-			  		 	{{ challenge.description|safe | truncatewords:50}} 
-			  		{% else %}
-			  			{{challenge.description|safe}}
-			  		{% endif %}
-				</p>
-		  	  </div>
-			</div>
-		{% endfor %}
-		
-		<div>&nbsp;</div>
-	</div>
-	
+  <!-- review results -->
+
+              <div class="peer_reviews" challenge_id="{{ challenge_dict.challenge.id }}">
+                {% if challenge_dict.awesome or challenge_dict.success or challenge_dict.fail or challenge_dict.nothing %}
+                  Reviews are in:
+                {% endif %}
+
+                {% if challenge_dict.awesome %}
+                <span class="received_review">
+                  {{ challenge_dict.awesome }} x <span class="review_token green effect6">Great work</span> &nbsp;
+                </span>
+                {% endif %}
+                {% if challenge_dict.success %}
+                <span class="received_review">
+                    {{ challenge_dict.success }} x <span class="review_token">Good Work</span> &nbsp;
+                </span>
+                {% endif %}
+                {% if challenge_dict.fail %}
+                <span class="received_review">
+                  {{ challenge_dict.fail }} x <span class="review_token yellow">Barely Acceptable</span> &nbsp;
+                </span>
+                {% endif %}
+                {% if challenge_dict.nothing %}
+                <span class="received_review">
+                  {{ challenge_dict.nothing }} x <span class="review_token red">Unacceptable</span> &nbsp;
+                </span>
+                {% endif %}
+                {% if challenge_dict.awesome or challenge_dict.success or challenge_dict.fail or challenge_dict.nothing %}
+                  <span>Full review results inside.</span>
+                {% endif %}
+
+              </div> <!-- peer reviews -->
+            </div> <!-- status space -->
+          </div> <!-- review-space -->
+        </div> <!-- challenge_footer -->
+        {% endif %}
+      </div> <!-- one_challenge -->
+
+
+      {% endfor %}
+    </div> <!-- challenge list -->
+    <div>&nbsp;</div>
+    {% if challenges_inactive %}
+    <div class="divider">&nbsp;
+      <i class="fa fa-scissors" style="position:relative;top:-9px;left:200px;"></i>
+    </div>
+    {% endif %}
+
+    <div class="challenge_list inactive">
+      {% for challenge in challenges_inactive %}
+        <div class="one_challenge more_high {% if challenge.is_final_challenge %} final_task{% endif %}">
+          <div class="challenge_image_container">
+              <img class="challenge_image active" src="{{ challenge.image.url }}">
+          </div>
+            <div class="challenge-description">
+                <div class="challenge-headline">{{ challenge.title }}</div>
+          <p>
+              {% if challenge.description|wordcount > 50 %}
+                {{ challenge.description|safe | truncatewords:50}}
+              {% else %}
+                {{challenge.description|safe}}
+              {% endif %}
+          </p>
+            </div>
+        </div>
+      {% endfor %}
+
+      <div>&nbsp;</div>
+    </div>
+  </div>
 </div>
-
-
-
-
-
-
-
+{% endblock %}

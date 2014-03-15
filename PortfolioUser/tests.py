@@ -4,7 +4,7 @@ PortfolioUser model method tests
 
 from datetime import datetime
 
-from django.test import TestCase
+from django.test import TestCase, Client
 
 from PortfolioUser.models import PortfolioUser
 from Stack.models import Stack, StackChallengeRelation
@@ -13,6 +13,9 @@ from Challenge.models import Challenge
 from ReviewQuestion.models import ReviewQuestion
 from Elaboration.models import Elaboration
 from Review.models import Review
+from django.conf import settings
+from hashlib import sha1
+from hmac import new as hmac_new
 
 
 class PortfolioUserTest(TestCase):
@@ -33,6 +36,7 @@ class PortfolioUserTest(TestCase):
         user.is_superuser = False
         password = username
         user.set_password(password)
+        user.matriculation_number = username + '2857289'
         user.save()
         return user
 
@@ -76,6 +80,53 @@ class PortfolioUserTest(TestCase):
 
     def create_review(self, elaboration, reviewer):
         Review(elaboration=elaboration, submission_time=datetime.now(), reviewer=reviewer, appraisal='S').save()
+
+    @staticmethod
+    def ipython_test():
+        user = PortfolioUser.objects.get(username='dd')
+        c = Client()
+
+        shared_secret = settings.SSO_SHARED_SECRET.encode(encoding='latin1')
+        oid = '258'
+        now = int((datetime.utcnow() - datetime(1970, 1, 1)).total_seconds() / 10)
+
+        values_string = oid + user.matriculation_number + user.first_name + user.last_name + user.email + str(now)
+        hmac_calced = hmac_new(shared_secret, values_string.encode(encoding='latin1'), sha1).hexdigest()
+        values = {'oid': oid,
+                  'mn': user.matriculation_number,
+                  'firstName': user.first_name,
+                  'lastName': user.last_name,
+                  'mail': user.email,
+                  'sKey': hmac_calced}
+
+        # response = c.get('sso_auth_callback', values, follow=True)
+
+        from django.http import QueryDict
+        q = QueryDict('', mutable=True)
+        for key in values.keys():
+            q[key] = values[key]
+        url = 'http://localhost:8000/sso_auth_callback?' + q.urlencode()
+        return url
+
+    def test_sso(self):
+        c = Client()
+
+        shared_secret = settings.SSO_SHARED_SECRET.encode(encoding='latin1')
+        oid = '258'
+        user = self.users[0]
+        now = int((datetime.utcnow() - datetime(1970, 1, 1)).total_seconds() / 10)
+
+        values_string = oid + user.matriculation_number + user.first_name + user.last_name + user.email + str(now)
+        hmac_calced = hmac_new(shared_secret, values_string.encode(encoding='latin1'), sha1).hexdigest()
+        values = {'oid': oid,
+                  'mn': user.matriculation_number,
+                  'firstName': user.first_name,
+                  'lastName': user.last_name,
+                  'mail': user.email,
+                  'sKey': hmac_calced}
+
+        response = c.get('sso_auth_callback', values, follow=True)
+        print(response.redirect_chain)
 
     def test_get_elaborations(self):
         challenge1 = self.challenge

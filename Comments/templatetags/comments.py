@@ -67,18 +67,30 @@ class MultiCommentListNode(CommentListNode):
 @register.tag
 # def render_comment_list_plain_tag(parser, token):
 def render_comment_list(parser, token):
+    """
+    Renders a complete comment list with scripts and forms. Use this at max once per document.
+    """
     ref_token = handle_tokens(token)
     return CommentListNode(ref_token)
 
 
 @register.tag
 def render_additional_comment_list(parser, token):
+    """
+    Comment List without any scripting or forms.
+    You need to load something like comments_boilerplate + comments js files or render_comment_list to make
+    this tags comment list work.
+    """
     ref_token = handle_tokens(token)
     return AdditionalCommentListNode(ref_token)
 
 
 @register.tag
 def render_multi_comment_list(parser, token):
+    """
+    Comment List with JS but without forms. Use this for comment lists that are loaded dynamically and not during
+    document load time. Use this in conjunction with comments_boilerplate to make the this tags comment_list work.
+    """
     ref_token = handle_tokens(token)
     return MultiCommentListNode(ref_token)
 
@@ -143,6 +155,9 @@ def render_comment_list_inclusion_tag(for_string, reference):
 
 @register.inclusion_tag('Comments/forms.html', takes_context=True)
 def comments_boilerplate(context):
+    """
+    Renders only the forms for one or more comment lists. No scripts are being loaded.
+    """
 
     form = CommentForm()
     form.fields['visibility'].initial = Comment.PUBLIC

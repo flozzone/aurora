@@ -42,12 +42,13 @@
 	padding-bottom:0;
 }
 
-.question_container > .answer > textarea {
+.question_container textarea {
+	box-sizing: border-box;
 	width:100%;
-	height:5em;
-	font-size:13px;
+	height:6em;
+	font-size:14px;
 	border:1px solid silver;
-	padding: 0.5em 0;
+	padding: 0.5em;
 }
 
 .suButton {
@@ -262,7 +263,7 @@ th {
 .between_reviews {
 	height:1em;
 	background-color:silver;
-	margin-bottom:0.5em;
+	margin:0.5em -0.5em 0.5em -0.5em;
 }
 
 .review_staff {
@@ -281,7 +282,7 @@ th {
 	background-color:rgb(58,201,88);
 }
 
-.missing_reviews, .non_adequate_work, .non_adequate_reviews, .top_level_challenges, .complaints, .questions, .awesome, .search_btn, .evaluated_non_adequate_work {
+.missing_reviews, .non_adequate_work, .non_adequate_reviews, .top_level_challenges, .complaints, .questions, .awesome, .search_btn, .evaluated_non_adequate_work, .expired {
     cursor: pointer;
 }
 
@@ -317,11 +318,15 @@ th {
 .awesome_reviews, .success_reviews, .notry_reviews, .fail_reviews {
     border-radius: 20px;
     height:25px;
-	padding: 3px 0 3px 0 ;
+	padding: 3px 1px 3px 1px;
     text-align: center;
     -moz-box-sizing: border-box;
-    margin-right: 6px;	
-	
+    margin-right: 6px;		
+}
+
+.zero_reviews {
+	opacity:0.35;
+	filter:alpha(opacity=35); /* For IE8 and earlier */	
 }
 
 .awesome_reviews {

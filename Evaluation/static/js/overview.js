@@ -1,4 +1,10 @@
 $(function() {
+	$('.course_selected').addClass('irrelevant');
+	$('#evaluation-li').addClass('uRhere');
+});
+
+
+$(function() {
    $(".missing_reviews").click(function(event) {
        var url = '/update_overview?data=missing_reviews';
        $.get(url, function (data) {
@@ -111,6 +117,15 @@ $(function() {
    });
 });
 
+$(function() {
+   $(".expired").click(function(event) {
+       var url = '/update_overview?data=expired';
+       $.get(url, function (data) {
+            $('#overview').html(data);
+       });
+   });
+});
+
 function load_details(id) {
    var url = '/detail?elaboration_id=' + id;
    $.get(url, function (data) {
@@ -163,3 +178,10 @@ $(function() {
        $.ajax(args);
    });
 });
+
+function set_expired(id) {
+    var url = '/expire?elaboration_id=' + id;
+    $.get(url, function (data) {
+        window.location.href = "/evaluation/";
+    });
+}

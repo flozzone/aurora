@@ -354,7 +354,7 @@ def init_data():
 
     # create elaboration for challenge 1 for s0
     print('adding elaboration for challenge 1 for s0')
-    e1 = Elaboration(challenge=challenge_1, user=s0, elaboration_text="dummy elaboration 1",
+    e1 = Elaboration(challenge=challenge_1, user=s0, elaboration_text="this elaboration text is from populate demo data",
                      submission_time=datetime.now())
     e1.save()
 
@@ -378,7 +378,7 @@ def init_data():
 
     # create elaboration for challenge 2 for s0
     print('adding elaboration for challenge 2 for s0')
-    e2 = Elaboration(challenge=challenge_2, user=s0, elaboration_text="dummy elaboration 1",
+    e2 = Elaboration(challenge=challenge_2, user=s0, elaboration_text="this elaboration text is from populate demo data",
                      submission_time=datetime.now())
     e2.save()
 

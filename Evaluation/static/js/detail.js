@@ -6,9 +6,7 @@ $(function() {
         menubar: false,
         statusbar: false,
 		toolbar: false,
-	    plugins: "autoresize",
-		autoresize_min_height: 100,
-		autoresize_max_height: 800,
+		height:300,
         readonly: 1
     });
 });
@@ -160,14 +158,20 @@ $(function() {
     event.preventDefault();
     var data = {};
     data['answers'] = [];
+    var missing_answer = false;
     $(".question_container").each(function (index) {
         var answer_object = $(this).find('.answer');
         var answer = null;
         if (answer_object.hasClass('boolean_answer')) {
-            answer = answer_object.find('input').first().is(':checked');
+            answer = answer_object.find('input:checked')
+            if (answer.length === 0) {
+                missing_answer = true;
+            }
+            answer = answer.val();
         } else {
             answer = answer_object.find('#text_answer').val();
         }
+
         var question = answer_object.parent().find('.question').first();
         var question_id = question.attr('id');
         if (question_id) {
@@ -178,7 +182,16 @@ $(function() {
         }
     });
 
-    data['appraisal'] = $('input[name=appraisal]:checked').val();
+    var appraisal = $('input[name=appraisal]:checked');
+    if (appraisal.length === 0) {
+        missing_answer = true
+    }
+
+    if (missing_answer) {
+        alert("please fill out all answers");
+        return;
+    }
+    data['appraisal'] = appraisal.val();
     ajax_setup()
     var args = {
         type: "POST",

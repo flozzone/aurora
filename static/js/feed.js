@@ -2,6 +2,14 @@
  * Created by peterpur on 22.2.2014.
  */
 
+$(function() {
+	$('.course_selected').addClass('irrelevant');
+	$('#feed-li').addClass('uRhere');
+	window.document.title="Aurora: Newsfeed"
+});
+
+var updateNew_Timer;
+
 $(window).load( function() {
     "use strict";
 
@@ -27,6 +35,7 @@ function filter(fx,usr) {
 
 	$('.filterbtn').removeClass('hilited');
 	$('#'+fx).addClass('hilited');
+	$('#new_date').text(''); clearTimeout(updateNew_Timer);
 
     switch (fx) {
         case 1:
@@ -39,6 +48,10 @@ function filter(fx,usr) {
             $('.response:not(.staff_author):not(.author_author),.comment:not(.staff_author):not(.author_author)').addClass('hided');
             $('#' + $('.response.staff_author').parent().attr('class').split(' ')[0].slice(2)).removeClass('hided');
             break;
+		case 4:
+            $('.response,.comment,.r_list').removeClass('hided');
+            $('.response').addClass('hided');
+			break;
         case -1:
             $('.response,.comment,.r_list').removeClass('hided');
             $('.r_list').show();
@@ -58,7 +71,6 @@ function filter(fx,usr) {
 				var c = $(this).data('date');
 				if (c > x) {
 					$(this).removeClass('hided');
-					$('.filterbtn').removeClass('hilited');
 				}
 			});
 			$('.response').each(function(i){
@@ -67,11 +79,23 @@ function filter(fx,usr) {
 					$('#'+$(this).data('comment')).removeClass('hided');
 					$('.r_'+$(this).data('comment')).removeClass('hided');
 					$(this).removeClass('hided');
-					$('.filterbtn').removeClass('hilited');
 				}
 			});
+			updateNew();
             break;
     }
+}
+
+function updateNew() {
+	var cookieName = 'filterTimeCookie.'+$('#the_username').data('username');
+	var x = getCookie(cookieName);
+	var y = Math.round(Date.now()/60000 - x/60);
+	if (y<2) {y = ''}
+	else if (y<60) {y = '(' + y + ' mins)'}
+	else if (y<1440) {y = '(' + Math.round(y/60) + ' hours)'}
+	else {y = '(' + Math.round(y/1440) + ' days)'}
+	$('#new_date').text(y);
+	updateNew_Timer = setTimeout(function(){updateNew()},60000);
 }
 
 function headClick(aDiv) {

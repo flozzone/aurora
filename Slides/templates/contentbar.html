@@ -6,11 +6,11 @@
     <ul class="content_navigation_list" title="show..." xml:lang="en">
     <li>&nbsp;&nbsp;</li>
 	<!-- this is what will stay. also, the divs with class 'lectureFront' in start.html will stay. update those -->
-	<li> {%if not slidecasting_mode == 'start' %}<a href="/slides"><i class="fa fa-angle-double-left"></i></a>&nbsp;{% endif %} {% if slidecasting_mode == 'start' %} overview {% elif slidecasting_mode == 'new_comments_since' %}recent comments {% elif slidecasting_mode == 'marked_slides' %} your bookmarks {% elif slidecasting_mode == 'exercises' %} slides with exercises (?) {% elif slidecasting_mode == 'discourses' %} slides with discussions {% elif slidecasting_mode == 'search_results' %} search results {% elif slidecasting_mode == 'create_pdf' %} create pdf {% else %}date: {{lecture.start.day}}.{{lecture.start.month}}{% endif %} </li>
+	<li> {%if not slidecasting_mode == 'start' %}<a href="/slides" class="isButton"><i class="fa fa-angle-double-left"></i> OVERVIEW</a>&nbsp;&nbsp;&nbsp;{% endif %} {% if slidecasting_mode == 'start' %} overview {% elif slidecasting_mode == 'new_comments_since' %}recent comments {% elif slidecasting_mode == 'marked_slides' %} your bookmarks {% elif slidecasting_mode == 'exercises' %} slides with exercises (?) {% elif slidecasting_mode == 'discourses' %} slides with discussions {% elif slidecasting_mode == 'search_results' %} search results {% elif slidecasting_mode == 'create_pdf' %} create pdf {% else %}date: {{lecture.start.day}}.{{lecture.start.month}}{% endif %} </li>
 	{% if slidecasting_mode == 'livecast' %}
 		<li>Livecast</li>
 	{% elif not slidecasting_mode == 'start' %}
-	<li>&nbsp;&nbsp;&nbsp;</li>
+		<li>&nbsp;&nbsp;&nbsp;</li>
 		<li class="playaudio" id="flowplayer_controls_label">Audio Player </li>
 		<li class="playaudio_cmd" id="flowplayer_controls_prev" class="button b_inactive"><i class="fa fa-angle-double-left"></i></li>
 		<li class="playaudio_cmd" id="flowplayer_controls_play" class="button b_inactive">PLAY</li>
@@ -23,7 +23,7 @@
 
 	<ul>
 	   	<li id="search_slides_li">
-    		<form action="{% url 'Slides:start' %}" method="GET"><input class="rounded_field search_field" name="search_text" type="text" placeholder="search slides & comments" /></form>
+    		<form action="{% url 'Slides:studio_search' %}" method="GET"><input class="rounded_field search_field" name="search_text" type="text" placeholder="search slides & comments"/></form>
     	</li>
 
 	</ul>

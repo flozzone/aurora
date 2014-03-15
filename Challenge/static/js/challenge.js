@@ -78,9 +78,7 @@ function elaboration_save(challenge_id, submit) {
             alert('error elaboration autosave');
         },
         success: function () {
-            console.log("saved");
             if (submit) {
-                console.log("submit");
                 send_submit();
             }
         }
@@ -114,4 +112,15 @@ function send_submit() {
     $.get(url, function (data) {
         window.location.href = "/challenges/stack?id=" + stack_id;
     });
+
+//    var submitData = { id: challenge_id };
+//    $.post('./submit', function (data) {
+//        window.location.href = "/challenges/stack?id=" + stack_id;
+//    });
 }
+
+//var UTIL = {
+//    getCsfr: function() {
+//        filter(getCookie('filtercookie.'+$('#the_username').data('username')));
+//    }
+//}

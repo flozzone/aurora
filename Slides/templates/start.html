@@ -16,6 +16,7 @@
 	        {% for lect in lectures %}
 					<div class="lectureFront vo_bookmark" onclick="window.location.href='{% url 'Slides:studio_lecture' lect.id_relative %}'"><a>Lecture: {{lect.start.day}}.{{lect.start.month}}</a> </div>
 	        {% endfor %}
+			<script> $('.lectureFront').css("background-image", "url(../static/img/vo_bookmark_{{course.id}}.png)"); </script> 
 			{% comment %}
 			
 			<div class="lectureFront" title="show slides which had comments in the last 24 hours" onclick="ajax_request_with_feedback('studio', '{# {% url slidecasting.views.ajax_render_special_studio 'new_comments_since' course.id 24 %}?page=1&mode={{mode}}' #})"> active last 24h
@@ -42,14 +43,12 @@
 				discussions
 			</div>
 				{% endcomment %}
-				<div style="clear:both"></div>
-			<div class="lectureFront confused_bookmark" onclick="window.location.href='{# {% url 'Slides:studio_confusing' course.short_title %} #}'"><a href="{# {% url 'Slides:studio_confusing' course.short_title %} #}" title="show slides which were marked as confusing" >Confusing Slides</a></div>
-			<div class="lectureFront important_bookmark"><a href="{# {% url 'Slides:studio_important' course.short_title %} #}"title="show slides which were marked as important" >Important Slides</a></div>
-			<div class="lectureFront liked_bookmark"><a href="{# {% url 'Slides:studio_liked' course.short_title %} #}" title="show slides which were marked as like" >Slides I like</a></div>
+			<div style="clear:both"></div>
+			<div class="lectureFront confused_bookmark" onclick="window.location.href='{% url 'Slides:studio_confusing' %}'"><a href="{% url 'Slides:studio_confusing' %}" title="show slides which were marked as confusing" >Confusing Slides</a></div>
+			<div class="lectureFront important_bookmark" onclick="window.location.href='{% url 'Slides:studio_important' %}'"><a href="{% url 'Slides:studio_important' %}" title="show slides which were marked as important" >Important Slides</a></div>
+			<div class="lectureFront liked_bookmark" onclick="window.location.href='{% url 'Slides:studio_liked' %}'"><a href="{% url 'Slides:studio_liked' %}" title="show slides which were marked as like" >Slides I like</a></div>
 
-
-	</div>
-	
+	</div>	
 </div>
 
 {% endblock %}

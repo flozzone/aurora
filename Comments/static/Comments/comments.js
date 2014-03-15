@@ -15,7 +15,6 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
     "use strict";
 
     my.registerAllTheElements = function () {
-        my.registerTestButton();
         my.registerStartPolling();
         my.registerStopPolling();
 
@@ -32,8 +31,6 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         my.registerCancelCommentButton();
 
         my.registerPolling();
-
-        my.startPolling();
     };
 
     my.state = {
@@ -212,69 +209,19 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
 
             $commentText.attr('contenteditable', true);
 
-//            document.execCommand("insertBrOnReturn", false, true);
-//
-//            $comment.on("keydown", "[contenteditable=true]", function (e) {
             $comment.on("keydown", function (e) {
                 var lineBreak;
 
                 if (e.which === 13 && !e.shiftKey) {
                     e.preventDefault();
 
-//                    console.log('adding br');
-//                    lineBreak = "<br />";
                     lineBreak = "<br />&nbsp";
                     document.execCommand("insertHTML", false, lineBreak);
-//                    document.execCommand("forwardDelete");
                     document.execCommand("delete");
-//                    document.execCommand("insertText", false, '\n');
-//
+
                     return false;
                 }
             });
-
-//            Very good solution, only produces some blanks in chromium
-//            $('div[contenteditable="true"]').keypress(function (event) {
-//
-//                if (event.which !== 13)
-//                    return true;
-//
-//                var docFragment = document.createDocumentFragment();
-//
-//                add a new line
-//                var newEle = document.createTextNode('\n');
-//                docFragment.appendChild(newEle);
-//
-//                add the br, or p, or something else
-//                newEle = document.createElement('br');
-//                docFragment.appendChild(newEle);
-//
-//                make the br replace selection
-//                var range = window.getSelection().getRangeAt(0);
-//                range.deleteContents();
-//                range.insertNode(docFragment);
-//
-//                create a new range
-//                range = document.createRange();
-//                range.setStartAfter(newEle);
-//                range.collapse(true);
-//
-//                make the cursor there
-//                var sel = window.getSelection();
-//                sel.removeAllRanges();
-//                sel.addRange(range);
-//
-//                return false;
-//            });
-
-//          weird solution via CSS:
-
-            /*inline-block; makes chromium not create <div> and <p> on return*/
-            /*[contenteditable=true] {*/
-            /*width: 100%;*/
-            /*display: inline-block;*/
-            /*}*/
-
 
             $(document).keydown(handleHotkeys);
             function handleHotkeys(e) {
@@ -314,54 +261,18 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
                 return false;
             }
 
-            /**
-             *
-             * @param n the node to convert to string with '\n'
-             * @returns {string}
-             */
-            function getText(n) {
-                var rv = '';
-
-                if (n.nodeType === 3) {
-                    rv = n.nodeValue;
-                } else {
-                    for (var i = 0; i < n.childNodes.length; i++) {
-                        rv += getText(n.childNodes[i]);
-                    }
-                    var d = getComputedStyle(n).getPropertyValue('display');
-//                if (d.match(/^block/) || d.match(/list/) || n.tagName == 'BR') {
-                    if (d.match(/list/) || n.tagName === 'BR') {
-                        rv += "\n";
-                    }
-                }
-
-                return rv;
-            }
-
             var $save = $('#edit_save');
             $save.off();
             $save.click(saveEdit);
             function saveEdit(event) {
                 event.preventDefault();
 
-//            var text = $commentText.html().trim()
-//            text = text.replace(/<div>[\s\r\n]*<br>[\s\r\n]*<\/div>/g, "<br>");
-//            text = text.replace(/(<\/p>)|(<\/div>)/g, "");
-//            text = text.replace(/(<br><\/br>)|(<br>)|(<br \/>)|(<p>)|(<div>)/g, "\r\n");
-//            text = text.replace(/(<br><\/br>)|(<br>)|(<br \/>)|(<p>)|(<\/p>)|(<div>)|(<\/div>)/g, "\r\n");
-
-//            var text = getText($commentText.get(0)).trim();
-//                var text = $commentText.html();
-//                console.log($commentText.text());
-
                 var text = $commentText.html().trim()
                     .replace(/<br(\s*)\/*>/ig, '\n') // replace single line-breaks
-                    .replace(/&nbsp;?/ig, ' ');
-//                    .replace(/<[p|div]\s/ig, '\n$0') // add a line break before all div and p tags
-//                    .replace(/(<([^>]+)>)/ig, "");   // remove any remaining tags
-
-//                var text = $commentText[0].innerText;
-                console.log(text);
+                    .replace(/&nbsp;?/ig, ' ')
+                    .replace(/&lt;?/ig, '<')
+                    .replace(/&gt;?/ig, '>')
+                    .replace(/&amp;?/ig, '&');
 
                 var data = {comment_id: $comment.data('comment_number'),
                     text: text};
@@ -506,11 +417,8 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         $button_post_reply.click(function (event) {
             event.preventDefault();
 
-            // hacky as hell. better use some empty contenteditable <div> instead of Textarea form
-            // this is done in addComment as well of course
             var $replyTextarea = $('#replyTextarea');
             var text = $replyTextarea.val();
-//            text = '<pre>' + text + '</pre>';
             $replyTextarea.val(text);
 
             $.ajax({
@@ -567,11 +475,8 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         $button_add_comment.click(function (event) {
             event.preventDefault();
 
-            // hacky as hell. better use some empty contenteditable <div> instead of Textarea form
-            // this is done in reply as well of course
             var $commentTextarea = $("#commentTextarea");
             var text = $commentTextarea.val();
-//            text = '<pre>' + text + '</pre>';
             $commentTextarea.val(text);
 
             $.ajax({
@@ -622,7 +527,7 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         $.ajax({
             url: '/update_comments/',
             data: data,
-            type: 'GET',
+            type: 'POST',
             dataType: 'json',
             success: function (json) {
                 var comment_list_updates = json.comment_list_updates;
@@ -644,6 +549,10 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
                 if (keepPolling === true) {
                     my.POLLING.resetTimer();
                 }
+            },
+            beforeSend: function (xhr) {
+                var csrftoken = my.getCsrfToken();
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
             }
         });
     };
@@ -720,9 +629,6 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         my.POLLING.firstRefId = firstRefId;
         my.POLLING.lastRefId = lastRefId;
 
-        console.log('firstRefId: ' + firstRefId.toString());
-        console.log('lastRefId: ' + lastRefId.toString());
-
         my.updateCommentLists(false);
     };
 
@@ -759,31 +665,6 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         };
     };
 
-    my.registerTestButton = function () {
-        var $myTest = $('#myTest');
-        $myTest.off();
-        $myTest.on('click', function () {
-//        editElements.prop = 'bam';
-//        editElements();
-//    $('#myTest').click(function () {
-//    updateComments(false);
-//    alert(x.toString() + " # " + y.toString());
-//    var currentId = $('.comment').first().attr('id');
-//    console.log(currentId);
-//        updateComments(false, true);
-//        $('#commentForm').toggle();
-//        console.log($('#id_parent_comment').val());
-//        $('#replyForm').toggle();
-//        $('#replyForm').hide();
-//        console.log($('#id_parent_comment').val());
-//        if(stop_update_poll) startPolling();
-//        else stopPolling();
-//            alert('nothing assigned');
-//        $('*').off();
-            return false;
-        });
-    };
-
     my.findClosestRefObj = function ($child) {
         var ref_type = $child.closest('[data-ref_type]').attr('data-ref_type');
         var ref_id = $child.closest('[data-ref_id]').attr('data-ref_id');
@@ -792,6 +673,14 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
 
     $(document).ready(function () {
         my.registerAllTheElements();
+    });
+
+    $(window).load(function() {
+        if(typeof(checkSlidesInView) !== 'undefined') {
+            checkSlidesInView();
+        }
+
+        my.startPolling();
     });
 
     return my;

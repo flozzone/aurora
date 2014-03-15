@@ -1,5 +1,6 @@
 from datetime import datetime
 import json
+from django.contrib.contenttypes.models import ContentType
 
 from django.core import serializers
 from django.db.models import TextField
@@ -7,6 +8,7 @@ from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import CharField
@@ -18,6 +20,7 @@ from Comments.models import Comment
 from Course.models import Course, CourseChallengeRelation
 from Elaboration.models import Elaboration
 from Evaluation.models import Evaluation
+from ObjectState.models import ObjectState
 from PortfolioUser.models import PortfolioUser
 from Review.models import Review
 from ReviewAnswer.models import ReviewAnswer
@@ -27,11 +30,12 @@ from Notification.models import Notification
 
 
 @login_required()
+@staff_member_required
 def evaluation(request):
     # TODO: delete this snippet, fetches gravatar images for every user only for test cases.
-    for puser in PortfolioUser.objects.all():
-        if not puser.avatar:
-            puser.get_gravatar()
+    #for puser in PortfolioUser.objects.all():
+    #    if not puser.avatar:
+    #        puser.get_gravatar()
 
     overview = ""
     if request.session.get('selection'):
@@ -51,12 +55,14 @@ def evaluation(request):
                                'complaints': Elaboration.get_complaints(RequestContext(request)),
                                'questions': Challenge.get_questions(RequestContext(request)),
                                'awesome': Elaboration.get_awesome(),
+                               'expired': Elaboration.get_expired(),
                                'overview': overview,
                               },
                               context_instance=RequestContext(request))
 
 
 @login_required()
+@staff_member_required
 def overview(request):
     challenges = Challenge.objects.all()
     missing_reviews = Elaboration.get_missing_reviews()
@@ -68,6 +74,7 @@ def overview(request):
 
 
 @login_required()
+@staff_member_required
 def update_overview(request):
     if request.GET.get('data', '') == "missing_reviews":
         print("loading missing reviews...")
@@ -84,6 +91,9 @@ def update_overview(request):
     if request.GET.get('data', '') == "awesome":
         print("loading awesome work...")
         elaborations = Elaboration.get_awesome()
+    if request.GET.get('data', '') == "expired":
+        print("loading expired work...")
+        elaborations = Elaboration.get_expired()
     if request.GET.get('data', '') == "evaluated_non_adequate_work":
         print("loading evaluated non adequate work...")
         elaborations = Elaboration.get_evaluated_non_adequate_work()
@@ -100,6 +110,7 @@ def update_overview(request):
 
 
 @login_required()
+@staff_member_required
 def questions(request):
     print("loading questions...")
     challenges = Challenge.get_questions(RequestContext(request))
@@ -113,6 +124,7 @@ def questions(request):
 
 
 @login_required()
+@staff_member_required
 def detail(request):
     # get selected elaborations from session
     elaborations = []
@@ -162,6 +174,9 @@ def detail(request):
     if selection == "awesome":
         print('selection: awesome')
         params = {}
+    if selection == "expired":
+        print('selection: expired')
+        params = {}
     if selection == "evaluated_non_adequate_work":
         print('selection: evaluated_non_adequate_work')
         params = {}
@@ -171,7 +186,7 @@ def detail(request):
                 evaluation = Evaluation.objects.get(submission=elaboration)
                 params = {'evaluation': evaluation}
 
-    reviews = Review.objects.filter(elaboration=elaboration)
+    reviews = Review.objects.filter(elaboration=elaboration, submission_time__isnull=False)
 
     next = prev = None
     index = elaborations.index(elaboration)
@@ -195,6 +210,7 @@ def detail(request):
 
 
 @login_required()
+@staff_member_required
 def stack(request):
     elaboration = Elaboration.objects.get(pk=request.session.get('elaboration_id', ''))
     stack_elaborations = elaboration.user.get_stack_elaborations(elaboration.challenge.get_stack())
@@ -203,6 +219,7 @@ def stack(request):
 
 
 @login_required()
+@staff_member_required
 def others(request):
     # get selected elaborations from session
     elaboration = Elaboration.objects.get(pk=request.session.get('elaboration_id', ''))
@@ -229,12 +246,14 @@ def others(request):
 
 
 @login_required()
+@staff_member_required
 def challenge_txt(request):
     elaboration = Elaboration.objects.get(pk=request.session.get('elaboration_id', ''))
     return render_to_response('challenge_txt.html', {'challenge': elaboration.challenge}, RequestContext(request))
 
 
 @csrf_exempt
+@staff_member_required
 def save_evaluation(request):
     elaboration_id = request.POST['elaboration_id']
     evaluation_text = request.POST['evaluation_text']
@@ -253,6 +272,7 @@ def save_evaluation(request):
 
 
 @csrf_exempt
+@staff_member_required
 def submit_evaluation(request):
     elaboration_id = request.POST['elaboration_id']
     evaluation_text = request.POST['evaluation_text']
@@ -285,6 +305,7 @@ def submit_evaluation(request):
 
 
 @csrf_exempt
+@staff_member_required
 def reopen_evaluation(request):
     elaboration_id = request.POST['elaboration_id']
     elaboration = Elaboration.objects.get(pk=elaboration_id)
@@ -308,6 +329,7 @@ def reopen_evaluation(request):
 
 
 @csrf_exempt
+@staff_member_required
 def set_appraisal(request):
     review_id = request.POST['review_id']
     appraisal = request.POST['appraisal']
@@ -315,19 +337,26 @@ def set_appraisal(request):
     review = Review.objects.get(pk=review_id)
     review.appraisal = appraisal
     review.save()
-
+    if review.appraisal == review.NOTHING:
+        Notification.bad_review(review)
+    else:
+        Notification.enough_peer_reviews(review)
     return HttpResponse()
 
 
 @csrf_exempt
 @login_required()
+@staff_member_required
 def select_challenge(request):
     selected_challenge = request.POST['selected_challenge']
 
     elaborations = []
-    challenge = Challenge.objects.get(title=selected_challenge)
-    if Elaboration.get_sel_challenge_elaborations(challenge):
-        elaborations = Elaboration.get_sel_challenge_elaborations(challenge)
+    challenges = Challenge.objects.filter(title=selected_challenge)
+    for challenge in challenges:
+        if Elaboration.get_sel_challenge_elaborations(challenge):
+            for elaboration in Elaboration.get_sel_challenge_elaborations(challenge):
+                if not ObjectState.get_expired(elaboration):
+                    elaborations.append(elaboration)
 
     html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
 
@@ -339,6 +368,7 @@ def select_challenge(request):
 
 @csrf_exempt
 @login_required()
+@staff_member_required
 def search(request):
     search_user = request.POST['search_user']
     search_all = request.POST['search_all']
@@ -362,11 +392,6 @@ def search(request):
 
                 results = md.objects.filter(qs)
                 for result in results:
-                    if isinstance(result, PortfolioUser):
-                        print("PortfolioUser: ", result)
-                        for elaboration in result.get_elaborations():
-                            if elaboration not in elaborations:
-                                elaborations.append(elaboration)
                     if isinstance(result, Elaboration):
                         print("Elaboration: ", result)
                         if result not in elaborations:
@@ -397,10 +422,28 @@ def search(request):
                             elaborations.append(result.elaboration)
                     if isinstance(result, ReviewAnswer):
                         print("ReviewAnswer: ", result)
+                        if result.review.elaboration not in elaborations:
+                            elaborations.append(result.review.elaboration)
                     if isinstance(result, ReviewQuestion):
                         print("ReviewQuestion: ", result)
                     if isinstance(result, Comment):
                         print("Comments: ", result)
+                        print(result.content_object)
+                        if result.content_type == ContentType.objects.get_for_model(Challenge):
+                            if Elaboration.get_sel_challenge_elaborations(result.content_object):
+                                for elaboration in Elaboration.get_sel_challenge_elaborations(result.content_object):
+                                    if elaboration not in elaborations:
+                                        elaborations.append(elaboration)
+                        if result.content_type == ContentType.objects.get_for_model(Elaboration):
+                            if result.content_object not in elaborations:
+                                elaborations.append(result.content_object)
+                        if result.content_type == ContentType.objects.get_for_model(Review):
+                            if result.content_object.elaboration not in elaborations:
+                                elaborations.append(result.content_object.elaboration)
+                        if result.content_type == ContentType.objects.get_for_model(ReviewAnswer):
+                            if result.content_object.review.elaboration not in elaborations:
+                                elaborations.append(result.content_object.review.elaboration)
+
 
     html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
 
@@ -411,6 +454,7 @@ def search(request):
 
 
 @login_required()
+@staff_member_required
 def autocomplete_challenge(request):
     term = request.GET.get('term', '')
     challenges = Challenge.objects.all().filter(title__istartswith=term)
@@ -420,22 +464,24 @@ def autocomplete_challenge(request):
 
 
 @login_required()
+@staff_member_required
 def autocomplete_user(request):
     term = request.GET.get('term', '')
     studies = PortfolioUser.objects.all().filter(
-        Q(username__istartswith=term) | Q(first_name__istartswith=term) | Q(last_name__istartswith=term))
-    names = [(studi.username + ' ' + studi.first_name + ' ' + studi.last_name) for studi in studies]
+        Q(username__istartswith=term) | Q(first_name__istartswith=term) | Q(last_name__istartswith=term) | Q(nickname__istartswith=term))
+    names = [(studi.username + ' ' + studi.nickname + ' ' + studi.last_name) for studi in studies]
     response_data = json.dumps(names, ensure_ascii=False)
     return HttpResponse(response_data, mimetype='application/json; charset=utf-8')
 
 
 @login_required()
+@staff_member_required
 def load_reviews(request):
     if not 'elaboration_id' in request.GET:
         return False;
 
     elaboration = Elaboration.objects.get(pk=request.GET.get('elaboration_id', ''))
-    reviews = Review.objects.filter(elaboration=elaboration)
+    reviews = Review.objects.filter(elaboration=elaboration, submission_time__isnull=False)
 
     return render_to_response('stack_rev.html', {'elaboration': elaboration, 'reviews': reviews, 'stack': 'stack'},
                               RequestContext(request))
@@ -443,6 +489,7 @@ def load_reviews(request):
 
 @csrf_exempt
 @login_required()
+@staff_member_required
 def review_answer(request):
     if request.POST:
         data = request.body.decode(encoding='UTF-8')
@@ -458,7 +505,10 @@ def review_answer(request):
             text = answer['answer']
             review_question = ReviewQuestion.objects.get(pk=question_id)
             ReviewAnswer(review=review, review_question=review_question, text=text).save()
-
+        if review.appraisal == review.NOTHING:
+            Notification.bad_review(review)
+        else:
+            Notification.enough_peer_reviews(review)
         # update overview
         elaborations = Elaboration.get_missing_reviews()
         elaborations.sort(key=lambda elaboration: elaboration.submission_time)
@@ -467,8 +517,11 @@ def review_answer(request):
 
 
 @login_required()
+@staff_member_required
 def back(request):
     selection = request.session.get('selection', 'error')
+    if selection == "search":
+        return HttpResponse()
     if selection == "missing_reviews":
         elaborations = Elaboration.get_missing_reviews()
     if selection == "top_level_challenges":
@@ -479,6 +532,43 @@ def back(request):
         elaborations = Elaboration.get_complaints(RequestContext(request))
     if selection == "awesome":
         elaborations = Elaboration.get_awesome()
+    if selection == "expired":
+        elaborations = Elaboration.get_expired()
+    if selection == "evaluated_non_adequate_work":
+        elaborations = Elaboration.get_evaluated_non_adequate_work()
+
+    # update overview
+    elaborations.sort(key=lambda elaboration: elaboration.submission_time)
+    request.session['elaborations'] = serializers.serialize('json', elaborations)
+
+    return HttpResponse()
+
+
+@login_required()
+@staff_member_required
+def expire(request):
+
+    if not 'elaboration_id' in request.GET:
+        return False;
+
+    elaboration = Elaboration.objects.get(pk=request.GET.get('elaboration_id', ''))
+    ObjectState.set_expired(elaboration, True)
+
+    selection = request.session.get('selection', 'error')
+    if selection == "search":
+        return HttpResponse()
+    if selection == "missing_reviews":
+        elaborations = Elaboration.get_missing_reviews()
+    if selection == "top_level_challenges":
+        elaborations = Elaboration.get_top_level_challenges()
+    if selection == "non_adequate_work":
+        elaborations = Elaboration.get_non_adequate_work()
+    if selection == "complaints":
+        elaborations = Elaboration.get_complaints(RequestContext(request))
+    if selection == "awesome":
+        elaborations = Elaboration.get_awesome()
+    if selection == "expired":
+        elaborations = Elaboration.get_expired()
     if selection == "evaluated_non_adequate_work":
         elaborations = Elaboration.get_evaluated_non_adequate_work()
 

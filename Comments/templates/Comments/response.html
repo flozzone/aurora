@@ -35,9 +35,15 @@
              {% endif %}
          </div>
      </div>
+	 <div id="detail_r{{response.id}}" class="author_detail hidden_detail" onClick="$(this).addClass('hidden_detail')">
+		 <img src='{{response.author.avatar.url}}'>
+		 <span class="nick">{{response.author.display_name}}</span><br>
+		 &quot;{{response.author.statement | urlizetrunc:50}}&quot;
+		 
+	 </div>
 
     <div class="response_body">
-		<img src="{{ response.author.avatar.url }}">
+		<img src="{{ response.author.avatar.url }}" onClick="$('#detail_r{{response.id}}').toggleClass('hidden_detail')">
 
 
         <div class="response_text">
@@ -68,6 +74,11 @@
         {% endif %}
 
         {% if response.deleter == None %}
+            {% if response.edited_date != None %}
+                <p class="comment_deleter">
+                    edited {{ response.edited_date | naturaltime }}
+                </p>
+            {% endif %}
             {% if requester == response.author %}
                 <a class="flR edit_link" href="javascript:void(0)" id="edit_response_link_{{ response.id }}">
                     edit&nbsp;&nbsp;
