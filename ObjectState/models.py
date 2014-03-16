@@ -7,7 +7,7 @@ class ObjectState(models.Model):
     content_type = models.ForeignKey(ContentType)
     object_id = models.PositiveIntegerField()
     content_object = generic.GenericForeignKey('content_type', 'object_id')
-    expired = models.BooleanField(default=True)
+    expired = models.BooleanField(default=False)
 
     @staticmethod
     def set_expired(ref_object, state):
@@ -20,7 +20,7 @@ class ObjectState(models.Model):
         except ObjectState.DoesNotExist:
             obj = ObjectState.objects.create(content_object=ref_object)
 
-        obj.expired = state
+        obj.expired = not obj.expired
         obj.save()
         return True
 

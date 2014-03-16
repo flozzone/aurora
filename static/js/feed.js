@@ -2,17 +2,21 @@
  * Created by peterpur on 22.2.2014.
  */
 
+
+
 $(function() {
 	$('.course_selected').addClass('irrelevant');
 	$('#feed-li').addClass('uRhere');
 	window.document.title="Aurora: Newsfeed"
+	$('.feed_header').click(function(){
+		$('#content_'+$(this).attr('id')).toggle();
+	})
 });
 
 var updateNew_Timer;
 
 $(window).load( function() {
     "use strict";
-
 	loadFilter();
 });
 
@@ -36,7 +40,7 @@ function filter(fx,usr) {
 	$('.filterbtn').removeClass('hilited');
 	$('#'+fx).addClass('hilited');
 	$('#new_date').text(''); clearTimeout(updateNew_Timer);
-
+	
     switch (fx) {
         case 1:
             $('.response,.comment,.r_list').removeClass('hided');
@@ -52,11 +56,6 @@ function filter(fx,usr) {
             $('.response,.comment,.r_list').removeClass('hided');
             $('.response').addClass('hided');
 			break;
-        case -1:
-            $('.response,.comment,.r_list').removeClass('hided');
-            $('.r_list').show();
-            $('.neg0:not(.author_author)').addClass('hided');
-            break;
         case -5:
             $('.response,.comment,.r_list').removeClass('hided');
             $('.r_list').show();

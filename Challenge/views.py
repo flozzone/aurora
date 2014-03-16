@@ -89,7 +89,7 @@ def create_context_challenge(request):
         except:
             raise Http404
         user = RequestContext(request)['user']
-        if not challenge.is_enabled_for_user(user):
+        if not challenge.is_enabled_for_user(user) and not user.is_staff:
             raise Http404
         data['challenge'] = challenge
         if Elaboration.objects.filter(challenge=challenge, user=user).exists():

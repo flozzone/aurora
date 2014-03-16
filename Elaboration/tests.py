@@ -3,7 +3,9 @@ Elaboration model method tests
 """
 
 from datetime import datetime
+
 from django.test import TestCase
+
 from PortfolioUser.models import PortfolioUser
 from Course.models import Course, CourseUserRelation, CourseChallengeRelation
 from Stack.models import Stack, StackChallengeRelation
@@ -552,3 +554,66 @@ class ElaborationTest(TestCase):
         assert Elaboration.get_review_candidate(challenge1, user2) == elaboration3
         assert Elaboration.get_review_candidate(challenge1, user3) == elaboration4
         assert Elaboration.get_review_candidate(challenge1, user4) == elaboration3
+
+    def test_is_reviewed_2times(self):
+        user1 = self.users[0]
+        user2 = self.users[1]
+        user3 = self.users[2]
+        challenge = self.challenge
+        elaboration1 = Elaboration(challenge=challenge, user=user1, elaboration_text="test",
+                                   submission_time=datetime.now())
+        elaboration1.save()
+        elaboration2 = Elaboration(challenge=challenge, user=user2, elaboration_text="test",
+                                   submission_time=datetime.now())
+        elaboration2.save()
+        elaboration3 = Elaboration(challenge=challenge, user=user3, elaboration_text="test",
+                                   submission_time=datetime.now())
+        elaboration3.save()
+        assert not elaboration1.is_reviewed_2times()
+        assert not elaboration2.is_reviewed_2times()
+        assert not elaboration3.is_reviewed_2times()
+        Review(elaboration=elaboration1, submission_time=datetime.now(),
+               reviewer=user2, appraisal=Review.SUCCESS).save()
+        assert not elaboration1.is_reviewed_2times()
+        assert not elaboration2.is_reviewed_2times()
+        assert not elaboration3.is_reviewed_2times()
+        Review(elaboration=elaboration1, submission_time=datetime.now(),
+               reviewer=user3, appraisal=Review.SUCCESS).save()
+        assert elaboration1.is_reviewed_2times()
+        assert not elaboration2.is_reviewed_2times()
+        assert not elaboration3.is_reviewed_2times()
+        Review(elaboration=elaboration2, submission_time=datetime.now(),
+               reviewer=user1, appraisal=Review.SUCCESS).save()
+        assert elaboration1.is_reviewed_2times()
+        assert not elaboration2.is_reviewed_2times()
+        assert not elaboration3.is_reviewed_2times()
+        review = Review(elaboration=elaboration2,
+               reviewer=user1, appraisal=Review.SUCCESS)
+        review.save()
+        assert elaboration1.is_reviewed_2times()
+        assert not elaboration2.is_reviewed_2times()
+        assert not elaboration3.is_reviewed_2times()
+        review.submission_time=datetime.now()
+        review.save()
+        assert elaboration1.is_reviewed_2times()
+        assert elaboration2.is_reviewed_2times()
+        assert not elaboration3.is_reviewed_2times()
+        review1 = Review(elaboration=elaboration3,
+               reviewer=user1, appraisal=Review.SUCCESS)
+        review1.save()
+        review2 = Review(elaboration=elaboration3,
+               reviewer=user2, appraisal=Review.SUCCESS)
+        review2.save()
+        assert elaboration1.is_reviewed_2times()
+        assert elaboration2.is_reviewed_2times()
+        assert not elaboration3.is_reviewed_2times()
+        review1.submission_time=datetime.now()
+        review1.save()
+        assert elaboration1.is_reviewed_2times()
+        assert elaboration2.is_reviewed_2times()
+        assert not elaboration3.is_reviewed_2times()
+        review2.submission_time=datetime.now()
+        review2.save()
+        assert elaboration1.is_reviewed_2times()
+        assert elaboration2.is_reviewed_2times()
+        assert elaboration3.is_reviewed_2times()

@@ -1,6 +1,6 @@
 {% load humanize %}
 
-<div class="comment{% if comment.author.is_staff %} staff_author{% endif %} {{ comment.visibility }}_visibility {% if comment.author == requester %} author_author{% endif %} {% if comment.score < 1 %}neg0{% endif %} {% if comment.score < -5 %}neg5{% endif %}"
+<div class="comment{% if comment.author.is_staff %} staff_author{% endif %} {{ comment.visibility }}_visibility {% if comment.author == requester %} author_author{% endif %} {% if comment.score < -5 %}neg5{% endif %}"
 	 data-date="{{ comment.post_date|date:'U' }}"
      id="comment_{{ comment.id }}" data-comment_number="{{ comment.id }}"
      data-comment_author="{{ comment.author.display_name }}">

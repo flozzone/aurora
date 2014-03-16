@@ -47,14 +47,14 @@ class Elaboration(models.Model):
         return None
 
     def is_reviewed_2times(self):
-        if Review.objects.filter(elaboration=self).count() < 2:
+        if Review.objects.filter(elaboration=self, submission_time__isnull=False).count() < 2:
             return False
         return True
 
     def is_older_3days(self):
         if not self.is_submitted():
             return False
-        if self.submission_time + timedelta(3) < datetime.now():
+        if self.submission_time + timedelta(3) > datetime.now():
             return False
         return True
 

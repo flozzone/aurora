@@ -27,7 +27,7 @@ def save_elaboration(request):
         elaboration.elaboration_text = elaboration_text
         elaboration.save()
     else:
-        elaboration = Elaboration.objects.create(challenge=challenge, user= user, elaboration_text=elaboration_text)
+        Elaboration.objects.get_or_create(challenge=challenge, user=user, elaboration_text=elaboration_text)
 
     return HttpResponse()
 

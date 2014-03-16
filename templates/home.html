@@ -5,92 +5,97 @@
 
     <div id="info_column">
         {% if not user.is_staff %}
-            <div class="feed_header"><b>Ihr Punktestand</b></div>
+            <div class="feed_header"  id="part_0"><i class="fa fa-toggle-down half"></i> <b>Ihr Punktestand</b></div>
+			<div class="feed_column"  id="content_part_0">
             {% include 'points.html' %}
+			</div>
         {% endif %}
 
-        <div class="feed_header">
-			<b>Informationen </b></div>
-        <br>
+        <div class="feed_header" id="part_1">
+			<i class="fa fa-toggle-down half"></i> <b>Informationen </b>
+		</div>
+        <div class="feed_column" id="content_part_1">
+	        <p>Hinweis 1: Diese Plattform wird zur Zeit zum ersten Mal eingesetzt. Bitte rechnen Sie mit Problemen, und melden Sie diese gegebenenfalls im &raquo;Bugs&amp;Feedback&laquo;-Bereich. Danke!</B></p><br>
+	        <p>Hinweis 2: Diese Seite wird mit Mozilla- und Webkit-Browsern <b>(Firefox, Safari, Chrome)</b> entwickelt und getestet. Bitte verwenden sie Aurora mit einem dieser Browser. F&uuml;r alle anderen Browser &uuml;bernehmen wir keine Garantie.</p><br>
+	       <p>Vorl&auml;fig gilt folgender <b>Punktespiegel:</b></p>
+	        <p>60 Punkte - sehr gut</p>
+	        <p>53 Punkte - gut</p>
+	        <p>47 Punkte - befriedigend</p>
+	        <p>40 Punkte - gen&uuml;gend</p><br>
+	        <p>F&uuml;r eine positive Note m&uuml;ssen Challenges im Umfang von 60 Punkten durchgearbeitet werden!</p><br>
+	        <br>
+	        <p><b>Video-Streams:</b></p>
+	        <br>
+	        <p>Die Video-Streams &uuml;bertragen w&auml;hrend der Vorlesungszeit die Vorlesung live: <br><br>
+				&nbsp;&nbsp;&nbsp;<i class="fa fa-angle-double-right"></i><a href="https://tuwel.tuwien.ac.at/mod/rssplayer/view.php?id=178748">BHCI</a><br>
+				&nbsp;&nbsp;&nbsp;<i class="fa fa-angle-double-right"></i><a href="https://tuwel.tuwien.ac.at/mod/rssplayer/view.php?id=178741">GSI</a></p><br>
+			<p>Ausserdem zeichnen wir diese Streams auf, und werden sie in den n&auml;chsten Wochen dann auch mit den Slides synchronisieren. Stay tuned!</a></p>
+	        <br><br>
 
-        <p>Hinweis 1: Diese Plattform wird zur Zeit zum ersten Mal eingesetzt. Bitte rechnen Sie mit Problemen, und melden Sie diese gegebenenfalls im &raquo;Bugs&amp;Feedback&laquo;-Bereich. Danke!</B></p><br>
-        <p>Hinweis 2: Diese Seite wird mit Mozilla- und Webkit-Browsern <b>(Firefox, Safari, Chrome)</b> entwickelt und getestet. Bitte verwenden sie Aurora mit einem dieser Browser. F&uuml;r alle anderen Browser &uuml;bernehmen wir keine Garantie.</p><br>
-       <p>Vorl&auml;fig gilt folgender <b>Punktespiegel:</b></p>
-        <p>60 Punkte - sehr gut</p>
-        <p>53 Punkte - gut</p>
-        <p>47 Punkte - befriedigend</p>
-        <p>40 Punkte - gen&uuml;gend</p><br>
-        <p>F&uuml;r eine positive Note m&uuml;ssen Challenges im Umfang von 60 Punkten durchgearbeitet werden!</p><br>
-        <br>
-        <p><b>Video-Streams:</b></p>
-        <br>
-        <p>Die Video-Streams &uuml;bertragen w&auml;hrend der Vorlesungszeit die Vorlesung live: <br><br>
-			&nbsp;&nbsp;&nbsp;<i class="fa fa-angle-double-right"></i><a href="https://tuwel.tuwien.ac.at/mod/rssplayer/view.php?id=178748">BHCI</a><br>
-			&nbsp;&nbsp;&nbsp;<i class="fa fa-angle-double-right"></i><a href="https://tuwel.tuwien.ac.at/mod/rssplayer/view.php?id=178741">GSI</a></p><br>
-		<p>Ausserdem zeichnen wir diese Streams auf, und werden sie in den n&auml;chsten Wochen dann auch mit den Slides synchronisieren. Stay tuned!</a></p>
-        <br><br>
-
-        <p><b>Support:</b></p>
-        <br>
-		<p>Wenn sie Probleme haben, sich nicht auskennen oder Hilfe ben&ouml;tigen, so stehen ihnen folgende Informationsquellen zur Verf&uuml;gung:</p>
-		<br>
-		<p>- Lesen sie die Sidebar sorgf&auml;tig. Die Informationen hier werden immer wieder aktualisiert.</p>
-		<p>- Wenn sie Fragen zu einem Task haben, dann nutzen sie bitte die M&ouml;glichkeit, bei den Beschreibungen der Tasks mit dem LVA-Team zu diskutieren. </p>
-		<p>- Wenn sie mit einem Review oder einer Bewertung nicht zufrieden sind, dann nutzen sie bitte die dort angegliederten Kan&auml;le, um mit uns dar&uuml;ber zu reden.</p>
-		<p>- Wenn sie eine andere Frage haben, die im allgemeinen Interesse ist, dann posten sie diese hier im Newsfeed.</p>
-		<p>- Sollten sie eine Frage haben, die nur sie betrifft, dann schreiben sie uns bitte eine email:</p>
-        <p><i>gsi: <a href="mailto:gsi@igw.tuwien.ac.at">gsi@igw.tuwien.ac.at</a></p>
-        <p>bhci: <a href="mailto:gsi@igw.tuwien.ac.at">bhci@igw.tuwien.ac.at</a></i></p>
-        <br><br>
-        <div class="feed_header">
-			<b>Frequently Asked Questions</b></div>
-		
-         <br>
-        <p><i>Q: Wie unterscheidet sich der Modus zu dem des Vorjahres?</i></p>
-        <p>A: Anstatt vieler kleiner, isolierter Activities sind die Arbeiten dieses Jahr in &raquo;Challenges&laquo; organisiert, die aus &raquo;Tasks&laquo; bestehen. Ihre Challenge wird bewertet, wenn sie den letzten Task absolviert haben. Um diesen abgeben zu k&ouml;nnen, m&uuml;ssen sie jedoch zuerst alle anderen Tasks eines Stacks bearbeiten. Diese werden jeweils in einem &raquo;Double Blind Peer Review&laquo; &uuml;berpr&uuml;ft. <br>Konkret bedeutet das, dass Sie zu Arbeiten ihrer Kolleg/innen anonym Feedback verfassen, und entsprechend anonymes Feedback von Kolleg/innen bekommen werden. </p>
-        <br>
-        <p><i>Q: Wann ist die Deadline f&uuml;r (eine/diese/alle) Challenges?</i></p>
-        <p>A: F&uuml;r eine positive Note m&uuml;ssen sie bis Ende des Semesters ausreichend Punkte gesammelt haben. Diese bekommen sie f&uuml;r fertiggestellte Challenges, aber zB. auch f&uuml;r ausgezeichnete Kommentare bei den Folien.  Beachten sie jedoch, dass sie nach dem abschliessen einer Challenge zwei Wochen warten m&uuml;ssen, bevor sie wieder einen Final Task einreichen!</p>
-        <br>
-        <p><i>Q: Was kann ich machen, wenn die Bewertung meiner Arbeit nicht meinen Erwartungen entspricht?</i></p>
-        <p>A: Sie k&ouml;nnen sie einen Kommentar zu ihrer Bewertung schreiben, in dem sie zb. eine Frage stellen, oder ihre
-            Arbeit noch einmal besser erkl&auml;ren. Damit wird ihre Arbeit intern markiert und f&uuml;r uns noch einmal sichtbar. Ihr Kommentar wird jedenfalls beantwortet werden,
-            auch wenn es manchmal etwas dauert.</p>
-        <br>
-        <p><i>Q: Ab wann werde ich bewertet?</i></p>
-        <p>A: Sobald sie eine Challenge (ausser der Intro-Challenge) abgeschlossen haben, wird f&uuml;r sie am Ende des Semesters ein Zeugnis ausgestellt. </p>
-        <br>
-        <p><i>Q: Wie war das nochmal mit dem Buch und dem Podcast?</i></p>
-        <p>A: Wenn sie an »Gesellschaftliche Spannungsfelder der Informatik« teilnehmen, lesen sie bitte bis nach Ostern folgendes Buch: <a href="http://craphound.com/littlebrother">Cory Doctorow: Little Brother</a><br>
-		Darüberhinaus steht zur Vertiefung einzelner Inhalte ein Podcast zur Verfügung: <a href="http://lex.iguw.tuwien.ac.at/groups/gespraeche/">Peter Purgathofer spricht mit...</a> (freiwillig)
-		</p>
-        <br>
-        <p><i>Q: Wie sind die Bewertungskategorien am Ende jedes Reviews zu verstehen?</i></p>
-        <p>A: <b>Great Work</b> - Soll nur f&uuml;r wirklich aussergew&ouml;hlich gute Arbeiten vergeben werden. In einem Notensystem w&auml;re das ein Sehr Gut mit goldenem Stern, Schlagobers und Kirsche oben drauf<br>
-			<b>Good Work</b> - Solide Arbeit, satt oberhalb der Bullshit-Grenze. Alles, was sie mit den Noten 1-3 bewerten w&uuml;rden.</b><br>
-			<b>Barely Acceptable</b> - Wesentliche Aspekte des Tasks wurden nicht zufriedenstellend erarbeitet, es wurde aber zumindest versucht, etwas brauchbares zu produzieren, auch wenns vielleicht danebengegangen ist. Barely Acceptable heisst, dass wir uns das noch genauer anschauen werden.<br>
-			<b>Unacceptable</b> - Diese Wertung ist für Arbeiten vorbehalten, die versuchen, ohne substantielle (eigene) Leistung durchzukommen. Plagiate, »Blindtext«,  Schummelversuche, grobe Themenverfehlungen fallen in diese Kategorie. Mit dieser Wertung stoppen sie die Autorin/den Autor des Beitrags an der Weiterarbeit in dieser Challenge, und erzwingen, dass wir uns das anschauen.</p>
-        <br><br>
-
-        <div class="feed_header">
-			<b>Vorlesungskalender</b></div>
-         <br>
-		<table>
-			<tr><td colspan=5><b>BHCI</b></td></tr>
-			<tr><td class="month">m&auml;rz</td><td class="day">4</td><td class="day">11</td><td class="day">18</td><td class="day">25</td></tr>
-			<tr><td>april</td><td class="day">1</td><td class="day">8</td><td class="day not">15</td><td class="day not">22</td><td class="day">29</td></tr>
-			<tr><td>mai</td><td class="day">6</td><td class="day">13</td><td class="day">20</td><td class="day">27</td></tr>
-			<tr><td>juni</td><td class="day">3</td><td class="day not">10</td><td class="day maybe">17*</td><td class="day maybe">24*</td></tr>
-		</table><br>
-		<table>
-			<tr><td colspan=5><b>GSI</b></td></tr>
-			<tr><td class="month">m&auml;rz</td><td class="day not">5</td><td class="day">12</td><td class="day">19</td><td class="day">26</td></tr>
-			<tr><td>april</td><td class="day">2</td><td class="day">9</td><td class="day not">15</td><td class="day not">22</td><td class="day">30</td></tr>
-			<tr><td>mai</td><td class="day">7</td><td class="day">14</td><td class="day">21</td><td class="day">28</td></tr>
-			<tr><td>juni</td><td class="day">4</td><td class="day">11</td><td class="day maybe">18*</td><td class="day maybe">25*</td></tr>
-		</table>
-		<br><br>
-		<span class="maybe">* diese termine sind als reserve geplant. nach momentanen planungsstand findet da keine vorlesung statt. 
+	        <p><b>Support:</b></p>
+	        <br>
+			<p>Wenn sie Probleme haben, sich nicht auskennen oder Hilfe ben&ouml;tigen, so stehen ihnen folgende Informationsquellen zur Verf&uuml;gung:</p>
+			<br>
+			<p>- Lesen sie die Sidebar sorgf&auml;tig. Die Informationen hier werden immer wieder aktualisiert.</p>
+			<p>- Wenn sie Fragen zu einem Task haben, dann nutzen sie bitte die M&ouml;glichkeit, bei den Beschreibungen der Tasks mit dem LVA-Team zu diskutieren. </p>
+			<p>- Wenn sie mit einem Review oder einer Bewertung nicht zufrieden sind, dann nutzen sie bitte die dort angegliederten Kan&auml;le, um mit uns dar&uuml;ber zu reden.</p>
+			<p>- Wenn sie eine andere Frage haben, die im allgemeinen Interesse ist, dann posten sie diese hier im Newsfeed.</p>
+			<p>- Sollten sie eine Frage haben, die nur sie betrifft, dann schreiben sie uns bitte eine email:</p>
+	        <p><i>gsi: <a href="mailto:gsi@igw.tuwien.ac.at">gsi@igw.tuwien.ac.at</a></p>
+	        <p>bhci: <a href="mailto:gsi@igw.tuwien.ac.at">bhci@igw.tuwien.ac.at</a></i></p>
+	        <br><br>
+		</div>
+        <div class="feed_header" id="part_2">
+			<i class="fa fa-toggle-down half"></i> <b>Frequently Asked Questions</b>
+		</div>
+        <div class="feed_column" id="content_part_2">
+	        <p><i>Q: Wie unterscheidet sich der Modus zu dem des Vorjahres?</i></p>
+	        <p>A: Anstatt vieler kleiner, isolierter Activities sind die Arbeiten dieses Jahr in &raquo;Challenges&laquo; organisiert, die aus &raquo;Tasks&laquo; bestehen. Ihre Challenge wird bewertet, wenn sie den letzten Task absolviert haben. Um diesen abgeben zu k&ouml;nnen, m&uuml;ssen sie jedoch zuerst alle anderen Tasks eines Stacks bearbeiten. Diese werden jeweils in einem &raquo;Double Blind Peer Review&laquo; &uuml;berpr&uuml;ft. <br>Konkret bedeutet das, dass Sie zu Arbeiten ihrer Kolleg/innen anonym Feedback verfassen, und entsprechend anonymes Feedback von Kolleg/innen bekommen werden. </p>
+	        <br>
+	        <p><i>Q: Wann ist die Deadline f&uuml;r (eine/diese/alle) Challenges?</i></p>
+	        <p>A: F&uuml;r eine positive Note m&uuml;ssen sie bis Ende des Semesters ausreichend Punkte gesammelt haben. Diese bekommen sie f&uuml;r fertiggestellte Challenges, aber zB. auch f&uuml;r ausgezeichnete Kommentare bei den Folien.  Beachten sie jedoch, dass sie nach dem abschliessen einer Challenge zwei Wochen warten m&uuml;ssen, bevor sie wieder einen Final Task einreichen!</p>
+	        <br>
+	        <p><i>Q: Was kann ich machen, wenn die Bewertung meiner Arbeit nicht meinen Erwartungen entspricht?</i></p>
+	        <p>A: Sie k&ouml;nnen sie einen Kommentar zu ihrer Bewertung schreiben, in dem sie zb. eine Frage stellen, oder ihre
+	            Arbeit noch einmal besser erkl&auml;ren. Damit wird ihre Arbeit intern markiert und f&uuml;r uns noch einmal sichtbar. Ihr Kommentar wird jedenfalls beantwortet werden,
+	            auch wenn es manchmal etwas dauert.</p>
+	        <br>
+	        <p><i>Q: Ab wann werde ich bewertet?</i></p>
+	        <p>A: Sobald sie eine Challenge (ausser der Intro-Challenge) abgeschlossen haben, wird f&uuml;r sie am Ende des Semesters ein Zeugnis ausgestellt. </p>
+	        <br>
+	        <p><i>Q: Wie war das nochmal mit dem Buch und dem Podcast?</i></p>
+	        <p>A: Wenn sie an »Gesellschaftliche Spannungsfelder der Informatik« teilnehmen, lesen sie bitte bis nach Ostern folgendes Buch: <a href="http://craphound.com/littlebrother">Cory Doctorow: Little Brother</a><br>
+			Darüberhinaus steht zur Vertiefung einzelner Inhalte ein Podcast zur Verfügung: <a href="http://lex.iguw.tuwien.ac.at/groups/gespraeche/">Peter Purgathofer spricht mit...</a> (freiwillig)
+			</p>
+	        <br>
+	        <p><i>Q: Wie sind die Bewertungskategorien am Ende jedes Reviews zu verstehen?</i></p>
+	        <p>A: <b>Great Work</b> - Soll nur f&uuml;r wirklich aussergew&ouml;hlich gute Arbeiten vergeben werden. In einem Notensystem w&auml;re das ein Sehr Gut mit goldenem Stern, Schlagobers und Kirsche oben drauf<br>
+				<b>Good Work</b> - Solide Arbeit, satt oberhalb der Bullshit-Grenze. Alles, was sie mit den Noten 1-3 bewerten w&uuml;rden.</b><br>
+				<b>Barely Acceptable</b> - Wesentliche Aspekte des Tasks wurden nicht zufriedenstellend erarbeitet, es wurde aber zumindest versucht, etwas brauchbares zu produzieren, auch wenns vielleicht danebengegangen ist. Barely Acceptable heisst, dass wir uns das noch genauer anschauen werden.<br>
+				<b>Unacceptable</b> - Diese Wertung ist für Arbeiten vorbehalten, die versuchen, ohne substantielle (eigene) Leistung durchzukommen. Plagiate, »Blindtext«,  Schummelversuche, grobe Themenverfehlungen fallen in diese Kategorie. Mit dieser Wertung stoppen sie die Autorin/den Autor des Beitrags an der Weiterarbeit in dieser Challenge, und erzwingen, dass wir uns das anschauen.</p>
+	        <br><br>
+		</div>
+        <div class="feed_header" id="part_3">
+			<i class="fa fa-toggle-down half"></i> <b>Vorlesungskalender</b>
+		</div>
+        <div class="feed_column" id="content_part_3">
+			<table>
+				<tr><td colspan=5><b>BHCI</b></td></tr>
+				<tr><td class="month">m&auml;rz</td><td class="day">4</td><td class="day">11</td><td class="day">18</td><td class="day">25</td></tr>
+				<tr><td>april</td><td class="day">1</td><td class="day">8</td><td class="day not">15</td><td class="day not">22</td><td class="day">29</td></tr>
+				<tr><td>mai</td><td class="day">6</td><td class="day">13</td><td class="day">20</td><td class="day">27</td></tr>
+				<tr><td>juni</td><td class="day">3</td><td class="day not">10</td><td class="day maybe">17*</td><td class="day maybe">24*</td></tr>
+			</table><br>
+			<table>
+				<tr><td colspan=5><b>GSI</b></td></tr>
+				<tr><td class="month">m&auml;rz</td><td class="day not">5</td><td class="day">12</td><td class="day">19</td><td class="day">26</td></tr>
+				<tr><td>april</td><td class="day">2</td><td class="day">9</td><td class="day not">15</td><td class="day not">22</td><td class="day">30</td></tr>
+				<tr><td>mai</td><td class="day">7</td><td class="day">14</td><td class="day">21</td><td class="day">28</td></tr>
+				<tr><td>juni</td><td class="day">4</td><td class="day">11</td><td class="day maybe">18*</td><td class="day maybe">25*</td></tr>
+			</table>
+			<br><br>
+			<span class="maybe">* diese termine sind als reserve geplant. nach momentanen planungsstand findet da keine vorlesung statt. </span>
+		</div>
 		<br><br><br><br><br>
     </div>
 {% endblock %}
