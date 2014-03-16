@@ -6,5 +6,5 @@ $(document).ready(function () {
     COMMENTS.Bookmarks.registerForCommentList($('.bookmark_list'));
 	$('.course_selected').addClass('irrelevant');
 	$('#bookmarks-li').addClass('uRhere');
-	window.document.title="Aurora: Bookmarks"
+	window.document.title="Aurora: Bookmarks";
 });
