@@ -36,7 +36,7 @@ function filter(fx,usr) {
 	$('.filterbtn').removeClass('hilited');
 	$('#'+fx).addClass('hilited');
 	$('#new_date').text(''); clearTimeout(updateNew_Timer);
-
+	
     switch (fx) {
         case 1:
             $('.response,.comment,.r_list').removeClass('hided');
@@ -52,11 +52,6 @@ function filter(fx,usr) {
             $('.response,.comment,.r_list').removeClass('hided');
             $('.response').addClass('hided');
 			break;
-        case -1:
-            $('.response,.comment,.r_list').removeClass('hided');
-            $('.r_list').show();
-            $('.neg0:not(.author_author)').addClass('hided');
-            break;
         case -5:
             $('.response,.comment,.r_list').removeClass('hided');
             $('.r_list').show();
