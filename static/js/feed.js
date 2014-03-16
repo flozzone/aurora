@@ -2,17 +2,21 @@
  * Created by peterpur on 22.2.2014.
  */
 
+
+
 $(function() {
 	$('.course_selected').addClass('irrelevant');
 	$('#feed-li').addClass('uRhere');
 	window.document.title="Aurora: Newsfeed"
+	$('.feed_header').click(function(){
+		$('#content_'+$(this).attr('id')).toggle();
+	})
 });
 
 var updateNew_Timer;
 
 $(window).load( function() {
     "use strict";
-
 	loadFilter();
 });
 

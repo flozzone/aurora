@@ -133,6 +133,10 @@ abbr, acronym {
 	
 }
 
+.hazClick {
+	opacity:0.2;
+}
+
 
 .login input[type="checkbox"]:checked + label  {
 /*    background-color:rgba(58,201,88,0.8);*/
