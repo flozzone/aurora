@@ -1,3 +1,5 @@
+{% load endless %}
+
 {% block content %}
 
     <table class="overview_table">
@@ -7,14 +9,19 @@
             <th>hand in date</th>
             <th>expire</th>
         </tr>
-    {% for elaboration in elaborations %}
-        <tr class="{% cycle 'darkRow' 'lightRow' %}">
-            <td onclick="load_details({{ elaboration.id }})"><img class="gravatar" src="{{ elaboration.user.avatar.url }}" style="vertical-align:middle"> {{ elaboration.user.nickname }}</td>
-            <td onclick="load_details({{ elaboration.id }})">{{ elaboration.challenge.title }}</td>
-            <td onclick="load_details({{ elaboration.id }})">{{ elaboration.submission_time }}</td>
-            <td onclick="set_expired({{ elaboration.id }})"><input type="checkbox" /></td>
-        </tr>
-    {% endfor %}
+
+        {% paginate elaborations %}
+        {% for elaboration in elaborations %}
+            <tr class="{% cycle 'darkRow' 'lightRow' %}">
+                <td onclick="load_details({{ elaboration.id }})"><img class="gravatar" src="{{ elaboration.user.avatar.url }}" style="vertical-align:middle"> {{ elaboration.user.nickname }}</td>
+                <td onclick="load_details({{ elaboration.id }})">{{ elaboration.challenge.title }}</td>
+                <td onclick="load_details({{ elaboration.id }})">{{ elaboration.submission_time }}</td>
+                <td onclick="set_expired({{ elaboration.id }})"><input type="checkbox" /></td>
+            </tr>
+        {% endfor %}
+        {% get_pages %}
+        {{ pages.previous }} {{ pages.next }}
+
     </table>
 
 {% endblock %}

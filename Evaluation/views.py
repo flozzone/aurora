@@ -33,9 +33,9 @@ from Notification.models import Notification
 @staff_member_required
 def evaluation(request):
     # TODO: delete this snippet, fetches gravatar images for every user only for test cases.
-    #for puser in PortfolioUser.objects.all():
-    #    if not puser.avatar:
-    #        puser.get_gravatar()
+    for puser in PortfolioUser.objects.all():
+        if not puser.avatar:
+            puser.get_gravatar()
 
     overview = ""
     if request.session.get('selection'):
@@ -43,7 +43,10 @@ def evaluation(request):
             elaborations = []
             for serialized_elaboration in serializers.deserialize('json', request.session.get('elaborations', {})):
                 elaborations.append(serialized_elaboration.object)
-            overview = render_to_string('overview.html', {'elaborations': elaborations})
+            overview = render_to_string('overview.html', {'elaborations': elaborations}, RequestContext(request))
+        else:
+            challenges = Challenge.get_questions(RequestContext(request))
+            overview = render_to_string('questions.html', {'challenges': challenges}, RequestContext(request))
 
     challenges = Challenge.objects.all()
     return render_to_response('evaluation.html',
@@ -76,6 +79,11 @@ def overview(request):
 @login_required()
 @staff_member_required
 def update_overview(request):
+
+    selection = request.session.get('selection', 'error')
+    print("SELECTION: ", selection)
+    print("DATA: ", request.GET.get('data', ''))
+
     if request.GET.get('data', '') == "missing_reviews":
         print("loading missing reviews...")
         elaborations = Elaboration.get_missing_reviews()
