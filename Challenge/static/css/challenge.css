@@ -2,6 +2,10 @@
 	display:none;
 }
 
+.nope {
+	opacity:0.1;
+}
+
 #tinymce p { 
 	font-family: Helvetica Neue, Arial, sans-serif !important; 
 	font-size:13px;
