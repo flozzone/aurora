@@ -67,18 +67,6 @@ def evaluation(request):
 @login_required()
 @staff_member_required
 def overview(request):
-    challenges = Challenge.objects.all()
-    missing_reviews = Elaboration.get_missing_reviews()
-    return render_to_response('overview.html',
-                              {'challenges': challenges,
-                               'missing_reviews': missing_reviews
-                              },
-                              context_instance=RequestContext(request))
-
-
-@login_required()
-@staff_member_required
-def update_overview(request):
 
     selection = request.session.get('selection', 'error')
     print("SELECTION: ", selection)

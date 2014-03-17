@@ -6,7 +6,7 @@ $(function() {
 
 $(function() {
    $(".missing_reviews").click(function(event) {
-       var url = '/update_overview?data=missing_reviews';
+       var url = '/overview?data=missing_reviews';
        $.get(url, function (data) {
             $('#overview').html(data);
        });
@@ -15,7 +15,7 @@ $(function() {
 
 $(function() {
    $(".non_adequate_work").click(function(event) {
-       var url = '/update_overview?data=non_adequate_work';
+       var url = '/overview?data=non_adequate_work';
        $.get(url, function (data) {
             $('#overview').html(data);
        });
@@ -24,7 +24,7 @@ $(function() {
 
 $(function() {
    $(".top_level_challenges").click(function(event) {
-       var url = '/update_overview?data=top_level_challenges';
+       var url = '/overview?data=top_level_challenges';
        $.get(url, function (data) {
             $('#overview').html(data);
        });
@@ -33,7 +33,7 @@ $(function() {
 
 $(function() {
    $(".complaints").click(function(event) {
-       var url = '/update_overview?data=complaints';
+       var url = '/overview?data=complaints';
        $.get(url, function (data) {
             $('#overview').html(data);
        });
@@ -51,7 +51,7 @@ $(function() {
 
 $(function() {
    $(".evaluated_non_adequate_work").click(function(event) {
-       var url = '/update_overview?data=evaluated_non_adequate_work';
+       var url = '/overview?data=evaluated_non_adequate_work';
        $.get(url, function (data) {
             $('#overview').html(data);
        });
@@ -110,7 +110,7 @@ $(function() {
 
 $(function() {
    $(".awesome").click(function(event) {
-       var url = '/update_overview?data=awesome';
+       var url = '/overview?data=awesome';
        $.get(url, function (data) {
             $('#overview').html(data);
        });
@@ -119,7 +119,7 @@ $(function() {
 
 $(function() {
    $(".expired").click(function(event) {
-       var url = '/update_overview?data=expired';
+       var url = '/overview?data=expired';
        $.get(url, function (data) {
             $('#overview').html(data);
        });
