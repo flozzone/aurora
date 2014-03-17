@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from xml.dom.domreg import _good_enough
 
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
@@ -136,11 +137,23 @@ class Elaboration(models.Model):
                 # if there is already a valid candidate
                 if best_candidate:
                     # try to get a better candidate
+                    if best_candidate.good_enough_candidate():
+                        return best_candidate
                     best_candidate = best_candidate.get_better_candidate(candidate)
                 else:
                     # set best candidate for the first time
                     best_candidate = candidate
         return best_candidate
+
+    def good_enough_candidate(self):
+        if self.user.is_staff:
+            return False
+        stack = self.challenge.get_stack()
+        if stack.is_blocked(self.user):
+            return False
+        if self.is_reviewed_2times():
+            return False
+        return True
 
     def get_better_candidate(self, candidate):
         # if one of the candidates is written by staff (dummy user) and the other not
