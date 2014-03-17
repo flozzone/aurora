@@ -3,7 +3,7 @@
 
 {% block content %}
 
-    {% paginate 1 challenges %}
+    {% paginate 1 challenges with "/evaluation/" %}
 
     {% get_pages %}
     {{ pages.previous }} {{ pages.next }}

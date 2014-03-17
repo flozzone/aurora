@@ -9,7 +9,6 @@ $(function() {
        var url = '/update_overview?data=missing_reviews';
        $.get(url, function (data) {
             $('#overview').html(data);
-            window.location.href = "/evaluation/";
        });
    });
 });
@@ -19,7 +18,6 @@ $(function() {
        var url = '/update_overview?data=non_adequate_work';
        $.get(url, function (data) {
             $('#overview').html(data);
-            window.location.href = "/evaluation/";
        });
    });
 });
@@ -29,7 +27,6 @@ $(function() {
        var url = '/update_overview?data=top_level_challenges';
        $.get(url, function (data) {
             $('#overview').html(data);
-            window.location.href = "/evaluation/";
        });
    });
 });
@@ -39,7 +36,6 @@ $(function() {
        var url = '/update_overview?data=complaints';
        $.get(url, function (data) {
             $('#overview').html(data);
-            window.location.href = "/evaluation/";
        });
    });
 });
@@ -49,7 +45,6 @@ $(function() {
        var url = '/questions/';
        $.get(url, function (data) {
             $('#overview').html(data);
-            window.location.href = '/evaluation/';
        });
    });
 });
@@ -59,7 +54,6 @@ $(function() {
        var url = '/update_overview?data=evaluated_non_adequate_work';
        $.get(url, function (data) {
             $('#overview').html(data);
-            window.location.href = "/evaluation/";
        });
    });
 });
@@ -119,7 +113,6 @@ $(function() {
        var url = '/update_overview?data=awesome';
        $.get(url, function (data) {
             $('#overview').html(data);
-            window.location.href = "/evaluation/";
        });
    });
 });
@@ -129,7 +122,6 @@ $(function() {
        var url = '/update_overview?data=expired';
        $.get(url, function (data) {
             $('#overview').html(data);
-            window.location.href = "/evaluation/";
        });
    });
 });
@@ -154,7 +146,6 @@ $(function() {
                 },
                 success: function(data) {
                     $('#overview').html(data);
-                    window.location.href = "/evaluation/";
                 }
            };
            $.ajax(args);
@@ -182,7 +173,6 @@ $(function() {
             },
             success: function(data) {
                 $('#overview').html(data);
-                window.location.href = "/evaluation/";
             }
        };
        $.ajax(args);

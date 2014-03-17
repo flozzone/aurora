@@ -10,7 +10,7 @@
             <th>expire</th>
         </tr>
 
-        {% paginate elaborations %}
+        {% paginate elaborations with "/evaluation/" %}
         {% for elaboration in elaborations %}
             <tr class="{% cycle 'darkRow' 'lightRow' %}">
                 <td onclick="load_details({{ elaboration.id }})"><img class="gravatar" src="{{ elaboration.user.avatar.url }}" style="vertical-align:middle"> {{ elaboration.user.nickname }}</td>
