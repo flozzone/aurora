@@ -38,15 +38,19 @@ def evaluation(request):
             puser.get_gravatar()
 
     overview = ""
-    if request.session.get('selection'):
-        if request.session.get('selection') != 'questions':
-            elaborations = []
-            for serialized_elaboration in serializers.deserialize('json', request.session.get('elaborations', {})):
-                elaborations.append(serialized_elaboration.object)
-            overview = render_to_string('overview.html', {'elaborations': elaborations}, RequestContext(request))
+    selection = request.session.get('selection', 'error')
+    if selection not in ('error', 'questions'):
+        elaborations = []
+        for serialized_elaboration in serializers.deserialize('json', request.session.get('elaborations', {})):
+            elaborations.append(serialized_elaboration.object)
+        if selection == 'search':
+            data = { 'elaborations': elaborations, 'search': True }
         else:
-            challenges = Challenge.get_questions(RequestContext(request))
-            overview = render_to_string('questions.html', {'challenges': challenges}, RequestContext(request))
+            data = { 'elaborations': elaborations }
+        overview = render_to_string('overview.html', data, RequestContext(request))
+    else:
+        challenges = Challenge.get_questions(RequestContext(request))
+        overview = render_to_string('questions.html', {'challenges': challenges}, RequestContext(request))
 
     challenges = Challenge.objects.all()
     return render_to_response('evaluation.html',
@@ -336,7 +340,7 @@ def select_challenge(request):
                 if not ObjectState.get_expired(elaboration):
                     elaborations.append(elaboration)
 
-    html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
+    html = render_to_response('overview.html', {'elaborations': elaborations, 'search': True}, RequestContext(request))
 
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
@@ -414,7 +418,7 @@ def search(request):
                                 elaborations.append(result.content_object.review.elaboration)
 
 
-    html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
+    html = render_to_response('overview.html', {'elaborations': elaborations, 'search': True}, RequestContext(request))
 
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
