@@ -68,10 +68,6 @@ def evaluation(request):
 @staff_member_required
 def overview(request):
 
-    selection = request.session.get('selection', 'error')
-    print("SELECTION: ", selection)
-    print("DATA: ", request.GET.get('data', ''))
-
     if request.GET.get('data', '') == "missing_reviews":
         print("loading missing reviews...")
         elaborations = Elaboration.get_missing_reviews()
