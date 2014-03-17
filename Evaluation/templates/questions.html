@@ -1,6 +1,12 @@
+{% load endless %}
 {% load comments %}
 
 {% block content %}
+
+    {% paginate 1 challenges with "/evaluation/" %}
+
+    {% get_pages %}
+    {{ pages.previous }} {{ pages.next }}
 
     {% for challenge in challenges %}
         <div class="one_challenge active">

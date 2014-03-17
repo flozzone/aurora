@@ -133,6 +133,10 @@ abbr, acronym {
 	
 }
 
+.hazClick {
+	opacity:0.2;
+}
+
 
 .login input[type="checkbox"]:checked + label  {
 /*    background-color:rgba(58,201,88,0.8);*/
@@ -463,6 +467,14 @@ button {
 	white-space: nowrap;
 }
 
+.button:active, button:active{
+	background:rgb(58,201,88)!important;
+	color:white!important;
+}
+
+button:hover, .button:hover{
+	text-shadow:0 0 5px rgba(58,201,88,0.3);
+}
 
 .XL {
 	font-size:16px !important;
