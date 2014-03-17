@@ -69,25 +69,18 @@ def evaluation(request):
 def overview(request):
 
     if request.GET.get('data', '') == "missing_reviews":
-        print("loading missing reviews...")
         elaborations = Elaboration.get_missing_reviews()
     if request.GET.get('data', '') == "top_level_challenges":
-        print("loading top level challenges...")
         elaborations = Elaboration.get_top_level_challenges()
     if request.GET.get('data', '') == "non_adequate_work":
-        print("loading non adequate work...")
         elaborations = Elaboration.get_non_adequate_work()
     if request.GET.get('data', '') == "complaints":
-        print("loading complaints...")
         elaborations = Elaboration.get_complaints(RequestContext(request))
     if request.GET.get('data', '') == "awesome":
-        print("loading awesome work...")
         elaborations = Elaboration.get_awesome()
     if request.GET.get('data', '') == "expired":
-        print("loading expired work...")
         elaborations = Elaboration.get_expired()
     if request.GET.get('data', '') == "evaluated_non_adequate_work":
-        print("loading evaluated non adequate work...")
         elaborations = Elaboration.get_evaluated_non_adequate_work()
 
     # sort elaborations by submission time
@@ -104,7 +97,6 @@ def overview(request):
 @login_required()
 @staff_member_required
 def questions(request):
-    print("loading questions...")
     challenges = Challenge.get_questions(RequestContext(request))
     html = render_to_response('questions.html', {'challenges': challenges}, RequestContext(request))
 
@@ -133,7 +125,6 @@ def detail(request):
     request.session['elaboration_id'] = elaboration.id
 
     if selection == "missing_reviews":
-        print('selection: missing_reviews')
         questions = ReviewQuestion.objects.filter(challenge=elaboration.challenge).order_by("order")
         params = {'questions': questions}
     if selection == "top_level_challenges":
@@ -158,19 +149,14 @@ def detail(request):
             evaluation.save()
         params = {'evaluation': evaluation, 'lock': lock}
     if selection == "non_adequate_work":
-        print('selection: non_adequate_work')
         params = {}
     if selection == "complaints":
-        print('selection: complaints')
         params = {}
     if selection == "awesome":
-        print('selection: awesome')
         params = {}
     if selection == "expired":
-        print('selection: expired')
         params = {}
     if selection == "evaluated_non_adequate_work":
-        print('selection: evaluated_non_adequate_work')
         params = {}
     if selection == "search":
         if elaboration.challenge.is_final_challenge():
@@ -385,42 +371,33 @@ def search(request):
                 results = md.objects.filter(qs)
                 for result in results:
                     if isinstance(result, Elaboration):
-                        print("Elaboration: ", result)
                         if result not in elaborations:
                             elaborations.append(result)
                     if isinstance(result, Challenge):
-                        print("Challenge: ", result)
                         if Elaboration.get_sel_challenge_elaborations(result):
                             for elaboration in Elaboration.get_sel_challenge_elaborations(result):
                                 if elaboration not in elaborations:
                                     elaborations.append(elaboration)
                     if isinstance(result, Course):
-                        print("Course: ", result)
                         for elaboration in Elaboration.get_course_elaborations(result):
                             if elaboration not in elaborations:
                                 elaborations.append(elaboration)
                     if isinstance(result, Stack):
-                        print("Stack: ", result)
                         for elaboration in Elaboration.get_stack_elaborations(result):
                             if elaboration not in elaborations:
                                 elaborations.append(elaboration)
                     if isinstance(result, Evaluation):
-                        print("Evaluation: ", result)
                         if result.submission not in elaborations:
                             elaborations.append(result.submission)
                     if isinstance(result, Review):
-                        print("Review: ", result)
                         if result.elaboration not in elaborations:
                             elaborations.append(result.elaboration)
                     if isinstance(result, ReviewAnswer):
-                        print("ReviewAnswer: ", result)
                         if result.review.elaboration not in elaborations:
                             elaborations.append(result.review.elaboration)
                     if isinstance(result, ReviewQuestion):
                         print("ReviewQuestion: ", result)
                     if isinstance(result, Comment):
-                        print("Comments: ", result)
-                        print(result.content_object)
                         if result.content_type == ContentType.objects.get_for_model(Challenge):
                             if Elaboration.get_sel_challenge_elaborations(result.content_object):
                                 for elaboration in Elaboration.get_sel_challenge_elaborations(result.content_object):
