@@ -69,14 +69,12 @@
     <form method="post">
       <textarea id="editor">{{ elaboration.elaboration_text }}</textarea>
     </form>
-    <button class="submit XL R">Enter work for Evaluation</button>
+    <button id="EWfE" class="submit XL R">Enter work for Evaluation</button>
       <div class="submission_text" hidden>
         <div>
           I certify that the work presented here is, to the best of my knowledge and belief, original and the result of
-          my
-          own investigations and creation, except as acknowledged, and has not been submitted, either in part or whole,
-          for
-          a degree at this or any other University.
+          my own investigations and creation, except as acknowledged, and has not been submitted, either in part or whole,
+          for a degree at this or any other University.
         </div>
         <div>
           <button class="real_submit XL R" id="{{ challenge.id }}">Submit work</button>
