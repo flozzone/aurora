@@ -5,7 +5,12 @@ $(function(){
 		char: '… (click for full text)',
 	    onlyFullWords: true,
 	});	
+	$('.course_selected').removeClass('irrelevant');
+	$('#challenges-li').addClass('uRhere');
+	window.document.title="Aurora: Challenges"
 });
+
+
 
 
 $(stack_loaded);

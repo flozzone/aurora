@@ -291,15 +291,42 @@ th {
 	background-color:rgb(58,201,88);
 }
 
-.missing_reviews, .non_adequate_work, .non_adequate_reviews, .top_level_challenges, .complaints, .questions, .awesome, .search_btn, .evaluated_non_adequate_work, .expired {
+.mitem {
     cursor: pointer;
+	padding:2px;
+	padding-left:5px;
+	position:relative;
+	height:18px;
+	border-radius:3px;
 }
+
+
+
+.stabilosiert, .mitem:active {
+	background:#92A480;
+}
+
+.stabilosiert:after {
+	height:16px;
+	width:16px;
+	position:absolute;
+	right:-7px;
+	top:3px;
+	height:;
+	content:"";
+	background:#92A480;
+	transform:rotate(45deg);
+	border-radius:2px;
+	-ms-transform:rotate(45deg); /* IE 9 */
+	-webkit-transform:rotate(45deg); /* Opera, Chrome, and Safari */
+}
+
 
 .search_user, .search_all, .search_challenge {
     border: 1px solid #666666;
     border-radius: 3px;
     background-color: #E9F3D9;
-    height: 25px;
+    height: 22px;
     margin-top: 10px;
     color: #666666;
     padding: 2px 0 0 5px;

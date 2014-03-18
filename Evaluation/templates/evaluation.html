@@ -16,18 +16,18 @@
   <div id="detail_area">
       <h1>Overview</h1>
       <div class="overview_left">
-            <div class="missing_reviews">missing reviews ({{ missing_reviews|length }})</div>
-            <div class="non_adequate_work">non-adequate work ({{ non_adequate_work|length }})</div>
-            <div class="top_level_challenges">top-level tasks ({{ top_level_challenges|length }})</div>
-            <div class="complaints">complaints ({{ complaints|length }})</div>
-            <div class="questions">questions ({{ questions|length }})</div>
-            <div class="evaluated_non_adequate_work">evaluated non-adequate work ({{ evaluated_non_adequate_work|length }})</div>
-            <div class="awesome">awesome ({{ awesome|length }})</div>
-            <div class="expired">expired ({{ expired|length }})</div>
+            <div class="mitem missing_reviews" id="m1">missing reviews ({{ missing_reviews|length }})</div>
+            <div class="mitem non_adequate_work" id="m2">non-adequate work ({{ non_adequate_work|length }})</div>
+            <div class="mitem top_level_challenges" id="m3">top-level tasks ({{ top_level_challenges|length }})</div>
+            <div class="mitem complaints" id="m4">complaints ({{ complaints|length }})</div>
+            <div class="mitem questions" id="m5">questions ({{ questions|length }})</div>
+            <div class="mitem evaluated_non_adequate_work" id="m6">evaluated non-adequate work ({{ evaluated_non_adequate_work|length }})</div>
+            <div class="mitem awesome" id="m7">awesome ({{ awesome|length }})</div>
+            <div class="mitem expired" id="m8">expired ({{ expired|length }})</div>
 			
-            <div class="search_challenge" id="search_challenge" contenteditable="true">task...</div>
-            <div class="search_user" id="search_user" contenteditable="true">user...</div>
-            <div class="search_all" id="search_all" contenteditable="true">all...</div>
+            <div class="mfield search_challenge" id="search_challenge" contenteditable="true">task...</div>
+            <div class="mfield search_user" id="search_user" contenteditable="true">user...</div>
+            <div class="mfield search_all" id="search_all" contenteditable="true">all...</div>
             <div class="search_btn">search</div>
       </div>
       <div class="overview_right" id="overview">{{ overview }}</div>
