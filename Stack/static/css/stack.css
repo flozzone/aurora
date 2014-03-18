@@ -124,6 +124,7 @@
 
 .challenge-description {
 	height:96px;
+	min-height:96px;
 	position:relative;
 	overflow:hidden;
 	text-overflow: ellipsis;
