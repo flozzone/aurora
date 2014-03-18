@@ -5,12 +5,25 @@ $(function() {
 
 
 $(function() {
-   $(".missing_reviews").click(function(event) {
-       var url = '/overview?data=missing_reviews';
-       $.get(url, function (data) {
-            $('#overview').html(data);
-       });
-   });
+	$(".mitem").click(function(event) {
+		$(".mitem").removeClass('stabilosiert');
+		$(this).addClass('stabilosiert');
+	});
+});
+
+$(function() {
+	$(".mfield").click(function(event) {
+		$(".mitem").removeClass('stabilosiert');
+	});
+});
+
+$(function() {
+	$(".missing_reviews").click(function(event) {
+		var url = '/overview?data=missing_reviews';
+		$.get(url, function (data) {
+			$('#overview').html(data);
+		});
+	});
 });
 
 $(function() {
