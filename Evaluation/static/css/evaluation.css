@@ -137,20 +137,29 @@ th {
 }
 
 .points, .evaluation {
-    border: 1px solid #666666;
+	border:1px solid rgba(0,0,0,0.2);
     border-radius: 5px;
-    background-color: #E9F3D9;
-    -moz-box-sizing: border-box;
+    background-color: rgba(255,255,255,0.8);
+}
+
+.eval_done {
+	border:1px solid rgba(0,0,0,0.1);
+    background-color: rgba(0,0,0,0.05);
+	color:black;
+}
+
+.point_label {
+	float:left;
+    padding: 3px;
+	margin-right:10px;
 }
 
 .points {
-    float:left;
+	text-align:right;
+	float:left;
     height: 25px;
-    width: 50px;
-    position: absolute;
-    display: inline;
-    margin: 0 0 20px 10px;
-    padding: 3px;
+    width: 30px;
+    padding: 3px 8px;
 }
 
 .evaluation {
@@ -200,7 +209,7 @@ th {
     float: right;
 }
 
-.stack, .others, .challenge_txt {
+.stack, .others, .challenge_txt, .review_list {
 	text-transform:uppercase;
 	margin-right:0.5em;
     text-align: center;
@@ -211,7 +220,7 @@ th {
 	border-radius:1em;
 }
 
-.stack.selected, .others.selected, .challenge_txt.selected {
+.review_list.selected, .stack.selected, .others.selected, .challenge_txt.selected {
 	background-color:rgb(58,201,88);
 	color:white;
 }

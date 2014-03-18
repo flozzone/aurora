@@ -39,10 +39,11 @@
             <form method="post">
                 {% csrf_token %}
                 {% if evaluation.submission_time %}
-				    <div class="evaluation">
+				    <div class="evaluation eval_done">
                         {{ evaluation.evaluation_text }}
                     </div>
-                    points assigned<div class="points">{{ evaluation.evaluation_points }}</div>
+                    <div class="point_label">points assigned</div><div class="points eval_done">{{ evaluation.evaluation_points }}</div>
+   				 	<div class="spacer"></div>
                     <div class="submission_date">
                         evaluated on {{ evaluation.submission_time }}
                         <button class="reopen_evaluation" id="{{ elaboration.id }}">Reopen</button>
@@ -52,7 +53,7 @@
                             onkeyup="DelayedAutoSave({{ elaboration.id }})">
                         {{ evaluation.evaluation_text }}{% if lock %}<div class="evaluation_lock">locked by {{ evaluation.tutor.username }}</div>{% endif %}
                     </div>
-                    Points <div class="points" {% if not lock %} contenteditable="true" {% endif %} onkeyup="DelayedAutoSave({{ elaboration.id }})">
+                    <div class="point_label">Points</div><div class="points" {% if not lock %} contenteditable="true" {% endif %} onkeyup="DelayedAutoSave({{ elaboration.id }})">
                         {% if evaluation.evaluation_points %}{{ evaluation.evaluation_points }}{% endif %}</div>
                     {% if not lock %}<button class="submit_evaluation XL" id="{{ elaboration.id }}">evaluate</button>{% endif %}
                 {% endif %}
@@ -79,7 +80,8 @@
 
   <div class="detail_right">
     <div class="menu">
-        <div class="stack selected" onclick="$('.menu').children().removeClass('selected');$(this).addClass('selected');">stack</div>
+        <div class="stack selected" onclick="$('.menu').children().removeClass('selected');$(this).addClass('selected');">tasks</div>
+		<div class="review_list" onclick="$('.menu').children().removeClass('selected');$(this).addClass('selected');">reviews</div>
         <div class="others" onclick="$('.menu').children().removeClass('selected');$(this).addClass('selected');">others</div>
         <div class="challenge_txt" onclick="$('.menu').children().removeClass('selected');$(this).addClass('selected');">challenge text</div>
     </div>
