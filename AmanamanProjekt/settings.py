@@ -102,6 +102,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 ROOT_URLCONF = 'AmanamanProjekt.urls'
@@ -138,7 +139,8 @@ INSTALLED_APPS = (
     'Slides',
     'Notification',
     'ObjectState',
-    'endless_pagination'
+    'endless_pagination',
+    'debug_toolbar'
 )
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
@@ -194,6 +196,10 @@ ENDLESS_PAGINATION_PREVIOUS_LABEL = (
 )
 ENDLESS_PAGINATION_NEXT_LABEL = (
     '<div class="paginator next">next <i class="fa fa-angle-double-right"></i></div>'
+)
+
+INTERNAL_IPS = (
+    '127.0.0.1',
 )
 
 try:

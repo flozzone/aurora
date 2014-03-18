@@ -33,9 +33,9 @@ from Notification.models import Notification
 @staff_member_required
 def evaluation(request):
     # TODO: delete this snippet, fetches gravatar images for every user only for test cases.
-    #for puser in PortfolioUser.objects.all():
-    #    if not puser.avatar:
-    #        puser.get_gravatar()
+    for puser in PortfolioUser.objects.all():
+        if not puser.avatar:
+            puser.get_gravatar()
 
     overview = ""
     selection = request.session.get('selection', 'error')
@@ -55,14 +55,14 @@ def evaluation(request):
     challenges = Challenge.objects.all()
     return render_to_response('evaluation.html',
                               {'challenges': challenges,
-                               'missing_reviews': Elaboration.get_missing_reviews(),
-                               'top_level_challenges': Elaboration.get_top_level_challenges(),
-                               'non_adequate_work': Elaboration.get_non_adequate_work(),
-                               'evaluated_non_adequate_work': Elaboration.get_evaluated_non_adequate_work(),
-                               'complaints': Elaboration.get_complaints(RequestContext(request)),
-                               'questions': Challenge.get_questions(RequestContext(request)),
-                               'awesome': Elaboration.get_awesome(),
-                               'expired': Elaboration.get_expired(),
+                               'missing_reviews': 0,
+                               'top_level_challenges': 0,
+                               'non_adequate_work': 0,
+                               'evaluated_non_adequate_work': 0,
+                               'complaints': 0,
+                               'questions': 0,
+                               'awesome': 0,
+                               'expired': 0,
                                'overview': overview,
                               },
                               context_instance=RequestContext(request))
