@@ -1,5 +1,14 @@
-$(stack_loaded);
 
+$(function(){
+	$('.challenge-text').ellipsis({
+	    row: 4,
+		char: '… (click for full text)',
+	    onlyFullWords: true,
+	});	
+});
+
+
+$(stack_loaded);
 
 
 
