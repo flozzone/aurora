@@ -1,9 +1,8 @@
 from datetime import datetime, timedelta
-from xml.dom.domreg import _good_enough
 
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
-from django.db.models import Q
+from django.db.models import Count
 
 from Comments.models import Comment
 from Evaluation.models import Evaluation
@@ -102,9 +101,9 @@ class Elaboration(models.Model):
         non_adequate_work = []
         for review in Review.objects.filter(appraisal=Review.NOTHING):
             if not review.elaboration.is_evaluated() and review.elaboration.is_submitted():
-                    if not review.elaboration in non_adequate_work and not review.elaboration.user.is_staff:
-                        if not ObjectState.get_expired(review.elaboration):
-                            non_adequate_work.append(review.elaboration)
+                if not review.elaboration in non_adequate_work and not review.elaboration.user.is_staff:
+                    if not ObjectState.get_expired(review.elaboration):
+                        non_adequate_work.append(review.elaboration)
         return non_adequate_work
 
     @staticmethod
@@ -122,62 +121,35 @@ class Elaboration(models.Model):
 
     @staticmethod
     def get_review_candidate(challenge, user):
-        # get all elaborations
-        candidates = Elaboration.objects.filter(challenge=challenge)
-        # exclude all that are not written by the user
-        candidates = candidates.exclude(user=user)
-        # exclude all not submitted elaborations
-        candidates = candidates.exclude(submission_time__isnull=True)
-        best_candidate = None
-        if not candidates:
-            return best_candidate
-        for candidate in candidates:
-            # if there is not already a review for this elaboration reviewed by this user
-            if not Review.objects.filter(elaboration=candidate, reviewer=user):
-                # if there is already a valid candidate
-                if best_candidate:
-                    # try to get a better candidate
-                    if best_candidate.good_enough_candidate():
-                        return best_candidate
-                    best_candidate = best_candidate.get_better_candidate(candidate)
-                else:
-                    # set best candidate for the first time
-                    best_candidate = candidate
-        return best_candidate
+        already_submitted_reviews_ids = (
+            Review
+            .objects.filter(reviewer=user, elaboration__challenge=challenge)
+            .values_list('elaboration__id', flat=True)
+        )
+        candidates = (
+            Elaboration
+            .objects.filter(challenge=challenge)
+            .exclude(user=user)
+            .exclude(user__is_staff=True)
+            .annotate(num_reviews=Count('review'))
+            .exclude(id__in=already_submitted_reviews_ids)
+        ).order_by('num_reviews')
 
-    def good_enough_candidate(self):
-        if self.user.is_staff:
-            return False
-        stack = self.challenge.get_stack()
-        if stack.is_blocked(self.user):
-            return False
-        if self.is_reviewed_2times():
-            return False
-        return True
+        if candidates.exists():
+            return candidates[0]
 
-    def get_better_candidate(self, candidate):
-        # if one of the candidates is written by staff (dummy user) and the other not
-        # return the one that is not written by staff (dummy user)
-        if not self.user.is_staff and candidate.user.is_staff:
-            return self
-        elif self.user.is_staff and not candidate.user.is_staff:
-            return candidate
-        stack = self.challenge.get_stack()
-        blocked = stack.is_blocked(self.user)
-        blocked_candidate = stack.is_blocked(candidate.user)
-        if not blocked and blocked_candidate:
-            return self
-        elif blocked and not blocked_candidate:
-            return candidate
-        one_missing = Review.get_review_amount(self) == 1
-        one_missing_candidate = Review.get_review_amount(candidate) == 1
-        if one_missing and not one_missing_candidate:
-            return self
-        elif not one_missing and one_missing_candidate:
-            return candidate
-        if Review.get_review_amount(self) > Review.get_review_amount(candidate):
-            return candidate
-        return self
+        candidates = (
+            Elaboration
+            .objects.filter(challenge=challenge)
+            .exclude(user__is_staff=False)
+            .annotate(num_reviews=Count('review'))
+            .exclude(id__in=already_submitted_reviews_ids)
+        ).order_by('num_reviews')
+
+        if candidates.exists():
+            return candidates[0]
+        print("Error! No dummy elaborations created.")
+        return None
 
     def get_success_reviews(self):
         return Review.objects.filter(elaboration=self, appraisal=Review.SUCCESS)
