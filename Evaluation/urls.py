@@ -21,5 +21,4 @@ urlpatterns = patterns('',
     url(r'^load_reviews/$', 'Evaluation.views.load_reviews'),
     url(r'^evaluation/review_answer/$', 'Evaluation.views.review_answer'),
     url(r'^back/$', 'Evaluation.views.back'),
-    url(r'^expire/$', 'Evaluation.views.expire'),
 )
