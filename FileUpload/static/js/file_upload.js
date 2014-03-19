@@ -1,5 +1,6 @@
 Dropzone.autoDiscover = false;
 
+
 $(file_upload_loaded);
 var dropzone_instance;
 function file_upload_loaded() {
@@ -14,7 +15,11 @@ function file_upload_loaded() {
         dictRemoveFile: 'REMOVE',
         acceptedFiles: $('.file_upload').attr('accepted_files'),
         init: function () {
+			this.on("drop", function (file, response) {
+				$('#EWfE').addClass('nope');
+			});
             this.on("success", function (file, response) {
+			    if (this.getQueuedFiles().length == 0 && this.getUploadingFiles().length != 0) { $('#EWfE').removeClass('nope') } 
                 revert_submit_clicked();
                 var data = JSON.parse(response);
                 file.id = data.id;

@@ -48,8 +48,8 @@
           <div class="answer {% if question.boolean_answer %}boolean_answer{% endif %}" id="{{ question.id }}"
               question_id="{{ question.id }}">
 {% if question.boolean_answer %}
-              <input type="radio" name="{{ question.id }}" value="True"> Yes <br>
-              <input type="radio" name="{{ question.id }}" value="False"> No
+              <input type="radio" name="{{ question.id }}" id="{{ question.id }}Y" value="True"><label for="{{ question.id }}Y">Yes</label><br>
+              <input type="radio" name="{{ question.id }}" id="{{ question.id }}N" value="False"><label for="{{ question.id }}N">No</label>
 {% else %}
               <textarea id="text_answer" name="answer"></textarea>
 {% endif %}
@@ -58,10 +58,10 @@
 {% endfor %}
      	<div class="question">Your final verdict </div>
   	  <div class="answer">
-      	<input type="radio" name="appraisal" value="A"> Great work <span class="explanation">Please only use for really outstanding work.</span><br>
-      	<input type="radio" name="appraisal" value="S"> Good work <span class="explanation">The Author took the task serious and delivered acceptable work</span><br>
-      	<input type="radio" name="appraisal" value="F"> Barely acceptable work <span class="explanation">The Author did the bare minimum to fulfill the task, handed in incomplete work or missed the point.</span><br>
-      	<input type="radio" name="appraisal" value="N"> Unacceptable <span class="explanation">Please use only if the author tried to cheat (eg. plagiarize) or handed in »blind text« quality work</span><br><br>
+      	<input type="radio" name="appraisal" value="A" id="apprA"> <label for="apprA">Great work <span class="explanation">Please only use for really outstanding work.</span></label><br>
+      	<input type="radio" name="appraisal" value="S" id="apprS"> <label for="apprS">Good work <span class="explanation">The Author took the task serious and delivered acceptable work</span></label><br>
+      	<input type="radio" name="appraisal" value="F" id="apprF"> <label for="apprF">Barely acceptable work <span class="explanation">The Author did the bare minimum to fulfill the task, handed in incomplete work or missed the point.</span></label><br>
+      	<input type="radio" name="appraisal" value="N" id="apprN"> <label for="apprN">Unacceptable <span class="explanation">Please use only if the author tried to cheat (eg. plagiarize) or handed in »blind text« quality work</span></label><br><br>
   	  </div>
 	  <div class="suButton">
     	  <input id="submit_button" class="button submitButton XL" style="padding-left:0.5em;" type="submit" value="Submit">

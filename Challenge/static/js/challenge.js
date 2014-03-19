@@ -1,3 +1,9 @@
+$(function() {
+	$('.course_selected').removeClass('irrelevant');
+	$('#challenges-li').addClass('uRhere');
+	window.document.title="Aurora: Challenges"
+});
+
 $(challenge_loaded);
 
 function challenge_loaded() {
@@ -87,9 +93,11 @@ function elaboration_save(challenge_id, submit) {
 }
 
 function submit_clicked(event) {
-    $('.submit').hide();
-    $('.submission_text').show();
-    window.scrollBy(0, 200);
+	if(!$('#EWfE').hasClass('nope')) {
+		$('.submit').hide();
+    	$('.submission_text').show();
+   		window.scrollBy(0, 200);
+ 	}	
 }
 
 function revert_submit_clicked() {
