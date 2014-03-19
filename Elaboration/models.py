@@ -6,7 +6,6 @@ from django.db.models import Count
 
 from Comments.models import Comment
 from Evaluation.models import Evaluation
-from ObjectState.models import ObjectState
 from Review.models import Review
 from FileUpload.models import UploadFile
 
@@ -82,8 +81,7 @@ class Elaboration(models.Model):
         for elaboration in Elaboration.objects.all():
             if not elaboration.is_reviewed_2times() and elaboration.is_older_3days() \
                 and not elaboration.challenge.is_final_challenge() and not elaboration.user.is_staff and elaboration.is_submitted():
-                    if not ObjectState.get_expired(elaboration):
-                        missing_reviews.append(elaboration)
+                    missing_reviews.append(elaboration)
         return missing_reviews
 
     @staticmethod
@@ -92,8 +90,7 @@ class Elaboration(models.Model):
         for elaboration in Elaboration.objects.all():
             if elaboration.challenge.is_final_challenge() and elaboration.is_submitted() \
                 and not elaboration.is_evaluated() and not elaboration.user.is_staff:
-                    if not ObjectState.get_expired(elaboration):
-                        top_level_challenges.append(elaboration)
+                    top_level_challenges.append(elaboration)
         return top_level_challenges
 
     @staticmethod
@@ -102,8 +99,7 @@ class Elaboration(models.Model):
         for review in Review.objects.filter(appraisal=Review.NOTHING):
             if not review.elaboration.is_evaluated() and review.elaboration.is_submitted():
                 if not review.elaboration in non_adequate_work and not review.elaboration.user.is_staff:
-                    if not ObjectState.get_expired(review.elaboration):
-                        non_adequate_work.append(review.elaboration)
+                    non_adequate_work.append(review.elaboration)
         return non_adequate_work
 
     @staticmethod
@@ -115,8 +111,7 @@ class Elaboration(models.Model):
             if final_elaboration:
                 if final_elaboration.is_evaluated():
                     if not review.elaboration in non_adequate_work and not review.elaboration.user.is_staff:
-                        if not ObjectState.get_expired(review.elaboration):
-                            non_adequate_work.append(review.elaboration)
+                        non_adequate_work.append(review.elaboration)
         return non_adequate_work
 
     @staticmethod
@@ -173,8 +168,7 @@ class Elaboration(models.Model):
         for review in Review.objects.all():
             if Comment.query_comments_without_responses(review, context['user']):
                 if not review.elaboration in elaborations:
-                    if not ObjectState.get_expired(review.elaboration):
-                        elaborations.append(review.elaboration)
+                    elaborations.append(review.elaboration)
         return elaborations
 
     @staticmethod
@@ -182,17 +176,8 @@ class Elaboration(models.Model):
         awesome = []
         for review in Review.objects.filter(appraisal=Review.AWESOME, submission_time__isnull=False):
             if not review.elaboration in awesome and not review.elaboration.user.is_staff:
-                if not ObjectState.get_expired(review.elaboration):
-                    awesome.append(review.elaboration)
+                awesome.append(review.elaboration)
         return awesome
-
-    @staticmethod
-    def get_expired():
-        expired = []
-        for elaboration in Elaboration.objects.filter(submission_time__isnull=False):
-            if ObjectState.get_expired(elaboration):
-                expired.append(elaboration)
-        return expired
 
     @staticmethod
     def get_stack_elaborations(stack):

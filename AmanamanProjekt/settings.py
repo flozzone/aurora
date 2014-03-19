@@ -137,7 +137,6 @@ INSTALLED_APPS = (
     'Comments',
     'Slides',
     'Notification',
-    'ObjectState',
     'endless_pagination'
 )
 

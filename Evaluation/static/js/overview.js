@@ -130,15 +130,6 @@ $(function() {
    });
 });
 
-$(function() {
-   $(".expired").click(function(event) {
-       var url = '/overview?data=expired';
-       $.get(url, function (data) {
-            $('#overview').html(data);
-       });
-   });
-});
-
 function load_details(id) {
    var url = '/detail?elaboration_id=' + id;
    $.get(url, function (data) {
@@ -191,10 +182,3 @@ $(function() {
        $.ajax(args);
    });
 });
-
-function set_expired(id) {
-    var url = '/expire?elaboration_id=' + id;
-    $.get(url, function (data) {
-        window.location.href = "/evaluation/";
-    });
-}
