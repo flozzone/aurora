@@ -32,9 +32,9 @@ from Notification.models import Notification
 @staff_member_required
 def evaluation(request):
     # TODO: delete this snippet, fetches gravatar images for every user only for test cases.
-    for puser in PortfolioUser.objects.all():
-        if not puser.avatar:
-            puser.get_gravatar()
+    #for puser in PortfolioUser.objects.all():
+    #    if not puser.avatar:
+    #        puser.get_gravatar()
 
     overview = ""
     selection = request.session.get('selection', 'error')
