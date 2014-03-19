@@ -55,7 +55,7 @@
                     </div>
                     <div class="point_label">Points</div><div class="points" {% if not lock %} contenteditable="true" {% endif %} onkeyup="DelayedAutoSave({{ elaboration.id }})">
                         {% if evaluation.evaluation_points %}{{ evaluation.evaluation_points }}{% endif %}</div>
-                    {% if not lock %}<button class="submit_evaluation XL" id="{{ elaboration.id }}">evaluate</button>{% endif %}
+                    {% if not lock %}<button class="submit_evaluation XL" id="{{ elaboration.id }}" next="{{ next }}">evaluate{% if next %} + next{% endif %}</button>{% endif %}
                 {% endif %}
             </form>
             <div class="spacer"></div>
