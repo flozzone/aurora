@@ -4,12 +4,11 @@ $(function() {
 });
 
 
-$(function() {
-	$(".mitem").click(function(event) {
-		$(".mitem").removeClass('stabilosiert');
-		$(this).addClass('stabilosiert');
-	});
-});
+function update_overview(data) {
+    data = JSON.parse(data);
+    $('#menu').html(data['menu_html']);
+    $('#overview').html(data['overview_html']);
+}
 
 $(function() {
 	$(".mfield").click(function(event) {
@@ -21,7 +20,7 @@ $(function() {
 	$(".missing_reviews").click(function(event) {
 		var url = '/overview?data=missing_reviews';
 		$.get(url, function (data) {
-			$('#overview').html(data);
+            update_overview(data);
 		});
 	});
 });
@@ -30,7 +29,7 @@ $(function() {
    $(".non_adequate_work").click(function(event) {
        var url = '/overview?data=non_adequate_work';
        $.get(url, function (data) {
-            $('#overview').html(data);
+            update_overview(data);
        });
    });
 });
@@ -39,7 +38,7 @@ $(function() {
    $(".top_level_challenges").click(function(event) {
        var url = '/overview?data=top_level_challenges';
        $.get(url, function (data) {
-            $('#overview').html(data);
+            update_overview(data);
        });
    });
 });
@@ -48,7 +47,7 @@ $(function() {
    $(".complaints").click(function(event) {
        var url = '/overview?data=complaints';
        $.get(url, function (data) {
-            $('#overview').html(data);
+            update_overview(data);
        });
    });
 });
@@ -57,7 +56,7 @@ $(function() {
    $(".questions").click(function(event) {
        var url = '/questions/';
        $.get(url, function (data) {
-            $('#overview').html(data);
+            update_overview(data);
        });
    });
 });
@@ -66,7 +65,16 @@ $(function() {
    $(".evaluated_non_adequate_work").click(function(event) {
        var url = '/overview?data=evaluated_non_adequate_work';
        $.get(url, function (data) {
-            $('#overview').html(data);
+            update_overview(data);
+       });
+   });
+});
+
+$(function() {
+   $(".awesome").click(function(event) {
+       var url = '/overview?data=awesome';
+       $.get(url, function (data) {
+            update_overview(data);
        });
    });
 });
@@ -118,15 +126,6 @@ $(function() {
    $(".search_all").focusout(function(event) {
        if($('.search_all').text() == "")
           $(".search_all").html("all...");
-   });
-});
-
-$(function() {
-   $(".awesome").click(function(event) {
-       var url = '/overview?data=awesome';
-       $.get(url, function (data) {
-            $('#overview').html(data);
-       });
    });
 });
 

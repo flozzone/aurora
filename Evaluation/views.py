@@ -32,9 +32,9 @@ from Notification.models import Notification
 @staff_member_required
 def evaluation(request):
     # TODO: delete this snippet, fetches gravatar images for every user only for test cases.
-    #for puser in PortfolioUser.objects.all():
-    #    if not puser.avatar:
-    #        puser.get_gravatar()
+    for puser in PortfolioUser.objects.all():
+        if not puser.avatar:
+            puser.get_gravatar()
 
     overview = ""
     selection = request.session.get('selection', 'error')
@@ -52,15 +52,11 @@ def evaluation(request):
         overview = render_to_string('questions.html', {'challenges': challenges}, RequestContext(request))
 
     challenges = Challenge.objects.all()
+
     return render_to_response('evaluation.html',
                               {'challenges': challenges,
-                               'missing_reviews': Elaboration.get_missing_reviews(),
-                               'top_level_challenges': Elaboration.get_top_level_challenges(),
-                               'non_adequate_work': Elaboration.get_non_adequate_work(),
-                               'evaluated_non_adequate_work': Elaboration.get_evaluated_non_adequate_work(),
-                               'complaints': Elaboration.get_complaints(RequestContext(request)),
-                               'questions': Challenge.get_questions(RequestContext(request)),
-                               'awesome': Elaboration.get_awesome(),
+                               'count_' + request.session.get('selection', ''): request.session.get('count', ''),
+                               'stabilosiert_' + request.session.get('selection', ''): 'stabilosiert',
                                'overview': overview,
                               },
                               context_instance=RequestContext(request))
@@ -89,22 +85,41 @@ def overview(request):
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
     request.session['selection'] = request.GET.get('data', '')
+    request.session['count'] = len(elaborations)
 
-    html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
-    return html
+    data = {
+        'overview_html': render_to_string('overview.html', {'elaborations': elaborations}, RequestContext(request)),
+        'menu_html': render_to_string('menu.html', {
+            'count_' + request.session.get('selection', ''): request.session.get('count', ''),
+            'stabilosiert_' + request.session.get('selection', ''): 'stabilosiert',
+            }, RequestContext(request)),
+        'selection': request.session['selection']
+    }
+
+    return HttpResponse(json.dumps(data))
 
 
 @login_required()
 @staff_member_required
 def questions(request):
     challenges = Challenge.get_questions(RequestContext(request))
-    html = render_to_response('questions.html', {'challenges': challenges}, RequestContext(request))
 
     # store selected elaborations in session
     elaborations = []
     request.session['elaborations'] = elaborations
     request.session['selection'] = 'questions'
-    return html
+    request.session['count'] = len(challenges)
+
+    data = {
+        'overview_html': render_to_string('questions.html', {'challenges': challenges}, RequestContext(request)),
+        'menu_html': render_to_string('menu.html', {
+            'count_' + request.session.get('selection', ''): request.session.get('count', ''),
+            'stabilosiert_' + request.session.get('selection', ''): 'stabilosiert',
+            }, RequestContext(request)),
+        'selection': request.session['selection']
+    }
+
+    return HttpResponse(json.dumps(data))
 
 
 @login_required()
