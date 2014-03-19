@@ -20,7 +20,6 @@ from Comments.models import Comment
 from Course.models import Course, CourseChallengeRelation
 from Elaboration.models import Elaboration
 from Evaluation.models import Evaluation
-from ObjectState.models import ObjectState
 from PortfolioUser.models import PortfolioUser
 from Review.models import Review
 from ReviewAnswer.models import ReviewAnswer
@@ -53,16 +52,11 @@ def evaluation(request):
         overview = render_to_string('questions.html', {'challenges': challenges}, RequestContext(request))
 
     challenges = Challenge.objects.all()
+
     return render_to_response('evaluation.html',
                               {'challenges': challenges,
-                               'missing_reviews': Elaboration.get_missing_reviews(),
-                               'top_level_challenges': Elaboration.get_top_level_challenges(),
-                               'non_adequate_work': Elaboration.get_non_adequate_work(),
-                               'evaluated_non_adequate_work': Elaboration.get_evaluated_non_adequate_work(),
-                               'complaints': Elaboration.get_complaints(RequestContext(request)),
-                               'questions': Challenge.get_questions(RequestContext(request)),
-                               'awesome': Elaboration.get_awesome(),
-                               'expired': Elaboration.get_expired(),
+                               'count_' + request.session.get('selection', ''): request.session.get('count', ''),
+                               'stabilosiert_' + request.session.get('selection', ''): 'stabilosiert',
                                'overview': overview,
                               },
                               context_instance=RequestContext(request))
@@ -82,8 +76,6 @@ def overview(request):
         elaborations = Elaboration.get_complaints(RequestContext(request))
     if request.GET.get('data', '') == "awesome":
         elaborations = Elaboration.get_awesome()
-    if request.GET.get('data', '') == "expired":
-        elaborations = Elaboration.get_expired()
     if request.GET.get('data', '') == "evaluated_non_adequate_work":
         elaborations = Elaboration.get_evaluated_non_adequate_work()
 
@@ -93,22 +85,41 @@ def overview(request):
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
     request.session['selection'] = request.GET.get('data', '')
+    request.session['count'] = len(elaborations)
 
-    html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
-    return html
+    data = {
+        'overview_html': render_to_string('overview.html', {'elaborations': elaborations}, RequestContext(request)),
+        'menu_html': render_to_string('menu.html', {
+            'count_' + request.session.get('selection', ''): request.session.get('count', ''),
+            'stabilosiert_' + request.session.get('selection', ''): 'stabilosiert',
+            }, RequestContext(request)),
+        'selection': request.session['selection']
+    }
+
+    return HttpResponse(json.dumps(data))
 
 
 @login_required()
 @staff_member_required
 def questions(request):
     challenges = Challenge.get_questions(RequestContext(request))
-    html = render_to_response('questions.html', {'challenges': challenges}, RequestContext(request))
 
     # store selected elaborations in session
     elaborations = []
     request.session['elaborations'] = elaborations
     request.session['selection'] = 'questions'
-    return html
+    request.session['count'] = len(challenges)
+
+    data = {
+        'overview_html': render_to_string('questions.html', {'challenges': challenges}, RequestContext(request)),
+        'menu_html': render_to_string('menu.html', {
+            'count_' + request.session.get('selection', ''): request.session.get('count', ''),
+            'stabilosiert_' + request.session.get('selection', ''): 'stabilosiert',
+            }, RequestContext(request)),
+        'selection': request.session['selection']
+    }
+
+    return HttpResponse(json.dumps(data))
 
 
 @login_required()
@@ -130,7 +141,7 @@ def detail(request):
 
     if selection == "missing_reviews":
         questions = ReviewQuestion.objects.filter(challenge=elaboration.challenge).order_by("order")
-        params = {'questions': questions}
+        params = {'questions': questions, 'selection': 'missing reviews'}
     if selection == "top_level_challenges":
         # set evaluation lock
         user = RequestContext(request)['user']
@@ -151,17 +162,15 @@ def detail(request):
             evaluation = Evaluation.objects.create(submission=elaboration, tutor=user)
             evaluation.lock_time = datetime.now()
             evaluation.save()
-        params = {'evaluation': evaluation, 'lock': lock}
+        params = {'evaluation': evaluation, 'lock': lock, 'selection': 'top-level tasks'}
     if selection == "non_adequate_work":
-        params = {}
+        params = {'selection': 'non-adequate work'}
     if selection == "complaints":
-        params = {}
+        params = {'selection': 'complaints'}
     if selection == "awesome":
-        params = {}
-    if selection == "expired":
-        params = {}
+        params = {'selection': 'awesome'}
     if selection == "evaluated_non_adequate_work":
-        params = {}
+        params = {'selection': 'evaluated non-adequate work'}
     if selection == "search":
         if elaboration.challenge.is_final_challenge():
             if Evaluation.objects.filter(submission=elaboration):
@@ -186,7 +195,6 @@ def detail(request):
     params['reviews'] = reviews
     params['next'] = next
     params['prev'] = prev
-    params['selection'] = selection
 
     return render_to_response('detail.html', params, RequestContext(request))
 
@@ -337,8 +345,7 @@ def select_challenge(request):
     for challenge in challenges:
         if Elaboration.get_sel_challenge_elaborations(challenge):
             for elaboration in Elaboration.get_sel_challenge_elaborations(challenge):
-                if not ObjectState.get_expired(elaboration):
-                    elaborations.append(elaboration)
+                elaborations.append(elaboration)
 
     html = render_to_response('overview.html', {'elaborations': elaborations, 'search': True}, RequestContext(request))
 
@@ -433,7 +440,7 @@ def autocomplete_challenge(request):
     challenges = Challenge.objects.all().filter(title__istartswith=term)
     titles = [challenge.title for challenge in challenges]
     response_data = json.dumps(titles, ensure_ascii=False)
-    return HttpResponse(response_data, mimetype='application/json; charset=utf-8')
+    return HttpResponse(response_data, content_type='application/json; charset=utf-8')
 
 
 @login_required()
@@ -444,7 +451,7 @@ def autocomplete_user(request):
         Q(username__istartswith=term) | Q(first_name__istartswith=term) | Q(last_name__istartswith=term) | Q(nickname__istartswith=term))
     names = [(studi.username + ' ' + studi.nickname + ' ' + studi.last_name) for studi in studies]
     response_data = json.dumps(names, ensure_ascii=False)
-    return HttpResponse(response_data, mimetype='application/json; charset=utf-8')
+    return HttpResponse(response_data, content_type='application/json; charset=utf-8')
 
 
 @login_required()
@@ -505,43 +512,6 @@ def back(request):
         elaborations = Elaboration.get_complaints(RequestContext(request))
     if selection == "awesome":
         elaborations = Elaboration.get_awesome()
-    if selection == "expired":
-        elaborations = Elaboration.get_expired()
-    if selection == "evaluated_non_adequate_work":
-        elaborations = Elaboration.get_evaluated_non_adequate_work()
-
-    # update overview
-    elaborations.sort(key=lambda elaboration: elaboration.submission_time)
-    request.session['elaborations'] = serializers.serialize('json', elaborations)
-
-    return HttpResponse()
-
-
-@login_required()
-@staff_member_required
-def expire(request):
-
-    if not 'elaboration_id' in request.GET:
-        return False;
-
-    elaboration = Elaboration.objects.get(pk=request.GET.get('elaboration_id', ''))
-    ObjectState.set_expired(elaboration, True)
-
-    selection = request.session.get('selection', 'error')
-    if selection == "search":
-        return HttpResponse()
-    if selection == "missing_reviews":
-        elaborations = Elaboration.get_missing_reviews()
-    if selection == "top_level_challenges":
-        elaborations = Elaboration.get_top_level_challenges()
-    if selection == "non_adequate_work":
-        elaborations = Elaboration.get_non_adequate_work()
-    if selection == "complaints":
-        elaborations = Elaboration.get_complaints(RequestContext(request))
-    if selection == "awesome":
-        elaborations = Elaboration.get_awesome()
-    if selection == "expired":
-        elaborations = Elaboration.get_expired()
     if selection == "evaluated_non_adequate_work":
         elaborations = Elaboration.get_evaluated_non_adequate_work()
 

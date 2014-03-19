@@ -9,7 +9,6 @@
             <th>student</th>
             <th>elaboration</th>
             <th>hand in date</th>
-            {% if not search %}<th>expire</th>{% endif %}
         </tr>
 
         {% paginate elaborations with "/evaluation/" %}
@@ -18,7 +17,6 @@
                 <td onclick="load_details({{ elaboration.id }})"><img class="gravatar" src="{{ elaboration.user.avatar.url }}" style="vertical-align:middle"> {{ elaboration.user.nickname }}</td>
                 <td onclick="load_details({{ elaboration.id }})">{{ elaboration.challenge.title }}</td>
                 <td onclick="load_details({{ elaboration.id }})">{{ elaboration.submission_time }}</td>
-                {% if not search %}<td onclick="set_expired({{ elaboration.id }})"><input type="checkbox" /></td>{% endif %}
             </tr>
         {% endfor %}
         {% get_pages %}

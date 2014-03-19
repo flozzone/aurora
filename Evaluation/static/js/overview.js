@@ -4,12 +4,11 @@ $(function() {
 });
 
 
-$(function() {
-	$(".mitem").click(function(event) {
-		$(".mitem").removeClass('stabilosiert');
-		$(this).addClass('stabilosiert');
-	});
-});
+function update_overview(data) {
+    data = JSON.parse(data);
+    $('#menu').html(data['menu_html']);
+    $('#overview').html(data['overview_html']);
+}
 
 $(function() {
 	$(".mfield").click(function(event) {
@@ -22,7 +21,7 @@ $(function() {
 		loadWait();
 		var url = '/overview?data=missing_reviews';
 		$.get(url, function (data) {
-			$('#overview').html(data);
+            update_overview(data);
 		});
 	});
 });
@@ -32,7 +31,7 @@ $(function() {
 		loadWait();
        var url = '/overview?data=non_adequate_work';
        $.get(url, function (data) {
-            $('#overview').html(data);
+            update_overview(data);
        });
    });
 });
@@ -42,7 +41,7 @@ $(function() {
 		loadWait();
        var url = '/overview?data=top_level_challenges';
        $.get(url, function (data) {
-            $('#overview').html(data);
+            update_overview(data);
        });
    });
 });
@@ -52,7 +51,7 @@ $(function() {
 		loadWait();
        var url = '/overview?data=complaints';
        $.get(url, function (data) {
-            $('#overview').html(data);
+            update_overview(data);
        });
    });
 });
@@ -62,7 +61,7 @@ $(function() {
 		loadWait();
        var url = '/questions/';
        $.get(url, function (data) {
-            $('#overview').html(data);
+            update_overview(data);
        });
    });
 });
@@ -72,7 +71,16 @@ $(function() {
 	   loadWait();
 	   var url = '/overview?data=evaluated_non_adequate_work';
        $.get(url, function (data) {
-            $('#overview').html(data);
+            update_overview(data);
+       });
+   });
+});
+
+$(function() {
+   $(".awesome").click(function(event) {
+       var url = '/overview?data=awesome';
+       $.get(url, function (data) {
+            update_overview(data);
        });
    });
 });
@@ -131,19 +139,9 @@ $(function() {
 $(function() {
    $(".awesome").click(function(event) {
        loadWait();
-	   var url = '/overview?data=awesome';
+       var url = '/overview?data=awesome';
        $.get(url, function (data) {
-            $('#overview').html(data);
-       });
-   });
-});
-
-$(function() {
-   $(".expired").click(function(event) {
-       loadWait();
-	   var url = '/overview?data=expired';
-       $.get(url, function (data) {
-            $('#overview').html(data);
+            update_overview(data);
        });
    });
 });
@@ -210,10 +208,3 @@ $(function() {
        $.ajax(args);
    });
 });
-
-function set_expired(id) {
-    var url = '/expire?elaboration_id=' + id;
-    $.get(url, function (data) {
-        window.location.href = "/evaluation/";
-    });
-}
