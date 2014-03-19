@@ -244,6 +244,7 @@ input:-moz-placeholder { color:rgba(58,201,88,0);	text-shadow: 0 0 2px rgba(58,2
 	margin-top:0.3em;
 	margin-right:0.1em;
 	float:right;
+	cursor:pointer;
 }
 
 .loginButton:active {
@@ -462,9 +463,11 @@ button {
     -webkit-appearance:none;
     -moz-appearance:none;
     appearance:none;
+	border-radius:2px;
 	background-color:rgba(0,0,0,0);
 	border:none;
 	white-space: nowrap;
+	cursor:pointer;
 }
 
 .button:active, button:active{
@@ -493,6 +496,7 @@ button:hover, .button:hover{
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     -webkit-appearance:none;
     -moz-appearance:none;
+	border-radius:2px;
     appearance:none;
 	background-color:rgba(0,0,0,0);
 	border:none;
