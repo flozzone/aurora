@@ -1,3 +1,6 @@
+.label {
+	cursor:pointer;
+}
 
 .all_reviews, .review {
 	max-width:940px;
