@@ -91,8 +91,8 @@ function elaboration_save(challenge_id, submit) {
 
 function submit_clicked(event) {
     if (!$('#EWfE').hasClass('nope')) {
-        $('.submit').hide();
-        $('.submission_text').show();
+        $('.submit').hide().finish();
+        $('.submission_text').slideDown('fast');
         window.scrollBy(0, 200);
     }
 }
