@@ -10,17 +10,17 @@
 		 <div class="comment_numreplies">&mdash; {{ comment.responses | length }} repl{{ comment.responses|length|pluralize:"y,ies"}}</div>
 		 <div class="comment_award">    
 			 {% if comment.promoted %}
-			 {% if requester.is_staff %}
-			 <a href="#" class="comment_demote" data-comment_number="{{ comment.id }}" title="Demote this comment">
-				 <i class="fa fa-star fa-lg gold"></i>
-			 </a>
-			 {% else %}
- 		 		<a title="This comment was rewarded with a point by the organizers"><i class="fa fa-star fa-lg gold"></i></a>
-			 {% endif %}
+				 {% if requester.is_staff %}
+				 <a href="#" class="comment_demote" data-comment_number="{{ comment.id }}" title="Demote this comment">
+					 <i class="fa fa-star fa-lg gold"></i>
+				 </a>
+				 {% else %}
+	 		 		<a title="This comment was rewarded with a point by the organizers"><i class="fa fa-star fa-lg gold"></i></a>
+				 {% endif %}
 			 {% elif requester.is_staff %}
-			 <a href='#' class="comment_promote" data-comment_number="{{ comment.id }}" title="Promote this comment">
-				 <i class="fa fa-star fa-lg ungold"></i>
-			 </a>
+				 <a href='#' class="comment_promote" data-comment_number="{{ comment.id }}" title="Promote this comment">
+					 <i class="fa fa-star fa-lg ungold"></i>
+				 </a>
 			 {% endif %}
          </div>
          <div class="comment_score {{ comment.voted }}">

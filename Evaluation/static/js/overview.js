@@ -13,6 +13,7 @@ function update_overview(data) {
 $(function() {
 	$(".mfield").click(function(event) {
 		$(".mitem").removeClass('stabilosiert');
+		
 	});
 });
 
