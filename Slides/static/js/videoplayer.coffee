@@ -9,7 +9,7 @@ class @Videoplayer
     @next = $("#flowplayer_controls_next")
     @whereAmI = $("#flowplayer_controls_where_am_i")
     @play.click =>
-      @load(0)
+      @togglePlay()
     @setControllerState "play_only"
     
     #@prev = $("#flowplayer_controls_play")
@@ -64,15 +64,15 @@ class @Videoplayer
     
   togglePlay: ->
     if not @loading
-      if loaded
-        if $().isPlaying
+      if @loaded
+        if $f.isPlaying
           @pause()
         else
           @play()
       else
         @setControllerState "loading"
         @loading = true
-        @load
+        @load()
     
   play: ->
     @play.text "PAUSE"

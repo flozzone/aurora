@@ -16,7 +16,7 @@
       this.whereAmI = $("#flowplayer_controls_where_am_i");
       this.play.click((function(_this) {
         return function() {
-          return _this.load(0);
+          return _this.togglePlay();
         };
       })(this));
       this.setControllerState("play_only");
@@ -87,8 +87,8 @@
 
     Videoplayer.prototype.togglePlay = function() {
       if (!this.loading) {
-        if (loaded) {
-          if ($().isPlaying) {
+        if (this.loaded) {
+          if ($f.isPlaying) {
             return this.pause();
           } else {
             return this.play();
@@ -96,7 +96,7 @@
         } else {
           this.setControllerState("loading");
           this.loading = true;
-          return this.load;
+          return this.load();
         }
       }
     };
