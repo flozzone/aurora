@@ -313,8 +313,12 @@ th {
 	top:100%;
 }
 
-.stabilosiert, .mitem:active {
+.stabilosiert {
 	background:#92A480;
+}
+
+.mitem:active {
+	background:rgba(0,0,0,0.2);
 }
 
 .stabilosiert:after {
@@ -323,7 +327,6 @@ th {
 	position:absolute;
 	right:-7px;
 	top:3px;
-	height:;
 	content:"";
 	background:#92A480;
 	transform:rotate(45deg);
@@ -362,13 +365,19 @@ th {
     -moz-box-sizing: border-box;
 }
 
-.awesome_reviews, .success_reviews, .notry_reviews, .fail_reviews {
+.indicator_field {
+	text-align:right;
+}
+
+.indicator {
     border-radius: 20px;
-    height:25px;
+    height:17px;
+	width:20px;
 	padding: 3px 1px 3px 1px;
     text-align: center;
     -moz-box-sizing: border-box;
-    margin-right: 6px;		
+    margin-right: 6px;
+	display:inline-block;
 }
 
 .zero_reviews {
@@ -380,7 +389,6 @@ th {
 	background-color:#00B700;
 	border:1px solid #829B04;
 	box-shadow: 0 0 4px 0px #FFBE46;
-	font-weight:bold;
 	color:#FFE8AA;
 }
 
@@ -588,3 +596,68 @@ th {
    border: 1px solid silver;
    padding: 0.5em 0px;
 }
+
+
+.author_detail {
+	clear:both;
+	font-size:12px;
+	color:#333;
+	padding:6px;
+	height:88px;
+	box-shadow:0 2px 4px rgba(0,0,0,0.3) inset;
+	background-color:#ddd;
+	cursor:pointer;
+	position:relative;
+	top:-1px;
+}
+
+.hidden_detail {
+	display:none;
+}
+
+.author_detail .nick {
+	font-weight:bold;
+}
+
+.eval_appraisal > input[type=radio] {
+	display:none;
+}
+.eval_appraisal > input[type=radio] + label {
+	padding:1px 10px;
+	border-radius:15px;
+	border:1px solid rgba(0,0,0,0);
+}
+
+.eval_appraisal > input[type=radio]:checked + label {
+	border: 1px solid rgb(58,201,88)
+}
+
+.eval_appraisal > input[type=radio]:checked + #X1t {
+	background-color:#00B700;
+	border:1px solid #829B04;
+	box-shadow: 0 0 4px 0px #FFBE46;
+	color:#FFE8AA;
+}
+
+.eval_appraisal > input[type=radio]:checked + #X2t {
+	background-color:#C5FFB6;
+	border:1px solid #359440;
+}
+
+.eval_appraisal > input[type=radio]:checked + #X3t {
+	background-color:yellow;
+	border:1px solid orange;
+	color:black;
+}
+
+.eval_appraisal > input[type=radio]:checked + #X4t {
+	color:white;
+	background-color:red;
+	border:1px solid darkred;
+}
+
+
+
+
+
+

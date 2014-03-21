@@ -1,3 +1,4 @@
+{% load humanize %}
 {% load endless %}
 
 {% block content %}
@@ -16,7 +17,7 @@
             <tr class="{% cycle 'darkRow' 'lightRow' %}">
                 <td onclick="load_details({{ elaboration.id }})"><img class="gravatar" src="{{ elaboration.user.avatar.url }}" style="vertical-align:middle"> {{ elaboration.user.nickname }}</td>
                 <td onclick="load_details({{ elaboration.id }})">{{ elaboration.challenge.title }}</td>
-                <td onclick="load_details({{ elaboration.id }})">{{ elaboration.submission_time }}</td>
+                <td onclick="load_details({{ elaboration.id }})" title="{{ elaboration.submission_time }}">{{ elaboration.submission_time|naturaltime}}</td>
             </tr>
         {% endfor %}
         {% get_pages %}
