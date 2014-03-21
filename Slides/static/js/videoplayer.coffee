@@ -56,7 +56,6 @@ class @Videoplayer
   resetControllerState: ->
     @prev.addClass "disabled"
     @play.addClass "disabled"
-    @play.text ""
     @next.addClass "disabled"
     @whereAmI.addClass "disabled"
   
@@ -64,13 +63,24 @@ class @Videoplayer
     console.log("seeking to chapter: " + chapter)
     
   togglePlay: ->
-    console.log("toggle play pause")
+    if not @loading
+      if loaded
+        if $().isPlaying
+          @pause()
+        else
+          @play()
+      else
+        @setControllerState "loading"
+        @loading = true
+        @load
     
   play: ->
-    console.log("play")
+    @play.text "PAUSE"
+    $f.play()
     
   pause: ->
-    console.log("pause")
+    @play.text "PLAY"
+    $f.pause()
     
   prev: ->
     console.log("previous chapter")

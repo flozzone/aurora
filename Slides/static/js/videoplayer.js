@@ -77,7 +77,6 @@
     Videoplayer.prototype.resetControllerState = function() {
       this.prev.addClass("disabled");
       this.play.addClass("disabled");
-      this.play.text("");
       this.next.addClass("disabled");
       return this.whereAmI.addClass("disabled");
     };
@@ -87,15 +86,29 @@
     };
 
     Videoplayer.prototype.togglePlay = function() {
-      return console.log("toggle play pause");
+      if (!this.loading) {
+        if (loaded) {
+          if ($().isPlaying) {
+            return this.pause();
+          } else {
+            return this.play();
+          }
+        } else {
+          this.setControllerState("loading");
+          this.loading = true;
+          return this.load;
+        }
+      }
     };
 
     Videoplayer.prototype.play = function() {
-      return console.log("play");
+      this.play.text("PAUSE");
+      return $f.play();
     };
 
     Videoplayer.prototype.pause = function() {
-      return console.log("pause");
+      this.play.text("PLAY");
+      return $f.pause();
     };
 
     Videoplayer.prototype.prev = function() {
