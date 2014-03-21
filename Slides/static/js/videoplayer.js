@@ -19,6 +19,7 @@
           return _this.load(0);
         };
       })(this));
+      this.setControllerState("play_only");
     }
 
     Videoplayer.prototype.load = function(chapter) {
@@ -50,12 +51,59 @@
       });
     };
 
-    Videoplayer.prototype.setState = function(state) {
-      return console.log("setting to: " + state);
+    Videoplayer.prototype.setControllerState = function(state) {
+      this.resetControllerState();
+      switch (state) {
+        case "play_only":
+          this.label.text("Play Audio");
+          return this.play.removeClass("disabled");
+        case "loading":
+          this.label.text("Loading");
+          this.play.removeClass("disabled");
+          return this.play.addClass("loading");
+        case "active":
+          this.label.text("Playing");
+          this.prev.removeClass("disabled");
+          this.play.removeClass("disabled");
+          this.play.removeClass("loading");
+          this.next.removeClass("disabled");
+          return this.whereAmI.removeClass("disabled");
+        case "error":
+          this.play.text("Error");
+          return this.play.text("ERROR");
+      }
     };
 
-    Videoplayer.prototype.seekToChapter = function(chapter) {
+    Videoplayer.prototype.resetControllerState = function() {
+      this.prev.addClass("disabled");
+      this.play.addClass("disabled");
+      this.play.text("");
+      this.next.addClass("disabled");
+      return this.whereAmI.addClass("disabled");
+    };
+
+    Videoplayer.prototype.seekChapter = function(chapter) {
       return console.log("seeking to chapter: " + chapter);
+    };
+
+    Videoplayer.prototype.togglePlay = function() {
+      return console.log("toggle play pause");
+    };
+
+    Videoplayer.prototype.play = function() {
+      return console.log("play");
+    };
+
+    Videoplayer.prototype.pause = function() {
+      return console.log("pause");
+    };
+
+    Videoplayer.prototype.prev = function() {
+      return console.log("previous chapter");
+    };
+
+    Videoplayer.prototype.next = function() {
+      return console.log("next chapter");
     };
 
     return Videoplayer;
