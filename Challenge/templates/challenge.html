@@ -23,7 +23,7 @@
 <div id="detail_area">
 
   <div id="{{ challenge.id }}" class="challenge" stack="{{ challenge.get_stack.id }}">
-    <div class="challenge_title" style="cursor:pointer;" {% if elaboration.is_submitted %}onclick="$('.challenge_description').toggle('fast');"{% endif %}>
+    <div class="challenge_title" style="cursor:pointer;" {% if elaboration.is_submitted %}onclick="$('.challenge_description').slideToggle('fast');"{% endif %}>
 {% if elaboration.is_submitted %}
     <i class="fa fa-toggle-down"></i>
 {% endif %}
@@ -33,10 +33,10 @@
       {{ challenge.description|safe|urlize }}
       <div class="qa_section">
         <div class="comments">
-          <span style="cursor:pointer;"><b {% if not elaboration.is_submitted %}onclick="$('#qa').toggle('fast');"><i class="fa fa-toggle-down"></i{% endif %}>
+          <span style="cursor:pointer;"><b {% if not elaboration.is_submitted %}onclick="$('#qa').slideToggle('fast');"><i class="fa fa-toggle-down"></i{% endif %}>
             Task Q+A Section</b> - {% comments_count for challenge %} comments so far
           </span>
-          <div id="qa" class="challenge_comments">If you have questions about the description of this task, post
+          <div id="qa" class="challenge_comments" style="display:none">If you have questions about the description of this task, post
             them here. The course organizers will answer as soon as possible.
 {% render_multi_comment_list for challenge %}
           </div>
@@ -50,7 +50,7 @@
 {% if not elaboration.is_submitted %}
 {% if not accepted %}
     <div id="Caccept" class="button XL"
-      onclick="$('.elaboration_block').show('fast');$('#Caccept').hide('fast');$('#qa').hide('fast');">
+      onclick="$('.elaboration_block').slideDown('fast');$('#Caccept').slideUp('fast');$('#qa').slideUp('fast');">
       start this task
     </div>
 {% endif %}
