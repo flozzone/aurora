@@ -4,8 +4,10 @@
 {% endblock %}
 
 <script>
-    document.cookie = "AuroraP={{ sum }}" + "; expires=Tue, 18 Jan 2038 03:14:06 GMT";
-    $('.pagehead').css('background-position', '0 {{sum}}%');
+	var position = Math.round({{ sum }} / 60 * 100);
+	if (position > 100) position=100;
+    document.cookie = "AuroraP=" + position + "; expires=Tue, 18 Jan 2038 03:14:06 GMT";
+    $('.pagehead').css('background-position', '0 ' + position + '%');
 </script>
 
 <div class="points_table">

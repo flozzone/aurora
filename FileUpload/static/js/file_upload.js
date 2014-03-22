@@ -15,11 +15,16 @@ function file_upload_loaded() {
         dictRemoveFile: 'REMOVE',
         acceptedFiles: $('.file_upload').attr('accepted_files'),
         init: function () {
-			this.on("drop", function (file, response) {
-				$('#EWfE').addClass('nope');
-			});
+            this.on("drop", function (file, response) {
+                $('#EWfE').addClass('nope');
+            });
+            this.on("sending", function (file, response) {
+                $('#EWfE').addClass('nope');
+            });
             this.on("success", function (file, response) {
-			    if (this.getQueuedFiles().length == 0 && this.getUploadingFiles().length != 0) { $('#EWfE').removeClass('nope') } 
+                if (this.getQueuedFiles().length == 0 && this.getAcceptedFiles().length != 0) {
+                    $('#EWfE').removeClass('nope')
+                }
                 revert_submit_clicked();
                 var data = JSON.parse(response);
                 file.id = data.id;
@@ -49,6 +54,9 @@ function file_upload_loaded() {
                 });
             });
             this.on("removedfile", function (file) {
+                if (this.getQueuedFiles().length == 0) {
+                    $('#EWfE').removeClass('nope')
+                }
                 revert_submit_clicked();
                 if (file.id) {
                     var url = '/fileupload/remove?id=' + file.id;
@@ -109,16 +117,15 @@ function load_files(elaboration_id, is_submitted) {
             // Create the mock file:
             var mockFile = { name: file.name, size: file.size, path: file.url, type: 'image/*', status: Dropzone.success};
             dropzone_instance.emit("addedfile", mockFile);
-
             if (file.url.match(/pdf$/)) {
-                dropzone_instance.emit("thumbnail", mockFile, '/static/img/pdf_icon.jpg');
+                dropzone_instance.emit("thumbnail", mockFile, static_url + 'img/pdf_icon.jpg');
                 $(mockFile.previewElement).find('img').wrap(function () {
                     return "<a href='/" + file.url + "' title='" + file.name + "'></div>";
                 });
             } else {
                 dropzone_instance.emit("thumbnail", mockFile, file.url);
                 $(mockFile.previewElement).find('img').wrap(function () {
-                    return "<a href='/" + file.url + "' data-lightbox='preview' title='" + file.name + "'></div>";
+                    return "<a href='" + file.url + "' data-lightbox='preview' title='" + file.name + "'></div>";
                 });
                 $(mockFile.previewElement).append('<div class="fig">Fig: ' + i + '</div>');
             }

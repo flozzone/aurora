@@ -141,7 +141,7 @@ def detail(request):
 
     if selection == "missing_reviews":
         questions = ReviewQuestion.objects.filter(challenge=elaboration.challenge).order_by("order")
-        params = {'questions': questions}
+        params = {'questions': questions, 'selection': 'missing reviews'}
     if selection == "top_level_challenges":
         # set evaluation lock
         user = RequestContext(request)['user']
@@ -162,15 +162,15 @@ def detail(request):
             evaluation = Evaluation.objects.create(submission=elaboration, tutor=user)
             evaluation.lock_time = datetime.now()
             evaluation.save()
-        params = {'evaluation': evaluation, 'lock': lock}
+        params = {'evaluation': evaluation, 'lock': lock, 'selection': 'top-level tasks'}
     if selection == "non_adequate_work":
-        params = {}
+        params = {'selection': 'non-adequate work'}
     if selection == "complaints":
-        params = {}
+        params = {'selection': 'complaints'}
     if selection == "awesome":
-        params = {}
+        params = {'selection': 'awesome'}
     if selection == "evaluated_non_adequate_work":
-        params = {}
+        params = {'selection': 'evaluated non-adequate work'}
     if selection == "search":
         if elaboration.challenge.is_final_challenge():
             if Evaluation.objects.filter(submission=elaboration):
@@ -195,7 +195,6 @@ def detail(request):
     params['reviews'] = reviews
     params['next'] = next
     params['prev'] = prev
-    params['selection'] = selection
 
     return render_to_response('detail.html', params, RequestContext(request))
 

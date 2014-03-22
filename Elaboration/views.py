@@ -10,6 +10,7 @@ from Elaboration.models import Elaboration
 from PortfolioUser.models import PortfolioUser
 from Course.models import Course
 from django.http import Http404
+from FileUpload.models import UploadFile
 
 @csrf_exempt
 def save_elaboration(request):
@@ -23,9 +24,13 @@ def save_elaboration(request):
     # check if elaboration exists
     if Elaboration.objects.filter(challenge=challenge, user=user).exists():
         elaboration = Elaboration.objects.all().filter(challenge=challenge, user=user).order_by('id').latest('creation_time')
-        elaboration.elaboration_text = ''
-        elaboration.elaboration_text = elaboration_text
-        elaboration.save()
+        # only save if it is unsubmitted (because of js raise condition)
+        if not elaboration.is_submitted():
+            elaboration.elaboration_text = ''
+            elaboration.elaboration_text = elaboration_text
+            elaboration.save()
+        else:
+            raise Http404
     else:
         Elaboration.objects.get_or_create(challenge=challenge, user=user, elaboration_text=elaboration_text)
 
@@ -46,13 +51,15 @@ def create_elaboration(request):
 
 @login_required()
 def submit_elaboration(request):
-    if 'id' in request.GET:
-        course = RequestContext(request)['last_selected_course']
-        challenge = Challenge.objects.get(id=request.GET['id'])
+    if 'challenge_id' in request.POST:
+        challenge = Challenge.objects.get(id=request.POST['challenge_id'])
         user = RequestContext(request)['user']
         if not challenge.is_enabled_for_user(user):
             raise Http404
         elaboration, created = Elaboration.objects.get_or_create(challenge=challenge, user=user)
-        elaboration.submission_time = datetime.now()
-        elaboration.save()
-    return HttpResponse()
+        elaboration.elaboration_text = request.POST['elaboration_text']
+        if elaboration.elaboration_text or UploadFile.objects.filter(elaboration=elaboration).exists():
+            elaboration.submission_time = datetime.now()
+            elaboration.save()
+            return HttpResponse()
+    raise Http404

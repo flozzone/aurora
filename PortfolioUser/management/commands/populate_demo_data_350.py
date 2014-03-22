@@ -330,9 +330,8 @@ def init_data():
     challenges = Challenge.objects.all()
     for challenge in challenges:
         for u in users:
-            if not challenge.is_final_challenge():
-                Elaboration(challenge=challenge, user=u, elaboration_text="dummy elaboration %s" % u.username,
-                            submission_time='2013-11-01 10:00:00').save()
+            Elaboration(challenge=challenge, user=u, elaboration_text="dummy elaboration %s" % u.username,
+                submission_time='2013-11-01 10:00:00').save()
 
     # create stack-challenge relations
     print('adding stack challenge relations')

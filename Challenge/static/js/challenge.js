@@ -1,7 +1,7 @@
-$(function() {
-	$('.course_selected').removeClass('irrelevant');
-	$('#challenges-li').addClass('uRhere');
-	window.document.title="Aurora: Challenges"
+$(function () {
+    $('.course_selected').removeClass('irrelevant');
+    $('#challenges-li').addClass('uRhere');
+    window.document.title = "Aurora: Challenges"
 });
 
 $(challenge_loaded);
@@ -18,15 +18,15 @@ function challenge_loaded() {
             try {
                 content = $(args.content);
                 if (content.selector === "") {
-                content.find('a').replaceWith(function () {
-                    return $(this).text()
-                });
-                var fullHtml = "";
-                $(content).each(function () {
-                    fullHtml += '<p>' + $(this).html() + '</p>';
-                });
-                args.content = fullHtml;
-            }
+                    content.find('a').replaceWith(function () {
+                        return $(this).text()
+                    });
+                    var fullHtml = "";
+                    $(content).each(function () {
+                        fullHtml += '<p>' + $(this).html() + '</p>';
+                    });
+                    args.content = fullHtml;
+                }
             } catch (error) {
                 // in case the content is not a valid markup
             }
@@ -53,11 +53,11 @@ function challenge_loaded() {
         menubar: false,
         statusbar: false,
         toolbar: false,
-		height:300,
+        height: 300,
 //        plugins: "autoresize",
         autoresize_min_height: 300,
         autoresize_max_height: 800,
-        readonly: 1 ,
+        readonly: 1,
         oninit: function () {
             var height = $('#editor_challenge_ifr').height() + 25;
             $('#editor_challenge_ifr').height(height);
@@ -80,9 +80,6 @@ function elaboration_save(challenge_id, submit) {
         elaboration_text: elaboration_text
     };
     var args = { type: "POST", url: "./autosave/", data: data,
-        error: function () {
-            alert('error elaboration autosave');
-        },
         success: function () {
             if (submit) {
                 send_submit();
@@ -93,11 +90,11 @@ function elaboration_save(challenge_id, submit) {
 }
 
 function submit_clicked(event) {
-	if(!$('#EWfE').hasClass('nope')) {
-		$('.submit').hide();
-    	$('.submission_text').show();
-   		window.scrollBy(0, 200);
- 	}	
+    if (!$('#EWfE').hasClass('nope')) {
+        $('.submit').hide().finish();
+        $('.submission_text').slideDown('fast');
+        window.scrollBy(0, 200);
+    }
 }
 
 function revert_submit_clicked() {
@@ -115,20 +112,18 @@ function send_submit() {
     var challenge = $('.challenge');
     var challenge_id = challenge.attr('id');
     var stack_id = challenge.attr('stack');
-    var url = './submit?id=' + challenge_id;
-    //TODO: change to post
-    $.get(url, function (data) {
-        window.location.href = "/challenges/stack?id=" + stack_id;
-    });
-
-//    var submitData = { id: challenge_id };
-//    $.post('./submit', function (data) {
-//        window.location.href = "/challenges/stack?id=" + stack_id;
-//    });
+    ajax_setup();
+    var data = {
+        challenge_id: challenge_id,
+        elaboration_text: tinyMCE.activeEditor.getContent().toString()
+    };
+    var args = { type: "POST", url: "./submit", data: data,
+        success: function () {
+            window.location.href = "/challenges/stack?id=" + stack_id;
+        },
+        error: function () {
+            alert("Error submitting elaboration!");
+        }
+    };
+    $.ajax(args);
 }
-
-//var UTIL = {
-//    getCsfr: function() {
-//        filter(getCookie('filtercookie.'+$('#the_username').data('username')));
-//    }
-//}

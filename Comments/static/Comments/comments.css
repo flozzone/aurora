@@ -257,6 +257,11 @@
 }
 
 .ungold {
+	font-size:15px;
+	position:relative;
+	bottom:3px;
+	right:2px;
+	margin-left:4px;
 	color:white;
 	text-shadow: 0 0 1px black,0 0 1px black;
 }

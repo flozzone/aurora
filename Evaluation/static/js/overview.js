@@ -13,11 +13,13 @@ function update_overview(data) {
 $(function() {
 	$(".mfield").click(function(event) {
 		$(".mitem").removeClass('stabilosiert');
+		
 	});
 });
 
 $(function() {
 	$(".missing_reviews").click(function(event) {
+		loadWait();
 		var url = '/overview?data=missing_reviews';
 		$.get(url, function (data) {
             update_overview(data);
@@ -36,6 +38,7 @@ $(function() {
 
 $(function() {
    $(".non_adequate_work").click(function(event) {
+		loadWait();
        var url = '/overview?data=non_adequate_work';
        $.get(url, function (data) {
             update_overview(data);
@@ -45,6 +48,7 @@ $(function() {
 
 $(function() {
    $(".top_level_challenges").click(function(event) {
+		loadWait();
        var url = '/overview?data=top_level_challenges';
        $.get(url, function (data) {
             update_overview(data);
@@ -54,6 +58,7 @@ $(function() {
 
 $(function() {
    $(".complaints").click(function(event) {
+		loadWait();
        var url = '/overview?data=complaints';
        $.get(url, function (data) {
             update_overview(data);
@@ -63,6 +68,7 @@ $(function() {
 
 $(function() {
    $(".questions").click(function(event) {
+		loadWait();
        var url = '/questions/';
        $.get(url, function (data) {
             update_overview(data);
@@ -72,7 +78,8 @@ $(function() {
 
 $(function() {
    $(".evaluated_non_adequate_work").click(function(event) {
-       var url = '/overview?data=evaluated_non_adequate_work';
+	   loadWait();
+	   var url = '/overview?data=evaluated_non_adequate_work';
        $.get(url, function (data) {
             update_overview(data);
        });
@@ -90,7 +97,8 @@ $(function() {
 
 $(function() {
    $(".select_challenge").click(function(event) {
-       var url = '/select_challenge';
+       loadWait();
+	   var url = '/select_challenge';
        $.get(url, function (data) {
             $('#select_challenge').html(data);
        });
@@ -138,11 +146,31 @@ $(function() {
    });
 });
 
+$(function() {
+   $(".awesome").click(function(event) {
+       loadWait();
+       var url = '/overview?data=awesome';
+       $.get(url, function (data) {
+            update_overview(data);
+       });
+   });
+});
+
 function load_details(id) {
    var url = '/detail?elaboration_id=' + id;
    $.get(url, function (data) {
        $('#detail_area').html(data);
    });
+}
+
+function loadWait() {
+	$('.loading_animation').show();
+	$('.overview_table').hide();
+}
+
+function hideWait() {
+	$('.loading_animation').hide();
+	$('.overview_table').show();
 }
 
 $(function() {
