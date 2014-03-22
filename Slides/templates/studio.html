@@ -10,13 +10,21 @@
 <script type="text/javascript" src="{{ STATIC_URL }}flowplayer/flowplayer-3.2.12.min.js"></script>
 
 <link rel="stylesheet" href="{{ STATIC_URL }}css/slides_base.css" type="text/css" media="screen"/>
+
+<script type="text/javascript" src="{{ STATIC_URL }}Comments/simple_functions.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}Comments/comments.js"></script>
+
+	<script type="text/javascript" src="{{ STATIC_URL }}lightbox/js/lightbox-2.6.min.js"></script>
+	<link rel="stylesheet" href="{{ STATIC_URL }}lightbox/css/lightbox.css" type="text/css" media="screen"/>
+
+
+<link rel="stylesheet" href="{{ STATIC_URL }}Comments/comments.css" type="text/css" media="screen"/>
 {% endblock %}
 
 {% block content %}
 
 {% include "contentbar.html" %}
 {% comments_boilerplate %}
-
 
 <div id="contentblock">
 	<script>
@@ -28,7 +36,7 @@
 	</script>	
 
 	<br />
-	 <div id="flowplayer_invisible"></div>
+	<div id="flowplayer_invisible"></div>
 	 {% if slidecasting_mode == 'search_results'%}
 		<br />
 		Your search for {{search_text}} found {{slides.count}} results. <br />
@@ -61,13 +69,14 @@
 	            </h1>
 	            </div>
 				<div class="studio_slide_medium">
-					<a href="{{slide.get_filepath}}/jpg/{{slide.filename}}.jpg" class="lightbox_trigger">
+					<a href="{{ STATIC_URL}}slides/{{ course.short_title }}/jpg/{{slide.filename}}.jpg" data-lightbox="image-{{slide.filename}}" class="lightbox_trigger">
 						<img onError="this.src='{{ STATIC_URL }}img/white_medium.jpg'" class="studio_slide" src="{{ STATIC_URL}}slides/{{ course.short_title }}/thumb/{{slide.filename}}_thumb.jpg" alt="{{slide.title}}"/ >
 					</a>
 				</div>
 				<div id="lazyload_{{slide.id}}" class="lazyload">comments will load on demand</div>
 				<div id="comments_{{slide.id}}">
-					{% render_multi_comment_list for slide %}
+{#					{% render_multi_comment_list for slide %}#}
+                    {% render_additional_comment_list for slide %}
 				</div>
 			</td>
 	     {% endfor %}

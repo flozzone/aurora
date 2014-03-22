@@ -1,42 +1,51 @@
+from django.views.decorators.http import require_GET, require_POST
 import json
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login as django_login, logout
 from django.template import RequestContext
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, redirect
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from PortfolioUser.models import PortfolioUser
+from datetime import datetime
 
 from Course.models import Course
 
+from hashlib import sha1
+from hmac import new as hmac_new
+from django.conf import settings
+from django.http import Http404
 
-@csrf_exempt
+
+@require_POST
 def signin(request):
-    if request.method == 'POST':
-        if 'username' in request.POST and 'password' in request.POST and 'remember' in request.POST:
-            if request.POST['remember'] == 'false':
-                request.session.set_expiry(0)
-            username = request.POST['username']
-            password = request.POST['password']
-            user = authenticate(username=username, password=password)
-
-            if user is not None:
-                if user.is_active:
-                    django_login(request, user)
-                    response_data = {'success': True}
-                    # fetch gravatar img on first login
-                    if not PortfolioUser.objects.all().get(id=user.id).avatar:
-                        PortfolioUser.objects.all().get(id=user.id).get_gravatar()
-                    return HttpResponse(json.dumps(response_data), content_type="application/json")
-                else:
-                    response_data = {'success': False, 'message': 'Your account has been disabled!'}
-                    return HttpResponse(json.dumps(response_data), content_type="application/json")
-            else:
-                response_data = {'success': False, 'message': 'Your username and password were incorrect.'}
-                return HttpResponse(json.dumps(response_data), content_type="application/json")
-    else:
-        response_data = {'success': False, 'message': 'only POST allowed for this url'}
+    if 'username' not in request.POST or 'password' not in request.POST or 'remember' not in request.POST:
+        response_data = {'success': False, 'message': 'Something went wrong. Please contact the LVA team'}
         return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+    if request.POST['remember'] == 'false':
+        request.session.set_expiry(0)
+
+    username = request.POST['username']
+    password = request.POST['password']
+    user = authenticate(username=username, password=password)
+
+    if user is None:
+        response_data = {'success': False, 'message': 'Your username or password was incorrect.'}
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+    if not user.is_active:
+        response_data = {'success': False, 'message': 'Your account has been disabled!'}
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+    django_login(request, user)
+
+    # fetch gravatar img on first login
+    if not PortfolioUser.objects.all().get(id=user.id).avatar:
+        PortfolioUser.objects.all().get(id=user.id).get_gravatar()
+
+    response_data = {'success': True}
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 
 def signout(request):
@@ -45,11 +54,92 @@ def signout(request):
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 
+@ensure_csrf_cookie
 def login(request):
     if 'next' in request.GET:
         return render_to_response('login.html', {'next': request.GET['next']}, context_instance=RequestContext(request))
+    elif 'error_message' in request.GET:
+        return render_to_response('login.html', {'next': '/', 'error_message': request.GET['error_message']}, context_instance=RequestContext(request))
     else:
         return render_to_response('login.html', {'next': '/'}, context_instance=RequestContext(request))
+
+
+def sso_auth_redirect():
+    return redirect(settings.SSO_URI)
+
+
+@require_GET
+def sso_auth_callback(request):
+    values = request.GET
+
+    user = authenticate(params=values)
+
+    if user is None:
+        return redirect('login/')
+        # return render_to_response('login.html', {'error_message': 'Your user is not enrolled with this system'}, context_instance=RequestContext(request))
+
+    if not user.is_active:
+        return redirect('login/')
+        # return render_to_response('login.html', {'error_message': 'Your user has been deactivated'}, context_instance=RequestContext(request))
+
+    django_login(request, user)
+
+    if not user.avatar:
+        user.get_gravatar()
+
+    return redirect('/')
+
+
+class ZidSSOBackend():
+    def authenticate(self, params):
+        print('ZidSSOBackend.authenticate() was called')
+
+        if 'sKey' in params.keys():
+            hmac_received = params['sKey']
+        elif 'logout' in params.keys():
+            hmac_received = params['logout']
+        else:
+            return None
+
+        values = ''
+        for key in ['oid', 'mn', 'firstName', 'lastName', 'mail']:
+            values += params[key]
+
+        shared_secret = settings.SSO_SHARED_SECRET.encode(encoding='latin1')
+        utc_now = (datetime.utcnow() - datetime(1970, 1, 1)).total_seconds()
+        now = int(utc_now / 10)
+        user = None
+        for offset in [0, -1, 1, -2, 2]:
+            values_string = values + str(now + offset)
+            values_string = values_string.encode(encoding='latin1')
+            hmac_calced = hmac_new(shared_secret, values_string, sha1).hexdigest()
+
+            if hmac_calced == hmac_received:
+                try:
+                    user = PortfolioUser.objects.get(matriculation_number=params['mn'])
+                except PortfolioUser.DoesNotExist:
+                    try:
+                        user = PortfolioUser.objects.get(oid=params['oid'])
+                    except PortfolioUser.DoesNotExist:
+                        user = None
+
+        print('authenticate returns user: ' + str(user))
+        return user
+
+    def get_user(self, user_id):
+        try:
+            user = PortfolioUser.objects.get(pk=user_id)
+        except PortfolioUser.DoesNotExist:
+            user = None
+
+        return user
+
+    def __str__(self):
+        return('ZidSSOBackend')
+
+    def __unicode__(self):
+        return('ZidSSOBackend')
+
 
 @login_required
 @ensure_csrf_cookie
@@ -119,9 +209,13 @@ def course(request):
     user = RequestContext(request)['user']
     response_data = {}
     if request.method == 'POST':
-        course = Course.objects.filter(short_title=request.POST['short_title'])
+        try:
+            course = Course.objects.get(short_title=request.POST['short_title'])
+            if not course.user_is_enlisted(user):
+                raise Http404
+        except:
+            raise Http404
         if course:
-            course = course[0]
             user.last_selected_course = course
             user.save()
         response_data['success'] = True

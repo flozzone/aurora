@@ -1,14 +1,16 @@
 from django.db import models
-from Challenge.models import Challenge
 
 
 class Course(models.Model):
-    title = models.CharField(max_length=100)
-    short_title = models.CharField(max_length=10)
+    title = models.CharField(max_length=100, unique=True)
+    short_title = models.CharField(max_length=10, unique=True)
     description = models.TextField()
-    course_number = models.CharField(max_length=100)
+    course_number = models.CharField(max_length=100, unique=True)
 
     def __unicode__(self):
+        return str(self.title)
+
+    def __str__(self):
         return str(self.title)
 
     def get_course_challenges(self):
@@ -17,6 +19,13 @@ class Course(models.Model):
         for ccr in ccrs:
             challenges.append(ccr.challenge)
         return challenges
+
+    def user_is_enlisted(self, user):
+        try:
+            CourseUserRelation.objects.get(user=user, course=self)
+            return True
+        except CourseUserRelation.DoesNotExist:
+            return False
 
 
 class CourseUserRelation(models.Model):

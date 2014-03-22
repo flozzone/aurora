@@ -21,14 +21,9 @@
     font-family: Arial;
     font-weight: normal;
     color: #000000;
+	font-size:14px;
 }
 
-.points_table tr:first-child td {
-    text-align: left;
-    font-size: 1em;
-    font-weight: bold;
-    color: black;
-}
 
 .points_table tr.lineL td {
 

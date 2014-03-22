@@ -11,6 +11,11 @@
 	color:white;
 	padding:0.2em 0.5em;
 	border-radius: 4px 4px 1px 1px;
+	cursor:pointer;
+}
+
+.feed_column {
+	padding-top:1em;
 }
 
 .toolbar > li {
@@ -38,6 +43,10 @@
 
 .hided .comment_body, .hided .response_body {
 	display:none;
+}
+
+.half {
+	opacity:0.5;
 }
 
 .hided .comment_top, .hided .response_top {

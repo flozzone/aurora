@@ -12,7 +12,5 @@ urlpatterns = patterns('',
                        url(r'^course/$', 'PortfolioUser.views.course'),
                        url(r'^profile/$', 'PortfolioUser.views.profile'),
                        url(r'^profile/save/$', 'PortfolioUser.views.profile_save'),
+                       url(r'^sso_auth_callback$', 'PortfolioUser.views.sso_auth_callback'),
 )
-
-
-

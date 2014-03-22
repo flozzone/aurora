@@ -14,10 +14,10 @@ function notifications_refresh() {
         $.ajax({
             url: '/notifications/refresh',
             success: function (data) {
-                $('#unread_notifications').html(data);
-            },
-            complete: function () {
-                setTimeout(refresh_worker, 60000);
+                if ($.isNumeric(data)) {
+                    $('#unread_notifications').html(data);
+                    setTimeout(refresh_worker, 60000);
+                }
             }
         });
     })();
@@ -40,6 +40,8 @@ function getCookie(name) {
 }
 
 function course_change(event) {
+	var selMen = $('.uRhere').text().trim().toLowerCase();
+	if (!isNaN(selMen)) {selMen='notifications'}
 	$('.ct_menu').removeClass('selected');
 	$(event.target).addClass('selected');
     ajax_setup();
@@ -48,12 +50,9 @@ function course_change(event) {
         {
             'short_title': short_title
         }).done(function (data) {
-            console.log(data);
             if (data.success === true) {
-                console.log(data.success);
-                location.href = '/';
+                location.href = '/'+selMen;
             } else {
-                console.log("test failed");
                 $('#password').val("")
                 $('#error_message').html(data.message);
                 $('#error').show();
@@ -84,13 +83,6 @@ function sign_in() {
     var username = $('#username').val();
     var password = $('#password').val();
     var remember = $('#checkbox_remember').prop('checked');
-    console.log(next);
-    console.log({
-        'username': username,
-        'password': password,
-        'remember': remember
-    });
-
     $.post("/signin/",
         {
             'username': username,

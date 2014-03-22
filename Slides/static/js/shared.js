@@ -1,5 +1,15 @@
 // making jquery work with django csrf protection.
 // see: https://docs.djangoproject.com/en/1.4/ref/contrib/csrf/#ajax
+
+$(function() {
+	$('.course_selected').removeClass('irrelevant');
+	$('#slides-li').addClass('uRhere');
+	window.document.title="Aurora: Slides"
+});
+
+
+
+
 var csrftoken = getCookie('csrftoken');
 
 function getCookie(name) {

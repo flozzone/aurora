@@ -1,3 +1,6 @@
+.label {
+	cursor:pointer;
+}
 
 .all_reviews, .review {
 	max-width:940px;
@@ -191,71 +194,16 @@ input[type=submit] {
 	border-right:1px solid white;
 }
 
-.button {
-	color:white;
-	background-color:rgb(58,201,88);
-	position:relative;
-	left:90%;
+.submitButton {
+ 	color:white;
+ 	background-color:rgb(58,201,88);
+ 	position:relative;
+ 	left:90%;
+ }
+
+.explanation {
+	color:darkgray;
+	margin-left:10px;
 }
 
-.dropzone {
-    margin-top: 15px;
-    margin-bottom: 15px;
-    min-height: 10px;
-    background-color: #fff;
-	box-shadow: 0px 1px 3px  rgba(0,0,0,0.4) inset;
-}
 
-.dropzone .dz-preview, .dropzone-previews .dz-preview {
-	margin-top:0;
-}
-
-.dropzone .dz-default.dz-message {
-	position:relative;
-	left:300px;
-	height:81px;
-}
-
-.dropzone .dz-preview .dz-details .dz-size {
-	background:rgba(0,0,0,0.7);
-	color:white;
-	font-size:80%;
-	padding:2px;
-	height:auto;
-	width:auto;
-	line-height:12px;
-	position:absolute;
-	bottom:5px;
-	right:5px;
-	left:auto;
-	text-align:center;
-	border-radius:3px;
-}
-
-.dropzone a.dz-remove, .dropzone-previews a.dz-remove {
-	text-transform:uppercase;
-	border:0;
-	background:0;
-	padding:0;
-	margin:0;
-	font-size:80%;
-	color:rgb(58,201,88);
-}
-
-.dropzone a.dz-remove, .dropzone-previews a.dz-remove {
-	margin-top:5px;
-	float:right;
-}
-
-.dropzone .dz-preview .dz-details, .dropzone-previews .dz-preview .dz-details {
-	margin-bottom:0;
-}
-
-.dz-filename {
-	visibility:hidden;
-	display:none;
-}
-
-.fig {
-	margin-top:2px;
-}

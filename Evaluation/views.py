@@ -32,28 +32,31 @@ from Notification.models import Notification
 @staff_member_required
 def evaluation(request):
     # TODO: delete this snippet, fetches gravatar images for every user only for test cases.
-    for puser in PortfolioUser.objects.all():
-        if not puser.avatar:
-            puser.get_gravatar()
+    #for puser in PortfolioUser.objects.all():
+    #    if not puser.avatar:
+    #        puser.get_gravatar()
 
     overview = ""
-    if request.session.get('selection'):
-        if request.session.get('selection') != 'questions':
-            elaborations = []
-            for serialized_elaboration in serializers.deserialize('json', request.session.get('elaborations', {})):
-                elaborations.append(serialized_elaboration.object)
-            overview = render_to_string('overview.html', {'elaborations': elaborations})
+    selection = request.session.get('selection', 'error')
+    if selection not in ('error', 'questions'):
+        elaborations = []
+        for serialized_elaboration in serializers.deserialize('json', request.session.get('elaborations', {})):
+            elaborations.append(serialized_elaboration.object)
+        if selection == 'search':
+            data = { 'elaborations': elaborations, 'search': True }
+        else:
+            data = { 'elaborations': elaborations }
+        overview = render_to_string('overview.html', data, RequestContext(request))
+    else:
+        challenges = Challenge.get_questions(RequestContext(request))
+        overview = render_to_string('questions.html', {'challenges': challenges}, RequestContext(request))
 
     challenges = Challenge.objects.all()
+
     return render_to_response('evaluation.html',
                               {'challenges': challenges,
-                               'missing_reviews': Elaboration.get_missing_reviews(),
-                               'top_level_challenges': Elaboration.get_top_level_challenges(),
-                               'non_adequate_work': Elaboration.get_non_adequate_work(),
-                               'evaluated_non_adequate_work': Elaboration.get_evaluated_non_adequate_work(),
-                               'complaints': Elaboration.get_complaints(RequestContext(request)),
-                               'questions': Challenge.get_questions(RequestContext(request)),
-                               'awesome': Elaboration.get_awesome(),
+                               'count_' + request.session.get('selection', ''): request.session.get('count', ''),
+                               'stabilosiert_' + request.session.get('selection', ''): 'stabilosiert',
                                'overview': overview,
                               },
                               context_instance=RequestContext(request))
@@ -62,35 +65,18 @@ def evaluation(request):
 @login_required()
 @staff_member_required
 def overview(request):
-    challenges = Challenge.objects.all()
-    missing_reviews = Elaboration.get_missing_reviews()
-    return render_to_response('overview.html',
-                              {'challenges': challenges,
-                               'missing_reviews': missing_reviews
-                              },
-                              context_instance=RequestContext(request))
 
-
-@login_required()
-@staff_member_required
-def update_overview(request):
     if request.GET.get('data', '') == "missing_reviews":
-        print("loading missing reviews...")
         elaborations = Elaboration.get_missing_reviews()
     if request.GET.get('data', '') == "top_level_challenges":
-        print("loading top level challenges...")
         elaborations = Elaboration.get_top_level_challenges()
     if request.GET.get('data', '') == "non_adequate_work":
-        print("loading non adequate work...")
         elaborations = Elaboration.get_non_adequate_work()
     if request.GET.get('data', '') == "complaints":
-        print("loading complaints...")
         elaborations = Elaboration.get_complaints(RequestContext(request))
     if request.GET.get('data', '') == "awesome":
-        print("loading awesome work...")
         elaborations = Elaboration.get_awesome()
     if request.GET.get('data', '') == "evaluated_non_adequate_work":
-        print("loading evaluated non adequate work...")
         elaborations = Elaboration.get_evaluated_non_adequate_work()
 
     # sort elaborations by submission time
@@ -99,23 +85,41 @@ def update_overview(request):
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
     request.session['selection'] = request.GET.get('data', '')
+    request.session['count'] = len(elaborations)
 
-    html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
-    return html
+    data = {
+        'overview_html': render_to_string('overview.html', {'elaborations': elaborations}, RequestContext(request)),
+        'menu_html': render_to_string('menu.html', {
+            'count_' + request.session.get('selection', ''): request.session.get('count', ''),
+            'stabilosiert_' + request.session.get('selection', ''): 'stabilosiert',
+            }, RequestContext(request)),
+        'selection': request.session['selection']
+    }
+
+    return HttpResponse(json.dumps(data))
 
 
 @login_required()
 @staff_member_required
 def questions(request):
-    print("loading questions...")
     challenges = Challenge.get_questions(RequestContext(request))
-    html = render_to_response('questions.html', {'challenges': challenges}, RequestContext(request))
 
     # store selected elaborations in session
     elaborations = []
     request.session['elaborations'] = elaborations
     request.session['selection'] = 'questions'
-    return html
+    request.session['count'] = len(challenges)
+
+    data = {
+        'overview_html': render_to_string('questions.html', {'challenges': challenges}, RequestContext(request)),
+        'menu_html': render_to_string('menu.html', {
+            'count_' + request.session.get('selection', ''): request.session.get('count', ''),
+            'stabilosiert_' + request.session.get('selection', ''): 'stabilosiert',
+            }, RequestContext(request)),
+        'selection': request.session['selection']
+    }
+
+    return HttpResponse(json.dumps(data))
 
 
 @login_required()
@@ -136,9 +140,8 @@ def detail(request):
     request.session['elaboration_id'] = elaboration.id
 
     if selection == "missing_reviews":
-        print('selection: missing_reviews')
         questions = ReviewQuestion.objects.filter(challenge=elaboration.challenge).order_by("order")
-        params = {'questions': questions}
+        params = {'questions': questions, 'selection': 'missing reviews'}
     if selection == "top_level_challenges":
         # set evaluation lock
         user = RequestContext(request)['user']
@@ -159,26 +162,22 @@ def detail(request):
             evaluation = Evaluation.objects.create(submission=elaboration, tutor=user)
             evaluation.lock_time = datetime.now()
             evaluation.save()
-        params = {'evaluation': evaluation, 'lock': lock}
+        params = {'evaluation': evaluation, 'lock': lock, 'selection': 'top-level tasks'}
     if selection == "non_adequate_work":
-        print('selection: non_adequate_work')
-        params = {}
+        params = {'selection': 'non-adequate work'}
     if selection == "complaints":
-        print('selection: complaints')
-        params = {}
+        params = {'selection': 'complaints'}
     if selection == "awesome":
-        print('selection: awesome')
-        params = {}
+        params = {'selection': 'awesome'}
     if selection == "evaluated_non_adequate_work":
-        print('selection: evaluated_non_adequate_work')
-        params = {}
+        params = {'selection': 'evaluated non-adequate work'}
     if selection == "search":
         if elaboration.challenge.is_final_challenge():
             if Evaluation.objects.filter(submission=elaboration):
                 evaluation = Evaluation.objects.get(submission=elaboration)
                 params = {'evaluation': evaluation}
 
-    reviews = Review.objects.filter(elaboration=elaboration)
+    reviews = Review.objects.filter(elaboration=elaboration, submission_time__isnull=False)
 
     next = prev = None
     index = elaborations.index(elaboration)
@@ -196,7 +195,6 @@ def detail(request):
     params['reviews'] = reviews
     params['next'] = next
     params['prev'] = prev
-    params['selection'] = selection
 
     return render_to_response('detail.html', params, RequestContext(request))
 
@@ -329,7 +327,10 @@ def set_appraisal(request):
     review = Review.objects.get(pk=review_id)
     review.appraisal = appraisal
     review.save()
-
+    if review.appraisal == review.NOTHING:
+        Notification.bad_review(review)
+    else:
+        Notification.enough_peer_reviews(review)
     return HttpResponse()
 
 
@@ -340,11 +341,13 @@ def select_challenge(request):
     selected_challenge = request.POST['selected_challenge']
 
     elaborations = []
-    challenge = Challenge.objects.get(title=selected_challenge)
-    if Elaboration.get_sel_challenge_elaborations(challenge):
-        elaborations = Elaboration.get_sel_challenge_elaborations(challenge)
+    challenges = Challenge.objects.filter(title=selected_challenge)
+    for challenge in challenges:
+        if Elaboration.get_sel_challenge_elaborations(challenge):
+            for elaboration in Elaboration.get_sel_challenge_elaborations(challenge):
+                elaborations.append(elaboration)
 
-    html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
+    html = render_to_response('overview.html', {'elaborations': elaborations, 'search': True}, RequestContext(request))
 
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
@@ -379,42 +382,33 @@ def search(request):
                 results = md.objects.filter(qs)
                 for result in results:
                     if isinstance(result, Elaboration):
-                        print("Elaboration: ", result)
                         if result not in elaborations:
                             elaborations.append(result)
                     if isinstance(result, Challenge):
-                        print("Challenge: ", result)
                         if Elaboration.get_sel_challenge_elaborations(result):
                             for elaboration in Elaboration.get_sel_challenge_elaborations(result):
                                 if elaboration not in elaborations:
                                     elaborations.append(elaboration)
                     if isinstance(result, Course):
-                        print("Course: ", result)
                         for elaboration in Elaboration.get_course_elaborations(result):
                             if elaboration not in elaborations:
                                 elaborations.append(elaboration)
                     if isinstance(result, Stack):
-                        print("Stack: ", result)
                         for elaboration in Elaboration.get_stack_elaborations(result):
                             if elaboration not in elaborations:
                                 elaborations.append(elaboration)
                     if isinstance(result, Evaluation):
-                        print("Evaluation: ", result)
                         if result.submission not in elaborations:
                             elaborations.append(result.submission)
                     if isinstance(result, Review):
-                        print("Review: ", result)
                         if result.elaboration not in elaborations:
                             elaborations.append(result.elaboration)
                     if isinstance(result, ReviewAnswer):
-                        print("ReviewAnswer: ", result)
                         if result.review.elaboration not in elaborations:
                             elaborations.append(result.review.elaboration)
                     if isinstance(result, ReviewQuestion):
                         print("ReviewQuestion: ", result)
                     if isinstance(result, Comment):
-                        print("Comments: ", result)
-                        print(result.content_object)
                         if result.content_type == ContentType.objects.get_for_model(Challenge):
                             if Elaboration.get_sel_challenge_elaborations(result.content_object):
                                 for elaboration in Elaboration.get_sel_challenge_elaborations(result.content_object):
@@ -431,7 +425,7 @@ def search(request):
                                 elaborations.append(result.content_object.review.elaboration)
 
 
-    html = render_to_response('overview.html', {'elaborations': elaborations}, RequestContext(request))
+    html = render_to_response('overview.html', {'elaborations': elaborations, 'search': True}, RequestContext(request))
 
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
@@ -446,7 +440,7 @@ def autocomplete_challenge(request):
     challenges = Challenge.objects.all().filter(title__istartswith=term)
     titles = [challenge.title for challenge in challenges]
     response_data = json.dumps(titles, ensure_ascii=False)
-    return HttpResponse(response_data, mimetype='application/json; charset=utf-8')
+    return HttpResponse(response_data, content_type='application/json; charset=utf-8')
 
 
 @login_required()
@@ -454,10 +448,10 @@ def autocomplete_challenge(request):
 def autocomplete_user(request):
     term = request.GET.get('term', '')
     studies = PortfolioUser.objects.all().filter(
-        Q(username__istartswith=term) | Q(first_name__istartswith=term) | Q(last_name__istartswith=term))
-    names = [(studi.username + ' ' + studi.first_name + ' ' + studi.last_name) for studi in studies]
+        Q(username__istartswith=term) | Q(first_name__istartswith=term) | Q(last_name__istartswith=term) | Q(nickname__istartswith=term))
+    names = [(studi.username + ' ' + studi.nickname + ' ' + studi.last_name) for studi in studies]
     response_data = json.dumps(names, ensure_ascii=False)
-    return HttpResponse(response_data, mimetype='application/json; charset=utf-8')
+    return HttpResponse(response_data, content_type='application/json; charset=utf-8')
 
 
 @login_required()
@@ -467,7 +461,7 @@ def load_reviews(request):
         return False;
 
     elaboration = Elaboration.objects.get(pk=request.GET.get('elaboration_id', ''))
-    reviews = Review.objects.filter(elaboration=elaboration)
+    reviews = Review.objects.filter(elaboration=elaboration, submission_time__isnull=False)
 
     return render_to_response('stack_rev.html', {'elaboration': elaboration, 'reviews': reviews, 'stack': 'stack'},
                               RequestContext(request))
@@ -491,7 +485,10 @@ def review_answer(request):
             text = answer['answer']
             review_question = ReviewQuestion.objects.get(pk=question_id)
             ReviewAnswer(review=review, review_question=review_question, text=text).save()
-
+        if review.appraisal == review.NOTHING:
+            Notification.bad_review(review)
+        else:
+            Notification.enough_peer_reviews(review)
         # update overview
         elaborations = Elaboration.get_missing_reviews()
         elaborations.sort(key=lambda elaboration: elaboration.submission_time)

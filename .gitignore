@@ -11,3 +11,6 @@ vagrant_ansible_inventory_default
 Slides/settings.py
 fixgit.sh
 .jshintrc
+reload
+current_working_version_on_aurora
+current_working_version_on_unchained

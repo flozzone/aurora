@@ -1,3 +1,10 @@
+$(function() {
+	$('.course_selected').removeClass('irrelevant');
+	$('#challenges-li').addClass('uRhere');
+	window.document.title="Aurora: Challenges"
+});
+
+
 $(challenges_loaded);
 
 function challenges_loaded() {

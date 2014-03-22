@@ -124,6 +124,7 @@
 
 .challenge-description {
 	height:96px;
+	min-height:96px;
 	position:relative;
 	overflow:hidden;
 	text-overflow: ellipsis;
@@ -132,6 +133,20 @@
 	padding:0.25em;
 	padding-bottom:0;
 	padding-left:0.75em;
+}
+
+.challenge-text {
+	width:725px;
+}
+
+.clickme {
+	pointer-events:auto;
+}
+
+.challenge-text-hidden {
+	position:relative;
+	display:none;
+	width:725px;
 }
 
 .challenge_top_bracket {

@@ -13,19 +13,9 @@ from django.contrib.contenttypes.models import ContentType
 import json
 
 from Comments.models import Comment, CommentsConfig, CommentList, Vote
+from Course.models import Course
 from Notification.models import Notification
 from Comments.tests import CommentReferenceObject
-
-
-# class BookmarkedView(ListView):
-#     queryset = Comment.query_bookmarked()
-#
-    # def get_context_data(self, **kwargs):
-    #     context = super(BookmarkedView, self).get_context_data(**kwargs)
-    #     context['form'] = CommentForm()
-        # context['reply_form'] = ReplyForm()
-        # context['form_action'] = '/post/'
-        # return context
 
 
 class CommentForm(forms.Form):
@@ -100,6 +90,7 @@ def edit_comment(request):
         return HttpResponse('')
 
     comment.text = data['text']
+    comment.edited_date = timezone.now()
     comment.save()
     CommentList.get_by_comment(comment).increment()
 
@@ -135,15 +126,23 @@ def create_comment(form, request):
         comment.save()
 
         comment_list = CommentList.get_by_comment(comment)
-        comment_list.uri = form.cleaned_data['uri']
-        comment_list.save()
+
+        if comment_list.uri is None or 'evaluation' in comment_list.uri:
+            comment_list.uri = form.cleaned_data['uri']
+            comment_list.save()
 
         comment_list.increment()
+
+        # TODO extremely borken fix, remove this ASAP
+        course = context['last_selected_course']
+        if course is None:
+            course = Course.objects.get(short_title='gsi')
+        # TODO endof extremely borken fix
 
         if parent_comment is not None and parent_comment.author != comment.author:
             obj, created = Notification.objects.get_or_create(
                 user=parent_comment.author,
-                course=context['last_selected_course'],
+                course=course,
                 text="You've received a reply to one of your comments",
                 image_url=comment.author.avatar.url,
                 link=comment_list.uri + '#comment_' + str(parent_comment.id)
@@ -244,7 +243,7 @@ def promote_comment(request):
     return HttpResponse('')
 
 
-@require_GET
+@require_POST
 @login_required
 def update_comments(request):
     polling_active, polling_idle = CommentsConfig.get_polling_interval()
@@ -252,7 +251,7 @@ def update_comments(request):
     response_data = {'polling_active_interval': polling_active,
                      'polling_idle_interval': polling_idle}
 
-    client_revisions = unpack_revisions(request.GET)
+    client_revisions = unpack_revisions(request.POST)
 
     comment_lists = []
     for client_revision in client_revisions:

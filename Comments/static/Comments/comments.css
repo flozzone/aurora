@@ -9,17 +9,17 @@
 
 .bookmark_list {
 	padding:1em;
-	width:680px;
+	width:580px;
 }
 
 
 .comment_form > p > textarea, .add_reply_form > p > textarea {
-	width:100%;
+	width:99%;
 	border:none;
     border-bottom: 1px solid #eee;
 	padding:2px;
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-	font-size:13px;
+	font-size:14px;
 	line-height:17px;
 	padding-top:4px;
 	height:60px;
@@ -63,6 +63,9 @@
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+#button_post_reply,#button_cancel_reply,#id_visibility,#edit_save,#edit_cancel {
+	cursor:pointer;
+}
 
 .comment_form > button,#edit_save,#edit_cancel, .add_reply_form > button {
 	float:right;
@@ -90,6 +93,34 @@
 	width:95%;
 }
 
+.author_detail {
+	clear:both;
+	font-size:12px;
+	color:#333;
+	padding:6px;
+	height:88px;
+	box-shadow:0 2px 4px rgba(0,0,0,0.3) inset;
+	background-color:#ddd;
+	cursor:pointer;
+	position:relative;
+	top:-1px;
+}
+
+.hidden_detail {
+	display:none;
+}
+
+.author_detail .nick {
+	font-weight:bold;
+}
+.author_detail img {
+	height:96px;
+	position:absolute;
+	top:2px;
+	right:2px;
+	box-shadow:0 2px 4px rgba(0,0,0,0.3) inset;	
+}
+
 .response_body, .comment_body {
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
@@ -106,6 +137,7 @@
 	height:32px;
 	float:left;
 	margin-right:4px;
+	cursor:pointer;
 }
 
 
@@ -162,7 +194,7 @@
 }
 
 .comment_top, .response_top {
-    background-color: #f8f8f8;
+    background-color: #eee;
 	height:17px;
 	width:100%;
 	vertical-align:bottom;
@@ -225,6 +257,11 @@
 }
 
 .ungold {
+	font-size:15px;
+	position:relative;
+	bottom:3px;
+	right:2px;
+	margin-left:4px;
 	color:white;
 	text-shadow: 0 0 1px black,0 0 1px black;
 }
@@ -301,6 +338,10 @@
     background-color: rgb(245,247,252);
 }
 
+.comment_body, .response_body {
+	background: #f8f8f8;
+}
+
 /* self-yellow */
 .author_author > .comment_top, .author_author > .response_top {
 	background-color: rgb(251, 249, 149);
@@ -322,7 +363,7 @@
 
 #comments_column_1 {
 	float:left;
-    width: 680px;
+    width: 580px;
     overflow: auto;
 	margin-left:1em;
 	margin-top:2em;
@@ -330,16 +371,20 @@
 
 #info_column {
 	float:left;
-	width:450px;
+	width:330px;
 	margin-top:2em;
 	margin-left:1em;
 	padding-left:1em;
 	border-left:1px dashed silver;
 }
 
+#info_column p {
+	font-size:14px;
+}
+
 #comments_column_2 {
     float: left;
-    width: 680px;
+    width: 580px;
     margin-left: 30px;
 }
 

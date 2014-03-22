@@ -46,10 +46,11 @@ class Stack(models.Model):
 
     def is_blocked(self, user):
         for challenge in self.get_challenges():
-            elaboration = challenge.get_elaboration(user)
-            if elaboration:
-                if not elaboration.is_passing_peer_review():
-                    return True
+            if not challenge.is_final_challenge():
+                elaboration = challenge.get_elaboration(user)
+                if elaboration:
+                    if not elaboration.is_passing_peer_review():
+                        return True
         return False
 
     def has_enough_peer_reviews(self, user):
