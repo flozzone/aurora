@@ -212,3 +212,12 @@ $(function() {
 function review_submitted() {
     window.location.href = '../evaluation';
 }
+
+$(function() {
+   $(".review_list").click(function(event) {
+        var url = '/reviewlist';
+        $.get(url, function (data) {
+            $('#info_area').html(data);
+        });
+   });
+});
