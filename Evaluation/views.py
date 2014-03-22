@@ -205,7 +205,7 @@ def stack(request):
     elaboration = Elaboration.objects.get(pk=request.session.get('elaboration_id', ''))
     stack_elaborations = elaboration.user.get_stack_elaborations(elaboration.challenge.get_stack())
 
-    return render_to_response('user_stack.html', {'stack_elaborations': stack_elaborations}, RequestContext(request))
+    return render_to_response('tasks.html', {'stack_elaborations': stack_elaborations}, RequestContext(request))
 
 
 @login_required()
@@ -463,7 +463,7 @@ def load_reviews(request):
     elaboration = Elaboration.objects.get(pk=request.GET.get('elaboration_id', ''))
     reviews = Review.objects.filter(elaboration=elaboration, submission_time__isnull=False)
 
-    return render_to_response('stack_rev.html', {'elaboration': elaboration, 'reviews': reviews, 'stack': 'stack'},
+    return render_to_response('task.html', {'elaboration': elaboration, 'reviews': reviews, 'stack': 'stack'},
                               RequestContext(request))
 
 
