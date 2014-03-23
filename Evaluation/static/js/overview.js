@@ -28,6 +28,15 @@ $(function() {
 });
 
 $(function() {
+   $(".count_missing_reviews").click(function(event) {
+       var url = '/overview?data=missing_reviews';
+       $.get(url, function (data) {
+            $('#count_mr').html("(118)");
+       });
+   });
+});
+
+$(function() {
    $(".non_adequate_work").click(function(event) {
 		loadWait();
        var url = '/overview?data=non_adequate_work';
