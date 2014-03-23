@@ -23,7 +23,7 @@ class Elaboration(models.Model):
     def is_started(self):
         if self.elaboration_text:
             return True
-        if UploadFile.objects.filter(elaboration=self):
+        if UploadFile.objects.filter(elaboration=self).exists():
             return True
         return False
 
@@ -41,7 +41,7 @@ class Elaboration(models.Model):
 
     def get_evaluation(self):
         evaluation = Evaluation.objects.filter(submission=self)
-        if evaluation:
+        if evaluation.exists():
             return evaluation[0]
         return None
 
@@ -58,8 +58,9 @@ class Elaboration(models.Model):
         return True
 
     def get_challenge_elaborations(self):
-        if Elaboration.objects.filter(challenge=self.challenge, submission_time__isnull=False):
-            return Elaboration.objects.filter(challenge=self.challenge, submission_time__isnull=False)
+        elaborations = Elaboration.objects.filter(challenge=self.challenge, submission_time__isnull=False)
+        if elaborations.exists():
+            return elaborations
         return False
 
     def get_others(self):
@@ -71,8 +72,9 @@ class Elaboration(models.Model):
 
     @staticmethod
     def get_sel_challenge_elaborations(challenge):
-        if Elaboration.objects.filter(challenge=challenge, submission_time__isnull=False):
-            return Elaboration.objects.filter(challenge=challenge, submission_time__isnull=False)
+        elaborations = Elaboration.objects.filter(challenge=challenge, submission_time__isnull=False)
+        if elaborations.exists():
+            return elaborations
         return False
 
     @staticmethod
@@ -123,7 +125,7 @@ class Elaboration(models.Model):
         )
         candidates = (
             Elaboration
-            .objects.filter(challenge=challenge)
+            .objects.filter(challenge=challenge, submission_time__isnull=False)
             .exclude(user=user)
             .exclude(user__is_staff=True)
             .annotate(num_reviews=Count('review'))
@@ -135,7 +137,7 @@ class Elaboration(models.Model):
 
         candidates = (
             Elaboration
-            .objects.filter(challenge=challenge)
+            .objects.filter(challenge=challenge, submission_time__isnull=False)
             .exclude(user__is_staff=False)
             .annotate(num_reviews=Count('review'))
             .exclude(id__in=already_submitted_reviews_ids)

@@ -440,6 +440,66 @@ class ElaborationTest(TestCase):
         assert Elaboration.get_review_candidate(challenge1, user3) == elaboration4
         assert Elaboration.get_review_candidate(challenge1, user4) == elaboration1
 
+    def test_get_review_candidate_unsubmitted(self):
+        challenge1 = self.challenge
+        self.create_challenge()
+        challenge2 = self.challenge
+        challenge2.prerequisite = challenge1
+        challenge2.save()
+        self.create_challenge()
+        challenge3 = self.challenge
+        challenge3.prerequisite = challenge2
+        challenge3.save()
+        user1 = self.users[0]
+        user2 = self.users[1]
+        user3 = self.users[2]
+        user4 = self.users[3]
+        dummy_user1 = self.dummy_users[0]
+        dummy_user2 = self.dummy_users[1]
+        dummy_user3 = self.dummy_users[2]
+        dummy_elaboration1 = Elaboration(challenge=challenge1, user=dummy_user1, elaboration_text="test",
+                                         submission_time=datetime.now())
+        dummy_elaboration1.save()
+        dummy_elaboration2 = Elaboration(challenge=challenge1, user=dummy_user2, elaboration_text="test",
+                                         submission_time=datetime.now())
+        dummy_elaboration2.save()
+        dummy_elaboration3 = Elaboration(challenge=challenge1, user=dummy_user3, elaboration_text="test",
+                                         submission_time=datetime.now())
+        dummy_elaboration3.save()
+
+        elaboration1 = Elaboration(challenge=challenge1, user=user1, elaboration_text="test")
+        elaboration1.save()
+        assert Elaboration.get_review_candidate(challenge1, user1) == dummy_elaboration1
+        assert Elaboration.get_review_candidate(challenge1, user2) == dummy_elaboration1
+        assert Elaboration.get_review_candidate(challenge1, user3) == dummy_elaboration1
+        assert Elaboration.get_review_candidate(challenge1, user4) == dummy_elaboration1
+        elaboration2 = Elaboration(challenge=challenge1, user=user2, elaboration_text="test")
+        elaboration2.save()
+        assert Elaboration.get_review_candidate(challenge1, user1) == dummy_elaboration1
+        assert Elaboration.get_review_candidate(challenge1, user2) == dummy_elaboration1
+        assert Elaboration.get_review_candidate(challenge1, user3) == dummy_elaboration1
+        assert Elaboration.get_review_candidate(challenge1, user4) == dummy_elaboration1
+        elaboration3 = Elaboration(challenge=challenge1, user=user3, elaboration_text="test")
+        elaboration3.save()
+        assert Elaboration.get_review_candidate(challenge1, user1) == dummy_elaboration1
+        assert Elaboration.get_review_candidate(challenge1, user2) == dummy_elaboration1
+        assert Elaboration.get_review_candidate(challenge1, user3) == dummy_elaboration1
+        assert Elaboration.get_review_candidate(challenge1, user4) == dummy_elaboration1
+        elaboration1.submission_time=datetime.now()
+        elaboration1.save()
+        assert Elaboration.get_review_candidate(challenge1, user1) == dummy_elaboration1
+        assert Elaboration.get_review_candidate(challenge1, user2) == elaboration1
+        assert Elaboration.get_review_candidate(challenge1, user3) == elaboration1
+        assert Elaboration.get_review_candidate(challenge1, user4) == elaboration1
+        elaboration2.submission_time=datetime.now()
+        elaboration2.save()
+        assert Elaboration.get_review_candidate(challenge1, user1) == elaboration2
+        assert Elaboration.get_review_candidate(challenge1, user2) == elaboration1
+        assert Elaboration.get_review_candidate(challenge1, user3) == elaboration1
+        assert Elaboration.get_review_candidate(challenge1, user4) == elaboration1
+
+
+
     def test_is_reviewed_2times(self):
         user1 = self.users[0]
         user2 = self.users[1]
