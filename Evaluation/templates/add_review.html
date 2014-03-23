@@ -1,9 +1,8 @@
 <div class="reviews">
     <div class="review_head greenish">Add Review</div>
 
-
     <form action="./review_answer/" method="post">
-        {% for question in questions %}
+       {% for question in questions %}
           <div class="question_container">
               {% if not question.visible_to_author %}
                 <i class="fa fa-arrow-right"></i>Only the course team will be able to see this answer
@@ -21,16 +20,18 @@
               {% endif %}
             </div>
           </div>
-        {% endfor %}
-   	<div>Your final verdict </div>
-	  <div class="appraisal">
-      <input type="radio" name="appraisal" id="apprA" value="A"> <label for="apprA">Great work</label><br>
-      <input type="radio" name="appraisal" id="apprS" value="S"> <label for="apprS">Good work <br>
-      <input type="radio" name="appraisal" id="apprF" value="F"> <label for="apprF">Barely acceptable work <br>
-      <input type="radio" name="appraisal" id="apprN" value="N"> <label for="apprN">Unacceptable<br><br>
-   </div>
-  <div class="suButton">
-      <input class="review_submit button XL" type="submit" value="Submit" onclick="$(this).attr('value','working')">
-  </div>
-    </form>
+       {% endfor %}
+       <div>Your final verdict </div>
+       <div class="appraisal">
+          <input type="radio" name="appraisal" id="apprA" value="A"> <label for="apprA">Great work</label><br>
+          <input type="radio" name="appraisal" id="apprS" value="S"> <label for="apprS">Good work</label><br>
+          <input type="radio" name="appraisal" id="apprF" value="F"> <label for="apprF">Barely acceptable work</label><br>
+          <input type="radio" name="appraisal" id="apprN" value="N"> <label for="apprN">Unacceptable</label><br><br>
+       </div>
+
+       <div class="suButton">
+          <input class="review_submit button XL" type="submit" value="Submit" onclick="$(this).attr('value','working')">
+       </div>
+   </form>
+
 </div>
