@@ -80,11 +80,7 @@ def overview(request):
         elaborations = Elaboration.get_evaluated_non_adequate_work()
 
     # sort elaborations by submission time
-    if type(elaborations) == list:
-        elaborations.sort(key=lambda elaboration: elaboration.submission_time)
-    else:
-        elaborations.order_by('submission_time')
-
+    list(elaborations).sort(key=lambda elaboration: elaboration.submission_time)
 
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
@@ -192,7 +188,7 @@ def detail(request):
 
     stack_elaborations = elaboration.user.get_stack_elaborations(elaboration.challenge.get_stack())
     # sort stack_elaborations by submission time
-    stack_elaborations.sort(key=lambda stack_elaboration: stack_elaboration.submission_time)
+    list(stack_elaborations).sort(key=lambda stack_elaboration: stack_elaboration.submission_time)
 
     params['elaboration'] = elaboration
     params['stack_elaborations'] = stack_elaborations
@@ -495,7 +491,7 @@ def review_answer(request):
             Notification.enough_peer_reviews(review)
         # update overview
         elaborations = Elaboration.get_missing_reviews()
-        elaborations.sort(key=lambda elaboration: elaboration.submission_time)
+        list(elaborations).sort(key=lambda elaboration: elaboration.submission_time)
         request.session['elaborations'] = serializers.serialize('json', elaborations)
     return HttpResponse()
 
@@ -520,7 +516,7 @@ def back(request):
         elaborations = Elaboration.get_evaluated_non_adequate_work()
 
     # update overview
-    elaborations.sort(key=lambda elaboration: elaboration.submission_time)
+    list(elaborations).sort(key=lambda elaboration: elaboration.submission_time)
     request.session['elaborations'] = serializers.serialize('json', elaborations)
 
     return HttpResponse()
