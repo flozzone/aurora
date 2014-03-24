@@ -656,6 +656,10 @@ th {
 	border:1px solid darkred;
 }
 
+label {
+	cursor:pointer;
+}
+
 
 
 
