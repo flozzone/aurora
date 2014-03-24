@@ -80,7 +80,11 @@ def overview(request):
         elaborations = Elaboration.get_evaluated_non_adequate_work()
 
     # sort elaborations by submission time
-    elaborations.sort(key=lambda elaboration: elaboration.submission_time)
+    if type(elaborations) == list:
+        elaborations.sort(key=lambda elaboration: elaboration.submission_time)
+    else:
+        elaborations.order_by('submission_time')
+
 
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
@@ -205,7 +209,7 @@ def stack(request):
     elaboration = Elaboration.objects.get(pk=request.session.get('elaboration_id', ''))
     stack_elaborations = elaboration.user.get_stack_elaborations(elaboration.challenge.get_stack())
 
-    return render_to_response('user_stack.html', {'stack_elaborations': stack_elaborations}, RequestContext(request))
+    return render_to_response('tasks.html', {'stack_elaborations': stack_elaborations}, RequestContext(request))
 
 
 @login_required()
@@ -463,7 +467,7 @@ def load_reviews(request):
     elaboration = Elaboration.objects.get(pk=request.GET.get('elaboration_id', ''))
     reviews = Review.objects.filter(elaboration=elaboration, submission_time__isnull=False)
 
-    return render_to_response('stack_rev.html', {'elaboration': elaboration, 'reviews': reviews, 'stack': 'stack'},
+    return render_to_response('task.html', {'elaboration': elaboration, 'reviews': reviews, 'stack': 'stack'},
                               RequestContext(request))
 
 
@@ -520,3 +524,12 @@ def back(request):
     request.session['elaborations'] = serializers.serialize('json', elaborations)
 
     return HttpResponse()
+
+
+@login_required()
+@staff_member_required
+def reviewlist(request):
+    elaboration = Elaboration.objects.get(pk=request.session.get('elaboration_id', ''))
+    reviews = Review.objects.filter(reviewer=elaboration.user, submission_time__isnull=False)
+
+    return render_to_response('reviewlist.html', {'reviews': reviews}, RequestContext(request))

@@ -1,13 +1,7 @@
 {% block content %}
 
-<img class="evc_challenge_image" src="{{ challenge.image.url }}">
-
+    <img class="evc_challenge_image" src="{{ challenge.image.url }}">
     <div class="evc_title"> {{ challenge.title }} </div>
-
-    <div class="evc_description">
-		 {{ challenge.description }} 
-	 </div>
-		 
-    
+    <div class="evc_description">{{ challenge.description }}</div>
 
 {% endblock %}
