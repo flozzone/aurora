@@ -80,7 +80,11 @@ def overview(request):
         elaborations = Elaboration.get_evaluated_non_adequate_work()
 
     # sort elaborations by submission time
-    elaborations.sort(key=lambda elaboration: elaboration.submission_time)
+    if type(elaborations) == list:
+        elaborations.sort(key=lambda elaboration: elaboration.submission_time)
+    else:
+        elaborations.order_by('submission_time')
+
 
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)

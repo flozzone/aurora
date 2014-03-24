@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
-from django.db.models import Count
+from django.db.models import Count, Min
 
 from Comments.models import Comment
 from Evaluation.models import Evaluation
@@ -64,68 +64,101 @@ class Elaboration(models.Model):
         return False
 
     def get_others(self):
-        elaborations = []
-        for elaboration in Elaboration.objects.filter(challenge=self.challenge, submission_time__isnull=False).exclude(pk=self.id):
-            if not elaboration.user.is_staff:
-                elaborations.append(elaboration)
+        elaborations = (
+            Elaboration.objects
+            .filter(challenge=self.challenge, submission_time__isnull=False)
+            .exclude(pk=self.id)
+            .exclude(user__is_staff=True)
+        )
         return elaborations
 
     @staticmethod
     def get_sel_challenge_elaborations(challenge):
-        elaborations = Elaboration.objects.filter(challenge=challenge, submission_time__isnull=False)
-        if elaborations.exists():
-            return elaborations
-        return False
+        elaborations = (
+            Elaboration.objects
+            .filter(challenge=challenge, submission_time__isnull=False)
+        )
+        return elaborations
 
     @staticmethod
     def get_missing_reviews():
-        missing_reviews = []
-        for elaboration in Elaboration.objects.all():
-            if not elaboration.is_reviewed_2times() and elaboration.is_older_3days() \
-                and not elaboration.challenge.is_final_challenge() and not elaboration.user.is_staff and elaboration.is_submitted():
-                    missing_reviews.append(elaboration)
+        from Challenge.models import Challenge
+
+        final_challenge_ids = Challenge.get_final_challenge_ids()
+        missing_reviews = (
+            Elaboration.objects
+            .filter(submission_time__lte=datetime.now() - timedelta(days=3))
+            .exclude(user__is_staff=True)
+            .annotate(num_reviews=Count('review'))
+            .exclude(num_reviews__gte=2)
+            .exclude(challenge__id__in=final_challenge_ids)
+        )
         return missing_reviews
 
     @staticmethod
     def get_top_level_challenges():
-        top_level_challenges = []
-        for elaboration in Elaboration.objects.all():
-            if elaboration.challenge.is_final_challenge() and elaboration.is_submitted() \
-                and not elaboration.is_evaluated() and not elaboration.user.is_staff:
-                    top_level_challenges.append(elaboration)
+        from Challenge.models import Challenge
+        final_challenge_ids = Challenge.get_final_challenge_ids()
+        top_level_challenges = (
+            Elaboration.objects
+            .filter(challenge__id__in=final_challenge_ids, submission_time__isnull=False)
+            .exclude(user__is_staff=True)
+            .annotate(evaluated=Min('evaluation__submission_time'))
+            .filter(evaluated=None)
+        )
         return top_level_challenges
+
+    @staticmethod
+    def get_non_adequate_elaborations():
+        nothing_reviews = (
+            Review.objects
+            .filter(appraisal=Review.NOTHING, submission_time__isnull=False)
+            .prefetch_related('elaboration')
+            .values_list('elaboration__id', flat=True)
+        )
+        non_adequate_elaborations = (
+            Elaboration.objects
+            .filter(id__in=nothing_reviews, submission_time__isnull=False)
+            .exclude(user__is_staff=True)
+        )
+        return non_adequate_elaborations
 
     @staticmethod
     def get_non_adequate_work():
         non_adequate_work = []
-        for review in Review.objects.filter(appraisal=Review.NOTHING):
-            if not review.elaboration.is_evaluated() and review.elaboration.is_submitted():
-                if not review.elaboration in non_adequate_work and not review.elaboration.user.is_staff:
-                    non_adequate_work.append(review.elaboration)
+        non_adequate_elaborations = Elaboration.get_non_adequate_elaborations().prefetch_related('challenge')
+        for elaboration in non_adequate_elaborations:
+            final_challenge = elaboration.challenge.get_final_challenge()
+            final_elaboration = final_challenge.get_elaboration(elaboration.user)
+            if final_elaboration:
+                if not final_elaboration.is_evaluated():
+                    non_adequate_work.append(elaboration)
+            else:
+                non_adequate_work.append(elaboration)
         return non_adequate_work
 
     @staticmethod
     def get_evaluated_non_adequate_work():
         non_adequate_work = []
-        for review in Review.objects.filter(appraisal=Review.NOTHING):
-            final_challenge = review.elaboration.challenge.get_final_challenge()
-            final_elaboration = final_challenge.get_elaboration(review.elaboration.user)
+        non_adequate_elaborations = Elaboration.get_non_adequate_elaborations().prefetch_related('challenge')
+        for elaboration in non_adequate_elaborations:
+            final_challenge = elaboration.challenge.get_final_challenge()
+            final_elaboration = final_challenge.get_elaboration(elaboration.user)
             if final_elaboration:
                 if final_elaboration.is_evaluated():
-                    if not review.elaboration in non_adequate_work and not review.elaboration.user.is_staff:
-                        non_adequate_work.append(review.elaboration)
+                    non_adequate_work.append(elaboration)
         return non_adequate_work
 
     @staticmethod
     def get_review_candidate(challenge, user):
         already_submitted_reviews_ids = (
-            Review
-            .objects.filter(reviewer=user, elaboration__challenge=challenge)
+            Review.objects
+            .filter(reviewer=user, elaboration__challenge=challenge)
             .values_list('elaboration__id', flat=True)
         )
         candidates = (
-            Elaboration
-            .objects.filter(challenge=challenge, submission_time__isnull=False)
+            Elaboration.objects
+            .filter(challenge=challenge, submission_time__isnull=False)
             .exclude(user=user)
             .exclude(user__is_staff=True)
             .annotate(num_reviews=Count('review'))
@@ -136,8 +169,8 @@ class Elaboration(models.Model):
             return candidates[0]
 
         candidates = (
-            Elaboration
-            .objects.filter(challenge=challenge, submission_time__isnull=False)
+            Elaboration.objects
+            .filter(challenge=challenge, submission_time__isnull=False)
             .exclude(user__is_staff=False)
             .annotate(num_reviews=Count('review'))
             .exclude(id__in=already_submitted_reviews_ids)
@@ -149,20 +182,19 @@ class Elaboration(models.Model):
         return None
 
     def get_success_reviews(self):
-        return Review.objects.filter(elaboration=self, appraisal=Review.SUCCESS)
+        return Review.objects.filter(elaboration=self, submission_time__isnull=False, appraisal=Review.SUCCESS)
 
     def get_nothing_reviews(self):
-        return Review.objects.filter(elaboration=self, appraisal=Review.NOTHING)
+        return Review.objects.filter(elaboration=self, submission_time__isnull=False, appraisal=Review.NOTHING)
 
     def get_fail_reviews(self):
-        return Review.objects.filter(elaboration=self, appraisal=Review.FAIL)
+        return Review.objects.filter(elaboration=self, submission_time__isnull=False, appraisal=Review.FAIL)
 
     def get_awesome_reviews(self):
-        return Review.objects.filter(elaboration=self, appraisal=Review.AWESOME)
+        return Review.objects.filter(elaboration=self, submission_time__isnull=False, appraisal=Review.AWESOME)
 
     def is_passing_peer_review(self):
-        nothing_reviews = Review.objects.filter(elaboration=self, appraisal=Review.NOTHING)
-        return not nothing_reviews
+        return not self.get_nothing_reviews().exists()
 
     @staticmethod
     def get_complaints(context):
