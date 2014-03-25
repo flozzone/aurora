@@ -66,9 +66,8 @@ class Elaboration(models.Model):
     def get_others(self):
         elaborations = (
             Elaboration.objects
-            .filter(challenge=self.challenge, submission_time__isnull=False)
+            .filter(challenge=self.challenge, submission_time__isnull=False, user__is_staff=False)
             .exclude(pk=self.id)
-            .exclude(user__is_staff=True)
         )
         return elaborations
 
@@ -87,11 +86,9 @@ class Elaboration(models.Model):
         final_challenge_ids = Challenge.get_final_challenge_ids()
         missing_reviews = (
             Elaboration.objects
-            .filter(submission_time__lte=datetime.now() - timedelta(days=3))
-            .exclude(user__is_staff=True)
+            .filter(submission_time__lte=datetime.now() - timedelta(days=3), user__is_staff=False)
             .annotate(num_reviews=Count('review'))
-            .exclude(num_reviews__gte=2)
-            .exclude(challenge__id__in=final_challenge_ids)
+            .exclude(num_reviews__gte=2, challenge__id__in=final_challenge_ids)
         )
         return missing_reviews
 
@@ -101,8 +98,7 @@ class Elaboration(models.Model):
         final_challenge_ids = Challenge.get_final_challenge_ids()
         top_level_challenges = (
             Elaboration.objects
-            .filter(challenge__id__in=final_challenge_ids, submission_time__isnull=False)
-            .exclude(user__is_staff=True)
+            .filter(challenge__id__in=final_challenge_ids, submission_time__isnull=False, user__is_staff=False)
             .annotate(evaluated=Min('evaluation__submission_time'))
             .filter(evaluated=None)
         )
@@ -118,8 +114,7 @@ class Elaboration(models.Model):
         )
         non_adequate_elaborations = (
             Elaboration.objects
-            .filter(id__in=nothing_reviews, submission_time__isnull=False)
-            .exclude(user__is_staff=True)
+            .filter(id__in=nothing_reviews, submission_time__isnull=False, user__is_staff=False)
         )
         return non_adequate_elaborations
 
@@ -158,9 +153,8 @@ class Elaboration(models.Model):
         )
         candidates = (
             Elaboration.objects
-            .filter(challenge=challenge, submission_time__isnull=False)
+            .filter(challenge=challenge, submission_time__isnull=False, user__is_staff=False)
             .exclude(user=user)
-            .exclude(user__is_staff=True)
             .annotate(num_reviews=Count('review'))
             .exclude(id__in=already_submitted_reviews_ids)
         ).order_by('num_reviews')
@@ -170,8 +164,7 @@ class Elaboration(models.Model):
 
         candidates = (
             Elaboration.objects
-            .filter(challenge=challenge, submission_time__isnull=False)
-            .exclude(user__is_staff=False)
+            .filter(challenge=challenge, submission_time__isnull=False, user__is_staff=True)
             .annotate(num_reviews=Count('review'))
             .exclude(id__in=already_submitted_reviews_ids)
         ).order_by('num_reviews')
@@ -207,11 +200,16 @@ class Elaboration(models.Model):
 
     @staticmethod
     def get_awesome():
-        awesome = []
-        for review in Review.objects.filter(appraisal=Review.AWESOME, submission_time__isnull=False):
-            if not review.elaboration in awesome and not review.elaboration.user.is_staff:
-                awesome.append(review.elaboration)
-        return awesome
+        awesome_review_ids = (
+            Review.objects
+            .filter(appraisal=Review.AWESOME, submission_time__isnull=False)
+            .values_list('elaboration__id', flat=True)
+        )
+        awesome_elaborations = (
+            Elaboration.objects
+            .filter(id__in=awesome_review_ids, user__is_staff=False)
+        )
+        return awesome_elaborations
 
     @staticmethod
     def get_stack_elaborations(stack):
