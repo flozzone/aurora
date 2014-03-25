@@ -12,10 +12,45 @@
 	padding:0.2em 0.5em;
 	border-radius: 4px 4px 1px 1px;
 	cursor:pointer;
+	margin-bottom:1em;
 }
 
-.feed_column {
-	padding-top:1em;
+.feed_header.newsfeed {
+	margin-bottom:0;
+}
+
+#info_column p {
+	font-size:14px;
+}
+
+
+#comments_column_1 {
+	float:left;
+    width: 580px;
+    overflow: auto;
+	margin-left:1em;
+	margin-top:2em;
+}
+
+@media all and (min-width: 960px) {
+	#info_column {
+		float:left;
+		width:330px;
+		margin-top:2em;
+		margin-left:1em;
+	}
+	.eventually {
+		display:none;
+	}
+}
+
+@media all and (max-width: 960px) {
+	#info_column {
+		float:left;
+		width:580px;
+		margin-top:1em;
+		margin-left:1em;
+	}
 }
 
 .toolbar > li {
