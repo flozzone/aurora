@@ -94,11 +94,15 @@ class Challenge(models.Model):
 
     @staticmethod
     def get_final_challenge_ids():
-        final_challenge_ids = []
-        challenges = Challenge.objects.all()
-        for challenge in challenges:
-            if challenge.is_final_challenge():
-                final_challenge_ids.append(challenge.id)
+        peer_review_challenges = (
+            Challenge.objects
+            .filter(prerequisite__isnull=False).values_list('prerequisite', flat=True)
+        )
+        final_challenge_ids = (
+            Challenge.objects
+            .exclude(id__in=list(peer_review_challenges))
+            .values_list('id', flat=True)
+        )
         return final_challenge_ids
 
     def is_final_challenge(self):
