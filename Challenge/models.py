@@ -130,12 +130,6 @@ class Challenge(models.Model):
         reviews = reviews.exclude(submission_time__isnull=True)
         return reviews
 
-    def get_peer_review_questions(self):
-        peer_review_questions = []
-        for peer_review_question in ReviewQuestion.objects.filter(challenge=self).order_by('order'):
-            peer_review_questions.append(peer_review_question)
-        return peer_review_questions
-
     def get_elaborations(self):
         submissions = Elaboration.objects.filter(challenge=self)
         return submissions
