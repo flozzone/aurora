@@ -94,16 +94,20 @@ class ZidSSOBackend():
     def authenticate(self, params):
         print('ZidSSOBackend.authenticate() was called')
 
-        if 'sKey' in params.keys():
+        param_keys = params.keys()
+
+        if 'sKey' in param_keys:
             hmac_received = params['sKey']
-        elif 'logout' in params.keys():
+        elif 'logout' in param_keys:
             hmac_received = params['logout']
         else:
             return None
 
+        # make sure order is correct by creating a new list and put in the available keys one by one
         values = ''
         for key in ['oid', 'mn', 'firstName', 'lastName', 'mail']:
-            values += params[key]
+            if key in param_keys:
+                values += params[key]
 
         shared_secret = settings.SSO_SHARED_SECRET.encode(encoding='latin1')
         utc_now = (datetime.utcnow() - datetime(1970, 1, 1)).total_seconds()
