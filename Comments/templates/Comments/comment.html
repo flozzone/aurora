@@ -10,17 +10,17 @@
 		 <div class="comment_numreplies">&mdash; {{ comment.responses | length }} repl{{ comment.responses|length|pluralize:"y,ies"}}</div>
 		 <div class="comment_award">    
 			 {% if comment.promoted %}
-			 {% if requester.is_staff %}
-			 <a href="#" class="comment_demote" data-comment_number="{{ comment.id }}" title="Demote this comment">
-				 <i class="fa fa-star fa-lg gold"></i>
-			 </a>
-			 {% else %}
- 		 		<a title="This comment was rewarded with a point by the organizers"><i class="fa fa-star fa-lg gold"></i></a>
-			 {% endif %}
+				 {% if requester.is_staff %}
+				 <a href="#" class="comment_demote" data-comment_number="{{ comment.id }}" title="Demote this comment">
+					 <i class="fa fa-star fa-lg gold"></i>
+				 </a>
+				 {% else %}
+	 		 		<a title="This comment was rewarded with a point by the organizers"><i class="fa fa-star fa-lg gold"></i></a>
+				 {% endif %}
 			 {% elif requester.is_staff %}
-			 <a href='#' class="comment_promote" data-comment_number="{{ comment.id }}" title="Promote this comment">
-				 <i class="fa fa-star fa-lg ungold"></i>
-			 </a>
+				 <a href='#' class="comment_promote" data-comment_number="{{ comment.id }}" title="Promote this comment">
+					 <i class="fa fa-star fa-lg ungold"></i>
+				 </a>
 			 {% endif %}
          </div>
          <div class="comment_score {{ comment.voted }}">
@@ -34,7 +34,7 @@
          </div>
      </div>
 
-	 <div id="detail_{{comment.id}}" class="author_detail hidden_detail" onClick="$(this).addClass('hidden_detail')">
+	 <div id="detail_{{comment.id}}" class="author_detail hidden_detail" onClick="$(this).slideUp('fast')">
 		 <img src='{{comment.author.avatar.url}}'>
 		 <span class="nick">{{comment.author.display_name}}</span><br>
 		 &quot;{{comment.author.statement|urlizetrunc:50}}&quot;<br>
@@ -43,7 +43,7 @@
 		 
 	 </div>
     <div class="comment_body">
-		<img src="{{ comment.author.avatar.url }}" onClick="$('#detail_{{comment.id}}').toggleClass('hidden_detail')">
+		<img src="{{ comment.author.avatar.url }}" onClick="$('#detail_{{comment.id}}').slideDown('fast')">
 
         <div class="comment_text">
             {% if comment.deleter == None %}

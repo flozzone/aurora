@@ -1,3 +1,4 @@
+{% load humanize %}
 {% load comments %}
 {% load render_uploads %}
 {% comments_boilerplate %}
@@ -13,7 +14,7 @@
 {% block content %}
 
    <h1>
-       <div class="back"  title="Back to evaluation Overview" id="{{ selection }}"><i class="fa fa-angle-double-up"></i> go back</div> Detailview
+       <div class="back"  title="Back to evaluation Overview" id="{{ selection }}"><i class="fa fa-angle-double-up"></i> go back</div> <b>&nbsp;{{ selection|title }}&nbsp;</b>
    </h1>
 
   <div class="detail_left">
@@ -23,8 +24,15 @@
 	 </div>
      <div class="spacer"></div>
 	 <div class="elab_title">{{elaboration.challenge.title}}</div>
-        <img class="gravatar" src="{{ elaboration.user.avatar.url }}" style="vertical-align:middle">
-        {{ elaboration.user.nickname }} ({{ elaboration.user.first_name }} {{ elaboration.user.last_name }}, {{ elaboration.user.username }})
+        <img class="gravatar" src="{{ elaboration.user.avatar.url }}" style="vertical-align:middle" onclick="$('#top_detail').toggleClass('hidden_detail')">
+        {{ elaboration.user.nickname }} ({{ elaboration.user.first_name }} {{ elaboration.user.last_name }}/{{ elaboration.user.username }}) @ <span title="{{elaboration.submission_time}}">{{elaboration.submission_time|naturaltime}}</span>:
+		 <div class="author_detail hidden_detail" id="top_detail" onclick="$(this).addClass('hidden_detail')">
+			 <img src='{{elaboration.user.avatar.url}}'>
+			 <span class="nick">{{elaboration.user.nickname}}</span><br>
+			 &quot;{{elaboration.user.statement|urlizetrunc:50}}&quot;<br>
+			 {{elaboration.user.matriculation_number}} - {{elaboration.user.first_name}} {{elaboration.user.last_name}}<br>
+			 <a href="mailto:{{elaboration.user.email}}">{{elaboration.user.email}}</a>
+		 </div>
         <div class="spacer"></div>
 
         {% render_uploads elaboration %}
@@ -39,12 +47,13 @@
             <form method="post">
                 {% csrf_token %}
                 {% if evaluation.submission_time %}
-				    <div class="evaluation">
+				    <div class="evaluation eval_done">
                         {{ evaluation.evaluation_text }}
                     </div>
-                    points assigned<div class="points">{{ evaluation.evaluation_points }}</div>
+                    <div class="point_label">points assigned</div><div class="points eval_done">{{ evaluation.evaluation_points }}</div>
+   				 	<div class="spacer"></div>
                     <div class="submission_date">
-                        evaluated on {{ evaluation.submission_time }}
+                        <span title="{{ evaluation.submission_time }}">evaluated {{ evaluation.submission_time|naturaltime }}</span>
                         <button class="reopen_evaluation" id="{{ elaboration.id }}">Reopen</button>
                     </div>
                 {% else %}
@@ -52,9 +61,9 @@
                             onkeyup="DelayedAutoSave({{ elaboration.id }})">
                         {{ evaluation.evaluation_text }}{% if lock %}<div class="evaluation_lock">locked by {{ evaluation.tutor.username }}</div>{% endif %}
                     </div>
-                    Points <div class="points" {% if not lock %} contenteditable="true" {% endif %} onkeyup="DelayedAutoSave({{ elaboration.id }})">
+                    <div class="point_label">Points</div><div class="points" {% if not lock %} contenteditable="true" {% endif %} onkeyup="DelayedAutoSave({{ elaboration.id }})">
                         {% if evaluation.evaluation_points %}{{ evaluation.evaluation_points }}{% endif %}</div>
-                    {% if not lock %}<button class="submit_evaluation XL" id="{{ elaboration.id }}">evaluate</button>{% endif %}
+                    {% if not lock %}<button class="submit_evaluation XL" id="{{ elaboration.id }}" next="{{ next }}">evaluate{% if next %} + next{% endif %}</button>{% endif %}
                 {% endif %}
             </form>
             <div class="spacer"></div>
@@ -71,7 +80,7 @@
             <div class="spacer"></div>
             {% include "reviews.html" %}
         {% endif %}
-        {% if selection == 'missing_reviews' %}
+        {% if selection == 'missing reviews' %}
             <div class="spacer"></div>
             {% include "add_review.html" %}
         {% endif %}
@@ -79,12 +88,13 @@
 
   <div class="detail_right">
     <div class="menu">
-        <div class="stack selected" onclick="$('.menu').children().removeClass('selected');$(this).addClass('selected');">stack</div>
+        <div class="stack selected" onclick="$('.menu').children().removeClass('selected');$(this).addClass('selected');">tasks</div>
+		<div class="review_list" onclick="$('.menu').children().removeClass('selected');$(this).addClass('selected');">reviews</div>
         <div class="others" onclick="$('.menu').children().removeClass('selected');$(this).addClass('selected');">others</div>
         <div class="challenge_txt" onclick="$('.menu').children().removeClass('selected');$(this).addClass('selected');">challenge text</div>
     </div>
     <div class="spacer"></div>
-    <div id="info_area">{% include "user_stack.html" %}</div>
+    <div id="info_area">{% include "tasks.html" %}</div>
   </div>
 
   <div class="clear"></div>

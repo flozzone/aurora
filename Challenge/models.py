@@ -1,11 +1,14 @@
+import os
+
 from django.db import models
+
 from Comments.models import Comment
 from Stack.models import StackChallengeRelation
 from ReviewQuestion.models import ReviewQuestion
 from Review.models import Review
 from Elaboration.models import Elaboration
 from Course.models import CourseChallengeRelation
-import os
+
 
 def challenge_image_path(instance, filename):
     name = 'challenge_%s' % instance.id
@@ -13,6 +16,7 @@ def challenge_image_path(instance, filename):
     if os.path.exists(fullname):
         os.remove(fullname)
     return fullname
+
 
 class Challenge(models.Model):
     reviews_per_challenge = 3
@@ -41,7 +45,7 @@ class Challenge(models.Model):
         1: "Not submitted.",
         2: "Review missing.",
         3: "Bad review.",
-        4: "Done, waiting for reviews by others.", # can proceed but will be a problem for final challenge
+        4: "Done, waiting for reviews by others.",  # can proceed but will be a problem for final challenge
         5: "Done, peer reviewed.",
         6: "Waiting for evaluation.",
         7: "Evaluated."
@@ -88,6 +92,19 @@ class Challenge(models.Model):
     def is_first_challenge(self):
         return not self.prerequisite  # challenge without prerequisite is the first challenge
 
+    @staticmethod
+    def get_final_challenge_ids():
+        peer_review_challenges = (
+            Challenge.objects
+            .filter(prerequisite__isnull=False).values_list('prerequisite', flat=True)
+        )
+        final_challenge_ids = (
+            Challenge.objects
+            .exclude(id__in=list(peer_review_challenges))
+            .values_list('id', flat=True)
+        )
+        return final_challenge_ids
+
     def is_final_challenge(self):
         return False if self.get_next() else True
 
@@ -112,12 +129,6 @@ class Challenge(models.Model):
         # exclude the reviews that are not submitted
         reviews = reviews.exclude(submission_time__isnull=True)
         return reviews
-
-    def get_peer_review_questions(self):
-        peer_review_questions = []
-        for peer_review_question in ReviewQuestion.objects.filter(challenge=self).order_by('order'):
-            peer_review_questions.append(peer_review_question)
-        return peer_review_questions
 
     def get_elaborations(self):
         submissions = Elaboration.objects.filter(challenge=self)

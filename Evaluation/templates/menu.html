@@ -1,0 +1,21 @@
+{% block additional_headers %}
+  <script type="text/javascript" src="{{ STATIC_URL }}js/overview.js"></script>
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/evaluation.css" type="text/css" media="screen"/>
+{% endblock %}
+
+{% block content %}
+
+    <div class="mitem {{ stabilosiert_missing_reviews }} missing_reviews" id="m1">missing reviews {% if count_missing_reviews %}({{ count_missing_reviews }}){% endif %}</div>
+    <div class="mitem {{ stabilosiert_non_adequate_work }} non_adequate_work" id="m2">non-adequate work {% if count_non_adequate_work %}({{ count_non_adequate_work }}){% endif %}</div>
+    <div class="mitem {{ stabilosiert_top_level_challenges }} top_level_challenges" id="m3">top-level tasks {% if count_top_level_challenges %}({{ count_top_level_challenges }}){% endif %}</div>
+    <div class="mitem {{ stabilosiert_complaints }} complaints" id="m4">complaints {% if count_complaints %}({{ count_complaints }}){% endif %}</div>
+    <div class="mitem {{ stabilosiert_questions }} questions" id="m5">questions {% if count_questions %}({{ count_questions }}){% endif %}</div>
+    <div class="mitem {{ stabilosiert_evaluated_non_adequate_work }} evaluated_non_adequate_work" id="m6">evaluted non-adequate work {% if count_evaluated_non_adequate_work %}({{ count_evaluated_non_adequate_work }}){% endif %}</div>
+    <div class="mitem {{ stabilosiert_awesome }} awesome" id="m7">awesome {% if count_awesome %}({{ count_awesome }}){% endif %}</div>
+
+    <div class="mfield search_challenge" id="search_challenge" contenteditable="true">task...</div>
+    <div class="mfield search_user" id="search_user" contenteditable="true">user...</div>
+    <div class="mfield search_all" id="search_all" contenteditable="true">all...</div>
+    <div class="search_btn">search</div>
+
+{% endblock %}

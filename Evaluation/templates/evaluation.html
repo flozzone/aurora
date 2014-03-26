@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 
+
 {% block additional_headers %}
     <script src="{{ STATIC_URL }}js/jquery-2.0.3.min.js"></script>
     <script src="{{ STATIC_URL }}js/libs/jquery-ui-1.10.3.custom.min.js"></script>
@@ -15,21 +16,7 @@
 
   <div id="detail_area">
       <h1>Overview</h1>
-      <div class="overview_left">
-            <div class="missing_reviews">missing reviews ({{ missing_reviews|length }})</div>
-            <div class="non_adequate_work">non-adequate work ({{ non_adequate_work|length }})</div>
-            <div class="top_level_challenges">top-level tasks ({{ top_level_challenges|length }})</div>
-            <div class="complaints">complaints ({{ complaints|length }})</div>
-            <div class="questions">questions ({{ questions|length }})</div>
-            <div class="evaluated_non_adequate_work">evaluated non-adequate work ({{ evaluated_non_adequate_work|length }})</div>
-            <div class="awesome">awesome ({{ awesome|length }})</div>
-            <div class="expired">expired ({{ expired|length }})</div>
-			
-            <div class="search_challenge" id="search_challenge" contenteditable="true">task...</div>
-            <div class="search_user" id="search_user" contenteditable="true">user...</div>
-            <div class="search_all" id="search_all" contenteditable="true">all...</div>
-            <div class="search_btn">search</div>
-      </div>
+      <div class="overview_left" id="menu">{% include "menu.html" %}</div>
       <div class="overview_right" id="overview">{{ overview }}</div>
       <div class="clear"></div>
   </div>

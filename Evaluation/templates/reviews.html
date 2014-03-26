@@ -1,3 +1,4 @@
+{% load humanize %}
 {% load comments %}
 {% load render_review_answers %}
 
@@ -12,18 +13,26 @@
 
 		<div class="review_body{% if review.reviewer.is_staff %} review_staff{% endif %}">
 			<div class="review_author{% if review.reviewer.is_staff %} review_staff{% endif %}">
-				<img class="gravatar" src="{{ review.reviewer.avatar.url }}" style="vertical-align:middle">
-    			{{ review.reviewer.username }}
-        		{{ review.reviewer.first_name }} {{ review.reviewer.last_name }}
+				<img class="gravatar" src="{{ review.reviewer.avatar.url }}" style="vertical-align:middle" onclick="$('#r_detail{{forloop.counter}}').toggleClass('hidden_detail')">
+    			{{ review.reviewer.username }}  
+        		({{ review.reviewer.first_name }} {{ review.reviewer.last_name }}) @ <span title="{{review.submission_time}}">{{review.submission_time|naturaltime}}</span>:
 			</div>
+	   		 <div class="author_detail hidden_detail" id="r_detail{{forloop.counter}}" onclick="$(this).addClass('hidden_detail')">
+	   			 <img src='{{review.reviewer.avatar.url}}'>
+	   			 <span class="nick">{{review.reviewer.nickname}}</span><br>
+	   			 &quot;{{review.reviewer.statement|urlizetrunc:50}}&quot;<br>
+	   			 {{review.reviewer.matriculation_number}} - {{review.reviewer.first_name}} {{review.reviewer.user.last_name}}<br>
+	   			 <a href="mailto:{{review.reviewer.email}}">{{review.reviewer.email}}</a>
+	   		 </div>
+			
 
             {% render_review_answers review.id %}
 			
-        	<div class="appraisal">
-            	<input type="radio" name="reviewgroup{{ stack }}{{ review.id }}" onclick="set_appraisal({{ review.id }}, 'A')" {% if review.appraisal == 'A' %} checked {% endif %}>Great work</input>
-            	<input type="radio" name="reviewgroup{{ stack }}{{ review.id }}" onclick="set_appraisal({{ review.id }}, 'S')" {% if review.appraisal == 'S' %} checked {% endif %}>Good work</input>
-            	<input type="radio" name="reviewgroup{{ stack }}{{ review.id }}" onclick="set_appraisal({{ review.id }}, 'F')" {% if review.appraisal == 'F' %} checked {% endif %}>Barely acceptable work</input>
-        		<input type="radio" name="reviewgroup{{ stack }}{{ review.id }}" onclick="set_appraisal({{ review.id }}, 'N')" {% if review.appraisal == 'N' %} checked {% endif %}>Unacceptable</input>
+        	<div class="appraisal eval_appraisal">
+            	<input type="radio" id="X1{{forloop.counter}}" name="reviewgroup{{ stack }}{{ review.id }}" onclick="set_appraisal({{ review.id }}, 'A')" {% if review.appraisal == 'A' %} checked {% endif %}></input><label for="X1{{forloop.counter}}" id="X1t">Great work</label>
+            	<input type="radio" id="X2{{forloop.counter}}" name="reviewgroup{{ stack }}{{ review.id }}" onclick="set_appraisal({{ review.id }}, 'S')" {% if review.appraisal == 'S' %} checked {% endif %}></input><label for="X2{{forloop.counter}}" id="X2t">Good work</label>
+            	<input type="radio" id="X3{{forloop.counter}}" name="reviewgroup{{ stack }}{{ review.id }}" onclick="set_appraisal({{ review.id }}, 'F')" {% if review.appraisal == 'F' %} checked {% endif %}></input><label for="X3{{forloop.counter}}" id="X3t">Barely acceptable work</label>
+        		<input type="radio" id="X4{{forloop.counter}}" name="reviewgroup{{ stack }}{{ review.id }}" onclick="set_appraisal({{ review.id }}, 'N')" {% if review.appraisal == 'N' %} checked {% endif %}></input><label for="X4{{forloop.counter}}" id="X4t">Unacceptable</label>
         	</div>
 		</div>
 		{% if review %}

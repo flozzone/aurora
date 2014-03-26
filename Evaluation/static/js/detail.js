@@ -80,7 +80,10 @@ $(function() {
                 alert('error submitting evaluation');
             },
             success: function () {
-                var url = '/detail?elaboration_id=' + $(event.target).attr('id');
+                var next = $(event.target).attr('next');
+                if(next == 'None')
+                    next = $(event.target).attr('id');
+                var url = '/detail?elaboration_id=' + next;
                 $.get(url, function (data) {
                     $('#detail_area').html(data);
                 });
@@ -209,3 +212,12 @@ $(function() {
 function review_submitted() {
     window.location.href = '../evaluation';
 }
+
+$(function() {
+   $(".review_list").click(function(event) {
+        var url = '/reviewlist';
+        $.get(url, function (data) {
+            $('#info_area').html(data);
+        });
+   });
+});

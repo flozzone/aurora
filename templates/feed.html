@@ -11,7 +11,8 @@
 	
 	
     <div id="comments_column_1">
-		<div class="feed_header"><b>Open Newsfeed</b></div>
+		<div class="feed_header newsfeed" id="all_the_news"><i class="fa fa-toggle-down half eventually"></i> <b>Open Newsfeed</b></div>
+		<div id="content_all_the_news">
 		<ul class="toolbar">
 			<li class="button filterbtn" id="1" title="Show all comments" onclick="filter(this.id,'{{user.username}}');"><i class="fa fa-eye"></i> All</li>
 			<li class="button filterbtn" id="2" title="Show only comments posted by lecturers, tutors or yourself" onclick="filter(this.id,'{{user.username}}');"><i class="fa fa-eye"></i> Lecturer Comments</li>
@@ -20,6 +21,7 @@
 			<li class="button filterbtn" id="0" title="Show only comments posted after you activate this filter" onclick="markT('{{user.username}}');filter(this.id,'{{user.username}}')"><i class="fa fa-eye"></i> new <span id="new_date"></span></li>
 		</ul>
         {% render_multi_comment_list for newsfeed %}
+		</div>
     </div>
 {% endblock content %}
 
