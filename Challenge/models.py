@@ -41,10 +41,10 @@ class Challenge(models.Model):
 
     status_dict = {
         -1: "Not enabled.",
-        0: "Not started.",
+        0: "Not started (Click the green right-arrow-button).",
         1: "Not submitted.",
-        2: "Review missing.",
-        3: "Bad review.",
+        2: "Reviews missing (Click the green write-review-buttons to the left).",
+        3: "Bad review. We need to look at this. Please be patient.",
         4: "Done, waiting for reviews by others.",  # can proceed but will be a problem for final challenge
         5: "Done, peer reviewed.",
         6: "Waiting for evaluation.",
@@ -53,7 +53,7 @@ class Challenge(models.Model):
 
     next_dict = {
         -1: "Not enabled...",
-        0: "Start a new level.",
+        0: "Start a new task.",
         1: "Finish and submit your current task.",
         2: "Write a review.",
         3: "Blocked by negative review.",
