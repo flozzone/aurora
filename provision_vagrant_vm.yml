@@ -26,7 +26,7 @@
     pip: name=ipython
          virtualenv={{ py3env }}
   - name: install project requirements
-    pip: requirements=/vagrant/requirements.txt
+    pip: requirements=/vagrant/requirements_dev.txt
          virtualenv={{ py3env }}
 
   - name: add automatic activation of virtualenv to .bashrc
