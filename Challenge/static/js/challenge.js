@@ -33,10 +33,10 @@ function challenge_loaded() {
         },
         menubar: false,
         theme: 'modern',
-        statusbar: false,
+        statusbar: true,
         fontsize_formats: "0.8em 1em 1.2em 1.6em 2em",
         toolbar1: "undo redo | bold italic | fontsizeselect | alignleft aligncenter | bullist numlist indent outdent ",
-        plugins: "autoresize table paste",
+        plugins: "autoresize paste wordcount",
         autoresize_min_height: 200,
         autoresize_max_height: 800,
         setup: function (editor) {
