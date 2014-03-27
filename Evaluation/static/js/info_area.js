@@ -4,10 +4,11 @@ $(function() {
         mode : "exact",
         elements :"editor_stack_rev, editor_others",
         menubar: false,
-        statusbar: false,
+        statusbar: true,
 		toolbar: false,
 		height:300,
-        readonly: 1
+        readonly: 1,
+        plugins: "wordcount",
     });
 });
 
