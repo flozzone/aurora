@@ -5,6 +5,7 @@ from django.db.models import Q, Count
 
 
 class Tag(models.Model):
+    # use of SlugField instead of CharField would be better
     name = models.CharField(max_length=30)
 
     def __unicode__(self):
@@ -118,14 +119,6 @@ class Comment(models.Model):
     def __unicode__(self):
         return str(self.id) + ": " + self.text[:30]
 
-    # @staticmethod
-    # def get_questions():
-    #     challenges = []
-    #     for challenge in Challenge.objects.all():
-    #         if Comment.objects.filter(content_type=ContentType.objects.get_for_model(Challenge), object_id=challenge.id):
-    #             challenges.append(challenge)
-    #     return challenges
-
     @staticmethod
     def query_comments_without_responses(ref_object, requester):
         ref_id, ref_type = Comment.ref_obj_to_id_type(ref_object)
@@ -143,6 +136,29 @@ class Comment(models.Model):
 
         Comment.set_flags(visible, requester)
         return visible
+
+    @staticmethod
+    def query_comments_not_answered_by_staff(ref_object):
+        # TODO guess this wont be needed => delete or finish
+        ref_id, ref_type = Comment.ref_obj_to_id_type(ref_object)
+
+        return Comment.objects.filter(content_type__pk=ref_type,
+                                      object_id=ref_id)\
+            .exclude(visibility=Comment.PRIVATE)\
+            .latest('post_date')\
+            .exclude(author__is_staff=True)\
+            .exists()
+
+    @staticmethod
+    def query_ref_objects_with_unanswered_user_comments(ref_model):
+        # TODO finish this
+        content_type = ContentType.objects.get_for_model(ref_model)
+
+        queryset = Comment.objects.filter(content_type__pk=content_type.id)\
+            .exclude(visibility=Comment.PRIVATE)\
+            .latest('post_date')\
+            .exclude(author__is_staff=True)\
+            .prefetch_related('content_object')
 
     @staticmethod
     def query_top_level_sorted(ref_object_id, ref_type_id, requester):

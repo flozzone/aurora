@@ -42,3 +42,8 @@ class Review(models.Model):
 
     def get_comments(self):
         return Comment.objects.filter(content_type=ContentType.objects.get_for_model(Review), object_id=self.id)
+
+    @staticmethod
+    def query_reviews_with_questions():
+        content_type = ContentType.objects.get_for_model(Review)
+        # Review.objects.annotate()
