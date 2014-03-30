@@ -2,15 +2,67 @@
 - hosts: all
   vars: 
     py3env: /home/vagrant/py3env
+    dbname: aurora
+    dbuser: aurora_dbuser
+    dbpassword: nosecret
 #    project_home: /srv/django/projects/portfolio
   tasks:
-  - name: apt-get update
-    apt: update_cache=yes
+#  - name: apt-get update
+#    apt: update_cache=yes
+#    sudo: yes
+  - command: locale-gen en_US.UTF-8
+  - command: update-locale LANG=en_US.UTF-8
     sudo: yes
   - apt: pkg=vim
     sudo: yes
   - apt: pkg=libjpeg-dev
     sudo: yes
+
+  - apt: pkg=postgresql
+    sudo: yes
+  - apt: pkg=python-psycopg2
+    sudo: yes
+#  - apt: pkg=postgresql-server-dev-9.1
+  - apt: pkg=libpq-dev
+    sudo: yes
+
+  - name: throw away postgres cluster
+    command: pg_dropcluster --stop 9.1 main
+    sudo: yes
+    sudo_user: postgres
+
+  - name: create new postgres cluster with UTF-8 encoding
+    command: pg_createcluster --locale=en_US.UTF-8 --start 9.1 main
+    sudo: yes
+    sudo_user: postgres
+
+  - postgresql_user: name={{ dbuser }}
+                     password={{ dbpassword }}
+    sudo: yes
+    sudo_user: postgres
+
+  - name: create database {{ dbname }}
+    postgresql_db: name={{ dbname }}
+                   owner={{ dbuser }}
+                   encoding='UTF-8'
+                   lc_collate='en_US.UTF-8'
+                   lc_ctype='en_US.UTF-8'
+    sudo: yes
+    sudo_user: postgres
+#  - postgresql_user: name={{ dbuser }}
+#                     db={{ dbname }}
+#                     password={{ dbpassword }}
+#                     priv=ALL
+#    sudo: yes
+#    sudo_user: postgres
+#  - name: ensure user has access to database
+#    postgresql_user: db={{dbname}} name={{dbuser}} password={{dbpassword}} priv=ALL
+
+  - name: ensure user does not have unnecessary privilege
+    postgresql_user: name={{dbuser}} role_attr_flags=NOSUPERUSER,NOCREATEDB
+    sudo: yes
+    sudo_user: postgres
+
   - apt: pkg=python-pip
     sudo: yes
   - apt: pkg=python3
@@ -25,6 +77,9 @@
   - name: install ipython into virtualenv
     pip: name=ipython
          virtualenv={{ py3env }}
+  - name: install psycopg2 into virtualenv
+    pip: name=psycopg2
+         virtualenv={{ py3env }}
   - name: install project requirements
     pip: requirements=/vagrant/requirements_dev.txt
          virtualenv={{ py3env }}
@@ -34,6 +89,12 @@
                 line=". {{ py3env }}/bin/activate"
   - lineinfile: dest=/home/vagrant/.bashrc
                 line='cd /vagrant'
+  - lineinfile: dest=/home/vagrant/.bashrc
+                line='export LANGUAGE=en_US.UTF-8'
+  - lineinfile: dest=/home/vagrant/.bashrc
+                line='export LANG=en_US.UTF-8'
+  - lineinfile: dest=/home/vagrant/.bashrc
+                line='export LC_ALL=en_US.UTF-8'
 
 #  - django_manage: app_path=/vagrant
 #                   command=syncdb
