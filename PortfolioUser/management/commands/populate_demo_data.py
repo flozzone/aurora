@@ -54,7 +54,7 @@ def init_data():
     s0 = users[0]
 
     # create the three dummy users for jumpstarting the peer review process
-    for i in range(3):
+    for i in range(4):
         print("adding dummy user %s of %s" % (i, 3))
         username = "d%s" % i
         dummy_user = PortfolioUser(username=username)
@@ -71,6 +71,7 @@ def init_data():
     d1 = dummy_users[0]
     d2 = dummy_users[1]
     d3 = dummy_users[2]
+    d4 = dummy_users[3]
 
     # adding tutors
     for i in range(number_of_tutors):

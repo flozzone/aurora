@@ -1,5 +1,4 @@
 from datetime import datetime, timedelta
-
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.db.models import Count, Min
@@ -95,6 +94,7 @@ class Elaboration(models.Model):
     @staticmethod
     def get_top_level_challenges():
         from Challenge.models import Challenge
+
         final_challenge_ids = Challenge.get_final_challenge_ids()
         top_level_challenges = (
             Elaboration.objects
@@ -120,29 +120,64 @@ class Elaboration(models.Model):
 
     @staticmethod
     def get_non_adequate_work():
-        non_adequate_work = []
+
+        """
+        alle non adequate elaborations für deren final challenge es noch keine abgegebene evaluation gibt
+
+        von allen submitted evaluations nimm den user und den stack
+        für jeden stack nimm alle elaborations für den jeweiligen user
+
+        nimm alle non adequate elaborations und exclude die vorher gefundenen elaborations
+        """
         non_adequate_elaborations = Elaboration.get_non_adequate_elaborations().prefetch_related('challenge')
-        for elaboration in non_adequate_elaborations:
-            final_challenge = elaboration.challenge.get_final_challenge()
-            final_elaboration = final_challenge.get_elaboration(elaboration.user)
-            if final_elaboration:
-                if not final_elaboration.is_evaluated():
-                    non_adequate_work.append(elaboration)
-            else:
-                non_adequate_work.append(elaboration)
-        return non_adequate_work
+
+        submitted_evaluations = (
+            Evaluation.objects
+            .filter(submission_time__isnull=False)
+            .values_list('submission__user', 'submission__challenge__stackchallengerelation__stack__id')
+        )
+
+        stack_loockup = {}
+        for user, stack in submitted_evaluations:
+            if not stack in stack_loockup:
+                stack_loockup[stack] = [user]
+            elif not user in stack_loockup[stack]:
+                stack_loockup[stack].append(user)
+        exclude_elaboration_ids = []
+        for stack, users in stack_loockup.items():
+            exclude_elaboration_ids = exclude_elaboration_ids + list(
+                Elaboration.objects
+                .filter(challenge__stackchallengerelation__stack__id=stack, user_id__in=users)
+                .values_list('id', flat=True)
+            )
+
+        non_adequate_elaborations.exclude(id__in=exclude_elaboration_ids)
+        return non_adequate_elaborations
 
     @staticmethod
     def get_evaluated_non_adequate_work():
-        non_adequate_work = []
         non_adequate_elaborations = Elaboration.get_non_adequate_elaborations().prefetch_related('challenge')
-        for elaboration in non_adequate_elaborations:
-            final_challenge = elaboration.challenge.get_final_challenge()
-            final_elaboration = final_challenge.get_elaboration(elaboration.user)
-            if final_elaboration:
-                if final_elaboration.is_evaluated():
-                    non_adequate_work.append(elaboration)
-        return non_adequate_work
+
+        submitted_evaluations = (
+            Evaluation.objects
+            .filter(submission_time__isnull=False)
+            .values_list('submission__user', 'submission__challenge__stackchallengerelation__stack__id')
+        )
+
+        stack_loockup = {}
+        for user, stack in submitted_evaluations:
+            if not stack in stack_loockup:
+                stack_loockup[stack] = [user]
+            elif not user in stack_loockup[stack]:
+                stack_loockup[stack].append(user)
+        include_elaboration_ids = []
+        for stack, users in stack_loockup.items():
+            include_elaboration_ids = include_elaboration_ids + list(
+                Elaboration.objects
+                .filter(challenge__stackchallengerelation__stack__id=stack, user_id__in=users)
+                .values_list('id', flat=True)
+            )
+        return Elaboration.objects.filter(id__in=include_elaboration_ids).filter(id__in=non_adequate_elaborations)
 
     @staticmethod
     def get_review_candidate(challenge, user):
