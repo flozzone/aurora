@@ -9,6 +9,7 @@ $(challenge_loaded);
 function challenge_loaded() {
     var challenge_id = $('.challenge').attr('id');
     tinymce.init({
+		paste_as_text:true,
         selector: "textarea#editor",
         paste_retain_style_properties: "font-size,bold,italic",
         paste_text_linebreaktype: "p",
