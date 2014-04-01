@@ -92,7 +92,7 @@ def livecast(request, lecture_id_relative):
     lectures = _get_contentbar_data(course)
     lecture = get_object_or_404(Lecture, course=course, active=True, id_relative=lecture_id_relative)
     if not _livecast_now(lecture):
-        return redirect('/slides/studio/' + lecture_id_relative) # FIXME: no hardcoded urls
+        return redirect('/slides/studio/lecture/' + lecture_id_relative) # FIXME: no hardcoded urls
     render_dict = {'slidecasting_mode': 'livecast', 'course':course, 'lectures': lectures, 'lecture': lecture, 'last_update': int(time.time()) }
     return render_to_response('livecast.html', render_dict, context_instance=RequestContext(request))
 
