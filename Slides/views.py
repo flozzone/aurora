@@ -50,15 +50,27 @@ def livecast_new_slide(request, course_id):
         try:
             now = datetime.datetime.now()
             course = Course.objects.get(id=course_id)
-            if _livecast_now(course):
-                lecture = Lecture.objects.get(start__lte=now, end__gte=now, course=course, active=True)
-                tags = ""
+            if 'lecture_id_relative' in request.POST:
+                lecture = Lecture.objects.get(course=course, active=True, id_relative=request.POST['lecture_id_relative'])
+                tags = ''
             else:
-                lecture = Lecture.objects.filter(end__gte=now, course=course, active=True).order_by('start')[0]
-                tags = ".preparation"
-            slide = Slide(title=request.POST['title'], pub_date=now, filename=request.POST['filename'], lecture=lecture, tags=tags)
+                if _livecast_now(course):
+                    lecture = Lecture.objects.get(start__lte=now, end__gte=now, course=course, active=True)
+                    tags = ""
+                else:
+                    lecture = Lecture.objects.filter(end__gte=now, course=course, active=True).order_by('start')[0]
+                    tags = ".preparation"
+
+            if 'pub_date' in request.POST:
+                pub_date = datetime.datetime.fromtimestamp(int(request.POST['pub_date']))
+            else:
+                pub_date = now
+
+            slide = Slide(title=request.POST['title'], pub_date=pub_date, filename=request.POST['filename'], lecture=lecture, tags=tags)
             slide.save()            
             return HttpResponse("")
+        except ValueError:
+            return HttpResponse('time error')
         except (Course.DoesNotExist, Course.MultipleObjectsReturned):
             return HttpResponse('course error.')
         except (Lecture.DoesNotExist, Lecture.MultipleObjectsReturned, IndexError):
@@ -84,7 +96,7 @@ def livecast(request, lecture_id_relative):
     lectures = _get_contentbar_data(course)
     lecture = get_object_or_404(Lecture, course=course, active=True, id_relative=lecture_id_relative)
     if not _livecast_now(lecture):
-        return redirect('/slides/studio/' + lecture_id_relative) # FIXME: no hardcoded urls
+        return redirect('/slides/studio/lecture/' + lecture_id_relative) # FIXME: no hardcoded urls
     render_dict = {'slidecasting_mode': 'livecast', 'course':course, 'lectures': lectures, 'lecture': lecture, 'last_update': int(time.time()) }
     return render_to_response('livecast.html', render_dict, context_instance=RequestContext(request))
 

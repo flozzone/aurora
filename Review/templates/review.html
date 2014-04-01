@@ -35,7 +35,9 @@
       <textarea id="editor_review">{{ review.elaboration.elaboration_text|safe }}</textarea>
     </div>
 
-	<div class="betweentext"><i class="fa fa-arrow-right"></i> Please carefully examine the work shown above and answer the following questions</div>
+	<div class="betweentext"><i class="fa fa-arrow-right"></i> <b>Before you start reviewing, please read
+		<a href="http://igw.tuwien.ac.at/aurora/aurora_reviews.pdf" style="color:yellow">About Reviewing</a>. 
+		Then, carefully examine the work shown above and answer the following questions:</b> </div>
     <form>
 {% for question in questions %}
         <div class="question_container">

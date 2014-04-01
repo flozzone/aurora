@@ -94,7 +94,7 @@ def overview(request):
     data = {
         'overview_html': render_to_string('overview.html', {'elaborations': elaborations}, RequestContext(request)),
         'menu_html': render_to_string('menu.html', {
-            'count_' + request.session.get('selection', ''): request.session.get('count', ''),
+            'count_' + request.session.get('selection', ''): request.session.get('count', '0'),
             'stabilosiert_' + request.session.get('selection', ''): 'stabilosiert',
             }, RequestContext(request)),
         'selection': request.session['selection']
