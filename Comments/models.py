@@ -160,6 +160,14 @@ class Comment(models.Model):
             .exclude(author__is_staff=True)\
             .prefetch_related('content_object')
 
+        ref_objects = list()
+        for comment in queryset:
+            ref_object = comment.content_object
+            if ref_object not in ref_objects:
+                ref_objects.append(ref_object)
+
+        return ref_objects
+
     @staticmethod
     def query_top_level_sorted(ref_object_id, ref_type_id, requester):
         queryset_all = Comment.objects.filter(
