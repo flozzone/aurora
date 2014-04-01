@@ -21,10 +21,11 @@ class Notification(models.Model):
 
     @staticmethod
     def bad_review(review):
+        text = Notification.truncate_text(Notification.BAD_REVIEW + review.elaboration.challenge.title)
         Notification(
             user=review.elaboration.user,
             course=review.elaboration.challenge.get_course(),
-            text=Notification.BAD_REVIEW + review.elaboration.challenge.title,
+            text=text,
             image_url=review.elaboration.challenge.image.url,
             link="/challenges/challenge?id=" + str(review.elaboration.challenge.id)
         ).save()
@@ -33,10 +34,18 @@ class Notification(models.Model):
     def enough_peer_reviews(review):
         final_challenge = review.elaboration.challenge.get_final_challenge()
         if final_challenge.is_enabled_for_user(review.elaboration.user):
+            text = Notification.truncate_text(Notification.ENOUGH_PEER_REVIEWS + final_challenge.title)
             obj, created = Notification.objects.get_or_create(
                 user=review.elaboration.user,
                 course=review.elaboration.challenge.get_course(),
-                text=Notification.ENOUGH_PEER_REVIEWS + final_challenge.title,
+                text=text,
                 image_url=final_challenge.image.url,
                 link="/challenges/stack?id=" + str(review.elaboration.challenge.get_stack().id)
             )
+
+    @staticmethod
+    def truncate_text(text):
+        if len(text) >= 100:
+            text = text[0:96]
+            text += "..."
+        return text
