@@ -56,9 +56,17 @@ def livecast_new_slide(request, course_id):
             else:
                 lecture = Lecture.objects.filter(end__gte=now, course=course, active=True).order_by('start')[0]
                 tags = ".preparation"
-            slide = Slide(title=request.POST['title'], pub_date=now, filename=request.POST['filename'], lecture=lecture, tags=tags)
+
+            if 'pub_date' in request.POST:
+                pub_date = datetime.datetime.fromtimestamp(int(request.POST['pub_date']))
+            else:
+                pub_date = now
+
+            slide = Slide(title=request.POST['title'], pub_date=pub_date, filename=request.POST['filename'], lecture=lecture, tags=tags)
             slide.save()            
             return HttpResponse("")
+        except ValueError:
+            return HttpResponse('time error')
         except (Course.DoesNotExist, Course.MultipleObjectsReturned):
             return HttpResponse('course error.')
         except (Lecture.DoesNotExist, Lecture.MultipleObjectsReturned, IndexError):
