@@ -9,7 +9,8 @@ class @Videoplayer
     @next = $("#flowplayer_controls_next")
     @whereAmI = $("#flowplayer_controls_where_am_i")
     @play.click =>
-      @load(0)
+      @togglePlay()
+    @setControllerState "play_only"
     
     #@prev = $("#flowplayer_controls_play")
   
@@ -31,11 +32,61 @@ class @Videoplayer
           url: @directory + 'flowplayer.rtmp-3.2.12.swf'
           netConnectionUrl: @url
     
-  setState: (state) ->
-    console.log("setting to: " + state ) 
+  setControllerState: (state) ->
+    @resetControllerState()
+    switch state
+      when "play_only"
+        @label.text "Play Audio"
+        @play.removeClass "disabled"
+      when "loading"
+        @label.text "Loading"
+        @play.removeClass "disabled"
+        @play.addClass "loading"
+      when "active"
+        @label.text "Playing"
+        @prev.removeClass "disabled"
+        @play.removeClass "disabled"
+        @play.removeClass "loading"        
+        @next.removeClass "disabled"
+        @whereAmI.removeClass "disabled"
+      when "error"
+        @play.text "Error"
+        @play.text "ERROR"
       
-  seekToChapter: (chapter) ->
+  resetControllerState: ->
+    @prev.addClass "disabled"
+    @play.addClass "disabled"
+    @next.addClass "disabled"
+    @whereAmI.addClass "disabled"
+  
+  seekChapter: (chapter) ->
     console.log("seeking to chapter: " + chapter)
+    
+  togglePlay: ->
+    if not @loading
+      if @loaded
+        if $f.isPlaying
+          @pause()
+        else
+          @play()
+      else
+        @setControllerState "loading"
+        @loading = true
+        @load()
+    
+  play: ->
+    @play.text "PAUSE"
+    $f.play()
+    
+  pause: ->
+    @play.text "PLAY"
+    $f.pause()
+    
+  prev: ->
+    console.log("previous chapter")
+    
+  next: ->
+    console.log("next chapter")
     
     
     
