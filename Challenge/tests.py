@@ -235,19 +235,6 @@ class ChallengeTest(TestCase):
         assert review2 in challenge1.get_reviews_written_by_user(user1)
         assert review3 in challenge1.get_reviews_written_by_user(user1)
 
-    def get_peer_review_questions(self):
-        assert len(self.challenge.get_peer_review_questions()) == 1
-        assert self.review_question in self.challenge.get_peer_review_questions()
-        review_question2 = ReviewQuestion(
-            challenge=self.challenge,
-            order=2,
-            text="Can you find any additional material not included in this submission?"
-        )
-        review_question2.save()
-        assert len(self.challenge.get_peer_review_questions()) == 2
-        assert self.review_question in self.challenge.get_peer_review_questions()
-        assert review_question2 in self.challenge.get_peer_review_questions()
-
     def test_get_elaborations(self):
         assert len(self.challenge.get_elaborations()) == 0
         user = self.users[0]

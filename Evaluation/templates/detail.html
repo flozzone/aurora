@@ -53,7 +53,7 @@
                     <div class="point_label">points assigned</div><div class="points eval_done">{{ evaluation.evaluation_points }}</div>
    				 	<div class="spacer"></div>
                     <div class="submission_date">
-                        <span title="{{ evaluation.submission_time }}">evaluated on {{ evaluation.submission_time|naturaltime }}</span>
+                        <span title="{{ evaluation.submission_time }}">evaluated {{ evaluation.submission_time|naturaltime }}</span>
                         <button class="reopen_evaluation" id="{{ elaboration.id }}">Reopen</button>
                     </div>
                 {% else %}

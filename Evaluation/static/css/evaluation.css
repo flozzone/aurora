@@ -315,6 +315,7 @@ th {
 
 .stabilosiert {
 	background:#92A480;
+	width:18.5em;
 }
 
 .mitem:active {
@@ -375,7 +376,6 @@ th {
 	width:20px;
 	padding: 3px 1px 3px 1px;
     text-align: center;
-    -moz-box-sizing: border-box;
     margin-right: 6px;
 	display:inline-block;
 }

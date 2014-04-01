@@ -12,10 +12,11 @@ function review_loaded() {
         mode : "exact",
         elements :"editor_review",
         menubar: false,
-        statusbar: false,
+        statusbar: true,
 		toolbar: false,
 		height: 300,
-        readonly: 1
+        readonly: 1,
+        plugins: "wordcount"
     });
 
     $('form').bind("keypress", function (e) {

@@ -94,7 +94,7 @@ def overview(request):
     data = {
         'overview_html': render_to_string('overview.html', {'elaborations': elaborations}, RequestContext(request)),
         'menu_html': render_to_string('menu.html', {
-            'count_' + request.session.get('selection', ''): request.session.get('count', ''),
+            'count_' + request.session.get('selection', ''): request.session.get('count', '0'),
             'stabilosiert_' + request.session.get('selection', ''): 'stabilosiert',
             }, RequestContext(request)),
         'selection': request.session['selection']
@@ -192,7 +192,10 @@ def detail(request):
 
     stack_elaborations = elaboration.user.get_stack_elaborations(elaboration.challenge.get_stack())
     # sort stack_elaborations by submission time
-    stack_elaborations.sort(key=lambda stack_elaboration: stack_elaboration.submission_time)
+    if type(stack_elaborations) == list:
+        stack_elaborations.sort(key=lambda stack_elaboration: stack_elaboration.submission_time)
+    else:
+        stack_elaborations.order_by('submission_time')
 
     params['elaboration'] = elaboration
     params['stack_elaborations'] = stack_elaborations
@@ -495,7 +498,10 @@ def review_answer(request):
             Notification.enough_peer_reviews(review)
         # update overview
         elaborations = Elaboration.get_missing_reviews()
-        elaborations.sort(key=lambda elaboration: elaboration.submission_time)
+        if type(elaborations) == list:
+            elaborations.sort(key=lambda elaboration: elaboration.submission_time)
+        else:
+            elaborations.order_by('submission_time')
         request.session['elaborations'] = serializers.serialize('json', elaborations)
     return HttpResponse()
 
@@ -520,7 +526,10 @@ def back(request):
         elaborations = Elaboration.get_evaluated_non_adequate_work()
 
     # update overview
-    elaborations.sort(key=lambda elaboration: elaboration.submission_time)
+    if type(elaborations) == list:
+        elaborations.sort(key=lambda elaboration: elaboration.submission_time)
+    else:
+        elaborations.order_by('submission_time')
     request.session['elaborations'] = serializers.serialize('json', elaborations)
 
     return HttpResponse()

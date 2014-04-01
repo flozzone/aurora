@@ -32,7 +32,7 @@ def create_context_review(request):
                 review = Review(elaboration=review_candidate, reviewer=user)
                 review.save()
             else:
-                raise Http404
+                return render_to_response('review.html', data, context_instance=RequestContext(request))
         data['review'] = review
         data['stack_id'] = challenge.get_stack().id
         review_questions = ReviewQuestion.objects.filter(challenge=challenge).order_by("order")

@@ -206,4 +206,9 @@ input[type=submit] {
 	margin-left:10px;
 }
 
+.mce-path-item {
+	visibility:hidden!important;
+}
+
+
 

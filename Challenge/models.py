@@ -41,10 +41,10 @@ class Challenge(models.Model):
 
     status_dict = {
         -1: "Not enabled.",
-        0: "Not started.",
+        0: "Not started (Click the green right-arrow-button).",
         1: "Not submitted.",
-        2: "Review missing.",
-        3: "Bad review.",
+        2: "Reviews missing (Click the green write-review-buttons to the left).",
+        3: "Bad review. We need to look at this. Please be patient.",
         4: "Done, waiting for reviews by others.",  # can proceed but will be a problem for final challenge
         5: "Done, peer reviewed.",
         6: "Waiting for evaluation.",
@@ -53,7 +53,7 @@ class Challenge(models.Model):
 
     next_dict = {
         -1: "Not enabled...",
-        0: "Start a new level.",
+        0: "Start a new task.",
         1: "Finish and submit your current task.",
         2: "Write a review.",
         3: "Blocked by negative review.",
@@ -94,11 +94,15 @@ class Challenge(models.Model):
 
     @staticmethod
     def get_final_challenge_ids():
-        final_challenge_ids = []
-        challenges = Challenge.objects.all()
-        for challenge in challenges:
-            if challenge.is_final_challenge():
-                final_challenge_ids.append(challenge.id)
+        peer_review_challenges = (
+            Challenge.objects
+            .filter(prerequisite__isnull=False).values_list('prerequisite', flat=True)
+        )
+        final_challenge_ids = (
+            Challenge.objects
+            .exclude(id__in=list(peer_review_challenges))
+            .values_list('id', flat=True)
+        )
         return final_challenge_ids
 
     def is_final_challenge(self):
@@ -125,12 +129,6 @@ class Challenge(models.Model):
         # exclude the reviews that are not submitted
         reviews = reviews.exclude(submission_time__isnull=True)
         return reviews
-
-    def get_peer_review_questions(self):
-        peer_review_questions = []
-        for peer_review_question in ReviewQuestion.objects.filter(challenge=self).order_by('order'):
-            peer_review_questions.append(peer_review_question)
-        return peer_review_questions
 
     def get_elaborations(self):
         submissions = Elaboration.objects.filter(challenge=self)
