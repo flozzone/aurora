@@ -5,7 +5,6 @@
     dbname: aurora
     dbuser: aurora_dbuser
     dbpassword: nosecret
-#    project_home: /srv/django/projects/portfolio
   tasks:
 #  - name: apt-get update
 #    apt: update_cache=yes
@@ -49,14 +48,6 @@
                    lc_ctype='en_US.UTF-8'
     sudo: yes
     sudo_user: postgres
-#  - postgresql_user: name={{ dbuser }}
-#                     db={{ dbname }}
-#                     password={{ dbpassword }}
-#                     priv=ALL
-#    sudo: yes
-#    sudo_user: postgres
-#  - name: ensure user has access to database
-#    postgresql_user: db={{dbname}} name={{dbuser}} password={{dbpassword}} priv=ALL
 
   - name: ensure user does not have unnecessary privilege
     postgresql_user: name={{dbuser}} role_attr_flags=NOSUPERUSER,NOCREATEDB
@@ -95,27 +86,3 @@
                 line='export LANG=en_US.UTF-8'
   - lineinfile: dest=/home/vagrant/.bashrc
                 line='export LC_ALL=en_US.UTF-8'
-
-#  - django_manage: app_path=/vagrant
-#                   command=syncdb
-#                   virtualenv={{ py3env }}
-#  - command: /home/vagrant/py3env/bin/python manage.py populate_demo_data
-#             chdir=/vagrant
-
-### some requirements manually debugged/found and added, not sure if correct, just trial and error to get project working
-#  - pip: name=pillow
-#         virtualenv={{ py3env }}
-
-#  - name: create project folder
-#    file: path={{ project_home }}
-#          state=directory
-#          owner=martin
-#          group=www-admin
-#          mode=0755
-#    sudo: yes
-#  - git: repo=https://github.com/martflu/amanaman.git
-#         dest=/srv/django/projects/portfolio
-#         sudo: yes
-#         sudo_user: martin
-#  - name: install requirements
-#    pip: requirements=requirements.txt virtualenv={{ py3env }}
