@@ -1,4 +1,7 @@
+{% load endless %}
+
 <div id="comments{{ id_suffix }}" class="comment_list" data-ref_type="{{ ref_type }}" data-ref_id="{{ ref_id }}" data-revision="{{ revision }}">
+    {% paginate comment_list %}
     {% for comment in comment_list %}
         <div class="comment_with_responses">
             {% include 'Comments/comment.html' %}
@@ -9,4 +12,6 @@
 			</div>
         </div>
     {% endfor %}
+{#    {% show_pages %}#}
+    {% show_more %}
 </div>

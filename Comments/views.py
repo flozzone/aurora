@@ -280,7 +280,8 @@ def get_comment_list_update(request, client_revision):
                    'ref_id': ref_id,
                    'id_suffix': id_suffix,
                    'requester': user,
-                   'revision': revision}
+                   'revision': revision,
+                   'request': request}
 
         return {
             'ref_id': ref_id,

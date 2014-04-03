@@ -3,6 +3,11 @@
 
 {% block additional_headers %}
     <script type="text/javascript" src="{% static "js/feed.js" %}"></script>
+    <script src="{{ STATIC_URL }}endless_pagination/js/endless-pagination.js"></script>
+    <script>$.endlessPaginate({paginateOnScroll: true});</script>
+{#    <script type="text/javascript" charset="utf-8">#}
+{#        var endless_on_scroll_margin = 20;#}
+{#    </script>#}
     <link rel="stylesheet" href="{{ STATIC_URL }}css/feed.css" type="text/css" media="screen"/>
 {% endblock %}
 
