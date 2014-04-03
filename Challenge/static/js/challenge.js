@@ -9,10 +9,11 @@ $(challenge_loaded);
 function challenge_loaded() {
     var challenge_id = $('.challenge').attr('id');
     tinymce.init({
+		paste_as_text:true,
         selector: "textarea#editor",
         paste_retain_style_properties: "font-size,bold,italic",
         paste_text_linebreaktype: "p",
-        valid_elements: "p,strong,em,span,ul,ol,li,sub,br,sup,table,tbody,tr,td,div",
+        valid_elements: "p,strong,em,span,ul,ol,li,sub,br,sup,table,tbody,tr,td,div,hr",
         paste_preprocess: function (plugins, args) { // remove all links
             var content;
             try {
@@ -35,8 +36,8 @@ function challenge_loaded() {
         theme: 'modern',
         statusbar: true,
         fontsize_formats: "0.8em 1em 1.2em 1.6em 2em",
-        toolbar1: "undo redo | bold italic | fontsizeselect | alignleft aligncenter | bullist numlist indent outdent ",
         plugins: "autoresize paste wordcount",
+        toolbar1: "undo redo | bold italic | fontsizeselect | alignleft aligncenter | bullist numlist indent outdent | hr",
         autoresize_min_height: 200,
         autoresize_max_height: 800,
         setup: function (editor) {

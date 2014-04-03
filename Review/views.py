@@ -78,6 +78,6 @@ def review_answer(request):
         else:
             Notification.enough_peer_reviews(review)
 
-    review.submission_time = datetime.now()
-    review.save()
+        review.submission_time = datetime.now()
+        review.save()
     return HttpResponse()
