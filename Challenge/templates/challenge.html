@@ -33,10 +33,10 @@
       {{ challenge.description|safe|urlize }}
       <div class="qa_section">
         <div class="comments">
-          <span style="cursor:pointer;"><b {% if not elaboration.is_submitted %}onclick="$('#qa').slideToggle('fast');"><i class="fa fa-toggle-down"></i{% endif %}>
-            Task Q+A Section</b> - {% comments_count for challenge %} comments so far
+          <span style="cursor:pointer;" onclick="$('#qa').slideToggle('fast');"><b><i class="fa fa-toggle-down"></i>
+            Task Q+A Section</b> - {% comments_count for challenge %} comments so far<br>
           </span>
-          <div id="qa" class="challenge_comments" style="display:none">If you have questions about the description of this task, post
+          <div id="qa" class="challenge_comments" style="display:none"><br>If you have questions about the description of this task, post
             them here. The course organizers will answer as soon as possible.
 {% render_multi_comment_list for challenge %}
           </div>
