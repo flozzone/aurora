@@ -2,9 +2,11 @@ from django.http import HttpResponse, Http404
 from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 
 from Notification.models import Notification
-
+from PortfolioUser.models import PortfolioUser
+from Course.models import Course, CourseUserRelation
 
 
 @login_required()
@@ -31,6 +33,38 @@ def notifications(request):
     notifications = Notification.objects.filter(user=user, course=course).order_by('-creation_time')
     data['notifications'] = notifications
     return render_to_response('notifications.html', data, context_instance=RequestContext(request))
+
+
+@login_required()
+@staff_member_required
+def write_notification(request):
+    if not 'user' in request.GET:
+        raise Http404
+    data = {
+        'user_id': request.GET['user'],
+    }
+    return render_to_response('send_notification.html', data, context_instance=RequestContext(request))
+
+
+@login_required()
+@staff_member_required
+def send_notification(request):
+    if not 'user_id' in request.POST:
+        raise Http404
+    if not 'message' in request.POST:
+        raise Http404
+    user = PortfolioUser.objects.get(pk=request.POST['user_id'])
+    text = request.POST['message']
+    course_ids = CourseUserRelation.objects.filter(user=user).values_list('course', flat=True)
+    courses = Course.objects.filter(id__in=course_ids)
+    for course in courses:
+        obj, created = Notification.objects.get_or_create(
+            user=user,
+            course=course,
+            text=text,
+            link=""
+        )
+    return HttpResponse("Notification sent to user with id: %s" % user.nickname)
 
 
 @login_required()

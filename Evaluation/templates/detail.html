@@ -31,7 +31,10 @@
 			 <span class="nick">{{elaboration.user.nickname}}</span><br>
 			 &quot;{{elaboration.user.statement|urlizetrunc:50}}&quot;<br>
 			 {{elaboration.user.matriculation_number}} - {{elaboration.user.first_name}} {{elaboration.user.last_name}}<br>
-			 <a href="mailto:{{elaboration.user.email}}">{{elaboration.user.email}}</a>
+			 <a href="mailto:{{elaboration.user.email}}">{{elaboration.user.email}}</a><br>
+       {% with notification_user_id=elaboration.user.id %}
+         {% include "send_notification_button.html" %}
+       {% endwith %}
 		 </div>
         <div class="spacer"></div>
 
