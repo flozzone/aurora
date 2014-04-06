@@ -33,7 +33,7 @@ class Notification(models.Model):
     @staticmethod
     def enough_peer_reviews(review):
         final_challenge = review.elaboration.challenge.get_final_challenge()
-        if final_challenge.is_enabled_for_user(review.elaboration.user):
+        if final_challenge.is_enabled_for_user(review.elaboration.user) and not final_challenge.get_elaboration(review.elaboration.user):
             text = Notification.truncate_text(Notification.ENOUGH_PEER_REVIEWS + final_challenge.title)
             obj, created = Notification.objects.get_or_create(
                 user=review.elaboration.user,

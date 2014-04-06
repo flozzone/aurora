@@ -72,11 +72,14 @@ def review_answer(request):
             review_question = ReviewQuestion.objects.get(pk=question_id)
             ReviewAnswer(review=review, review_question=review_question, text=text).save()
             # send notifications
-        if review.appraisal == review.NOTHING:
-            Notification.bad_review(review)
-        else:
-            Notification.enough_peer_reviews(review)
-
         review.submission_time = datetime.now()
         review.save()
+        try:
+            if review.appraisal == review.NOTHING:
+                Notification.bad_review(review)
+            else:
+                Notification.enough_peer_reviews(review)
+        except:
+            print('Could not send Notification')
+
     return HttpResponse()
