@@ -50,8 +50,8 @@ def livecast_new_slide(request, course_id):
         try:
             now = datetime.datetime.now()
             course = Course.objects.get(id=course_id)
-            if 'lecture_id_relative' in request.POST:
-                lecture = Lecture.objects.get(course=course, active=True, id_relative=request.POST['lecture_id_relative'])
+            if 'lecture_id' in request.POST:
+                lecture = Lecture.objects.get(course=course, active=True, id=request.POST['lecture_id'])
                 tags = ''
             else:
                 if _livecast_now(course):
@@ -91,23 +91,23 @@ def livecast_update_slide(request, client_timestamp):
     return HttpResponse(simplejson.dumps(json_response), mimetype='application/javascript')
 
 
-def livecast(request, lecture_id_relative):
+def livecast(request, lecture_id):
     course = RequestContext(request)['last_selected_course']
     lectures = _get_contentbar_data(course)
-    lecture = get_object_or_404(Lecture, course=course, active=True, id_relative=lecture_id_relative)
+    lecture = get_object_or_404(Lecture, id=lecture_id, course=course, active=True)
     if not _livecast_now(lecture):
-        return redirect('/slides/studio/lecture/' + lecture_id_relative) # FIXME: no hardcoded urls
+        return redirect('/slides/studio/lecture/' + lecture_id) # FIXME: no hardcoded urls
     render_dict = {'slidecasting_mode': 'livecast', 'course':course, 'lectures': lectures, 'lecture': lecture, 'last_update': int(time.time()) }
     return render_to_response('livecast.html', render_dict, context_instance=RequestContext(request))
 
 
-def studio_lecture(request, lecture_id_relative):
+def studio_lecture(request, lecture_id):
     course = RequestContext(request)['last_selected_course']
     user = RequestContext(request)['user']
     lectures = _get_contentbar_data(course)
-    lecture = get_object_or_404(Lecture, course=course, active=True, id_relative=lecture_id_relative)
+    lecture = get_object_or_404(Lecture, id=lecture_id, course=course, active=True)
     if _livecast_now(lecture):
-        return redirect('/slides/livecast/' + str(lecture_id_relative)) # FIXME: no hardcoded urls 
+        return redirect('/slides/livecast/' + str(lecture_id)) # FIXME: no hardcoded urls 
     slides = Slide.objects.filter(lecture=lecture)
     slides = _cache_slide_markers(slides)
     slides_preparation = slides.filter(tags__contains='.preparation')
