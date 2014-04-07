@@ -13,12 +13,11 @@
 }
 
 .points_table th {
-    vertical-align: middle;
+    vertical-align: top;
     text-align: left;
     padding: 9px;
     font-size: 1em;
     font-family: Arial;
-    font-weight: bold;
     color: #000000;
     background-color: #eee;
     font-size: 14px;
@@ -27,7 +26,7 @@
 .points_table td {
     vertical-align: middle;
     text-align: left;
-    padding: 9px;
+    padding: 4px 9px;
     font-size: 1em;
     font-family: Arial;
     font-weight: normal;
@@ -35,12 +34,20 @@
     font-size: 14px;
 }
 
+.punkte {
+	text-align:right!important;
+}
+
 .points_table tr.lineL td {
 
 }
 
 .points_table td {
-    border-bottom: 1px solid silver;
+    border-bottom: 1px solid #eee;
+}
+
+.letztezeile {
+	border-bottom:0!important;
 }
 
 .slides {
