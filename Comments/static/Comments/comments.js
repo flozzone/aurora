@@ -574,6 +574,7 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
 
             $comment_list = my.findCommentListByRef(ref_id, ref_type);
             my.replaceCommentListWithHtml($comment_list, html);
+            my.fixEndlessPaginationLinks();
         }
     };
 
@@ -660,7 +661,8 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
     };
 
     my.getRevision = function ($comment_list) {
-        return {id: $comment_list.data('revision'),
+        return {
+            id: $comment_list.data('revision'),
             ref_type: $comment_list.data('ref_type'),
             ref_id: $comment_list.data('ref_id')
         };
@@ -672,8 +674,25 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         return { type: ref_type, id: ref_id };
     };
 
+    /**
+     * Rewrites the endless pagination link to a correct value for updating a single comment list
+     */
+    my.fixEndlessPaginationLinks = function() {
+        $(".endless_more").each(function() {
+            var $this = $(this);
+            var refObj = my.findClosestRefObj($this),
+                refId = refObj.id.toString(10),
+                refType = refObj.type.toString(10);
+            var href = $this.attr('href');
+            var new_link = "/comment_list_page/?ref_id=" + refId + "&ref_type=" + refType + "&";
+            var new_href = href.replace(/.*\/\?/, new_link);
+            $this.attr('href', new_href);
+        });
+    };
+
     $(document).ready(function () {
         my.registerAllTheElements();
+        my.fixEndlessPaginationLinks();
     });
 
     $(window).load(function() {

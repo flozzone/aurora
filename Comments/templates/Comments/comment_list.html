@@ -1,17 +1,3 @@
-{% load endless %}
-
 <div id="comments{{ id_suffix }}" class="comment_list" data-ref_type="{{ ref_type }}" data-ref_id="{{ ref_id }}" data-revision="{{ revision }}">
-    {% paginate comment_list %}
-    {% for comment in comment_list %}
-        <div class="comment_with_responses">
-            {% include 'Comments/comment.html' %}
-			<div class="r_comment_{{comment.id}} r_list">
-            {% for response in comment.responses %}
-                {% include 'Comments/response.html' %}
-            {% endfor %}
-			</div>
-        </div>
-    {% endfor %}
-{#    {% show_pages %}#}
-    {% show_more %}
+    {% include 'Comments/comment_list_page.html' %}
 </div>
