@@ -92,8 +92,6 @@ def sso_auth_callback(request):
 
 class ZidSSOBackend():
     def authenticate(self, params):
-        print('ZidSSOBackend.authenticate() was called')
-
         param_keys = params.keys()
 
         if 'sKey' in param_keys:
@@ -127,7 +125,6 @@ class ZidSSOBackend():
                     except PortfolioUser.DoesNotExist:
                         user = None
 
-        print('authenticate returns user: ' + str(user))
         return user
 
     def get_user(self, user_id):
