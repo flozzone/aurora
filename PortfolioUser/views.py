@@ -103,7 +103,7 @@ class ZidSSOBackend():
         else:
             return None
 
-        # make sure order is correct by creating a new list and put in the available keys one by one
+        # make sure order is correct by creating a new list and putting in the available keys one by one
         values = ''
         for key in ['oid', 'mn', 'firstName', 'lastName', 'mail']:
             if key in param_keys:
