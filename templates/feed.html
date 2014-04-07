@@ -8,7 +8,11 @@
         $.endlessPaginate({
             paginateOnScroll: true,
             paginateOnScrollMargin: 300,
-            onCompleted: function() { COMMENTS.registerAllTheElements(); COMMENTS.stopPolling(); }
+            onCompleted: function() {
+                COMMENTS.registerAllTheElements();
+                COMMENTS.stopPolling();
+                loadFilter();
+            }
         });
     </script>
     <link rel="stylesheet" href="{{ STATIC_URL }}css/feed.css" type="text/css" media="screen"/>

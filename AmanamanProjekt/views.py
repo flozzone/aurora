@@ -44,15 +44,5 @@ def home(request):
         from PortfolioUser.views import sso_auth_callback
 
         return sso_auth_callback(request)
-
-        # from django.http import QueryDict
-
-        # q = QueryDict('', mutable=True)
-        # for key in request.GET.keys():
-        #     q[key] = request.GET[key]
-        # print(q)
-        # url = '/sso_auth_callback?' + q.urlencode()
-        # print(url)
-        # return redirect(url)
     else:
         return redirect('/login')
