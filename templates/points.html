@@ -4,7 +4,7 @@
 {% endblock %}
 
 <script>
-	var position = Math.round({{ sum }} / 60 * 100);
+	var position = Math.round(({% for stack_data in stacks %}{{ stack_data.sum }}+{% endfor %}0) / (0.1+60 * {{stack_data|length}} * 100));
 	if (position > 100) position=100;
     document.cookie = "AuroraP=" + position + "; expires=Tue, 18 Jan 2038 03:14:06 GMT";
     $('.pagehead').css('background-position', '0 ' + position + '%');
@@ -14,24 +14,23 @@
 <div class="points_table">
     <table>
         <tr>
-          <th class="course_title">{{ stack_data.course_title }}</th>
-          <th>Points</th>
+          <th colspan=2 class="course_title"></i> {{ stack_data.course_title }}</th>
         </tr>
         {% for stack in stack_data.course_stacks %}
-            <tr>
+            <tr class="pZeile{{forloop.parentloop.counter}}">
                 <td class="stack_name">{{ stack.stack.title }}</td>
-                <td>{{ stack.points }}</td>
+                <td class="punkte">{{ stack.points }}</td>
             </tr>
         {% endfor %}
 
-        <tr class="slides">
+        <tr class="slides pZeile{{forloop.counter}}">
             <td>Slide Special Points</td>
-            <td>(inactive)</td>
+            <td class="punkte">(inactive)</td>
         </tr>
         <tr class="sum">
-            <td style="border-bottom:0;">Total</td>
-            <td style="border-bottom:0;">{{ sum }}</td>
+            <td class="letztezeile">Total</td>
+            <td class="letztezeile punkte">{{ stack_data.sum }}</td>
         </tr>
     </table>
 </div>
-{% endfor %}
+{% endfor %} 
