@@ -25,6 +25,8 @@ def create_context_review(request):
             raise Http404
         if challenge.has_enough_user_reviews(user):
             raise Http404
+        if not challenge.submitted_by_user(user):
+            raise Http404
         review = Review.get_open_review(challenge, user)
         if not review:
             review_candidate = Elaboration.get_review_candidate(challenge, user)
@@ -42,15 +44,12 @@ def create_context_review(request):
 @login_required()
 def review(request):
     data = create_context_review(request)
-    import pprint
-    pprint.pprint(data)
     return render_to_response('review.html', data, context_instance=RequestContext(request))
 
 
 @login_required()
 def review_answer(request):
     user = RequestContext(request)['user']
-    course = RequestContext(request)['last_selected_course']
     if request.POST:
         data = request.body.decode(encoding='UTF-8')
         data = json.loads(data)
@@ -73,11 +72,14 @@ def review_answer(request):
             review_question = ReviewQuestion.objects.get(pk=question_id)
             ReviewAnswer(review=review, review_question=review_question, text=text).save()
             # send notifications
-        if review.appraisal == review.NOTHING:
-            Notification.bad_review(review)
-        else:
-            Notification.enough_peer_reviews(review)
+        review.submission_time = datetime.now()
+        review.save()
+        try:
+            if review.appraisal == review.NOTHING:
+                Notification.bad_review(review)
+            else:
+                Notification.enough_peer_reviews(review)
+        except:
+            print('Could not send Notification')
 
-    review.submission_time = datetime.now()
-    review.save()
     return HttpResponse()

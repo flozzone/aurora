@@ -13,6 +13,7 @@ $(function() {
 
 $(function() {
    $(".back").click(function(event) {
+	   $(".back").text(": : LOADING : :")
         var url = '/back';
         $.get(url, function (data) {
             window.location.href = "/evaluation/";
