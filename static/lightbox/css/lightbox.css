@@ -200,3 +200,22 @@ body:after {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
   opacity: 1;
 }
+
+/* line 121, ../sass/lightbox.sass */
+.lb-data .lb-download {
+  font-size: 13px;
+  font-weight: bold;
+  line-height: 1em;
+  text-decoration: none;
+  color: #999999;
+  float: left;
+  text-align: left;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=70);
+  opacity: 0.7;
+}
+/* line 130, ../sass/lightbox.sass */
+.lb-data .lb-download:hover {
+  cursor: pointer;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+  opacity: 1;
+}

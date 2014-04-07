@@ -10,9 +10,14 @@
     $('.pagehead').css('background-position', '0 ' + position + '%');
 </script>
 
+{% for stack_data in stacks %}
 <div class="points_table">
     <table>
-        {% for stack in course_stacks %}
+        <tr>
+          <th class="course_title">{{ stack_data.course_title }}</th>
+          <th>Points</th>
+        </tr>
+        {% for stack in stack_data.course_stacks %}
             <tr>
                 <td class="stack_name">{{ stack.stack.title }}</td>
                 <td>{{ stack.points }}</td>
@@ -25,7 +30,8 @@
         </tr>
         <tr class="sum">
             <td style="border-bottom:0;">Total</td>
-            <td style="border-bottom:0;">{{ sum }}</td>
+            <td style="border-bottom:0;">{{ stack_data.sum }}</td>
         </tr>
     </table>
 </div>
+{% endfor %}

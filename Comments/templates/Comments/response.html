@@ -39,8 +39,13 @@
 		 <img src='{{response.author.avatar.url}}'>
 		 <span class="nick">{{response.author.display_name}}</span><br>
 		 &quot;{{response.author.statement | urlizetrunc:50}}&quot;<br>
-		 {% if requester.is_staff %}{{comment.author.matriculation_number}} - {{comment.author.first_name}} {{comment.author.last_name}}<br>
-		 <a href="mailto:{{comment.author.email}}">{{comment.author.email}}</a>{% endif %}
+		 {% if requester.is_staff %}
+       {{response.author.matriculation_number}} - {{response.author.first_name}} {{response.author.last_name}}<br>
+		   <a href="mailto:{{response.author.email}}">{{response.author.email}}</a><br>
+       {% with notification_user_id=comment.author.id %}
+         {% include "send_notification_button.html" %}
+       {% endwith %}
+     {% endif %}
 	 </div>
 
     <div class="response_body">

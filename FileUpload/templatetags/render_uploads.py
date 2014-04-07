@@ -17,6 +17,7 @@ def render_uploads(context, elaboration):
         files.append([os.path.basename(upload_file.upload_file.name),
                       round((upload_file.upload_file.size / 1048576), 2),
                       upload_file.upload_file.url,
-                      figure])
+                      figure,
+                      elaboration.challenge.accepted_files])
     context.update({'files': files})
     return context
