@@ -392,3 +392,9 @@
 #edit_buttons, #delete_buttons {
     float: right;
 }
+
+.endless_container {
+	width:100%;
+	text-align:center;
+	font-size:90%;
+}
