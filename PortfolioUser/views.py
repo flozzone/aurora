@@ -57,11 +57,11 @@ def signout(request):
 @ensure_csrf_cookie
 def login(request):
     if 'next' in request.GET:
-        return render_to_response('login.html', {'next': request.GET['next']}, context_instance=RequestContext(request))
+        return render_to_response('login.html', {'next': request.GET['next'], 'sso_uri': settings.SSO_URI}, context_instance=RequestContext(request))
     elif 'error_message' in request.GET:
-        return render_to_response('login.html', {'next': '/', 'error_message': request.GET['error_message']}, context_instance=RequestContext(request))
+        return render_to_response('login.html', {'next': '/', 'error_message': request.GET['error_message'], 'sso_uri': settings.SSO_URI}, context_instance=RequestContext(request))
     else:
-        return render_to_response('login.html', {'next': '/'}, context_instance=RequestContext(request))
+        return render_to_response('login.html', {'next': '/', 'sso_uri': settings.SSO_URI}, context_instance=RequestContext(request))
 
 
 def sso_auth_redirect():
