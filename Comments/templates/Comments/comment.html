@@ -42,7 +42,7 @@
        {{comment.author.matriculation_number}} - {{comment.author.first_name}} {{comment.author.last_name}}<br>
 		   <a href="mailto:{{comment.author.email}}">{{comment.author.email}}</a><br>
        {% with notification_user_id=comment.author.id %}
-         {% include "send_notification_button.html" %}
+	         {% include "send_notification_button.html" %}
        {% endwith %}
      {% endif %}
 
