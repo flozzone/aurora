@@ -42,8 +42,24 @@
           </div>
         </div>
       </div>
+	  {% if not reviews %}
+	  
+	  <div class="review_section">
+		<div onclick="$('.review_questions').slideToggle('fast');">
+			<i class="fa fa-toggle-down"></i>
+    		Review Questions
+    	</div>
+    	
+		<div class="review_questions nothere">
+			<br>
+			<div class="title">Your work will be reviewed by your peers following these criteria:</div>
+			<br>
+			[review questions will be shown here in the near future]
+		</div>
+	  </div>
+	  {% endif %}
     </div>
-
+	  
 {% if user.is_staff %}
     [you are admin. you cannot accept tasks]
 {% else %}
@@ -53,7 +69,7 @@
       onclick="$('.elaboration_block').slideDown('fast');$('#Caccept').slideUp('fast');$('#qa').slideUp('fast');">
       start this task
     </div>
-{% endif %}
+{% endif  %}
     <div class="elaboration_block{% if not accepted %} unstarted{% endif %}">
 {% if challenge.accepted_files %}
     <div class="file_upload" accepted_files="{{ challenge.accepted_files }}">
