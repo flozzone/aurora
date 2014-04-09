@@ -1,7 +1,7 @@
 {% load humanize %}
 {% load comments %}
 {% load render_uploads %}
-{% load render_review_answers %}
+{% load render_review_answers_staff %}
 
 {% block additional_headers %}
    <script type="text/javascript" src="{{ STATIC_URL }}js/info_area.js"></script>
@@ -37,7 +37,7 @@
         {% endif %}
         <div class="spacer"></div>
         <div class="review_body{% if review.reviewer.is_staff %} review_staff{% endif %}">
-            {% render_review_answers review.id %}
+            {% render_review_answers_staff review.id %}
             <div class="appraisal eval_appraisal">
                 <input type="radio" id="X1" name="reviewgroup{{ stack }}{{ review.id }}" {% if review.appraisal == 'A' %} checked {% endif %}/><label for="X1" id="X1t">Great work</label>
                 <input type="radio" id="X2" name="reviewgroup{{ stack }}{{ review.id }}" {% if review.appraisal == 'S' %} checked {% endif %}/><label for="X2" id="X2t">Good work</label>
