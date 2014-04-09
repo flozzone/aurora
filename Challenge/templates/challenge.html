@@ -49,13 +49,21 @@
 			<i class="fa fa-toggle-down"></i>
     		Review Questions
     	</div>
-    	
-		<div class="review_questions nothere">
-			<br>
-			<div class="title">Your work will be reviewed by your peers following these criteria:</div>
-			<br>
-			[review questions will be shown here in the near future]
-		</div>
+
+{% if review_questions %}
+		  <div class="review_questions nothere">
+			  <br>
+			  <div class="title">Your work will be reviewed by your peers following these criteria:</div>
+			  <br>
+{% for review_question in review_questions %}
+        <div class="question_container">
+          <div class="question">
+            {{ review_question }}
+          </div>
+        </div>
+{% endfor %}
+		  </div>
+{% endif %}
 	  </div>
 	  {% endif %}
     </div>

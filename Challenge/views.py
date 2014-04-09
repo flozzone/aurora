@@ -92,6 +92,10 @@ def create_context_challenge(request):
         if not challenge.is_enabled_for_user(user) and not user.is_staff:
             raise Http404
         data['challenge'] = challenge
+        data['review_questions'] = []
+        for review_question in ReviewQuestion.objects.filter(challenge=challenge, visible_to_author=True).order_by("order"):
+            data['review_questions'].append(review_question.text)
+
         if Elaboration.objects.filter(challenge=challenge, user=user).exists():
             elaboration = Elaboration.objects.get(challenge=challenge, user=user)
             data['elaboration'] = elaboration
@@ -110,6 +114,7 @@ def challenge(request):
     if 'elaboration' in data:
         data = create_context_view_review(request, data)
     return render_to_response('challenge.html', data, context_instance=RequestContext(request))
+
 
 def create_context_view_review(request, data):
     if 'id' in request.GET:

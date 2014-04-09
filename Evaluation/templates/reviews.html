@@ -1,6 +1,6 @@
 {% load humanize %}
 {% load comments %}
-{% load render_review_answers %}
+{% load render_review_answers_staff %}
 
 <div class="reviews">
 
@@ -29,7 +29,7 @@
 	   		 </div>
 			
 
-            {% render_review_answers review.id %}
+            {% render_review_answers_staff review.id %}
 			
         	<div class="appraisal eval_appraisal">
             	<input type="radio" id="X1{{forloop.counter}}{{review.id}}" name="reviewgroup{{ stack }}{{ review.id }}" onclick="set_appraisal({{ review.id }}, 'A')" {% if review.appraisal == 'A' %} checked {% endif %}/><label for="X1{{forloop.counter}}{{review.id}}" id="X1t">Great work</label>
