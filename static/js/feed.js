@@ -2,7 +2,6 @@
  * Created by peterpur on 22.2.2014.
  */
 
-
 var loadMore_Timer;
 
 $(function() {
@@ -11,16 +10,18 @@ $(function() {
 
 function clickLoadMore() {
 	el = $('.endless_more')[0]
-	if (isScrolledIntoView(el)) {
-		el.click();
+	if ($(el).length) {
+		if (isScrolledIntoView(el)) {
+			el.click();
+		}
+		loadMore_Timer = setTimeout(function(){clickLoadMore()},1000);
 	}
-	loadMore_Timer = setTimeout(function(){clickLoadMore()},1000);
 }
 
-function isScrolledIntoView($el)
+function isScrolledIntoView(el)
 {
-    var elemTop = $el.getBoundingClientRect().top;
-    var elemBottom = $el.getBoundingClientRect().bottom;
+    var elemTop = el.getBoundingClientRect().top;
+    var elemBottom = el.getBoundingClientRect().bottom;
 
     var isVisible = (elemTop >= 0) && (elemBottom <= window.innerHeight);
     return isVisible;

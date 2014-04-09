@@ -340,7 +340,7 @@
 }
 
 .author_author > .comment_body, .author_author > .response_body {
-	background-color: #F6F8CE; /* was rgb(252,252,227);*/
+	background-color: #F6F8CE!important; /* was rgb(252,252,227);*/
 }
 
 .staff_author > .comment_body, .staff_author > .response_body {
