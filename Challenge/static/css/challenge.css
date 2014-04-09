@@ -38,6 +38,20 @@
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	background:#eee;
+	font-weight:bold;
+}
+
+.review_section .question_container {
+	font-size:90%;
+}
+
+.review_section .question {
+	padding-left:12px;
+	font-weight:normal;
+}
+
+.review_section .question:before {
+	content:"❖";
 }
 
 .elaboration_text {
