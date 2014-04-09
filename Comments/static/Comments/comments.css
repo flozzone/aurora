@@ -326,16 +326,8 @@
     width: 400px;
 }
 
-.staff_visibility {
-    color: darkgreen;
-}
-
 .staff_author > .comment_top, .staff_author > .response_top {
     background-color: rgb(229, 235, 253);
-}
-
-.staff_author > .comment_body, .staff_author > .response_body {
-    background-color: rgb(245,247,252);
 }
 
 .comment_body, .response_body {
@@ -349,6 +341,20 @@
 
 .author_author > .comment_body, .author_author > .response_body {
 	background-color: #F6F8CE; /* was rgb(252,252,227);*/
+}
+
+.staff_author > .comment_body, .staff_author > .response_body {
+    background-color: rgb(245,247,252);
+}
+
+.staff_visibility > .comment_body, .staff_visibility > .response_body {
+	background-color: #ddffdd;
+	background-image: repeating-linear-gradient(45deg, transparent, transparent 15px, rgba(255,255,255,.5) 15px, rgba(255,255,255,.5) 30px);
+}
+
+.staff_visibility.author_author > .comment_top, .staff_visibility.author_author > .response_top {
+	background-color: #F6f488;
+	background-image: repeating-linear-gradient(45deg, transparent, transparent 15px, rgba(255,255,255,.5) 15px, rgba(255,255,255,0.5) 30px);
 }
 
 .private_visibility {
