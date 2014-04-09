@@ -24,7 +24,9 @@
     </table>
 
     {% render_uploads elaboration %}
-
+	
+	<div class="elab_in_detail minElab" id="EiD" class="height:2em"><i class="fa fa-caret-square-o-down fa-2x klapp" onClick="if ($('#EiD').hasClass('minElab')) {$('#EiD').removeClass('minElab')} else {$('#EiD').addClass('minElab')}"></i> {{ elaboration.challenge.description|safe|urlizetrunc:30 }}</div>
+	
     {% if elaboration.elaboration_text|length != 0 %}
         <textarea id="editor_stack_rev">{{ elaboration.elaboration_text|safe }}</textarea>
     {% endif %}

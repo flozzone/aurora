@@ -347,8 +347,8 @@
     background-color: rgb(245,247,252);
 }
 
-.staff_visibility > .comment_body, .staff_visibility > .response_body {
-	background-color: #ddffdd;
+.staff_visibility > .comment_body, .staff_visibility > .response_body, .staff_visibility > .comment_top, .staff_visibility > .response_top {
+	background-color: rgb(229, 235, 253);
 	background-image: repeating-linear-gradient(45deg, transparent, transparent 15px, rgba(255,255,255,.5) 15px, rgba(255,255,255,.5) 30px);
 }
 
