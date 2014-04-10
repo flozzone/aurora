@@ -209,9 +209,6 @@ def init_data():
     challenge_4.image.save('4.png', File(open(os.path.join(STATIC_ROOT, 'img', '4.png'), 'rb')))
     challenge_4.save()
 
-    ReviewQuestion(challenge=challenge_4, order=1, text="Erfüllt diese Arbeit die gestellte Aufgabe?", boolean_answer=True).save()
-    ReviewQuestion(challenge=challenge_4, order=2, text="Falls nicht: Was fehlt? Was sollte anders sein? Was ist zuviel?").save()
-
     challenge_5 = Challenge(id=5,
                             title='ping',
                             subtitle='ping',
@@ -257,9 +254,6 @@ def init_data():
     challenge_8.image.save('8.png', File(open(os.path.join(STATIC_ROOT, 'img', '8.png'), 'rb')))
     challenge_8.save()
 
-    ReviewQuestion(challenge=challenge_8, order=1, text="Erfüllt diese Arbeit die gestellte Aufgabe?", boolean_answer=True).save()
-    ReviewQuestion(challenge=challenge_8, order=2, text="Falls nicht: Was fehlt? Was sollte anders sein? Was ist zuviel?").save()
-
     challenge_9 = Challenge(id=9,
                             title='youtube',
                             subtitle='youtube',
@@ -281,8 +275,6 @@ def init_data():
     )
     challenge_10.image.save('4.png', File(open(os.path.join(STATIC_ROOT, 'img', '4.png'), 'rb')))
     challenge_10.save()
-    ReviewQuestion(challenge=challenge_10, order=1, text="Erfüllt diese Arbeit die gestellte Aufgabe?", boolean_answer=True).save()
-    ReviewQuestion(challenge=challenge_10, order=2, text="Falls nicht: Was fehlt? Was sollte anders sein? Was ist zuviel?").save()
 
     # create course-challenge relations
     print('adding course-challenge relations')

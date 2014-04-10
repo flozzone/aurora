@@ -41,12 +41,8 @@ def home(request):
 
         return render_to_response('home.html', data, context)
     elif 'sKey' in request.GET:
-        from django.http import QueryDict
+        from PortfolioUser.views import sso_auth_callback
 
-        q = QueryDict('', mutable=True)
-        for key in request.GET.keys():
-            q[key] = request.GET[key]
-        url = 'sso_auth_callback?' + q.urlencode()
-        return redirect(url)
+        return sso_auth_callback(request)
     else:
         return redirect('/login')

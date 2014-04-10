@@ -70,10 +70,9 @@ $(function() {
             $(".error").html("points must be numeric!");
             return;
         }
-
         var data = {
             elaboration_id: $(event.target).attr('id'),
-            evaluation_text: $(".evaluation").text(),
+            evaluation_text: $(".evaluation").html(),
             evaluation_points: points
         };
         var args = { type: "POST", url: "/submit_evaluation/", data: data,
@@ -139,7 +138,7 @@ function AutoSave(elaboration_id) {
     var points = Math.abs(parseInt($(".points").text()) || 0);
     var data = {
         elaboration_id: elaboration_id,
-        evaluation_text: $(".evaluation").text().replace(/\n|<.*?>/g,' '),
+        evaluation_text: $(".evaluation").html(),
         evaluation_points: points
     };
     var args = { type: "POST", url: "/save_evaluation/", data: data,

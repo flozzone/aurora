@@ -2,6 +2,31 @@
  * Created by peterpur on 22.2.2014.
  */
 
+var loadMore_Timer;
+
+$(function() {
+	loadMore_Timer = setTimeout(function(){clickLoadMore()},1000);
+})
+
+function clickLoadMore() {
+	el = $('.endless_more')[0]
+	if ($(el).length) {
+		if (isScrolledIntoView(el)) {
+			el.click();
+		}
+		loadMore_Timer = setTimeout(function(){clickLoadMore()},1000);
+	}
+}
+
+function isScrolledIntoView(el)
+{
+    var elemTop = el.getBoundingClientRect().top;
+    var elemBottom = el.getBoundingClientRect().bottom;
+
+    var isVisible = (elemTop >= 0) && (elemBottom <= window.innerHeight);
+    return isVisible;
+}
+
 
 
 $(function() {
@@ -24,6 +49,7 @@ function loadFilter() {
     "use strict";
 
 	filter(getCookie('filtercookie.'+$('#the_username').data('username')));
+	
 }
 
 function filter(fx,usr) {
@@ -83,6 +109,8 @@ function filter(fx,usr) {
 			updateNew();
             break;
     }
+	clearTimeout(loadMore_Timer);
+	loadMore_Timer = setTimeout(function(){clickLoadMore()},1000);
 }
 
 function updateNew() {

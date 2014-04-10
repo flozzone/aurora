@@ -36,14 +36,38 @@
           <span style="cursor:pointer;" onclick="$('#qa').slideToggle('fast');"><b><i class="fa fa-toggle-down"></i>
             Task Q+A Section</b> - {% comments_count for challenge %} comments so far<br>
           </span>
-          <div id="qa" class="challenge_comments" style="display:none"><br>If you have questions about the description of this task, post
-            them here. The course organizers will answer as soon as possible.
+          <div id="qa" class="challenge_comments"{% if not user.is_staff %} style="display:none"{% endif %}><br>{% if not user.is_staff %}If you have questions about the description of this task, post
+            them here. The course organizers will answer as soon as possible.{% endif %}
 {% render_multi_comment_list for challenge %}
           </div>
         </div>
       </div>
-    </div>
+	  {% if not reviews %}
+	  
+	  <div class="review_section">
+		<div onclick="$('.review_questions').slideToggle('fast');">
+			<i class="fa fa-toggle-down"></i>
+    		Review Questions
+    	</div>
 
+{% if review_questions %}
+		  <div class="review_questions nothere">
+			  <br>
+			  <div class="title">Your work will be reviewed by peers on the following criteria:</div>
+			  <br>
+{% for review_question in review_questions %}
+        <div class="question_container">
+          <div class="question">
+            {{ review_question }}
+          </div>
+        </div>
+{% endfor %}
+		  </div>
+{% endif %}
+	  </div>
+	  {% endif %}
+    </div>
+	  
 {% if user.is_staff %}
     [you are admin. you cannot accept tasks]
 {% else %}
@@ -53,7 +77,7 @@
       onclick="$('.elaboration_block').slideDown('fast');$('#Caccept').slideUp('fast');$('#qa').slideUp('fast');">
       start this task
     </div>
-{% endif %}
+{% endif  %}
     <div class="elaboration_block{% if not accepted %} unstarted{% endif %}">
 {% if challenge.accepted_files %}
     <div class="file_upload" accepted_files="{{ challenge.accepted_files }}">

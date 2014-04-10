@@ -51,7 +51,7 @@
                 {% csrf_token %}
                 {% if evaluation.submission_time %}
 				    <div class="evaluation eval_done">
-                        {{ evaluation.evaluation_text }}
+                        {{ evaluation.evaluation_text|safe }}
                     </div>
                     <div class="point_label">points assigned</div><div class="points eval_done">{{ evaluation.evaluation_points }}</div>
    				 	<div class="spacer"></div>
@@ -62,7 +62,7 @@
                 {% else %}
                     <div class="evaluation" {% if not lock %} contenteditable="true" {% endif %}
                             onkeyup="DelayedAutoSave({{ elaboration.id }})">
-                        {{ evaluation.evaluation_text }}{% if lock %}<div class="evaluation_lock">locked by {{ evaluation.tutor.username }}</div>{% endif %}
+                        {{ evaluation.evaluation_text|safe }}{% if lock %}<div class="evaluation_lock">locked by {{ evaluation.tutor.username }}</div>{% endif %}
                     </div>
                     <div class="point_label">Points</div><div class="points" {% if not lock %} contenteditable="true" {% endif %} onkeyup="DelayedAutoSave({{ elaboration.id }})">
                         {% if evaluation.evaluation_points %}{{ evaluation.evaluation_points }}{% endif %}</div>

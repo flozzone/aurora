@@ -57,11 +57,11 @@ def signout(request):
 @ensure_csrf_cookie
 def login(request):
     if 'next' in request.GET:
-        return render_to_response('login.html', {'next': request.GET['next']}, context_instance=RequestContext(request))
+        return render_to_response('login.html', {'next': request.GET['next'], 'sso_uri': settings.SSO_URI}, context_instance=RequestContext(request))
     elif 'error_message' in request.GET:
-        return render_to_response('login.html', {'next': '/', 'error_message': request.GET['error_message']}, context_instance=RequestContext(request))
+        return render_to_response('login.html', {'next': '/', 'error_message': request.GET['error_message'], 'sso_uri': settings.SSO_URI}, context_instance=RequestContext(request))
     else:
-        return render_to_response('login.html', {'next': '/'}, context_instance=RequestContext(request))
+        return render_to_response('login.html', {'next': '/', 'sso_uri': settings.SSO_URI}, context_instance=RequestContext(request))
 
 
 def sso_auth_redirect():
@@ -92,8 +92,6 @@ def sso_auth_callback(request):
 
 class ZidSSOBackend():
     def authenticate(self, params):
-        print('ZidSSOBackend.authenticate() was called')
-
         param_keys = params.keys()
 
         if 'sKey' in param_keys:
@@ -103,7 +101,7 @@ class ZidSSOBackend():
         else:
             return None
 
-        # make sure order is correct by creating a new list and put in the available keys one by one
+        # make sure order is correct by creating a new list and putting in the available keys one by one
         values = ''
         for key in ['oid', 'mn', 'firstName', 'lastName', 'mail']:
             if key in param_keys:
@@ -127,7 +125,6 @@ class ZidSSOBackend():
                     except PortfolioUser.DoesNotExist:
                         user = None
 
-        print('authenticate returns user: ' + str(user))
         return user
 
     def get_user(self, user_id):

@@ -263,8 +263,22 @@ def update_comments(request):
     template_response = json.dumps(response_data)
     return HttpResponse(template_response, content_type="application/json")
 
+@require_GET
+@login_required
+def comment_list_page(request):
+    client_revision = {
+        'number': -1,
+        'ref_id': request.GET['ref_id'],
+        'ref_type': request.GET['ref_type']
+    }
 
-def get_comment_list_update(request, client_revision):
+    template = 'Comments/comment_list_page.html'
+    rendered_response = get_comment_list_update(request, client_revision, template)['comment_list']
+
+    return HttpResponse(rendered_response)
+
+
+def get_comment_list_update(request, client_revision, template='Comments/comment_list.html'):
     ref_type = client_revision['ref_type']
     ref_id = client_revision['ref_id']
     user = RequestContext(request)['user']
@@ -280,12 +294,13 @@ def get_comment_list_update(request, client_revision):
                    'ref_id': ref_id,
                    'id_suffix': id_suffix,
                    'requester': user,
-                   'revision': revision}
+                   'revision': revision,
+                   'request': request}
 
         return {
             'ref_id': ref_id,
             'ref_type': ref_type,
-            'comment_list': render_to_string('Comments/comment_list.html', context)
+            'comment_list': render_to_string(template, context)
         }
     return None
 

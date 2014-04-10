@@ -3,6 +3,18 @@
 
 {% block additional_headers %}
     <script type="text/javascript" src="{% static "js/feed.js" %}"></script>
+    <script src="{{ STATIC_URL }}endless_pagination/js/endless-pagination.js"></script>
+    <script>
+        $.endlessPaginate({
+            paginateOnScroll: true,
+            paginateOnScrollMargin: 300,
+            onCompleted: function() {
+                COMMENTS.registerAllTheElements();
+                COMMENTS.stopPolling();
+                loadFilter();
+            }
+        });
+    </script>
     <link rel="stylesheet" href="{{ STATIC_URL }}css/feed.css" type="text/css" media="screen"/>
 {% endblock %}
 

@@ -28,6 +28,31 @@
 	content: '';
 }
 
+.review_section {
+	cursor:pointer;
+	padding:8px;
+	margin:8px 0 8px 0;
+	width:100%;
+	border-top:1px dashed silver;
+	border-bottom:1px dashed silver;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	background:#eee;
+	font-weight:bold;
+}
+
+.review_section .question_container {
+	font-size:90%;
+}
+
+.review_section .question {
+	padding-left:12px;
+	font-weight:normal;
+}
+
+.review_section .question:before {
+	content:"❖";
+}
 
 .elaboration_text {
 	box-sizing: border-box;
@@ -85,6 +110,7 @@
 .challenge_title {
 	font-size:16px;
 	font-weight:bold;
+	margin-bottom:8px;
 }
 
 .challenge_description {

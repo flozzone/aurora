@@ -1,7 +1,10 @@
 <form action="/notifications/send" method="POST">
   {% csrf_token %}
   <input name="user_id" hidden value="{{ user_id }}"></input>
-  <input name="message" placeholder="Message" size="72" maxlength="99"></input>
+  Send notification<br><br>
+  <textarea rows="2" name="message" placeholder="Message" maxlength="99" style="width:100%;font-size:14px;padding:3px"></textarea><br>
+  <div style="background:gray;color:white">Beware: Notifications must not exceed 100 chars!</div>
+  
   <br/>
   <input type="submit" value="Submit">
 </form>
