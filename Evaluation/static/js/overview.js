@@ -196,6 +196,20 @@ $(function() {
 $(function() {
     $("#search_user").autocomplete({
         source: "/autocomplete_user/",
+        select: function (event, ui) {
+           var data = {
+                selected_user: ui.item.value     // select value from autocomplete box
+           };
+           var args = { type: "POST", url: "/select_user/", data: data,
+                error: function () {
+                    alert('user not found');
+                },
+                success: function(data) {
+                    $('#overview').html(data);
+                }
+           };
+           $.ajax(args);
+        },
         minLength: 2
     });
 });
@@ -203,7 +217,6 @@ $(function() {
 $(function() {
    $(".search_btn").click(function(event) {
        var data = {
-            search_user: $('.search_user').text(),
             search_all: $('.search_all').text()
        };
        var args = { type: "POST", url: "/search/", data: data,

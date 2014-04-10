@@ -365,14 +365,28 @@ def select_challenge(request):
 @csrf_exempt
 @login_required()
 @staff_member_required
+def select_user(request):
+    selected_user = request.POST['selected_user'].split()[0]
+
+    elaborations = []
+    user = PortfolioUser.objects.get(username=selected_user)
+    elaborations = user.get_elaborations()
+
+    html = render_to_response('overview.html', {'elaborations': elaborations, 'search': True}, RequestContext(request))
+
+    # store selected elaborations in session
+    request.session['elaborations'] = serializers.serialize('json', elaborations)
+    request.session['selection'] = 'search'
+    return html
+
+
+@csrf_exempt
+@login_required()
+@staff_member_required
 def search(request):
-    search_user = request.POST['search_user']
     search_all = request.POST['search_all']
 
     elaborations = []
-    if search_user not in ['', 'user...']:
-        user = PortfolioUser.objects.get(username=search_user.split()[0])
-        elaborations = user.get_elaborations()
     if search_all not in ['', 'all...']:
         SEARCH_TERM = search_all
 
