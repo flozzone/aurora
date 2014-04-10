@@ -13,7 +13,6 @@ function update_overview(data) {
 $(function() {
 	$(".mfield").click(function(event) {
 		$(".mitem").removeClass('stabilosiert');
-		
 	});
 });
 
@@ -38,7 +37,7 @@ $(function() {
 
 $(function() {
    $(".non_adequate_work").click(function(event) {
-		loadWait();
+	   loadWait();
        var url = '/overview?data=non_adequate_work';
        $.get(url, function (data) {
             update_overview(data);
@@ -48,7 +47,7 @@ $(function() {
 
 $(function() {
    $(".top_level_challenges").click(function(event) {
-		loadWait();
+	   loadWait();
        var url = '/overview?data=top_level_challenges';
        $.get(url, function (data) {
             update_overview(data);
@@ -58,7 +57,7 @@ $(function() {
 
 $(function() {
    $(".complaints").click(function(event) {
-		loadWait();
+	   loadWait();
        var url = '/overview?data=complaints';
        $.get(url, function (data) {
             update_overview(data);
@@ -68,7 +67,7 @@ $(function() {
 
 $(function() {
    $(".questions").click(function(event) {
-		loadWait();
+	   loadWait();
        var url = '/questions/';
        $.get(url, function (data) {
             update_overview(data);
