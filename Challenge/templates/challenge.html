@@ -36,8 +36,8 @@
           <span style="cursor:pointer;" onclick="$('#qa').slideToggle('fast');"><b><i class="fa fa-toggle-down"></i>
             Task Q+A Section</b> - {% comments_count for challenge %} comments so far<br>
           </span>
-          <div id="qa" class="challenge_comments" style="display:none"><br>If you have questions about the description of this task, post
-            them here. The course organizers will answer as soon as possible.
+          <div id="qa" class="challenge_comments"{% if not user.is_staff %} style="display:none"{% endif %}><br>{% if not user.is_staff %}If you have questions about the description of this task, post
+            them here. The course organizers will answer as soon as possible.{% endif %}
 {% render_multi_comment_list for challenge %}
           </div>
         </div>
