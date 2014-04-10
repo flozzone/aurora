@@ -345,7 +345,7 @@ def set_appraisal(request):
 @login_required()
 @staff_member_required
 def select_challenge(request):
-    selected_challenge = request.POST['selected_challenge']
+    selected_challenge = request.POST['selected_challenge'][:(request.POST['selected_challenge'].rindex('(')-1)]
 
     elaborations = []
     challenges = Challenge.objects.filter(title=selected_challenge)
@@ -445,7 +445,7 @@ def search(request):
 def autocomplete_challenge(request):
     term = request.GET.get('term', '')
     challenges = Challenge.objects.all().filter(title__istartswith=term)
-    titles = [challenge.title for challenge in challenges]
+    titles = [challenge.title + ' (' + str(challenge.get_elaborations().count()) + ')' for challenge in challenges]
     response_data = json.dumps(titles, ensure_ascii=False)
     return HttpResponse(response_data, content_type='application/json; charset=utf-8')
 
