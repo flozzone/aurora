@@ -12,7 +12,8 @@
     <table>
     {% for review in reviews %}
         {% ifchanged review.elaboration.challenge.id %}
-            <tr>
+			<tr><td>&nbsp;</td><td></td></tr>
+            <tr class="R_first_row">
                 <td><img src="{{ review.elaboration.challenge.image.url }}" class="mini_task_img"></td>
                 <td class="elab_title" colspan="3">{{ review.elaboration.challenge.title }}</td>
             </tr>
@@ -29,7 +30,6 @@
                 <div title="Public comments" class="visible_comments indicator">{{ review.elaboration.get_visible_comments|length }}</div>
                 <div title="Private comments" class="invisible_comments indicator">{{ review.elaboration.get_invisible_comments|length }}</div>
             </td>
-            <td>{{ review.appraisal }}</td>
         </tr>
     {% endfor %}
     </table>
