@@ -37,7 +37,7 @@
 
 			{% render_uploads review.elaboration %}
         	{% if review.elaboration.elaboration_text|length != 0 %}
-            	<textarea class="review_answer" readonly>{{ review.elaboration.elaboration_text|safe }}</textarea>
+            	<textarea class="review_answer" readonly>{{ review.elaboration.elaboration_text|safe|urlizetrunc:40 }}</textarea>
         	{% endif %}
 
         	<div class="spacer"></div>
