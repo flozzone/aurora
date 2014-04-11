@@ -10,46 +10,55 @@
 {% block content %}
 
     {% for review in reviews %}
-        <img class="evc_challenge_image" src="{{ review.elaboration.challenge.image.url }}">
-        <div class="evc_title"> {{ review.elaboration.challenge.title }} </div>
-        <div class="evc_description">{{ review.elaboration.challenge.description }}</div>
+		<table><tr>
+    		<td width="36"><img src="{{ review.elaboration.challenge.image.url }}" class="mini_task_img"></td>
+   		 	<td>{{ review.elaboration.challenge.title }}</td>
+		</tr></table>
+		<div class="elab_in_detail minElab" id="EiD" class="height:2em"><i class="fa fa-caret-square-o-down fa-2x klapp" onClick="if ($('#EiD').hasClass('minElab')) {$('#EiD').removeClass('minElab')} else {$('#EiD').addClass('minElab')}"></i> 
+			<div>{{ review.elaboration.challenge.description|safe|urlizetrunc:40 }}</div>
 
-        <div class="review_author">
-            <img class="gravatar" src="{{ review.elaboration.user.avatar.url }}" style="vertical-align:middle" onclick="$('#r_detail{{forloop.counter}}').toggleClass('hidden_detail')">
-            {{ review.elaboration.user.username }}
-            ({{ review.elaboration.user.first_name }} {{ review.elaboration.user.last_name }}) @ <span title="{{review.elaboration.submission_time}}">{{review.elaboration.submission_time|naturaltime}}</span>:
-        </div>
-        <div class="author_detail hidden_detail" id="r_detail{{forloop.counter}}" onclick="$(this).addClass('hidden_detail')">
-            <img src='{{review.elaboration.user.avatar.url}}'>
-            <span class="nick">{{review.elaboration.user.nickname}}</span><br>
-            &quot;{{review.elaboration.user.statement|urlizetrunc:50}}&quot;<br>
-            {{review.elaboration.user.matriculation_number}} - {{review.elaboration.user.first_name}} {{review.elaboration.user.last_name}}<br>
-            <a href="mailto:{{review.elaboration.user.email}}">{{review.elaboration.user.email}}</a><br>
-            {% with notification_user_id=review.elaboration.user.id %}
-         {% include "send_notification_button.html" %}
-       {% endwith %}
-        </div>
+       	 	<div class="spacer"></div>
 
-        <br/>
-        {% render_uploads review.elaboration %}
-        {% if review.elaboration.elaboration_text|length != 0 %}
-            <textarea class="review_answer" readonly>{{ review.elaboration.elaboration_text|safe }}</textarea>
-        {% endif %}
-        <div class="spacer"></div>
-        <div class="review_body{% if review.reviewer.is_staff %} review_staff{% endif %}">
-            {% render_review_answers_staff review.id %}
-            <div class="appraisal eval_appraisal">
-                <input type="radio" id="X1" name="reviewgroup{{ stack }}{{ review.id }}" {% if review.appraisal == 'A' %} checked {% endif %}/><label for="X1" id="X1t">Great work</label>
-                <input type="radio" id="X2" name="reviewgroup{{ stack }}{{ review.id }}" {% if review.appraisal == 'S' %} checked {% endif %}/><label for="X2" id="X2t">Good work</label>
-                <input type="radio" id="X3" name="reviewgroup{{ stack }}{{ review.id }}" {% if review.appraisal == 'F' %} checked {% endif %}/><label for="X3" id="X3t">Barely acceptable work</label>
-                <input type="radio" id="X4" name="reviewgroup{{ stack }}{{ review.id }}" {% if review.appraisal == 'N' %} checked {% endif %}/><label for="X4" id="X4t">Unacceptable</label>
-            </div>
-        </div>
-        {% if review %}
-            {% render_additional_comment_list for review %}
-        {% endif %}
-        <div class="spacer"></div>
+        	<div class="review_author">
+				<img class="gravatar" src="{{ review.elaboration.user.avatar.url }}" style="vertical-align:middle" onclick="$('#r_detail{{forloop.counter}}').toggleClass('hidden_detail')">
+ 			   	{{ review.elaboration.user.username }}
+            	({{ review.elaboration.user.first_name }} {{ review.elaboration.user.last_name }}), <span title="{{review.elaboration.submission_time}}">{{review.elaboration.submission_time|naturaltime}}</span>:
+			</div>
+			<div class="author_detail hidden_detail" id="r_detail{{forloop.counter}}" onclick="$(this).addClass('hidden_detail')">
+  			  	<img src='{{review.elaboration.user.avatar.url}}'>
+            	<span class="nick">{{review.elaboration.user.nickname}}</span><br>
+            	&quot;{{review.elaboration.user.statement|urlizetrunc:50}}&quot;<br>
+            	{{review.elaboration.user.matriculation_number}} - {{review.elaboration.user.first_name}} {{review.elaboration.user.last_name}}<br>
+            	<a href="mailto:{{review.elaboration.user.email}}">{{review.elaboration.user.email}}</a><br>
+            	{% with notification_user_id=review.elaboration.user.id %}
+         	  	 	{% include "send_notification_button.html" %}
+       			{% endwith %}
+       	 	</div>
 
+       	 	<div class="spacer"></div>
+
+			{% render_uploads review.elaboration %}
+        	{% if review.elaboration.elaboration_text|length != 0 %}
+            	<textarea class="review_answer" readonly>{{ review.elaboration.elaboration_text|safe }}</textarea>
+        	{% endif %}
+
+        	<div class="spacer"></div>
+
+        	<div class="review_body{% if review.reviewer.is_staff %} review_staff{% endif %}">
+            	{% render_review_answers_staff review.id %}
+            	<div class="appraisal eval_appraisal">
+               	 	<input type="radio" id="X1" name="reviewgroup{{ stack }}{{ review.id }}" {% if review.appraisal == 'A' %} checked {% endif %}/><label for="X1" id="X1t">Great work</label>
+                	<input type="radio" id="X2" name="reviewgroup{{ stack }}{{ review.id }}" {% if review.appraisal == 'S' %} checked {% endif %}/><label for="X2" id="X2t">Good work</label>
+                	<input type="radio" id="X3" name="reviewgroup{{ stack }}{{ review.id }}" {% if review.appraisal == 'F' %} checked {% endif %}/><label for="X3" id="X3t">Barely acceptable work</label>
+                	<input type="radio" id="X4" name="reviewgroup{{ stack }}{{ review.id }}" {% if review.appraisal == 'N' %} checked {% endif %}/><label for="X4" id="X4t">Unacceptable</label>
+            	</div>
+        	</div>
+       	 	{% if review %}
+        		{% render_additional_comment_list for review %}
+        		{% endif %}
+				
+        	<div class="spacer"></div>
+		</div>
     {% endfor %}
 
 {% endblock %}
