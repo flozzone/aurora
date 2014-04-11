@@ -556,3 +556,23 @@ def reviewlist(request):
     reviews = Review.objects.filter(reviewer=elaboration.user, submission_time__isnull=False)
 
     return render_to_response('reviewlist.html', {'reviews': reviews}, RequestContext(request))
+
+
+@login_required()
+@staff_member_required
+def search_user(request):
+    if request.GET:
+        user = PortfolioUser.objects.get(pk=request.GET['id'])
+        elaborations = user.get_elaborations()
+
+         # sort elaborations by submission time
+        if type(elaborations) == list:
+            elaborations.sort(key=lambda elaboration: elaboration.submission_time)
+        else:
+            elaborations.order_by('submission_time')
+
+        # store selected elaborations in session
+        request.session['elaborations'] = serializers.serialize('json', elaborations)
+        request.session['selection'] = 'search'
+
+    return evaluation(request)

@@ -23,4 +23,5 @@ urlpatterns = patterns('',
     url(r'^evaluation/review_answer/$', 'Evaluation.views.review_answer'),
     url(r'^back/$', 'Evaluation.views.back'),
     url(r'^reviewlist/$', 'Evaluation.views.reviewlist'),
+    url(r'^evaluation/user$', 'Evaluation.views.search_user'),
 )
