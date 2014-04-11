@@ -63,13 +63,24 @@
 .question_container {
 	margin-top:0.5em;
 }
-.question_container textarea {
+
+.question_container div {
+	color:#666;
+}
+.review_answer {
 	box-sizing: border-box;
-	width:100%;
-	height:1em;
+	background:transparent;
+	width: 100%;
+	height:20px;
 	font-size:14px;
-	border:1px solid silver;
-	padding: 0.5em;
+	border:0;
+	border-top: 1px solid silver;
+	padding: 0.5em 0px;
+}
+
+.whisperframe {
+	background-color: rgba(0,0,0,.05);
+	background-image: repeating-linear-gradient(45deg, transparent, transparent 15px, rgba(255,255,255,.5) 15px, rgba(255,255,255,.5) 30px);
 }
 
 .suButton {
@@ -627,14 +638,6 @@ th {
 
 .fig {
 	margin-top:2px;
-}
-
-.review_answer {
-   width: 100%;
-   height:20px;
-   font-size: 13px;
-   border: 1px solid silver;
-   padding: 0.5em 0px;
 }
 
 
