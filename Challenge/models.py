@@ -134,6 +134,12 @@ class Challenge(models.Model):
         submissions = Elaboration.objects.filter(challenge=self)
         return submissions
 
+    def get_elab_count(self):
+        return Elaboration.objects.filter(challenge=self).count()
+
+    def get_sub_elab_count(self):
+        return Elaboration.objects.filter(challenge=self, submission_time__isnull=False).count()
+
     def get_status_text(self, user):
         status = self.get_status(user)
         status_text = self.status_dict[status]

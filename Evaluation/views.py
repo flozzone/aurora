@@ -459,7 +459,7 @@ def search(request):
 def autocomplete_challenge(request):
     term = request.GET.get('term', '')
     challenges = Challenge.objects.all().filter(title__istartswith=term)
-    titles = [challenge.title + ' (' + str(challenge.get_elaborations().count()) + ')' for challenge in challenges]
+    titles = [challenge.title + ' (' + str(challenge.get_sub_elab_count()) + '/' + str(challenge.get_elab_count()) + ')' for challenge in challenges]
     response_data = json.dumps(titles, ensure_ascii=False)
     return HttpResponse(response_data, content_type='application/json; charset=utf-8')
 
