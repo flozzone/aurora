@@ -60,10 +60,13 @@
 	padding-bottom:0;
 }
 
+.question_container {
+	margin-top:0.5em;
+}
 .question_container textarea {
 	box-sizing: border-box;
 	width:100%;
-	height:6em;
+	height:1em;
 	font-size:14px;
 	border:1px solid silver;
 	padding: 0.5em;
@@ -628,7 +631,7 @@ th {
 
 .review_answer {
    width: 100%;
-   height: 5em;
+   height:20px;
    font-size: 13px;
    border: 1px solid silver;
    padding: 0.5em 0px;

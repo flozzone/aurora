@@ -1,6 +1,5 @@
 {% for review_answer in review_answers %}
 <div class="question_container">
-  <br/>
   <div>
 {% if review_answer.review_question.visible_to_author == False %}
     <p>This answer is not visible to the author of the elaboration:</p>
@@ -17,3 +16,4 @@
   </div>
 </div>
 {% endfor %}
+

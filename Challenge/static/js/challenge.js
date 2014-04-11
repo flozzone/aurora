@@ -4,6 +4,15 @@ $(function () {
     window.document.title = "Aurora: Challenges"
 });
 
+$(function () {
+    $(".review_answer").each(function () {
+        this.style.height = (this.scrollHeight+5)+'px';
+    });
+});
+
+
+
+
 $(challenge_loaded);
 
 function challenge_loaded() {
