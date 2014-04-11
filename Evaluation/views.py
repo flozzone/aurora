@@ -553,7 +553,7 @@ def back(request):
 @staff_member_required
 def reviewlist(request):
     elaboration = Elaboration.objects.get(pk=request.session.get('elaboration_id', ''))
-    reviews = Review.objects.filter(reviewer=elaboration.user, submission_time__isnull=False)
+    reviews = Review.objects.filter(reviewer=elaboration.user, submission_time__isnull=False).order_by('elaboration__challenge__id')
 
     return render_to_response('reviewlist.html', {'reviews': reviews}, RequestContext(request))
 
