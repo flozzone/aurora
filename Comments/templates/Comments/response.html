@@ -41,10 +41,11 @@
 		 &quot;{{response.author.statement | urlizetrunc:50}}&quot;<br>
 		 {% if requester.is_staff %}
        {{response.author.matriculation_number}} - {{response.author.first_name}} {{response.author.last_name}}<br>
-		   <a href="mailto:{{response.author.email}}">{{response.author.email}}</a><br>
+		   <a href="mailto:{{response.author.email}}">{{response.author.email}}</a> &mdash;
        {% with notification_user_id=response.author.id %}
          {% include "send_notification_button.html" %}
        {% endwith %}
+	  {% if not response.author.is_staff %}&mdash;   <a href="/evaluation/user?id={{response..author.id}}">{{response..author.display_name}}'s work</a>{% endif %}
      {% endif %}
 	 </div>
 

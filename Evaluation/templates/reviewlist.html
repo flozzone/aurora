@@ -10,22 +10,20 @@
 {% block content %}
 
     {% for review in reviews %}
-		<table><tr>
-    		<td width="36"><img src="{{ review.elaboration.challenge.image.url }}" class="mini_task_img"></td>
-   		 	<td>{{ review.elaboration.challenge.title }}</td>
-		</tr></table>
-		<div class="elab_in_detail minElab" id="EiD" class="height:2em"><i class="fa fa-caret-square-o-down fa-2x klapp" onClick="if ($('#EiD').hasClass('minElab')) {$('#EiD').removeClass('minElab')} else {$('#EiD').addClass('minElab')}"></i> 
+    	<i style="float:left" class="fa fa-caret-square-o-down klapp" onClick="if ($('.Relab{{forloop.counter}}').hasClass('minElab')) {$('.Relab{{forloop.counter}}').removeClass('minElab')} else {$('.Relab{{forloop.counter}}').addClass('minElab')}"></i> <img src="{{ review.elaboration.challenge.image.url }}" class="mini_task_img">
+   		{{ review.elaboration.challenge.title }}
+		<div class="elab_in_detail minElab Relab{{forloop.counter}}">
 			<div>{{ review.elaboration.challenge.description|safe|urlizetrunc:40 }}</div>
 
        	 	<div class="spacer"></div>
 
         	<div class="review_author">
-				<img class="gravatar" src="{{ review.elaboration.user.avatar.url }}" style="vertical-align:middle" onclick="$('#r_detail{{forloop.counter}}').toggleClass('hidden_detail')">
+				<img class="gravatar" src="{{ review.elaboration.user.avatar.url }}l" style="vertical-align:middle" onclick="$('#r_detail{{forloop.counter}}').toggleClass('hidden_detail')">
  			   	{{ review.elaboration.user.username }}
             	({{ review.elaboration.user.first_name }} {{ review.elaboration.user.last_name }}), <span title="{{review.elaboration.submission_time}}">{{review.elaboration.submission_time|naturaltime}}</span>:
 			</div>
 			<div class="author_detail hidden_detail" id="r_detail{{forloop.counter}}" onclick="$(this).addClass('hidden_detail')">
-  			  	<img src='{{review.elaboration.user.avatar.url}}'>
+  			  	<img src='{{ review.elaboration.user.avatar.url }}'>
             	<span class="nick">{{review.elaboration.user.nickname}}</span><br>
             	&quot;{{review.elaboration.user.statement|urlizetrunc:50}}&quot;<br>
             	{{review.elaboration.user.matriculation_number}} - {{review.elaboration.user.first_name}} {{review.elaboration.user.last_name}}<br>

@@ -35,7 +35,7 @@
 		$(".timestamp:contains(' week')").html(function(i, text) {return text.replace(/ week/g, 'w'); });
 	</script>
 
-	<div class="elab_in_detail minElab" id="EiD" class="height:2em"><i class="fa fa-caret-square-o-down fa-2x klapp" onClick="if ($('#EiD').hasClass('minElab')) {$('#EiD').removeClass('minElab')} else {$('#EiD').addClass('minElab')}"></i> {{ elaboration.challenge.description|safe|urlizetrunc:30 }}</div>
+	<div class="elab_in_detail minElab" id="EiD"><i class="fa fa-toggle-down fa-2x klapp" onClick="if ($('#EiD').hasClass('minElab')) {$('#EiD').removeClass('minElab')} else {$('#EiD').addClass('minElab')}"></i> {{ elaboration.challenge.description|safe|urlizetrunc:30 }}</div>
 	
     {% render_uploads elaboration %}
 
