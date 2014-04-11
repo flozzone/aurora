@@ -10,19 +10,31 @@
 
     <table>
         <tr class="{% cycle 'darkTableRow' 'lightTableRow' %}">
-            <td><img src="{{ elaboration.challenge.image.url }}" width="32" height="32"></td>
+            <td><img class="mini_task_img" src="{{ elaboration.challenge.image.url }}" width="32" height="32"></td>
             <td>{{ elaboration.challenge.title }}</td>
-            <td title="{{ elaboration.submission_time}}">{{ elaboration.submission_time|naturaltime }}</td>
-            <td><div title="Great work" class="awesome_reviews indicator">{{ elaboration.get_awesome_reviews|length }}</div></td>
-            <td><div title="Good work" class="success_reviews indicator">{{ elaboration.get_success_reviews|length }}</div></td>
-            <td><div title="Barely acceptable work" class="fail_reviews indicator">{{ elaboration.get_fail_reviews|length }}</div></td>
-            <td><div title="Unacceptable" class="notry_reviews indicator">{{ elaboration.get_nothing_reviews|length }}</div></td>
-            <td><div title="Public comments" class="visible_comments indicator">{{ elaboration.get_visible_comments|length }}</div></td>
-            <td><div title="Private comments" class="invisible_comments indicator">{{ elaboration.get_invisible_comments|length }}</div></td>
-			<script>$(".indicator:contains('0')").addClass('zero_reviews')</script>
+            <td class="timestamp" title="{{ elaboration.submission_time}}">{{ elaboration.submission_time|naturaltime }}</td>
+            <td class="indicator_field">
+				<div title="Great work" class="awesome_reviews indicator">{{ elaboration.get_awesome_reviews|length }}</div>
+           	 	<div title="Good work" class="success_reviews indicator">{{ elaboration.get_success_reviews|length }}</div>
+            	<div title="Barely acceptable work" class="fail_reviews indicator">{{ elaboration.get_fail_reviews|length }}</div>
+            	<div title="Unacceptable" class="notry_reviews indicator">{{ elaboration.get_nothing_reviews|length }}</div>
+            	<div title="Public comments" class="visible_comments indicator">{{ elaboration.get_visible_comments|length }}</div>
+            	<div title="Private comments" class="invisible_comments indicator">{{ elaboration.get_invisible_comments|length }}</div></td>
         </tr>
     </table>
 	
+	<script>
+		$(".indicator:contains('0')").addClass('zero_reviews');
+		$(".timestamp").text($(".timestamp").text().replace(' days','d'));
+		$(".timestamp").text($(".timestamp").text().replace(' day','d'));
+		$(".timestamp").text($(".timestamp").text().replace(' hours','h'));
+		$(".timestamp").text($(".timestamp").text().replace(' hour','h'));
+		$(".timestamp").text($(".timestamp").text().replace(' weeks','w'));
+		$(".timestamp").text($(".timestamp").text().replace(' week','w'));
+		$(".timestamp").text($(".timestamp").text().replace(',',''));
+		$(".timestamp").text($(".timestamp").text().replace(' ago',''));
+	</script>
+
 	<div class="elab_in_detail minElab" id="EiD" class="height:2em"><i class="fa fa-caret-square-o-down fa-2x klapp" onClick="if ($('#EiD').hasClass('minElab')) {$('#EiD').removeClass('minElab')} else {$('#EiD').addClass('minElab')}"></i> {{ elaboration.challenge.description|safe|urlizetrunc:30 }}</div>
 	
     {% render_uploads elaboration %}

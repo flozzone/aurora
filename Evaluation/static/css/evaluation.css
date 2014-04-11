@@ -384,16 +384,15 @@ th {
 }
 
 .indicator_field {
-	text-align:right;
+	width:160px;
 }
 
 .indicator {
     border-radius: 20px;
-    height:17px;
-	width:20px;
+    height:15px;
+	width:18px;
 	padding: 3px 1px 3px 1px;
     text-align: center;
-    margin-right: 6px;
 	display:inline-block;
 }
 
@@ -436,11 +435,11 @@ th {
 
 .visible_comments, .invisible_comments {
     border-radius: 0px;
-    height: 25px;
+    height: 18px;
     padding: 3px 2px 0 2px;
     text-align: center;
     -moz-box-sizing: border-box;
-    margin-right: 6px;
+    margin-right: 2px;
 }
 
 .visible_comments {
@@ -453,6 +452,12 @@ th {
 	border-top:1px dashed gray;
 	border-bottom:1px dashed gray;
     background-color: white;
+}
+
+.mini_task_img {
+	width:32px;
+	height=32px;
+	border-radius:2px; 
 }
 
 .gravatar {

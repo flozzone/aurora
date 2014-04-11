@@ -9,8 +9,8 @@
         <tr>
             <th>student</th>
             <th>elaboration</th>
-            <th>hand in date</th>
-            <th>reviews</th>
+            <th>hand in</th>
+            <th class="indicator_field" >reviews</th>
         </tr>
 
         {% paginate elaborations with "/evaluation/" %}
@@ -18,7 +18,7 @@
             <tr class="{% cycle 'darkRow' 'lightRow' %}">
                 <td onclick="load_details({{ elaboration.id }})"><img class="gravatar" src="{{ elaboration.user.avatar.url }}" style="vertical-align:middle"> {{ elaboration.user.nickname }}</td>
                 <td onclick="load_details({{ elaboration.id }})">{{ elaboration.challenge.title }}</td>
-                <td onclick="load_details({{ elaboration.id }})" title="{{ elaboration.submission_time }}">{{ elaboration.submission_time|naturaltime}}</td>
+                <td class="timestamp" onclick="load_details({{ elaboration.id }})" title="{{ elaboration.submission_time }}">{{ elaboration.submission_time|naturaltime}}</td>
                 <td onclick="load_details({{ elaboration.id }})">
                 {% if elaboration.get_awesome_reviews|length or elaboration.get_success_reviews|length or elaboration.get_fail_reviews|length or elaboration.get_nothing_reviews|length or elaboration.get_visible_comments|length or elaboration.get_invisible_comments|length %}
                     <div title="Great work" class="awesome_reviews indicator">{{ elaboration.get_awesome_reviews|length }}</div>
@@ -35,5 +35,15 @@
         {{ pages.previous }} {{ pages.next }}
 
     </table>
+	<script>
+		$(".indicator:contains('0')").addClass('zero_reviews');
+		$(".timestamp").text($(".timestamp").text().replace(' days','d'));
+		$(".timestamp").text($(".timestamp").text().replace(' day','d'));
+		$(".timestamp").text($(".timestamp").text().replace(' hours','h'));
+		$(".timestamp").text($(".timestamp").text().replace(' hour','h'));
+		$(".timestamp").text($(".timestamp").text().replace(' weeks','w'));
+		$(".timestamp").text($(".timestamp").text().replace(' week','w'));
+		$(".timestamp").text($(".timestamp").text().replace(',',''));
+	</script>
 
 {% endblock %}

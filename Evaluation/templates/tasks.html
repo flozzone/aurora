@@ -5,9 +5,9 @@
     <table>
     {% for elaboration in stack_elaborations %}
         <tr onclick="load_reviews({{ elaboration.id }})" class="{% cycle 'darkTableRow' 'lightTableRow' %}">
-            <td><img src="{{ elaboration.challenge.image.url }}" width="32" height="32"></td>
+            <td><img src="{{ elaboration.challenge.image.url }}" class="mini_task_img"></td>
             <td>{{ elaboration.challenge.title }}</td>
-            <td title="{{ elaboration.submission_time }}">{{ elaboration.submission_time|naturaltime }}</td>
+            <td class="timestamp" title="{{ elaboration.submission_time }}">{{ elaboration.submission_time|naturaltime }}</td>
             <td class="indicator_field">
 				<div title="Great work" class="awesome_reviews indicator">{{ elaboration.get_awesome_reviews|length }}</div>
                 <div title="Good work" class="success_reviews indicator">{{ elaboration.get_success_reviews|length }}</div>
@@ -18,6 +18,16 @@
         </tr>
     {% endfor %}
     </table>
-	<script>$(".indicator:contains('0')").addClass('zero_reviews')</script>
+	<script>
+		$(".indicator:contains('0')").addClass('zero_reviews');
+		$(".timestamp").text($(".timestamp").text().replace(' days','d'));
+		$(".timestamp").text($(".timestamp").text().replace(' day','d'));
+		$(".timestamp").text($(".timestamp").text().replace(' hours','h'));
+		$(".timestamp").text($(".timestamp").text().replace(' hour','h'));
+		$(".timestamp").text($(".timestamp").text().replace(' weeks','w'));
+		$(".timestamp").text($(".timestamp").text().replace(' week','w'));
+		$(".timestamp").text($(".timestamp").text().replace(',',''));
+		$(".timestamp").text($(".timestamp").text().replace(' ago',''));
+	</script>
 
 {% endblock %}
