@@ -576,3 +576,42 @@ def search_user(request):
         request.session['selection'] = 'search'
 
     return evaluation(request)
+
+
+@login_required()
+@staff_member_required
+def search_elab(request):
+    if request.GET:
+        request.session['elaboration_id'] = request.GET['id']
+
+        elaboration = Elaboration.objects.get(pk=request.GET['id'])
+        # store selected elaboration_id in session
+        request.session['elaboration_id'] = elaboration.id
+        request.session['selection'] = 'search'
+
+        params = {}
+        if elaboration.challenge.is_final_challenge():
+            if Evaluation.objects.filter(submission=elaboration):
+                evaluation = Evaluation.objects.get(submission=elaboration)
+                params = {'evaluation': evaluation}
+
+        reviews = Review.objects.filter(elaboration=elaboration, submission_time__isnull=False)
+
+        next = prev = None
+        stack_elaborations = elaboration.user.get_stack_elaborations(elaboration.challenge.get_stack())
+        # sort stack_elaborations by submission time
+        if type(stack_elaborations) == list:
+            stack_elaborations.sort(key=lambda stack_elaboration: stack_elaboration.submission_time)
+        else:
+            stack_elaborations.order_by('submission_time')
+
+        params['elaboration'] = elaboration
+        params['stack_elaborations'] = stack_elaborations
+        params['reviews'] = reviews
+        params['next'] = next
+        params['prev'] = prev
+
+        detail_html = render_to_string('detail.html', params, RequestContext(request))
+
+    challenges = Challenge.objects.all()
+    return render_to_response('evaluation.html', {'challenges': challenges, 'detail_html': detail_html}, context_instance=RequestContext(request))
