@@ -78,6 +78,10 @@
 	padding: 0.5em 0px;
 }
 
+.resultN .notry_reviews.indicator, .resultA .awesome_reviews.indicator, .resultS .success_reviews.indicator, .resultF .fail_reviews.indicator {
+	box-shadow: 0 1px 3px 0px rgba(0,0,0,0.5), 1px 1px 2px 0px rgba(255,255,255,0.6) inset, -1px -1px 2px 0px rgba(0,0,0,0.15) inset;
+}
+
 .whisperframe {
 	background-color: rgba(0,0,0,.05);
 	background-image: repeating-linear-gradient(45deg, transparent, transparent 15px, rgba(255,255,255,.5) 15px, rgba(255,255,255,.5) 30px);

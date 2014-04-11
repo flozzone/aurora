@@ -21,7 +21,7 @@
             <td><img class="gravatar" src="{{ review.elaboration.user.avatar.url }}" style="vertical-align:middle"></td>
             <td>{{ review.elaboration.user.nickname }}</td>
             <td class="timestamp" title="{{ review.elaboration.submission_time }}">{{ review.elaboration.submission_time|naturaltime }}</td>
-            <td class="indicator_field">
+            <td class="indicator_field result{{ review.appraisal }}"> <!-- A S F N -->
 				<div title="Great work" class="awesome_reviews indicator">{{ review.elaboration.get_awesome_reviews|length }}</div>
                 <div title="Good work" class="success_reviews indicator">{{ review.elaboration.get_success_reviews|length }}</div>
                 <div title="Barely acceptable work" class="fail_reviews indicator">{{ review.elaboration.get_fail_reviews|length }}</div>
