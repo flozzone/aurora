@@ -71,25 +71,25 @@
 {% if user.is_staff %}
     [you are admin. you cannot accept tasks]
 {% else %}
-{% if not elaboration.is_submitted %}
-{% if not accepted %}
-    <div id="Caccept" class="button XL"
-      onclick="$('.elaboration_block').slideDown('fast');$('#Caccept').slideUp('fast');$('#qa').slideUp('fast');">
-      start this task
-    </div>
-{% endif  %}
-    <div class="elaboration_block{% if not accepted %} unstarted{% endif %}">
-{% if challenge.accepted_files %}
-    <div class="file_upload" accepted_files="{{ challenge.accepted_files }}">
-      <form action="/fileupload"
-        class="dropzone dz-clickable{% if elaboration.is_submitted %} is_submitted{% endif %}"
-        id="dropzone">
-        <input id="elaboration_id" type="hidden" name="elaboration_id" value="{{ elaboration.id }}"/>
-{% csrf_token %}
-      </form>
-      <div style="font-size:80%">Note: use »Fig.X« in your text to reference to uploaded images.</div>
-    </div>
-{% endif %}
+	{% if not elaboration.is_submitted %}
+		{% if not accepted %}
+			<div id="Caccept" class="button XL"
+    			onclick="$('.elaboration_block').slideDown('fast');$('#Caccept').slideUp('fast');$('#qa').slideUp('fast');">
+    			start this task
+    		</div>
+		{% endif  %}
+    	<div class="elaboration_block{% if not accepted %} unstarted{% endif %}">
+			{% if challenge.accepted_files %}
+    		<div class="file_upload" accepted_files="{{ challenge.accepted_files }}">
+      		<form action="/fileupload"
+        		class="dropzone dz-clickable{% if elaboration.is_submitted %} is_submitted{% endif %}"
+    				id="dropzone">
+        		<input id="elaboration_id" type="hidden" name="elaboration_id" value="{{ elaboration.id }}"/>
+				{% csrf_token %}
+      		</form>
+      		<div style="font-size:80%">Note: use »Fig.X« in your text to reference to uploaded images.</div>
+    	</div>
+	{% endif %}
     <form method="post">
       <textarea id="editor">{{ elaboration.elaboration_text }}</textarea>
     </form>
