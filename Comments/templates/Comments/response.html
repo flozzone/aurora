@@ -8,7 +8,7 @@
      data-comment_author="{{ response.author.display_name }}">
 	 <div class="response_top" onclick="headClick(this.parentNode)" >
 		 <div class="comment_author">{{ response.author.display_name }}</div>
-		 <div class="comment_time">({{ response.post_date | naturaltime }})</div>
+		 <div class="comment_time" title="{{ response.post_date|date:'D j.n.y, G:i:s' }}">({{ response.post_date | naturaltime }})</div>
 		 <div class="comment_award">   
 		 {% if response.promoted %}
 		 {% if requester.is_staff %}
