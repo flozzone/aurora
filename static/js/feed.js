@@ -78,6 +78,11 @@ function filter(fx,usr) {
             $('.response:not(.staff_author):not(.author_author),.comment:not(.staff_author):not(.author_author)').addClass('hided');
             $('#' + $('.response.staff_author').parent().attr('class').split(' ')[0].slice(2)).removeClass('hided');
             break;
+        case 3:
+            $('.response,.comment,.r_list').removeClass('hided');
+            $('.r_list').show();
+            $('.not3:not(.author_author)').addClass('hided');
+            break;
 		case 4:
             $('.response,.comment,.r_list').removeClass('hided');
             $('.response').addClass('hided');
@@ -136,6 +141,7 @@ function headClick(aDiv) {
 		}
 		else {
 			$('.r_'+$(aDiv).attr('id')).removeClass('hided');
+			$('.'+$(aDiv).attr('id')).removeClass('hided');
 		}
 	}
 }
