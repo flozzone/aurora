@@ -32,7 +32,7 @@
 	margin-top:2em;
 }
 
-@media all and (min-width: 960px) {
+@media all and (min-width: 961px) {
 	#info_column {
 		float:left;
 		width:330px;
@@ -44,7 +44,7 @@
 	}
 }
 
-@media all and (max-width: 960px) {
+@media all and (max-width: 961px) {
 	#info_column {
 		float:left;
 		width:580px;

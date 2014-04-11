@@ -86,8 +86,8 @@ input:-moz-placeholder { color:gray; }
 	border-bottom:1px solid gray;
 	background:color:rgba(255,255,255,0.5);
     height:2em;
-    position:fixed;
-    top:6.0em;
+    position:absolute;
+    top:96px;
 	left:0em;
 	right:0em;
 	z-index:10;
@@ -320,7 +320,7 @@ ul.content_navigation_list li {
 #contentblock {
 	z-index:-2;
 	position:fixed;
-    top: 7.3em;
+    top: 126px;
 	bottom:0;
 	left:0;
 	right:0;
