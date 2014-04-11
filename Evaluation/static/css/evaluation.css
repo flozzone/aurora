@@ -65,7 +65,7 @@
 }
 
 .question_container div {
-	color:gray;
+	color:#666;
 }
 .review_answer {
 	box-sizing: border-box;
@@ -76,6 +76,11 @@
 	border:0;
 	border-top: 1px solid silver;
 	padding: 0.5em 0px;
+}
+
+.whisperframe {
+	background-color: rgba(0,0,0,.05);
+	background-image: repeating-linear-gradient(45deg, transparent, transparent 15px, rgba(255,255,255,.5) 15px, rgba(255,255,255,.5) 30px);
 }
 
 .suButton {
