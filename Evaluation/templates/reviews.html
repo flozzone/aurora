@@ -2,6 +2,11 @@
 {% load comments %}
 {% load render_review_answers_staff %}
 
+{% block additional_headers %}
+  <script type="text/javascript" src="{{ STATIC_URL }}js/reviews.js"></script>
+{% endblock %}
+
+
 <div class="reviews">
 
     {% for review in reviews %}
