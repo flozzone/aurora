@@ -87,6 +87,10 @@ function filter(fx,usr) {
             $('.response,.comment,.r_list').removeClass('hided');
             $('.response').addClass('hided');
 			break;
+		case 99: 
+        	$('.response,.comment,.r_list').removeClass('hided');
+            $('.response:not(.staff_visibility),.comment:not(.staff_visibility)').addClass('hided');
+			break;
         case -5:
             $('.response,.comment,.r_list').removeClass('hided');
             $('.r_list').show();
