@@ -134,10 +134,20 @@ var timer = 0;
 
 function StartEvaluation(elaboration_id) {
     var url = '/start_evaluation?elaboration_id=' + elaboration_id;
-    $.get(url, function (init) {
-        if (init == 'True')
+    $.get(url, function (state) {
+        if (state == 'init') {
             $('.evaluation').html("");
             $('.points').attr('contentEditable', true);
+        }
+        if (state == 'open') {
+            $('.evaluation').attr('contentEditable', true);
+            $('.points').attr('contentEditable', true);
+        }
+        if (state.indexOf('locked') > -1) {
+            $('.evaluation').html("<div class='evaluation_lock'>" + state + "</div>")
+            $('.evaluation').attr('contentEditable', false);
+            $('.points').attr('contentEditable', false);
+        }
     });
 }
 

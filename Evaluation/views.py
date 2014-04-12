@@ -164,10 +164,14 @@ def detail(request):
     if selection == "evaluated_non_adequate_work":
         params = {'selection': 'evaluated non-adequate work'}
     if selection == "search":
-        if elaboration.challenge.is_final_challenge():
-            if Evaluation.objects.filter(submission=elaboration):
-                evaluation = Evaluation.objects.get(submission=elaboration)
-                params = {'evaluation': evaluation}
+        evaluation = None
+        user = RequestContext(request)['user']
+        lock = False
+        if Evaluation.objects.filter(submission=elaboration):
+            evaluation = Evaluation.objects.get(submission=elaboration)
+            if evaluation.tutor != user and not evaluation.is_older_15min():
+                lock = True
+        params = {'evaluation': evaluation, 'lock': lock}
 
     reviews = Review.objects.filter(elaboration=elaboration, submission_time__isnull=False)
 
@@ -203,7 +207,7 @@ def start_evaluation(request):
     elaboration = Elaboration.objects.get(pk=request.GET.get('elaboration_id', ''))
 
     # set evaluation lock
-    init = False
+    state = 'open'
     user = RequestContext(request)['user']
     if Evaluation.objects.filter(submission=elaboration):
         evaluation = Evaluation.objects.get(submission=elaboration)
@@ -215,13 +219,15 @@ def start_evaluation(request):
                 evaluation.lock_time = datetime.now()
                 evaluation.tutor = user
                 evaluation.save()
+            else:
+                state = 'locked by ' + evaluation.tutor.username
     else:
         evaluation = Evaluation.objects.create(submission=elaboration, tutor=user)
         evaluation.lock_time = datetime.now()
         evaluation.save()
-        init = True
+        state = 'init'
 
-    return HttpResponse(init)
+    return HttpResponse(state)
 
 
 @login_required()
