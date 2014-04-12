@@ -1,7 +1,7 @@
 from django.db import models as models
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
-from django.db.models import Q, Count
+from django.db.models import Q, Count, Max
 
 
 class Tag(models.Model):
@@ -138,6 +138,10 @@ class Comment(models.Model):
         return visible
 
     @staticmethod
+    def get_points_for_user(user):
+        return Comment.objects.filter(author=user, promoted=True).count()
+
+    @staticmethod
     def query_comments_not_answered_by_staff(ref_object):
         # TODO guess this wont be needed => delete or finish
         ref_id, ref_type = Comment.ref_obj_to_id_type(ref_object)
@@ -155,10 +159,16 @@ class Comment(models.Model):
         content_type = ContentType.objects.get_for_model(ref_model)
 
         queryset = Comment.objects.filter(content_type__pk=content_type.id)\
-            .exclude(visibility=Comment.PRIVATE)\
-            .latest('post_date')\
-            .exclude(author__is_staff=True)\
+            .exclude(visibility=Comment.PRIVATE) \
             .prefetch_related('content_object')
+
+            # .annotate(Max('post_date')) \
+            # .exclude(author__is_staff=True)\
+
+        #queryset = Comment.objects.filter(content_type__pk=content_type.id) \
+        #    .exclude(visibility=Comment.PRIVATE)\
+        #    .values('object_id')
+        #queryset = Review.objects.annotate(Max('comments__post_date'))
 
         ref_objects = list()
         for comment in queryset:
@@ -167,6 +177,20 @@ class Comment(models.Model):
                 ref_objects.append(ref_object)
 
         return ref_objects
+
+
+
+        ### another try:
+        max_dates_queryset = Comment.objects.filter(content_type__pk=content_type.id)\
+                .exclude(visibility=Comment.PRIVATE) \
+                .prefetch_related('content_object') \
+                .values('object_id').annotate(Max('post_date'))
+
+        object_ids = []
+        for max_date_comment in max_dates_queryset:
+            c = Comment.objects.filter(post_date=max_date_comment['post_date__max'], object_id=max_date_comment['object_id']).prefetch_related('author', 'content_object')[0]
+            if c.author.is_staff:
+                object_ids.append(c.content_object)
 
     @staticmethod
     def query_top_level_sorted(ref_object_id, ref_type_id, requester):
