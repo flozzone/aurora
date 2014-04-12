@@ -132,6 +132,15 @@ function set_appraisal(review_id, appraisal) {
 
 var timer = 0;
 
+function StartEvaluation(elaboration_id) {
+    var url = '/start_evaluation?elaboration_id=' + elaboration_id;
+    $.get(url, function (init) {
+        if (init == 'True')
+            $('.evaluation').html("");
+            $('.points').attr('contentEditable', true);
+    });
+}
+
 function DelayedAutoSave(elaboration_id) {
     if (timer)
         window.clearTimeout(timer);
