@@ -2,6 +2,11 @@
 {% load comments %}
 {% load render_review_answers_staff %}
 
+{% block additional_headers %}
+  <script type="text/javascript" src="{{ STATIC_URL }}js/reviews.js"></script>
+{% endblock %}
+
+
 <div class="reviews">
 
     {% for review in reviews %}
@@ -22,10 +27,11 @@
 	   			 <span class="nick">{{review.reviewer.nickname}}</span><br>
 	   			 &quot;{{review.reviewer.statement|urlizetrunc:50}}&quot;<br>
 	   			 {{review.reviewer.matriculation_number}} - {{review.reviewer.first_name}} {{review.reviewer.user.last_name}}<br>
-	   			 <a href="mailto:{{review.reviewer.email}}">{{review.reviewer.email}}</a><br>
-           {% with notification_user_id=review.reviewer.id %}
-             {% include "send_notification_button.html" %}
-           {% endwith %}
+	   			 <a href="mailto:{{review.reviewer.email}}">{{review.reviewer.email}}</a> &mdash;
+          	   	{% with notification_user_id=review.reviewer.id %}
+             		{% include "send_notification_button.html" %}
+          	 	{% endwith %}
+	  	 		&mdash;   <a href="/evaluation/user?id={{review.reviewer.id}}">{{review.reviewer.nickname}}'s work</a>
 	   		 </div>
 			
 

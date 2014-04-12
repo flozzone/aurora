@@ -9,48 +9,41 @@
 
 {% block content %}
 
+    <table>
     {% for review in reviews %}
-        <img class="evc_challenge_image" src="{{ review.elaboration.challenge.image.url }}">
-        <div class="evc_title"> {{ review.elaboration.challenge.title }} </div>
-        <div class="evc_description">{{ review.elaboration.challenge.description }}</div>
-
-        <div class="review_author">
-            <img class="gravatar" src="{{ review.elaboration.user.avatar.url }}" style="vertical-align:middle" onclick="$('#r_detail{{forloop.counter}}').toggleClass('hidden_detail')">
-            {{ review.elaboration.user.username }}
-            ({{ review.elaboration.user.first_name }} {{ review.elaboration.user.last_name }}) @ <span title="{{review.elaboration.submission_time}}">{{review.elaboration.submission_time|naturaltime}}</span>:
-        </div>
-        <div class="author_detail hidden_detail" id="r_detail{{forloop.counter}}" onclick="$(this).addClass('hidden_detail')">
-            <img src='{{review.elaboration.user.avatar.url}}'>
-            <span class="nick">{{review.elaboration.user.nickname}}</span><br>
-            &quot;{{review.elaboration.user.statement|urlizetrunc:50}}&quot;<br>
-            {{review.elaboration.user.matriculation_number}} - {{review.elaboration.user.first_name}} {{review.elaboration.user.last_name}}<br>
-            <a href="mailto:{{review.elaboration.user.email}}">{{review.elaboration.user.email}}</a><br>
-            {% with notification_user_id=review.elaboration.user.id %}
-         {% include "send_notification_button.html" %}
-       {% endwith %}
-        </div>
-
-        <br/>
-        {% render_uploads review.elaboration %}
-        {% if review.elaboration.elaboration_text|length != 0 %}
-            <textarea class="review_answer" readonly>{{ review.elaboration.elaboration_text|safe }}</textarea>
-        {% endif %}
-        <div class="spacer"></div>
-        <div class="review_body{% if review.reviewer.is_staff %} review_staff{% endif %}">
-            {% render_review_answers_staff review.id %}
-            <div class="appraisal eval_appraisal">
-                <input type="radio" id="X1" name="reviewgroup{{ stack }}{{ review.id }}" {% if review.appraisal == 'A' %} checked {% endif %}/><label for="X1" id="X1t">Great work</label>
-                <input type="radio" id="X2" name="reviewgroup{{ stack }}{{ review.id }}" {% if review.appraisal == 'S' %} checked {% endif %}/><label for="X2" id="X2t">Good work</label>
-                <input type="radio" id="X3" name="reviewgroup{{ stack }}{{ review.id }}" {% if review.appraisal == 'F' %} checked {% endif %}/><label for="X3" id="X3t">Barely acceptable work</label>
-                <input type="radio" id="X4" name="reviewgroup{{ stack }}{{ review.id }}" {% if review.appraisal == 'N' %} checked {% endif %}/><label for="X4" id="X4t">Unacceptable</label>
-            </div>
-        </div>
-        {% if review %}
-            {% render_additional_comment_list for review %}
-        {% endif %}
-        <div class="spacer"></div>
-
+        {% ifchanged review.elaboration.challenge.id %}
+			<tr><td>&nbsp;</td><td></td></tr>
+            <tr class="R_first_row">
+                <td><img src="{{ review.elaboration.challenge.image.url }}" class="mini_task_img"></td>
+                <td class="elab_title" colspan="3">{{ review.elaboration.challenge.title }}</td>
+            </tr>
+        {% endifchanged %}
+        <tr onclick="load_reviews({{ review.elaboration.id }})" class="{% cycle 'darkTableRow' 'lightTableRow' %}">
+            <td><img class="gravatar" src="{{ review.elaboration.user.avatar.url }}" style="vertical-align:middle"></td>
+            <td>{{ review.elaboration.user.nickname }}</td>
+            <td class="timestamp" title="{{ review.elaboration.submission_time }}">{{ review.elaboration.submission_time|naturaltime }}</td>
+            <td class="indicator_field result{{ review.appraisal }}"> <!-- A S F N -->
+				<div title="Great work" class="awesome_reviews indicator">{{ review.elaboration.get_awesome_reviews|length }}</div>
+                <div title="Good work" class="success_reviews indicator">{{ review.elaboration.get_success_reviews|length }}</div>
+                <div title="Barely acceptable work" class="fail_reviews indicator">{{ review.elaboration.get_fail_reviews|length }}</div>
+                <div title="Unacceptable" class="notry_reviews indicator">{{ review.elaboration.get_nothing_reviews|length }}</div>
+                <div title="Public comments" class="visible_comments indicator">{{ review.elaboration.get_visible_comments|length }}</div>
+                <div title="Private comments" class="invisible_comments indicator">{{ review.elaboration.get_invisible_comments|length }}</div>
+            </td>
+        </tr>
     {% endfor %}
+    </table>
+	<script>
+		$(".indicator:contains('0')").addClass('zero_reviews');
+		$(".timestamp:contains(' days')").html(function(i, text) {return text.replace(/ days/g, 'd');});
+		$(".timestamp:contains(' day')").html(function(i, text) {return text.replace(/ day/g, 'd'); });
+		$(".timestamp:contains(' hours')").html(function(i, text) {return text.replace(/ hours/g, 'h');});
+		$(".timestamp:contains(' hour')").html(function(i, text) {return text.replace(/ hour/g, 'h'); });
+		$(".timestamp:contains(',')").html(function(i, text) {return text.replace(/,/g, ''); });
+		$(".timestamp:contains(' ago')").html(function(i, text) {return text.replace(/ ago/g, ''); });
+		$(".timestamp:contains(' weeks')").html(function(i, text) {return text.replace(/ weeks/g, 'w'); });
+		$(".timestamp:contains(' week')").html(function(i, text) {return text.replace(/ week/g, 'w'); });
+	</script>
 
 {% endblock %}
 

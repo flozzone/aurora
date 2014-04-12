@@ -1,3 +1,9 @@
+$(function () {
+    $(".review_answer").each(function () {
+        this.style.height = (this.scrollHeight+5)+'px';
+    });
+});
+
 $(function() {
     tinymce.init({
         // selector: "textarea#editor",
@@ -125,6 +131,15 @@ function set_appraisal(review_id, appraisal) {
 }
 
 var timer = 0;
+
+function StartEvaluation(elaboration_id) {
+    var url = '/start_evaluation?elaboration_id=' + elaboration_id;
+    $.get(url, function (init) {
+        if (init == 'True')
+            $('.evaluation').html("");
+            $('.points').attr('contentEditable', true);
+    });
+}
 
 function DelayedAutoSave(elaboration_id) {
     if (timer)

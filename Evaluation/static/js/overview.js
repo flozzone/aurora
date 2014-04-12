@@ -13,7 +13,6 @@ function update_overview(data) {
 $(function() {
 	$(".mfield").click(function(event) {
 		$(".mitem").removeClass('stabilosiert');
-		
 	});
 });
 
@@ -38,7 +37,7 @@ $(function() {
 
 $(function() {
    $(".non_adequate_work").click(function(event) {
-		loadWait();
+	   loadWait();
        var url = '/overview?data=non_adequate_work';
        $.get(url, function (data) {
             update_overview(data);
@@ -48,7 +47,7 @@ $(function() {
 
 $(function() {
    $(".top_level_challenges").click(function(event) {
-		loadWait();
+	   loadWait();
        var url = '/overview?data=top_level_challenges';
        $.get(url, function (data) {
             update_overview(data);
@@ -58,7 +57,7 @@ $(function() {
 
 $(function() {
    $(".complaints").click(function(event) {
-		loadWait();
+	   loadWait();
        var url = '/overview?data=complaints';
        $.get(url, function (data) {
             update_overview(data);
@@ -68,7 +67,7 @@ $(function() {
 
 $(function() {
    $(".questions").click(function(event) {
-		loadWait();
+	   loadWait();
        var url = '/questions/';
        $.get(url, function (data) {
             update_overview(data);
@@ -142,7 +141,7 @@ $(function() {
 $(function() {
    $(".search_all").focusout(function(event) {
        if($('.search_all').text() == "")
-          $(".search_all").html("all...");
+          $(".search_all").html("everywhere...");
    });
 });
 
@@ -197,6 +196,20 @@ $(function() {
 $(function() {
     $("#search_user").autocomplete({
         source: "/autocomplete_user/",
+        select: function (event, ui) {
+           var data = {
+                selected_user: ui.item.value     // select value from autocomplete box
+           };
+           var args = { type: "POST", url: "/select_user/", data: data,
+                error: function () {
+                    alert('user not found');
+                },
+                success: function(data) {
+                    $('#overview').html(data);
+                }
+           };
+           $.ajax(args);
+        },
         minLength: 2
     });
 });
@@ -204,7 +217,6 @@ $(function() {
 $(function() {
    $(".search_btn").click(function(event) {
        var data = {
-            search_user: $('.search_user').text(),
             search_all: $('.search_all').text()
        };
        var args = { type: "POST", url: "/search/", data: data,

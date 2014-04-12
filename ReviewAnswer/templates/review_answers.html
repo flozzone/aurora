@@ -1,13 +1,10 @@
 {% for review_answer in review_answers %}
 <div class="question_container">
-  <br/>
-  <div>
+  <div {% if review_answer.review_question.visible_to_author == False %}class="whisperframe"{% endif %}>
 {% if review_answer.review_question.visible_to_author == False %}
-    <p>This answer is not visible to the author of the elaboration:</p>
 {% endif %}
 {{ review_answer.review_question.text }}
-  </div>
-  <div>
+
 {% if review_answer.review_question.boolean_answer %}
     <input type="radio" value="yes" {% if review_answer.text == 'True' %}checked{% endif %} disabled> Yes<br>
     <input type="radio" value="no" {% if review_answer.text == 'False' %}checked{% endif %} disabled> No
@@ -17,3 +14,4 @@
   </div>
 </div>
 {% endfor %}
+

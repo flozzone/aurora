@@ -15,10 +15,14 @@
 {% block content %}
 
   <div id="detail_area">
-      <h1>Overview</h1>
-      <div class="overview_left" id="menu">{% include "menu.html" %}</div>
-      <div class="overview_right" id="overview">{{ overview }}</div>
-      <div class="clear"></div>
+      {% if detail_html %}
+          {{ detail_html }}
+      {% else %}
+          <h1>Overview</h1>
+          <div class="overview_left" id="menu">{% include "menu.html" %}</div>
+          <div class="overview_right" id="overview">{{ overview }}</div>
+          <div class="clear"></div>
+      {% endif %}
   </div>
 
 {% endblock %}

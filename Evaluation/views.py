@@ -147,25 +147,13 @@ def detail(request):
         questions = ReviewQuestion.objects.filter(challenge=elaboration.challenge).order_by("order")
         params = {'questions': questions, 'selection': 'missing reviews'}
     if selection == "top_level_challenges":
-        # set evaluation lock
+        evaluation = None
         user = RequestContext(request)['user']
         lock = False
         if Evaluation.objects.filter(submission=elaboration):
             evaluation = Evaluation.objects.get(submission=elaboration)
-            if evaluation.tutor == user:
-                evaluation.lock_time = datetime.now()
-                evaluation.save()
-            else:
-                if evaluation.is_older_15min():
-                    evaluation.lock_time = datetime.now()
-                    evaluation.tutor = user
-                    evaluation.save()
-                else:
-                    lock = True
-        else:
-            evaluation = Evaluation.objects.create(submission=elaboration, tutor=user)
-            evaluation.lock_time = datetime.now()
-            evaluation.save()
+            if evaluation.tutor != user and not evaluation.is_older_15min():
+                lock = True
         params = {'evaluation': evaluation, 'lock': lock, 'selection': 'top-level tasks'}
     if selection == "non_adequate_work":
         params = {'selection': 'non-adequate work'}
@@ -204,6 +192,36 @@ def detail(request):
     params['prev'] = prev
 
     return render_to_response('detail.html', params, RequestContext(request))
+
+
+@login_required()
+@staff_member_required
+def start_evaluation(request):
+    if not 'elaboration_id' in request.GET:
+        return False;
+
+    elaboration = Elaboration.objects.get(pk=request.GET.get('elaboration_id', ''))
+
+    # set evaluation lock
+    init = False
+    user = RequestContext(request)['user']
+    if Evaluation.objects.filter(submission=elaboration):
+        evaluation = Evaluation.objects.get(submission=elaboration)
+        if evaluation.tutor == user:
+            evaluation.lock_time = datetime.now()
+            evaluation.save()
+        else:
+            if evaluation.is_older_15min():
+                evaluation.lock_time = datetime.now()
+                evaluation.tutor = user
+                evaluation.save()
+    else:
+        evaluation = Evaluation.objects.create(submission=elaboration, tutor=user)
+        evaluation.lock_time = datetime.now()
+        evaluation.save()
+        init = True
+
+    return HttpResponse(init)
 
 
 @login_required()
@@ -310,6 +328,7 @@ def reopen_evaluation(request):
     course = CourseChallengeRelation.objects.filter(challenge=evaluation.submission.challenge)[0].course
 
     evaluation.submission_time = None
+    evaluation.tutor = RequestContext(request)['user']
     evaluation.save()
 
     obj, created = Notification.objects.get_or_create(
@@ -345,7 +364,7 @@ def set_appraisal(request):
 @login_required()
 @staff_member_required
 def select_challenge(request):
-    selected_challenge = request.POST['selected_challenge']
+    selected_challenge = request.POST['selected_challenge'][:(request.POST['selected_challenge'].rindex('(')-1)]
 
     elaborations = []
     challenges = Challenge.objects.filter(title=selected_challenge)
@@ -365,15 +384,29 @@ def select_challenge(request):
 @csrf_exempt
 @login_required()
 @staff_member_required
+def select_user(request):
+    selected_user = request.POST['selected_user'].split()[0]
+
+    elaborations = []
+    user = PortfolioUser.objects.get(username=selected_user)
+    elaborations = user.get_elaborations()
+
+    html = render_to_response('overview.html', {'elaborations': elaborations, 'search': True}, RequestContext(request))
+
+    # store selected elaborations in session
+    request.session['elaborations'] = serializers.serialize('json', elaborations)
+    request.session['selection'] = 'search'
+    return html
+
+
+@csrf_exempt
+@login_required()
+@staff_member_required
 def search(request):
-    search_user = request.POST['search_user']
     search_all = request.POST['search_all']
 
     elaborations = []
-    if search_user not in ['', 'user...']:
-        user = PortfolioUser.objects.get(username=search_user.split()[0])
-        elaborations = user.get_elaborations()
-    if search_all not in ['', 'all...']:
+    if search_all not in ['', 'everywhere...']:
         SEARCH_TERM = search_all
 
         for md in models.get_models():
@@ -445,7 +478,7 @@ def search(request):
 def autocomplete_challenge(request):
     term = request.GET.get('term', '')
     challenges = Challenge.objects.all().filter(title__istartswith=term)
-    titles = [challenge.title for challenge in challenges]
+    titles = [challenge.title + ' (' + str(challenge.get_sub_elab_count()) + '/' + str(challenge.get_elab_count()) + ')' for challenge in challenges]
     response_data = json.dumps(titles, ensure_ascii=False)
     return HttpResponse(response_data, content_type='application/json; charset=utf-8')
 
@@ -539,6 +572,65 @@ def back(request):
 @staff_member_required
 def reviewlist(request):
     elaboration = Elaboration.objects.get(pk=request.session.get('elaboration_id', ''))
-    reviews = Review.objects.filter(reviewer=elaboration.user, submission_time__isnull=False)
+    reviews = Review.objects.filter(reviewer=elaboration.user, submission_time__isnull=False).order_by('elaboration__challenge__id')
 
     return render_to_response('reviewlist.html', {'reviews': reviews}, RequestContext(request))
+
+
+@login_required()
+@staff_member_required
+def search_user(request):
+    if request.GET:
+        user = PortfolioUser.objects.get(pk=request.GET['id'])
+        elaborations = user.get_elaborations()
+
+         # sort elaborations by submission time
+        if type(elaborations) == list:
+            elaborations.sort(key=lambda elaboration: elaboration.submission_time)
+        else:
+            elaborations.order_by('submission_time')
+
+        # store selected elaborations in session
+        request.session['elaborations'] = serializers.serialize('json', elaborations)
+        request.session['selection'] = 'search'
+
+    return evaluation(request)
+
+
+@login_required()
+@staff_member_required
+def search_elab(request):
+    if request.GET:
+        request.session['elaboration_id'] = request.GET['id']
+
+        elaboration = Elaboration.objects.get(pk=request.GET['id'])
+        # store selected elaboration_id in session
+        request.session['elaboration_id'] = elaboration.id
+        request.session['selection'] = 'search'
+
+        params = {}
+        if elaboration.challenge.is_final_challenge():
+            if Evaluation.objects.filter(submission=elaboration):
+                evaluation = Evaluation.objects.get(submission=elaboration)
+                params = {'evaluation': evaluation}
+
+        reviews = Review.objects.filter(elaboration=elaboration, submission_time__isnull=False)
+
+        next = prev = None
+        stack_elaborations = elaboration.user.get_stack_elaborations(elaboration.challenge.get_stack())
+        # sort stack_elaborations by submission time
+        if type(stack_elaborations) == list:
+            stack_elaborations.sort(key=lambda stack_elaboration: stack_elaboration.submission_time)
+        else:
+            stack_elaborations.order_by('submission_time')
+
+        params['elaboration'] = elaboration
+        params['stack_elaborations'] = stack_elaborations
+        params['reviews'] = reviews
+        params['next'] = next
+        params['prev'] = prev
+
+        detail_html = render_to_string('detail.html', params, RequestContext(request))
+
+    challenges = Challenge.objects.all()
+    return render_to_response('evaluation.html', {'challenges': challenges, 'detail_html': detail_html}, context_instance=RequestContext(request))

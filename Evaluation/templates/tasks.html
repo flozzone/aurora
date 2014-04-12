@@ -5,9 +5,9 @@
     <table>
     {% for elaboration in stack_elaborations %}
         <tr onclick="load_reviews({{ elaboration.id }})" class="{% cycle 'darkTableRow' 'lightTableRow' %}">
-            <td><img src="{{ elaboration.challenge.image.url }}" width="32" height="32"></td>
+            <td><img src="{{ elaboration.challenge.image.url }}" class="mini_task_img"></td>
             <td>{{ elaboration.challenge.title }}</td>
-            <td title="{{ elaboration.submission_time }}">{{ elaboration.submission_time|naturaltime }}</td>
+            <td class="timestamp" title="{{ elaboration.submission_time }}">{{ elaboration.submission_time|naturaltime }}</td>
             <td class="indicator_field">
 				<div title="Great work" class="awesome_reviews indicator">{{ elaboration.get_awesome_reviews|length }}</div>
                 <div title="Good work" class="success_reviews indicator">{{ elaboration.get_success_reviews|length }}</div>
@@ -18,6 +18,16 @@
         </tr>
     {% endfor %}
     </table>
-	<script>$(".indicator:contains('0')").addClass('zero_reviews')</script>
+	<script>
+		$(".indicator:contains('0')").addClass('zero_reviews');
+		$(".timestamp:contains(' days')").html(function(i, text) {return text.replace(/ days/g, 'd');});
+		$(".timestamp:contains(' day')").html(function(i, text) {return text.replace(/ day/g, 'd'); });
+		$(".timestamp:contains(' hours')").html(function(i, text) {return text.replace(/ hours/g, 'h');});
+		$(".timestamp:contains(' hour')").html(function(i, text) {return text.replace(/ hour/g, 'h'); });
+		$(".timestamp:contains(',')").html(function(i, text) {return text.replace(/,/g, ''); });
+		$(".timestamp:contains(' ago')").html(function(i, text) {return text.replace(/ ago/g, ''); });
+		$(".timestamp:contains(' weeks')").html(function(i, text) {return text.replace(/ weeks/g, 'w'); });
+		$(".timestamp:contains(' week')").html(function(i, text) {return text.replace(/ week/g, 'w'); });
+	</script>
 
 {% endblock %}

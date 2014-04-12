@@ -31,10 +31,11 @@
 			 <span class="nick">{{elaboration.user.nickname}}</span><br>
 			 &quot;{{elaboration.user.statement|urlizetrunc:50}}&quot;<br>
 			 {{elaboration.user.matriculation_number}} - {{elaboration.user.first_name}} {{elaboration.user.last_name}}<br>
-			 <a href="mailto:{{elaboration.user.email}}">{{elaboration.user.email}}</a><br>
-       {% with notification_user_id=elaboration.user.id %}
-         {% include "send_notification_button.html" %}
-       {% endwith %}
+			 <a href="mailto:{{elaboration.user.email}}">{{elaboration.user.email}}</a> &mdash;
+       	  	{% with notification_user_id=elaboration.user.id %}
+        	 	{% include "send_notification_button.html" %}
+       		 {% endwith %}
+  	 		&mdash;   <a href="/evaluation/user?id={{elaboration.user.id}}">{{elaboration.user.nickname}}'s work</a>
 		 </div>
         <div class="spacer"></div>
 
@@ -60,7 +61,7 @@
                         <button class="reopen_evaluation" id="{{ elaboration.id }}">Reopen</button>
                     </div>
                 {% else %}
-                    <div class="evaluation" {% if not lock %} contenteditable="true" {% endif %}
+                    <div class="evaluation" id="evaluation" {% if not lock %} contenteditable="true" onclick="StartEvaluation({{ elaboration.id }})"{% endif %}
                             onkeyup="DelayedAutoSave({{ elaboration.id }})">
                         {{ evaluation.evaluation_text|safe }}{% if lock %}<div class="evaluation_lock">locked by {{ evaluation.tutor.username }}</div>{% endif %}
                     </div>
@@ -69,8 +70,17 @@
                     {% if not lock %}<button class="submit_evaluation XL" id="{{ elaboration.id }}" next="{{ next }}">evaluate{% if next %} + next{% endif %}</button>{% endif %}
                 {% endif %}
             </form>
-            <div class="spacer"></div>
-        {% endif %}
+        {% elif selection == 'top-level tasks' %}
+             <div class="evaluation" contenteditable="true"
+                  onclick="StartEvaluation({{ elaboration.id }})" onkeyup="DelayedAutoSave({{ elaboration.id }})">
+                click to lock and start evaluation...
+             </div>
+             <div class="point_label">Points</div><div class="points" contenteditable="false" onkeyup="DelayedAutoSave({{ elaboration.id }})">
+             </div>
+             <button class="submit_evaluation XL" id="{{ elaboration.id }}" next="{{ next }}">evaluate{% if next %} + next{% endif %}</button>
+       {% endif %}
+       <div class="spacer"></div>
+
 
         {% if elaboration %}
 		<div class="comments">
@@ -94,7 +104,7 @@
         <div class="stack selected" onclick="$('.menu').children().removeClass('selected');$(this).addClass('selected');">tasks</div>
 		<div class="review_list" onclick="$('.menu').children().removeClass('selected');$(this).addClass('selected');">reviews</div>
         <div class="others" onclick="$('.menu').children().removeClass('selected');$(this).addClass('selected');">others</div>
-        <div class="challenge_txt" onclick="$('.menu').children().removeClass('selected');$(this).addClass('selected');">challenge text</div>
+        <div class="challenge_txt" onclick="$('.menu').children().removeClass('selected');$(this).addClass('selected');">task description</div>
     </div>
     <div class="spacer"></div>
     <div id="info_area">{% include "tasks.html" %}</div>
