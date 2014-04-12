@@ -56,6 +56,7 @@ def delete_comment(request):
 
     comment.deleter = deleter
     comment.delete_date = timezone.now()
+    comment.promoted = False
     comment.save()
     CommentList.get_by_comment(comment).increment()
 
