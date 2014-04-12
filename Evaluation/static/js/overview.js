@@ -141,7 +141,7 @@ $(function() {
 $(function() {
    $(".search_all").focusout(function(event) {
        if($('.search_all').text() == "")
-          $(".search_all").html("all...");
+          $(".search_all").html("everywhere...");
    });
 });
 
