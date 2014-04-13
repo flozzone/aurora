@@ -53,6 +53,12 @@
 	background-color: rgb(252,252,227);
 	padding:0.5em;
 	padding-top:0.25em;
+	width:97%;
+}
+
+.reviews .answer textarea {
+	width:99%;
+	height:60px;
 }
 
 .reviews .question, {
