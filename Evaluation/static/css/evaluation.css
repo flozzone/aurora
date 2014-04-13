@@ -422,7 +422,7 @@ th {
 }
 
 .indicator_field {
-	width:165px;
+	width:190px;
 }
 
 .indicator {
@@ -507,6 +507,18 @@ th {
 .invisible_comments {
 	border-top:1px dashed gray;
 	border-bottom:1px dashed gray;
+    background-color: white;
+}
+
+.lva_team_notes {
+    border-radius: 0px;
+    height: 18px;
+    padding: 3px 2px 0 2px;
+    text-align: center;
+    margin-right: 2px;
+    color: lightseagreen;
+    border-top:1px dotted lightseagreen;
+	border-bottom:1px dotted lightseagreen;
     background-color: white;
 }
 
