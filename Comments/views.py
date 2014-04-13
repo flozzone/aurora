@@ -140,19 +140,30 @@ def create_comment(form, request):
             course = Course.objects.get(short_title='gsi')
         # TODO endof extremely borken fix
 
-        if parent_comment is not None and parent_comment.author != comment.author:
-            obj, created = Notification.objects.get_or_create(
-                user=parent_comment.author,
-                course=course,
-                text="You've received a reply to one of your comments",
-                image_url=comment.author.avatar.url,
-                link=comment_list.uri + '#comment_' + str(parent_comment.id)
-            )
+        if parent_comment is None:
+            return
 
-            if not created:
-                obj.creation_time = timezone.now()
-                obj.read = False
-                obj.save()
+        if comment.visibility is Comment.PRIVATE:
+            return
+
+        if parent_comment.author == comment.author:
+            return
+
+        if comment.visibility == Comment.STAFF and not parent_comment.author.is_staff:
+            return
+
+        obj, created = Notification.objects.get_or_create(
+            user=parent_comment.author,
+            course=course,
+            text="You've received a reply to one of your comments",
+            image_url=comment.author.avatar.url,
+            link=comment_list.uri + '#comment_' + str(parent_comment.id)
+        )
+
+        if not created:
+            obj.creation_time = timezone.now()
+            obj.read = False
+            obj.save()
 
 
 @require_POST
