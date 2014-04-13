@@ -37,9 +37,9 @@ def evaluation(request):
     #        puser.get_gravatar()
 
     overview = ""
+    elaborations = []
     selection = request.session.get('selection', 'error')
     if selection not in ('error', 'questions'):
-        elaborations = []
         for serialized_elaboration in serializers.deserialize('json', request.session.get('elaborations', {})):
             elaborations.append(serialized_elaboration.object)
         if selection == 'search':
