@@ -29,6 +29,7 @@
                 <div title="Unacceptable" class="notry_reviews indicator">{{ review.elaboration.get_nothing_reviews|length }}</div>
                 <div title="Public comments" class="visible_comments indicator">{{ review.elaboration.get_visible_comments|length }}</div>
                 <div title="Private comments" class="invisible_comments indicator">{{ review.elaboration.get_invisible_comments|length }}</div>
+                {% if review.elaboration.get_lva_team_notes %}<div title="LVA team notes" class="lva_team_notes indicator">A</div>{% endif %}
             </td>
         </tr>
     {% endfor %}

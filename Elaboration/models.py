@@ -7,6 +7,7 @@ from Comments.models import Comment
 from Evaluation.models import Evaluation
 from Review.models import Review
 from FileUpload.models import UploadFile
+from ReviewAnswer.models import ReviewAnswer
 
 
 class Elaboration(models.Model):
@@ -220,6 +221,20 @@ class Elaboration(models.Model):
 
     def get_awesome_reviews(self):
         return Review.objects.filter(elaboration=self, submission_time__isnull=False, appraisal=Review.AWESOME)
+
+    def get_lva_team_notes(self):
+        reviews = (
+            Review.objects
+            .filter(elaboration=self, submission_time__isnull=False)
+            .values_list('id', flat=True)
+        )
+        notes = (
+            ReviewAnswer.objects
+            .filter(review__id__in=reviews, review_question__visible_to_author=False)
+        )
+        if notes.exists():
+            return True
+        return False
 
     def is_passing_peer_review(self):
         return not self.get_nothing_reviews().exists()

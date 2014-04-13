@@ -53,6 +53,12 @@
 	background-color: rgb(252,252,227);
 	padding:0.5em;
 	padding-top:0.25em;
+	width:97%;
+}
+
+.reviews .answer textarea {
+	width:99%;
+	height:60px;
 }
 
 .reviews .question, {
@@ -206,6 +212,7 @@ th {
     min-height: 80px;
     margin-bottom: 20px;
     padding: 5px;
+	overflow: hidden;
 }
 
 .submit_evaluation {
@@ -421,7 +428,7 @@ th {
 }
 
 .indicator_field {
-	width:165px;
+	width:190px;
 }
 
 .indicator {
@@ -464,13 +471,31 @@ th {
 }
 
 .evaluation_lock {
-    float: right;
-    border: 1px solid darkred;
-    border-radius: 5px;
-    background-color: indianred;
-    padding: 0 3px 0 3px;
+	float: right;
+	border: 1px solid #8B0000;
+	border-radius: 5px;
+	background-color: #CD5C5C;
+	padding: 10px 5px 2px 5px;
+	position: relative;
+	top: -15px;
+	color:white;
 }
-
+/*
+.evaluation_lock:after {
+	content:"";
+	position:absolute;
+	z-index:-1;
+	-webkit-box-shadow:0 0 40px rgba(0,0,0,0.8);
+	box-shadow:0 0 40px rgba(0,0,0,0.8);
+	bottom:0px;
+	left:10%;
+	right:10%;
+	width:80%;
+	height:50%;
+	moz-border-radius:100%;
+	border-radius:100%;
+}
+*/
 .visible_comments, .invisible_comments {
     border-radius: 0px;
     height: 18px;
@@ -488,6 +513,18 @@ th {
 .invisible_comments {
 	border-top:1px dashed gray;
 	border-bottom:1px dashed gray;
+    background-color: white;
+}
+
+.lva_team_notes {
+    border-radius: 0px;
+    height: 18px;
+    padding: 3px 2px 0 2px;
+    text-align: center;
+    margin-right: 2px;
+    color: lightseagreen;
+    border-top:1px dotted lightseagreen;
+	border-bottom:1px dotted lightseagreen;
     background-color: white;
 }
 
