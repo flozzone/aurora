@@ -58,6 +58,8 @@ def evaluation(request):
                                'count_' + request.session.get('selection', ''): request.session.get('count', ''),
                                'stabilosiert_' + request.session.get('selection', ''): 'stabilosiert',
                                'overview': overview,
+                               'count_' + request.session.get('selection', ''): len(elaborations),
+                               'stabilosiert_' + request.session.get('selection', ''): 'stabilosiert',
                               },
                               context_instance=RequestContext(request))
 
