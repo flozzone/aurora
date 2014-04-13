@@ -61,35 +61,79 @@ def dummy_comment_generator():
 
 class ModelMethodTests(TestCase):
     def setUp(self):
-        user_generator = dummy_user_generator()
-        self.u1 = next(user_generator)
+        self.user_generator = dummy_user_generator()
+        self.u1 = next(self.user_generator)
         self.u1.save()
-        self.u2 = next(user_generator)
+        self.u2 = next(self.user_generator)
         self.u2.save()
-        self.u3 = next(user_generator)
+        self.u3 = next(self.user_generator)
         self.u3.save()
+        self.s1 = next(self.user_generator)
+        self.s1.is_staff = True
+        self.s1.save()
 
-        self.ref_object = CommentReferenceObject.objects.create()
+        self.ref_object1 = CommentReferenceObject.objects.create(name='ref_object1')
 
         self.t1 = "text1"
-        self.c1 = create_comment(self.t1, self.u1, self.ref_object)
+        self.c1 = create_comment(self.t1, self.u1, self.ref_object1)
         self.rt1 = "response text1"
-        self.r1 = create_comment(self.rt1, self.u2, self.ref_object, parent=self.c1)
+        self.r1 = create_comment(self.rt1, self.u2, self.ref_object1, parent=self.c1)
         self.t2 = "text2"
-        self.c2 = create_comment(self.t2, self.u2, self.ref_object)
+        self.c2 = create_comment(self.t2, self.u2, self.ref_object1)
         self.t3 = "text3"
-        self.c3 = create_comment(self.t3, self.u2, self.ref_object)
+        self.c3 = create_comment(self.t3, self.u2, self.ref_object1)
         self.rt2 = "response text2"
-        self.r2 = create_comment(self.rt1, self.u1, self.ref_object, parent=self.c3)
+        self.r2 = create_comment(self.rt1, self.u1, self.ref_object1, parent=self.c3)
         self.rt3 = "response text3"
-        self.r3 = create_comment(self.rt1, self.u3, self.ref_object, parent=self.c3)
+        self.r3 = create_comment(self.rt1, self.u3, self.ref_object1, parent=self.c3)
         self.t4 = "text4"
-        self.c4 = create_comment(self.t4, self.u3, self.ref_object)
+        self.c4 = create_comment(self.t4, self.u3, self.ref_object1)
+
+        self.ref_object2 = CommentReferenceObject.objects.create(name='ref_object2')
+
+        self.t5 = "text5"
+        self.c5 = create_comment(self.t5, self.u3, self.ref_object2)
+        self.rt4 = "response text4"
+        self.r4 = create_comment(self.rt4, self.s1, self.ref_object2, parent=self.c5)
+        self.rt5 = "response text5"
+        self.r5 = create_comment(self.rt5, self.u2, self.ref_object2, parent=self.c5)
+
+        self.ref_object3 = CommentReferenceObject.objects.create(name='ref_object3')
+
+        self.t6 = "text6"
+        self.c6 = create_comment(self.t6, self.u1, self.ref_object3)
+        self.rt6 = "response text6"
+        self.r6 = create_comment(self.rt6, self.u2, self.ref_object3, parent=self.c6)
+        self.rt7 = "response text7"
+        self.r7 = create_comment(self.rt7, self.s1, self.ref_object3, parent=self.c6)
+
+        self.t7 = "text7"
+        self.c7 = create_comment(self.t7, self.u2, self.ref_object3)
+        self.rt8 = "response text8"
+        self.r8 = create_comment(self.rt8, self.u3, self.ref_object3, parent=self.c7)
+
+        self.t8 = "text8"
+        self.c8 = create_comment(self.t8, self.s1, self.ref_object3)
+
+        self.ref_object4 = CommentReferenceObject.objects.create(name='ref_object4')
+
+        self.t9 = "text9"
+        self.c9 = create_comment(self.t9, self.u2, self.ref_object4)
+        self.rt10 = "response text10"
+        self.r10 = create_comment(self.rt10, self.u3, self.ref_object4, parent=self.c9)
+        self.rt11 = "response text11"
+        self.r11 = create_comment(self.rt11, self.s1, self.ref_object4, parent=self.c9)
+
+        self.t10 = "text10"
+        self.c10 = create_comment(self.t10, self.s1, self.ref_object4)
 
     def test_query_comments_without_responses(self):
-        queryset = Comment.query_comments_without_responses(self.ref_object, self.u2)
+        queryset = Comment.query_comments_without_responses(self.ref_object1, self.u2)
         self.assertTrue(list(queryset) == [self.c4, self.c2])
 
+    def test_query_ref_objects_with_unanswered_user_comments(self):
+        objects = Comment.get_ref_objects_with_unanswered_user_comments(CommentReferenceObject)
+        self.assertTrue(objects == [self.ref_object1, self.ref_object2])
 
 class TagTests(TestCase):
     def setUp(self):

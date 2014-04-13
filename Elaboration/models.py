@@ -227,10 +227,9 @@ class Elaboration(models.Model):
     @staticmethod
     def get_complaints(context):
         elaborations = []
-        for review in Review.objects.all():
-            if Comment.query_comments_without_responses(review, context['user']):
-                if not review.elaboration in elaborations:
-                    elaborations.append(review.elaboration)
+        for review in Comment.get_ref_objects_with_unanswered_user_comments(Review):
+            if not review.elaboration in elaborations:
+                elaborations.append(review.elaboration)
         return elaborations
 
     @staticmethod

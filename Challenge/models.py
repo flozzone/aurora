@@ -233,8 +233,4 @@ class Challenge(models.Model):
 
     @staticmethod
     def get_questions(context):
-        challenges = []
-        for challenge in Challenge.objects.all():
-            if Comment.query_comments_without_responses(challenge, context['user']):
-                challenges.append(challenge)
-        return challenges
+        return Comment.get_ref_objects_with_unanswered_user_comments(Challenge)

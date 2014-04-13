@@ -154,13 +154,13 @@ class Comment(models.Model):
             .exists()
 
     @staticmethod
-    def query_ref_objects_with_unanswered_user_comments(ref_model):
+    def get_ref_objects_with_unanswered_user_comments(ref_model):
         # TODO finish this
         content_type = ContentType.objects.get_for_model(ref_model)
 
-        queryset = Comment.objects.filter(content_type__pk=content_type.id)\
-            .exclude(visibility=Comment.PRIVATE) \
-            .prefetch_related('content_object')
+        # queryset = Comment.objects.filter(content_type__pk=content_type.id)\
+        #     .exclude(visibility=Comment.PRIVATE) \
+        #     .prefetch_related('content_object')
 
             # .annotate(Max('post_date')) \
             # .exclude(author__is_staff=True)\
@@ -170,27 +170,27 @@ class Comment(models.Model):
         #    .values('object_id')
         #queryset = Review.objects.annotate(Max('comments__post_date'))
 
-        ref_objects = list()
-        for comment in queryset:
-            ref_object = comment.content_object
-            if ref_object not in ref_objects:
-                ref_objects.append(ref_object)
-
-        return ref_objects
-
-
+        # ref_objects = list()
+        # for comment in queryset:
+        #     ref_object = comment.content_object
+        #     if ref_object not in ref_objects:
+        #         ref_objects.append(ref_object)
+        #
+        # return ref_objects
 
         ### another try:
         max_dates_queryset = Comment.objects.filter(content_type__pk=content_type.id)\
-                .exclude(visibility=Comment.PRIVATE) \
-                .prefetch_related('content_object') \
-                .values('object_id').annotate(Max('post_date'))
+            .exclude(visibility=Comment.PRIVATE) \
+            .prefetch_related('content_object') \
+            .values('object_id').annotate(Max('post_date'))
 
-        object_ids = []
+        ref_objects = []
         for max_date_comment in max_dates_queryset:
             c = Comment.objects.filter(post_date=max_date_comment['post_date__max'], object_id=max_date_comment['object_id']).prefetch_related('author', 'content_object')[0]
-            if c.author.is_staff:
-                object_ids.append(c.content_object)
+            if not c.author.is_staff:
+                ref_objects.append(c.content_object)
+
+        return ref_objects
 
     @staticmethod
     def query_top_level_sorted(ref_object_id, ref_type_id, requester):
@@ -347,7 +347,13 @@ class CommentReferenceObject(models.Model):
     If there is no other Object available this Model can be used to create
     reference Objects. Comments can then be attached to that reference Object.
     """
+
     name = models.CharField(max_length=50, unique=True)
 
     def __unicode__(self):
-        return str(self.id)
+        name = '' if self.name is None else ': ' + self.name
+        return str(self.id) + self.name
+
+    def __str__(self):
+        name = '' if self.name is None else ': ' + self.name
+        return str(self.id) + self.name
