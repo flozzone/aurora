@@ -47,9 +47,11 @@ def evaluation(request):
         else:
             data = { 'elaborations': elaborations }
         overview = render_to_string('overview.html', data, RequestContext(request))
+        count = len(elaborations)
     else:
         challenges = Challenge.get_questions(RequestContext(request))
         overview = render_to_string('questions.html', {'challenges': challenges}, RequestContext(request))
+        count = len(challenges)
 
     challenges = Challenge.objects.all()
 
@@ -58,7 +60,7 @@ def evaluation(request):
                                'count_' + request.session.get('selection', ''): request.session.get('count', ''),
                                'stabilosiert_' + request.session.get('selection', ''): 'stabilosiert',
                                'overview': overview,
-                               'count_' + request.session.get('selection', ''): len(elaborations),
+                               'count_' + request.session.get('selection', ''): count,
                                'stabilosiert_' + request.session.get('selection', ''): 'stabilosiert',
                               },
                               context_instance=RequestContext(request))
