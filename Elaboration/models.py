@@ -230,7 +230,7 @@ class Elaboration(models.Model):
         )
         notes = (
             ReviewAnswer.objects
-            .filter(review__id__in=reviews, review_question__visible_to_author=False)
+            .filter(review__id__in=reviews, review_question__visible_to_author=False).exclude(text='')
         )
         if notes.exists():
             return True
