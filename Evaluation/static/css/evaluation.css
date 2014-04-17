@@ -434,6 +434,7 @@ th {
 .indicator {
     border-radius: 20px;
     height:15px;
+    line-height: 14px;
 	width:18px;
 	padding: 3px 1px 3px 1px;
     text-align: center;
@@ -442,8 +443,17 @@ th {
 }
 
 .zero_reviews {
-	opacity:0.35;
+	background-color:white!important;
+	color:white!important;
+	border:1px solid #eee!important;
+	box-shadow: 1px 1px 1px rgba(0,0,0,0.3) inset!important;
+	opacity:0.55;
 	filter:alpha(opacity=35); /* For IE8 and earlier */	
+}
+
+.zero_reviews:after {
+	border:2px solid white!important;
+	background-color:white!important;
 }
 
 .awesome_reviews {
@@ -468,6 +478,15 @@ th {
 	color:white;
 	background-color:red;
 	border:1px solid darkred;
+}
+
+.no_reviews {
+	background-color:white;
+	box-shadow: 1px 1px 1px rgba(0,0,0,0.3) inset;
+    height:17px;
+	width:20px;
+	opacity:0.55;
+	filter:alpha(opacity=35); /* For IE8 and earlier */	
 }
 
 .evaluation_lock {
@@ -496,36 +515,59 @@ th {
 	border-radius:100%;
 }
 */
-.visible_comments, .invisible_comments {
-    border-radius: 0px;
-    height: 18px;
+.visible_comments, .invisible_comments, .no_comments {
+    border-radius: 3px;
+    height:17px;
+	width:17px;
     padding: 3px 2px 0 2px;
     text-align: center;
     margin-right: 2px;
+    border:1px solid gray;
+    position: relative;	
+	background-color: rgba(0,0,0,.1);
+	background-image: repeating-linear-gradient(45deg, transparent, transparent 3px, rgba(255,255,255,.7) 3px, rgba(255,255,255,.7) 6px);
+}
+
+.visible_comments:after, .invisible_comments:after, .no_comments:after {
+    content: "";
+	background-color: white;
+    display: block; /* reduce the damage in FF3.0 */
+    position: absolute;
+    bottom: -3px;
+    left: 5px;
+    width: 3px;
+	height:3px;
+	transform: rotate(45deg);
+	-webkit-transform: rotate(45deg); /* Chrome, Safari, Opera */
+	border-bottom:1px solid gray;
+	border-right:1px solid gray;
+	
+}
+
+.invisible_comments:after {
+    background-color: rgb(229, 235, 253);
 }
 
 .visible_comments {
-	border-top:1px solid gray;
-	border-bottom:1px solid gray;
     background-color: white;
 }
 
 .invisible_comments {
-	border-top:1px dashed gray;
-	border-bottom:1px dashed gray;
-    background-color: white;
+    background-color: rgb(229, 235, 253);
+	background-image: repeating-linear-gradient(45deg, transparent, transparent 3px, rgba(255,255,255,.7) 3px, rgba(255,255,255,.7) 6px);
 }
 
 .lva_team_notes {
     border-radius: 0px;
-    height: 18px;
+    height:16px;
+	width:17px;
     padding: 3px 2px 0 2px;
     text-align: center;
     margin-right: 2px;
-    color: lightseagreen;
-    border-top:1px dotted lightseagreen;
-	border-bottom:1px dotted lightseagreen;
-    background-color: white;
+    border-top:1px solid gray;
+    position: relative;	
+	background-color: rgba(0,0,0,.1);
+	background-image: repeating-linear-gradient(45deg, transparent, transparent 3px, rgba(255,255,255,.7) 3px, rgba(255,255,255,.7) 6px);
 }
 
 .mini_task_img {
