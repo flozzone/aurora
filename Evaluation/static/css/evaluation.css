@@ -256,7 +256,7 @@ th {
     float: right;
 }
 
-.stack, .others, .challenge_txt, .review_list {
+.stack, .others, .challenge_txt, .review_list, .similarities {
 	text-transform:uppercase;
 	margin-right:0.5em;
     text-align: center;
@@ -267,7 +267,7 @@ th {
 	border-radius:1em;
 }
 
-.review_list.selected, .stack.selected, .others.selected, .challenge_txt.selected {
+.review_list.selected, .stack.selected, .others.selected, .challenge_txt.selected, .similarities.selected {
 	background-color:rgb(58,201,88);
 	color:white;
 }

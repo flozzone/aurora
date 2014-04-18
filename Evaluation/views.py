@@ -1,4 +1,6 @@
 from datetime import datetime
+from difflib import SequenceMatcher
+import difflib
 import json
 from django.contrib.contenttypes.models import ContentType
 
@@ -275,6 +277,27 @@ def others(request):
 def challenge_txt(request):
     elaboration = Elaboration.objects.get(pk=request.session.get('elaboration_id', ''))
     return render_to_response('challenge_txt.html', {'challenge': elaboration.challenge}, RequestContext(request))
+
+
+@login_required()
+@staff_member_required
+def similarities(request):
+    elaboration = Elaboration.objects.get(pk=request.session.get('elaboration_id', ''))
+    challenge_elaborations = Elaboration.objects.filter(challenge=elaboration.challenge, submission_time__isnull=False).exclude(pk=elaboration.id)
+
+    similarities = []
+    for challenge_elaboration in challenge_elaborations:
+        similarity = {}
+        s = SequenceMatcher(lambda x: x == " ",
+                            elaboration.elaboration_text,
+                            challenge_elaboration.elaboration_text)
+
+        if(s.ratio() > 0.5):
+            similarity['elaboration'] = challenge_elaboration
+            similarity['diff'] = difflib.Differ().compare(elaboration.elaboration_text, challenge_elaboration.elaboration_text)
+            similarities.append(similarity)
+
+    return render_to_response('similarities.html', {'similarities': similarities}, RequestContext(request))
 
 
 @csrf_exempt

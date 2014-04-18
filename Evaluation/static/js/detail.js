@@ -55,6 +55,15 @@ $(function() {
 });
 
 $(function() {
+   $(".similarities").click(function(event) {
+       var url = '/similarities';
+        $.get(url, function (data) {
+            $('#info_area').html(data);
+        });
+   });
+});
+
+$(function() {
     $(".paginator").click(function(event) {
         var url = '/detail?elaboration_id=' + $(event.target).attr('id');
         $.get(url, function (data) {
