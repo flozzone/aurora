@@ -16,11 +16,7 @@
             </div>
             <div class="challenge-description">
               <div class="challenge-headline">{{ challenge.title }}</div>
-              {% if challenge.description|wordcount > 50 %}
-                  {{ challenge.description|safe | truncatewords:50}}
-              {% else %}
-                  {{ challenge.description|safe }}
-              {% endif %}
+                {{ challenge.description|safe }}
             </div>
         </div>
         <div>
