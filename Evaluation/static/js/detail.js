@@ -7,13 +7,14 @@ $(function () {
 $(function() {
     tinymce.init({
         // selector: "textarea#editor",
-        mode : "exact",
-        elements :"editor_detail",
-        menubar: false,
-        statusbar: false,
+		plugins: "wordcount",
+		mode : "exact",
+		elements :"editor_detail",
+		menubar: false,
+		statusbar: true,
 		toolbar: false,
-		height:300,
-        readonly: 1
+		height:400,
+		readonly: 1
     });
 });
 
