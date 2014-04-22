@@ -45,7 +45,7 @@
 	 <tr>
 		 {% with user.customuser as customuser %}
 	     {% for slide in slides %}
-			<td data-id="{{slide.id}}" id="slide_{{slide.id}}" class="slide_image {% if slide in slides_preparation %}preparation_slide{% endif %}">
+			<td data-id="{{slide.id}}" id="slide_{{slide.id}}" data-date="{{slide.pub_date}}" class="slide_image {% if slide in slides_preparation %}preparation_slide{% endif %}">
 		        <div class="glass">
 				<h1 class="glass_full glass_text_full">
 				    <a {% if slidecasting_mode == 'search_results' %}href="{% url 'Slides:studio_lecture' slide.lecture.id %}"{% endif %}>{{ slide.title }}</a>
