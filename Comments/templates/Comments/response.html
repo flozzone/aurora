@@ -45,7 +45,7 @@
        {% with notification_user_id=response.author.id %}
          {% include "send_notification_button.html" %}
        {% endwith %}
-	  {% if not response.author.is_staff %}&mdash;   <a href="/evaluation/user?id={{response..author.id}}">{{response..author.display_name}}'s work</a>{% endif %}
+	  {% if not response.author.is_staff %}&mdash;   <a href="/evaluation/user?id={{response.author.id}}">{{response.author.display_name}}'s work</a>{% endif %}
      {% endif %}
 	 </div>
 
