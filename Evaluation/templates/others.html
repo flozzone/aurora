@@ -1,3 +1,4 @@
+{% load humanize %}
 {% load comments %}
 {% load render_uploads %}
 
@@ -19,6 +20,19 @@
             <textarea id="editor_others">{{ elaboration.elaboration_text|safe }}</textarea>
         {% endif %}
         <div class="spacer"></div>
+
+        {% if evaluation %}
+		Written feedback
+            <div class="evaluation eval_done">
+                {{ evaluation.evaluation_text|safe }}
+            </div>
+            <div class="point_label">points assigned</div><div class="points eval_done">{{ evaluation.evaluation_points }}</div>
+            <div class="spacer"></div>
+            <div class="submission_date">
+                <span title="{{ evaluation.submission_time }}">evaluated {{ evaluation.submission_time|naturaltime }}</span>
+            </div>
+        <div class="spacer"></div>
+        {% endif %}
 
         <div class="spacer"></div>
         {% if elaboration %}
