@@ -268,7 +268,12 @@ def others(request):
     else:
         elaboration = []
 
-    return render_to_response('others.html', {'elaboration': elaboration, 'next': next, 'prev': prev},
+    evaluation = None
+    if elaboration.challenge.is_final_challenge():
+        if Evaluation.objects.filter(submission=elaboration, submission_time__isnull=False):
+            evaluation = Evaluation.objects.get(submission=elaboration, submission_time__isnull=False)
+
+    return render_to_response('others.html', {'elaboration': elaboration, 'evaluation': evaluation, 'next': next, 'prev': prev},
                               RequestContext(request))
 
 
