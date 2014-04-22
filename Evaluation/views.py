@@ -40,6 +40,7 @@ def evaluation(request):
 
     overview = ""
     elaborations = []
+    count = 0
     selection = request.session.get('selection', 'error')
     if selection not in ('error', 'questions'):
         for serialized_elaboration in serializers.deserialize('json', request.session.get('elaborations', {})):
@@ -50,10 +51,10 @@ def evaluation(request):
             data = { 'elaborations': elaborations }
         overview = render_to_string('overview.html', data, RequestContext(request))
         count = len(elaborations)
-    else:
-        challenges = Challenge.get_questions(RequestContext(request))
-        overview = render_to_string('questions.html', {'challenges': challenges}, RequestContext(request))
-        count = len(challenges)
+    elif selection == 'questions':
+            challenges = Challenge.get_questions(RequestContext(request))
+            overview = render_to_string('questions.html', {'challenges': challenges}, RequestContext(request))
+            count = len(challenges)
 
     challenges = Challenge.objects.all()
 
