@@ -175,6 +175,8 @@ h1 {
 }
 
 .stack_next {
+	z-index:192;
+	position:relative;
 }
 
 .stack .title {
