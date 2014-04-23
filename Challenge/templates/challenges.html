@@ -25,7 +25,7 @@
         <div class="description">{{ stack.stack.description|safe|urlize }}</div>
 {#       Status: <b>{{ stack.status.status }}.</b>#}
 		<div class="stack_status">
-			 <div class="stack_action button XL">ENTER CHALLENGE</div>
+			 <a href="stack?id={{ stack.stack.id }}" class="stack_action button XL" onclick="event.stopPropagation();">ENTER CHALLENGE</a>
 			 <div class="stack_next">Status: <b>{{ stack.status.next }} {% if stack.points != 0 %}{{ stack.points }}{% endif %}</b></div>
 		</div>
 		<div class="stack_done" {% if stack.points != 0 %}style="display:block;"{% endif %}><i class="fa fa-check"></i></div>

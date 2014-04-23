@@ -172,6 +172,8 @@ h1 {
 
 .stack_action {
 	float:right;
+	position:relative;
+	z-index:3000;
 }
 
 .stack_next {
