@@ -319,6 +319,7 @@ input:-moz-placeholder { color:rgba(58,201,88,0);	text-shadow: 0 0 2px rgba(58,2
 .pagehead {
     position: relative;
 	top:-5px;
+	background-color:#254B1F;
     background-image: url("../img/auroraH.png");
 	background-clip: border-box;
 	background-origin: border-box;
