@@ -282,7 +282,8 @@ def others(request):
 @staff_member_required
 def challenge_txt(request):
     elaboration = Elaboration.objects.get(pk=request.session.get('elaboration_id', ''))
-    return render_to_response('challenge_txt.html', {'challenge': elaboration.challenge}, RequestContext(request))
+    return render_to_response('challenge_txt.html', {'challenge': elaboration.challenge, 'stack': elaboration.challenge.get_stack()},
+                              RequestContext(request))
 
 
 @login_required()
