@@ -676,3 +676,36 @@ def search_elab(request):
 
     challenges = Challenge.objects.all()
     return render_to_response('evaluation.html', {'challenges': challenges, 'detail_html': detail_html}, context_instance=RequestContext(request))
+
+
+@login_required()
+@staff_member_required
+def sort(request):
+
+    elaborations = []
+    for serialized_elaboration in serializers.deserialize('json', request.session.get('elaborations', {})):
+        elaborations.append(serialized_elaboration.object)
+
+    if request.GET.get('data', '') == "date_asc":
+        elaborations.sort(key=lambda elaboration: elaboration.submission_time)
+    if request.GET.get('data', '') == "date_desc":
+        elaborations.sort(key=lambda elaboration: elaboration.submission_time, reverse=True)
+    if request.GET.get('data', '') == "elab_asc":
+        elaborations.sort(key=lambda elaboration: elaboration.challenge.title)
+    if request.GET.get('data', '') == "elab_desc":
+        elaborations.sort(key=lambda elaboration: elaboration.challenge.title, reverse=True)
+
+    # store selected elaborations in session
+    request.session['elaborations'] = serializers.serialize('json', elaborations)
+    request.session['count'] = len(elaborations)
+
+    data = {
+        'overview_html': render_to_string('overview.html', {'elaborations': elaborations}, RequestContext(request)),
+        'menu_html': render_to_string('menu.html', {
+            'count_' + request.session.get('selection', ''): request.session.get('count', '0'),
+            'stabilosiert_' + request.session.get('selection', ''): 'stabilosiert',
+            }, RequestContext(request)),
+        'selection': request.session['selection']
+    }
+
+    return HttpResponse(json.dumps(data))

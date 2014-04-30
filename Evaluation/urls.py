@@ -27,4 +27,5 @@ urlpatterns = patterns('',
     url(r'^evaluation/user$', 'Evaluation.views.search_user'),
     url(r'^evaluation/elab$', 'Evaluation.views.search_elab'),
     url(r'^start_evaluation$', 'Evaluation.views.start_evaluation'),
+    url(r'^sort/$', 'Evaluation.views.sort'),
 )
