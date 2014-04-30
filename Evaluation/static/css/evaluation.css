@@ -598,10 +598,6 @@ th {
 
 .one_challenge {
 	position:relative;
-	margin-top:2em;
-	border-radius:1em;
-	box-shadow:0px 2px 7px rgba(0,0,0,0.1);
-    padding-bottom: 20px;
 }
 
 .elab_title {
@@ -627,9 +623,8 @@ th {
 }
 
 .challenge-description {
-	height:96px;
+	min-height:96px;
 	position:relative;
-	overflow:hidden;
 	margin-left:120px;
 	pointer-events:none;
 	padding:0.25em;
@@ -637,10 +632,6 @@ th {
 }
 
 .challenge_top_bracket {
-	border-radius: 1em 1em 0 0;
-	background-color:#eee;
-	background: linear-gradient(#f0f0f0,white);
-	border-top:1px solid #e8e8e8;
 }
 
 .challenge-headline {
@@ -661,7 +652,7 @@ th {
 	width:96px;
 	height:96px;
 	pointer-events:none;
-	border-radius: 64px;
+	border-radius: 7px;
 	border:1px solid silver;
 }
 
