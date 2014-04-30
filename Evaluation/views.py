@@ -293,16 +293,18 @@ def similarities(request):
     challenge_elaborations = Elaboration.objects.filter(challenge=elaboration.challenge, submission_time__isnull=False).exclude(pk=elaboration.id)
 
     similarities = []
-    for challenge_elaboration in challenge_elaborations:
-        similarity = {}
-        s = SequenceMatcher(lambda x: x == " ",
-                            elaboration.elaboration_text,
-                            challenge_elaboration.elaboration_text)
+    if elaboration.elaboration_text:
+        for challenge_elaboration in challenge_elaborations:
+            if challenge_elaboration.elaboration_text:
+                similarity = {}
+                s = SequenceMatcher(lambda x: x == " ",
+                                    elaboration.elaboration_text,
+                                    challenge_elaboration.elaboration_text)
 
-        if(s.ratio() > 0.5):
-            similarity['elaboration'] = challenge_elaboration
-            similarity['diff'] = difflib.Differ().compare(elaboration.elaboration_text, challenge_elaboration.elaboration_text)
-            similarities.append(similarity)
+                if(s.ratio() > 0.5):
+                    similarity['elaboration'] = challenge_elaboration
+                    similarity['table'] = difflib.HtmlDiff().make_table(elaboration.elaboration_text.splitlines(), challenge_elaboration.elaboration_text.splitlines())
+                    similarities.append(similarity)
 
     return render_to_response('similarities.html', {'similarities': similarities}, RequestContext(request))
 
