@@ -88,8 +88,17 @@ class Elaboration(models.Model):
             Elaboration.objects
             .filter(submission_time__lte=datetime.now() - timedelta(days=3), user__is_staff=False)
             .annotate(num_reviews=Count('review'))
-            .exclude(num_reviews__gte=2, challenge__id__in=final_challenge_ids)
+            .exclude(challenge__id__in=final_challenge_ids)
         )
+        final_elaborations = []
+        for elaboration in missing_reviews:
+            if elaboration.num_reviews < 2:
+                final_elaborations.append(elaboration.id)
+            else:
+                if Review.objects.filter(elaboration=elaboration, submission_time__isnull=False).count() < 2:
+                    final_elaborations.append(elaboration.id)
+
+        missing_reviews = Elaboration.objects.filter(id__in=final_elaborations)
         return missing_reviews
 
     @staticmethod

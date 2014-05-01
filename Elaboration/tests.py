@@ -689,7 +689,7 @@ class ElaborationTest(TestCase):
         elaboration3 = Elaboration(challenge=challenge1, user=user3, elaboration_text="test",
                                    submission_time=old)
         elaboration3.save()
-        elaboration4 = Elaboration(challenge=challenge2, user=user4, elaboration_text="test")
+        elaboration4 = Elaboration(challenge=challenge1, user=user4, elaboration_text="test")
         elaboration4.save()
         elaboration5 = Elaboration(challenge=challenge1, user=user5, elaboration_text="test",
                                    submission_time=old)
@@ -698,44 +698,130 @@ class ElaborationTest(TestCase):
                                    submission_time=old)
         elaboration6.save()
 
-        dummy_elaboration1 not in Elaboration.get_missing_reviews()  # is staff
-        elaboration1 in Elaboration.get_missing_reviews()  # 2 reviews missing
-        elaboration2 not in Elaboration.get_missing_reviews()  # not 3 days old
-        elaboration3 in Elaboration.get_missing_reviews()  # 2 reviews missing
-        elaboration4 not in Elaboration.get_missing_reviews()  # unsubmitted
-        elaboration5 in Elaboration.get_missing_reviews()  # 2 reviews missing
-        elaboration6 not in Elaboration.get_missing_reviews()  # final challenge
+        assert dummy_elaboration1 not in Elaboration.get_missing_reviews()  # is staff
+        assert elaboration1 in Elaboration.get_missing_reviews()  # 2 reviews missing
+        assert elaboration2 not in Elaboration.get_missing_reviews()  # not 3 days old
+        assert elaboration3 in Elaboration.get_missing_reviews()  # 2 reviews missing
+        assert elaboration4 not in Elaboration.get_missing_reviews()  # unsubmitted
+        assert elaboration5 in Elaboration.get_missing_reviews()  # 2 reviews missing
+        assert elaboration6 not in Elaboration.get_missing_reviews()  # final challenge
 
         Review(elaboration=elaboration1, reviewer=user2, appraisal='S', submission_time=new).save()
         Review(elaboration=elaboration1, reviewer=user3, appraisal='S', submission_time=new).save()
         Review(elaboration=elaboration2, reviewer=user1, appraisal='S', submission_time=new).save()
         Review(elaboration=elaboration5, reviewer=user1, appraisal='S', submission_time=new).save()
 
-        dummy_elaboration1 not in Elaboration.get_missing_reviews()  # is staff
-        elaboration1 not in Elaboration.get_missing_reviews()  # already 2 reviews
-        elaboration2 not in Elaboration.get_missing_reviews()  # not 3 days old
-        elaboration3 in Elaboration.get_missing_reviews()  # 2 reviews missing
-        elaboration4 not in Elaboration.get_missing_reviews()  # unsubmitted
-        elaboration5 in Elaboration.get_missing_reviews()  # 1 review missing
-        elaboration6 not in Elaboration.get_missing_reviews()  # final challenge
+        assert dummy_elaboration1 not in Elaboration.get_missing_reviews()  # is staff
+        assert elaboration1 not in Elaboration.get_missing_reviews()  # already 2 reviews
+        assert elaboration2 not in Elaboration.get_missing_reviews()  # not 3 days old
+        assert elaboration3 in Elaboration.get_missing_reviews()  # 2 reviews missing
+        assert elaboration4 not in Elaboration.get_missing_reviews()  # unsubmitted
+        assert elaboration5 in Elaboration.get_missing_reviews()  # 1 review missing
+        assert elaboration6 not in Elaboration.get_missing_reviews()  # final challenge
 
         elaboration2.submission_time = old
         elaboration2.save()
-        elaboration4.submission_time = new
+        elaboration4.submission_time = old
         elaboration4.save()
 
         Review(elaboration=elaboration3, reviewer=user1, appraisal='S').save()
         Review(elaboration=elaboration3, reviewer=user2, appraisal='S').save()
         Review(elaboration=elaboration5, reviewer=user2, appraisal='S', submission_time=new).save()
 
-        dummy_elaboration1 not in Elaboration.get_missing_reviews()  # is staff
-        elaboration1 not in Elaboration.get_missing_reviews()  # already 2 reviews
-        elaboration2 in Elaboration.get_missing_reviews()  # not 3 days old
-        elaboration3 in Elaboration.get_missing_reviews()  # 2 reviews missing because reviews are unsubmitted
-        elaboration4 in Elaboration.get_missing_reviews()  # 2 reviews missing
-        elaboration5 not in Elaboration.get_missing_reviews()  # already 2 reviews
-        elaboration6 not in Elaboration.get_missing_reviews()  # final challenge
+        assert dummy_elaboration1 not in Elaboration.get_missing_reviews()  # is staff
+        assert elaboration1 not in Elaboration.get_missing_reviews()  # already 2 reviews
+        assert elaboration2 in Elaboration.get_missing_reviews()  # not 3 days old
+        assert elaboration3 in Elaboration.get_missing_reviews()  # 2 reviews missing because reviews are unsubmitted
+        assert elaboration4 in Elaboration.get_missing_reviews()  # 2 reviews missing
+        assert elaboration5 not in Elaboration.get_missing_reviews()  # already 2 reviews
+        assert elaboration6 not in Elaboration.get_missing_reviews()  # final challenge
 
+    def test_get_missing_reviews_unsubmitted(self):
+        challenge1 = self.challenge
+        self.create_challenge()
+        challenge2 = self.challenge
+        challenge2.prerequisite = challenge1
+        challenge2.save()
+        user1 = self.users[0]
+        user2 = self.users[1]
+        user3 = self.users[2]
+        user4 = self.users[3]
+        user5 = self.users[4]
+        dummy_user1 = self.dummy_users[0]
+
+        old = datetime.now() - timedelta(days=3)
+
+        dummy_elaboration1 = Elaboration(challenge=challenge1, user=dummy_user1, elaboration_text="test",
+                                         submission_time=old)
+        dummy_elaboration1.save()
+        elaboration1 = Elaboration(challenge=challenge1, user=user1, elaboration_text="test",
+                                   submission_time=old)
+        elaboration1.save()
+        elaboration2 = Elaboration(challenge=challenge1, user=user2, elaboration_text="test",
+                                   submission_time=old)
+        elaboration2.save()
+        elaboration3 = Elaboration(challenge=challenge1, user=user3, elaboration_text="test",
+                                   submission_time=old)
+        elaboration3.save()
+        elaboration4 = Elaboration(challenge=challenge1, user=user4, elaboration_text="test",
+                                   submission_time=old)
+        elaboration4.save()
+        elaboration5 = Elaboration(challenge=challenge1, user=user5, elaboration_text="test",
+                                   submission_time=old)
+        elaboration5.save()
+        elaboration6 = Elaboration(challenge=challenge2, user=user1, elaboration_text="test",
+                                   submission_time=old)
+        elaboration6.save()
+
+        missing_reviews = Elaboration.get_missing_reviews().values_list('id', flat=True)
+        assert dummy_elaboration1.id not in missing_reviews  # is staff
+        assert elaboration1.id in missing_reviews  # 2 reviews missing
+        assert elaboration2.id in missing_reviews  # 2 reviews missing
+        assert elaboration3.id in missing_reviews  # 2 reviews missing
+        assert elaboration4.id in missing_reviews  # 2 reviews missing
+        assert elaboration5.id in missing_reviews  # 2 reviews missing
+        assert elaboration6.id not in missing_reviews  # final challenge
+
+        reviews = []
+        reviews.append(Review(elaboration=elaboration1, reviewer=user2, appraisal='S'))
+        reviews.append(Review(elaboration=elaboration2, reviewer=user1, appraisal='S'))
+        reviews.append(Review(elaboration=elaboration2, reviewer=user3, appraisal='S'))
+        reviews.append(Review(elaboration=elaboration3, reviewer=user1, appraisal='S'))
+        reviews.append(Review(elaboration=elaboration3, reviewer=user2, appraisal='S'))
+        reviews.append(Review(elaboration=elaboration3, reviewer=user4, appraisal='S'))
+        reviews.append(Review(elaboration=elaboration4, reviewer=user1, appraisal='S'))
+        reviews.append(Review(elaboration=elaboration4, reviewer=user2, appraisal='S'))
+        reviews.append(Review(elaboration=elaboration4, reviewer=user3, appraisal='S'))
+        reviews.append(Review(elaboration=elaboration4, reviewer=user5, appraisal='S'))
+        reviews.append(Review(elaboration=elaboration5, reviewer=user1, appraisal='S'))
+        reviews.append(Review(elaboration=elaboration5, reviewer=user2, appraisal='S'))
+        reviews.append(Review(elaboration=elaboration5, reviewer=user3, appraisal='S'))
+        reviews.append(Review(elaboration=elaboration5, reviewer=user4, appraisal='S'))
+        reviews.append(Review(elaboration=elaboration5, reviewer=dummy_user1, appraisal='S'))
+
+        for review in reviews:
+            review.save()
+
+        missing_reviews = Elaboration.get_missing_reviews().values_list('id', flat=True)
+        assert dummy_elaboration1 not in missing_reviews  # is staff
+        assert elaboration1.id in missing_reviews  # 1 review missing (not submitted)
+        assert elaboration2.id in missing_reviews  # 2 reviews missing (not submitted)
+        assert elaboration3.id in missing_reviews  # 2 reviews missing (not submitted)
+        assert elaboration4.id in missing_reviews  # 2 reviews missing (not submitted)
+        assert elaboration5.id in missing_reviews  # 2 reviews missing (not submitted)
+        assert elaboration6.id not in missing_reviews  # final challenge
+
+        for review in reviews:
+            review.submission_time = old
+            review.save()
+
+        assert dummy_elaboration1 not in Elaboration.get_missing_reviews()  # is staff
+        assert elaboration1 in Elaboration.get_missing_reviews()  # 1 reviews missing
+        assert elaboration2 not in Elaboration.get_missing_reviews()  # 2 reviews
+        assert elaboration3 not in Elaboration.get_missing_reviews()  # 2 reviews
+        assert elaboration4 not in Elaboration.get_missing_reviews()  # 2 reviews
+        assert elaboration5 not in Elaboration.get_missing_reviews()  # 2 reviews
+        assert elaboration6 not in Elaboration.get_missing_reviews()  # final challenge
 
     def test_get_top_level_challenges(self):
         challenge1 = self.challenge
