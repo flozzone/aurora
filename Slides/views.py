@@ -68,7 +68,7 @@ def livecast_new_slide(request, course_id):
 
             slide = Slide(title=request.POST['title'], pub_date=pub_date, filename=request.POST['filename'], lecture=lecture, tags=tags)
             slide.save()            
-            return HttpResponse("")
+            return HttpResponse(str(slide.id))
         except ValueError:
             return HttpResponse('time error')
         except (Course.DoesNotExist, Course.MultipleObjectsReturned):
