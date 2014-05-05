@@ -238,7 +238,6 @@ th {
 .paginator, .paginator_others {
     cursor: pointer;
 	position:relative;
-	top:-15px;
 	text-transform:uppercase;
 	color:rgb(58,201,88);
 }
