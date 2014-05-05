@@ -642,7 +642,6 @@ th {
 .challenge_image {
 	width:96px;
 	height:96px;
-	border-radius: 64px;
 	pointer-events:none;
 }
 
