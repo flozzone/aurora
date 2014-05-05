@@ -237,7 +237,8 @@ th {
 
 .paginator, .paginator_others {
     cursor: pointer;
-    margin-bottom: 10px;
+	position:relative;
+	top:-15px;
 	text-transform:uppercase;
 	color:rgb(58,201,88);
 }
@@ -598,6 +599,7 @@ th {
 
 .one_challenge {
 	position:relative;
+	margin-top:20px
 }
 
 .elab_title {
