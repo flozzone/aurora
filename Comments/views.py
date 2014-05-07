@@ -1,4 +1,4 @@
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -8,7 +8,7 @@ from django.views.decorators.http import require_POST, require_GET
 from django.contrib.auth.decorators import login_required
 from django import forms
 from django.utils import timezone
-from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden
+from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden, HttpResponseBadRequest
 from django.contrib.contenttypes.models import ContentType
 import json
 
@@ -39,7 +39,10 @@ class ReplyForm(forms.Form):
 @login_required
 def post_comment(request):
     form = CommentForm(request.POST)
-    create_comment(form, request)
+    try:
+        create_comment(form, request)
+    except ValidationError:
+        return HttpResponseBadRequest('The submitted form seems to be borken')
     return HttpResponse('')
 
 
@@ -67,7 +70,10 @@ def delete_comment(request):
 @login_required
 def post_reply(request):
     form = ReplyForm(request.POST)
-    create_comment(form, request)
+    try:
+        create_comment(form, request)
+    except ValidationError:
+        return HttpResponseBadRequest('The submitted form seems to be borken')
     return HttpResponse('')
 
 
@@ -99,71 +105,73 @@ def edit_comment(request):
 
 
 def create_comment(form, request):
-    if form.is_valid():
-        context = RequestContext(request)
-        user = context['user']
-        ref_type_id = form.cleaned_data['reference_type_id']
-        ref_obj_id = form.cleaned_data['reference_id']
-        ref_obj_model = ContentType.objects.get_for_id(ref_type_id).model_class()
-        ref_obj = ref_obj_model.objects.get(id=ref_obj_id)
-        visibility = form.cleaned_data['visibility']
+    if not form.is_valid():
+        raise ValidationError
 
-        parent_comment_id = form.cleaned_data.get('parent_comment', None)
-        if parent_comment_id is not None:
-            try:
-                parent_comment = Comment.objects.get(id=parent_comment_id)
-            except ObjectDoesNotExist:
-                parent_comment = None
-        else:
+    context = RequestContext(request)
+    user = context['user']
+    ref_type_id = form.cleaned_data['reference_type_id']
+    ref_obj_id = form.cleaned_data['reference_id']
+    ref_obj_model = ContentType.objects.get_for_id(ref_type_id).model_class()
+    ref_obj = ref_obj_model.objects.get(id=ref_obj_id)
+    visibility = form.cleaned_data['visibility']
+
+    parent_comment_id = form.cleaned_data.get('parent_comment', None)
+    if parent_comment_id is not None:
+        try:
+            parent_comment = Comment.objects.get(id=parent_comment_id)
+        except ObjectDoesNotExist:
             parent_comment = None
+    else:
+        parent_comment = None
 
-        comment = Comment.objects.create(text=form.cleaned_data['text'],
-                                         author=user,
-                                         content_object=ref_obj,
-                                         parent=parent_comment,
-                                         post_date=timezone.now(),
-                                         visibility=visibility)
+    comment = Comment.objects.create(text=form.cleaned_data['text'],
+                                     author=user,
+                                     content_object=ref_obj,
+                                     parent=parent_comment,
+                                     post_date=timezone.now(),
+                                     visibility=visibility)
 
-        comment.save()
+    comment.save()
 
-        comment_list = CommentList.get_by_comment(comment)
+    comment_list = CommentList.get_by_comment(comment)
 
-        if comment_list.uri is None or 'evaluation' in comment_list.uri:
-            comment_list.uri = form.cleaned_data['uri']
-            comment_list.save()
+    if comment_list.uri is None or 'evaluation' in comment_list.uri:
+        comment_list.uri = form.cleaned_data['uri']
+        comment_list.save()
 
-        comment_list.increment()
+    comment_list.increment()
 
-        # TODO extremely borken fix, remove this ASAP
-        course = context['last_selected_course']
-        if course is None:
-            course = Course.objects.get(short_title='gsi')
-        # TODO endof extremely borken fix
+    # TODO extremely borken fix, remove this ASAP
+    course = context['last_selected_course']
+    if course is None:
+        course = Course.objects.get(short_title='gsi')
+    # TODO endof extremely borken fix
 
-        if parent_comment is None:
-            return
+    if parent_comment is None:
+        return
 
-        if comment.visibility is Comment.PRIVATE:
-            return
+    if comment.visibility is Comment.PRIVATE:
+        return
 
-        if parent_comment.author == comment.author:
-            return
+    if parent_comment.author == comment.author:
+        return
 
-        if comment.visibility == Comment.STAFF and not parent_comment.author.is_staff:
-            return
+    if comment.visibility == Comment.STAFF and not parent_comment.author.is_staff:
+        return
 
-        obj, created = Notification.objects.get_or_create(
-            user=parent_comment.author,
-            course=course,
-            text="You've received a reply to one of your comments",
-            image_url=comment.author.avatar.url,
-            link=comment_list.uri + '#comment_' + str(parent_comment.id)
-        )
+    obj, created = Notification.objects.get_or_create(
+        user=parent_comment.author,
+        course=course,
+        text="You've received a reply to one of your comments",
+        image_url=comment.author.avatar.url,
+        link=comment_list.uri + '#comment_' + str(parent_comment.id)
+    )
 
-        if not created:
-            obj.creation_time = timezone.now()
-            obj.read = False
-            obj.save()
+    if not created:
+        obj.creation_time = timezone.now()
+        obj.read = False
+        obj.save()
 
 
 @require_POST
