@@ -19,12 +19,12 @@ function review_loaded() {
         plugins: "wordcount"
     });
 
-    $('form').bind("keypress", function (e) {
-        if (e.keyCode == 13) {
-            e.preventDefault();
-            return false;
-        }
-    });
+//    $('form').bind("keypress", function (e) {
+//        if (e.keyCode == 13) {
+//            e.preventDefault();
+//            return false;
+//        }
+//    });
     $('#submit_button').click(submit_clicked);
 }
 
