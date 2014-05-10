@@ -47,7 +47,7 @@ def create_context_stack(request):
                     'reviews': reviews,
                     'status': stack_challenge.challenge.get_status_text(user)
                 }
-                elaboration = Elaboration.objects.filter(challenge=stack_challenge, user=user)
+                elaboration = Elaboration.objects.filter(challenge=stack_challenge.challenge, user=user)
                 if elaboration:
                     elaboration = elaboration[0]
                     challenge_active['success'] = len(elaboration.get_success_reviews())
