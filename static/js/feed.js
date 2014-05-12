@@ -47,9 +47,24 @@ $(window).load( function() {
 
 function loadFilter() {
     "use strict";
-
 	filter(getCookie('filtercookie.'+$('#the_username').data('username')));
-	
+	doClickFilter();
+}
+
+function doClickFilter () {
+	"use strict";
+	var ccCookieData = getCookie('clickcookie.'+$('#the_username').data('username'));
+	if (ccCookieData != null) {
+		var clickedComments = ccCookieData.split(',');
+		for (var i=0;i<clickedComments.length;i++) {
+			if (clickedComments[i] != "") {filterByClick('#comment_'+clickedComments[i])}
+		}
+	}
+}
+
+function filterClick(fx,usr) {
+	document.cookie = "clickcookie." + $('#the_username').data('username') + "= " + "; expires=Tue, 18 Jan 2038 03:14:06 GMT";
+	filter(fx,usr);
 }
 
 function filter(fx,usr) {
@@ -136,8 +151,26 @@ function updateNew() {
 
 function headClick(aDiv) {
     "use strict";
+	var ccCookieData = getCookie('clickcookie.'+$('#the_username').data('username'));
+	if (ccCookieData != null && ccCookieData != "") {
+		var clickedComments = ccCookieData.split(',');
+	} 
+	else {
+		var clickedComments = new Array()
+	}
+//	$('.filterbtn').removeClass('hilited');
+	var thisID = $(aDiv).data('comment_number');
+	var indexID = $.inArray(thisID.toString(),clickedComments);
+	if (indexID==-1) {clickedComments.push(thisID)} else {clickedComments.splice(indexID,1)}
+	var morgs = "clickcookie." + $('#the_username').data('username') + "=" + clickedComments.join(',') + "; expires=Tue, 18 Jan 2038 03:14:06 GMT";;
+//	alert (morgs);
+	document.cookie = morgs;
+	
+	filterByClick(aDiv);	
+}
 
-	$('.filterbtn').removeClass('hilited');
+function filterByClick(aDiv) {
+    "use strict";
 	$(aDiv).toggleClass('hided');
 	if ($(aDiv).hasClass('comment')) {
 		if ($(aDiv).hasClass('hided')) {
@@ -147,7 +180,7 @@ function headClick(aDiv) {
 			$('.r_'+$(aDiv).attr('id')).removeClass('hided');
 			$('.'+$(aDiv).attr('id')).removeClass('hided');
 		}
-	}
+	}	
 }
 
 
