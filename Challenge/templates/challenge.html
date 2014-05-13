@@ -93,7 +93,11 @@
     <form method="post">
       <textarea id="editor">{{ elaboration.elaboration_text }}</textarea>
     </form>
-    <button id="EWfE" class="submit XL R">Enter work for Evaluation</button>
+      <button id="EWfE" class="submit XL R" {% if lock %}disabled="disabled"{% endif %}>
+          {% if lock %}You can enter work for Evaluation on {{ lock }}
+          {% else %}Enter work for Evaluation
+          {% endif %}
+      </button>
       <div class="submission_text" hidden>
         <div>
           I certify that the work presented here is, to the best of my knowledge and belief, original and the result of

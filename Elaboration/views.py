@@ -56,6 +56,8 @@ def submit_elaboration(request):
         user = RequestContext(request)['user']
         if not challenge.is_enabled_for_user(user):
             raise Http404
+        if challenge.is_final_challenge() and challenge.is_in_lock_period(user):
+            raise Http404
         elaboration, created = Elaboration.objects.get_or_create(challenge=challenge, user=user)
         elaboration.elaboration_text = request.POST['elaboration_text']
         if elaboration.elaboration_text or UploadFile.objects.filter(elaboration=elaboration).exists():

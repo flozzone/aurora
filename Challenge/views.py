@@ -105,6 +105,10 @@ def create_context_challenge(request):
             data['fail'] = elaboration.get_fail_reviews()
             if Evaluation.objects.filter(submission=elaboration).exists():
                 data['evaluation'] = Evaluation.objects.filter(submission=elaboration)[0]
+
+        if challenge.is_final_challenge():
+            if challenge.is_in_lock_period(RequestContext(request)['user']):
+                data['lock'] = challenge.is_in_lock_period(RequestContext(request)['user'])
     return data
 
 

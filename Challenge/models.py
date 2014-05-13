@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 import os
 
 from django.db import models
@@ -234,3 +235,19 @@ class Challenge(models.Model):
     @staticmethod
     def get_questions(context):
         return Comment.get_ref_objects_with_unanswered_user_comments(Challenge)
+
+    def is_in_lock_period(self, user):
+        PERIOD = 13
+
+        final_challenge_ids = Challenge.get_final_challenge_ids()
+        elaborations = (
+            Elaboration.objects
+            .filter(challenge__id__in=final_challenge_ids, user=user, submission_time__isnull=False)
+        )
+        if elaborations:
+            last_submit = elaborations.latest('submission_time')
+            if last_submit.submission_time < (datetime.now() - timedelta(days=PERIOD)):
+                return False
+            else:
+                return (last_submit.submission_time + timedelta(days=PERIOD))
+        return False
