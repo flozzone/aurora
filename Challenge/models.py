@@ -238,11 +238,14 @@ class Challenge(models.Model):
 
     def is_in_lock_period(self, user):
         PERIOD = 13
+        START_YEAR = 2014
+        START_MONTH = 5
+        START_DAY = 15
 
         final_challenge_ids = Challenge.get_final_challenge_ids()
         elaborations = (
             Elaboration.objects
-            .filter(challenge__id__in=final_challenge_ids, user=user, submission_time__isnull=False)
+            .filter(challenge__id__in=final_challenge_ids, user=user, submission_time__gt=datetime(START_YEAR, START_MONTH, START_DAY))
         )
         if elaborations:
             last_submit = elaborations.latest('submission_time')
