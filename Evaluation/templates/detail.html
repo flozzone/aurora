@@ -42,7 +42,7 @@
         {% render_uploads elaboration %}
 
         {% if elaboration.elaboration_text|length != 0 %}
-            <textarea id="editor_detail">{{ elaboration.elaboration_text|safe }}</textarea>
+            <textarea id="editor_detail">{{ elaboration.elaboration_text}}</textarea>
         {% endif %}
         <div class="spacer"></div>
 

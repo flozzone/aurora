@@ -25,14 +25,14 @@
         {{ review.elaboration.challenge.title }}
       </div>
       <div class="description">
-        {{ review.elaboration.challenge.description|safe }}
+        {{ review.elaboration.challenge.description|urlizetrunc:25 }}
       </div>
     </div>
 
 {% render_uploads review.elaboration %}
 
     <div class="elaboration">
-      <textarea id="editor_review">{{ review.elaboration.elaboration_text|safe }}</textarea>
+      <textarea id="editor_review">{{ review.elaboration.elaboration_text }}</textarea>
     </div>
 
 	<div class="betweentext"><i class="fa fa-arrow-right"></i> <b>Before you start reviewing, please read
