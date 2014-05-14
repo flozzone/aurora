@@ -93,8 +93,8 @@
     <form method="post">
       <textarea id="editor">{{ elaboration.elaboration_text }}</textarea>
     </form>
-      <button id="EWfE" class="submit XL R" {% if lock %}disabled="disabled"{% endif %}>
-          {% if lock %}You can enter work for Evaluation on {{ lock }}
+      <button id="EWfE" class="{% if not lock %} submit {% endif %}XL R" {% if lock %}disabled="disabled" style="color:darkred;"{% endif %}>
+          {% if lock %}enter this work for Evaluation on {{ lock }} or later
           {% else %}Enter work for Evaluation
           {% endif %}
       </button>
