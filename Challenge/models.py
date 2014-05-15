@@ -259,8 +259,6 @@ class Challenge(models.Model):
         START_MONTH = 5
         START_DAY = 15
 
-        print("course: ", course.course_number)
-
         final_challenge_ids = Challenge.get_course_final_challenge_ids(course)
         elaborations = (
             Elaboration.objects
