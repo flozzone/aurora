@@ -107,7 +107,7 @@ def create_context_challenge(request):
                 data['evaluation'] = Evaluation.objects.filter(submission=elaboration)[0]
 
         if challenge.is_final_challenge():
-            if challenge.is_in_lock_period(RequestContext(request)['user']):
+            if challenge.is_in_lock_period(RequestContext(request)['user'], RequestContext(request)['last_selected_course']):
                 data['lock'] = challenge.is_in_lock_period(RequestContext(request)['user'])
     return data
 

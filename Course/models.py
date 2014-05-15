@@ -20,6 +20,13 @@ class Course(models.Model):
             challenges.append(ccr.challenge)
         return challenges
 
+    def get_non_course_challenges(self):
+        challenges = []
+        ccrs = CourseChallengeRelation.objects.all().exclude(course=self)
+        for ccr in ccrs:
+            challenges.append(ccr.challenge)
+        return challenges
+
     def user_is_enlisted(self, user):
         try:
             CourseUserRelation.objects.get(user=user, course=self)

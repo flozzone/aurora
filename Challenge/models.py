@@ -8,7 +8,7 @@ from Stack.models import StackChallengeRelation
 from ReviewQuestion.models import ReviewQuestion
 from Review.models import Review
 from Elaboration.models import Elaboration
-from Course.models import CourseChallengeRelation
+from Course.models import CourseChallengeRelation, Course
 
 
 def challenge_image_path(instance, filename):
@@ -102,6 +102,23 @@ class Challenge(models.Model):
         final_challenge_ids = (
             Challenge.objects
             .exclude(id__in=list(peer_review_challenges))
+            .values_list('id', flat=True)
+        )
+        return final_challenge_ids
+
+    @staticmethod
+    def get_course_final_challenge_ids(course):
+        peer_review_challenges = (
+            Challenge.objects
+            .filter(prerequisite__isnull=False).values_list('prerequisite', flat=True)
+        )
+        non_course_challenges = []
+        for course in course.get_non_course_challenges():
+            non_course_challenges.append(course.id)
+        knockout_list = non_course_challenges + list(peer_review_challenges)
+        final_challenge_ids = (
+            Challenge.objects
+            .exclude(id__in=knockout_list)
             .values_list('id', flat=True)
         )
         return final_challenge_ids
@@ -236,13 +253,15 @@ class Challenge(models.Model):
     def get_questions(context):
         return Comment.get_ref_objects_with_unanswered_user_comments(Challenge)
 
-    def is_in_lock_period(self, user):
+    def is_in_lock_period(self, user, course):
         PERIOD = 13
         START_YEAR = 2014
         START_MONTH = 5
         START_DAY = 15
 
-        final_challenge_ids = Challenge.get_final_challenge_ids()
+        print("course: ", course.course_number)
+
+        final_challenge_ids = Challenge.get_course_final_challenge_ids(course)
         elaborations = (
             Elaboration.objects
             .filter(challenge__id__in=final_challenge_ids, user=user, submission_time__gt=datetime(START_YEAR, START_MONTH, START_DAY))
