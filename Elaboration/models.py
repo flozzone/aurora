@@ -8,6 +8,7 @@ from Evaluation.models import Evaluation
 from Review.models import Review
 from FileUpload.models import UploadFile
 from ReviewAnswer.models import ReviewAnswer
+from collections import Counter
 
 
 class Elaboration(models.Model):
@@ -263,9 +264,10 @@ class Elaboration(models.Model):
             .filter(appraisal=Review.AWESOME, submission_time__isnull=False)
             .values_list('elaboration__id', flat=True)
         )
+        multiple_awesome_review_ids = ([k for k,v in Counter(awesome_review_ids).items() if v>1])
         awesome_elaborations = (
             Elaboration.objects
-            .filter(id__in=awesome_review_ids, user__is_staff=False)
+            .filter(id__in=multiple_awesome_review_ids, user__is_staff=False)
         )
         return awesome_elaborations
 
