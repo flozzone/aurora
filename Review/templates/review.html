@@ -25,7 +25,7 @@
         {{ review.elaboration.challenge.title }}
       </div>
       <div class="description">
-        {{ review.elaboration.challenge.description|urlizetrunc:25 }}
+        {{ review.elaboration.challenge.description|safe|urlizetrunc:25 }}
       </div>
     </div>
 

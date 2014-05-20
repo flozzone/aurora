@@ -116,7 +116,7 @@
     <textarea id="editor_challenge">{{ elaboration.elaboration_text }}</textarea>
 {% if evaluation %}
     <div class="comments">
-      <div class="evaluation_text">Evaluation text: {{ evaluation.evaluation_text }}</div>
+      <div class="evaluation_text">Evaluation text: {{ evaluation.evaluation_text|safe }}</div>
     </div>
 {% endif %}
     <div class="comment_section">
