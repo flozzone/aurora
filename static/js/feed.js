@@ -83,40 +83,40 @@ function filter(fx,usr) {
 	$('#new_date').text(''); clearTimeout(updateNew_Timer);
 	
     switch (fx) {
-        case 1:
+        case 1: // show all comments
             $('.response,.comment,.r_list').removeClass('hided');
             $('.r_list').show();
             break;
-        case 2:
+        case 2: // lecturers
             $('.response,.comment,.r_list').removeClass('hided');
             $('.r_list').show();
             $('.response:not(.staff_author):not(.author_author),.comment:not(.staff_author):not(.author_author)').addClass('hided');
             $('#' + $('.response.staff_author').parent().attr('class').split(' ')[0].slice(2)).removeClass('hided');
             break;
-        case 3:
+        case 3: // good comments 
             $('.response,.comment,.r_list').removeClass('hided');
             $('.r_list').show();
             $('.not3:not(.author_author)').addClass('hided');
             break;
-		case 4:
+		case 4:  // top-level comments, no replies
             $('.response,.comment,.r_list').removeClass('hided');
             $('.response').addClass('hided');
 			break;
-		case 99: 
+		case 99:  // only staff comments
         	$('.response,.comment,.r_list').removeClass('hided');
             $('.response:not(.staff_visibility),.comment:not(.staff_visibility)').addClass('hided');
             $('.response:not(.staff_visibility),.comment:not(.staff_visibility)').addClass('hided');
 			break;
-		case 98: 
+		case 98:  // no staff comments
         	$('.response,.comment,.r_list').removeClass('hided');
             $('.response.staff_visibility,.comment.staff_visibility').addClass('hided');
 			break;
-        case -5:
+        case -5: // no lame comments
             $('.response,.comment,.r_list').removeClass('hided');
             $('.r_list').show();
             $('.neg5:not(.author_author)').addClass('hided');
             break;
-        case 0:
+        case 0: // new comments
             $('.response,.comment,.r_list').addClass('hided');
             $('.r_list').addClass('hided');
 			var cookieName = 'filterTimeCookie.'+$('#the_username').data('username');
@@ -193,6 +193,7 @@ function markT(usr) {
     "use strict";
 
 	var s = Date.now() /1000 || 0;
+	s = s-30;
 	var a = "filterTimeCookie." + usr + "=" + s.toString() + "; expires=Tue, 18 Jan 2038 03:14:06 GMT";
 	document.cookie = a;
 }
