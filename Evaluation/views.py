@@ -94,6 +94,7 @@ def overview(request):
     else:
         elaborations.order_by('submission_time')
 
+    print("calling OVERVIEW... elaboration_id in session = " ,request.session.get('elaboration_id'))
 
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
