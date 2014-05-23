@@ -58,6 +58,8 @@ def evaluation(request):
 
     challenges = Challenge.objects.all()
 
+    print("calling EVALUATION... elaboration_id in session = " ,request.session.get('elaboration_id'))
+
     return render_to_response('evaluation.html',
                               {'challenges': challenges,
                                'count_' + request.session.get('selection', ''): request.session.get('count', ''),
@@ -151,9 +153,11 @@ def detail(request):
     request.session['elaboration_id'] = elaboration.id
 
     if selection == "missing_reviews":
+        print("calling ELABORATION_DETAIL (missing reviews)... for elaboration_id = ", request.session.get('elaboration_id'))
         questions = ReviewQuestion.objects.filter(challenge=elaboration.challenge).order_by("order")
         params = {'questions': questions, 'selection': 'missing reviews'}
     if selection == "top_level_challenges":
+        print("calling ELABORATION_DETAIL (top level challenge)... for elaboration_id = ", request.session.get('elaboration_id'))
         evaluation = None
         user = RequestContext(request)['user']
         lock = False
@@ -356,6 +360,7 @@ def submit_evaluation(request):
         image_url= elaboration.challenge.image.url,
         link="/challenges/stack?id=" + str(elaboration.challenge.get_stack().id)
     )
+
     obj.read = False
     obj.save
     return HttpResponse()
@@ -389,6 +394,7 @@ def reopen_evaluation(request):
 @csrf_exempt
 @staff_member_required
 def set_appraisal(request):
+
     review_id = request.POST['review_id']
     appraisal = request.POST['appraisal']
 
@@ -553,12 +559,20 @@ def load_reviews(request):
 @login_required()
 @staff_member_required
 def review_answer(request):
+
+    print("saving REVIEW... for elaboration_id = " ,request.session.get('elaboration_id'))
+
     if request.POST:
         data = request.body.decode(encoding='UTF-8')
         data = json.loads(data)
+
         user = RequestContext(request)['user']
         answers = data['answers']
+
         review = Review.objects.create(elaboration_id=request.session.get('elaboration_id', ''), reviewer_id=user.id)
+
+        print("generated review_id = " , review.id)
+
         review.appraisal = data['appraisal']
         review.submission_time = datetime.now()
         review.save()
