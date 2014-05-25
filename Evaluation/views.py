@@ -19,7 +19,7 @@ from django.db import models
 
 from Challenge.models import Challenge
 from Comments.models import Comment
-from Course.models import Course, CourseChallengeRelation
+from Course.models import Course, CourseChallengeRelation, CourseUserRelation
 from Elaboration.models import Elaboration
 from Evaluation.models import Evaluation
 from PortfolioUser.models import PortfolioUser
@@ -46,7 +46,11 @@ def evaluation(request):
         for serialized_elaboration in serializers.deserialize('json', request.session.get('elaborations', {})):
             elaborations.append(serialized_elaboration.object)
         if selection == 'search':
-            data = { 'elaborations': elaborations, 'search': True }
+            if 'id' in request.GET:
+                points = get_points(request, PortfolioUser.objects.get(pk=request.GET['id']))
+                data = { 'elaborations': elaborations, 'search': True, 'stacks': points['stacks'], 'courses': points['courses'] }
+            else:
+                data = { 'elaborations': elaborations, 'search': True }
         else:
             data = { 'elaborations': elaborations }
         overview = render_to_string('overview.html', data, RequestContext(request))
@@ -434,7 +438,9 @@ def select_user(request):
     user = PortfolioUser.objects.get(username=selected_user)
     elaborations = user.get_elaborations()
 
-    html = render_to_response('overview.html', {'elaborations': elaborations, 'search': True}, RequestContext(request))
+    points = get_points(request, user)
+    html = render_to_response('overview.html',
+        {'elaborations': elaborations, 'search': True, 'stacks': points['stacks'], 'courses': points['courses'] }, RequestContext(request))
 
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
@@ -713,3 +719,30 @@ def sort(request):
     }
 
     return HttpResponse(json.dumps(data))
+
+
+@login_required()
+@staff_member_required
+def get_points(request, user):
+
+    data = {}
+    course_ids = CourseUserRelation.objects.filter(user=user).values_list('course', flat=True)
+    courses = Course.objects.filter(id__in=course_ids)
+    data['courses'] = courses
+    data['stacks'] = []
+    for course in courses:
+        stack_data = {}
+        course_stacks = Stack.objects.all().filter(course=course)
+        stack_data['course_title'] = course.title
+        stack_data['course_stacks'] = []
+        points_sum = 0
+        for stack in course_stacks:
+            stack_data['course_stacks'].append({
+                'stack': stack,
+                'points': stack.get_points(user)
+            })
+            points_sum += stack.get_points(user)
+        stack_data['sum'] = points_sum
+        data['stacks'].append(stack_data)
+
+    return data

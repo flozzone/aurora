@@ -38,10 +38,22 @@
                 </td>
             </tr>
         {% endfor %}
+
         {% get_pages %}
         {{ pages.previous }} {{ pages.next }}
 
     </table>
+
+    <div>
+        {% if courses %}
+            <br/>
+            <div class="feed_header"  id="part_0"><i class="fa fa-toggle-down half"></i> <b>Punktestand</b></div>
+			<div class="feed_column"  id="content_part_0">
+            {% include 'points.html' %}
+			</div>
+        {% endif %}
+    </div>
+
 	<script>
 		$(".indicator:contains('0')").addClass('zero_reviews');
 	</script>
