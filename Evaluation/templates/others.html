@@ -22,7 +22,7 @@
         <div class="spacer"></div>
 
         {% if evaluation %}
-		Written feedback
+		Written feedback by {{ evaluation.tutor }}
             <div class="evaluation eval_done">
                 {{ evaluation.evaluation_text|safe }}
             </div>
