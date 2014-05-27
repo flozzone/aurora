@@ -251,11 +251,12 @@ class Elaboration(models.Model):
 
     @staticmethod
     def get_complaints(context):
-        elaborations = []
+        elaborations = set()
         for review in Comment.get_ref_objects_with_unanswered_user_comments(Review):
-            if not review.elaboration in elaborations:
-                elaborations.append(review.elaboration)
-        return elaborations
+            elaborations.add(review.elaboration)
+        for elaboration in Comment.get_ref_objects_with_unanswered_user_comments(Elaboration):
+            elaborations.add(elaboration)
+        return list(elaborations)
 
     @staticmethod
     def get_awesome():
