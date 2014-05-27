@@ -524,7 +524,7 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
 
     my.updateCommentLists = function (keepPolling) {
         var data = {revisions: my.getRevisions()};
-
+		$('#lindicator').fadeIn(50);
         $.ajax({
             url: '/update_comments/',
             data: data,
@@ -556,6 +556,7 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
                 xhr.setRequestHeader("X-CSRFToken", csrftoken);
             }
         });
+		$('#lindicator').fadeOut(200);
     };
 
     my.findCommentListByRef = function (ref_id, ref_type) {

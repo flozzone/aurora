@@ -14,7 +14,7 @@
 {% block content %}
 
    <h1>
-       <div class="back"  title="Back to evaluation Overview" id="{{ selection }}"><i class="fa fa-angle-double-up"></i> go back</div> <b>&nbsp;{{ selection|title }}&nbsp;</b>
+       <div class="back"  title="Back to evaluation overview" id="{{ selection }}"><i class="fa fa-angle-double-up"></i> go back</div> <b>&nbsp;{{ selection|title }}&nbsp;</b>
    </h1>
 
   <div class="detail_left">
@@ -26,7 +26,7 @@
 	 <div class="elab_title">{{elaboration.challenge.title}}</div>
         <img class="gravatar" src="{{ elaboration.user.avatar.url }}" style="vertical-align:middle" onclick="$('#top_detail').toggleClass('hidden_detail')">
         {{ elaboration.user.nickname }} ({{ elaboration.user.first_name }} {{ elaboration.user.last_name }}/{{ elaboration.user.username }}) @ <span title="{{elaboration.submission_time}}">{{elaboration.submission_time|naturaltime}}</span>:
-		 <div class="author_detail hidden_detail" id="top_detail" onclick="$(this).addClass('hidden_detail')">
+		 <div class="author_detail staff_detail" id="top_detail" onclick="$(this).addClass('hidden_detail')">
 			 <img src='{{elaboration.user.avatar.url}}'>
 			 <span class="nick">{{elaboration.user.nickname}}</span><br>
 			 &quot;{{elaboration.user.statement|urlizetrunc:50}}&quot;<br>
@@ -45,7 +45,7 @@
             <textarea id="editor_detail">{{ elaboration.elaboration_text}}</textarea>
         {% endif %}
         <div class="spacer"></div>
-
+		
         {% if evaluation %}
 		Written feedback<div class="error"></div>
             <form method="post">

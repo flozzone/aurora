@@ -1,5 +1,5 @@
 /**
- * Created by peterpur on 22.2.2014.
+ * Created by peterpur between 22.2.2014 and now.
  */
 
 var loadMore_Timer;
@@ -167,7 +167,7 @@ function headClick(aDiv) {
 	var thisID = $(aDiv).data('comment_number');
 	var indexID = $.inArray(thisID.toString(),clickedComments);
 	if (indexID==-1) {clickedComments.push(thisID)} else {clickedComments.splice(indexID,1)}
-	var morgs = "clickcookie." + $('#the_username').data('username') + "=" + clickedComments.join(',') + "; expires=Tue, 18 Jan 2038 03:14:06 GMT";;
+	var morgs = "clickcookie." + $('#the_username').data('username') + "=" + clickedComments.join(',') + "; expires=Tue, 18 Jan 2038 03:14:06 GMT";
 //	alert (morgs);
 	document.cookie = morgs;
 	

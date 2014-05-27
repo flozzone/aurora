@@ -105,8 +105,8 @@
 }
 
 .inactive {
-	opacity:0.5;
-	filter:alpha(opacity=50); /* For IE8 and earlier */
+	opacity:0.65;
+	filter:alpha(opacity=65); /* For IE8 and earlier */
 }
 
 
@@ -134,6 +134,10 @@
 	padding:0.25em;
 	padding-bottom:0;
 	padding-left:0.75em;
+}
+
+.cd-full {
+	height:auto !important;
 }
 
 .challenge-text {

@@ -733,11 +733,18 @@ th {
 	top:-1px;
 }
 
+.staff_detail {
+	border-top:1px solid gray;
+	border-bottom:1px solid gray;
+	background-color:rgba(200,200,200,0.3) !important;
+	box-shadow:none !important;
+}
+
 .hidden_detail {
 	display:none;
 }
 
-.author_detail .nick {
+.author_detail .nick, .author_detail_staff .nick {
 	font-weight:bold;
 }
 
