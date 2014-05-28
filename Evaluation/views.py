@@ -168,7 +168,17 @@ def detail(request):
     if selection == "non_adequate_work":
         params = {'selection': 'non-adequate work'}
     if selection == "complaints":
-        params = {'selection': 'complaints'}
+        if elaboration.challenge.is_final_challenge():
+            evaluation = None
+            user = RequestContext(request)['user']
+            lock = False
+            if Evaluation.objects.filter(submission=elaboration):
+                evaluation = Evaluation.objects.get(submission=elaboration)
+                if evaluation.tutor != user and not evaluation.is_older_15min():
+                    lock = True
+            params = {'evaluation': evaluation, 'lock': lock, 'selection': 'complaints'}
+        else:
+            params = {'selection': 'complaints'}
     if selection == "awesome":
         params = {'selection': 'awesome'}
     if selection == "evaluated_non_adequate_work":
