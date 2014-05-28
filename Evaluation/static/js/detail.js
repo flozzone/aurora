@@ -82,10 +82,6 @@ $(function() {
             $(".error").html("you forgot feedback!");
             return;
         }
-        if (points == 0) {
-            $(".error").html("points must be numeric!");
-            return;
-        }
         var data = {
             elaboration_id: $(event.target).attr('id'),
             evaluation_text: $(".evaluation").html(),
