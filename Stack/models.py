@@ -34,17 +34,17 @@ class Stack(models.Model):
         return evaluation.evaluation_points
 
     def get_last_available_challenge(self, user):
-        print ("####################GET_LAST_AVAILABLE_CHALLENGE")
+        print ("####################calling GET_LAST_AVAILABLE_CHALLENGE")
         available_challenge = None
         for challenge in self.get_challenges():
-            print ("####################IN SELF.GET_CHALLENGES LOOP")
+            print ("**********************in self.get_challenges() loop")
             if challenge.is_enabled_for_user(user):
-                print ("####################CHALLENGE.IS_ENABLED_FOR_USER")
+                print ("*******challenge enabled for user: ", challenge.title)
                 available_challenge = challenge
             else:
-                print ("####################!!NOT!! CHALLENGE.IS_ENABLED_FOR_USER")
+                print ("*******!!NOT!! challenge enabled for user: ", challenge.title)
         if not self.get_challenges():
-            print ("####################SELF.GET_CHALLENGES_RETURNS NOTHING")
+            print ("*******no elements in self.get_challenges()")
         return available_challenge
 
     def get_status_text(self, user):

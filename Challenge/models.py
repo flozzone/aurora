@@ -173,29 +173,23 @@ class Challenge(models.Model):
         course = CourseChallengeRelation.objects.filter(challenge=self)[0].course
         if not course.user_is_enlisted(user):
             return False
-        print("*********************COURSE TITLE: ", course.title)
 
         # first challenge is always enabled
         if self.is_first_challenge():
-            print("*********************FIRST CHALLENGE")
             return True
 
         # if challenge is already submitted it is enabled by default
         elaboration = self.get_elaboration(user)
         if elaboration:
-            print("*********************ELABORATION FOR CHALLENGE: ", elaboration.challenge.title)
-            print("*********************ELABORATION ID: ", elaboration.id)
             if elaboration.is_submitted():
                 return True
 
         # if the stack is blocked the challenge is not available
         if self.get_stack().is_blocked(user):
-            print("*********************STACK BLOCKED")
             return False
 
         # if not final challenge the prerequisite must have enough (3) user reviews
         if not self.is_final_challenge():
-            print("*********************NOT A FINAL CHALLENGE")
             if self.prerequisite.has_enough_user_reviews(user):
                 return True
             else:
@@ -205,9 +199,6 @@ class Challenge(models.Model):
         # the prerequisite must have enough (3) user reviews
         # and the stack must have enough peer reviews
         else:
-            print("*********************FINAL CHALLENGE")
-            print("*********************FINAL CHALLENGE ID: ", self.id)
-            print("*********************FINAL CHALLENGE TITLE: ", self.title)
             if not self.prerequisite.has_enough_user_reviews(user):
                 return False
             if self.get_stack().has_enough_peer_reviews(user):
