@@ -35,6 +35,8 @@ class Stack(models.Model):
 
     def get_last_available_challenge(self, user):
         print ("####################calling GET_LAST_AVAILABLE_CHALLENGE")
+        print ("*******username: ", user.username)
+        print ("*******userid: ", user.id)
         available_challenge = None
         for challenge in self.get_challenges():
             print ("**********************in self.get_challenges() loop")
