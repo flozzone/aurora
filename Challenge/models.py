@@ -206,6 +206,8 @@ class Challenge(models.Model):
         # and the stack must have enough peer reviews
         else:
             print("*********************FINAL CHALLENGE")
+            print("*********************FINAL CHALLENGE ID: ", self.id)
+            print("*********************FINAL CHALLENGE TITLE: ", self.title)
             if not self.prerequisite.has_enough_user_reviews(user):
                 return False
             if self.get_stack().has_enough_peer_reviews(user):
