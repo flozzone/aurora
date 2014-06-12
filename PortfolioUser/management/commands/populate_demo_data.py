@@ -31,7 +31,7 @@ def init_data():
     CommentsConfig.setup()
 
     number_of_users = 50
-    number_of_tutors = 50
+    number_of_tutors = 5
     users = []
     dummy_users = []
     tutors = []
@@ -62,7 +62,7 @@ def init_data():
         dummy_user.first_name = 'Firstname_%s' % username
         dummy_user.last_name = 'Lastname_%s' % username
         dummy_user.nickname = 'Nickname_%s' % username
-        dummy_user.is_staff = True
+        dummy_user.is_staff = False
         dummy_user.is_superuser = False
         password = username
         dummy_user.set_password(password)
