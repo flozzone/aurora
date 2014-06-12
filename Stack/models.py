@@ -38,7 +38,12 @@ class Stack(models.Model):
         print ("*******username: ", user.username)
         print ("*******userid: ", user.id)
         available_challenge = None
+        iteration = 0
         for challenge in self.get_challenges():
+            if iteration == 0:
+                print ("*******stack title: ", challenge.get_stack().title)
+                print ("*******stack id: ", challenge.get_stack().id)
+            iteration+=1
             if challenge.is_enabled_for_user(user):
                 print ("*******challenge enabled for user: ", challenge.title)
                 available_challenge = challenge
