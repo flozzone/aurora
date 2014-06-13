@@ -33,7 +33,7 @@
             <img class="challenge_image active" src="{{ challenge_dict.challenge.image.url }}">
         </div>
           <div class="challenge-description">
-                <div class="challenge-headline">{{ challenge_dict.challenge.title }}</div>
+                <div class="challenge-headline">{{ challenge_dict.challenge.title|safe }}</div>
                 <div class="challenge-text">{{ challenge_dict.challenge.description|safe}}</div>
           </div>
         <a href="/challenges/challenge?id={{ challenge_dict.challenge.id }}" class="go_challenge button XL active" onclick="event.stopPropagation();">
