@@ -27,7 +27,7 @@
 {% if elaboration.is_submitted %}
     <i class="fa fa-toggle-down"></i>
 {% endif %}
-    {{ challenge.title }}
+    {{ challenge.title|safe }}
     </div>
     <div class="challenge_description{% if elaboration.is_submitted %} nothere{% endif %}" >
       {{ challenge.description|safe|urlize }}

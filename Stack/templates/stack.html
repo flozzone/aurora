@@ -15,7 +15,7 @@
   <div class="challenges_stack">
 	  <div class="stack_info">
       <div class="info_title">
-          {{ stack.title }}
+          {{ stack.title|safe }}
         </div>
       <div class="info_description">
           {{ stack.description|safe|urlize }}
@@ -125,7 +125,7 @@
                <img class="challenge_image active" src="{{ challenge_dict.challenge.image.url }}">
            </div>
              <div class="challenge-description">
-                   <div class="challenge-headline">{{ challenge_dict.challenge.title }}</div>
+                   <div class="challenge-headline">{{ challenge_dict.challenge.title|safe }}</div>
                    <div class="challenge-text">{{ challenge_dict.challenge.description|safe}}</div>
              </div>
            <div class="go_challenge button XL active" challenge_id="{{ challenge_dict.challenge.id }}">
@@ -140,7 +140,7 @@
 	             <img class="challenge_image active" src="{{ challenge.image.url }}">
 	         </div>
 	           <div class="challenge-description">
-	               <div class="challenge-headline">{{ challenge.title }}</div>
+	               <div class="challenge-headline">{{ challenge.title|safe }}</div>
 	               <div class="challenge-text">{{ challenge.description|safe}}</div>
 	           </div>
            <div class="go_challenge button XL active" challenge_id="{{ challenge.id }}">
@@ -168,7 +168,7 @@
               <img class="challenge_image active" src="{{ challenge.image.url }}">
           </div>
             <div class="challenge-description cd-full">
-                <div class="challenge-headline" >{{ challenge.title }}</div>
+                <div class="challenge-headline" >{{ challenge.title|safe }}</div>
 				<div class="challenge-text-full">{{ challenge.description|safe}}</div>
 				
             </div>
