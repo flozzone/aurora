@@ -19,6 +19,7 @@ class CommentAdmin(admin.ModelAdmin):
             }
         ),
     ]
+    search_fields = ('author__username',)
     list_display = ('id', 'text', 'author', 'post_date', 'delete_date', 'deleter', 'parent', 'promoted', 'content_type', 'object_id', )
 
 admin.site.register(Comment, CommentAdmin)
