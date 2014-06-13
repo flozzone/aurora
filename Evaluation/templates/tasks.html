@@ -6,7 +6,7 @@
     {% for elaboration in stack_elaborations %}
         <tr onclick="load_reviews({{ elaboration.id }})" class="{% cycle 'darkTableRow' 'lightTableRow' %}">
             <td><img src="{{ elaboration.challenge.image.url }}" class="mini_task_img"></td>
-            <td>{{ elaboration.challenge.title }}</td>
+            <td>{{ elaboration.challenge.title|safe }}</td>
             <td class="timestamp" title="{{ elaboration.submission_time }}">{{ elaboration.submission_time|naturaltime }}</td>
             <td class="indicator_field">
 				<div title="Great work" class="awesome_reviews indicator">{{ elaboration.get_awesome_reviews|length }}</div>

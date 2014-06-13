@@ -11,7 +11,7 @@
     <table>
         <tr class="{% cycle 'darkTableRow' 'lightTableRow' %}">
             <td><img class="mini_task_img" src="{{ elaboration.challenge.image.url }}" width="32" height="32"></td>
-            <td>{{ elaboration.challenge.title }}</td>
+            <td>{{ elaboration.challenge.title|safe }}</td>
             <td class="timestamp" title="{{ elaboration.submission_time}}">{{ elaboration.submission_time|naturaltime }}</td>
             <td class="indicator_field">
 				<div title="Great work" class="awesome_reviews indicator">{{ elaboration.get_awesome_reviews|length }}</div>

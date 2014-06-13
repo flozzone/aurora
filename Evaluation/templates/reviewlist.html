@@ -15,7 +15,7 @@
 			<tr><td>&nbsp;</td><td></td></tr>
             <tr class="R_first_row">
                 <td><img src="{{ review.elaboration.challenge.image.url }}" class="mini_task_img"></td>
-                <td class="elab_title" colspan="3">{{ review.elaboration.challenge.title }}</td>
+                <td class="elab_title" colspan="3">{{ review.elaboration.challenge.title|safe }}</td>
             </tr>
         {% endifchanged %}
         <tr onclick="load_reviews({{ review.elaboration.id }})" class="{% cycle 'darkTableRow' 'lightTableRow' %}">

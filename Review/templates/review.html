@@ -22,7 +22,7 @@
     <div class="challenge" id="{{ review.elaboration.challenge.id }}">
 
       <div class="title">
-        {{ review.elaboration.challenge.title }}
+        {{ review.elaboration.challenge.title|safe }}
       </div>
       <div class="description">
         {{ review.elaboration.challenge.description|safe|urlizetrunc:25 }}

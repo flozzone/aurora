@@ -25,7 +25,7 @@
         {% for elaboration in elaborations %}
             <tr class="{% cycle 'darkRow' 'lightRow' %}">&nbsp;
                 <td onclick="load_details({{ elaboration.id }})"><img class="gravatar" src="{{ elaboration.user.avatar.url }}" style="vertical-align:middle"> {{ elaboration.user.nickname }}</td>
-                <td onclick="load_details({{ elaboration.id }})">{{ elaboration.challenge.title }}</td>
+                <td onclick="load_details({{ elaboration.id }})">{{ elaboration.challenge.title|safe }}</td>
                 <td class="timestamp" onclick="load_details({{ elaboration.id }})" title="{{ elaboration.submission_time }}">{{ elaboration.submission_time|naturaltime}}</td>
                 <td onclick="load_details({{ elaboration.id }})">
                 <div title="Great work" class="awesome_reviews indicator">{{ elaboration.get_awesome_reviews|length }}</div>

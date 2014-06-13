@@ -1,11 +1,11 @@
 {% block content %}
 
-    <div class="evc_title"> {{ stack.title }} </div>
+    <div class="evc_title"> {{ stack.title|safe }} </div>
     <div class="evc_description">{{ stack.description|safe|urlizetrunc:40 }}</div>
     <br/>
 
     <img class="evc_challenge_image" src="{{ challenge.image.url }}">
-    <div class="evc_title"> {{ challenge.title }} </div>
+    <div class="evc_title"> {{ challenge.title|safe }} </div>
     <div class="evc_description">{{ challenge.description|safe|urlizetrunc:40 }}</div>
 
 {% endblock %}

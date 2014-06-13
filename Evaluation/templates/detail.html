@@ -23,7 +23,7 @@
 	     {% if next %}<div class="paginator next" id="{{ next }}">next <i class="fa fa-angle-double-right"></i></div>{% else %}<div class="no-paginator next">no next</div>{% endif %}
 	 </div>
      <div class="spacer"></div>
-	 <div class="elab_title">{{elaboration.challenge.title}}</div>
+	 <div class="elab_title">{{elaboration.challenge.title|safe}}</div>
         <img class="gravatar" src="{{ elaboration.user.avatar.url }}" style="vertical-align:middle" onclick="$('#top_detail').toggleClass('hidden_detail')">
         {{ elaboration.user.nickname }} ({{ elaboration.user.first_name }} {{ elaboration.user.last_name }}/{{ elaboration.user.username }}) @ <span title="{{elaboration.submission_time}}">{{elaboration.submission_time|naturaltime}}</span>:
 		 <div class="author_detail staff_detail" id="top_detail" onclick="$(this).addClass('hidden_detail')">
