@@ -15,7 +15,7 @@ class ReviewAdmin(admin.ModelAdmin):
         ),
     ]
     list_display = ('id', 'elaboration', 'creation_time', 'submission_time', 'reviewer', )
-    search_fields = ('reviewer__username',)
+    search_fields = ('reviewer__username','elaboration__id',)
     readonly_fields = ("creation_time", )
 
 admin.site.register(Review, ReviewAdmin)
