@@ -675,7 +675,7 @@ class ElaborationTest(TestCase):
         dummy_user1 = self.dummy_users[0]
 
         new = datetime.now()
-        old = datetime.now() - timedelta(days=3)
+        old = datetime.now() - timedelta(days=2)
 
         dummy_elaboration1 = Elaboration(challenge=challenge1, user=dummy_user1, elaboration_text="test",
                                          submission_time=old)
