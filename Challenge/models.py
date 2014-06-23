@@ -254,7 +254,7 @@ class Challenge(models.Model):
         return Comment.get_ref_objects_with_unanswered_user_comments(Challenge)
 
     def is_in_lock_period(self, user, course):
-        PERIOD = 10
+        PERIOD = 8
         START_YEAR = 2014
         START_MONTH = 5
         START_DAY = 15
