@@ -118,6 +118,7 @@ function real_submit_clicked(event) {
     elaboration_save(challenge_id, true);
 }
 
+/*
 function send_submit() {
     var challenge = $('.challenge');
     var challenge_id = challenge.attr('id');
@@ -136,4 +137,4 @@ function send_submit() {
         }
     };
     $.ajax(args);
-}
+}*/
