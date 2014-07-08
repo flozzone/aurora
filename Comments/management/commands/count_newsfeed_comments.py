@@ -32,4 +32,4 @@ class Command(NoArgsCommand):
         for user in authors:
           parent_count = parent_counts[user] if user in parent_counts.keys() else 0
           reply_count = reply_counts[user] if user in reply_counts.keys() else 0
-          print(str(user.nickname) + "	" + str(user) + "	" + str(parent_count) + "	" + str(reply_count))
+          print(str(user.nickname) + "\t" + str(user) + "\t" + str(parent_count) + "\t" + str(reply_count))
