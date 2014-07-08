@@ -5,7 +5,7 @@ from django.contrib.contenttypes.models import ContentType
 
 class Command(NoArgsCommand):
     def handle_noargs(self, **options):
-        ref_object = CommentReferenceObject.objects.get(name='newsfeed');
+        ref_object = CommentReferenceObject.objects.get(name='newsfeed')
         content_type = ContentType.objects.get_for_model(ref_object)
         ref_id = ref_object.id
         ref_type = content_type.id
