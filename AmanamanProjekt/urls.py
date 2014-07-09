@@ -8,6 +8,9 @@ admin.autodiscover()
 urlpatterns = patterns('',
                        # Examples:
                        url(r'^$', 'AmanamanProjekt.views.home', name='home'),
+                       url(r'result_users', 'AmanamanProjekt.views.result_users', name='result_users'),
+                       url(r'result_elabs_nonfinal', 'AmanamanProjekt.views.result_elabs_nonfinal', name='result_elabs_nonfinal'),
+                       url(r'result_elabs_final', 'AmanamanProjekt.views.result_elabs_final', name='result_elabs_final'),
                        url(r'', include('PortfolioUser.urls')),
                        url(r'', include('Challenge.urls')),
                        url(r'', include('Elaboration.urls')),
