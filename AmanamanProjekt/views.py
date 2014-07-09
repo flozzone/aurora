@@ -5,6 +5,8 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 
+from datetime import datetime
+
 from Comments.models import CommentReferenceObject
 from Stack.models import Stack
 from Course.models import Course, CourseUserRelation
@@ -55,6 +57,12 @@ def home(request):
     else:
         return redirect('/login')
 
+def time_to_unix_string(time):
+    delta = time - datetime(1970, 1, 1)
+    hours = delta.days * 24
+    seconds = hours * 3600
+    seconds += delta.seconds
+    return str(seconds)
 
 @login_required()
 @staff_member_required
@@ -66,7 +74,7 @@ def result_users(request):
                                          user.first_name,
                                          user.last_name,
                                          user.study_code,
-                                         str(user.last_activity),
+                                         time_to_unix_string(user.last_activity),
                                          user.statement)
         s += "\n"
 
@@ -88,19 +96,19 @@ def result_elabs_nonfinal(request):
     s = ""
     for elab in elabs:
         s += "\t".join(["{}"] * 6).format(
-            elab.user.username + " (" + str(elab.user.matriculation_number) + ")",
+            str(elab.user.matriculation_number),
             str(elab.id),
             elab.challenge.title,
             str(elab.challenge.id),
-            str(elab.creation_time),
-            str(elab.submission_time)
+            time_to_unix_string(elab.creation_time),
+            time_to_unix_string(elab.submission_time)
         )
 
         for review in Review.objects.filter(elaboration=elab):
             s += "\t" + str(review.id)
             s += "\t" + str(review.appraisal)
-            s += "\t" + str(review.creation_time)
-            s += "\t" + str(review.submission_time)
+            s += "\t" + time_to_unix_string(review.creation_time)
+            s += "\t" + time_to_unix_string(review.submission_time)
 
         s += "\n"
 
@@ -121,16 +129,16 @@ def result_elabs_final(request):
     for eval in evals:
         elab = eval.submission
         s += "\t".join(["{}"] * 11).format(
-            elab.user.username + " (" + str(elab.user.matriculation_number) + ")",
+            str(elab.user.matriculation_number),
             str(elab.id),
             elab.challenge.title,
             str(elab.challenge.id),
-            str(elab.creation_time),
-            str(elab.submission_time),
+            time_to_unix_string(elab.creation_time),
+            time_to_unix_string(elab.submission_time),
             eval.id,
             eval.tutor.display_name,
-            str(eval.creation_date),
-            str(eval.submission_time),
+            time_to_unix_string(eval.creation_date),
+            time_to_unix_string(eval.submission_time),
             str(eval.evaluation_points)
         )
 
