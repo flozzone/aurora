@@ -17,19 +17,19 @@ class Command(NoArgsCommand):
         elabs = Elaboration.objects.exclude(challenge__id__in=final_challenge_ids).prefetch_related()
 
         for elab in elabs:
-            s = "\t".join(["{}"] * 15).format(
-                elab.user.matriculation_number,
-                elab.id,
+            s = "\t".join(["{}"] * 6).format(
+                elab.user.username + " (" + str(elab.user.matriculation_number) + ")",
+                str(elab.id),
                 elab.challenge.title,
-                elab.challenge.id,
-                elab.creation_time,
-                elab.submission_time
+                str(elab.challenge.id),
+                str(elab.creation_time),
+                str(elab.submission_time)
             )
 
             for review in Review.objects.filter(elaboration=elab):
-                s += "\t" + review.id
-                s += "\t" + review.appraisal
-                s += "\t" + review.creation_time
-                s += "\t" + review.submission_time
+                s += "\t" + str(review.id)
+                s += "\t" + str(review.appraisal)
+                s += "\t" + str(review.creation_time)
+                s += "\t" + str(review.submission_time)
 
             print(s)
