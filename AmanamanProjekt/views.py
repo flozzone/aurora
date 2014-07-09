@@ -56,6 +56,8 @@ def home(request):
         return redirect('/login')
 
 
+@login_required()
+@staff_member_required
 def result_users(request):
     s = ""
     for user in PortfolioUser.objects.filter(is_staff=False):
