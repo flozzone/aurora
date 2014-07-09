@@ -2,7 +2,8 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.shortcuts import redirect
 from django.http import HttpResponse
-from email import charset
+from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 
 from Comments.models import CommentReferenceObject
 from Stack.models import Stack
@@ -70,6 +71,8 @@ def result_users(request):
     return HttpResponse(s, mimetype="text/plain; charset=utf-8")
 
 
+@login_required()
+@staff_member_required
 def result_elabs_nonfinal(request):
     """
     username (mnr) TAB elabID TAB challenge-title TAB challenge-ID TAB creation time TAB submission time TAB
@@ -102,6 +105,8 @@ def result_elabs_nonfinal(request):
     return HttpResponse(s, mimetype="text/plain; charset=utf-8")
 
 
+@login_required()
+@staff_member_required
 def result_elabs_final(request):
     """
     username(mnr) TAB elabID TAB challenge-title TAB challenge-ID TAB creation time TAB submission time TAB
