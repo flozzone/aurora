@@ -13,6 +13,7 @@ from Course.models import Course, CourseUserRelation
 from PortfolioUser.models import  PortfolioUser
 from Evaluation.models import Evaluation
 from Review.models import Review
+from ReviewAnswer.models import ReviewAnswer
 from Elaboration.models import Elaboration
 from Challenge.models import Challenge
 
@@ -148,3 +149,37 @@ def result_elabs_final(request):
         s += "\n"
 
     return HttpResponse(s, mimetype="text/plain; charset=utf-8")
+
+
+@login_required()
+@staff_member_required
+def result_reviews(request):
+    """
+    review-autor (MNr) TAB
+    reviewed-elab-autor (MNr) TAB
+    reviewed-elab-challenge-ID TAB
+    review-creation-date TAB
+    review-submission-date TAB
+    länge des reviews (number of chars of all fields summiert)
+    """
+    reviews = Review.objects.all().prefetch_related()
+    result = ""
+    for review in reviews:
+        answers = ReviewAnswer.objects.filter(review=review.id)
+        answer_string = ""
+        for answer in answers:
+            answer_string += answer.text
+        length = len(answer_string)
+
+        result += "\t".join(["{}"] * 6).format(
+            review.reviewer.matriculation_number,
+            review.elaboration.user.matriculation_number,
+            review.elaboration.challenge_id,
+            time_to_unix_string(review.creation_time),
+            time_to_unix_string(review.submission_time),
+            str(length)
+        )
+
+        result += "\n"
+
+    return HttpResponse(result, mimetype="text/plain; charset=utf-8")
