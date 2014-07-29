@@ -151,10 +151,11 @@ def result_elabs_final(request):
     return HttpResponse(s, mimetype="text/plain; charset=utf-8")
 
 
-@login_required()
-@staff_member_required
-def result_reviews(request):
+def get_result_reviews():
     """
+    Since this is so slow (and can be too slow for a application server response, this is also being used
+    as a command in Review.
+
     review-autor (MNr) TAB
     reviewed-elab-autor (MNr) TAB
     reviewed-elab-challenge-ID TAB
@@ -172,8 +173,8 @@ def result_reviews(request):
         length = len(answer_string)
 
         result += "\t".join(["{}"] * 6).format(
-            review.reviewer.matriculation_number,
-            review.elaboration.user.matriculation_number,
+            review.reviewer.username,
+            review.elaboration.user.username,
             review.elaboration.challenge_id,
             time_to_unix_string(review.creation_time),
             time_to_unix_string(review.submission_time),
@@ -181,5 +182,12 @@ def result_reviews(request):
         )
 
         result += "\n"
+
+    return result
+
+@login_required()
+@staff_member_required
+def result_reviews(request):
+    result = get_result_reviews()
 
     return HttpResponse(result, mimetype="text/plain; charset=utf-8")
