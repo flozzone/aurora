@@ -34,7 +34,7 @@ class Command(NoArgsCommand):
                 answer_string += answer.text
             length = len(answer_string)
 
-            result += "\t".join(["{}"] * 6).format(
+            result = "\t".join(["{}"] * 6).format(
                 review.reviewer.matriculation_number,
                 review.elaboration.user.matriculation_number,
                 review.elaboration.challenge_id,
