@@ -26,12 +26,12 @@
     sudo: yes
 
   - name: throw away postgres cluster
-    command: pg_dropcluster --stop 9.1 main
+    command: pg_dropcluster --stop 9.3 main
     sudo: yes
     sudo_user: postgres
 
   - name: create new postgres cluster with UTF-8 encoding
-    command: pg_createcluster --locale=en_US.UTF-8 --start 9.1 main
+    command: pg_createcluster --locale=en_US.UTF-8 --start 9.3 main
     sudo: yes
     sudo_user: postgres
 
