@@ -28,6 +28,7 @@ from ReviewAnswer.models import ReviewAnswer
 from ReviewQuestion.models import ReviewQuestion
 from Stack.models import Stack
 from Notification.models import Notification
+from endless_pagination import utils
 
 
 @login_required()
@@ -56,9 +57,12 @@ def evaluation(request):
         overview = render_to_string('overview.html', data, RequestContext(request))
         count = len(elaborations)
     elif selection == 'questions':
-            challenges = Challenge.get_questions(RequestContext(request))
-            overview = render_to_string('questions.html', {'challenges': challenges}, RequestContext(request))
+            # get selected challenges from session
+            challenges = []
+            for serialized_challenge in serializers.deserialize('json', request.session.get('challenges', {})):
+                challenges.append(serialized_challenge.object)
             count = len(challenges)
+            overview = render_to_string('questions.html', {'challenges': challenges}, RequestContext(request))
 
     challenges = Challenge.objects.all()
 
@@ -117,6 +121,9 @@ def overview(request):
 @staff_member_required
 def questions(request):
     challenges = Challenge.get_questions(RequestContext(request))
+
+    # store selected challenges in session
+    request.session['challenges'] = serializers.serialize('json', challenges)
 
     # store selected elaborations in session
     elaborations = []
