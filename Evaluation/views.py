@@ -28,7 +28,6 @@ from ReviewAnswer.models import ReviewAnswer
 from ReviewQuestion.models import ReviewQuestion
 from Stack.models import Stack
 from Notification.models import Notification
-from endless_pagination import utils
 
 
 @login_required()
