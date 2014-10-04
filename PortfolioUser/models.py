@@ -15,7 +15,8 @@ def avatar_path(instance, filename):
         os.remove(fullname)
     return fullname
 
-class PortfolioUser(User):
+class PortfolioUser(models.Model):
+    user = models.OneToOneField(User)
     nickname = models.CharField(max_length=100, null=True, blank=True)
     last_activity = models.DateTimeField(auto_now_add=True, blank=True)
     statement = models.TextField(blank=True)
