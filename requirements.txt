@@ -6,3 +6,4 @@ django-endless-pagination==2.0
 psycopg2==2.5.2
 six==1.4.1
 wsgiref==0.1.2
+django-taggit==0.12.2

@@ -137,7 +137,8 @@ INSTALLED_APPS = (
     'Comments',
     'Slides',
     'Notification',
-    'endless_pagination'
+    'endless_pagination',
+    'taggit'
 )
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'

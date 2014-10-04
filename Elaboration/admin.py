@@ -11,6 +11,7 @@ class ElaborationAdmin(admin.ModelAdmin):
                     'creation_time',
                     'elaboration_text',
                     'submission_time',
+                    'tags',
                 ]
             }
         ),

@@ -9,7 +9,7 @@ from Review.models import Review
 from FileUpload.models import UploadFile
 from ReviewAnswer.models import ReviewAnswer
 from collections import Counter
-
+from taggit.managers import TaggableManager
 
 class Elaboration(models.Model):
     challenge = models.ForeignKey('Challenge.Challenge')
@@ -17,6 +17,7 @@ class Elaboration(models.Model):
     creation_time = models.DateTimeField(auto_now_add=True)
     elaboration_text = models.TextField(null=True)
     submission_time = models.DateTimeField(null=True)
+    tags = TaggableManager()
 
     def __unicode__(self):
         return str(self.id)
