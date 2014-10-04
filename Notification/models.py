@@ -2,7 +2,7 @@ import os
 
 from django.db import models
 
-from AmanamanProjekt.settings import STATIC_URL
+from AuroraProject.settings import STATIC_URL
 
 
 class Notification(models.Model):

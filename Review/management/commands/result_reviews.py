@@ -5,7 +5,7 @@ from ReviewAnswer.models import ReviewAnswer
 from django.core.management.base import NoArgsCommand
 from datetime import datetime
 
-from AmanamanProjekt.views import get_result_reviews
+from AuroraProject.views import get_result_reviews
 
 def time_to_unix_string(time):
     if time is None:

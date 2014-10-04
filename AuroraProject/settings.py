@@ -1,5 +1,5 @@
 import os
-# Django settings for AmanamanProjekt project.
+# Django settings for AuroraProject project.
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -104,10 +104,10 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'AmanamanProjekt.urls'
+ROOT_URLCONF = 'AuroraProject.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
-WSGI_APPLICATION = 'AmanamanProjekt.wsgi.application'
+WSGI_APPLICATION = 'AuroraProject.wsgi.application'
 
 import os
 TEMPLATE_DIRS = (os.path.join(os.path.dirname(__file__), '..', 'templates').replace('\\','/'),)
@@ -181,7 +181,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.static",
     "django.core.context_processors.tz",
     "django.contrib.messages.context_processors.messages",
-    "AmanamanProjekt.context_processor.general_context_processor",
+    "AuroraProject.context_processor.general_context_processor",
     "django.core.context_processors.request",
 )
 

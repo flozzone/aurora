@@ -15,7 +15,7 @@ from ReviewQuestion.models import ReviewQuestion
 from Slides.models import *
 from Comments.models import Comment, CommentsConfig
 from Notification.models import Notification
-from AmanamanProjekt.settings import STATIC_ROOT
+from AuroraProject.settings import STATIC_ROOT
 import os
 from django.core.files import File
 
