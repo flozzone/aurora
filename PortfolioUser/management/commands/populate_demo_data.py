@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
-from django.contrib.auth.models import User
 
 import random
 from django.contrib.contenttypes.models import ContentType
@@ -29,7 +28,7 @@ class Command(BaseCommand):
 
 
 def init_data():
-    #CommentsConfig.setup()
+    CommentsConfig.setup()
 
     number_of_users = 50
     number_of_tutors = 5
@@ -40,103 +39,81 @@ def init_data():
     for i in range(number_of_users):
         print("adding student %s of %s" % (i, number_of_users))
         username = "s%s" % i
-        user = User(username=username)
+        user = PortfolioUser(username=username)
         user.email = '%s@student.tuwien.ac.at' % username
         user.first_name = 'Firstname_%s' % username
         user.last_name = 'Lastname_%s' % username
+        user.nickname = 'Nickname_%s' % username
+        user.matriculation_number = "{0:0=2d}".format(i) + ''.join(["%s" % random.randint(0, 9) for num in range(0, 5)])
         user.is_staff = False
         user.is_superuser = False
         password = username
         user.set_password(password)
         user.save()
-
-        portfolio_user = PortfolioUser()
-        portfolio_user.user = user
-        portfolio_user.nickname = 'Nickname_%s' % username
-        portfolio_user.matriculation_number = "{0:0=2d}".format(i) + ''.join(["%s" % random.randint(0, 9) for num in range(0, 5)])
-        portfolio_user.save()
-
-        users.append(portfolio_user)
-
+        users.append(user)
     s0 = users[0]
 
     # create the three dummy users for jumpstarting the peer review process
-    for i in range(3):
+    for i in range(4):
         print("adding dummy user %s of %s" % (i, 3))
         username = "d%s" % i
-        dummy_user = User(username=username)
+        dummy_user = PortfolioUser(username=username)
         dummy_user.email = '%s@student.tuwien.ac.at' % username
         dummy_user.first_name = 'Firstname_%s' % username
         dummy_user.last_name = 'Lastname_%s' % username
+        dummy_user.nickname = 'Nickname_%s' % username
         dummy_user.is_staff = False
         dummy_user.is_superuser = False
         password = username
         dummy_user.set_password(password)
         dummy_user.save()
-
-        dummy_portfolio_user = PortfolioUser()
-        dummy_portfolio_user.user = dummy_user
-        dummy_portfolio_user.nickname = 'Nickname_%s' % username
-        dummy_portfolio_user.save()
-
-        dummy_users.append(dummy_portfolio_user)
+        dummy_users.append(dummy_user)
     d1 = dummy_users[0]
     d2 = dummy_users[1]
     d3 = dummy_users[2]
+    d4 = dummy_users[3]
 
     # adding tutors
     for i in range(number_of_tutors):
         print("adding tutor %s of %s" % (i, number_of_tutors))
         username = "t%s" % i
-        tutor = User(username=username)
+        tutor = PortfolioUser(username=username)
         tutor.email = '%s@student.tuwien.ac.at' % username
         tutor.first_name = 'Firstname_%s' % username
         tutor.last_name = 'Lastname_%s' % username
+        tutor.nickname = 'Nickname_%s' % username
         tutor.is_staff = True
         tutor.is_superuser = False
         password = username
         tutor.set_password(password)
         tutor.save()
         print("***tutor username: %s" % tutor.username)
+        tutors.append(tutor)
 
-        portfolio_tutor = PortfolioUser()
-        portfolio_tutor.user = tutor
-        portfolio_tutor.nickname = 'Nickname_%s' % username
-        portfolio_tutor.save()
-
-        tutors.append(portfolio_tutor)
-
-    # create an admin user with password aurora
+    # create an admin user with password amanaman
     print('adding superuser')
-    username = "aurora"
-    aurora = User(username=username)
-    aurora.first_name = 'Firstname_%s' % username
-    aurora.last_name = 'Lastname_%s' % username
-    aurora.set_password(username)
-    aurora.is_staff = True
-    aurora.is_superuser = True
-    aurora.save()
-
-    portfolio_aurora = PortfolioUser()
-    portfolio_aurora.user = aurora
-    portfolio_aurora.nickname = 'Nickname_%s' % username
-    portfolio_aurora.save()
+    username = "amanaman"
+    amanaman = PortfolioUser(username=username)
+    amanaman.first_name = 'Firstname_%s' % username
+    amanaman.last_name = 'Lastname_%s' % username
+    amanaman.nickname = 'Nickname_%s' % username
+    amanaman.set_password(username)
+    amanaman.is_staff = True
+    amanaman.is_superuser = True
+    amanaman.save()
 
     # hagrid staff user
     print('adding staff')
     username = "hagrid"
-    superuser = User(username=username)
+    superuser = PortfolioUser(username=username)
     superuser.first_name = 'Firstname_%s' % username
     superuser.last_name = 'Lastname_%s' % username
+    superuser.nickname = 'Nickname_%s' % username
     superuser.set_password(username)
     superuser.is_staff = True
     superuser.is_superuser = False
     superuser.save()
 
-    portfolio_superuser = PortfolioUser()
-    portfolio_superuser.user = superuser
-    portfolio_superuser.nickname = 'Nickname_%s' % username
-    portfolio_superuser.save()
 
     # create courses "GSI" and "HCI"
     print('adding course gsi')
@@ -160,16 +137,16 @@ def init_data():
 
     # create course-user relations
     print('adding course-user relations')
-    CourseUserRelation(course=gsi, user=portfolio_aurora).save()
-    CourseUserRelation(course=hci, user=portfolio_aurora).save()
-    CourseUserRelation(course=gsi, user=portfolio_superuser).save()
-    CourseUserRelation(course=hci, user=portfolio_superuser).save()
+    CourseUserRelation(course=gsi, user=amanaman).save()
+    CourseUserRelation(course=hci, user=amanaman).save()
+    CourseUserRelation(course=gsi, user=superuser).save()
+    CourseUserRelation(course=hci, user=superuser).save()
 
     for tutor in tutors:
-        CourseUserRelation(course=gsi, user=portfolio_tutor).save()
-        CourseUserRelation(course=hci, user=portfolio_tutor).save()
-        Notification(user=portfolio_tutor, course=gsi, text="Welcome to GSI!").save()
-        Notification(user=portfolio_tutor, course=hci, text="Welcome to HCI!").save()
+        CourseUserRelation(course=gsi, user=tutor).save()
+        CourseUserRelation(course=hci, user=tutor).save()
+        Notification(user=tutor, course=gsi, text="Welcome to GSI!").save()
+        Notification(user=tutor, course=hci, text="Welcome to HCI!").save()
 
     for user in users:
         CourseUserRelation(course=gsi, user=user).save()
@@ -347,7 +324,7 @@ def init_data():
     for challenge in challenges:
         for dummy_user in dummy_users:
             if not challenge.is_final_challenge():
-                Elaboration(challenge=challenge, user=dummy_user, elaboration_text="dummy elaboration %s" % dummy_user.user.username,
+                Elaboration(challenge=challenge, user=dummy_user, elaboration_text="dummy elaboration %s" % dummy_user.username,
                             submission_time='2013-11-01 10:00:00').save()
 
     print('adding final elaboration 1 for challenge 10')
@@ -423,13 +400,13 @@ def init_data():
     StackChallengeRelation(stack=gtav, challenge=challenge_9).save()
     StackChallengeRelation(stack=gtav, challenge=challenge_10).save()
 
-    # print('adding escalation for challenge 1 for s0')
-    # com1 = Comment(text="escalation for review 1 for challenge 1 for d1", author=superuser, post_date=datetime.now(),
-    #                content_type=ContentType.objects.get_for_model(Review), object_id=r1.id, visibility=Comment.STAFF)
-    # com1.save()
-    # com2 = Comment(text="escalation for review 2 for challenge 1 for d2", author=superuser, post_date=datetime.now(),
-    #                content_type=ContentType.objects.get_for_model(Review), object_id=r2.id, visibility=Comment.PUBLIC)
-    # com2.save()
+    print('adding escalation for challenge 1 for s0')
+    com1 = Comment(text="escalation for review 1 for challenge 1 for d1", author=superuser, post_date=datetime.now(),
+                   content_type=ContentType.objects.get_for_model(Review), object_id=r1.id, visibility=Comment.STAFF)
+    com1.save()
+    com2 = Comment(text="escalation for review 2 for challenge 1 for d2", author=superuser, post_date=datetime.now(),
+                   content_type=ContentType.objects.get_for_model(Review), object_id=r2.id, visibility=Comment.PUBLIC)
+    com2.save()
 
     print('Adding Sample Lectures')
     Lecture(

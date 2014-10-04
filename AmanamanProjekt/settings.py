@@ -1,5 +1,5 @@
 import os
-# Django settings for auroraProjekt project.
+# Django settings for AmanamanProjekt project.
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
