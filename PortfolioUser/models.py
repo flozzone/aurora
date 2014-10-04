@@ -53,7 +53,7 @@ class PortfolioUser(models.Model):
             os.makedirs(os.path.join(MEDIA_ROOT,self.upload_path))
         try:
             gravatarurl = "http://www.gravatar.com/avatar/" + hashlib.md5(
-                self.email.lower().encode("utf-8")).hexdigest() + "?"
+                self.user.email.lower().encode("utf-8")).hexdigest() + "?"
             gravatarurl += urllib.parse.urlencode({'d': 'monsterid', 's': str(192)})
             result = urllib.request.urlretrieve(gravatarurl)
             self.avatar.save(avatar_path(self, ''), File(open(result[0], 'rb')))

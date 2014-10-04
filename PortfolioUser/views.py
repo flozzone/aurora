@@ -84,8 +84,8 @@ def sso_auth_callback(request):
 
     django_login(request, user)
 
-    if not user.avatar:
-        user.get_gravatar()
+    if not user.portfoliouser.avatar:
+        user.portfoliouser.get_gravatar()
 
     return redirect('/')
 
