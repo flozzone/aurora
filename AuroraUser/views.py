@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate, login as django_login, logout
 from django.template import RequestContext
 from django.shortcuts import render_to_response, redirect
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
-from PortfolioUser.models import PortfolioUser
+from AuroraUser.models import AuroraUser
 from datetime import datetime
 
 from Course.models import Course
@@ -41,8 +41,8 @@ def signin(request):
     django_login(request, user)
 
     # fetch gravatar img on first login
-    if not PortfolioUser.objects.all().get(id=user.id).avatar:
-        PortfolioUser.objects.all().get(id=user.id).get_gravatar()
+    if not AuroraUser.objects.all().get(id=user.id).avatar:
+        AuroraUser.objects.all().get(id=user.id).get_gravatar()
 
     response_data = {'success': True}
     return HttpResponse(json.dumps(response_data), content_type="application/json")
@@ -118,19 +118,19 @@ class ZidSSOBackend():
 
             if hmac_calced == hmac_received:
                 try:
-                    user = PortfolioUser.objects.get(matriculation_number=params['mn'])
-                except PortfolioUser.DoesNotExist:
+                    user = AuroraUser.objects.get(matriculation_number=params['mn'])
+                except AuroraUser.DoesNotExist:
                     try:
-                        user = PortfolioUser.objects.get(oid=params['oid'])
-                    except PortfolioUser.DoesNotExist:
+                        user = AuroraUser.objects.get(oid=params['oid'])
+                    except AuroraUser.DoesNotExist:
                         user = None
 
         return user
 
     def get_user(self, user_id):
         try:
-            user = PortfolioUser.objects.get(pk=user_id)
-        except PortfolioUser.DoesNotExist:
+            user = AuroraUser.objects.get(pk=user_id)
+        except AuroraUser.DoesNotExist:
             user = None
 
         return user
@@ -162,7 +162,7 @@ def profile_save(request):
         data['error'] = "nickname too long (%s character limit)" % nickname_limit
         valid_nickname = False
 
-    users_with_same_nickname = PortfolioUser.objects.filter(nickname=request.POST['nickname'])
+    users_with_same_nickname = AuroraUser.objects.filter(nickname=request.POST['nickname'])
     for user_with_same_nickname in users_with_same_nickname:
         if user.id is not user_with_same_nickname.id:
             data['error'] = "nickname already taken"

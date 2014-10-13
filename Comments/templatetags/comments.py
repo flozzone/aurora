@@ -3,7 +3,7 @@ from django.contrib.contenttypes.models import ContentType
 from Comments.models import Comment, CommentList
 from Comments.views import CommentForm, ReplyForm
 from django.template.loader import render_to_string
-from PortfolioUser.models import PortfolioUser
+from AuroraUser.models import AuroraUser
 
 register = template.Library()
 
@@ -21,7 +21,7 @@ class CommentListNode(template.Node):
             ref_object = self.reference_var.resolve(context)
             ref_type = ContentType.objects.get_for_model(ref_object)
 
-            # user = PortfolioUser.objects.get(id=context['user'].id)
+            # user = AuroraUser.objects.get(id=context['user'].id)
             user = context['user']
 
             queryset = Comment.query_top_level_sorted(ref_object.id, ref_type.id, user)

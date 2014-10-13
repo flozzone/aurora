@@ -6,7 +6,7 @@ from datetime import datetime
 
 from django.test import TestCase
 
-from PortfolioUser.models import PortfolioUser
+from AuroraUser.models import AuroraUser
 from Stack.models import Stack, StackChallengeRelation
 from Course.models import Course, CourseUserRelation, CourseChallengeRelation
 from Challenge.models import Challenge
@@ -24,7 +24,7 @@ class CourseTest(TestCase):
         self.create_challenge()
 
     def create_test_user(self, username):
-        user = PortfolioUser(username=username)
+        user = AuroraUser(username=username)
         user.email = '%s@student.tuwien.ac.at.' % username
         user.first_name = 'Firstname_%s' % username
         user.last_name = 'Lastname_%s' % username

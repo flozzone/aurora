@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 
 from Notification.models import Notification
-from PortfolioUser.models import PortfolioUser
+from AuroraUser.models import AuroraUser
 from Course.models import Course, CourseUserRelation
 
 
@@ -53,7 +53,7 @@ def send_notification(request):
         raise Http404
     if not 'message' in request.POST:
         raise Http404
-    user = PortfolioUser.objects.get(pk=request.POST['user_id'])
+    user = AuroraUser.objects.get(pk=request.POST['user_id'])
     text = request.POST['message']
     course_ids = CourseUserRelation.objects.filter(user=user).values_list('course', flat=True)
     courses = Course.objects.filter(id__in=course_ids)

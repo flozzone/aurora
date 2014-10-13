@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from Challenge.models import Challenge
 from Course.models import Course
 from Elaboration.models import Elaboration
-from PortfolioUser.models import PortfolioUser
+from AuroraUser.models import AuroraUser
 from Stack.models import Stack, StackChallengeRelation
 from Evaluation.models import Evaluation
 from FileUpload.models import UploadFile

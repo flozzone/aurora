@@ -7,7 +7,7 @@ class Review(models.Model):
     elaboration = models.ForeignKey('Elaboration.Elaboration')
     creation_time = models.DateTimeField(auto_now_add=True)
     submission_time = models.DateTimeField(null=True)
-    reviewer = models.ForeignKey('PortfolioUser.PortfolioUser')
+    reviewer = models.ForeignKey('AuroraUser.AuroraUser')
     NOTHING = 'N'
     FAIL = 'F'
     SUCCESS = 'S'

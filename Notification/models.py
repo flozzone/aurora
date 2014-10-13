@@ -6,7 +6,7 @@ from AuroraProject.settings import STATIC_URL
 
 
 class Notification(models.Model):
-    user = models.ForeignKey('PortfolioUser.PortfolioUser')
+    user = models.ForeignKey('AuroraUser.AuroraUser')
     course = models.ForeignKey('Course.Course')
     text = models.CharField(max_length=100)
     image_url = models.CharField(max_length=100, default=os.path.join(STATIC_URL, 'img', 'info.jpg'))

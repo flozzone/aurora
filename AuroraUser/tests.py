@@ -6,7 +6,7 @@ from datetime import datetime
 
 from django.test import TestCase, Client
 
-from PortfolioUser.models import PortfolioUser
+from AuroraUser.models import AuroraUser
 from Stack.models import Stack, StackChallengeRelation
 from Course.models import Course, CourseUserRelation, CourseChallengeRelation
 from Challenge.models import Challenge
@@ -27,7 +27,7 @@ class PortfolioUserTest(TestCase):
         self.create_review_question()
 
     def create_test_user(self, username):
-        user = PortfolioUser(username=username)
+        user = AuroraUser(username=username)
         user.email = '%s@student.tuwien.ac.at.' % username
         user.first_name = 'Firstname_%s' % username
         user.last_name = 'Lastname_%s' % username
@@ -83,7 +83,7 @@ class PortfolioUserTest(TestCase):
 
     @staticmethod
     def ipython_test():
-        user = PortfolioUser.objects.get(username='dd')
+        user = AuroraUser.objects.get(username='dd')
         c = Client()
 
         shared_secret = settings.SSO_SHARED_SECRET.encode(encoding='latin1')

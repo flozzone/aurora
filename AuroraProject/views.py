@@ -10,7 +10,7 @@ from datetime import datetime
 from Comments.models import CommentReferenceObject
 from Stack.models import Stack
 from Course.models import Course, CourseUserRelation
-from PortfolioUser.models import  PortfolioUser
+from AuroraUser.models import  AuroraUser
 from Evaluation.models import Evaluation
 from Review.models import Review
 from ReviewAnswer.models import ReviewAnswer
@@ -52,7 +52,7 @@ def home(request):
 
         return render_to_response('home.html', data, context)
     elif 'sKey' in request.GET:
-        from PortfolioUser.views import sso_auth_callback
+        from AuroraUser.views import sso_auth_callback
 
         return sso_auth_callback(request)
     else:
@@ -72,7 +72,7 @@ def time_to_unix_string(time):
 @staff_member_required
 def result_users(request):
     s = ""
-    for user in PortfolioUser.objects.filter(is_staff=False):
+    for user in AuroraUser.objects.filter(is_staff=False):
         s += "\t".join(["{}"] * 7).format(user.matriculation_number,
                                          user.nickname,
                                          user.first_name,

@@ -63,7 +63,7 @@ class Vote(models.Model):
     direction = models.BooleanField(choices=((UP, True), (DOWN, False)),
                                     default=True)
 
-    voter = models.ForeignKey('PortfolioUser.PortfolioUser')
+    voter = models.ForeignKey('AuroraUser.AuroraUser')
     comment = models.ForeignKey('Comment', related_name='votes')
 
     class Meta:
@@ -72,11 +72,11 @@ class Vote(models.Model):
 
 class Comment(models.Model):
     text = models.TextField()
-    author = models.ForeignKey('PortfolioUser.PortfolioUser')
+    author = models.ForeignKey('AuroraUser.AuroraUser')
     post_date = models.DateTimeField('date posted')
     delete_date = models.DateTimeField('date deleted', null=True)
     edited_date = models.DateTimeField('date edited', null=True)
-    deleter = models.ForeignKey('PortfolioUser.PortfolioUser', related_name='deleted_comments_set', null=True)
+    deleter = models.ForeignKey('AuroraUser.AuroraUser', related_name='deleted_comments_set', null=True)
     parent = models.ForeignKey('self', null=True, related_name='children')
     promoted = models.BooleanField(default=False)
 
@@ -98,7 +98,7 @@ class Comment(models.Model):
                                   choices=VISIBILITY_CHOICES,
                                   default=PUBLIC)
 
-    bookmarked_by = models.ManyToManyField('PortfolioUser.PortfolioUser', related_name='bookmarked_comments_set')
+    bookmarked_by = models.ManyToManyField('AuroraUser.AuroraUser', related_name='bookmarked_comments_set')
     tags = models.ManyToManyField(Tag)
 
     @property

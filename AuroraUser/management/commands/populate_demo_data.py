@@ -5,7 +5,7 @@ import random
 from django.contrib.contenttypes.models import ContentType
 from django.core.management.base import BaseCommand
 
-from PortfolioUser.models import PortfolioUser
+from AuroraUser.models import AuroraUser
 from Course.models import *
 from Challenge.models import Challenge
 from Elaboration.models import Elaboration
@@ -39,7 +39,7 @@ def init_data():
     for i in range(number_of_users):
         print("adding student %s of %s" % (i, number_of_users))
         username = "s%s" % i
-        user = PortfolioUser(username=username)
+        user = AuroraUser(username=username)
         user.email = '%s@student.tuwien.ac.at' % username
         user.first_name = 'Firstname_%s' % username
         user.last_name = 'Lastname_%s' % username
@@ -57,7 +57,7 @@ def init_data():
     for i in range(4):
         print("adding dummy user %s of %s" % (i, 3))
         username = "d%s" % i
-        dummy_user = PortfolioUser(username=username)
+        dummy_user = AuroraUser(username=username)
         dummy_user.email = '%s@student.tuwien.ac.at' % username
         dummy_user.first_name = 'Firstname_%s' % username
         dummy_user.last_name = 'Lastname_%s' % username
@@ -77,7 +77,7 @@ def init_data():
     for i in range(number_of_tutors):
         print("adding tutor %s of %s" % (i, number_of_tutors))
         username = "t%s" % i
-        tutor = PortfolioUser(username=username)
+        tutor = AuroraUser(username=username)
         tutor.email = '%s@student.tuwien.ac.at' % username
         tutor.first_name = 'Firstname_%s' % username
         tutor.last_name = 'Lastname_%s' % username
@@ -93,7 +93,7 @@ def init_data():
     # create an admin user with password amanaman
     print('adding superuser')
     username = "amanaman"
-    amanaman = PortfolioUser(username=username)
+    amanaman = AuroraUser(username=username)
     amanaman.first_name = 'Firstname_%s' % username
     amanaman.last_name = 'Lastname_%s' % username
     amanaman.nickname = 'Nickname_%s' % username
@@ -105,7 +105,7 @@ def init_data():
     # hagrid staff user
     print('adding staff')
     username = "hagrid"
-    superuser = PortfolioUser(username=username)
+    superuser = AuroraUser(username=username)
     superuser.first_name = 'Firstname_%s' % username
     superuser.last_name = 'Lastname_%s' % username
     superuser.nickname = 'Nickname_%s' % username

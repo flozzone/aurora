@@ -22,7 +22,7 @@ from Comments.models import Comment
 from Course.models import Course, CourseChallengeRelation, CourseUserRelation
 from Elaboration.models import Elaboration
 from Evaluation.models import Evaluation
-from PortfolioUser.models import PortfolioUser
+from AuroraUser.models import AuroraUser
 from Review.models import Review
 from ReviewAnswer.models import ReviewAnswer
 from ReviewQuestion.models import ReviewQuestion
@@ -34,7 +34,7 @@ from Notification.models import Notification
 @staff_member_required
 def evaluation(request):
     # TODO: delete this snippet, fetches gravatar images for every user only for test cases.
-    #for puser in PortfolioUser.objects.all():
+    #for puser in AuroraUser.objects.all():
     #    if not puser.avatar:
     #        puser.get_gravatar()
 
@@ -47,7 +47,7 @@ def evaluation(request):
             elaborations.append(serialized_elaboration.object)
         if selection == 'search':
             if 'id' in request.GET:
-                points = get_points(request, PortfolioUser.objects.get(pk=request.GET['id']))
+                points = get_points(request, AuroraUser.objects.get(pk=request.GET['id']))
                 data = { 'elaborations': elaborations, 'search': True, 'stacks': points['stacks'], 'courses': points['courses'] }
             else:
                 data = { 'elaborations': elaborations, 'search': True }
@@ -451,7 +451,7 @@ def select_user(request):
     selected_user = request.POST['selected_user'].split()[0]
 
     elaborations = []
-    user = PortfolioUser.objects.get(username=selected_user)
+    user = AuroraUser.objects.get(username=selected_user)
     elaborations = user.get_elaborations()
 
     points = get_points(request, user)
@@ -552,7 +552,7 @@ def autocomplete_challenge(request):
 @staff_member_required
 def autocomplete_user(request):
     term = request.GET.get('term', '')
-    studies = PortfolioUser.objects.all().filter(
+    studies = AuroraUser.objects.all().filter(
         Q(username__istartswith=term) | Q(first_name__istartswith=term) | Q(last_name__istartswith=term) | Q(nickname__istartswith=term))
     names = [(studi.username + ' ' + studi.nickname + ' ' + studi.last_name) for studi in studies]
     response_data = json.dumps(names, ensure_ascii=False)
@@ -649,7 +649,7 @@ def reviewlist(request):
 @staff_member_required
 def search_user(request):
     if request.GET:
-        user = PortfolioUser.objects.get(pk=request.GET['id'])
+        user = AuroraUser.objects.get(pk=request.GET['id'])
         elaborations = user.get_elaborations()
 
          # sort elaborations by submission time
