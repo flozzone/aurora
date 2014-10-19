@@ -1,13 +1,13 @@
 from django.test import TestCase
 
 from Notification.models import Notification
-from PortfolioUser.models import PortfolioUser
+from AuroraUser.models import AuroraUser
 from Course.models import Course, CourseUserRelation
 
 
 class NotificationTest(TestCase):
     def create_test_user(self, username):
-        user = PortfolioUser(username=username)
+        user = AuroraUser(username=username)
         user.email = '%s@student.tuwien.ac.at.' % username
         user.first_name = 'Firstname_%s' % username
         user.last_name = 'Lastname_%s' % username

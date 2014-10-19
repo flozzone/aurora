@@ -1,6 +1,6 @@
 from django.test import TestCase
 from Comments.models import Comment, CommentReferenceObject
-from PortfolioUser.models import PortfolioUser
+from AuroraUser.models import AuroraUser
 from django.utils import timezone
 from django.template import Context, Template
 from django import template
@@ -15,7 +15,7 @@ def create_comment(text, author, reference_object, parent=None, days=0, minutes=
     ----------
     text: string
         Comment text
-    author: PortfolioUser
+    author: AuroraUser
         author of the Comment
     reference_object: django.db.models.Model
         the object the Comment should be attached to
@@ -36,7 +36,7 @@ def dummy_user_generator():
     while True:
         i += 1
         n = str(i)
-        user = PortfolioUser(username='du'+n, first_name='first'+n,
+        user = AuroraUser(username='du'+n, first_name='first'+n,
                              last_name='last'+n, email='du'+n+'@foo.bar')
         user.nickname = 'duni' + n
         user.password = 'dupa' + n

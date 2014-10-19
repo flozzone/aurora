@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from Challenge.models import Challenge
 from Elaboration.models import Elaboration
-from PortfolioUser.models import PortfolioUser
+from AuroraUser.models import AuroraUser
 from Course.models import Course
 from django.http import Http404
 from FileUpload.models import UploadFile

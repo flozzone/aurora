@@ -6,7 +6,7 @@ from datetime import datetime
 from django.core.management.base import BaseCommand
 
 from Course.models import Course, CourseUserRelation
-from PortfolioUser.models import PortfolioUser
+from AuroraUser.models import AuroraUser
 
 
 class Command(BaseCommand):
@@ -38,7 +38,7 @@ def import_students():
                     if len(values) == 5:
                         matriculation_number, last_name, first_name, email, study_code = values
                         username = matriculation_number
-                        student, created = PortfolioUser.objects.get_or_create(username=username)
+                        student, created = AuroraUser.objects.get_or_create(username=username)
                         if created:
                             print("new user")
                         else:

@@ -17,7 +17,7 @@ def get_upload_path(instance, filename):
 
 
 class UploadFile(models.Model):
-    user = models.ForeignKey('PortfolioUser.PortfolioUser')
+    user = models.ForeignKey('AuroraUser.AuroraUser')
     elaboration = models.ForeignKey('Elaboration.Elaboration')
     creation_time = models.DateTimeField(auto_now_add=True)
     upload_file = models.FileField(upload_to=get_upload_path)

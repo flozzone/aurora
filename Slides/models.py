@@ -6,9 +6,9 @@ class Slide(models.Model):
     filename = models.CharField(max_length=64) 
     pdf_text_content = models.TextField(max_length=2048, blank=True)
     lecture = models.ForeignKey('Lecture')
-    confusing = models.ManyToManyField("PortfolioUser.portfoliouser", related_name="confusing", blank=True)
-    important = models.ManyToManyField("PortfolioUser.portfoliouser", related_name="important", blank=True)
-    liked = models.ManyToManyField("PortfolioUser.portfoliouser", related_name="liked", blank=True)
+    confusing = models.ManyToManyField("AuroraUser.aurorauser", related_name="confusing", blank=True)
+    important = models.ManyToManyField("AuroraUser.aurorauser", related_name="important", blank=True)
+    liked = models.ManyToManyField("AuroraUser.aurorauser", related_name="liked", blank=True)
     tags = models.CharField(max_length=128, blank=True)
     
     class Meta:

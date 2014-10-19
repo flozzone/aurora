@@ -1,10 +1,10 @@
-from PortfolioUser.models import PortfolioUser
+from AuroraUser.models import AuroraUser
 from Course.models import CourseUserRelation, Course
 from Notification.models import Notification
 
 def general_context_processor(request):
     context = {}
-    user = PortfolioUser.objects.filter(id=request.user.id)
+    user = AuroraUser.objects.filter(id=request.user.id)
     if user:
         user = user[0]
         context['user'] = user

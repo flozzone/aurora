@@ -1,7 +1,7 @@
 from django.contrib import admin
-from PortfolioUser.models import *
+from AuroraUser.models import *
 
-class PortfolioUserAdmin(admin.ModelAdmin):
+class AuroraUserAdmin(admin.ModelAdmin):
     fieldsets = [
         (
             None, {
@@ -22,4 +22,4 @@ class PortfolioUserAdmin(admin.ModelAdmin):
     list_display = ('id', 'nickname', 'last_activity', 'statement', 'upload_path', 'avatar', 'oid', 'matriculation_number', 'study_code', 'last_selected_course', )
     readonly_fields = ("last_activity", "upload_path", )
 
-admin.site.register(PortfolioUser, PortfolioUserAdmin)
+admin.site.register(AuroraUser, AuroraUserAdmin)
