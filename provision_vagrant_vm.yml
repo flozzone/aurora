@@ -11,19 +11,13 @@
 #    sudo: yes
   - command: locale-gen en_US.UTF-8
   - command: update-locale LANG=en_US.UTF-8
-    sudo: yes
   - apt: pkg=vim
-    sudo: yes
   - apt: pkg=libjpeg-dev
-    sudo: yes
 
   - apt: pkg=postgresql
-    sudo: yes
   - apt: pkg=python-psycopg2
-    sudo: yes
 #  - apt: pkg=postgresql-server-dev-9.1
   - apt: pkg=libpq-dev
-    sudo: yes
 
   - name: throw away postgres cluster
     command: pg_dropcluster --stop 9.3 main
@@ -55,35 +49,49 @@
     sudo_user: postgres
 
   - apt: pkg=python-pip
-    sudo: yes
   - apt: pkg=python3
-    sudo: yes
   - apt: pkg=python3-dev
-    sudo: yes
   - pip: name=virtualenv
-    sudo: yes
   - name: create virtualenv
     command: virtualenv -p /usr/bin/python3 {{ py3env }}
              creates={{ py3env }}
+    sudo: yes
+    sudo_user: vagrant
 # ipython not working with python manage.py shell anymore :(
-#  - name: install ipython into virtualenv
-#      pip: name=ipython
-#           virtualenv={{ py3env }}
+  - name: install ipython into virtualenv
+    pip: name=ipython
+         virtualenv={{ py3env }}
+    sudo: yes
+    sudo_user: vagrant
   - name: install psycopg2 into virtualenv
     pip: name=psycopg2
          virtualenv={{ py3env }}
+    sudo: yes
+    sudo_user: vagrant
   - name: install project requirements
     pip: requirements=/vagrant/requirements_dev.txt
          virtualenv={{ py3env }}
+    sudo: yes
+    sudo_user: vagrant
 
   - name: add automatic activation of virtualenv to .bashrc
     lineinfile: dest=/home/vagrant/.bashrc
                 line=". {{ py3env }}/bin/activate"
+    sudo: yes
+    sudo_user: vagrant
   - lineinfile: dest=/home/vagrant/.bashrc
                 line='cd /vagrant'
+    sudo: yes
+    sudo_user: vagrant
   - lineinfile: dest=/home/vagrant/.bashrc
                 line='export LANGUAGE=en_US.UTF-8'
+    sudo: yes
+    sudo_user: vagrant
   - lineinfile: dest=/home/vagrant/.bashrc
                 line='export LANG=en_US.UTF-8'
+    sudo: yes
+    sudo_user: vagrant
   - lineinfile: dest=/home/vagrant/.bashrc
                 line='export LC_ALL=en_US.UTF-8'
+    sudo: yes
+    sudo_user: vagrant
