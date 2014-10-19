@@ -1,7 +1,7 @@
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.shortcuts import redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 
@@ -18,11 +18,17 @@ from Elaboration.models import Elaboration
 from Challenge.models import Challenge
 
 
-def home(request):
+def home(request, course=None):
+    print(course)
     if request.user.is_authenticated():
         data = {}
         user = RequestContext(request)['user']
+        data['course'] = course
 
+        course = Course.objects.all().filter(short_title=course)
+
+        if not course:
+            raise Http404
         course_ids = CourseUserRelation.objects.filter(user=user).values_list('course', flat=True)
         courses = Course.objects.filter(id__in=course_ids)
         data['courses'] = courses

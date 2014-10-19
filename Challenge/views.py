@@ -66,10 +66,14 @@ def create_context_stack(request):
 
 
 @login_required()
-def challenges(request):
+def challenges(request, course=None):
+
     data = {}
+    data['course'] = course
+    course = Course.objects.all().filter(short_title=course)
+    if not course:
+        raise Http404
     user = RequestContext(request)['user']
-    course = RequestContext(request)['last_selected_course']
     course_stacks = Stack.objects.all().filter(course=course)
     data['course_stacks'] = []
     for stack in course_stacks:

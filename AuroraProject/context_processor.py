@@ -3,6 +3,7 @@ from Course.models import CourseUserRelation, Course
 from Notification.models import Notification
 
 def general_context_processor(request):
+    print(request)
     context = {}
     user = AuroraUser.objects.filter(id=request.user.id)
     if user:
