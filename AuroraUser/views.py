@@ -8,6 +8,7 @@ from django.shortcuts import render_to_response, redirect
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from AuroraUser.models import AuroraUser
 from datetime import datetime
+from django.core.urlresolvers import reverse
 
 from Course.models import Course
 
@@ -18,7 +19,7 @@ from django.http import Http404
 
 
 @require_POST
-def signin(request):
+def signin(request, course=None):
     if 'username' not in request.POST or 'password' not in request.POST or 'remember' not in request.POST:
         response_data = {'success': False, 'message': 'Something went wrong. Please contact the LVA team'}
         return HttpResponse(json.dumps(response_data), content_type="application/json")
@@ -48,20 +49,20 @@ def signin(request):
     return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 
-def signout(request):
+def signout(request, course=None):
     logout(request)
-    response_data = {'success': True}
-    return HttpResponse(json.dumps(response_data), content_type="application/json")
+    return redirect(reverse('home', args=(course,)))
 
 
 @ensure_csrf_cookie
-def login(request):
+def login(request, course=None):
     if 'next' in request.GET:
-        return render_to_response('login.html', {'next': request.GET['next'], 'sso_uri': settings.SSO_URI}, context_instance=RequestContext(request))
+        # TODO: add next functionality
+        return render_to_response('login.html', {'course': course, 'signin_url': reverse('user:signin', args=(course, )), 'next': reverse('home', args=(course, )), 'sso_uri': settings.SSO_URI}, context_instance=RequestContext(request))
     elif 'error_message' in request.GET:
-        return render_to_response('login.html', {'next': '/', 'error_message': request.GET['error_message'], 'sso_uri': settings.SSO_URI}, context_instance=RequestContext(request))
+        return render_to_response('login.html', {'course': course, 'signin_url': reverse('user:signin', args=(course, )), 'next': reverse('home', args=(course, )), 'error_message': request.GET['error_message'], 'sso_uri': settings.SSO_URI}, context_instance=RequestContext(request))
     else:
-        return render_to_response('login.html', {'next': '/', 'sso_uri': settings.SSO_URI}, context_instance=RequestContext(request))
+        return render_to_response('login.html', {'course': course, 'signin_url': reverse('user:signin', args=(course, )), 'next': reverse('home', args=(course, )), 'sso_uri': settings.SSO_URI}, context_instance=RequestContext(request))
 
 
 def sso_auth_redirect():

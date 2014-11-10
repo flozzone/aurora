@@ -2,7 +2,6 @@ $(homepage_loaded);
 
 function homepage_loaded() {
     $('#button_sign_in').click(sign_in);
-    $('#button_sign_out').click(sign_out);
     $('.ct_menu').click(course_change);
     if ($('#unread_notifications').length) {
         notifications_refresh();
@@ -80,16 +79,19 @@ function ajax_setup() {
 
 function sign_in() {
     ajax_setup();
+    var course = $('#course').val();
     var username = $('#username').val();
     var password = $('#password').val();
     var remember = $('#checkbox_remember').prop('checked');
-    $.post("/signin/",
+    // signin_url comes from template
+    $.post(signin_url,
         {
             'username': username,
             'password': password,
             'remember': remember
         }).done(function (data) {
             if (data.success === true) {
+                // next comes from template
                 location.href = next;
             } else {
                 $('#password').val("")
@@ -97,13 +99,5 @@ function sign_in() {
                 $('#error').show();
             }
         });
-    return false;
-}
-
-function sign_out() {
-    ajax_setup();
-    $.get("/signout/").done(function (data) {
-        window.location.href = '/login';
-    });
     return false;
 }

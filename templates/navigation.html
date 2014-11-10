@@ -67,7 +67,7 @@
 		  <div class="user_nick">{{user.nickname}}</div>
 		  <div class="profile_link">Click to edit</div>
 	  </div>
-  	<button class="logout_button" id="button_sign_out">Sign out</button>
+  	<a class="logout_button" id="button_sign_out" href="{% url 'user:signout' course %}">Sign out</a>
 
     {% endif %}
   </div>

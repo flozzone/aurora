@@ -2,37 +2,35 @@
 {% block content %}
   <script type="text/javascript">
   var next = "{{ next }}";
+  var signin_url = "{{ signin_url }}";
   </script>
-	<div class="login_background">
-		<div class="login"  id="loginXL">
-			<form>
-				<div class="title">
-					Welcome to Aurora
-				</div>
-				<div>
-<!--            	<label for="inputEmail">Username</label>
-					<div> -->
-              		  <input id="username" type="text" id="inputEmail" placeholder="Username">
-<!--            	</div> -->
-				</div>
-				<div style="padding-top:5px;">
-<!--            	<label for="inputPassword">Password</label>
-					<div>-->
-						<input id="password" type="password" id="inputPassword" placeholder="Password">
-						<div class="remember_me">
-							<input id="checkbox_remember" type="checkbox">
-							<label for="checkbox_remember">remember me</label>
-						</div>
-						<button id="button_sign_in" class="loginButton">Sign in</button>
-<!--				</div>-->
-				</div>
-			</form>
-			<div id="error" style="display:none;">
-				<strong id="error_message">{{ error_message }}</strong>
-			</div><br><br><br><br><br><br><hr>
-		<div class="alternate_login"><a href="{{ sso_uri }}">sign in via tu password</a><span>or</span> </div>
-		</div>
-	</div>
+<div class="login_background">
+    <div class="login"  id="loginXL">
+        <form>
+            <div class="title">
+                Welcome to Aurora
+            </div>
+            <div>
+                <input type="text" id="course" value="{{ course }}" hidden>
+            </div>
+            <div>
+                <input type="text" id="username" placeholder="Username">
+            </div>
+            <div style="padding-top:5px;">
+                <input type="password" id="password" placeholder="Password">
+                <div class="remember_me">
+                    <input id="checkbox_remember" type="checkbox">
+                    <label for="checkbox_remember">remember me</label>
+                </div>
+                <button id="button_sign_in" class="loginButton">Sign in</button>
+            </div>
+        </form>
+        <div id="error" style="display:none;">
+            <strong id="error_message">{{ error_message }}</strong>
+        </div><br><br><br><br><br><br><hr>
+        <div class="alternate_login"><a href="{{ sso_uri }}">sign in via tu password</a><span>or</span> </div>
+    </div>
+</div>
 
 
 {% endblock %}

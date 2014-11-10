@@ -6,9 +6,10 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-                       url(r'^login/$', 'AuroraUser.views.login'),
-                       url(r'^signin/$', 'AuroraUser.views.signin'),
-                       url(r'^signout/$', 'AuroraUser.views.signout'),
+                       # namespace comes from main urls.py
+                       url(r'login/$', 'AuroraUser.views.login', name='login'),
+                       url(r'signin/$', 'AuroraUser.views.signin', name='signin'),
+                       url(r'signout/$', 'AuroraUser.views.signout', name='signout'),
                        url(r'^course/$', 'AuroraUser.views.course'),
                        url(r'^profile/$', 'AuroraUser.views.profile'),
                        url(r'^profile/save/$', 'AuroraUser.views.profile_save'),

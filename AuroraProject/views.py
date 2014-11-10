@@ -16,10 +16,10 @@ from Review.models import Review
 from ReviewAnswer.models import ReviewAnswer
 from Elaboration.models import Elaboration
 from Challenge.models import Challenge
+from django.core.urlresolvers import reverse
 
 
 def home(request, course=None):
-    print(course)
     if request.user.is_authenticated():
         data = {}
         user = RequestContext(request)['user']
@@ -62,7 +62,7 @@ def home(request, course=None):
 
         return sso_auth_callback(request)
     else:
-        return redirect('/login')
+        return redirect(reverse('user:login', args=(course, )))
 
 def time_to_unix_string(time):
     if time is None:
