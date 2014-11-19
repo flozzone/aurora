@@ -33,19 +33,19 @@
 
       <ul>
          <li id="feed-li">
-            <a href="/">Newsfeed</a>
+            <a href="{% url 'home' course %}">Newsfeed</a>
          </li>
 
         <li id="challenges-li">
-          <a href="{% url 'home' course %}challenge">Challenges</a>
+          <a href="{% url 'Challenge:home' course %}">Challenges</a>
         </li>
 
         <li id="slides-li">
-          <a href="/slides">Slides</a>
+          <a href="/slides">Slides [defunct]</a>
         </li>
 
         <li id="bookmarks-li">
-          <a href="/bookmarks">Bookmarks</a>
+          <a href="/bookmarks">Bookmarks [defunct]</a>
         </li>
 		
         <li id="bugs-li">
@@ -54,7 +54,7 @@
 
         {% if user.is_staff %}
           <li id="evaluation-li">
-            <a href="/evaluation">Evaluation</a>
+            <a href="{% url 'Evaluation.views.evaluation' course %}">Evaluation</a>
           </li>
         {% endif %}
 
