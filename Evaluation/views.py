@@ -32,7 +32,7 @@ from Notification.models import Notification
 
 @login_required()
 @staff_member_required
-def evaluation(request):
+def evaluation(request, course=None):
     # TODO: delete this snippet, fetches gravatar images for every user only for test cases.
     #for puser in AuroraUser.objects.all():
     #    if not puser.avatar:
@@ -48,11 +48,11 @@ def evaluation(request):
         if selection == 'search':
             if 'id' in request.GET:
                 points = get_points(request, AuroraUser.objects.get(pk=request.GET['id']))
-                data = { 'elaborations': elaborations, 'search': True, 'stacks': points['stacks'], 'courses': points['courses'] }
+                data = {'elaborations': elaborations, 'search': True, 'stacks': points['stacks'], 'courses': points['courses']}
             else:
-                data = { 'elaborations': elaborations, 'search': True }
+                data = {'elaborations': elaborations, 'search': True}
         else:
-            data = { 'elaborations': elaborations }
+            data = {'elaborations': elaborations}
         overview = render_to_string('overview.html', data, RequestContext(request))
         count = len(elaborations)
     elif selection == 'questions':
@@ -72,7 +72,8 @@ def evaluation(request):
                                'overview': overview,
                                'count_' + request.session.get('selection', ''): count,
                                'stabilosiert_' + request.session.get('selection', ''): 'stabilosiert',
-                              },
+                               'course': course
+                               },
                               context_instance=RequestContext(request))
 
 
