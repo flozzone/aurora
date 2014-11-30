@@ -14,3 +14,6 @@ fixgit.sh
 reload
 current_working_version_on_aurora
 current_working_version_on_unchained
+
+static
+media
