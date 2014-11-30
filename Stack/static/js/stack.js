@@ -3,7 +3,7 @@ $(function(){
 	$('.challenge-text').ellipsis({
 	    row: 4,
 		char: '… (click for full text)',
-	    onlyFullWords: true,
+	    onlyFullWords: true
 	});	
 	$('.course_selected').removeClass('irrelevant');
 	$('#challenges-li').addClass('uRhere');

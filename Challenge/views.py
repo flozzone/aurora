@@ -17,11 +17,12 @@ from ReviewAnswer.models import ReviewAnswer
 from django.http import Http404
 
 @login_required()
-def stack(request):
-    data = create_context_stack(request)
+def stack(request, course_short_title=None):
+    data = create_context_stack(request, course_short_title)
     return render_to_response('stack.html', data, context_instance=RequestContext(request))
 
-def create_context_stack(request):
+
+def create_context_stack(request, course_short_title):
     data = {}
     if 'id' in request.GET:
         user = RequestContext(request)['user']
@@ -62,17 +63,17 @@ def create_context_stack(request):
                 challenges_inactive.append(stack_challenge.challenge)
         data['challenges_active'] = challenges_active
         data['challenges_inactive'] = challenges_inactive
+        data['course'] = Course.get_or_raise_404()
     return data
 
 
 @login_required()
-def challenges(request, course=None):
-
+def challenges(request, course_short_title=None):
     data = {}
+
+    course = Course.get_or_raise_404(short_title=course_short_title)
     data['course'] = course
-    course = Course.objects.all().filter(short_title=course)
-    if not course:
-        raise Http404
+
     user = RequestContext(request)['user']
     course_stacks = Stack.objects.all().filter(course=course)
     data['course_stacks'] = []

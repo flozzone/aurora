@@ -13,7 +13,7 @@ from Course.models import Course, CourseUserRelation
 def notifications(request):
     data = {}
     user = RequestContext(request)['user']
-    course = RequestContext(request)['last_selected_course']
+    course = RequestContext(request)['course']
 
     if 'id' in request.GET:
         try:
@@ -81,9 +81,9 @@ def read(request):
 
 
 @login_required()
-def refresh(request):
+def refresh(request, course_short_title=None):
     user = RequestContext(request)['user']
-    course = RequestContext(request)['last_selected_course']
+    course = Course.get_or_raise_404(course_short_title)
     notifications = Notification.objects.filter(user=user, course=course, read=False)
     return HttpResponse(len(notifications))
 

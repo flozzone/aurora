@@ -17,18 +17,16 @@ from ReviewAnswer.models import ReviewAnswer
 from Elaboration.models import Elaboration
 from Challenge.models import Challenge
 from django.core.urlresolvers import reverse
+from django.core.exceptions import ObjectDoesNotExist
 
 
-def home(request, course=None):
+def home(request, course_short_title=None):
     if request.user.is_authenticated():
         data = {}
         user = RequestContext(request)['user']
-        data['course'] = course
 
-        course = Course.objects.all().filter(short_title=course)
+        data['course'] = Course.get_or_raise_404(course_short_title)
 
-        if not course:
-            raise Http404
         course_ids = CourseUserRelation.objects.filter(user=user).values_list('course', flat=True)
         courses = Course.objects.filter(id__in=course_ids)
         data['courses'] = courses
@@ -62,7 +60,8 @@ def home(request, course=None):
 
         return sso_auth_callback(request)
     else:
-        return redirect(reverse('user:login', args=(course, )))
+        return redirect(reverse('user:login', args=(course_short_title, )))
+
 
 def time_to_unix_string(time):
     if time is None:

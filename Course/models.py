@@ -1,5 +1,6 @@
 from django.db import models
-
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import Http404
 
 class Course(models.Model):
     title = models.CharField(max_length=100, unique=True)
@@ -33,6 +34,13 @@ class Course(models.Model):
             return True
         except CourseUserRelation.DoesNotExist:
             return False
+
+    @staticmethod
+    def get_or_raise_404(short_title):
+        try:
+            return Course.objects.get(short_title=short_title)
+        except ObjectDoesNotExist:
+            raise Http404
 
 
 class CourseUserRelation(models.Model):
