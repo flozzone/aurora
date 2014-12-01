@@ -11,15 +11,15 @@
     <div class="headline">
       <a href="/">Aurora</a>
       {% if available_courses|length > 1 %}
-	  <div class="course_selected" onclick="if(!$(this).hasClass('irrelevant')){$('#course_select').toggle(100);}"> {{last_selected_course.title}} <i class="fa fa-angle-down"></i>
+	  <div class="course_selected" onclick="if(!$(this).hasClass('irrelevant')){$('#course_select').toggle(100);}"> {{course.title}} <i class="fa fa-angle-down"></i>
         <ul id="course_select">
-          {% for course in available_courses %}
-            <li class="ct_menu {% if course == last_selected_course %}selected{% endif %}" data-shortname="{{ course.short_title }}" >{{course.title}}</li>
+          {% for available_course in available_courses %}
+            <li class="ct_menu {% if available_course.id == course.id %}selected{% endif %}" data-shortname="{{ course.short_title }}" >{{course.title}}</li>
           {% endfor %}
         </ul>
 	  </div>
 	  {% else %}
-		  <div class="course_selected"> {{last_selected_course.title}}</div>
+		  <div class="course_selected"> {{course.title}}</div>
 
       {% endif %}
     </div>
@@ -33,11 +33,11 @@
 
       <ul>
          <li id="feed-li">
-            <a href="{% url 'home' course %}">Newsfeed</a>
+            <a href="{% url 'home' course.short_title %}">Newsfeed</a>
          </li>
 
         <li id="challenges-li">
-          <a href="{% url 'Challenge:home' course %}">Challenges</a>
+          <a href="{% url 'Challenge:home' course.short_title %}">Challenges</a>
         </li>
 
         <li id="slides-li">
@@ -54,7 +54,7 @@
 
         {% if user.is_staff %}
           <li id="evaluation-li">
-            <a href="{% url 'Evaluation.views.evaluation' course %}">Evaluation</a>
+            <a href="{% url 'Evaluation.views.evaluation' course.short_title %}">Evaluation</a>
           </li>
         {% endif %}
 
@@ -67,7 +67,7 @@
 		  <div class="user_nick">{{user.nickname}}</div>
 		  <div class="profile_link">Click to edit</div>
 	  </div>
-  	<a class="logout_button" id="button_sign_out" href="{% url 'user:signout' course %}">Sign out</a>
+  	<a class="logout_button" id="button_sign_out" href="{% url 'user:signout' course.short_title %}">Sign out</a>
 
     {% endif %}
   </div>

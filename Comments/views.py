@@ -342,6 +342,7 @@ def unpack_revisions(revisions):
     return revisions_array
 
 
+# TODO is this just a test method? (delete or mark if yes)
 @login_required
 def feed(request):
     try:
