@@ -24,6 +24,7 @@ urlpatterns = patterns('',
     url(r'^media/(?P<path>.*)$', 'django.views.static.serve',
         {'document_root': MEDIA_ROOT}),
 
+    url(r'', include('Comments.urls', namespace='Comments')),
 
     url(r'result_users', 'AuroraProject.views.result_users', name='result_users'),
     url(r'result_elabs_nonfinal', 'AuroraProject.views.result_elabs_nonfinal', name='result_elabs_nonfinal'),
@@ -41,7 +42,6 @@ urlpatterns = patterns('',
         ))),
 
     url(r'', include('FileUpload.urls')),
-    url(r'', include('Comments.urls', namespace='Comments')),
     url(r'slides/', include('Slides.urls', namespace='Slides')),
     # url(r'^AuroraProject/', include('AuroraProject.foo.urls')),
 
