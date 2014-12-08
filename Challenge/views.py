@@ -67,7 +67,7 @@ def create_context_stack(request, course_short_title):
         challenges_active.append(challenge_active)
     data['challenges_active'] = challenges_active
     data['challenges_inactive'] = challenges_inactive
-    data['course'] = Course.get_or_raise_404()
+    data['course'] = Course.get_or_raise_404(course_short_title)
 
     return data
 
