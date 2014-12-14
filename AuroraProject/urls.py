@@ -37,7 +37,7 @@ urlpatterns = patterns('',
         url(r'^elaboration/', include('Elaboration.urls')),
         url(r'^review/', include('Review.urls')),
         url(r'^notifications/', include('Notification.urls', namespace='Notification')),
-        url(r'', include('Evaluation.urls')),
+        url(r'^evaluation/', include('Evaluation.urls', namespace='Evaluation')),
         url(r'', include('AuroraUser.urls', namespace='user')),
         ))),
 

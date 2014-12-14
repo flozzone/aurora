@@ -3,11 +3,11 @@ from django.conf.urls import patterns, url
 import Evaluation.views
 
 urlpatterns = patterns('',
-    url(r'^evaluation/$', Evaluation.views.evaluation),
+    url(r'^$', Evaluation.views.evaluation, name='home'),
     url(r'^save_evaluation/$', Evaluation.views.save_evaluation),
     url(r'^submit_evaluation/$', Evaluation.views.submit_evaluation),
     url(r'^reopen_evaluation/$', Evaluation.views.reopen_evaluation),
-    url(r'^overview/$', Evaluation.views.overview),
+    url(r'^overview/$', Evaluation.views.overview, name='overview'),
     url(r'^questions/$', Evaluation.views.questions),
     url(r'^detail/$', Evaluation.views.detail),
     url(r'^stack/$', Evaluation.views.stack),

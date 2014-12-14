@@ -32,12 +32,13 @@ from Notification.models import Notification
 
 @login_required()
 @staff_member_required
-def evaluation(request, course=None):
+def evaluation(request, course_short_title=None):
     # TODO: delete this snippet, fetches gravatar images for every user only for test cases.
     #for puser in AuroraUser.objects.all():
     #    if not puser.avatar:
     #        puser.get_gravatar()
 
+    course = Course.get_or_raise_404(short_title=course_short_title)
     overview = ""
     elaborations = []
     count = 0
