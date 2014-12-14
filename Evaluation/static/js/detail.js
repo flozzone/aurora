@@ -21,16 +21,16 @@ $(function() {
 $(function() {
    $(".back").click(function(event) {
 	   $(".back").text(": : LOADING : :")
-        var url = '/back';
+        var url = './back';
         $.get(url, function (data) {
-            window.location.href = "/evaluation/";
+            window.location.href = "./";
         });
    });
 });
 
 $(function() {
    $(".stack").click(function(event) {
-       var url = '/stack';
+       var url = './stack';
         $.get(url, function (data) {
             $('#info_area').html(data);
         });
@@ -39,7 +39,7 @@ $(function() {
 
 $(function() {
    $(".others").click(function(event) {
-        var url = '/others';
+        var url = './others';
         $.get(url, function (data) {
             $('#info_area').html(data);
         });
@@ -48,7 +48,7 @@ $(function() {
 
 $(function() {
    $(".challenge_txt").click(function(event) {
-       var url = '/challenge_txt';
+       var url = './challenge_txt';
         $.get(url, function (data) {
             $('#info_area').html(data);
         });
@@ -57,7 +57,7 @@ $(function() {
 
 $(function() {
    $(".similarities").click(function(event) {
-       var url = '/similarities';
+       var url = './similarities';
         $.get(url, function (data) {
             $('#info_area').html(data);
         });
@@ -66,7 +66,7 @@ $(function() {
 
 $(function() {
     $(".paginator").click(function(event) {
-        var url = '/detail?elaboration_id=' + $(event.target).attr('id');
+        var url = './detail?elaboration_id=' + $(event.target).attr('id');
         $.get(url, function (data) {
             $('#detail_area').html(data);
         });
@@ -246,7 +246,7 @@ function review_submitted() {
 
 $(function() {
    $(".review_list").click(function(event) {
-        var url = '/reviewlist';
+        var url = './reviewlist';
         $.get(url, function (data) {
             $('#info_area').html(data);
         });

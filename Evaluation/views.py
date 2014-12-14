@@ -80,7 +80,8 @@ def evaluation(request, course_short_title=None):
 
 @login_required()
 @staff_member_required
-def overview(request):
+def overview(request, course_short_title=None):
+    print("i am heeeeeeeeeeeeeeereeeeeeeeee")
 
     if request.GET.get('data', '') == "missing_reviews":
         elaborations = Elaboration.get_missing_reviews()
@@ -120,7 +121,7 @@ def overview(request):
 
 @login_required()
 @staff_member_required
-def questions(request):
+def questions(request, course_short_title=None):
     challenges = Challenge.get_questions(RequestContext(request))
 
     # store selected challenges in session
@@ -146,7 +147,7 @@ def questions(request):
 
 @login_required()
 @staff_member_required
-def detail(request):
+def detail(request, course_short_title=None):
     # get selected elaborations from session
     elaborations = []
     params = {}
@@ -260,7 +261,7 @@ def start_evaluation(request):
 
 @login_required()
 @staff_member_required
-def stack(request):
+def stack(request, course_short_title=None):
     elaboration = Elaboration.objects.get(pk=request.session.get('elaboration_id', ''))
     stack_elaborations = elaboration.user.get_stack_elaborations(elaboration.challenge.get_stack())
 
@@ -269,7 +270,7 @@ def stack(request):
 
 @login_required()
 @staff_member_required
-def others(request):
+def others(request, course_short_title=None):
     # get selected elaborations from session
     elaboration = Elaboration.objects.get(pk=request.session.get('elaboration_id', ''))
 
@@ -301,7 +302,7 @@ def others(request):
 
 @login_required()
 @staff_member_required
-def challenge_txt(request):
+def challenge_txt(request, course_short_title=None):
     elaboration = Elaboration.objects.get(pk=request.session.get('elaboration_id', ''))
     return render_to_response('challenge_txt.html', {'challenge': elaboration.challenge, 'stack': elaboration.challenge.get_stack()},
                               RequestContext(request))
@@ -309,7 +310,7 @@ def challenge_txt(request):
 
 @login_required()
 @staff_member_required
-def similarities(request):
+def similarities(request, course_short_title=None):
     elaboration = Elaboration.objects.get(pk=request.session.get('elaboration_id', ''))
     challenge_elaborations = Elaboration.objects.filter(challenge=elaboration.challenge, submission_time__isnull=False).exclude(pk=elaboration.id)
 
@@ -428,7 +429,7 @@ def set_appraisal(request):
 @csrf_exempt
 @login_required()
 @staff_member_required
-def select_challenge(request):
+def select_challenge(request, course_short_title=None):
     selected_challenge = request.POST['selected_challenge'][:(request.POST['selected_challenge'].rindex('(')-1)]
 
     elaborations = []
@@ -449,7 +450,7 @@ def select_challenge(request):
 @csrf_exempt
 @login_required()
 @staff_member_required
-def select_user(request):
+def select_user(request, course_short_title=None):
     selected_user = request.POST['selected_user'].split()[0]
 
     elaborations = []
@@ -542,7 +543,7 @@ def search(request):
 
 @login_required()
 @staff_member_required
-def autocomplete_challenge(request):
+def autocomplete_challenge(request, course_short_title=None):
     term = request.GET.get('term', '')
     challenges = Challenge.objects.all().filter(title__istartswith=term)
     titles = [challenge.title + ' (' + str(challenge.get_sub_elab_count()) + '/' + str(challenge.get_elab_count()) + ')' for challenge in challenges]
@@ -552,7 +553,7 @@ def autocomplete_challenge(request):
 
 @login_required()
 @staff_member_required
-def autocomplete_user(request):
+def autocomplete_user(request, course_short_title=None):
     term = request.GET.get('term', '')
     studies = AuroraUser.objects.all().filter(
         Q(username__istartswith=term) | Q(first_name__istartswith=term) | Q(last_name__istartswith=term) | Q(nickname__istartswith=term))
@@ -611,7 +612,7 @@ def review_answer(request):
 
 @login_required()
 @staff_member_required
-def back(request):
+def back(request, course_short_title=None):
     selection = request.session.get('selection', 'error')
     if selection == "search":
         return HttpResponse()
@@ -640,7 +641,7 @@ def back(request):
 
 @login_required()
 @staff_member_required
-def reviewlist(request):
+def reviewlist(request, course_short_title=None):
     elaboration = Elaboration.objects.get(pk=request.session.get('elaboration_id', ''))
     reviews = Review.objects.filter(reviewer=elaboration.user, submission_time__isnull=False).order_by('elaboration__challenge__id')
 

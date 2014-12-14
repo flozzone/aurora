@@ -19,7 +19,7 @@ $(function() {
 $(function() {
 	$(".missing_reviews").click(function(event) {
 		loadWait();
-		var url = '/overview?data=missing_reviews';
+		var url = './overview?data=missing_reviews';
 		$.get(url, function (data) {
             update_overview(data);
 		});
@@ -28,7 +28,7 @@ $(function() {
 
 $(function() {
    $(".count_missing_reviews").click(function(event) {
-       var url = '/overview?data=missing_reviews';
+       var url = './overview?data=missing_reviews';
        $.get(url, function (data) {
             $('#count_mr').html("(118)");
        });
@@ -38,7 +38,7 @@ $(function() {
 $(function() {
    $(".non_adequate_work").click(function(event) {
 	   loadWait();
-       var url = '/overview?data=non_adequate_work';
+       var url = './overview?data=non_adequate_work';
        $.get(url, function (data) {
             update_overview(data);
        });
@@ -48,7 +48,7 @@ $(function() {
 $(function() {
    $(".top_level_challenges").click(function(event) {
 	   loadWait();
-       var url = '/overview?data=top_level_challenges';
+       var url = './overview?data=top_level_challenges';
        $.get(url, function (data) {
             update_overview(data);
        });
@@ -58,7 +58,7 @@ $(function() {
 $(function() {
    $(".complaints").click(function(event) {
 	   loadWait();
-       var url = '/overview?data=complaints';
+       var url = './overview?data=complaints';
        $.get(url, function (data) {
             update_overview(data);
        });
@@ -68,7 +68,7 @@ $(function() {
 $(function() {
    $(".questions").click(function(event) {
 	   loadWait();
-       var url = '/questions/';
+       var url = './questions/';
        $.get(url, function (data) {
             update_overview(data);
        });
@@ -78,7 +78,7 @@ $(function() {
 $(function() {
    $(".evaluated_non_adequate_work").click(function(event) {
 	   loadWait();
-	   var url = '/overview?data=evaluated_non_adequate_work';
+	   var url = './overview?data=evaluated_non_adequate_work';
        $.get(url, function (data) {
             update_overview(data);
        });
@@ -87,7 +87,7 @@ $(function() {
 
 $(function() {
    $(".awesome").click(function(event) {
-       var url = '/overview?data=awesome';
+       var url = './overview?data=awesome';
        $.get(url, function (data) {
             update_overview(data);
        });
@@ -97,7 +97,7 @@ $(function() {
 $(function() {
    $(".select_challenge").click(function(event) {
        loadWait();
-	   var url = '/select_challenge';
+	   var url = './select_challenge';
        $.get(url, function (data) {
             $('#select_challenge').html(data);
        });
@@ -148,7 +148,7 @@ $(function() {
 $(function() {
    $(".awesome").click(function(event) {
        loadWait();
-       var url = '/overview?data=awesome';
+       var url = './overview?data=awesome';
        $.get(url, function (data) {
             update_overview(data);
        });
@@ -156,7 +156,7 @@ $(function() {
 });
 
 function load_details(id) {
-   var url = '/detail?elaboration_id=' + id;
+   var url = './detail?elaboration_id=' + id;
    $.get(url, function (data) {
        $('#detail_area').html(data);
    });
@@ -174,12 +174,12 @@ function hideWait() {
 
 $(function() {
     $("#search_challenge").autocomplete({
-        source: "/autocomplete_challenge/",
+        source: "./autocomplete_challenge/",
         select: function (event, ui) {
            var data = {
                 selected_challenge: ui.item.value     // select value from autocomplete box
            };
-           var args = { type: "POST", url: "/select_challenge/", data: data,
+           var args = { type: "POST", url: "./select_challenge/", data: data,
                 error: function () {
                     alert('challenge not found');
                 },
@@ -195,12 +195,12 @@ $(function() {
 
 $(function() {
     $("#search_user").autocomplete({
-        source: "/autocomplete_user/",
+        source: "./autocomplete_user/",
         select: function (event, ui) {
            var data = {
                 selected_user: ui.item.value     // select value from autocomplete box
            };
-           var args = { type: "POST", url: "/select_user/", data: data,
+           var args = { type: "POST", url: "./select_user/", data: data,
                 error: function () {
                     alert('user not found');
                 },
