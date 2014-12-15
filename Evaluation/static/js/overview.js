@@ -232,7 +232,7 @@ $(function() {
 });
 
 function sort(param) {
-   var url = '/sort?data=' + param;
+   var url = './sort?data=' + param;
    $.get(url, function (data) {
        update_overview(data);
    });

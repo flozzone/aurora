@@ -18,6 +18,7 @@ urlpatterns = patterns('',
     url(r'^autocomplete_user/$', Evaluation.views.autocomplete_user),
     url(r'^select_challenge/$', Evaluation.views.select_challenge),
     url(r'^select_user/$', Evaluation.views.select_user),
+    url(r'^sort$', Evaluation.views.sort),
 
     url(r'^save_evaluation/$', Evaluation.views.save_evaluation),
     url(r'^submit_evaluation/$', Evaluation.views.submit_evaluation),
@@ -29,5 +30,4 @@ urlpatterns = patterns('',
     url(r'^evaluation/user$', Evaluation.views.search_user),
     url(r'^evaluation/elab$', Evaluation.views.search_elab),
     url(r'^start_evaluation$', Evaluation.views.start_evaluation),
-    url(r'^sort/$', Evaluation.views.sort),
 )

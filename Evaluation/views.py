@@ -81,8 +81,6 @@ def evaluation(request, course_short_title=None):
 @login_required()
 @staff_member_required
 def overview(request, course_short_title=None):
-    print("i am heeeeeeeeeeeeeeereeeeeeeeee")
-
     if request.GET.get('data', '') == "missing_reviews":
         elaborations = Elaboration.get_missing_reviews()
     if request.GET.get('data', '') == "top_level_challenges":
@@ -709,7 +707,7 @@ def search_elab(request):
 
 @login_required()
 @staff_member_required
-def sort(request):
+def sort(request, course_short_title=None):
 
     elaborations = []
     for serialized_elaboration in serializers.deserialize('json', request.session.get('elaborations', {})):
