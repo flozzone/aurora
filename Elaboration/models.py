@@ -82,10 +82,10 @@ class Elaboration(models.Model):
         return elaborations
 
     @staticmethod
-    def get_missing_reviews():
+    def get_missing_reviews(course):
         from Challenge.models import Challenge
 
-        final_challenge_ids = Challenge.get_final_challenge_ids()
+        final_challenge_ids = Challenge.get_course_final_challenge_ids(course)
         missing_reviews = (
             Elaboration.objects
             .filter(submission_time__lte=datetime.now() - timedelta(days=1), user__is_staff=False)
@@ -104,10 +104,10 @@ class Elaboration(models.Model):
         return missing_reviews
 
     @staticmethod
-    def get_top_level_challenges():
+    def get_top_level_challenges(course):
         from Challenge.models import Challenge
 
-        final_challenge_ids = Challenge.get_final_challenge_ids()
+        final_challenge_ids = Challenge.get_course_final_challenge_ids(course)
         top_level_challenges = (
             Elaboration.objects
             .filter(challenge__id__in=final_challenge_ids, submission_time__isnull=False, user__is_staff=False)

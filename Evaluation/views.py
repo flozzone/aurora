@@ -82,8 +82,8 @@ def evaluation(request, course_short_title=None):
 @login_required()
 @staff_member_required
 def missing_reviews(request, course_short_title=None):
-    elaborations = Elaboration.get_missing_reviews()
     course = Course.get_or_raise_404(short_title=course_short_title)
+    elaborations = Elaboration.get_missing_reviews(course)
 
     # sort elaborations by submission time
     if type(elaborations) == list:
@@ -138,8 +138,8 @@ def non_adequate_work(request, course_short_title=None):
 @login_required()
 @staff_member_required
 def top_level_tasks(request, course_short_title=None):
-    elaborations = Elaboration.get_top_level_challenges()
     course = Course.get_or_raise_404(short_title=course_short_title)
+    elaborations = Elaboration.get_top_level_challenges(course)
 
     # sort elaborations by submission time
     if type(elaborations) == list:
