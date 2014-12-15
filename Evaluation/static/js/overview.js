@@ -3,7 +3,6 @@ $(function() {
 	$('#evaluation-li').addClass('uRhere');
 });
 
-
 function update_overview(data) {
     data = JSON.parse(data);
     $('#menu').html(data['menu_html']);
@@ -14,16 +13,6 @@ $(function() {
 	$(".mfield").click(function(event) {
 		$(".mitem").removeClass('stabilosiert');
 	});
-});
-
-$(function() {
-   $(".questions").click(function(event) {
-	   loadWait();
-       var url = './questions/';
-       $.get(url, function (data) {
-            update_overview(data);
-       });
-   });
 });
 
 $(function() {
@@ -74,16 +63,6 @@ $(function() {
    $(".search_all").focusout(function(event) {
        if($('.search_all').text() == "")
           $(".search_all").html("everywhere...");
-   });
-});
-
-$(function() {
-   $(".awesome").click(function(event) {
-       loadWait();
-       var url = './overview?data=awesome';
-       $.get(url, function (data) {
-            update_overview(data);
-       });
    });
 });
 

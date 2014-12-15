@@ -34,7 +34,7 @@ from Notification.models import Notification
 @staff_member_required
 def evaluation(request, course_short_title=None):
     # TODO: delete this snippet, fetches gravatar images for every user only for test cases.
-    #for puser in AuroraUser.objects.all():
+    # for puser in AuroraUser.objects.all():
     #    if not puser.avatar:
     #        puser.get_gravatar()
 
@@ -49,7 +49,8 @@ def evaluation(request, course_short_title=None):
         if selection == 'search':
             if 'id' in request.GET:
                 points = get_points(request, AuroraUser.objects.get(pk=request.GET['id']))
-                data = {'elaborations': elaborations, 'search': True, 'stacks': points['stacks'], 'courses': points['courses']}
+                data = {'elaborations': elaborations, 'search': True, 'stacks': points['stacks'],
+                        'courses': points['courses']}
             else:
                 data = {'elaborations': elaborations, 'search': True}
         else:
@@ -57,12 +58,12 @@ def evaluation(request, course_short_title=None):
         overview = render_to_string('overview.html', data, RequestContext(request))
         count = len(elaborations)
     elif selection == 'questions':
-            # get selected challenges from session
-            challenges = []
-            for serialized_challenge in serializers.deserialize('json', request.session.get('challenges', {})):
-                challenges.append(serialized_challenge.object)
-            count = len(challenges)
-            overview = render_to_string('questions.html', {'challenges': challenges}, RequestContext(request))
+        # get selected challenges from session
+        challenges = []
+        for serialized_challenge in serializers.deserialize('json', request.session.get('challenges', {})):
+            challenges.append(serialized_challenge.object)
+        count = len(challenges)
+        overview = render_to_string('questions.html', {'challenges': challenges}, RequestContext(request))
 
     challenges = Challenge.objects.all()
 
@@ -74,7 +75,7 @@ def evaluation(request, course_short_title=None):
                                'count_' + request.session.get('selection', ''): count,
                                'stabilosiert_' + request.session.get('selection', ''): 'stabilosiert',
                                'course': course
-                               },
+                              },
                               context_instance=RequestContext(request))
 
 
@@ -96,12 +97,13 @@ def missing_reviews(request, course_short_title=None):
     request.session['count'] = len(elaborations)
 
     return render_to_response('evaluation.html',
-                              { 'overview': render_to_string('overview.html', {'elaborations': elaborations}, RequestContext(request)),
-                                'count_missing_reviews': request.session.get('count', '0'),
-                                'stabilosiert_missing_reviews': 'stabilosiert',
-                                'selection': request.session['selection'],
-                                'course': course
-                               },
+                              {'overview': render_to_string('overview.html', {'elaborations': elaborations},
+                                                            RequestContext(request)),
+                               'count_missing_reviews': request.session.get('count', '0'),
+                               'stabilosiert_missing_reviews': 'stabilosiert',
+                               'selection': request.session['selection'],
+                               'course': course
+                              },
                               context_instance=RequestContext(request))
 
 
@@ -123,12 +125,13 @@ def non_adequate_work(request, course_short_title=None):
     request.session['count'] = len(elaborations)
 
     return render_to_response('evaluation.html',
-                              { 'overview': render_to_string('overview.html', {'elaborations': elaborations}, RequestContext(request)),
-                                'count_non_adequate_work': request.session.get('count', '0'),
-                                'stabilosiert_non_adequate_work': 'stabilosiert',
-                                'selection': request.session['selection'],
-                                'course': course
-                               },
+                              {'overview': render_to_string('overview.html', {'elaborations': elaborations},
+                                                            RequestContext(request)),
+                               'count_non_adequate_work': request.session.get('count', '0'),
+                               'stabilosiert_non_adequate_work': 'stabilosiert',
+                               'selection': request.session['selection'],
+                               'course': course
+                              },
                               context_instance=RequestContext(request))
 
 
@@ -150,12 +153,13 @@ def top_level_tasks(request, course_short_title=None):
     request.session['count'] = len(elaborations)
 
     return render_to_response('evaluation.html',
-                              { 'overview': render_to_string('overview.html', {'elaborations': elaborations}, RequestContext(request)),
-                                'count_top_level_tasks': request.session.get('count', '0'),
-                                'stabilosiert_top_level_tasks': 'stabilosiert',
-                                'selection': request.session['selection'],
-                                'course': course
-                               },
+                              {'overview': render_to_string('overview.html', {'elaborations': elaborations},
+                                                            RequestContext(request)),
+                               'count_top_level_tasks': request.session.get('count', '0'),
+                               'stabilosiert_top_level_tasks': 'stabilosiert',
+                               'selection': request.session['selection'],
+                               'course': course
+                              },
                               context_instance=RequestContext(request))
 
 
@@ -177,12 +181,13 @@ def complaints(request, course_short_title=None):
     request.session['count'] = len(elaborations)
 
     return render_to_response('evaluation.html',
-                              { 'overview': render_to_string('overview.html', {'elaborations': elaborations}, RequestContext(request)),
-                                'count_complaints': request.session.get('count', '0'),
-                                'stabilosiert_complaints': 'stabilosiert',
-                                'selection': request.session['selection'],
-                                'course': course
-                               },
+                              {'overview': render_to_string('overview.html', {'elaborations': elaborations},
+                                                            RequestContext(request)),
+                               'count_complaints': request.session.get('count', '0'),
+                               'stabilosiert_complaints': 'stabilosiert',
+                               'selection': request.session['selection'],
+                               'course': course
+                              },
                               context_instance=RequestContext(request))
 
 
@@ -204,12 +209,13 @@ def evaluated_non_adequate_work(request, course_short_title=None):
     request.session['count'] = len(elaborations)
 
     return render_to_response('evaluation.html',
-                              { 'overview': render_to_string('overview.html', {'elaborations': elaborations}, RequestContext(request)),
-                                'count_evaluated_non_adequate_work': request.session.get('count', '0'),
-                                'stabilosiert_evaluated_non_adequate_work': 'stabilosiert',
-                                'selection': request.session['selection'],
-                                'course': course
-                               },
+                              {'overview': render_to_string('overview.html', {'elaborations': elaborations},
+                                                            RequestContext(request)),
+                               'count_evaluated_non_adequate_work': request.session.get('count', '0'),
+                               'stabilosiert_evaluated_non_adequate_work': 'stabilosiert',
+                               'selection': request.session['selection'],
+                               'course': course
+                              },
                               context_instance=RequestContext(request))
 
 
@@ -231,12 +237,13 @@ def awesome(request, course_short_title=None):
     request.session['count'] = len(elaborations)
 
     return render_to_response('evaluation.html',
-                              { 'overview': render_to_string('overview.html', {'elaborations': elaborations}, RequestContext(request)),
-                                'count_awesome': request.session.get('count', '0'),
-                                'stabilosiert_awesome': 'stabilosiert',
-                                'selection': request.session['selection'],
-                                'course': course
-                               },
+                              {'overview': render_to_string('overview.html', {'elaborations': elaborations},
+                                                            RequestContext(request)),
+                               'count_awesome': request.session.get('count', '0'),
+                               'stabilosiert_awesome': 'stabilosiert',
+                               'selection': request.session['selection'],
+                               'course': course
+                              },
                               context_instance=RequestContext(request))
 
 
@@ -272,7 +279,7 @@ def overview(request, course_short_title=None):
         'menu_html': render_to_string('menu.html', {
             'count_' + request.session.get('selection', ''): request.session.get('count', '0'),
             'stabilosiert_' + request.session.get('selection', ''): 'stabilosiert',
-            }, RequestContext(request)),
+        }, RequestContext(request)),
         'selection': request.session['selection']
     }
 
@@ -294,16 +301,16 @@ def questions(request, course_short_title=None):
     request.session['selection'] = 'questions'
     request.session['count'] = len(challenges)
 
-    data = {
-        'overview_html': render_to_string('questions.html', {'challenges': challenges}, RequestContext(request)),
-        'menu_html': render_to_string('menu.html', {
-            'count_' + request.session.get('selection', ''): request.session.get('count', ''),
-            'stabilosiert_' + request.session.get('selection', ''): 'stabilosiert',
-            }, RequestContext(request)),
-        'selection': request.session['selection']
-    }
-
-    return HttpResponse(json.dumps(data))
+    return render_to_response('evaluation.html',
+                              {'challenges': challenges,
+                               'overview': render_to_string('overview.html', {'elaborations': elaborations},
+                                                            RequestContext(request)),
+                               'count_questions': request.session.get('count', '0'),
+                               'stabilosiert_questions': 'stabilosiert',
+                               'selection': request.session['selection'],
+                               'course': course
+                              },
+                              context_instance=RequestContext(request))
 
 
 @login_required()
@@ -457,7 +464,8 @@ def others(request, course_short_title=None):
         if Evaluation.objects.filter(submission=elaboration, submission_time__isnull=False):
             evaluation = Evaluation.objects.get(submission=elaboration, submission_time__isnull=False)
 
-    return render_to_response('others.html', {'elaboration': elaboration, 'evaluation': evaluation, 'next': next, 'prev': prev},
+    return render_to_response('others.html',
+                              {'elaboration': elaboration, 'evaluation': evaluation, 'next': next, 'prev': prev},
                               RequestContext(request))
 
 
@@ -465,7 +473,8 @@ def others(request, course_short_title=None):
 @staff_member_required
 def challenge_txt(request, course_short_title=None):
     elaboration = Elaboration.objects.get(pk=request.session.get('elaboration_id', ''))
-    return render_to_response('challenge_txt.html', {'challenge': elaboration.challenge, 'stack': elaboration.challenge.get_stack()},
+    return render_to_response('challenge_txt.html',
+                              {'challenge': elaboration.challenge, 'stack': elaboration.challenge.get_stack()},
                               RequestContext(request))
 
 
@@ -473,7 +482,8 @@ def challenge_txt(request, course_short_title=None):
 @staff_member_required
 def similarities(request, course_short_title=None):
     elaboration = Elaboration.objects.get(pk=request.session.get('elaboration_id', ''))
-    challenge_elaborations = Elaboration.objects.filter(challenge=elaboration.challenge, submission_time__isnull=False).exclude(pk=elaboration.id)
+    challenge_elaborations = Elaboration.objects.filter(challenge=elaboration.challenge,
+                                                        submission_time__isnull=False).exclude(pk=elaboration.id)
 
     similarities = []
     if elaboration.elaboration_text:
@@ -484,9 +494,10 @@ def similarities(request, course_short_title=None):
                                     elaboration.elaboration_text,
                                     challenge_elaboration.elaboration_text)
 
-                if(s.ratio() > 0.5):
+                if (s.ratio() > 0.5):
                     similarity['elaboration'] = challenge_elaboration
-                    similarity['table'] = difflib.HtmlDiff().make_table(elaboration.elaboration_text.splitlines(), challenge_elaboration.elaboration_text.splitlines())
+                    similarity['table'] = difflib.HtmlDiff().make_table(elaboration.elaboration_text.splitlines(),
+                                                                        challenge_elaboration.elaboration_text.splitlines())
                     similarities.append(similarity)
 
     return render_to_response('similarities.html', {'similarities': similarities}, RequestContext(request))
@@ -536,7 +547,7 @@ def submit_evaluation(request):
         user=elaboration.user,
         course=course,
         text=Notification.SUBMISSION_EVALUATED + elaboration.challenge.title,
-        image_url= elaboration.challenge.image.url,
+        image_url=elaboration.challenge.image.url,
         link="/challenges/stack?id=" + str(elaboration.challenge.get_stack().id)
     )
 
@@ -573,7 +584,6 @@ def reopen_evaluation(request):
 @csrf_exempt
 @staff_member_required
 def set_appraisal(request):
-
     review_id = request.POST['review_id']
     appraisal = request.POST['appraisal']
 
@@ -591,7 +601,7 @@ def set_appraisal(request):
 @login_required()
 @staff_member_required
 def select_challenge(request, course_short_title=None):
-    selected_challenge = request.POST['selected_challenge'][:(request.POST['selected_challenge'].rindex('(')-1)]
+    selected_challenge = request.POST['selected_challenge'][:(request.POST['selected_challenge'].rindex('(') - 1)]
 
     elaborations = []
     challenges = Challenge.objects.filter(title=selected_challenge)
@@ -620,7 +630,8 @@ def select_user(request, course_short_title=None):
 
     points = get_points(request, user)
     html = render_to_response('overview.html',
-        {'elaborations': elaborations, 'search': True, 'stacks': points['stacks'], 'courses': points['courses'] }, RequestContext(request))
+                              {'elaborations': elaborations, 'search': True, 'stacks': points['stacks'],
+                               'courses': points['courses']}, RequestContext(request))
 
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
@@ -693,7 +704,6 @@ def search(request):
                             if result.content_object.review.elaboration not in elaborations:
                                 elaborations.append(result.content_object.review.elaboration)
 
-
     html = render_to_response('overview.html', {'elaborations': elaborations, 'search': True}, RequestContext(request))
 
     # store selected elaborations in session
@@ -707,7 +717,8 @@ def search(request):
 def autocomplete_challenge(request, course_short_title=None):
     term = request.GET.get('term', '')
     challenges = Challenge.objects.all().filter(title__istartswith=term)
-    titles = [challenge.title + ' (' + str(challenge.get_sub_elab_count()) + '/' + str(challenge.get_elab_count()) + ')' for challenge in challenges]
+    titles = [challenge.title + ' (' + str(challenge.get_sub_elab_count()) + '/' + str(challenge.get_elab_count()) + ')'
+              for challenge in challenges]
     response_data = json.dumps(titles, ensure_ascii=False)
     return HttpResponse(response_data, content_type='application/json; charset=utf-8')
 
@@ -717,7 +728,8 @@ def autocomplete_challenge(request, course_short_title=None):
 def autocomplete_user(request, course_short_title=None):
     term = request.GET.get('term', '')
     studies = AuroraUser.objects.all().filter(
-        Q(username__istartswith=term) | Q(first_name__istartswith=term) | Q(last_name__istartswith=term) | Q(nickname__istartswith=term))
+        Q(username__istartswith=term) | Q(first_name__istartswith=term) | Q(last_name__istartswith=term) | Q(
+            nickname__istartswith=term))
     names = [(studi.username + ' ' + studi.nickname + ' ' + studi.last_name) for studi in studies]
     response_data = json.dumps(names, ensure_ascii=False)
     return HttpResponse(response_data, content_type='application/json; charset=utf-8')
@@ -804,7 +816,8 @@ def back(request, course_short_title=None):
 @staff_member_required
 def reviewlist(request, course_short_title=None):
     elaboration = Elaboration.objects.get(pk=request.session.get('elaboration_id', ''))
-    reviews = Review.objects.filter(reviewer=elaboration.user, submission_time__isnull=False).order_by('elaboration__challenge__id')
+    reviews = Review.objects.filter(reviewer=elaboration.user, submission_time__isnull=False).order_by(
+        'elaboration__challenge__id')
 
     return render_to_response('reviewlist.html', {'reviews': reviews}, RequestContext(request))
 
@@ -816,7 +829,7 @@ def search_user(request):
         user = AuroraUser.objects.get(pk=request.GET['id'])
         elaborations = user.get_elaborations()
 
-         # sort elaborations by submission time
+        # sort elaborations by submission time
         if type(elaborations) == list:
             elaborations.sort(key=lambda elaboration: elaboration.submission_time)
         else:
@@ -865,13 +878,13 @@ def search_elab(request):
         detail_html = render_to_string('detail.html', params, RequestContext(request))
 
     challenges = Challenge.objects.all()
-    return render_to_response('evaluation.html', {'challenges': challenges, 'detail_html': detail_html}, context_instance=RequestContext(request))
+    return render_to_response('evaluation.html', {'challenges': challenges, 'detail_html': detail_html},
+                              context_instance=RequestContext(request))
 
 
 @login_required()
 @staff_member_required
 def sort(request, course_short_title=None):
-
     elaborations = []
     for serialized_elaboration in serializers.deserialize('json', request.session.get('elaborations', {})):
         elaborations.append(serialized_elaboration.object)
@@ -894,7 +907,7 @@ def sort(request, course_short_title=None):
         'menu_html': render_to_string('menu.html', {
             'count_' + request.session.get('selection', ''): request.session.get('count', '0'),
             'stabilosiert_' + request.session.get('selection', ''): 'stabilosiert',
-            }, RequestContext(request)),
+        }, RequestContext(request)),
         'selection': request.session['selection']
     }
 
@@ -904,7 +917,6 @@ def sort(request, course_short_title=None):
 @login_required()
 @staff_member_required
 def get_points(request, user):
-
     data = {}
     course_ids = CourseUserRelation.objects.filter(user=user).values_list('course', flat=True)
     courses = Course.objects.filter(id__in=course_ids)

@@ -9,9 +9,7 @@
     <a href="{% url 'Evaluation:non_adequate_work' course.short_title %}"><div class="mitem {{ stabilosiert_non_adequate_work }} non_adequate_work" id="m2">non-adequate work {% if stabilosiert_non_adequate_work %}({{ count_non_adequate_work }}){% endif %}</div></a>
     <a href="{% url 'Evaluation:top_level_tasks' course.short_title %}"><div class="mitem {{ stabilosiert_top_level_tasks }} top_level_tasks" id="m3">top-level tasks {% if stabilosiert_top_level_tasks %}({{ count_top_level_tasks }}){% endif %}</div></a>
     <a href="{% url 'Evaluation:complaints' course.short_title %}"><div class="mitem {{ stabilosiert_complaints }} complaints" id="m4">complaints {% if stabilosiert_complaints %}({{ count_complaints }}){% endif %}</div></a>
-
-    <div class="mitem {{ stabilosiert_questions }} questions" id="m5">questions {% if stabilosiert_questions %}({{ count_questions }}){% endif %}</div>
-
+    <a href="{% url 'Evaluation:questions' course.short_title %}"><div class="mitem {{ stabilosiert_questions }} questions" id="m5">questions {% if stabilosiert_questions %}({{ count_questions }}){% endif %}</div></a>
     <a href="{% url 'Evaluation:evaluated_non_adequate_work' course.short_title %}"><div class="mitem {{ stabilosiert_evaluated_non_adequate_work }} evaluated_non_adequate_work" id="m6">evaluted non-adequate work {% if stabilosiert_evaluated_non_adequate_work %}({{ count_evaluated_non_adequate_work }}){% endif %}</div></a>
     <a href="{% url 'Evaluation:awesome' course.short_title %}"><div class="mitem {{ stabilosiert_awesome }} awesome" id="m7">awesome {% if stabilosiert_awesome %}({{ count_awesome }}){% endif %}</div></a>
 
