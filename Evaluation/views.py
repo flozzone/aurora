@@ -249,45 +249,6 @@ def awesome(request, course_short_title=None):
 
 @login_required()
 @staff_member_required
-def overview(request, course_short_title=None):
-    if request.GET.get('data', '') == "missing_reviews":
-        elaborations = Elaboration.get_missing_reviews()
-    if request.GET.get('data', '') == "top_level_challenges":
-        elaborations = Elaboration.get_top_level_challenges()
-    if request.GET.get('data', '') == "non_adequate_work":
-        elaborations = Elaboration.get_non_adequate_work()
-    if request.GET.get('data', '') == "complaints":
-        elaborations = Elaboration.get_complaints(RequestContext(request))
-    if request.GET.get('data', '') == "awesome":
-        elaborations = Elaboration.get_awesome()
-    if request.GET.get('data', '') == "evaluated_non_adequate_work":
-        elaborations = Elaboration.get_evaluated_non_adequate_work()
-
-    # sort elaborations by submission time
-    if type(elaborations) == list:
-        elaborations.sort(key=lambda elaboration: elaboration.submission_time)
-    else:
-        elaborations.order_by('submission_time')
-
-    # store selected elaborations in session
-    request.session['elaborations'] = serializers.serialize('json', elaborations)
-    request.session['selection'] = request.GET.get('data', '')
-    request.session['count'] = len(elaborations)
-
-    data = {
-        'overview_html': render_to_string('overview.html', {'elaborations': elaborations}, RequestContext(request)),
-        'menu_html': render_to_string('menu.html', {
-            'count_' + request.session.get('selection', ''): request.session.get('count', '0'),
-            'stabilosiert_' + request.session.get('selection', ''): 'stabilosiert',
-        }, RequestContext(request)),
-        'selection': request.session['selection']
-    }
-
-    return HttpResponse(json.dumps(data))
-
-
-@login_required()
-@staff_member_required
 def questions(request, course_short_title=None):
     challenges = Challenge.get_questions(RequestContext(request))
     course = Course.get_or_raise_404(short_title=course_short_title)
