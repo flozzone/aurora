@@ -17,77 +17,9 @@ $(function() {
 });
 
 $(function() {
-	$(".missing_reviews").click(function(event) {
-		loadWait();
-		var url = './overview?data=missing_reviews';
-		$.get(url, function (data) {
-            update_overview(data);
-		});
-	});
-});
-
-$(function() {
-   $(".count_missing_reviews").click(function(event) {
-       var url = './overview?data=missing_reviews';
-       $.get(url, function (data) {
-            $('#count_mr').html("(118)");
-       });
-   });
-});
-
-$(function() {
-   $(".non_adequate_work").click(function(event) {
-	   loadWait();
-       var url = './overview?data=non_adequate_work';
-       $.get(url, function (data) {
-            update_overview(data);
-       });
-   });
-});
-
-$(function() {
-   $(".top_level_challenges").click(function(event) {
-	   loadWait();
-       var url = './overview?data=top_level_challenges';
-       $.get(url, function (data) {
-            update_overview(data);
-       });
-   });
-});
-
-$(function() {
-   $(".complaints").click(function(event) {
-	   loadWait();
-       var url = './overview?data=complaints';
-       $.get(url, function (data) {
-            update_overview(data);
-       });
-   });
-});
-
-$(function() {
    $(".questions").click(function(event) {
 	   loadWait();
        var url = './questions/';
-       $.get(url, function (data) {
-            update_overview(data);
-       });
-   });
-});
-
-$(function() {
-   $(".evaluated_non_adequate_work").click(function(event) {
-	   loadWait();
-	   var url = './overview?data=evaluated_non_adequate_work';
-       $.get(url, function (data) {
-            update_overview(data);
-       });
-   });
-});
-
-$(function() {
-   $(".awesome").click(function(event) {
-       var url = './overview?data=awesome';
        $.get(url, function (data) {
             update_overview(data);
        });

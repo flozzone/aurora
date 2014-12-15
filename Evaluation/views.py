@@ -80,6 +80,168 @@ def evaluation(request, course_short_title=None):
 
 @login_required()
 @staff_member_required
+def missing_reviews(request, course_short_title=None):
+    elaborations = Elaboration.get_missing_reviews()
+    course = Course.get_or_raise_404(short_title=course_short_title)
+
+    # sort elaborations by submission time
+    if type(elaborations) == list:
+        elaborations.sort(key=lambda elaboration: elaboration.submission_time)
+    else:
+        elaborations.order_by('submission_time')
+
+    # store selected elaborations in session
+    request.session['elaborations'] = serializers.serialize('json', elaborations)
+    request.session['selection'] = 'missing_reviews'
+    request.session['count'] = len(elaborations)
+
+    return render_to_response('evaluation.html',
+                              { 'overview': render_to_string('overview.html', {'elaborations': elaborations}, RequestContext(request)),
+                                'count_missing_reviews': request.session.get('count', '0'),
+                                'stabilosiert_missing_reviews': 'stabilosiert',
+                                'selection': request.session['selection'],
+                                'course': course
+                               },
+                              context_instance=RequestContext(request))
+
+
+@login_required()
+@staff_member_required
+def non_adequate_work(request, course_short_title=None):
+    elaborations = Elaboration.get_non_adequate_work()
+    course = Course.get_or_raise_404(short_title=course_short_title)
+
+    # sort elaborations by submission time
+    if type(elaborations) == list:
+        elaborations.sort(key=lambda elaboration: elaboration.submission_time)
+    else:
+        elaborations.order_by('submission_time')
+
+    # store selected elaborations in session
+    request.session['elaborations'] = serializers.serialize('json', elaborations)
+    request.session['selection'] = 'non_adequate_work'
+    request.session['count'] = len(elaborations)
+
+    return render_to_response('evaluation.html',
+                              { 'overview': render_to_string('overview.html', {'elaborations': elaborations}, RequestContext(request)),
+                                'count_non_adequate_work': request.session.get('count', '0'),
+                                'stabilosiert_non_adequate_work': 'stabilosiert',
+                                'selection': request.session['selection'],
+                                'course': course
+                               },
+                              context_instance=RequestContext(request))
+
+
+@login_required()
+@staff_member_required
+def top_level_tasks(request, course_short_title=None):
+    elaborations = Elaboration.get_top_level_challenges()
+    course = Course.get_or_raise_404(short_title=course_short_title)
+
+    # sort elaborations by submission time
+    if type(elaborations) == list:
+        elaborations.sort(key=lambda elaboration: elaboration.submission_time)
+    else:
+        elaborations.order_by('submission_time')
+
+    # store selected elaborations in session
+    request.session['elaborations'] = serializers.serialize('json', elaborations)
+    request.session['selection'] = 'top_level_challenges'
+    request.session['count'] = len(elaborations)
+
+    return render_to_response('evaluation.html',
+                              { 'overview': render_to_string('overview.html', {'elaborations': elaborations}, RequestContext(request)),
+                                'count_top_level_tasks': request.session.get('count', '0'),
+                                'stabilosiert_top_level_tasks': 'stabilosiert',
+                                'selection': request.session['selection'],
+                                'course': course
+                               },
+                              context_instance=RequestContext(request))
+
+
+@login_required()
+@staff_member_required
+def complaints(request, course_short_title=None):
+    elaborations = Elaboration.get_complaints(RequestContext(request))
+    course = Course.get_or_raise_404(short_title=course_short_title)
+
+    # sort elaborations by submission time
+    if type(elaborations) == list:
+        elaborations.sort(key=lambda elaboration: elaboration.submission_time)
+    else:
+        elaborations.order_by('submission_time')
+
+    # store selected elaborations in session
+    request.session['elaborations'] = serializers.serialize('json', elaborations)
+    request.session['selection'] = 'complaints'
+    request.session['count'] = len(elaborations)
+
+    return render_to_response('evaluation.html',
+                              { 'overview': render_to_string('overview.html', {'elaborations': elaborations}, RequestContext(request)),
+                                'count_complaints': request.session.get('count', '0'),
+                                'stabilosiert_complaints': 'stabilosiert',
+                                'selection': request.session['selection'],
+                                'course': course
+                               },
+                              context_instance=RequestContext(request))
+
+
+@login_required()
+@staff_member_required
+def evaluated_non_adequate_work(request, course_short_title=None):
+    elaborations = Elaboration.get_non_adequate_work()
+    course = Course.get_or_raise_404(short_title=course_short_title)
+
+    # sort elaborations by submission time
+    if type(elaborations) == list:
+        elaborations.sort(key=lambda elaboration: elaboration.submission_time)
+    else:
+        elaborations.order_by('submission_time')
+
+    # store selected elaborations in session
+    request.session['elaborations'] = serializers.serialize('json', elaborations)
+    request.session['selection'] = 'evaluated_non_adequate_work'
+    request.session['count'] = len(elaborations)
+
+    return render_to_response('evaluation.html',
+                              { 'overview': render_to_string('overview.html', {'elaborations': elaborations}, RequestContext(request)),
+                                'count_evaluated_non_adequate_work': request.session.get('count', '0'),
+                                'stabilosiert_evaluated_non_adequate_work': 'stabilosiert',
+                                'selection': request.session['selection'],
+                                'course': course
+                               },
+                              context_instance=RequestContext(request))
+
+
+@login_required()
+@staff_member_required
+def awesome(request, course_short_title=None):
+    elaborations = Elaboration.get_awesome()
+    course = Course.get_or_raise_404(short_title=course_short_title)
+
+    # sort elaborations by submission time
+    if type(elaborations) == list:
+        elaborations.sort(key=lambda elaboration: elaboration.submission_time)
+    else:
+        elaborations.order_by('submission_time')
+
+    # store selected elaborations in session
+    request.session['elaborations'] = serializers.serialize('json', elaborations)
+    request.session['selection'] = 'awesome'
+    request.session['count'] = len(elaborations)
+
+    return render_to_response('evaluation.html',
+                              { 'overview': render_to_string('overview.html', {'elaborations': elaborations}, RequestContext(request)),
+                                'count_awesome': request.session.get('count', '0'),
+                                'stabilosiert_awesome': 'stabilosiert',
+                                'selection': request.session['selection'],
+                                'course': course
+                               },
+                              context_instance=RequestContext(request))
+
+
+@login_required()
+@staff_member_required
 def overview(request, course_short_title=None):
     if request.GET.get('data', '') == "missing_reviews":
         elaborations = Elaboration.get_missing_reviews()
@@ -121,6 +283,7 @@ def overview(request, course_short_title=None):
 @staff_member_required
 def questions(request, course_short_title=None):
     challenges = Challenge.get_questions(RequestContext(request))
+    course = Course.get_or_raise_404(short_title=course_short_title)
 
     # store selected challenges in session
     request.session['challenges'] = serializers.serialize('json', challenges)
