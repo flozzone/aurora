@@ -748,10 +748,12 @@ def review_answer(request):
 @staff_member_required
 def back(request, course_short_title=None):
     selection = request.session.get('selection', 'error')
+    course = Course.get_or_raise_404(short_title=course_short_title)
+
     if selection == "search":
         return HttpResponse()
     if selection == "missing_reviews":
-        elaborations = Elaboration.get_missing_reviews()
+        elaborations = Elaboration.get_missing_reviews(course)
     if selection == "top_level_challenges":
         elaborations = Elaboration.get_top_level_challenges()
     if selection == "non_adequate_work":
