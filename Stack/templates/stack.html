@@ -36,7 +36,7 @@
                 <div class="challenge-headline">{{ challenge_dict.challenge.title|safe }}</div>
                 <div class="challenge-text">{{ challenge_dict.challenge.description|safe}}</div>
           </div>
-        <a href="./challenge?id={{ challenge_dict.challenge.id }}" class="go_challenge button XL active" onclick="event.stopPropagation();">
+        <a href="{% url 'Challenge:challenge' course_short_title=course.short_title %}?id={{ challenge_dict.challenge.id }}" class="go_challenge button XL active" onclick="event.stopPropagation();">
           <i class="fa fa-chevron-circle-right no_clicksed" onclick="event.stopPropagation();" style="z-index:10000;position:relative;"></i>
         </a>
   <!-- writing reviews -->
