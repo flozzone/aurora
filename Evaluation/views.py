@@ -787,7 +787,7 @@ def reviewlist(request, course_short_title=None):
 
 @login_required()
 @staff_member_required
-def search_user(request):
+def search_user(request, course_short_title=None):
     if request.GET:
         user = AuroraUser.objects.get(pk=request.GET['id'])
         elaborations = user.get_elaborations()
@@ -802,7 +802,7 @@ def search_user(request):
         request.session['elaborations'] = serializers.serialize('json', elaborations)
         request.session['selection'] = 'search'
 
-    return evaluation(request)
+    return evaluation(request, course_short_title)
 
 
 @login_required()
