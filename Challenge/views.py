@@ -91,8 +91,11 @@ def challenges(request, course_short_title=None):
     return render_to_response('challenges.html', data, context_instance=RequestContext(request))
 
 
-def create_context_challenge(request):
+def create_context_challenge(request, course_short_title):
     data = {}
+    course = Course.get_or_raise_404(short_title=course_short_title)
+    data['course'] = course
+
     if 'id' in request.GET:
         try:
             challenge = Challenge.objects.get(pk=request.GET.get('id'))
@@ -117,14 +120,14 @@ def create_context_challenge(request):
                 data['evaluation'] = Evaluation.objects.filter(submission=elaboration)[0]
 
         if challenge.is_final_challenge():
-            if challenge.is_in_lock_period(RequestContext(request)['user'], RequestContext(request)['last_selected_course']):
-                data['lock'] = challenge.is_in_lock_period(RequestContext(request)['user'], RequestContext(request)['last_selected_course'])
+            if challenge.is_in_lock_period(RequestContext(request)['user'], course):
+                data['lock'] = challenge.is_in_lock_period(RequestContext(request)['user'], course)
     return data
 
 
 @login_required()
-def challenge(request):
-    data = create_context_challenge(request)
+def challenge(request, course_short_title=None):
+    data = create_context_challenge(request, course_short_title)
     if 'elaboration' in data:
         data = create_context_view_review(request, data)
     return render_to_response('challenge.html', data, context_instance=RequestContext(request))
