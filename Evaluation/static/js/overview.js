@@ -66,13 +66,6 @@ $(function() {
    });
 });
 
-function load_details(id) {
-   var url = './detail?elaboration_id=' + id;
-   $.get(url, function (data) {
-       $('#detail_area').html(data);
-   });
-}
-
 function loadWait() {
 	$('.loading_animation').show();
 	$('.overview_table').hide();

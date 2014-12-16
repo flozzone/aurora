@@ -50,11 +50,11 @@ def evaluation(request, course_short_title=None):
             if 'id' in request.GET:
                 points = get_points(request, AuroraUser.objects.get(pk=request.GET['id']))
                 data = {'elaborations': elaborations, 'search': True, 'stacks': points['stacks'],
-                        'courses': points['courses']}
+                        'courses': points['courses'], 'course': course}
             else:
-                data = {'elaborations': elaborations, 'search': True}
+                data = {'elaborations': elaborations, 'search': True, 'course': course}
         else:
-            data = {'elaborations': elaborations}
+            data = {'elaborations': elaborations, 'course': course}
         overview = render_to_string('overview.html', data, RequestContext(request))
         count = len(elaborations)
     elif selection == 'questions':
@@ -97,7 +97,7 @@ def missing_reviews(request, course_short_title=None):
     request.session['count'] = len(elaborations)
 
     return render_to_response('evaluation.html',
-                              {'overview': render_to_string('overview.html', {'elaborations': elaborations},
+                              {'overview': render_to_string('overview.html', {'elaborations': elaborations, 'course': course},
                                                             RequestContext(request)),
                                'count_missing_reviews': request.session.get('count', '0'),
                                'stabilosiert_missing_reviews': 'stabilosiert',
@@ -125,7 +125,7 @@ def non_adequate_work(request, course_short_title=None):
     request.session['count'] = len(elaborations)
 
     return render_to_response('evaluation.html',
-                              {'overview': render_to_string('overview.html', {'elaborations': elaborations},
+                              {'overview': render_to_string('overview.html', {'elaborations': elaborations, 'course': course},
                                                             RequestContext(request)),
                                'count_non_adequate_work': request.session.get('count', '0'),
                                'stabilosiert_non_adequate_work': 'stabilosiert',
@@ -153,7 +153,7 @@ def top_level_tasks(request, course_short_title=None):
     request.session['count'] = len(elaborations)
 
     return render_to_response('evaluation.html',
-                              {'overview': render_to_string('overview.html', {'elaborations': elaborations},
+                              {'overview': render_to_string('overview.html', {'elaborations': elaborations, 'course': course},
                                                             RequestContext(request)),
                                'count_top_level_tasks': request.session.get('count', '0'),
                                'stabilosiert_top_level_tasks': 'stabilosiert',
@@ -181,7 +181,7 @@ def complaints(request, course_short_title=None):
     request.session['count'] = len(elaborations)
 
     return render_to_response('evaluation.html',
-                              {'overview': render_to_string('overview.html', {'elaborations': elaborations},
+                              {'overview': render_to_string('overview.html', {'elaborations': elaborations, 'course': course},
                                                             RequestContext(request)),
                                'count_complaints': request.session.get('count', '0'),
                                'stabilosiert_complaints': 'stabilosiert',
@@ -209,7 +209,7 @@ def evaluated_non_adequate_work(request, course_short_title=None):
     request.session['count'] = len(elaborations)
 
     return render_to_response('evaluation.html',
-                              {'overview': render_to_string('overview.html', {'elaborations': elaborations},
+                              {'overview': render_to_string('overview.html', {'elaborations': elaborations, 'course': course},
                                                             RequestContext(request)),
                                'count_evaluated_non_adequate_work': request.session.get('count', '0'),
                                'stabilosiert_evaluated_non_adequate_work': 'stabilosiert',
@@ -237,7 +237,7 @@ def awesome(request, course_short_title=None):
     request.session['count'] = len(elaborations)
 
     return render_to_response('evaluation.html',
-                              {'overview': render_to_string('overview.html', {'elaborations': elaborations},
+                              {'overview': render_to_string('overview.html', {'elaborations': elaborations, 'course': course},
                                                             RequestContext(request)),
                                'count_awesome': request.session.get('count', '0'),
                                'stabilosiert_awesome': 'stabilosiert',
@@ -264,7 +264,7 @@ def questions(request, course_short_title=None):
 
     return render_to_response('evaluation.html',
                               {'challenges': challenges,
-                               'overview': render_to_string('overview.html', {'elaborations': elaborations},
+                               'overview': render_to_string('overview.html', {'elaborations': elaborations, 'course': course},
                                                             RequestContext(request)),
                                'count_questions': request.session.get('count', '0'),
                                'stabilosiert_questions': 'stabilosiert',
@@ -277,6 +277,8 @@ def questions(request, course_short_title=None):
 @login_required()
 @staff_member_required
 def detail(request, course_short_title=None):
+    course = Course.get_or_raise_404(short_title=course_short_title)
+
     # get selected elaborations from session
     elaborations = []
     params = {}
@@ -352,8 +354,14 @@ def detail(request, course_short_title=None):
     params['reviews'] = reviews
     params['next'] = next
     params['prev'] = prev
+    params['course'] = course
 
-    return render_to_response('detail.html', params, RequestContext(request))
+    detail_html = render_to_string('detail.html', params, RequestContext(request))
+
+    challenges = Challenge.objects.all()
+    return render_to_response('evaluation.html', {'challenges': challenges, 'course': course, 'detail_html': detail_html},
+                              context_instance=RequestContext(request))
+
 
 
 @login_required()
