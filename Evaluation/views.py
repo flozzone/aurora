@@ -708,14 +708,15 @@ def autocomplete_user(request, course_short_title=None):
 
 @login_required()
 @staff_member_required
-def load_reviews(request):
+def load_reviews(request, course_short_title=None):
+    course = Course.get_or_raise_404(short_title=course_short_title)
     if not 'elaboration_id' in request.GET:
         return False;
 
     elaboration = Elaboration.objects.get(pk=request.GET.get('elaboration_id', ''))
     reviews = Review.objects.filter(elaboration=elaboration, submission_time__isnull=False)
 
-    return render_to_response('task.html', {'elaboration': elaboration, 'reviews': reviews, 'stack': 'stack'},
+    return render_to_response('task.html', {'elaboration': elaboration, 'reviews': reviews, 'stack': 'stack', 'course':course},
                               RequestContext(request))
 
 

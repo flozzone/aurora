@@ -181,7 +181,7 @@ function AutoSave(elaboration_id) {
 }
 
 function load_reviews(elaboration_id) {
-   var url = '/load_reviews?elaboration_id=' + elaboration_id;
+   var url = './load_reviews?elaboration_id=' + elaboration_id;
    $.get(url, function (data) {
        $('#info_area').html(data);
    });
