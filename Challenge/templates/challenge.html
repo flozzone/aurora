@@ -73,15 +73,16 @@
 {% else %}
 	{% if not elaboration.is_submitted %}
 		{% if not accepted %}
-{% comment %}
             <div id="Caccept" class="button XL"
     			onclick="$('.elaboration_block').slideDown('fast');$('#Caccept').slideUp('fast');$('#qa').slideUp('fast');">
     			start this task
     		</div>
-{% endcomment %}
+
+        {% comment %}
             <div class="button XL">
     			end of semester reached
     		</div>
+        {% endcomment %}
 		{% endif  %}
     	<div class="elaboration_block{% if not accepted %} unstarted{% endif %}">
 			{% if challenge.accepted_files %}
