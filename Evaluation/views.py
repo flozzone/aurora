@@ -552,7 +552,7 @@ def reopen_evaluation(request):
 
 @csrf_exempt
 @staff_member_required
-def set_appraisal(request):
+def set_appraisal(request, course_short_title=None):
     review_id = request.POST['review_id']
     appraisal = request.POST['appraisal']
 

@@ -128,7 +128,7 @@ function set_appraisal(review_id, appraisal) {
         review_id: review_id,
         appraisal: appraisal
     };
-    var args = { type: "POST", url: "/set_appraisal/", data: data,
+    var args = { type: "POST", url: "./set_appraisal/", data: data,
         error: function () {
             alert('error updating appraisal');
         }
