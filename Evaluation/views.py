@@ -862,6 +862,8 @@ def search_elab(request):
 @login_required()
 @staff_member_required
 def sort(request, course_short_title=None):
+    course = Course.get_or_raise_404(short_title=course_short_title)
+
     elaborations = []
     for serialized_elaboration in serializers.deserialize('json', request.session.get('elaborations', {})):
         elaborations.append(serialized_elaboration.object)
@@ -880,10 +882,10 @@ def sort(request, course_short_title=None):
     request.session['count'] = len(elaborations)
 
     data = {
-        'overview_html': render_to_string('overview.html', {'elaborations': elaborations}, RequestContext(request)),
+        'overview_html': render_to_string('overview.html', {'elaborations': elaborations, 'course': course}, RequestContext(request)),
         'menu_html': render_to_string('menu.html', {
             'count_' + request.session.get('selection', ''): request.session.get('count', '0'),
-            'stabilosiert_' + request.session.get('selection', ''): 'stabilosiert',
+            'stabilosiert_' + request.session.get('selection', ''): 'stabilosiert', 'course': course,
         }, RequestContext(request)),
         'selection': request.session['selection']
     }
