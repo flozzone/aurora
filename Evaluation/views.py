@@ -570,6 +570,7 @@ def set_appraisal(request):
 @login_required()
 @staff_member_required
 def select_challenge(request, course_short_title=None):
+    course = Course.get_or_raise_404(short_title=course_short_title)
     selected_challenge = request.POST['selected_challenge'][:(request.POST['selected_challenge'].rindex('(') - 1)]
 
     elaborations = []
@@ -579,7 +580,7 @@ def select_challenge(request, course_short_title=None):
             for elaboration in Elaboration.get_sel_challenge_elaborations(challenge):
                 elaborations.append(elaboration)
 
-    html = render_to_response('overview.html', {'elaborations': elaborations, 'search': True}, RequestContext(request))
+    html = render_to_response('overview.html', {'elaborations': elaborations, 'search': True, 'course': course}, RequestContext(request))
 
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
@@ -591,6 +592,7 @@ def select_challenge(request, course_short_title=None):
 @login_required()
 @staff_member_required
 def select_user(request, course_short_title=None):
+    course = Course.get_or_raise_404(short_title=course_short_title)
     selected_user = request.POST['selected_user'].split()[0]
 
     elaborations = []
@@ -600,7 +602,7 @@ def select_user(request, course_short_title=None):
     points = get_points(request, user)
     html = render_to_response('overview.html',
                               {'elaborations': elaborations, 'search': True, 'stacks': points['stacks'],
-                               'courses': points['courses']}, RequestContext(request))
+                               'courses': points['courses'], 'course': course}, RequestContext(request))
 
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
