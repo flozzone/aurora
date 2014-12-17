@@ -123,12 +123,13 @@ $(function() {
        var data = {
             search_all: $('.search_all').text()
        };
-       var args = { type: "POST", url: "/search/", data: data,
+       var args = { type: "POST", url: "./search/", data: data,
             error: function () {
                 alert('no search results found');
             },
             success: function(data) {
                 $('#overview').html(data);
+                window.location.href = "./";
             }
        };
        $.ajax(args);

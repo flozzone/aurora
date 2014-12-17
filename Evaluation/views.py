@@ -613,7 +613,8 @@ def select_user(request, course_short_title=None):
 @csrf_exempt
 @login_required()
 @staff_member_required
-def search(request):
+def search(request, course_short_title=None):
+    course = Course.get_or_raise_404(short_title=course_short_title)
     search_all = request.POST['search_all']
 
     elaborations = []
@@ -675,7 +676,7 @@ def search(request):
                             if result.content_object.review.elaboration not in elaborations:
                                 elaborations.append(result.content_object.review.elaboration)
 
-    html = render_to_response('overview.html', {'elaborations': elaborations, 'search': True}, RequestContext(request))
+    html = render_to_response('overview.html', {'elaborations': elaborations, 'search': True, 'course': course}, RequestContext(request))
 
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
