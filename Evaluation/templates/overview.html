@@ -21,7 +21,7 @@
             <th class="indicator_field" >reviews</th>
         </tr>
 
-        {% paginate elaborations with "/evaluation/" %}
+        {% paginate elaborations with "" %}
         {% for elaboration in elaborations %}
             <tr class="{% cycle 'darkRow' 'lightRow' %}">&nbsp;
                 <td><a href="{% url 'Evaluation:detail' course_short_title=course.short_title %}?elaboration_id={{elaboration.id}}"><img class="gravatar" src="{{ elaboration.user.avatar.url }}" style="vertical-align:middle"> {{ elaboration.user.nickname }}</a></td>
