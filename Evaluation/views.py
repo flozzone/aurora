@@ -722,8 +722,10 @@ def load_reviews(request):
 @csrf_exempt
 @login_required()
 @staff_member_required
-def review_answer(request):
+def review_answer(request, course_short_title=None):
     if request.POST:
+        course = Course.get_or_raise_404(short_title=course_short_title)
+
         data = request.body.decode(encoding='UTF-8')
         data = json.loads(data)
 
@@ -745,7 +747,8 @@ def review_answer(request):
         else:
             Notification.enough_peer_reviews(review)
         # update overview
-        elaborations = Elaboration.get_missing_reviews()
+        print("haaalooo")
+        elaborations = Elaboration.get_missing_reviews(course)
         if type(elaborations) == list:
             elaborations.sort(key=lambda elaboration: elaboration.submission_time)
         else:

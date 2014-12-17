@@ -229,7 +229,7 @@ $(function() {
     ajax_setup()
     var args = {
         type: "POST",
-        url: "/evaluation/review_answer/",
+        url: "./review_answer/",
         data: JSON.stringify(data),
         error: function (data) {
             alert('error submitting review');
