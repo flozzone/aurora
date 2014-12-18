@@ -87,7 +87,7 @@ $(function() {
             evaluation_text: $(".evaluation").html(),
             evaluation_points: points
         };
-        var args = { type: "POST", url: "/submit_evaluation/", data: data,
+        var args = { type: "POST", url: "./submit_evaluation/", data: data,
             error: function () {
                 alert('error submitting evaluation');
             },
@@ -95,9 +95,9 @@ $(function() {
                 var next = $(event.target).attr('next');
                 if(next == 'None')
                     next = $(event.target).attr('id');
-                var url = '/detail?elaboration_id=' + next;
+                var url = './detail?elaboration_id=' + next;
                 $.get(url, function (data) {
-                    $('#detail_area').html(data);
+                    $('body').html(data);
                 });
             }
         };
@@ -111,11 +111,11 @@ $(function() {
         var data = {
             elaboration_id: $(event.target).attr('id')
         };
-        var args = { type: "POST", url: "/reopen_evaluation/", data: data,
+        var args = { type: "POST", url: "./reopen_evaluation/", data: data,
             success: function () {
-                var url = '/detail?elaboration_id=' + $(event.target).attr('id');
+                var url = './detail?elaboration_id=' + $(event.target).attr('id');
                 $.get(url, function (data) {
-                    $('#detail_area').html(data);
+                    $('body').html(data);
                 });
             }
         };
@@ -139,7 +139,7 @@ function set_appraisal(review_id, appraisal) {
 var timer = 0;
 
 function StartEvaluation(elaboration_id) {
-    var url = '/start_evaluation?elaboration_id=' + elaboration_id;
+    var url = './start_evaluation?elaboration_id=' + elaboration_id;
     $.get(url, function (state) {
         if (state == 'init') {
             $('.evaluation').html("");
@@ -172,7 +172,7 @@ function AutoSave(elaboration_id) {
         evaluation_text: $(".evaluation").html(),
         evaluation_points: points
     };
-    var args = { type: "POST", url: "/save_evaluation/", data: data,
+    var args = { type: "POST", url: "./save_evaluation/", data: data,
         error: function () {
             alert('error saving evaluation');
         }

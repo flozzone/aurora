@@ -366,7 +366,7 @@ def detail(request, course_short_title=None):
 
 @login_required()
 @staff_member_required
-def start_evaluation(request):
+def start_evaluation(request, course_short_title=None):
     if not 'elaboration_id' in request.GET:
         return False;
 
@@ -474,7 +474,7 @@ def similarities(request, course_short_title=None):
 
 @csrf_exempt
 @staff_member_required
-def save_evaluation(request):
+def save_evaluation(request, course_short_title=None):
     elaboration_id = request.POST['elaboration_id']
     evaluation_text = request.POST['evaluation_text']
     evaluation_points = request.POST['evaluation_points']
@@ -493,7 +493,7 @@ def save_evaluation(request):
 
 @csrf_exempt
 @staff_member_required
-def submit_evaluation(request):
+def submit_evaluation(request, course_short_title=None):
     elaboration_id = request.POST['elaboration_id']
     evaluation_text = request.POST['evaluation_text']
     evaluation_points = request.POST['evaluation_points']
@@ -527,7 +527,7 @@ def submit_evaluation(request):
 
 @csrf_exempt
 @staff_member_required
-def reopen_evaluation(request):
+def reopen_evaluation(request, course_short_title=None):
     elaboration_id = request.POST['elaboration_id']
     elaboration = Elaboration.objects.get(pk=elaboration_id)
     evaluation = Evaluation.objects.get(submission=elaboration)

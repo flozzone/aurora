@@ -30,9 +30,10 @@ urlpatterns = patterns('',
     url(r'^review_answer/$', Evaluation.views.review_answer),
     url(r'^load_reviews/$', Evaluation.views.load_reviews),
 
+    url(r'^start_evaluation$', Evaluation.views.start_evaluation),
     url(r'^save_evaluation/$', Evaluation.views.save_evaluation),
     url(r'^submit_evaluation/$', Evaluation.views.submit_evaluation),
     url(r'^reopen_evaluation/$', Evaluation.views.reopen_evaluation),
+
     url(r'^evaluation/elab$', Evaluation.views.search_elab),
-    url(r'^start_evaluation$', Evaluation.views.start_evaluation),
 )
