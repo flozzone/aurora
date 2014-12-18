@@ -88,7 +88,8 @@ class Elaboration(models.Model):
         final_challenge_ids = Challenge.get_course_final_challenge_ids(course)
         missing_reviews = (
             Elaboration.objects
-            .filter(submission_time__lte=datetime.now() - timedelta(days=1), user__is_staff=False)
+            .filter(submission_time__lte=datetime.now() - timedelta(days=1), user__is_staff=False,
+                    challenge__coursechallengerelation__course=course)
             .annotate(num_reviews=Count('review'))
             .exclude(challenge__id__in=final_challenge_ids)
         )
@@ -117,7 +118,7 @@ class Elaboration(models.Model):
         return top_level_challenges
 
     @staticmethod
-    def get_non_adequate_elaborations():
+    def get_non_adequate_elaborations(course):
         nothing_reviews = (
             Review.objects
             .filter(appraisal=Review.NOTHING, submission_time__isnull=False)
@@ -126,12 +127,13 @@ class Elaboration(models.Model):
         )
         non_adequate_elaborations = (
             Elaboration.objects
-            .filter(id__in=nothing_reviews, submission_time__isnull=False, user__is_staff=False)
+            .filter(id__in=nothing_reviews, submission_time__isnull=False, user__is_staff=False,
+                    challenge__coursechallengerelation__course=course)
         )
         return non_adequate_elaborations
 
     @staticmethod
-    def get_non_adequate_work():
+    def get_non_adequate_work(course):
 
         """
         alle non adequate elaborations für deren final challenge es noch keine abgegebene evaluation gibt
@@ -141,7 +143,7 @@ class Elaboration(models.Model):
 
         nimm alle non adequate elaborations und exclude die vorher gefundenen elaborations
         """
-        non_adequate_elaborations = Elaboration.get_non_adequate_elaborations().prefetch_related('challenge')
+        non_adequate_elaborations = Elaboration.get_non_adequate_elaborations(course).prefetch_related('challenge')
 
         submitted_evaluations = (
             Evaluation.objects
@@ -167,8 +169,8 @@ class Elaboration(models.Model):
         return non_adequate_elaborations
 
     @staticmethod
-    def get_evaluated_non_adequate_work():
-        non_adequate_elaborations = Elaboration.get_non_adequate_elaborations().prefetch_related('challenge')
+    def get_evaluated_non_adequate_work(course):
+        non_adequate_elaborations = Elaboration.get_non_adequate_elaborations(course).prefetch_related('challenge')
 
         submitted_evaluations = (
             Evaluation.objects
@@ -260,7 +262,7 @@ class Elaboration(models.Model):
         return list(elaborations)
 
     @staticmethod
-    def get_awesome():
+    def get_awesome(course):
         awesome_review_ids = (
             Review.objects
             .filter(appraisal=Review.AWESOME, submission_time__isnull=False)
@@ -269,7 +271,8 @@ class Elaboration(models.Model):
         multiple_awesome_review_ids = ([k for k,v in Counter(awesome_review_ids).items() if v>1])
         awesome_elaborations = (
             Elaboration.objects
-            .filter(id__in=multiple_awesome_review_ids, user__is_staff=False)
+            .filter(id__in=multiple_awesome_review_ids, challenge__coursechallengerelation__course=course,
+                    user__is_staff=False)
         )
         return awesome_elaborations
 

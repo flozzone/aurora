@@ -110,8 +110,8 @@ def missing_reviews(request, course_short_title=None):
 @login_required()
 @staff_member_required
 def non_adequate_work(request, course_short_title=None):
-    elaborations = Elaboration.get_non_adequate_work()
     course = Course.get_or_raise_404(short_title=course_short_title)
+    elaborations = Elaboration.get_non_adequate_work(course)
 
     # sort elaborations by submission time
     if type(elaborations) == list:
@@ -194,8 +194,8 @@ def complaints(request, course_short_title=None):
 @login_required()
 @staff_member_required
 def evaluated_non_adequate_work(request, course_short_title=None):
-    elaborations = Elaboration.get_non_adequate_work()
     course = Course.get_or_raise_404(short_title=course_short_title)
+    elaborations = Elaboration.get_non_adequate_work(course)
 
     # sort elaborations by submission time
     if type(elaborations) == list:
@@ -222,8 +222,8 @@ def evaluated_non_adequate_work(request, course_short_title=None):
 @login_required()
 @staff_member_required
 def awesome(request, course_short_title=None):
-    elaborations = Elaboration.get_awesome()
     course = Course.get_or_raise_404(short_title=course_short_title)
+    elaborations = Elaboration.get_awesome(course)
 
     # sort elaborations by submission time
     if type(elaborations) == list:
