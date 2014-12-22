@@ -14,7 +14,7 @@
 {% block content %}
 
    <h1>
-       <div class="back"  title="Back to evaluation overview" id="{{ selection }}"><i class="fa fa-angle-double-up"></i> go back</div> <b>&nbsp;{{ selection|title }}&nbsp;</b>
+       <a href="{% url 'Evaluation:home' course.short_title %}"><div class="back"  title="Back to evaluation overview" id="{{ selection }}"><i class="fa fa-angle-double-up"></i> go back</div> <b>&nbsp;{{ selection|title }}&nbsp;</b></a>
    </h1>
 
   <div class="detail_left">
