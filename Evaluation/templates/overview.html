@@ -23,19 +23,19 @@
 
         {% paginate elaborations with "" %}
         {% for elaboration in elaborations %}
-            <tr class="{% cycle 'darkRow' 'lightRow' %}">&nbsp;
-                <td><a href="{% url 'Evaluation:detail' course_short_title=course.short_title %}?elaboration_id={{elaboration.id}}"><img class="gravatar" src="{{ elaboration.user.avatar.url }}" style="vertical-align:middle"> {{ elaboration.user.nickname }}</a></td>
-                <td><a href="{% url 'Evaluation:detail' course_short_title=course.short_title %}?elaboration_id={{elaboration.id}}">{{ elaboration.challenge.title|safe }}</a></td>
-                <td class="timestamp" title="{{ elaboration.submission_time }}"><a href="{% url 'Evaluation:detail' course_short_title=course.short_title %}?elaboration_id={{elaboration.id}}">{{ elaboration.submission_time|naturaltime}}</a></td>
-                <td><a href="{% url 'Evaluation:detail' course_short_title=course.short_title %}?elaboration_id={{elaboration.id}}">
-                <div title="Great work" class="awesome_reviews indicator">{{ elaboration.get_awesome_reviews|length }}</div>
-                <div title="Good work" class="success_reviews indicator">{{ elaboration.get_success_reviews|length }}</div>
-                <div title="Barely acceptable work" class="fail_reviews indicator">{{ elaboration.get_fail_reviews|length }}</div>
-                <div title="Unacceptable" class="notry_reviews indicator">{{ elaboration.get_nothing_reviews|length }}</div>
-                 <div title="Public comments" class="visible_comments indicator">{{ elaboration.get_visible_comments|length }}</div>
-                 <div title="Private comments" class="invisible_comments indicator">{{ elaboration.get_invisible_comments|length }}</div>
-                 {% if elaboration.get_lva_team_notes %}<div title="LVA team notes" class="lva_team_notes whisperframe indicator">&nbsp;</div>{% else %}<div class="lva_team_notes indicator zero_reviews">&nbsp;</div>{% endif %}
-                </a></td>
+            <tr class="{% cycle 'darkRow' 'lightRow' %}" onclick="document.location = '{% url 'Evaluation:detail' course_short_title=course.short_title %}?elaboration_id={{elaboration.id}}'">&nbsp;
+                <td><img class="gravatar" src="{{ elaboration.user.avatar.url }}" style="vertical-align:middle"> {{ elaboration.user.nickname }}</td>
+                <td>{{ elaboration.challenge.title|safe }}</td>
+                <td class="timestamp" title="{{ elaboration.submission_time }}">{{ elaboration.submission_time|naturaltime}}</td>
+                <td>
+                    <div title="Great work" class="awesome_reviews indicator">{{ elaboration.get_awesome_reviews|length }}</div>
+                    <div title="Good work" class="success_reviews indicator">{{ elaboration.get_success_reviews|length }}</div>
+                    <div title="Barely acceptable work" class="fail_reviews indicator">{{ elaboration.get_fail_reviews|length }}</div>
+                    <div title="Unacceptable" class="notry_reviews indicator">{{ elaboration.get_nothing_reviews|length }}</div>
+                    <div title="Public comments" class="visible_comments indicator">{{ elaboration.get_visible_comments|length }}</div>
+                    <div title="Private comments" class="invisible_comments indicator">{{ elaboration.get_invisible_comments|length }}</div>
+                    {% if elaboration.get_lva_team_notes %}<div title="LVA team notes" class="lva_team_notes whisperframe indicator">&nbsp;</div>{% else %}<div class="lva_team_notes indicator zero_reviews">&nbsp;</div>{% endif %}
+                </td>
             </tr>
         {% endfor %}
 

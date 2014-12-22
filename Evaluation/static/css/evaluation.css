@@ -235,6 +235,11 @@ th {
     margin-bottom: 10px;
 }
 
+#detail_area a {
+    color: #000000;
+    text-decoration: none;
+}
+
 .paginator, .paginator_others {
     cursor: pointer;
 	position:relative;
