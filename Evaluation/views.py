@@ -574,10 +574,10 @@ def select_challenge(request, course_short_title=None):
     selected_challenge = request.POST['selected_challenge'][:(request.POST['selected_challenge'].rindex('(') - 1)]
 
     elaborations = []
-    challenges = Challenge.objects.filter(title=selected_challenge)
+    challenges = Challenge.objects.filter(title=selected_challenge, coursechallengerelation__course=course)
     for challenge in challenges:
-        if Elaboration.get_sel_challenge_elaborations(challenge):
-            for elaboration in Elaboration.get_sel_challenge_elaborations(challenge):
+        if Elaboration.get_course_sel_challenge_elaborations(challenge, course):
+            for elaboration in Elaboration.get_course_sel_challenge_elaborations(challenge, course):
                 elaborations.append(elaboration)
 
     html = render_to_response('overview.html', {'elaborations': elaborations, 'search': True, 'course': course}, RequestContext(request))
@@ -597,7 +597,7 @@ def select_user(request, course_short_title=None):
 
     elaborations = []
     user = AuroraUser.objects.get(username=selected_user)
-    elaborations = user.get_elaborations()
+    elaborations = user.get_course_elaborations(course)
 
     points = get_points(request, user)
     html = render_to_response('overview.html',
@@ -687,8 +687,9 @@ def search(request, course_short_title=None):
 @login_required()
 @staff_member_required
 def autocomplete_challenge(request, course_short_title=None):
+    course = Course.get_or_raise_404(short_title=course_short_title)
     term = request.GET.get('term', '')
-    challenges = Challenge.objects.all().filter(title__istartswith=term)
+    challenges = Challenge.objects.all().filter(title__istartswith=term, coursechallengerelation__course=course)
     titles = [challenge.title + ' (' + str(challenge.get_sub_elab_count()) + '/' + str(challenge.get_elab_count()) + ')'
               for challenge in challenges]
     response_data = json.dumps(titles, ensure_ascii=False)
@@ -803,9 +804,10 @@ def reviewlist(request, course_short_title=None):
 @login_required()
 @staff_member_required
 def search_user(request, course_short_title=None):
+    course = Course.get_or_raise_404(short_title=course_short_title)
     if request.GET:
         user = AuroraUser.objects.get(pk=request.GET['id'])
-        elaborations = user.get_elaborations()
+        elaborations = user.get_course_elaborations(course)
 
         # sort elaborations by submission time
         if type(elaborations) == list:

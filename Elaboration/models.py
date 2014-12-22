@@ -82,6 +82,14 @@ class Elaboration(models.Model):
         return elaborations
 
     @staticmethod
+    def get_course_sel_challenge_elaborations(challenge, course):
+        elaborations = (
+            Elaboration.objects
+            .filter(challenge=challenge, challenge__coursechallengerelation__course=course, submission_time__isnull=False)
+        )
+        return elaborations
+
+    @staticmethod
     def get_missing_reviews(course):
         from Challenge.models import Challenge
 
