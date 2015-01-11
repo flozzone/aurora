@@ -63,11 +63,11 @@
         </li>
       </ul>
 
-	  <div class="user_info" style="background-image:url('{{ user.avatar.url }}')" onclick="window.location='/profile'">
+	  <div class="user_info" style="background-image:url('{{ user.avatar.url }}')" onclick="window.location='{% url 'User:profile' course.short_title %}'">
 		  <div class="user_nick">{{user.nickname}}</div>
 		  <div class="profile_link">Click to edit</div>
 	  </div>
-  	<a class="logout_button" id="button_sign_out" href="{% url 'user:signout' course.short_title %}">Sign out</a>
+  	<a class="logout_button" id="button_sign_out" href="{% url 'User:signout' course.short_title %}">Sign out</a>
 
     {% endif %}
   </div>

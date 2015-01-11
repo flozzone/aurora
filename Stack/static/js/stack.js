@@ -26,16 +26,13 @@ function stack_loaded() {
 
 function challenge_clicked(event) {
     var challenge = $(event.target);
-    if (!challenge.hasClass("active")) {
-        return;
-    }
     var challenge_id = challenge.attr('challenge_id');
     window.location.href = './challenge?id=' + challenge_id
 }
 
 function review_box_clicked(event) {
     var challenge_id = $(event.target).parent().attr('challenge_id');
-    window.location.href = './challenge_review?id=' + challenge_id;
+    window.location.href = REVIEW_URL + '?id=' + challenge_id;
 }
 
 function received_review_clicked(event) {

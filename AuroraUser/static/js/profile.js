@@ -17,7 +17,7 @@ function input_change(event) {
     } else {
         $.ajax({
             type: 'POST',
-            url: '/profile/save/',
+            url: PROFILE_SAVE_URL,
             data: {
                 'nickname': $('#nickname').val(),
                 'study_code': $('#study_code').val(),

@@ -102,8 +102,6 @@ def create_context_challenge(request, course_short_title):
         except:
             raise Http404
         user = RequestContext(request)['user']
-        if not challenge.is_enabled_for_user(user) and not user.is_staff:
-            raise Http404
         data['challenge'] = challenge
         data['review_questions'] = []
         for review_question in ReviewQuestion.objects.filter(challenge=challenge, visible_to_author=True).order_by("order"):
@@ -128,8 +126,12 @@ def create_context_challenge(request, course_short_title):
 @login_required()
 def challenge(request, course_short_title=None):
     data = create_context_challenge(request, course_short_title)
+    user = RequestContext(request)['user']
+    if not data['challenge'].is_enabled_for_user(user) and not user.is_staff:
+        return render_to_response('challenge_inactive.html', data, context_instance=RequestContext(request))
     if 'elaboration' in data:
         data = create_context_view_review(request, data)
+
     return render_to_response('challenge.html', data, context_instance=RequestContext(request))
 
 

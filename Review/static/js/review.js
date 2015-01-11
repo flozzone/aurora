@@ -75,7 +75,7 @@ function submit_clicked(event) {
     ajax_setup()
     var args = {
         type: "POST",
-        url: "/challenges/challenge_review/review_answer/",
+        url: REVIEW_ANSWER_URL,
         data: JSON.stringify(data),
         error: function (data) {
             alert('error submitting review');
@@ -86,6 +86,6 @@ function submit_clicked(event) {
 }
 
 function review_submitted() {
-    window.location.href = '../../challenges/stack?id=' + stack_id;
+    window.location.href = STACK_URL + '?id=' + stack_id;
 }
 

@@ -145,12 +145,13 @@ class ZidSSOBackend():
 
 @login_required
 @ensure_csrf_cookie
-def profile(request):
+def profile(request, course_short_title):
     user = RequestContext(request)['user']
-    return render_to_response('profile.html', {'user': user}, context_instance=RequestContext(request))
+    selected_course = Course.get_or_raise_404(course_short_title)
+    return render_to_response('profile.html', {'user': user, 'course': selected_course}, context_instance=RequestContext(request))
 
 @login_required()
-def profile_save(request):
+def profile_save(request, course_short_title):
     data = {}
     user = RequestContext(request)['user']
     text_limit = 100
