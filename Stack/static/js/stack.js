@@ -26,9 +26,6 @@ function stack_loaded() {
 
 function challenge_clicked(event) {
     var challenge = $(event.target);
-    if (!challenge.hasClass("active")) {
-        return;
-    }
     var challenge_id = challenge.attr('challenge_id');
     window.location.href = './challenge?id=' + challenge_id
 }

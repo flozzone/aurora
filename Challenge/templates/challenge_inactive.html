@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% load comments %}
+
+{% block additional_headers %}
+<script type="text/javascript" src="{{ STATIC_URL }}js/challenge.js"></script>
+<link rel="stylesheet" href="{{ STATIC_URL }}css/challenge.css" type="text/css" media="screen"/>
+{% endblock %}
+
+{% block content %}
+{% comments_boilerplate %}
+
+<div id="detail_area">
+
+  <div id="{{ challenge.id }}" class="challenge" stack="{{ challenge.get_stack.id }}">
+    <div class="challenge_title" style="cursor:pointer;" {% if elaboration.is_submitted %}onclick="$('.challenge_description').slideToggle('fast');"{% endif %}>
+{% if elaboration.is_submitted %}
+    <i class="fa fa-toggle-down"></i>
+{% endif %}
+    {{ challenge.title|safe }}
+    </div>
+    <div class="challenge_description" >
+      {{ challenge.description|safe|urlize }}
+      <div class="qa_section">
+        <div class="comments">
+          <span style="cursor:pointer;" onclick="$('#qa').slideToggle('fast');"><b><i class="fa fa-toggle-down"></i>
+            Task Q+A Section</b> - {% comments_count for challenge %} comments so far<br>
+          </span>
+          <div id="qa" class="challenge_comments"{% if not user.is_staff %} style="display:none"{% endif %}><br>{% if not user.is_staff %}If you have questions about the description of this task, post
+            them here. The course organizers will answer as soon as possible.{% endif %}
+{% render_multi_comment_list for challenge %}
+          </div>
+        </div>
+      </div>
+	  {% if not reviews %}
+	  
+
+{% if review_questions %}
+	  <div class="review_section">
+		<div onclick="$('.review_questions').slideToggle('fast');">
+			<i class="fa fa-toggle-down"></i>
+    		Review Questions
+    	</div>
+		  <div class="review_questions nothere">
+			  <br>
+			  <div class="title">Your work will be reviewed by peers on the following criteria:</div>
+			  <br>
+{% for review_question in review_questions %}
+        <div class="question_container">
+          <div class="question">
+            {{ review_question }}
+          </div>
+        </div>
+{% endfor %}
+		  </div>
+{% endif %}
+	  </div>
+	  {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

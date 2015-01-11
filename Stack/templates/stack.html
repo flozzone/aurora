@@ -169,7 +169,8 @@
 
     <div class="challenge_list inactive">
       {% for challenge in challenges_inactive %}
-        <div class="one_challenge more_high {% if challenge.is_final_challenge %} final_task{% endif %}">
+        <div class="one_challenge more_high {% if challenge.is_final_challenge %} final_task{% endif %}"
+             challenge_id="{{ challenge.id }}">
           <div class="challenge_image_container">
               <img class="challenge_image active" src="{{ challenge.image.url }}">
           </div>
