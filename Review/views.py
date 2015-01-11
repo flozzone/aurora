@@ -5,7 +5,7 @@ from django.shortcuts import render, render_to_response
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, Http404
-
+from Course.models import Course
 from Review.models import Review
 from Elaboration.models import Elaboration
 from Challenge.models import Challenge
@@ -42,13 +42,14 @@ def create_context_review(request):
     return data
 
 @login_required()
-def review(request):
+def review(request, course_short_title):
     data = create_context_review(request)
+    data['course'] = Course.get_or_raise_404(course_short_title)
     return render_to_response('review.html', data, context_instance=RequestContext(request))
 
 
 @login_required()
-def review_answer(request):
+def review_answer(request, course_short_title):
     user = RequestContext(request)['user']
     if request.POST:
         data = request.body.decode(encoding='UTF-8')

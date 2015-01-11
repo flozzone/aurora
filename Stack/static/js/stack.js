@@ -35,7 +35,7 @@ function challenge_clicked(event) {
 
 function review_box_clicked(event) {
     var challenge_id = $(event.target).parent().attr('challenge_id');
-    window.location.href = './challenge_review?id=' + challenge_id;
+    window.location.href = REVIEW_URL + '?id=' + challenge_id;
 }
 
 function received_review_clicked(event) {

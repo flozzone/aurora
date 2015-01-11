@@ -10,6 +10,15 @@
 {% endblock %}
 
 {% block content %}
+
+<script type="text/javascript">
+
+  var REVIEW_ANSWER_URL = "{% url 'Review:review_answer' course_short_title=course.short_title %}";
+  var STACK_URL = "{% url 'Challenge:stack' course_short_title=course.short_title %}";
+
+</script>
+
+
 <div id="detail_area">
 
 {% load render_uploads %}
