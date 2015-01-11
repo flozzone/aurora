@@ -27,7 +27,7 @@ def home(request, course_short_title=None):
 
             return sso_auth_callback(request)
         else:
-            return redirect(reverse('user:login', args=(course_short_title, )))
+            return redirect(reverse('User:login', args=(course_short_title, )))
 
     data = {}
     user = RequestContext(request)['user']
