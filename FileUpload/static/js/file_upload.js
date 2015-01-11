@@ -91,8 +91,8 @@ function file_upload_loaded() {
     var elaboration_id = $('#elaboration_id').val();
     if (elaboration_id === '') {
         var challenge_id = $('.challenge').attr('id');
-        var url = '/elaboration/create?id=' + challenge_id;
-        $.get(url, function (data) {
+        var url = AUTOSAVE_URL;
+        $.post(url, {'challenge_id': challenge_id, 'elaboration_text': ''}, function (data) {
             elaboration_id = data;
             $('#elaboration_id').val(elaboration_id);
             load_files(elaboration_id, is_submitted)

@@ -20,6 +20,15 @@
 
 {% block content %}
 {% comments_boilerplate %}
+
+<script type="text/javascript">
+
+var AUTOSAVE_URL = "{% url 'Elaboration:save' course_short_title=course.short_title %}";
+var SUBMIT_URL = "{% url 'Elaboration:submit' course_short_title=course.short_title %}";
+var STACK_URL = "{% url 'Challenge:stack' course_short_title=course.short_title %}";
+
+</script>
+
 <div id="detail_area">
 
   <div id="{{ challenge.id }}" class="challenge" stack="{{ challenge.get_stack.id }}">
@@ -99,7 +108,7 @@
     <form method="post">
       <textarea id="editor">{{ elaboration.elaboration_text }}</textarea>
     </form>
-{% comment %}
+
       <button id="EWfE" class="{% if not lock %} submit {% endif %}XL R" {% if lock %}disabled="disabled" style="color:darkred;"{% endif %}>
           {% if lock %}enter this work for Evaluation on {{ lock }} or later
           {% else %}Enter work for Evaluation
@@ -114,7 +123,7 @@
         <div>
           <button class="real_submit XL R" id="{{ challenge.id }}">Submit work</button>
         </div>
-{% endcomment %}
+
       </div>
     </div>
 {% else %}
