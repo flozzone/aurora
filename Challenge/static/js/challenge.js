@@ -89,7 +89,7 @@ function elaboration_save(challenge_id, submit) {
         challenge_id: challenge_id,
         elaboration_text: elaboration_text
     };
-    var args = { type: "POST", url: AUTOSAVE_URL, data: data,
+    var args = { type: "POST", url: SAVE_URL, data: data,
         success: function () {
             if (submit) {
                 send_submit();
