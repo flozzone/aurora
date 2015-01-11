@@ -89,7 +89,7 @@ function elaboration_save(challenge_id, submit) {
         challenge_id: challenge_id,
         elaboration_text: elaboration_text
     };
-    var args = { type: "POST", url: "./autosave/", data: data,
+    var args = { type: "POST", url: SAVE_URL, data: data,
         success: function () {
             if (submit) {
                 send_submit();
@@ -118,7 +118,7 @@ function real_submit_clicked(event) {
     elaboration_save(challenge_id, true);
 }
 
-/*
+
 function send_submit() {
     var challenge = $('.challenge');
     var challenge_id = challenge.attr('id');
@@ -128,13 +128,13 @@ function send_submit() {
         challenge_id: challenge_id,
         elaboration_text: tinyMCE.activeEditor.getContent().toString()
     };
-    var args = { type: "POST", url: "./submit", data: data,
+    var args = { type: "POST", url: SUBMIT_URL, data: data,
         success: function () {
-            window.location.href = "/challenges/stack?id=" + stack_id;
+            window.location.href = STACK_URL + "?id=" + stack_id;
         },
         error: function () {
             alert("Error submitting elaboration!");
         }
     };
     $.ajax(args);
-}*/
+}
