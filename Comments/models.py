@@ -2,14 +2,7 @@ from django.db import models as models
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.db.models import Q, Count, Max
-
-
-class Tag(models.Model):
-    # use of SlugField instead of CharField would be better
-    name = models.CharField(max_length=30)
-
-    def __unicode__(self):
-        return self.name
+from taggit.managers import TaggableManager
 
 
 class CommentList(models.Model):
@@ -79,6 +72,7 @@ class Comment(models.Model):
     deleter = models.ForeignKey('AuroraUser.AuroraUser', related_name='deleted_comments_set', null=True)
     parent = models.ForeignKey('self', null=True, related_name='children')
     promoted = models.BooleanField(default=False)
+    tags = TaggableManager()
 
     # Foreign object this Comment is attached to
     content_type = models.ForeignKey(ContentType)
@@ -99,7 +93,6 @@ class Comment(models.Model):
                                   default=PUBLIC)
 
     bookmarked_by = models.ManyToManyField('AuroraUser.AuroraUser', related_name='bookmarked_comments_set')
-    tags = models.ManyToManyField(Tag)
 
     @property
     def score(self):
