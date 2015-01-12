@@ -138,7 +138,6 @@ INSTALLED_APPS = (
     'Slides',
     'Notification',
     'endless_pagination',
-    'django_js_reverse',
     'taggit'
 )
 
