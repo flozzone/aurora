@@ -79,7 +79,7 @@ var COMMENTS = (function (my, $) {
 
 // TODO chose one implementation for bookmarks, delete the other :)
     my.Bookmarks = {
-        url: '/bookmark_comment/',
+        url: my.BOOKMARK_URL,
 
         registerForCommentList: function ($comment_list) {
             var that = this;
@@ -153,7 +153,7 @@ var COMMENTS = (function (my, $) {
             unbookmark($this, event);
         });
 
-        var url = '/bookmark_comment/';
+        var url = my.BOOKMARK_URL;
 
         function bookmark($this, event) {
             event.preventDefault();
