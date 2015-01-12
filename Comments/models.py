@@ -2,6 +2,7 @@ from django.db import models as models
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.db.models import Q, Count, Max
+import re
 from taggit.managers import TaggableManager
 
 
@@ -94,6 +95,10 @@ class Comment(models.Model):
 
     bookmarked_by = models.ManyToManyField('AuroraUser.AuroraUser', related_name='bookmarked_comments_set')
 
+    def save(self, *args, **kwargs):
+        super(Comment, self).save(*args, **kwargs)
+        self.set_tags_from_text()
+
     @property
     def score(self):
         up_votes = self.votes.filter(direction=Vote.UP).count()
@@ -111,6 +116,16 @@ class Comment(models.Model):
 
     def __unicode__(self):
         return str(self.id) + ": " + self.text[:30]
+
+    def set_tags_from_text(self):
+        tag_pattern = '#[\S]+'
+        tags = re.findall(tag_pattern, self.text)
+        tags = [tag.lower() for tag in tags]
+        self.tags.add(*tags)
+
+    @staticmethod
+    def query_tagged(tags):
+        return Comment.objects.filter(tags__name__in=tags)
 
     @staticmethod
     def query_comments_without_responses(ref_object, requester):
