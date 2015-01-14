@@ -4,6 +4,7 @@
 {% block additional_headers %}
     <link rel="stylesheet" href="{% static "Comments/comments.css" %}" type="text/css" media="screen"/>
 	<script type="text/javascript" src="{% static "Comments/autogrow.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/libs/spin.min.js" %}"></script>
 {% endblock %}
 
 <div id="#comment_forms">
@@ -17,6 +18,8 @@
             <button id="delete_confirm">Confirm delete</button>
             <button id="delete_cancel">Cancel</button>
         </div>
+
+        {% include 'Comments/empty_comment.html' %}
     </div>
 
     <form method="post" class="comment_form  author_author" id="commentForm" style="display:none">{% csrf_token %}
@@ -41,6 +44,7 @@
       	 </div>
             {{ reply_form.as_p }}
         <button id="button_post_reply">Post reply</button>
+        <div id="comment_spinner"></div>
         <button id="button_cancel_reply">Cancel</button>
     </form>
 </div>
