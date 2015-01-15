@@ -120,6 +120,10 @@ def create_comment(form, request):
     if parent_comment_id is not None:
         try:
             parent_comment = Comment.objects.get(id=parent_comment_id)
+
+            # if the created comment has a parent, it is a new reply which should mark the thread as unseen
+            parent_comment.seen = False
+            parent_comment.save()
         except ObjectDoesNotExist:
             parent_comment = None
     else:
@@ -240,6 +244,30 @@ def bookmark_comment(request):
 
     comment.save()
     CommentList.get_by_comment(comment).increment()
+
+    return HttpResponse('')
+
+
+@require_POST
+@login_required
+def mark_seen(request):
+    requester = RequestContext(request)['user']
+
+    if not requester.is_staff:
+        return HttpResponseForbidden('Only staff may seen this!')
+
+    key, comment_ids = next(request.POST.lists())
+
+    if not key == "comment_ids[]":
+        return HttpResponseBadRequest('No comment ids provided')
+
+    for comment_id in comment_ids:
+        try:
+            comment = Comment.objects.get(id=comment_id)
+            comment.seen = True
+            comment.save()
+        except Comment.DoesNotExist:
+            continue
 
     return HttpResponse('')
 

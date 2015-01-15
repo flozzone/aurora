@@ -46,6 +46,7 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         my.registerVoteForCommentList($comment_list);
         my.registerPromoteLinksForCommentList($comment_list);
         my.registerBookmarkLinksForCommentList($comment_list);
+        my.registerSeenLinksForCommentList($comment_list);
     };
 
     my.registerPolling = function () {

@@ -74,6 +74,7 @@ class Comment(models.Model):
     parent = models.ForeignKey('self', null=True, related_name='children')
     promoted = models.BooleanField(default=False)
     tags = TaggableManager()
+    seen = models.BooleanField(default=False)
 
     # Foreign object this Comment is attached to
     content_type = models.ForeignKey(ContentType)
@@ -202,10 +203,17 @@ class Comment(models.Model):
 
     @staticmethod
     def query_top_level_sorted(ref_object_id, ref_type_id, requester):
-        queryset_all = Comment.objects.filter(
-            parent=None,
-            content_type__pk=ref_type_id,
-            object_id=ref_object_id)
+        if requester.is_staff:
+            queryset_all = Comment.objects.filter(
+                parent=None,
+                seen=False,
+                content_type__pk=ref_type_id,
+                object_id=ref_object_id)
+        else:
+            queryset_all = Comment.objects.filter(
+                parent=None,
+                content_type__pk=ref_type_id,
+                object_id=ref_object_id)
 
         visible = Comment.filter_visible(queryset_all, requester)
         visible = Comment.filter_deleted_trees(visible)

@@ -135,5 +135,40 @@ var COMMENTS = (function (my, $) {
         }
     };
 
+    my.registerSeenLinksForCommentList = function($comment_list) {
+        $comment_list.find('.comment_seen').click(function(event) {
+            var $this = $(this);
+            markSeen($this, event);
+        });
+
+        var url = my.MARK_SEEN_URL;
+
+        function markSeen($this, event) {
+            event.preventDefault();
+
+            if(typeof my.POLLING !== 'undefined') {
+                my.POLLING.resetTimer();
+            }
+
+            var comment_ids = [];
+
+            $this.parents(".comment_with_responses").find(".comment, .response").each(function() {
+                comment_ids.push($(this).data('comment_number'));
+            });
+
+            var data = {
+                comment_ids: comment_ids
+            };
+
+            my.post(url, data);
+
+            $this.off();
+            $this.toggleClass('comment_unseen comment_seen');
+            $this.text('seen');
+
+            return false;
+        }
+    };
+
     return my;
 }(COMMENTS || {}, jQuery));

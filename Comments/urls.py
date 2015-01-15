@@ -14,4 +14,5 @@ urlpatterns = patterns(
     url(r'^vote/$', views.vote_on_comment, name='vote'),
     url(r'^update/$', views.update_comments, name='update'),
     url(r'^list_page/$', views.comment_list_page, name='list_page'),
+    url(r'^mark_seen/$', views.mark_seen, name='mark_seen'),
 )
