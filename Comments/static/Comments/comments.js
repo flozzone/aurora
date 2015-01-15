@@ -45,8 +45,8 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         my.registerDeleteLinksForCommentList($comment_list);
         my.registerVoteForCommentList($comment_list);
         my.registerPromoteLinksForCommentList($comment_list);
-//    registerBookmarkLinksForCommentList($comment_list);
-        my.Bookmarks.registerForCommentList($comment_list);
+        my.registerBookmarkLinksForCommentList($comment_list);
+        my.registerSeenLinksForCommentList($comment_list);
     };
 
     my.registerPolling = function () {
@@ -418,6 +418,8 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         $button_post_reply.click(function (event) {
             event.preventDefault();
 
+            var $replyForm = $('#replyForm');
+            var $newComment = $('#comment_new');
             var $replyTextarea = $('#replyTextarea');
             var text = $replyTextarea.val();
             $replyTextarea.val(text);
@@ -428,8 +430,13 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
                 type: 'POST',
                 dataType: 'html',
                 success: function () {
-                    $('#replyForm').hide();
+                    $replyForm.hide();
                     $("#replyTextarea").val('');
+
+                    $replyForm.after($newComment);
+                    $newComment.find(".comment_text").html(text);
+                    $newComment.show();
+
                     my.startPolling();
                     my.state.posting = false;
                 }
@@ -478,16 +485,22 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
 
             var $commentTextarea = $("#commentTextarea");
             var text = $commentTextarea.val();
+            var $commentForm = $("#commentForm");
             $commentTextarea.val(text);
+
+            var $newComment = $("#comment_new");
 
             $.ajax({
                 url: my.POST_URL,
-                data: $("#commentForm").serialize(),
+                data: $commentForm.serialize(),
                 type: "POST",
                 // the type of data we expect back
                 dataType: 'html',
                 success: function () {
                     my.hideCommentForm();
+                    $commentForm.after($newComment);
+                    $newComment.find(".comment_text").html(text);
+                    $newComment.show();
                     my.startPolling();
                 },
                 error: function (xhr, status) {
@@ -567,6 +580,10 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
     my.handleCommentListUpdates = function (comment_list_updates) {
         var ref_id, ref_type, html;
         var $comment_list;
+
+        var $comment_new = $("#comment_new");
+        $comment_new.hide();
+        $("#element_shelter").append($comment_new);
 
         for (var i = 0; i < comment_list_updates.length; i++) {
             ref_id = comment_list_updates[i].ref_id;

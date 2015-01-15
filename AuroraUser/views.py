@@ -56,13 +56,21 @@ def signout(request, course_short_title=None):
 
 @ensure_csrf_cookie
 def login(request, course_short_title=None):
+    data = {
+        'course': Course.get_or_raise_404(course_short_title),
+        'signin_url': reverse('User:signin', args=(course_short_title, )),
+        'next': reverse('home', args=(course_short_title, )),
+        'sso_uri': settings.SSO_URI
+    }
+
     if 'next' in request.GET:
         # TODO: add next functionality
-        return render_to_response('login.html', {'course': course_short_title, 'signin_url': reverse('User:signin', args=(course_short_title, )), 'next': reverse('home', args=(course_short_title, )), 'sso_uri': settings.SSO_URI}, context_instance=RequestContext(request))
+        return render_to_response('login.html', data, context_instance=RequestContext(request))
     elif 'error_message' in request.GET:
-        return render_to_response('login.html', {'course': course_short_title, 'signin_url': reverse('User:signin', args=(course_short_title, )), 'next': reverse('home', args=(course_short_title, )), 'error_message': request.GET['error_message'], 'sso_uri': settings.SSO_URI}, context_instance=RequestContext(request))
+        data.update({'error_message': request.GET['error_message']})
+        return render_to_response('login.html', data, context_instance=RequestContext(request))
     else:
-        return render_to_response('login.html', {'course': course_short_title, 'signin_url': reverse('User:signin', args=(course_short_title, )), 'next': reverse('home', args=(course_short_title, )), 'sso_uri': settings.SSO_URI}, context_instance=RequestContext(request))
+        return render_to_response('login.html', data, context_instance=RequestContext(request))
 
 
 def sso_auth_redirect():

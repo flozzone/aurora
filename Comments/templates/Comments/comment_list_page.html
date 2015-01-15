@@ -9,6 +9,12 @@
                 {% include 'Comments/response.html' %}
             {% endfor %}
         </div>
+
+        {% if requester.is_staff %}
+            <a href='#' class="comment_seen" title="What has been seen, cannot be unseen!">
+                Mark seen
+            </a>
+        {% endif %}
     </div>
 {% endfor %}
 {% show_more %}

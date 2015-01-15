@@ -77,71 +77,6 @@ var COMMENTS = (function (my, $) {
         }
     };
 
-// TODO chose one implementation for bookmarks, delete the other :)
-    my.Bookmarks = {
-        url: my.BOOKMARK_URL,
-
-        registerForCommentList: function ($comment_list) {
-            var that = this;
-            $comment_list.find('.comment_bookmark').click(function (event) {
-                that.bookmark(event, $(this));
-            });
-            $comment_list.find('.comment_unbookmark').click(function (event) {
-                that.unbookmark(event, $(this));
-            });
-        },
-
-        bookmark: function (event, $link) {
-            event.preventDefault();
-
-            if(typeof my.POLLING !== 'undefined') {
-                my.POLLING.resetTimer();
-            }
-
-            var comment_number = $link.data('comment_number');
-            var data = {
-                comment_id: comment_number,
-                bookmark: true
-            };
-            my.post(this.url, data);
-
-            var that = this;
-            $link.off();
-            $link.click(function (event) {
-                that.unbookmark(event, $link);
-            });
-            $link.toggleClass('comment_unbookmark comment_bookmark');
-            $link.text('unbookmark');
-
-            return false;
-        },
-
-        unbookmark: function (event, $link) {
-            event.preventDefault();
-
-            if(typeof my.POLLING !== 'undefined') {
-                my.POLLING.resetTimer();
-            }
-
-            var comment_number = $link.data('comment_number');
-            var data = {
-                comment_id: comment_number,
-                bookmark: false
-            };
-            my.post(this.url, data);
-
-            var that = this;
-            $link.off();
-            $link.click(function (event) {
-                that.bookmark(event, $link);
-            });
-            $link.toggleClass('comment_unbookmark comment_bookmark');
-            $link.text('bookmark');
-
-            return false;
-        }
-    };
-
     my.registerBookmarkLinksForCommentList = function($comment_list) {
         $comment_list.find('.comment_bookmark').click(function(event) {
             var $this = $(this);
@@ -195,6 +130,41 @@ var COMMENTS = (function (my, $) {
             $this.click(bookmark);
             $this.toggleClass('comment_unbookmark comment_bookmark');
             $this.text('bookmark');
+
+            return false;
+        }
+    };
+
+    my.registerSeenLinksForCommentList = function($comment_list) {
+        $comment_list.find('.comment_seen').click(function(event) {
+            var $this = $(this);
+            markSeen($this, event);
+        });
+
+        var url = my.MARK_SEEN_URL;
+
+        function markSeen($this, event) {
+            event.preventDefault();
+
+            if(typeof my.POLLING !== 'undefined') {
+                my.POLLING.resetTimer();
+            }
+
+            var comment_ids = [];
+
+            $this.parents(".comment_with_responses").find(".comment, .response").each(function() {
+                comment_ids.push($(this).data('comment_number'));
+            });
+
+            var data = {
+                comment_ids: comment_ids
+            };
+
+            my.post(url, data);
+
+            $this.off();
+            $this.toggleClass('comment_unseen comment_seen');
+            $this.text('seen');
 
             return false;
         }

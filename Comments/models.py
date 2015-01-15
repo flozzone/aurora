@@ -2,14 +2,8 @@ from django.db import models as models
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.db.models import Q, Count, Max
-
-
-class Tag(models.Model):
-    # use of SlugField instead of CharField would be better
-    name = models.CharField(max_length=30)
-
-    def __unicode__(self):
-        return self.name
+import re
+from taggit.managers import TaggableManager
 
 
 class CommentList(models.Model):
@@ -79,6 +73,8 @@ class Comment(models.Model):
     deleter = models.ForeignKey('AuroraUser.AuroraUser', related_name='deleted_comments_set', null=True)
     parent = models.ForeignKey('self', null=True, related_name='children')
     promoted = models.BooleanField(default=False)
+    tags = TaggableManager()
+    seen = models.BooleanField(default=False)
 
     # Foreign object this Comment is attached to
     content_type = models.ForeignKey(ContentType)
@@ -99,7 +95,10 @@ class Comment(models.Model):
                                   default=PUBLIC)
 
     bookmarked_by = models.ManyToManyField('AuroraUser.AuroraUser', related_name='bookmarked_comments_set')
-    tags = models.ManyToManyField(Tag)
+
+    def save(self, *args, **kwargs):
+        super(Comment, self).save(*args, **kwargs)
+        self.set_tags_from_text()
 
     @property
     def score(self):
@@ -118,6 +117,16 @@ class Comment(models.Model):
 
     def __unicode__(self):
         return str(self.id) + ": " + self.text[:30]
+
+    def set_tags_from_text(self):
+        tag_pattern = '#[\S]+'
+        tags = re.findall(tag_pattern, self.text)
+        tags = [tag.lower() for tag in tags]
+        self.tags.add(*tags)
+
+    @staticmethod
+    def query_tagged(tags):
+        return Comment.objects.filter(tags__name__in=tags)
 
     @staticmethod
     def query_comments_without_responses(ref_object, requester):
@@ -194,10 +203,17 @@ class Comment(models.Model):
 
     @staticmethod
     def query_top_level_sorted(ref_object_id, ref_type_id, requester):
-        queryset_all = Comment.objects.filter(
-            parent=None,
-            content_type__pk=ref_type_id,
-            object_id=ref_object_id)
+        if requester.is_staff:
+            queryset_all = Comment.objects.filter(
+                parent=None,
+                seen=False,
+                content_type__pk=ref_type_id,
+                object_id=ref_object_id)
+        else:
+            queryset_all = Comment.objects.filter(
+                parent=None,
+                content_type__pk=ref_type_id,
+                object_id=ref_object_id)
 
         visible = Comment.filter_visible(queryset_all, requester)
         visible = Comment.filter_deleted_trees(visible)

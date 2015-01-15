@@ -8,12 +8,7 @@ admin.autodiscover()
 import AuroraProject.views
 
 urlpatterns = patterns('',
-    # Examples:
-
     # TODO: add home without course
-
-    # url reverse for javascript
-    # url(r'^jsreverse/$', 'django_js_reverse.views.urls_js', name='js_reverse'),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
@@ -43,6 +38,4 @@ urlpatterns = patterns('',
 
     url(r'', include('FileUpload.urls')),
     url(r'slides/', include('Slides.urls', namespace='Slides')),
-    # url(r'^AuroraProject/', include('AuroraProject.foo.urls')),
-
 )
