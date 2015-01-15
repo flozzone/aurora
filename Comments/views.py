@@ -143,7 +143,9 @@ def create_comment(form, request):
     comment_list.increment()
 
     # TODO extremely borken fix, remove this ASAP
-    course = context['last_selected_course']
+    # TODO FIXME remove or replace or something
+    course = None
+    # course = context['last_selected_course']
     if course is None:
         course = Course.objects.get(short_title='gsi')
     # TODO endof extremely borken fix

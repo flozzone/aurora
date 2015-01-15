@@ -58,11 +58,11 @@ def signout(request, course_short_title=None):
 def login(request, course_short_title=None):
     if 'next' in request.GET:
         # TODO: add next functionality
-        return render_to_response('login.html', {'course': course_short_title, 'signin_url': reverse('user:signin', args=(course_short_title, )), 'next': reverse('home', args=(course_short_title, )), 'sso_uri': settings.SSO_URI}, context_instance=RequestContext(request))
+        return render_to_response('login.html', {'course': course_short_title, 'signin_url': reverse('User:signin', args=(course_short_title, )), 'next': reverse('home', args=(course_short_title, )), 'sso_uri': settings.SSO_URI}, context_instance=RequestContext(request))
     elif 'error_message' in request.GET:
-        return render_to_response('login.html', {'course': course_short_title, 'signin_url': reverse('user:signin', args=(course_short_title, )), 'next': reverse('home', args=(course_short_title, )), 'error_message': request.GET['error_message'], 'sso_uri': settings.SSO_URI}, context_instance=RequestContext(request))
+        return render_to_response('login.html', {'course': course_short_title, 'signin_url': reverse('User:signin', args=(course_short_title, )), 'next': reverse('home', args=(course_short_title, )), 'error_message': request.GET['error_message'], 'sso_uri': settings.SSO_URI}, context_instance=RequestContext(request))
     else:
-        return render_to_response('login.html', {'course': course_short_title, 'signin_url': reverse('user:signin', args=(course_short_title, )), 'next': reverse('home', args=(course_short_title, )), 'sso_uri': settings.SSO_URI}, context_instance=RequestContext(request))
+        return render_to_response('login.html', {'course': course_short_title, 'signin_url': reverse('User:signin', args=(course_short_title, )), 'next': reverse('home', args=(course_short_title, )), 'sso_uri': settings.SSO_URI}, context_instance=RequestContext(request))
 
 
 def sso_auth_redirect():

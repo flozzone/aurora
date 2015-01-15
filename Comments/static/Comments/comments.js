@@ -135,7 +135,7 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
             }
             $score.html(newscore);
 
-            var url = '/vote_on_comment/';
+            var url = my.VOTE_URL;
             var data = {
                 direction: direction,
                 comment_id: $link.data('comment_number')
@@ -282,7 +282,7 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
                     beforeSend: function (xhr) {
                         xhr.setRequestHeader("X-CSRFToken", my.getCsrfToken());
                     },
-                    url: '/edit_comment/',
+                    url: my.EDIT_URL,
                     crossDomain: false,
                     data: data,
                     type: 'POST',
@@ -370,7 +370,7 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
 
             function deleteComment() {
                 $.ajax({
-                    url: '/delete_comment/',
+                    url: my.DELETE_URL,
                     data: { comment_id: comment_number },
                     type: 'POST',
                     dataType: 'json',
@@ -423,7 +423,7 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
             $replyTextarea.val(text);
 
             $.ajax({
-                url: '/post_reply/',
+                url: my.REPLY_URL,
                 data: $(this).closest('form').serialize(),
                 type: 'POST',
                 dataType: 'html',
@@ -481,7 +481,7 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
             $commentTextarea.val(text);
 
             $.ajax({
-                url: "/post_comment/",
+                url: my.POST_URL,
                 data: $("#commentForm").serialize(),
                 type: "POST",
                 // the type of data we expect back
@@ -526,7 +526,7 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         var data = {revisions: my.getRevisions()};
 		$('#lindicator').fadeIn(50);
         $.ajax({
-            url: '/update_comments/',
+            url: my.UPDATE_URL,
             data: data,
             type: 'POST',
             dataType: 'json',

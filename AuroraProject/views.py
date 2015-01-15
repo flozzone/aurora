@@ -21,46 +21,47 @@ from django.core.exceptions import ObjectDoesNotExist
 
 
 def home(request, course_short_title=None):
-    if request.user.is_authenticated():
-        data = {}
-        user = RequestContext(request)['user']
+    if not request.user.is_authenticated():
+        if 'sKey' in request.GET:
+            from AuroraUser.views import sso_auth_callback
 
-        data['course'] = Course.get_or_raise_404(course_short_title)
+            return sso_auth_callback(request)
+        else:
+            return redirect(reverse('User:login', args=(course_short_title, )))
 
-        course_ids = CourseUserRelation.objects.filter(user=user).values_list('course', flat=True)
-        courses = Course.objects.filter(id__in=course_ids)
-        data['courses'] = courses
-        data['stacks'] = []
-        for course in courses:
-            stack_data = {}
-            course_stacks = Stack.objects.all().filter(course=course)
-            stack_data['course_title'] = course.title
-            stack_data['course_stacks'] = []
-            points_sum = 0
-            for stack in course_stacks:
-                stack_data['course_stacks'].append({
-                    'stack': stack,
-                    'points': stack.get_points(user)
-                })
-                points_sum += stack.get_points(user)
-            stack_data['sum'] = points_sum
-            data['stacks'].append(stack_data)
+    data = {}
+    user = RequestContext(request)['user']
 
-        try:
-            o = CommentReferenceObject.objects.get(name='newsfeed')
-        except CommentReferenceObject.DoesNotExist:
-            o = CommentReferenceObject(name='newsfeed')
-            o.save()
+    data['course'] = Course.get_or_raise_404(course_short_title)
 
-        context = RequestContext(request, {'newsfeed': o})
+    course_ids = CourseUserRelation.objects.filter(user=user).values_list('course', flat=True)
+    courses = Course.objects.filter(id__in=course_ids)
+    data['courses'] = courses
+    data['stacks'] = []
+    for course in courses:
+        stack_data = {}
+        course_stacks = Stack.objects.all().filter(course=course)
+        stack_data['course_title'] = course.title
+        stack_data['course_stacks'] = []
+        points_sum = 0
+        for stack in course_stacks:
+            stack_data['course_stacks'].append({
+                'stack': stack,
+                'points': stack.get_points(user)
+            })
+            points_sum += stack.get_points(user)
+        stack_data['sum'] = points_sum
+        data['stacks'].append(stack_data)
 
-        return render_to_response('home.html', data, context)
-    elif 'sKey' in request.GET:
-        from AuroraUser.views import sso_auth_callback
+    try:
+        o = CommentReferenceObject.objects.get(name='newsfeed')
+    except CommentReferenceObject.DoesNotExist:
+        o = CommentReferenceObject(name='newsfeed')
+        o.save()
 
-        return sso_auth_callback(request)
-    else:
-        return redirect(reverse('user:login', args=(course_short_title, )))
+    context = RequestContext(request, {'newsfeed': o})
+
+    return render_to_response('home.html', data, context)
 
 
 def time_to_unix_string(time):
