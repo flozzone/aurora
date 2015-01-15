@@ -9,7 +9,7 @@
 <div>
   <div class="pagehead">
     <div class="headline">
-      <a href="/">Aurora</a>
+      <a href="{% url 'home' course.short_title %}">Aurora</a>
       {% if available_courses|length > 1 %}
 	  <div class="course_selected" onclick="if(!$(this).hasClass('irrelevant')){$('#course_select').toggle(100);}"> {{course.title}} <i class="fa fa-angle-down"></i>
         <ul id="course_select">
