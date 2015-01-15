@@ -135,7 +135,15 @@ class ModelMethodTests(TestCase):
         objects = Comment.get_ref_objects_with_unanswered_user_comments(CommentReferenceObject)
         self.assertTrue(objects == [self.ref_object1, self.ref_object2])
 
-class TagTests(TestCase):
+    def test_single_tag(self):
+        t11 = 'hello #Tag this is #comment #comment'
+        c11 = create_comment(t11, self.s1, self.ref_object3)
+
+        objects = Comment.objects.filter(tags__name__in=['#tag'])
+        self.assertTrue(objects == [c11])
+
+
+class TemplateTagTests(TestCase):
     def setUp(self):
         user_generator = dummy_user_generator()
         self.u1 = next(user_generator)
