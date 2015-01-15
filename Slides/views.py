@@ -1,15 +1,14 @@
 import datetime
 from datetime import timedelta
 import re
-import sys
 import time
+import json
 
 from django.db.models import Count, Q
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, render_to_response, redirect
 from django.template import RequestContext
 from django.template.loader import render_to_string
-from django.utils import simplejson
 from django.views.decorators.csrf import csrf_exempt
 
 from Course.models import Course
@@ -38,10 +37,10 @@ the following tags can be attached to slides:
 """
 
 
-def start(request):
-    course = RequestContext(request)['last_selected_course']
+def start(request, course_short_title=None):
+    course = Course.get_or_raise_404(course_short_title)
     lectures = _get_contentbar_data(course)
-    render_dict = {'slidecasting_mode': 'start', 'course':course, 'lectures': lectures}
+    render_dict = {'slidecasting_mode': 'start', 'course': course, 'lectures': lectures}
     return render_to_response('start.html', render_dict, context_instance=RequestContext(request))
 
 @csrf_exempt
@@ -88,7 +87,7 @@ def livecast_update_slide(request, client_timestamp):
     else: 
         json_response = { 'update': False }
     json_response.update({ 'last_update': int(time.time()) })
-    return HttpResponse(simplejson.dumps(json_response), mimetype='application/javascript')
+    return HttpResponse(json.dumps(json_response), content_type='application/javascript')
 
 
 def livecast(request, lecture_id):
@@ -101,8 +100,8 @@ def livecast(request, lecture_id):
     return render_to_response('livecast.html', render_dict, context_instance=RequestContext(request))
 
 
-def studio_lecture(request, lecture_id):
-    course = RequestContext(request)['last_selected_course']
+def studio_lecture(request, course_short_title=None, lecture_id=None):
+    course = Course.get_or_raise_404(course_short_title)
     user = RequestContext(request)['user']
     lectures = _get_contentbar_data(course)
     lecture = get_object_or_404(Lecture, id=lecture_id, course=course, active=True)
@@ -121,8 +120,8 @@ def studio_lecture(request, lecture_id):
     return render_to_response('studio.html', render_dict, context_instance=RequestContext(request))
     
 
-def studio_marker(request, marker):
-    course = RequestContext(request)['last_selected_course']
+def studio_marker(request, marker, course_short_title=None):
+    course = Course.get_or_raise_404(course_short_title)
     user = RequestContext(request)['user']
     lectures = _get_contentbar_data(course)
     if marker == 'confusing':
@@ -152,16 +151,16 @@ def studio_search(request):
         raise Http404
 
 
-def mark_slide(request, slide_id, marker, value):
-    course = RequestContext(request)['last_selected_course']
+def mark_slide(request, slide_id, marker, value, course_short_title=None):
+    course = Course.get_or_raise_404(course_short_title)
     user = RequestContext(request)['user']
     if request.method == 'POST':
         try:
             slide = Slide.objects.get(id=slide_id)
         except (Slide.DoesNotExist, Slide.MultipleObjectsReturned): 
-            return HttpResponse(simplejson.dumps({'success': False}), mimetype='application/javascript')
+            return HttpResponse(json.dumps({'success': False}), content_type='application/javascript')
         if value == 'xxx':
-            return HttpResponse(simplejson.dumps({'success': False}), mimetype='application/javascript')
+            return HttpResponse(json.dumps({'success': False}), content_type='application/javascript')
         elif value == 'true':
             slide.set_marker(user, marker, True)
         else:
@@ -169,8 +168,8 @@ def mark_slide(request, slide_id, marker, value):
         count = slide.get_marker_count(marker)
         new_title = render_to_string('marker_title.html', {'count': count, 'marker': marker})
         json_return_dict = {'success': True, 'count': count, 'new_title': new_title}
-        return HttpResponse(simplejson.dumps(json_return_dict), mimetype='application/javascript')
-    return HttpResponse(simplejson.dumps({'success': False}), mimetype='application/javascript')
+        return HttpResponse(json.dumps(json_return_dict), content_type='application/javascript')
+    return HttpResponse(json.dumps({'success': False}), content_type='application/javascript')
 
 
 def _get_contentbar_data(course):

@@ -48,20 +48,20 @@
 			<td data-id="{{slide.id}}" id="slide_{{slide.id}}" data-date="{{slide.pub_date|date:'U'}}" class="slide_image {% if slide in slides_preparation %}preparation_slide{% endif %}">
 		        <div class="glass">
 				<h1 class="glass_full glass_text_full">
-				    <a {% if slidecasting_mode == 'search_results' %}href="{% url 'Slides:studio_lecture' slide.lecture.id %}"{% endif %}>{{ slide.title }}</a>
+				    <a {% if slidecasting_mode == 'search_results' %}href="{% url 'Slides:studio_lecture' course.short_title slide.lecture.id %}"{% endif %}>{{ slide.title }}</a>
 	                <div>
 						{% with marker='liked' count=slide.count_liked %}
-						<div class="oneBB leftBB {% if slide.count_liked > 0 %}somebody{% else %}nobody{% endif %}" title="{% include 'marker_title.html' %}" onClick="markSlide(this, '{% url 'Slides:mark_slide' slide.id 'liked' 'xxx' %}')">
+						<div class="oneBB leftBB {% if slide.count_liked > 0 %}somebody{% else %}nobody{% endif %}" title="{% include 'marker_title.html' %}" onClick="markSlide(this, '{% url 'Slides:mark_slide' course.short_title slide.id 'liked' 'xxx' %}')">
 							<img src="{{ STATIC_URL }}img/liked{% if slide.count_liked > 0 and user in slide.liked.all %}_slide_marked{%endif%}.png" > 
 						</div>
 						{% endwith %}
 						{% with marker='important' count=slide.count_important %}
-						<div class="oneBB middleBB {% if slide.count_important > 0 %}somebody{% else %}nobody{% endif %}" title="{% include 'marker_title.html' %}" onClick="markSlide(this, '{% url 'Slides:mark_slide' slide.id 'important' 'xxx' %}')">
+						<div class="oneBB middleBB {% if slide.count_important > 0 %}somebody{% else %}nobody{% endif %}" title="{% include 'marker_title.html' %}" onClick="markSlide(this, '{% url 'Slides:mark_slide' course.short_title slide.id 'important' 'xxx' %}')">
 							<img src="{{ STATIC_URL }}img/important{% if slide.count_important > 0 and user in slide.important.all %}_slide_marked{%endif%}.png" > 
 						</div>
 						{% endwith %}
 						{% with marker='confusing' count=slide.count_confusing %}
-						<div class="oneBB rightBB {% if slide.count_confusing > 0 %}somebody{% else %}nobody{% endif %}" title="{% include 'marker_title.html' %}" onClick="markSlide(this, '{% url 'Slides:mark_slide' slide.id 'confusing' 'xxx' %}')">
+						<div class="oneBB rightBB {% if slide.count_confusing > 0 %}somebody{% else %}nobody{% endif %}" title="{% include 'marker_title.html' %}" onClick="markSlide(this, '{% url 'Slides:mark_slide' course.short_title slide.id 'confusing' 'xxx' %}')">
 							<img src="{{ STATIC_URL }}img/confusing{% if slide.count_confusing > 0 and user in slide.confusing.all %}_slide_marked{%endif%}.png" > 
 						</div>
 						{% endwith %}
