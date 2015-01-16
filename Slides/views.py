@@ -81,8 +81,8 @@ def livecast_new_slide(request, course_short_title=None):
         return HttpResponse('lecture error.')
 
 
-def livecast_update_slide(request, client_timestamp):
-    course = RequestContext(request)['last_selected_course']
+def livecast_update_slide(request, course_short_title=None, client_timestamp=None):
+    course = Course.get_or_raise_404(course_short_title)
     client_time = datetime.datetime.fromtimestamp(int(client_timestamp))
     slides = Slide.objects.filter(lecture__course=course, lecture__active=True, pub_date__gte=client_time)
     if slides.count() > 0:
@@ -94,11 +94,11 @@ def livecast_update_slide(request, client_timestamp):
 
 
 def livecast(request, lecture_id=None, course_short_title=None):
-    course = RequestContext(request)['last_selected_course']
+    course = Course.get_or_raise_404(course_short_title)
     lectures = _get_contentbar_data(course)
     lecture = get_object_or_404(Lecture, id=lecture_id, course=course, active=True)
     if not _livecast_now(lecture):
-        url = reverse('Slides:studio_lecture', args=(course_short_title, lecture_id)) + lecture_id
+        url = reverse('Slides:studio_lecture', args=(course_short_title, lecture_id))
         return redirect(url)
     render_dict = {'slidecasting_mode': 'livecast', 'course': course, 'lectures': lectures,
                    'lecture': lecture, 'last_update': int(time.time())}
@@ -147,8 +147,8 @@ def studio_marker(request, marker, course_short_title=None):
     return render_to_response('studio.html', render_dict, context_instance=RequestContext(request))
 
 
-def studio_search(request):
-    course = RequestContext(request)['last_selected_course']
+def studio_search(request, course_short_title=None):
+    course = Course.get_or_raise_404(course_short_title)
     lectures = _get_contentbar_data(course)
     search_text = request.GET.get('search_text', '')
     if search_text.strip():
@@ -162,7 +162,7 @@ def studio_search(request):
         raise Http404
 
 
-def mark_slide(request, slide_id, marker, value, course_short_title=None):
+def mark_slide(request, course_short_title=None, slide_id=None, marker=None, value=None):
     user = RequestContext(request)['user']
     if not request.method == 'POST':
         return HttpResponse(json.dumps({'success': False}), content_type='application/javascript')
