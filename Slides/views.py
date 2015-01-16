@@ -46,9 +46,10 @@ def start(request, course_short_title=None):
 
 
 @csrf_exempt
-def livecast_new_slide(request, course_id):
+def livecast_new_slide(request, course_id=None):
     if not request.method == 'POST' or not request.POST['secret'] == SLIDE_SECRET:
         return HttpResponse('must post')
+
     try:
         now = datetime.datetime.now()
         course = Course.objects.get(id=course_id)
@@ -92,13 +93,15 @@ def livecast_update_slide(request, client_timestamp):
     return HttpResponse(json.dumps(json_response), content_type='application/javascript')
 
 
-def livecast(request, lecture_id):
+def livecast(request, lecture_id=None, course_short_title=None):
     course = RequestContext(request)['last_selected_course']
     lectures = _get_contentbar_data(course)
     lecture = get_object_or_404(Lecture, id=lecture_id, course=course, active=True)
     if not _livecast_now(lecture):
-        return redirect('/slides/studio/lecture/' + lecture_id) # FIXME: no hardcoded urls
-    render_dict = {'slidecasting_mode': 'livecast', 'course':course, 'lectures': lectures, 'lecture': lecture, 'last_update': int(time.time()) }
+        url = reverse('Slides:studio_lecture', args=(course_short_title, lecture_id)) + lecture_id
+        return redirect(url)
+    render_dict = {'slidecasting_mode': 'livecast', 'course': course, 'lectures': lectures,
+                   'lecture': lecture, 'last_update': int(time.time())}
     return render_to_response('livecast.html', render_dict, context_instance=RequestContext(request))
 
 
@@ -108,7 +111,8 @@ def studio_lecture(request, course_short_title=None, lecture_id=None):
     lectures = _get_contentbar_data(course)
     lecture = get_object_or_404(Lecture, id=lecture_id, course=course, active=True)
     if _livecast_now(lecture):
-        return redirect('/slides/livecast/' + str(lecture_id)) # FIXME: no hardcoded urls 
+        url = reverse('Slides:livecast', args=(course_short_title, lecture_id)) + lecture_id
+        return redirect(url)
     slides = Slide.objects.filter(lecture=lecture)
     slides = _cache_slide_markers(slides)
     slides_preparation = slides.filter(tags__contains='.preparation')
@@ -135,6 +139,8 @@ def studio_marker(request, marker, course_short_title=None):
         slides = Slide.objects.filter(important=user, lecture__course=course)
     elif marker == 'liked':
         slides = Slide.objects.filter(liked=user, lecture__course=course)
+    else:
+        raise Http404
     slides = _cache_slide_markers(slides)
     render_dict = {'slidecasting_mode': 'marked_slides', 'marker': marker, 'course': course}
     render_dict.update({'lectures': lectures, 'slides': slides, 'user': user})
@@ -237,10 +243,10 @@ def _livecast_now(lecture_or_course):
 def _get_query(query_string, search_fields):
     # Returns a query, that is a combination of Q objects. That combination
     # aims to search keywords within a model by testing the given search fields.
-    query = None # Query to search for every search term        
+    query = None  # Query to search for every search term
     terms = _normalize_query(query_string)
     for term in terms:
-        or_query = None # Query to search for a given term in each field
+        or_query = None  # Query to search for a given term in each field
         for field_name in search_fields:
             q = Q(**{"%s__icontains" % field_name: term})
             if or_query is None:
@@ -255,8 +261,8 @@ def _get_query(query_string, search_fields):
 
 
 def _normalize_query(query_string,
-                    findterms=re.compile(r'"([^"]+)"|(\S+)').findall,
-                    normspace=re.compile(r'\s{2,}').sub):
+                     findterms=re.compile(r'"([^"]+)"|(\S+)').findall,
+                     normspace=re.compile(r'\s{2,}').sub):
     # Splits the query string in invidual keywords, getting rid of unecessary spaces
     #    and grouping quoted words together.
     #    Example:
