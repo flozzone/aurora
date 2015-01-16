@@ -62,13 +62,13 @@ $.ajaxSetup({
 
 // takes care of marking slides as confusing/important/
 function markSlide(button_div, url) {
-    console.log("marking slide: " + url)
     var $marker_button = $(button_div);
     var img_src = $marker_button.children("img").attr("src");
     // we know that the user has previously clicked on the marker if the
     // src of the button-image contains '_slide_marked'. e.g.: important_slide_marked.png
     var new_value = (img_src.indexOf("_slide_marked") != -1) ? false : true;
     url = url.replace("xxx", String(new_value));
+    console.log("marking slide: " + url);
     $.post(url, {}, function(json_return_dict){
         if (json_return_dict.success) {
             if (new_value) {
