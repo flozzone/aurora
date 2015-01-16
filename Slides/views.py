@@ -46,13 +46,13 @@ def start(request, course_short_title=None):
 
 
 @csrf_exempt
-def livecast_new_slide(request, course_id=None):
+def livecast_new_slide(request, course_short_title=None):
     if not request.method == 'POST' or not request.POST['secret'] == SLIDE_SECRET:
         return HttpResponse('must post')
 
     try:
         now = datetime.datetime.now()
-        course = Course.objects.get(id=course_id)
+        course = Course.get_or_raise_404(course_short_title)
         if 'lecture_id' in request.POST:
             lecture = Lecture.objects.get(course=course, active=True, id=request.POST['lecture_id'])
             tags = ''
