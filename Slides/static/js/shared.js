@@ -63,8 +63,8 @@ $.ajaxSetup({
 // takes care of marking slides as confusing/important/
 function markSlide(button_div, url) {
     console.log("marking slide: " + url)
-    var marker_button = $(button_div);
-    var img_src = marker_button.children("img").attr("src");
+    var $marker_button = $(button_div);
+    var img_src = $marker_button.children("img").attr("src");
     // we know that the user has previously clicked on the marker if the
     // src of the button-image contains '_slide_marked'. e.g.: important_slide_marked.png
     var new_value = (img_src.indexOf("_slide_marked") != -1) ? false : true;
@@ -73,20 +73,20 @@ function markSlide(button_div, url) {
         if (json_return_dict.success) {
             if (new_value) {
                 var new_img_src = img_src.substring(0, img_src.length - 4) + "_slide_marked.png";
-                marker_button.children("img").attr("src", new_img_src);
-                if (marker_button.hasClass("nobody")) {
-                    marker_button.addClass("somebody");
-                    marker_button.removeClass("nobody");
+                $marker_button.children("img").attr("src", new_img_src);
+                if ($marker_button.hasClass("nobody")) {
+                    $marker_button.addClass("somebody");
+                    $marker_button.removeClass("nobody");
                 }
             } else {
                 var new_img_src = img_src.substring(0, img_src.length - 17) + ".png";
-                marker_button.children("img").attr("src", new_img_src);
+                $marker_button.children("img").attr("src", new_img_src);
                 if (json_return_dict.count == 0) {
-                    marker_button.addClass("nobody");
-                    marker_button.removeClass("somebody");
+                    $marker_button.addClass("nobody");
+                    $marker_button.removeClass("somebody");
                 }
             }
-            marker_button.attr('title', json_return_dict.new_title)
+            $marker_button.attr('title', json_return_dict.new_title)
         }
     }, 'json');
 }
