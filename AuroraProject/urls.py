@@ -33,9 +33,9 @@ urlpatterns = patterns('',
         url(r'^review/', include('Review.urls', namespace='Review')),
         url(r'^notifications/', include('Notification.urls', namespace='Notification')),
         url(r'^evaluation/', include('Evaluation.urls', namespace='Evaluation')),
+        url(r'^slides/', include('Slides.urls', namespace='Slides')),
         url(r'', include('AuroraUser.urls', namespace='User')),
         ))),
 
     url(r'', include('FileUpload.urls')),
-    url(r'slides/', include('Slides.urls', namespace='Slides')),
 )
