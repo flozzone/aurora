@@ -164,7 +164,7 @@ def studio_search(request):
 
 def mark_slide(request, slide_id, marker, value, course_short_title=None):
     user = RequestContext(request)['user']
-    if request.method == 'POST':
+    if not request.method == 'POST':
         return HttpResponse(json.dumps({'success': False}), content_type='application/javascript')
     try:
         slide = Slide.objects.get(id=slide_id)
@@ -176,7 +176,7 @@ def mark_slide(request, slide_id, marker, value, course_short_title=None):
         slide.set_marker(user, marker, True)
     else:
         slide.set_marker(user, marker, False)
-        count = slide.get_marker_count(marker)
+    count = slide.get_marker_count(marker)
     new_title = render_to_string('marker_title.html', {'count': count, 'marker': marker})
     json_return_dict = {'success': True, 'count': count, 'new_title': new_title}
     return HttpResponse(json.dumps(json_return_dict), content_type='application/javascript')
