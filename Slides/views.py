@@ -100,8 +100,13 @@ def livecast(request, lecture_id=None, course_short_title=None):
     if not _livecast_now(lecture):
         url = reverse('Slides:studio_lecture', args=(course_short_title, lecture_id))
         return redirect(url)
+
+    update_slides_url = reverse('Slides:livecast_update_slide', args=(course_short_title, 0))
+    # the last part of the url, i.e. the timestamp, should be set by js so should be removed
+    # from the base url js gets for using
+    update_slides_url = re.sub('0/$', '', update_slides_url)
     render_dict = {'slidecasting_mode': 'livecast', 'course': course, 'lectures': lectures,
-                   'lecture': lecture, 'last_update': int(time.time())}
+                   'lecture': lecture, 'last_update': int(time.time()), 'update_slides_url': update_slides_url}
     return render_to_response('livecast.html', render_dict, context_instance=RequestContext(request))
 
 
@@ -223,7 +228,11 @@ def _livecast_now(lecture_or_course):
     if type(lecture_or_course) == Lecture:
         lecture = lecture_or_course
         lecture_livecast_start = lecture.start - timedelta(minutes=LIVECAST_START)
+        print(lecture_livecast_start)
+        print(now)
+        print(lecture.end)
         if lecture_livecast_start < now < lecture.end:
+            print('true')
             return True
         else:
             return False
