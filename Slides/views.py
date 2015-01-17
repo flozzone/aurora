@@ -223,7 +223,7 @@ def _livecast_now(lecture_or_course):
     if type(lecture_or_course) == Lecture:
         lecture = lecture_or_course
         lecture_livecast_start = lecture.start - timedelta(minutes=LIVECAST_START)
-        if lecture_livecast_start > now < lecture.end:
+        if lecture_livecast_start < now < lecture.end:
             return True
         else:
             return False
