@@ -1,5 +1,6 @@
 import datetime
 from datetime import timedelta
+from django.contrib.auth.decorators import login_required
 import re
 import time
 import json
@@ -37,7 +38,7 @@ the following tags can be attached to slides:
     * .exercise
 """
 
-
+@login_required
 def start(request, course_short_title=None):
     course = Course.get_or_raise_404(course_short_title)
     lectures = _get_contentbar_data(course)
