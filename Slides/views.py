@@ -38,6 +38,7 @@ the following tags can be attached to slides:
     * .exercise
 """
 
+
 @login_required
 def start(request, course_short_title=None):
     course = Course.get_or_raise_404(course_short_title)
