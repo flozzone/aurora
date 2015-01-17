@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class Slide(models.Model):
     title = models.CharField(max_length=128)
     pub_date = models.DateTimeField()
@@ -30,7 +31,8 @@ class Slide(models.Model):
     # get_thumbnail_image
     # get_medium_image
     # get_pdf_image
-    
+
+
 class Lecture(models.Model):
     course = models.ForeignKey("Course.course")
     id_relative = models.IntegerField(blank=True)
