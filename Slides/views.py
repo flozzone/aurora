@@ -116,7 +116,7 @@ def studio_lecture(request, course_short_title=None, lecture_id=None):
     lectures = _get_contentbar_data(course)
     lecture = get_object_or_404(Lecture, id=lecture_id, course=course, active=True)
     if _livecast_now(lecture):
-        url = reverse('Slides:livecast', args=(course_short_title, lecture_id)) + lecture_id
+        url = reverse('Slides:livecast', args=(course_short_title, lecture_id))
         return redirect(url)
     slides = Slide.objects.filter(lecture=lecture)
     slides = _cache_slide_markers(slides)
