@@ -248,3 +248,37 @@ $(function() {
         });
    });
 });
+
+$(function() {
+   $(".tags").click(function(event) {
+       event.stopPropagation();
+   });
+});
+
+String.prototype.startsWith = function(prefix) {
+    return this.indexOf(prefix) === 0;
+}
+
+String.prototype.endsWith = function(suffix) {
+    return this.match(suffix+"$") == suffix;
+};
+
+$(function(){
+    $(".tags").on('keyup', function(event) {
+        var text = $(this).text();
+        var user_id = $(event.target).attr('id');
+        if((text.startsWith('#')) && (text.endsWith(' '))) {
+            console.log("tag found");
+            var data = {
+                text: text,
+                user_id: user_id
+            };
+            var args = { type: "POST", url: "./add_user_tag/", data: data,
+                success: function () {
+                    // todo: display success info
+                }
+            };
+            $.ajax(args);
+        }
+    });
+});

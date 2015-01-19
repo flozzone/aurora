@@ -34,9 +34,9 @@ from Notification.models import Notification
 @staff_member_required
 def evaluation(request, course_short_title=None):
     # TODO: delete this snippet, fetches gravatar images for every user only for test cases.
-    # for puser in AuroraUser.objects.all():
-    #    if not puser.avatar:
-    #        puser.get_gravatar()
+    for puser in AuroraUser.objects.all():
+       if not puser.avatar:
+           puser.get_gravatar()
 
     course = Course.get_or_raise_404(short_title=course_short_title)
     overview = ""
@@ -920,3 +920,14 @@ def get_points(request, user):
         data['stacks'].append(stack_data)
 
     return data
+
+@csrf_exempt
+@staff_member_required
+def add_user_tag(request, course_short_title=None):
+    text = request.POST['text']
+    user_id = request.POST['user_id']
+
+    user = AuroraUser.objects.get(pk=user_id)
+    user.set_tags_from_text(text)
+
+    return HttpResponse()

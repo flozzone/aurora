@@ -1,5 +1,7 @@
 import os
 import hashlib
+import re
+from taggit.managers import TaggableManager
 from urllib.parse import urlparse
 import urllib.request
 from django.db import models
@@ -24,6 +26,7 @@ class AuroraUser(User):
     matriculation_number = models.CharField(max_length=100, null=True, unique=True, blank=True)
     study_code = models.CharField(max_length=100, null=True, blank=True, default="")
     oid = models.CharField(max_length=30, null=True, unique=True, blank=True)
+    tags = TaggableManager()
 
     # Use UserManager to get the create_user method, etc.
     objects = UserManager()
@@ -66,6 +69,16 @@ class AuroraUser(User):
             copyfile(os.path.join(STATIC_ROOT, 'img', 'default_gravatar.png'), os.path.join(self.upload_path, filename))
         self.avatar = os.path.join(self.upload_path, filename)
         self.save()
+
+    def set_tags_from_text(self, text):
+        tag_pattern = '#[\S]+'
+        tags = re.findall(tag_pattern, text)
+        tags = [tag.lower() for tag in tags]
+        result = self.tags.add(*tags)
+
+    @staticmethod
+    def query_tagged(tags):
+        return AuroraUser.objects.filter(tags__name__in=tags)
 
     @property
     def display_name(self):

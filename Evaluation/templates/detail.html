@@ -36,6 +36,7 @@
         	 	{% include "send_notification_button.html" %}
        		 {% endwith %}
   	 		&mdash;   <a href="user?id={{elaboration.user.id}}">{{elaboration.user.nickname}}'s work</a>
+            <div class="tags" id="{{ elaboration.user.id }}" contenteditable="true" style="width:80%; height:25px; background:white; border:1px solid gray; margin-top:2px;"></div>
 		 </div>
         <div class="spacer"></div>
 
