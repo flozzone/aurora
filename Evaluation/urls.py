@@ -34,6 +34,7 @@ urlpatterns = patterns('',
     url(r'^save_evaluation/$', Evaluation.views.save_evaluation),
     url(r'^submit_evaluation/$', Evaluation.views.submit_evaluation),
     url(r'^reopen_evaluation/$', Evaluation.views.reopen_evaluation),
+    url(r'^add_user_tag/$', Evaluation.views.add_user_tag),
 
     url(r'^evaluation/elab$', Evaluation.views.search_elab),
 )
