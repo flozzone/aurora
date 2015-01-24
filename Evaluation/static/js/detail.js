@@ -267,6 +267,7 @@ $(function() {
        var args = { type: "POST", url: "./add_tags/", data: data,
            success: function (data) {
                $(".tags").html(data);
+               $(".tag_input").text("");
            }
        };
        $.ajax(args);
