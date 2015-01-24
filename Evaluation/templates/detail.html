@@ -40,7 +40,9 @@
             <div class="add_tags_btn">Add Tags</div>
             <div class="tags">
                 {% for tag in elaboration.user.tags.names %}
-                    <div class="tag" name="{{ tag }}" user_id="{{ elaboration.user.id }}">{{ tag }}</div>
+                    <div class="tag">{{ tag }}
+                        <div class="tag_remove" name="{{ tag }}" user_id="{{ elaboration.user.id }}"><i class="fa fa-times"></i></div>
+                    </div>
                 {% endfor %}
             </div>
 		 </div>

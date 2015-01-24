@@ -276,6 +276,12 @@ $(function() {
 $(function() {
    $(".tag").click(function(event) {
        event.stopPropagation();
+   });
+});
+
+$(function() {
+   $(".tag_remove").click(function(event) {
+       event.stopPropagation();
        var tag = $(this).attr('name');
        var user_id = $(this).attr('user_id');
        var data = {
