@@ -266,7 +266,7 @@ $(function() {
             };
        var args = { type: "POST", url: "./add_tags/", data: data,
            success: function (data) {
-               // todo: update tag list
+               $(".tags").html(data);
            }
        };
        $.ajax(args);
@@ -290,7 +290,7 @@ $(function() {
             };
        var args = { type: "POST", url: "./remove_tag/", data: data,
            success: function (data) {
-               // todo: update tag list
+                $(".tags").html(data);
            }
        };
        $.ajax(args);

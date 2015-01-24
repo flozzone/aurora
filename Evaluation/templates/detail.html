@@ -1,6 +1,7 @@
 {% load humanize %}
 {% load comments %}
 {% load render_uploads %}
+{% load render_tags %}
 {% comments_boilerplate %}
 
 {% block additional_headers %}
@@ -39,11 +40,7 @@
             <div class="tag_input" user_id="{{ elaboration.user.id }}" contenteditable="true"></div>
             <div class="add_tags_btn">Add Tags</div>
             <div class="tags">
-                {% for tag in elaboration.user.tags.names %}
-                    <div class="tag">{{ tag }}
-                        <div class="tag_remove" name="{{ tag }}" user_id="{{ elaboration.user.id }}"><i class="fa fa-times"></i></div>
-                    </div>
-                {% endfor %}
+                {% render_tags elaboration.user.id %}
             </div>
 		 </div>
         <div class="spacer"></div>
