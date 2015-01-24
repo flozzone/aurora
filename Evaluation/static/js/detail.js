@@ -250,35 +250,43 @@ $(function() {
 });
 
 $(function() {
-   $(".tags").click(function(event) {
+   $(".tag_input").click(function(event) {
        event.stopPropagation();
    });
 });
 
-String.prototype.startsWith = function(prefix) {
-    return this.indexOf(prefix) === 0;
-}
-
-String.prototype.endsWith = function(suffix) {
-    return this.match(suffix+"$") == suffix;
-};
-
-$(function(){
-    $(".tags").on('keyup', function(event) {
-        var text = $(this).text();
-        var user_id = $(event.target).attr('id');
-        if((text.startsWith('#')) && (text.endsWith(' '))) {
-            console.log("tag found");
-            var data = {
+$(function() {
+   $(".add_tags_btn").click(function(event) {
+       event.stopPropagation();
+       var text = $(".tag_input").text();
+       var user_id = $(".tag_input").attr('user_id');
+       var data = {
                 text: text,
                 user_id: user_id
             };
-            var args = { type: "POST", url: "./add_user_tag/", data: data,
-                success: function () {
-                    // todo: display success info
-                }
+       var args = { type: "POST", url: "./add_tags/", data: data,
+           success: function (data) {
+               // todo: update tag list
+           }
+       };
+       $.ajax(args);
+   });
+});
+
+$(function() {
+   $(".tag").click(function(event) {
+       event.stopPropagation();
+       var tag = $(this).attr('name');
+       var user_id = $(this).attr('user_id');
+       var data = {
+                tag: tag,
+                user_id: user_id
             };
-            $.ajax(args);
-        }
-    });
+       var args = { type: "POST", url: "./remove_tag/", data: data,
+           success: function (data) {
+               // todo: update tag list
+           }
+       };
+       $.ajax(args);
+   });
 });

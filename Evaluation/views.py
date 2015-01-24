@@ -923,11 +923,31 @@ def get_points(request, user):
 
 @csrf_exempt
 @staff_member_required
-def add_user_tag(request, course_short_title=None):
+def add_tags(request, course_short_title=None):
     text = request.POST['text']
     user_id = request.POST['user_id']
 
     user = AuroraUser.objects.get(pk=user_id)
-    user.set_tags_from_text(text)
+    user.add_tags_from_text(text)
 
-    return HttpResponse()
+    tags = []
+    for tag in user.tags.names():
+        tags.append(tag)
+
+    return HttpResponse(tags)
+
+
+@csrf_exempt
+@staff_member_required
+def remove_tag(request, course_short_title=None):
+    tag = request.POST['tag']
+    user_id = request.POST['user_id']
+
+    user = AuroraUser.objects.get(pk=user_id)
+    user.remove_tag(tag)
+
+    tags = []
+    for tag in user.tags.names():
+        tags.append(tag)
+
+    return HttpResponse(tags)

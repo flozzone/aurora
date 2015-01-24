@@ -26,7 +26,7 @@
 	 <div class="elab_title">{{elaboration.challenge.title|safe}}</div>
         <img class="gravatar" src="{{ elaboration.user.avatar.url }}" style="vertical-align:middle" onclick="$('#top_detail').toggleClass('hidden_detail')">
         {{ elaboration.user.nickname }} ({{ elaboration.user.first_name }} {{ elaboration.user.last_name }}/{{ elaboration.user.username }}) @ <span title="{{elaboration.submission_time}}">{{elaboration.submission_time|naturaltime}}</span>:
-		 <div class="author_detail staff_detail" id="top_detail" onclick="$(this).addClass('hidden_detail')">
+		 <div class="author_detail staff_detail" id="top_detail" onclick="$(this).addClass('hidden_detail')" style="overflow:auto; height:auto;">
 			 <img src='{{elaboration.user.avatar.url}}'>
 			 <span class="nick">{{elaboration.user.nickname}}</span><br>
 			 &quot;{{elaboration.user.statement|urlizetrunc:50}}&quot;<br>
@@ -36,7 +36,13 @@
         	 	{% include "send_notification_button.html" %}
        		 {% endwith %}
   	 		&mdash;   <a href="user?id={{elaboration.user.id}}">{{elaboration.user.nickname}}'s work</a>
-            <div class="tags" id="{{ elaboration.user.id }}" contenteditable="true" style="width:80%; height:25px; background:white; border:1px solid gray; margin-top:2px;"></div>
+            <div class="tag_input" user_id="{{ elaboration.user.id }}" contenteditable="true"></div>
+            <div class="add_tags_btn">Add Tags</div>
+            <div class="tags">
+                {% for tag in elaboration.user.tags.names %}
+                    <div class="tag" name="{{ tag }}" user_id="{{ elaboration.user.id }}">{{ tag }}</div>
+                {% endfor %}
+            </div>
 		 </div>
         <div class="spacer"></div>
 
@@ -46,7 +52,7 @@
             <textarea id="editor_detail">{{ elaboration.elaboration_text}}</textarea>
         {% endif %}
         <div class="spacer"></div>
-		
+
         {% if evaluation %}
 		Written feedback<div class="error"></div>
             <form method="post">
