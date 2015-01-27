@@ -417,7 +417,7 @@ th {
 	float:left;
 }
 
-.search_btn {
+.search_btn, .add_tags_btn {
     float: right;
     border: 1px solid #BAE46E;
     border-radius: 3px;
@@ -814,4 +814,51 @@ td.diff_header {
 }
 .diff_sub {
     background-color:#ffaaaa
+}
+
+.tag_input {
+    float:left;
+    width:300px;
+    height:17px;
+    background:white;
+    border:1px solid gray;
+    margin-top:5px;
+    padding-top:2px;
+    border-radius:3px;
+}
+
+.add_tags_btn {
+    float:left;
+    font-weight: bold;
+    margin: 5px 0 0 5px;
+    background-color: #C5FFB6;
+    border: 1px solid #359440;
+    color: black;
+}
+
+.tags {
+    clear:both;
+    width:80%;
+}
+
+.tag {
+    float:left;
+    background-color: #F0F0F0;
+    border: 1px solid #A5A5A5;
+    color: black;
+    height:1.75em;
+    margin: 5px 5px 0 0;
+    text-align: center;
+    -moz-box-sizing: border-box;
+    border-radius: 3px;
+    padding: 2px 0 0 5px;
+}
+
+.tag_remove {
+    float:right;
+    color: black;
+	cursor:pointer;
+    color:#FF0000;
+    font-weight:bold;
+    padding:0 5px 0 3px;
 }

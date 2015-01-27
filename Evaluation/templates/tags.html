@@ -1,0 +1,7 @@
+<div class="tags">
+    {% for tag in user.tags.names %}
+        <div class="tag">{{ tag }}
+            <div class="tag_remove" name="{{ tag }}" user_id="{{ user.id }}"><i class="fa fa-times"></i></div>
+        </div>
+    {% endfor %}
+</div>

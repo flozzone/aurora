@@ -750,7 +750,6 @@ def review_answer(request, course_short_title=None):
         else:
             Notification.enough_peer_reviews(review)
         # update overview
-        print("haaalooo")
         elaborations = Elaboration.get_missing_reviews(course)
         if type(elaborations) == list:
             elaborations.sort(key=lambda elaboration: elaboration.submission_time)
@@ -923,11 +922,22 @@ def get_points(request, user):
 
 @csrf_exempt
 @staff_member_required
-def add_user_tag(request, course_short_title=None):
+def add_tags(request, course_short_title=None):
     text = request.POST['text']
     user_id = request.POST['user_id']
 
     user = AuroraUser.objects.get(pk=user_id)
-    user.set_tags_from_text(text)
+    user.add_tags_from_text(text)
 
-    return HttpResponse()
+    return render_to_response('tags.html', {'user': user}, context_instance=RequestContext(request))
+
+@csrf_exempt
+@staff_member_required
+def remove_tag(request, course_short_title=None):
+    tag = request.POST['tag']
+    user_id = request.POST['user_id']
+
+    user = AuroraUser.objects.get(pk=user_id)
+    user.remove_tag(tag)
+
+    return render_to_response('tags.html', {'user': user}, context_instance=RequestContext(request))
