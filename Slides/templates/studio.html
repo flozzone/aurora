@@ -75,8 +75,7 @@
 				</div>
 				<div id="lazyload_{{slide.id}}" class="lazyload">comments will load on demand</div>
 				<div id="comments_{{slide.id}}">
-{#					{% render_multi_comment_list for slide %}#}
-                    {% render_additional_comment_list for slide %}
+					{% render_multi_comment_list for slide %}
 				</div>
 			</td>
 	     {% endfor %}

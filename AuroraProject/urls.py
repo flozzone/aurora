@@ -26,7 +26,7 @@ urlpatterns = patterns('',
     url(r'result_elabs_final', 'AuroraProject.views.result_elabs_final', name='result_elabs_final'),
     url(r'result_reviews', 'AuroraProject.views.result_reviews', name='result_reviews'),
 
-    url(r'^(?P<course_short_title>\w+)/', include(patterns('',
+    url(r'^(?P<course_short_title>(gsi|hci))/', include(patterns('',
         url(r'^$', AuroraProject.views.home, name='home'),
         url(r'^challenge/', include('Challenge.urls', namespace='Challenge')),
         url(r'^elaboration/', include('Elaboration.urls', namespace='Elaboration')),
