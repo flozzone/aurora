@@ -41,7 +41,7 @@ $(function() {
 
 $(function() {
    $(".search_user").click(function(event) {
-       // $(".search_user").autocomplete( "search", "" );
+       $(".search_user").autocomplete( "search", "" );
        $(".search_user").html("");
    });
 });
