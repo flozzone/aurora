@@ -23,6 +23,7 @@ urlpatterns = patterns('',
 
     url(r'^autocomplete_challenge/$', Evaluation.views.autocomplete_challenge),
     url(r'^autocomplete_user/$', Evaluation.views.autocomplete_user),
+    url(r'^autocomplete_tag/$', Evaluation.views.autocomplete_tag),
     url(r'^select_challenge/$', Evaluation.views.select_challenge),
     url(r'^select_user/$', Evaluation.views.select_user),
     url(r'^sort$', Evaluation.views.sort),

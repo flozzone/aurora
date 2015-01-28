@@ -710,6 +710,18 @@ def autocomplete_user(request, course_short_title=None):
 
 @login_required()
 @staff_member_required
+def autocomplete_tag(request, course_short_title=None):
+    term = request.GET.get('term', '')
+    tags = AuroraUser.tags.all().filter(
+        Q(name__istartswith=term)
+    )
+    names = [tag.name for tag in tags]
+    response_data = json.dumps(names, ensure_ascii=False)
+    return HttpResponse(response_data, content_type='application/json; charset=utf-8')
+
+
+@login_required()
+@staff_member_required
 def load_reviews(request, course_short_title=None):
     course = Course.get_or_raise_404(short_title=course_short_title)
     if not 'elaboration_id' in request.GET:

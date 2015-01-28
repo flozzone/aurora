@@ -252,6 +252,7 @@ $(function() {
 $(function() {
    $(".tag_input").click(function(event) {
        event.stopPropagation();
+       $(".tag_input").autocomplete( "search", "" );
    });
 });
 
@@ -296,4 +297,26 @@ $(function() {
        };
        $.ajax(args);
    });
+});
+
+$(function() {
+    $("#tag_input").autocomplete({
+        source: "./autocomplete_tag/",
+        select: function (event, ui) {
+            var text = ui.item.value     // select value from autocomplete box
+            var user_id = $(".tag_input").attr('user_id');
+            var data = {
+                text: text,
+                user_id: user_id
+            };
+            var args = { type: "POST", url: "./add_tags/", data: data,
+                success: function (data) {
+                    $(".tags").html(data);
+                    $(".tag_input").text("");
+                }
+            };
+            $.ajax(args);
+        },
+        minLength: 2
+    });
 });
