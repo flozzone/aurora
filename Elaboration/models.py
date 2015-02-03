@@ -285,6 +285,21 @@ class Elaboration(models.Model):
         return awesome_elaborations
 
     @staticmethod
+    def get_awesome_challenge(course, challenge):
+        awesome_review_ids = (
+            Review.objects
+            .filter(appraisal=Review.AWESOME, submission_time__isnull=False)
+            .values_list('elaboration__id', flat=True)
+        )
+        multiple_awesome_review_ids = ([k for k,v in Counter(awesome_review_ids).items() if v>1])
+        awesome_elaborations = (
+            Elaboration.objects
+            .filter(id__in=multiple_awesome_review_ids, challenge=challenge, challenge__coursechallengerelation__course=course,
+                    user__is_staff=False)
+        )
+        return awesome_elaborations
+
+    @staticmethod
     def get_stack_elaborations(stack):
         elaborations = []
         for challenge in stack.get_challenges():
