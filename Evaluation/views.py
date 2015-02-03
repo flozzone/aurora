@@ -246,7 +246,7 @@ def awesome(request, course_short_title=None):
                               {'overview': render_to_string('overview.html', {'elaborations': elaborations, 'course': course},
                                                             RequestContext(request)),
                                'count_awesome': request.session.get('count', '0'),
-                               'selected_challenge': selected_challenge,
+                               'selected_challenge': '' if selected_challenge in 'error' else selected_challenge,
                                'stabilosiert_awesome': 'stabilosiert',
                                'selection': request.session['selection'],
                                'course': course
