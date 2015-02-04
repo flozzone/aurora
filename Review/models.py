@@ -1,4 +1,5 @@
 from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from Comments.models import Comment
 
@@ -8,6 +9,8 @@ class Review(models.Model):
     creation_time = models.DateTimeField(auto_now_add=True)
     submission_time = models.DateTimeField(null=True)
     reviewer = models.ForeignKey('AuroraUser.AuroraUser')
+    comments = GenericRelation(Comment)
+
     NOTHING = 'N'
     FAIL = 'F'
     SUCCESS = 'S'
