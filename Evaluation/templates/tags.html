@@ -1,0 +1,10 @@
+{% block additional_headers %}
+  <script type="text/javascript" src="{{ STATIC_URL }}js/detail.js"></script>
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/evaluation.css" type="text/css" media="screen"/>
+{% endblock %}
+
+{% for tag in user.tags.names %}
+    <div class="tag">{{ tag }}
+        <div class="tag_remove" name="{{ tag }}" user_id="{{ user.id }}"><i class="fa fa-times"></i></div>
+    </div>
+{% endfor %}

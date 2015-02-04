@@ -70,11 +70,13 @@ class AuroraUser(User):
         self.avatar = os.path.join(self.upload_path, filename)
         self.save()
 
-    def set_tags_from_text(self, text):
-        tag_pattern = '#[\S]+'
-        tags = re.findall(tag_pattern, text)
-        tags = [tag.lower() for tag in tags]
-        result = self.tags.add(*tags)
+    def add_tags_from_text(self, text):
+        tags = text.split(',');
+        tags = [tag.lower().strip() for tag in tags]
+        self.tags.add(*tags)
+
+    def remove_tag(self, tag):
+        self.tags.remove(tag)
 
     @staticmethod
     def query_tagged(tags):

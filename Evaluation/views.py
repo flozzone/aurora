@@ -34,9 +34,9 @@ from Notification.models import Notification
 @staff_member_required
 def evaluation(request, course_short_title=None):
     # TODO: delete this snippet, fetches gravatar images for every user only for test cases.
-    for puser in AuroraUser.objects.all():
-       if not puser.avatar:
-           puser.get_gravatar()
+    # for puser in AuroraUser.objects.all():
+    #   if not puser.avatar:
+    #       puser.get_gravatar()
 
     course = Course.get_or_raise_404(short_title=course_short_title)
     overview = ""
@@ -710,6 +710,18 @@ def autocomplete_user(request, course_short_title=None):
 
 @login_required()
 @staff_member_required
+def autocomplete_tag(request, course_short_title=None):
+    term = request.GET.get('term', '')
+    tags = AuroraUser.tags.all().filter(
+        Q(name__istartswith=term)
+    )
+    names = [tag.name for tag in tags]
+    response_data = json.dumps(names, ensure_ascii=False)
+    return HttpResponse(response_data, content_type='application/json; charset=utf-8')
+
+
+@login_required()
+@staff_member_required
 def load_reviews(request, course_short_title=None):
     course = Course.get_or_raise_404(short_title=course_short_title)
     if not 'elaboration_id' in request.GET:
@@ -750,7 +762,6 @@ def review_answer(request, course_short_title=None):
         else:
             Notification.enough_peer_reviews(review)
         # update overview
-        print("haaalooo")
         elaborations = Elaboration.get_missing_reviews(course)
         if type(elaborations) == list:
             elaborations.sort(key=lambda elaboration: elaboration.submission_time)
@@ -923,11 +934,22 @@ def get_points(request, user):
 
 @csrf_exempt
 @staff_member_required
-def add_user_tag(request, course_short_title=None):
+def add_tags(request, course_short_title=None):
     text = request.POST['text']
     user_id = request.POST['user_id']
 
     user = AuroraUser.objects.get(pk=user_id)
-    user.set_tags_from_text(text)
+    user.add_tags_from_text(text)
 
-    return HttpResponse()
+    return render_to_response('tags.html', {'user': user}, context_instance=RequestContext(request))
+
+@csrf_exempt
+@staff_member_required
+def remove_tag(request, course_short_title=None):
+    tag = request.POST['tag']
+    user_id = request.POST['user_id']
+
+    user = AuroraUser.objects.get(pk=user_id)
+    user.remove_tag(tag)
+
+    return render_to_response('tags.html', {'user': user}, context_instance=RequestContext(request))
