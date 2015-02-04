@@ -223,8 +223,8 @@ def evaluated_non_adequate_work(request, course_short_title=None):
 @staff_member_required
 def awesome(request, course_short_title=None):
     course = Course.get_or_raise_404(short_title=course_short_title)
-    selected_challenge = request.session.get('selected_challenge', 'error')
-    if selected_challenge not in ('error'):
+    selected_challenge = request.session.get('selected_challenge', default='')
+    if selected_challenge != '':
         challenge = Challenge.objects.get(title=selected_challenge, coursechallengerelation__course=course)
         elaborations = Elaboration.get_awesome_challenge(course, challenge)
     else:
@@ -246,7 +246,7 @@ def awesome(request, course_short_title=None):
                               {'overview': render_to_string('overview.html', {'elaborations': elaborations, 'course': course},
                                                             RequestContext(request)),
                                'count_awesome': request.session.get('count', '0'),
-                               'selected_challenge': '' if selected_challenge in 'error' else selected_challenge,
+                               'selected_challenge': selected_challenge,
                                'stabilosiert_awesome': 'stabilosiert',
                                'selection': request.session['selection'],
                                'course': course
