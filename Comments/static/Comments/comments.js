@@ -31,6 +31,8 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         my.registerSubmitCommentButton();
         my.registerCancelCommentButton();
 
+        my.registerAutocompleteTags();
+
         my.registerPolling();
     };
 

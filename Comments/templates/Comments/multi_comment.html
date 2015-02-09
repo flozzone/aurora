@@ -17,11 +17,13 @@
       COMMENTS.UPDATE_URL = '{% url 'Comments:update' %}';
       COMMENTS.LIST_PAGE_URL = '{% url 'Comments:list_page' %}';
       COMMENTS.MARK_SEEN_URL = '{% url 'Comments:mark_seen' %}';
+      COMMENTS.AUTOCOMPLETE_TAGS_URL = '{% url 'Comments:autocomplete_tags' %}';
     </script>
 
     <script type="text/javascript" src="{% static "Comments/simple_functions.js" %}"></script>
     <script type="text/javascript" src="{% static "Comments/comments.js" %}"></script>
     <link rel="stylesheet" href="{% static "Comments/comments.css" %}" type="text/css" media="screen"/>
+    <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
 {% endblock %}
 
 <div id="#comments_with_forms{{ id_suffix }}">

@@ -170,5 +170,33 @@ var COMMENTS = (function (my, $) {
         }
     };
 
+    my.registerAutocompleteTags = function() {
+    // # replyTextarea
+        $('#commentTextarea').autocomplete({
+            minLength: 3,
+            //source: COMMENTS.AUTOCOMPLETE_TAGS_URL
+            source: function(request, respond) {
+                $.ajax({
+                    url: COMMENTS.AUTOCOMPLETE_TAGS_URL,
+                    type: 'GET',
+                    success: function(data) {
+                        console.log(data);
+                        var pattern = $.ui.autocomplete.escapeRegex(request.term);
+                        var regex = new RegExp('\s' + pattern, 'i');
+
+                        var result = $.grep(data, function(elem) {
+                            return regex.test(elem);
+                        });
+
+                        respond(result)
+                    },
+                    error: function() {
+                        respond([]);
+                    }
+                });
+            }
+        });
+    };
+
     return my;
 }(COMMENTS || {}, jQuery));

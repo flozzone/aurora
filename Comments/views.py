@@ -395,3 +395,9 @@ def bookmarks(request):
     comment_list = Comment.query_bookmarks(requester)
     template = 'Comments/bookmarks_list.html'
     return render_to_response(template, {'comment_list': comment_list}, context_instance=RequestContext(request))
+
+
+def autocomplete_tags(request):
+    tags = ['#one', '#two', '#three']
+    response_data = json.dumps(tags, ensure_ascii=False)
+    return HttpResponse(response_data, content_type='application/json; charset=utf-8')
