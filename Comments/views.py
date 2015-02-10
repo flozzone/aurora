@@ -136,6 +136,9 @@ def create_comment(form, request):
                                      post_date=timezone.now(),
                                      visibility=visibility)
 
+    if user.is_staff:
+        comment.seen = True
+
     comment.save()
 
     comment_list = CommentList.get_by_comment(comment)
