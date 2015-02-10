@@ -12,7 +12,7 @@
 
         {% if requester.is_staff %}
             <a href='#' class="comment_seen" title="What has been seen, cannot be unseen!">
-                Mark seen
+                {% if comment.seen %} seen {% else %} Mark seen {% endif %}
             </a>
         {% endif %}
     </div>
