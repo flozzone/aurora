@@ -1,6 +1,7 @@
 {% load humanize %}
 {% load comments %}
 {% load render_review_answers_staff %}
+{% load render_tags %}
 
 {% block additional_headers %}
   <script type="text/javascript" src="{{ STATIC_URL }}js/reviews.js"></script>
@@ -32,6 +33,11 @@
              		{% include "send_notification_button.html" %}
           	 	{% endwith %}
 	  	 		&mdash;   <a href="/evaluation/user?id={{review.reviewer.id}}">{{review.reviewer.nickname}}'s work</a>
+                 <div class="tag_input" id="tag_input" user_id="{{ review.reviewer.id }}" contenteditable="true"></div>
+                 <div class="add_tags_btn">Add Tags</div>
+                 <div class="tags {{ review.reviewer.id }}">
+                    {% render_tags review.reviewer.id %}
+                </div>
 	   		 </div>
 			
 
