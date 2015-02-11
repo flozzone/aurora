@@ -223,7 +223,12 @@ def evaluated_non_adequate_work(request, course_short_title=None):
 @staff_member_required
 def awesome(request, course_short_title=None):
     course = Course.get_or_raise_404(short_title=course_short_title)
-    elaborations = Elaboration.get_awesome(course)
+    selected_challenge = request.session.get('selected_challenge', default='')
+    if selected_challenge != '':
+        challenge = Challenge.objects.get(title=selected_challenge, coursechallengerelation__course=course)
+        elaborations = Elaboration.get_awesome_challenge(course, challenge)
+    else:
+        elaborations = Elaboration.get_awesome(course)
 
     # sort elaborations by submission time
     if type(elaborations) == list:
@@ -234,12 +239,14 @@ def awesome(request, course_short_title=None):
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
     request.session['selection'] = 'awesome'
+    request.session['selected_challenge'] = ''
     request.session['count'] = len(elaborations)
 
     return render_to_response('evaluation.html',
                               {'overview': render_to_string('overview.html', {'elaborations': elaborations, 'course': course},
                                                             RequestContext(request)),
                                'count_awesome': request.session.get('count', '0'),
+                               'selected_challenge': selected_challenge,
                                'stabilosiert_awesome': 'stabilosiert',
                                'selection': request.session['selection'],
                                'course': course
@@ -585,6 +592,7 @@ def select_challenge(request, course_short_title=None):
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
     request.session['selection'] = 'search'
+    request.session['selected_challenge'] = selected_challenge
     return html
 
 

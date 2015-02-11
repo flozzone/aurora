@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from django.contrib.contenttypes.fields import GenericRelation
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.db.models import Count, Min
@@ -18,6 +19,7 @@ class Elaboration(models.Model):
     elaboration_text = models.TextField(null=True)
     submission_time = models.DateTimeField(null=True)
     tags = TaggableManager()
+    comments = GenericRelation(Comment)
 
     def __unicode__(self):
         return str(self.id)
@@ -262,12 +264,21 @@ class Elaboration(models.Model):
 
     @staticmethod
     def get_complaints(context):
-        elaborations = set()
-        for review in Comment.get_ref_objects_with_unanswered_user_comments(Review):
-            elaborations.add(review.elaboration)
-        for elaboration in Comment.get_ref_objects_with_unanswered_user_comments(Elaboration):
-            elaborations.add(elaboration)
-        return list(elaborations)
+        result1 = Elaboration.objects.filter(
+            comments__parent=None,
+            comments__seen=False,
+        ).exclude(
+            comments__visibility=Comment.PRIVATE
+        ).distinct()
+
+        result2 = Elaboration.objects.filter(
+            review__comments__parent=None,
+            review__comments__seen=False
+        ).exclude(
+            review__comments__visibility=Comment.PRIVATE
+        ).distinct()
+
+        return list(set(result1).union(result2))
 
     @staticmethod
     def get_awesome(course):
@@ -280,6 +291,21 @@ class Elaboration(models.Model):
         awesome_elaborations = (
             Elaboration.objects
             .filter(id__in=multiple_awesome_review_ids, challenge__coursechallengerelation__course=course,
+                    user__is_staff=False)
+        )
+        return awesome_elaborations
+
+    @staticmethod
+    def get_awesome_challenge(course, challenge):
+        awesome_review_ids = (
+            Review.objects
+            .filter(appraisal=Review.AWESOME, submission_time__isnull=False)
+            .values_list('elaboration__id', flat=True)
+        )
+        multiple_awesome_review_ids = ([k for k,v in Counter(awesome_review_ids).items() if v>1])
+        awesome_elaborations = (
+            Elaboration.objects
+            .filter(id__in=multiple_awesome_review_ids, challenge=challenge, challenge__coursechallengerelation__course=course,
                     user__is_staff=False)
         )
         return awesome_elaborations
