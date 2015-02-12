@@ -1,14 +1,15 @@
 from django.db import models
 
+
 class Slide(models.Model):
     title = models.CharField(max_length=128)
     pub_date = models.DateTimeField()
     filename = models.CharField(max_length=64) 
     pdf_text_content = models.TextField(max_length=2048, blank=True)
     lecture = models.ForeignKey('Lecture')
-    confusing = models.ManyToManyField("AuroraUser.aurorauser", related_name="confusing", blank=True)
-    important = models.ManyToManyField("AuroraUser.aurorauser", related_name="important", blank=True)
-    liked = models.ManyToManyField("AuroraUser.aurorauser", related_name="liked", blank=True)
+    confusing = models.ManyToManyField("AuroraUser.AuroraUser", related_name="confusing", blank=True)
+    important = models.ManyToManyField("AuroraUser.AuroraUser", related_name="important", blank=True)
+    liked = models.ManyToManyField("AuroraUser.AuroraUser", related_name="liked", blank=True)
     tags = models.CharField(max_length=128, blank=True)
     
     class Meta:
@@ -30,7 +31,8 @@ class Slide(models.Model):
     # get_thumbnail_image
     # get_medium_image
     # get_pdf_image
-    
+
+
 class Lecture(models.Model):
     course = models.ForeignKey("Course.course")
     id_relative = models.IntegerField(blank=True)

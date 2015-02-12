@@ -37,8 +37,6 @@
         	 	{% include "send_notification_button.html" %}
        		 {% endwith %}
   	 		&mdash;   <a href="user?id={{elaboration.user.id}}">{{elaboration.user.nickname}}'s work</a>
-            <div class="tag_input" id="tag_input" user_id="{{ elaboration.user.id }}" contenteditable="true"></div>
-            <div class="add_tags_btn">Add Tags</div>
             <div class="tags {{ elaboration.user.id }}">
                 {% render_tags elaboration.user.id %}
             </div>

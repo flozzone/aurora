@@ -7,9 +7,14 @@ from taggit.managers import TaggableManager
 
 
 class CommentList(models.Model):
-    revision = models.BigIntegerField(default=0)
+    """
+    currently Comments are associated with CommentList only by having the same reference object
+    (i.e. object_id/content_type and content_object are identical)
+    """
 
+    revision = models.BigIntegerField(default=0)
     uri = models.CharField(max_length=200, null=True)
+
     content_type = models.ForeignKey(ContentType)
     object_id = models.PositiveIntegerField()
     content_object = generic.GenericForeignKey('content_type', 'object_id')
