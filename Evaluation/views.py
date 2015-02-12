@@ -618,80 +618,6 @@ def select_user(request, course_short_title=None):
     return html
 
 
-@csrf_exempt
-@login_required()
-@staff_member_required
-def search(request, course_short_title=None):
-    course = Course.get_or_raise_404(short_title=course_short_title)
-    search_all = request.POST['search_all']
-
-    elaborations = []
-    if search_all not in ['', 'everywhere...']:
-        SEARCH_TERM = search_all
-
-        for md in models.get_models():
-            # search query in all models and fields (char and textfields) of database
-            fields = [f for f in md._meta.fields if isinstance(f, CharField) or isinstance(f, TextField)]
-            if fields:
-                queries = [Q(**{f.name + '__icontains': SEARCH_TERM}) for f in fields]
-
-                qs = Q()
-                for query in queries:
-                    qs = qs | query
-
-                results = md.objects.filter(qs)
-                for result in results:
-                    if isinstance(result, Elaboration):
-                        if result not in elaborations:
-                            elaborations.append(result)
-                    if isinstance(result, Challenge):
-                        if Elaboration.get_sel_challenge_elaborations(result):
-                            for elaboration in Elaboration.get_sel_challenge_elaborations(result):
-                                if elaboration not in elaborations:
-                                    elaborations.append(elaboration)
-                    if isinstance(result, Course):
-                        for elaboration in Elaboration.get_course_elaborations(result):
-                            if elaboration not in elaborations:
-                                elaborations.append(elaboration)
-                    if isinstance(result, Stack):
-                        for elaboration in Elaboration.get_stack_elaborations(result):
-                            if elaboration not in elaborations:
-                                elaborations.append(elaboration)
-                    if isinstance(result, Evaluation):
-                        if result.submission not in elaborations:
-                            elaborations.append(result.submission)
-                    if isinstance(result, Review):
-                        if result.elaboration not in elaborations:
-                            elaborations.append(result.elaboration)
-                    if isinstance(result, ReviewAnswer):
-                        if result.review.elaboration not in elaborations:
-                            elaborations.append(result.review.elaboration)
-                    if isinstance(result, ReviewQuestion):
-                        print("ReviewQuestion: ", result)
-                    if isinstance(result, Comment):
-                        if result.content_type == ContentType.objects.get_for_model(Challenge):
-                            if Elaboration.get_sel_challenge_elaborations(result.content_object):
-                                for elaboration in Elaboration.get_sel_challenge_elaborations(result.content_object):
-                                    if elaboration not in elaborations:
-                                        elaborations.append(elaboration)
-                        if result.content_type == ContentType.objects.get_for_model(Elaboration):
-                            if result.content_object not in elaborations:
-                                elaborations.append(result.content_object)
-                        if result.content_type == ContentType.objects.get_for_model(Review):
-                            if result.content_object.elaboration not in elaborations:
-                                elaborations.append(result.content_object.elaboration)
-                        if result.content_type == ContentType.objects.get_for_model(ReviewAnswer):
-                            if result.content_object.review.elaboration not in elaborations:
-                                elaborations.append(result.content_object.review.elaboration)
-
-    html = render_to_response('overview.html', {'elaborations': elaborations, 'search': True, 'course': course}, RequestContext(request))
-
-    # store selected elaborations in session
-    request.session['elaborations'] = serializers.serialize('json', elaborations)
-    request.session['selection'] = 'search'
-    return html
-
-
 @login_required()
 @staff_member_required
 def autocomplete_challenge(request, course_short_title=None):
@@ -839,46 +765,6 @@ def search_user(request, course_short_title=None):
         request.session['selection'] = 'search'
 
     return evaluation(request, course_short_title)
-
-
-@login_required()
-@staff_member_required
-def search_elab(request):
-    if request.GET:
-        request.session['elaboration_id'] = request.GET['id']
-
-        elaboration = Elaboration.objects.get(pk=request.GET['id'])
-        # store selected elaboration_id in session
-        request.session['elaboration_id'] = elaboration.id
-        request.session['selection'] = 'search'
-
-        params = {}
-        if elaboration.challenge.is_final_challenge():
-            if Evaluation.objects.filter(submission=elaboration):
-                evaluation = Evaluation.objects.get(submission=elaboration)
-                params = {'evaluation': evaluation}
-
-        reviews = Review.objects.filter(elaboration=elaboration, submission_time__isnull=False)
-
-        next = prev = None
-        stack_elaborations = elaboration.user.get_stack_elaborations(elaboration.challenge.get_stack())
-        # sort stack_elaborations by submission time
-        if type(stack_elaborations) == list:
-            stack_elaborations.sort(key=lambda stack_elaboration: stack_elaboration.submission_time)
-        else:
-            stack_elaborations.order_by('submission_time')
-
-        params['elaboration'] = elaboration
-        params['stack_elaborations'] = stack_elaborations
-        params['reviews'] = reviews
-        params['next'] = next
-        params['prev'] = prev
-
-        detail_html = render_to_string('detail.html', params, RequestContext(request))
-
-    challenges = Challenge.objects.all()
-    return render_to_response('evaluation.html', {'challenges': challenges, 'detail_html': detail_html},
-                              context_instance=RequestContext(request))
 
 
 @login_required()
