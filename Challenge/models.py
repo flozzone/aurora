@@ -113,9 +113,7 @@ class Challenge(models.Model):
             Challenge.objects
             .filter(prerequisite__isnull=False).values_list('prerequisite', flat=True)
         )
-        non_course_challenges = []
-        for course in course.get_non_course_challenges():
-            non_course_challenges.append(course.id)
+        non_course_challenges = [challenge.id for challenge in Challenge.objects.exclude(course=course)]
         knockout_list = non_course_challenges + list(peer_review_challenges)
         final_challenge_ids = (
             Challenge.objects

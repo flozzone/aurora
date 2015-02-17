@@ -20,10 +20,6 @@ class Course(models.Model):
         challenges = Challenge.models.Challenge.objects.filter(course=self)
         return list(challenges)
 
-    def get_non_course_challenges(self):
-        challenges = Challenge.models.Challenge.objects.exclude(course=self)
-        return list(challenges)
-
     def user_is_enlisted(self, user):
         try:
             CourseUserRelation.objects.get(user=user, course=self)
