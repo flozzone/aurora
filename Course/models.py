@@ -1,7 +1,7 @@
 from django.db import models
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
-from Challenge.models import Challenge
+import Challenge.models
 
 
 class Course(models.Model):
@@ -17,11 +17,11 @@ class Course(models.Model):
         return str(self.title)
 
     def get_course_challenges(self):
-        challenges = Challenge.objects.filter(course=self)
+        challenges = Challenge.models.Challenge.objects.filter(course=self)
         return list(challenges)
 
     def get_non_course_challenges(self):
-        challenges = Challenge.objects.exclude(course=self)
+        challenges = Challenge.models.Challenge.objects.exclude(course=self)
         return list(challenges)
 
     def user_is_enlisted(self, user):
@@ -41,9 +41,4 @@ class Course(models.Model):
 
 class CourseUserRelation(models.Model):
     user = models.ForeignKey('AuroraUser.AuroraUser')
-    course = models.ForeignKey(Course)
-
-
-class CourseChallengeRelation(models.Model):
-    challenge = models.ForeignKey('Challenge.Challenge')
     course = models.ForeignKey(Course)

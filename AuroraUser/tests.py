@@ -65,9 +65,9 @@ class PortfolioUserTest(TestCase):
             title='test_title',
             subtitle='test_subtitle',
             description='test_description',
+            course=self.course,
         )
         self.challenge.save()
-        self.challenge.course.add(self.course)
         StackChallengeRelation(stack=self.stack, challenge=self.challenge).save()
 
     def create_review_question(self):

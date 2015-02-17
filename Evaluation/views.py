@@ -19,7 +19,7 @@ from django.db import models
 
 from Challenge.models import Challenge
 from Comments.models import Comment
-from Course.models import Course, CourseChallengeRelation, CourseUserRelation
+from Course.models import Course, CourseUserRelation
 from Elaboration.models import Elaboration
 from Evaluation.models import Evaluation
 from AuroraUser.models import AuroraUser
@@ -507,7 +507,7 @@ def submit_evaluation(request, course_short_title=None):
 
     elaboration = Elaboration.objects.get(pk=elaboration_id)
     user = RequestContext(request)['user']
-    course = CourseChallengeRelation.objects.filter(challenge=elaboration.challenge)[0].course
+    course = elaboration.challenge.course
 
     if Evaluation.objects.filter(submission=elaboration):
         evaluation = Evaluation.objects.get(submission=elaboration)
@@ -538,7 +538,7 @@ def reopen_evaluation(request, course_short_title=None):
     elaboration_id = request.POST['elaboration_id']
     elaboration = Elaboration.objects.get(pk=elaboration_id)
     evaluation = Evaluation.objects.get(submission=elaboration)
-    course = CourseChallengeRelation.objects.filter(challenge=evaluation.submission.challenge)[0].course
+    course = evaluation.submission.challenge.course
 
     evaluation.submission_time = None
     evaluation.tutor = RequestContext(request)['user']

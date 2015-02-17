@@ -161,11 +161,11 @@ def init_data():
                             title='meine meinung',
                             subtitle='meine meinung',
                             description='gehen sie nach derstandard.at, suchen sie einen beliebigen artikel, und posten sie den text dieses artikels hier.',
-                            accepted_files=''
+                            accepted_files='',
+                            course=gsi,
     )
     challenge_1.image.save('1.png', File(open(os.path.join(STATIC_ROOT, 'img', '1.png'), 'rb')))
     challenge_1.save()
-    challenge_1.course.add(gsi)
 
     ReviewQuestion(challenge=challenge_1, order=1, text="Erfüllt diese Arbeit die gestellte Aufgabe?", boolean_answer=True).save()
     ReviewQuestion(challenge=challenge_1, order=2, text="Falls nicht: Was fehlt? Was sollte anders sein? Was ist zuviel?").save()
@@ -175,11 +175,11 @@ def init_data():
                             subtitle='rage-comic',
                             prerequisite=challenge_1,
                             description='finden sie einen web-comic, den sie lustig finden, und laden sie ihn hier hoch. beschreiben sie kurz, wie lange sie diesen webcomic schon lesen.',
-                            accepted_files='image/*'
+                            accepted_files='image/*',
+                            course=gsi,
     )
     challenge_2.image.save('2.png', File(open(os.path.join(STATIC_ROOT, 'img', '2.png'), 'rb')))
     challenge_2.save()
-    challenge_2.course.add(gsi)
 
     ReviewQuestion(challenge=challenge_2, order=1, text="Erfüllt diese Arbeit die gestellte Aufgabe?", boolean_answer=True).save()
     ReviewQuestion(challenge=challenge_2, order=2, text="Falls nicht: Was fehlt? Was sollte anders sein? Was ist zuviel?").save()
@@ -193,11 +193,11 @@ def init_data():
                             subtitle='wikipedia',
                             prerequisite=challenge_2,
                             description='kopieren sie 4 absätze aus einem  wikipedia-artikel und geben sie sie ab! setzen sie ans ende der arbeit den link auf den wikipedia-artikel!',
-                            accepted_files=''
+                            accepted_files='',
+                            course=gsi,
     )
     challenge_3.image.save('3.png', File(open(os.path.join(STATIC_ROOT, 'img', '3.png'), 'rb')))
     challenge_3.save()
-    challenge_3.course.add(gsi)
 
     ReviewQuestion(challenge=challenge_3, order=1, text="Erfüllt diese Arbeit die gestellte Aufgabe?", boolean_answer=True).save()
     ReviewQuestion(challenge=challenge_3, order=2, text="Falls nicht: Was fehlt? Was sollte anders sein? Was ist zuviel?").save()
@@ -207,22 +207,21 @@ def init_data():
                             subtitle='wissenschaft',
                             prerequisite=challenge_3,
                             description='finden sie einen pseudowissenschaftlichen artikel und laden sie ihn hier hoch.',
-                            accepted_files='application/pdf'
+                            accepted_files='application/pdf',
+                            course=hci,
     )
     challenge_4.image.save('4.png', File(open(os.path.join(STATIC_ROOT, 'img', '4.png'), 'rb')))
     challenge_4.save()
-    challenge_4.course.add(gsi)
-    challenge_4.course.add(hci)
 
     challenge_5 = Challenge(id=5,
                             title='ping',
                             subtitle='ping',
                             description='laden sie drei bilder im png-format hoch. beschreiben sie dann kurz, was auf diesen bildern zu sehen ist.',
-                            accepted_files='image/png'
+                            accepted_files='image/png',
+                            course=gsi,
     )
     challenge_5.image.save('5.png', File(open(os.path.join(STATIC_ROOT, 'img', '5.png'), 'rb')))
     challenge_5.save()
-    challenge_5.course.add(gsi)
     ReviewQuestion(challenge=challenge_5, order=1, text="Erfüllt diese Arbeit die gestellte Aufgabe?", boolean_answer=True).save()
     ReviewQuestion(challenge=challenge_5, order=2, text="Falls nicht: Was fehlt? Was sollte anders sein? Was ist zuviel?").save()
 
@@ -231,12 +230,11 @@ def init_data():
                             subtitle='advice animal',
                             prerequisite=challenge_5,
                             description='suchen sie ein »advice animal« bild und posten sie es hier. geben sie die quelle dazu an.',
-                            accepted_files='image/*'
+                            accepted_files='image/*',
+                            course=hci,
     )
     challenge_6.image.save('6.png', File(open(os.path.join(STATIC_ROOT, 'img', '6.png'), 'rb')))
     challenge_6.save()
-    challenge_6.course.add(gsi)
-    challenge_6.course.add(hci)
     ReviewQuestion(challenge=challenge_6, order=1, text="Erfüllt diese Arbeit die gestellte Aufgabe?", boolean_answer=True).save()
     ReviewQuestion(challenge=challenge_6, order=2, text="Falls nicht: Was fehlt? Was sollte anders sein? Was ist zuviel?").save()
 
@@ -245,12 +243,11 @@ def init_data():
                             subtitle='animated gif',
                             prerequisite=challenge_6,
                             description='suchen sie ein animated gif und posten sie es. geben sie die quelle dazu an.',
-                            accepted_files='image/gif'
+                            accepted_files='image/gif',
+                            course=hci,
     )
     challenge_7.image.save('7.png', File(open(os.path.join(STATIC_ROOT, 'img', '7.png'), 'rb')))
     challenge_7.save()
-    challenge_7.course.add(gsi)
-    challenge_7.course.add(hci)
     ReviewQuestion(challenge=challenge_7, order=1, text="Erfüllt diese Arbeit die gestellte Aufgabe?", boolean_answer=True).save()
     ReviewQuestion(challenge=challenge_7, order=2, text="Falls nicht: Was fehlt? Was sollte anders sein? Was ist zuviel?").save()
 
@@ -259,22 +256,21 @@ def init_data():
                             subtitle='zwei menschen',
                             prerequisite=challenge_7,
                             description='laden sie zwei bilder von zwei verschiedenen menschen hoch. erklären sie dann, wer diese beiden menschen sind. vergessen sie nicht auf die quellenangabe!',
-                            accepted_files='image/*'
+                            accepted_files='image/*',
+                            course=hci,
     )
     challenge_8.image.save('8.png', File(open(os.path.join(STATIC_ROOT, 'img', '8.png'), 'rb')))
     challenge_8.save()
-    challenge_8.course.add(gsi)
-    challenge_8.course.add(hci)
 
     challenge_9 = Challenge(id=9,
                             title='youtube',
                             subtitle='youtube',
                             description='suchen sie ein gutes youtube-video und posten sie den link hier. wenn sherlock holmes darin vorkommt, dann können sie auch einen extrapunkt bekommen.',
-                            accepted_files=''
+                            accepted_files='',
+                            course=gsi,
     )
     challenge_9.image.save('9.png', File(open(os.path.join(STATIC_ROOT, 'img', '9.png'), 'rb')))
     challenge_9.save()
-    challenge_9.course.add(gsi)
     ReviewQuestion(challenge=challenge_9, order=1, text="Erfüllt diese Arbeit die gestellte Aufgabe?", boolean_answer=True).save()
     ReviewQuestion(challenge=challenge_9, order=2, text="Falls nicht: Was fehlt? Was sollte anders sein? Was ist zuviel?").save()
      
@@ -284,11 +280,11 @@ def init_data():
                              prerequisite=challenge_9,
                              description='suchen sie in google image search schmetterlingsbilder und laden sie diese hier hoch. vergessen sie nicht auf die quellenangaben!',
 
-                             accepted_files='image/*'
+                             accepted_files='image/*',
+                             course=gsi,
     )
     challenge_10.image.save('4.png', File(open(os.path.join(STATIC_ROOT, 'img', '4.png'), 'rb')))
     challenge_10.save()
-    challenge_10.course.add(gsi)
 
     # create stacks
     print('adding stack accessibility')

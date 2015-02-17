@@ -8,7 +8,7 @@ from Comments.models import Comment
 from Stack.models import StackChallengeRelation
 from Review.models import Review
 from Elaboration.models import Elaboration
-from Course.models import CourseChallengeRelation, Course
+from Course.models import Course
 
 
 def challenge_image_path(instance, filename):
@@ -29,7 +29,7 @@ class Challenge(models.Model):
     image = models.ImageField(upload_to=challenge_image_path, null=True, blank=True)
     # This is a comma separated list of mime types or file extensions. Eg.: image/*,application/pdf,.psd.
     accepted_files = models.CharField(max_length=100, default="image/*,application/pdf", blank=True)
-    course = ManyToManyField(Course)
+    course = models.ForeignKey(Course)
 
     NOT_ENABLED = -1
     NOT_STARTED = 0
@@ -69,7 +69,7 @@ class Challenge(models.Model):
         return str(self.title)
 
     def get_course(self):
-        return CourseChallengeRelation.objects.filter(challenge=self)[0].course
+        return self.course
 
     def get_next(self):
         next_challenges = Challenge.objects.filter(prerequisite=self)
@@ -171,8 +171,7 @@ class Challenge(models.Model):
     def is_enabled_for_user(self, user):
         # if user is not enlisted for the course the challenge is in,
         # the challenge can not be enabled for the user
-        course = CourseChallengeRelation.objects.filter(challenge=self)[0].course
-        if not course.user_is_enlisted(user):
+        if not self.course.user_is_enlisted(user):
             return False
 
         # first challenge is always enabled

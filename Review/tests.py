@@ -53,9 +53,9 @@ class SimpleTest(TestCase):
             title='test_title',
             subtitle='test_subtitle',
             description='test_description',
+            course=self.course,
         )
         self.challenge.save()
-        self.challenge.course.add(self.course)
 
     def create_review_question(self):
         print("create test review question")
