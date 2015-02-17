@@ -6,7 +6,6 @@ from django.db import models
 
 from Comments.models import Comment
 from Stack.models import StackChallengeRelation
-from ReviewQuestion.models import ReviewQuestion
 from Review.models import Review
 from Elaboration.models import Elaboration
 from Course.models import CourseChallengeRelation, Course

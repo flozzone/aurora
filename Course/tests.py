@@ -10,10 +10,6 @@ from AuroraUser.models import AuroraUser
 from Stack.models import Stack, StackChallengeRelation
 from Course.models import Course, CourseUserRelation
 from Challenge.models import Challenge
-from ReviewQuestion.models import ReviewQuestion
-from Elaboration.models import Elaboration
-from Evaluation.models import Evaluation
-from Review.models import Review
 
 
 class CourseTest(TestCase):
