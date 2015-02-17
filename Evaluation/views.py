@@ -166,8 +166,8 @@ def top_level_tasks(request, course_short_title=None):
 @login_required()
 @staff_member_required
 def complaints(request, course_short_title=None):
-    elaborations = Elaboration.get_complaints(RequestContext(request))
     course = Course.get_or_raise_404(short_title=course_short_title)
+    elaborations = Elaboration.get_complaints(RequestContext(request), course)
 
     # sort elaborations by submission time
     if type(elaborations) == list:

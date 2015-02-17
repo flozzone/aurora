@@ -8,7 +8,7 @@ import django
 from django.test import TestCase
 
 from AuroraUser.models import AuroraUser
-from Course.models import Course, CourseUserRelation, CourseChallengeRelation
+from Course.models import Course, CourseUserRelation
 from Stack.models import Stack, StackChallengeRelation
 from Challenge.models import Challenge
 from Review.models import Review
@@ -78,7 +78,7 @@ class ElaborationTest(TestCase):
             description='test_description',
         )
         self.challenge.save()
-        CourseChallengeRelation(course=self.course, challenge=self.challenge).save()
+        self.challenge.course.add(self.course)
         StackChallengeRelation(stack=self.stack, challenge=self.challenge).save()
 
     def create_review_question(self):

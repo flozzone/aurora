@@ -1,6 +1,8 @@
 from django.db import models
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
+from Challenge.models import Challenge
+
 
 class Course(models.Model):
     title = models.CharField(max_length=100, unique=True)
@@ -15,18 +17,12 @@ class Course(models.Model):
         return str(self.title)
 
     def get_course_challenges(self):
-        challenges = []
-        ccrs = CourseChallengeRelation.objects.filter(course=self)
-        for ccr in ccrs:
-            challenges.append(ccr.challenge)
-        return challenges
+        challenges = Challenge.objects.filter(course=self)
+        return list(challenges)
 
     def get_non_course_challenges(self):
-        challenges = []
-        ccrs = CourseChallengeRelation.objects.all().exclude(course=self)
-        for ccr in ccrs:
-            challenges.append(ccr.challenge)
-        return challenges
+        challenges = Challenge.objects.exclude(course=self)
+        return list(challenges)
 
     def user_is_enlisted(self, user):
         try:

@@ -1,7 +1,7 @@
 from datetime import datetime
 from django.test import TestCase
 from AuroraUser.models import AuroraUser
-from Course.models import Course, CourseUserRelation, CourseChallengeRelation
+from Course.models import Course, CourseUserRelation
 from Challenge.models import Challenge
 from Review.models import Review
 from ReviewQuestion.models import ReviewQuestion
@@ -55,7 +55,7 @@ class SimpleTest(TestCase):
             description='test_description',
         )
         self.challenge.save()
-        CourseChallengeRelation(course=self.course, challenge=self.challenge).save()
+        self.challenge.course.add(self.course)
 
     def create_review_question(self):
         print("create test review question")

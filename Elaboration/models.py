@@ -263,8 +263,9 @@ class Elaboration(models.Model):
         return not self.get_nothing_reviews().exists()
 
     @staticmethod
-    def get_complaints(context):
+    def get_complaints(context, course):
         result1 = Elaboration.objects.filter(
+            challenge__course=course,
             comments__parent=None,
             comments__seen=False,
         ).exclude(

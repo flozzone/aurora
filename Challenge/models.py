@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from django.db.models import ManyToManyField
 import os
 
 from django.db import models
@@ -29,6 +30,7 @@ class Challenge(models.Model):
     image = models.ImageField(upload_to=challenge_image_path, null=True, blank=True)
     # This is a comma separated list of mime types or file extensions. Eg.: image/*,application/pdf,.psd.
     accepted_files = models.CharField(max_length=100, default="image/*,application/pdf", blank=True)
+    course = ManyToManyField(Course)
 
     NOT_ENABLED = -1
     NOT_STARTED = 0

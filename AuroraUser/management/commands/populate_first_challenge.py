@@ -142,6 +142,7 @@ def init_data():
     )
     challenge_1.image.save('1.png', File(open(os.path.join(STATIC_ROOT, 'img', '1.png'), 'rb')))
     challenge_1.save()
+    challenge_1.course.add(gsi)
 
     ReviewQuestion(challenge=challenge_1, order=1, text="Wurde die Aufgabe im wesentlichen erfüllt?", boolean_answer=True).save()
     ReviewQuestion(challenge=challenge_1, order=2, text="Falls nein: Beschreiben sie, warum die Aufgabe nicht erfüllt wurde!").save()
@@ -162,6 +163,7 @@ def init_data():
     )
     challenge_2.image.save('2.png', File(open(os.path.join(STATIC_ROOT, 'img', '2.png'), 'rb')))
     challenge_2.save()
+    challenge_2.course.add(gsi)
 
     ReviewQuestion(challenge=challenge_2, order=1, text="Wurde die Aufgabe im wesentlichen erfüllt?", boolean_answer=True).save()
     ReviewQuestion(challenge=challenge_2, order=2, text="Falls nein: Beschreiben sie, warum die Aufgabe nicht erfüllt wurde!").save()
@@ -183,6 +185,7 @@ def init_data():
     )
     challenge_3.image.save('3.png', File(open(os.path.join(STATIC_ROOT, 'img', '3.png'), 'rb')))
     challenge_3.save()
+    challenge_3.course.add(gsi)
 
     ReviewQuestion(challenge=challenge_3, order=1, text="Wurde die Aufgabe im wesentlichen erfüllt?", boolean_answer=True).save()
     ReviewQuestion(challenge=challenge_3, order=2, text="Falls nein: Beschreiben sie, warum die Aufgabe nicht erfüllt wurde!").save()
@@ -198,6 +201,7 @@ def init_data():
     )
     challenge_4.image.save('4.png', File(open(os.path.join(STATIC_ROOT, 'img', '4.png'), 'rb')))
     challenge_4.save()
+    challenge_4.course.add(gsi)
 
     ReviewQuestion(challenge=challenge_4, order=1, text="Wurde die Aufgabe im wesentlichen erfüllt?", boolean_answer=True).save()
     ReviewQuestion(challenge=challenge_4, order=2, text="Falls nein: Beschreiben sie, warum die Aufgabe nicht erfüllt wurde!").save()
@@ -215,6 +219,7 @@ def init_data():
     )
     challenge_5.image.save('5.png', File(open(os.path.join(STATIC_ROOT, 'img', '5.png'), 'rb')))
     challenge_5.save()
+    challenge_5.course.add(gsi)
     ReviewQuestion(challenge=challenge_5, order=1, text="Wurde die Aufgabe im wesentlichen erfüllt?", boolean_answer=True).save()
     ReviewQuestion(challenge=challenge_5, order=2, text="Falls nein: Beschreiben sie, warum die Aufgabe nicht erfüllt wurde!").save()
     ReviewQuestion(challenge=challenge_5, order=3, text="Schätzen sie: wurden hier sinnvolle Kommentare markiert?", boolean_answer=True).save()
@@ -230,6 +235,7 @@ def init_data():
     )
     challenge_6.image.save('6.png', File(open(os.path.join(STATIC_ROOT, 'img', '6.png'), 'rb')))
     challenge_6.save()
+    challenge_6.course.add(gsi)
 
 
 
@@ -246,6 +252,7 @@ def init_data():
     )
     challenge_7.image.save('1.png', File(open(os.path.join(STATIC_ROOT, 'img', '1.png'), 'rb')))
     challenge_7.save()
+    challenge_7.course.add(hci)
 
     ReviewQuestion(challenge=challenge_7, order=1, text="Wurde die Aufgabe im wesentlichen erfüllt?", boolean_answer=True).save()
     ReviewQuestion(challenge=challenge_7, order=2, text="Falls nein: Beschreiben sie, warum die Aufgabe nicht erfüllt wurde!").save()
@@ -266,6 +273,7 @@ def init_data():
     )
     challenge_8.image.save('2.png', File(open(os.path.join(STATIC_ROOT, 'img', '2.png'), 'rb')))
     challenge_8.save()
+    challenge_8.course.add(hci)
 
     ReviewQuestion(challenge=challenge_8, order=1, text="Wurde die Aufgabe im wesentlichen erfüllt?", boolean_answer=True).save()
     ReviewQuestion(challenge=challenge_8, order=2, text="Falls nein: Beschreiben sie, warum die Aufgabe nicht erfüllt wurde!").save()
@@ -287,6 +295,7 @@ def init_data():
     )
     challenge_9.image.save('3.png', File(open(os.path.join(STATIC_ROOT, 'img', '3.png'), 'rb')))
     challenge_9.save()
+    challenge_9.course.add(hci)
 
     ReviewQuestion(challenge=challenge_9, order=1, text="Wurde die Aufgabe im wesentlichen erfüllt?", boolean_answer=True).save()
     ReviewQuestion(challenge=challenge_9, order=2, text="Falls nein: Beschreiben sie, warum die Aufgabe nicht erfüllt wurde!").save()
@@ -302,6 +311,7 @@ def init_data():
     )
     challenge_10.image.save('4.png', File(open(os.path.join(STATIC_ROOT, 'img', '4.png'), 'rb')))
     challenge_10.save()
+    challenge_10.course.add(hci)
 
     ReviewQuestion(challenge=challenge_10, order=1, text="Wurde die Aufgabe im wesentlichen erfüllt?", boolean_answer=True).save()
     ReviewQuestion(challenge=challenge_10, order=2, text="Falls nein: Beschreiben sie, warum die Aufgabe nicht erfüllt wurde!").save()
@@ -319,6 +329,7 @@ def init_data():
     )
     challenge_11.image.save('5.png', File(open(os.path.join(STATIC_ROOT, 'img', '5.png'), 'rb')))
     challenge_11.save()
+    challenge_11.course.add(hci)
     ReviewQuestion(challenge=challenge_11, order=1, text="Wurde die Aufgabe im wesentlichen erfüllt?", boolean_answer=True).save()
     ReviewQuestion(challenge=challenge_11, order=2, text="Falls nein: Beschreiben sie, warum die Aufgabe nicht erfüllt wurde!").save()
     ReviewQuestion(challenge=challenge_11, order=3, text="Schätzen sie: wurden hier sinnvolle Kommentare markiert?", boolean_answer=True).save()
@@ -334,23 +345,7 @@ def init_data():
     )
     challenge_12.image.save('6.png', File(open(os.path.join(STATIC_ROOT, 'img', '6.png'), 'rb')))
     challenge_12.save()
-
-
-    # create course-challenge relations
-    print('adding course-challenge relations')
-    CourseChallengeRelation(course=gsi, challenge_id=1).save()
-    CourseChallengeRelation(course=gsi, challenge_id=2).save()
-    CourseChallengeRelation(course=gsi, challenge_id=3).save()
-    CourseChallengeRelation(course=gsi, challenge_id=4).save()
-    CourseChallengeRelation(course=gsi, challenge_id=5).save()
-    CourseChallengeRelation(course=gsi, challenge_id=6).save()
-
-    CourseChallengeRelation(course=hci, challenge_id=7).save()
-    CourseChallengeRelation(course=hci, challenge_id=8).save()
-    CourseChallengeRelation(course=hci, challenge_id=9).save()
-    CourseChallengeRelation(course=hci, challenge_id=10).save()
-    CourseChallengeRelation(course=hci, challenge_id=11).save()
-    CourseChallengeRelation(course=hci, challenge_id=12).save()
+    challenge_12.course.add(hci)
 
 
     # create stacks

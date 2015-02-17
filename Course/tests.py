@@ -8,7 +8,7 @@ from django.test import TestCase
 
 from AuroraUser.models import AuroraUser
 from Stack.models import Stack, StackChallengeRelation
-from Course.models import Course, CourseUserRelation, CourseChallengeRelation
+from Course.models import Course, CourseUserRelation
 from Challenge.models import Challenge
 from ReviewQuestion.models import ReviewQuestion
 from Elaboration.models import Elaboration
@@ -63,7 +63,7 @@ class CourseTest(TestCase):
             description='test_description',
         )
         self.challenge.save()
-        CourseChallengeRelation(course=self.course, challenge=self.challenge).save()
+        self.challenge.course.add(self.course)
         StackChallengeRelation(stack=self.stack, challenge=self.challenge).save()
 
     def test_user_is_enlisted(self):
