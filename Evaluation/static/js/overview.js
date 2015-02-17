@@ -53,19 +53,6 @@ $(function() {
    });
 });
 
-$(function() {
-   $(".search_all").click(function(event) {
-       $(".search_all").html("");
-   });
-});
-
-$(function() {
-   $(".search_all").focusout(function(event) {
-       if($('.search_all').text() == "")
-          $(".search_all").html("everywhere...");
-   });
-});
-
 function loadWait() {
 	$('.loading_animation').show();
 	$('.overview_table').hide();
@@ -116,24 +103,6 @@ $(function() {
         },
         minLength: 2
     });
-});
-
-$(function() {
-   $(".search_btn").click(function(event) {
-       var data = {
-            search_all: $('.search_all').text()
-       };
-       var args = { type: "POST", url: "./search/", data: data,
-            error: function () {
-                alert('no search results found');
-            },
-            success: function(data) {
-                $('#overview').html(data);
-                window.location.href = "./";
-            }
-       };
-       $.ajax(args);
-   });
 });
 
 function sort(param) {

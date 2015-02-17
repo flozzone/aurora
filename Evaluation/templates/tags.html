@@ -1,5 +1,13 @@
+{% block additional_headers %}
+  <script type="text/javascript" src="{{ STATIC_URL }}js/tags.js"></script>
+{% endblock %}
+
+<div class="tag_input" id="tag_input" user_id="{{ user.id }}" contenteditable="true"></div>
+<div class="add_tags_btn">Add Tags</div>
+<div class="tag_list">
 {% for tag in user.tags.names %}
     <div class="tag">{{ tag }}
         <div class="tag_remove" name="{{ tag }}" user_id="{{ user.id }}"><i class="fa fa-times"></i></div>
     </div>
 {% endfor %}
+</div>
