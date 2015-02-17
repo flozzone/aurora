@@ -53,6 +53,20 @@ $(function() {
    });
 });
 
+$(function() {
+   $(".search_tag").click(function(event) {
+       $(".search_tag").autocomplete( "search", "" );
+       $(".search_tag").html("");
+   });
+});
+
+$(function() {
+   $(".search_tag").focusout(function(event) {
+       if($('.search_tag').text() == "")
+          $(".search_tag").html("tag...");
+   });
+});
+
 function loadWait() {
 	$('.loading_animation').show();
 	$('.overview_table').hide();
@@ -102,6 +116,16 @@ $(function() {
            $.ajax(args);
         },
         minLength: 2
+    });
+});
+
+$(function() {
+    $("#search_tag").autocomplete({
+        source: "./autocomplete_tag/",
+        select: function (event, ui) {
+           alert("todo: query");
+        },
+        minLength: 0
     });
 });
 
