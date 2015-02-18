@@ -130,6 +130,7 @@ function load_files(elaboration_id, is_submitted) {
                 $(mockFile.previewElement).append('<div class="fig">Fig: ' + i + '</div>');
             }
             mockFile.id = file.id;
+            $(mockFile.previewElement).find(".dz-progress").remove();
             dropzone_instance.files.push(mockFile);
         });
     });
