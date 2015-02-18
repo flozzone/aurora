@@ -138,6 +138,9 @@ def create_comment(form, request):
 
     if user.is_staff:
         comment.seen = True
+        if parent_comment is not None:
+            parent_comment.seen = True
+            parent_comment.save()
 
     comment.save()
 

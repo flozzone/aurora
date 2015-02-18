@@ -1,7 +1,6 @@
 from django.contrib import admin
 from Course.models import Course
 from Course.models import CourseUserRelation
-from Course.models import CourseChallengeRelation
 
 class CourseAdmin(admin.ModelAdmin):
     fieldsets = [
@@ -36,18 +35,3 @@ class CourseUserRelationAdmin(admin.ModelAdmin):
 
 admin.site.register(CourseUserRelation, CourseUserRelationAdmin)
 
-
-class CourseChallengeRelationAdmin(admin.ModelAdmin):
-    fieldsets = [
-        (
-            None, {
-                'fields': [
-                    'challenge',
-                    'course',
-                ]
-            }
-        ),
-    ]
-    list_display = ('id', 'challenge', 'course', )
-
-admin.site.register(CourseChallengeRelation, CourseChallengeRelationAdmin)

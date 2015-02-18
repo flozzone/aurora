@@ -12,6 +12,7 @@ class ChallengeAdmin(admin.ModelAdmin):
                     'description',
                     'image',
                     'accepted_files',
+                    'course'
                 ]
             }
         ),
