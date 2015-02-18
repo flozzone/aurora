@@ -39,7 +39,7 @@ class AuroraUser(User):
 
     def get_course_elaborations(self, course):
         elaborations = []
-        for elaboration in Elaboration.objects.filter(user=self, challenge__coursechallengerelation__course=course, submission_time__isnull=False):
+        for elaboration in Elaboration.objects.filter(user=self, challenge__course=course, submission_time__isnull=False):
             elaborations.append(elaboration)
         return elaborations
 
