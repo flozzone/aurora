@@ -8,7 +8,7 @@ from django.dispatch import receiver
 def get_upload_path(instance, filename):
     name = "no_elaboration"
     if instance.elaboration:
-        name = str(instance.elaboration.id)
+        name = filename
     return os.path.join(
         "upload",
         str(instance.user.id),
