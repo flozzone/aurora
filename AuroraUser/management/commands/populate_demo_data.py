@@ -558,5 +558,9 @@ def init_data():
         offset=-656,
     ).save()
 
+    for user in AuroraUser.objects.all():
+        if not user.avatar:
+            user.get_gravatar()
+
 if __name__ == '__main__':
     init_data()
