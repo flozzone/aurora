@@ -15,6 +15,9 @@ function file_upload_loaded() {
         dictRemoveFile: 'REMOVE',
         acceptedFiles: $('.file_upload').attr('accepted_files'),
         init: function () {
+            this.on("error", function (file, error, xhr) {
+                console.log(error);
+                dropzone_instance.removeFile(file);
             });
             this.on("success", function (file, response) {
                 revert_submit_clicked();

@@ -20,11 +20,11 @@ def file_upload(request):
         try:
             elaboration = Elaboration.objects.get(pk=elaboration_id)
             if not elaboration.user == user:
-                raise Http404
-        except:
-            raise Http404
-        upload_file = UploadFile(user=user, elaboration_id=elaboration_id, upload_file=request.FILES['file'])
-        upload_file.save()
+                return file_upload_failed_response()
+            upload_file = UploadFile(user=user, elaboration_id=elaboration_id, upload_file=request.FILES['file'])
+            upload_file.save()
+        except Exception as e:
+            return file_upload_failed_response(str(e))
     if 'user_id' in request.POST:
         request.FILES['file'].name = 'avatar_' + str(user.id)
         if not request.POST.get('user_id') == str(user.id):
@@ -83,3 +83,10 @@ def all_files(request):
                 'id': upload_file.id,
             })
     return HttpResponse(json.dumps(data))
+
+def file_upload_failed_response(reason):
+    print('upload failed')
+    response = HttpResponse('File Upload failed:' + reason)
+    response.status_code = 500
+    print(response.status_code)
+    return response
