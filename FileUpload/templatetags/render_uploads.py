@@ -6,7 +6,7 @@ from FileUpload.models import UploadFile
 register = template.Library()
 
 
-@register.inclusion_tag('uploads.html', takes_context=True)
+@register.inclusion_tag('elaboration_files.html', takes_context=True)
 def render_uploads(context, elaboration):
     elaboration = Elaboration.objects.get(id=elaboration.id)
     files = []

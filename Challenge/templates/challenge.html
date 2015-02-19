@@ -10,7 +10,9 @@
 <script type="text/javascript" src="{{ STATIC_URL }}js/challenge.js"></script>
 {% if not elaboration.is_submitted %}
 <script type="text/javascript" src="{{ STATIC_URL }}dropzone/dropzone.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/file_upload.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/file_upload.js"></script>
+<link rel="stylesheet" href="{{ STATIC_URL }}dropzone/css/dropzone.css" type="text/css" media="screen"/>
+<link rel="stylesheet" href="{{ STATIC_URL }}dropzone/css/basic.css" type="text/css" media="screen"/>
 {% endif %}
 <link rel="stylesheet" href="{{ STATIC_URL }}css/review.css" type="text/css" media="screen"/>
 <script type="text/javascript" src="{{ STATIC_URL }}lightbox/js/lightbox.js"></script>
