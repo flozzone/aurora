@@ -1,4 +1,16 @@
 $(function() {
+ $('.tag_input').keydown(function(e) {
+	 keyP = e.which;
+     if(keyP == 188 || keyP == 13 || keyP == 186) {
+		$('.add_tags_btn').trigger( "click" );
+		setInterval(function() {$('#tag_input').focus();},250);
+		return false;
+      }
+  });
+});
+
+
+$(function() {
    $(".tag_input").click(function(event) {
        event.stopPropagation();
        $(".tag_input").autocomplete( "search", "" );
