@@ -22,7 +22,7 @@
         width: 0;
         background: green; }
     .dropzone .dz-preview .dz-error-message {
-      color: red;
+      color: white;
       display: none; }
     .dropzone .dz-preview.dz-error .dz-error-message, .dropzone .dz-preview.dz-error .dz-error-mark {
       display: block; }
