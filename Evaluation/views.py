@@ -19,7 +19,7 @@ from django.db import models
 
 from Challenge.models import Challenge
 from Comments.models import Comment
-from Course.models import Course, CourseChallengeRelation, CourseUserRelation
+from Course.models import Course, CourseUserRelation
 from Elaboration.models import Elaboration
 from Evaluation.models import Evaluation
 from AuroraUser.models import AuroraUser
@@ -33,11 +33,6 @@ from Notification.models import Notification
 @login_required()
 @staff_member_required
 def evaluation(request, course_short_title=None):
-    # TODO: delete this snippet, fetches gravatar images for every user only for test cases.
-    # for puser in AuroraUser.objects.all():
-    #   if not puser.avatar:
-    #       puser.get_gravatar()
-
     course = Course.get_or_raise_404(short_title=course_short_title)
     overview = ""
     elaborations = []
@@ -166,8 +161,8 @@ def top_level_tasks(request, course_short_title=None):
 @login_required()
 @staff_member_required
 def complaints(request, course_short_title=None):
-    elaborations = Elaboration.get_complaints(RequestContext(request))
     course = Course.get_or_raise_404(short_title=course_short_title)
+    elaborations = Elaboration.get_complaints(RequestContext(request), course)
 
     # sort elaborations by submission time
     if type(elaborations) == list:
@@ -225,7 +220,7 @@ def awesome(request, course_short_title=None):
     course = Course.get_or_raise_404(short_title=course_short_title)
     selected_challenge = request.session.get('selected_challenge', default='')
     if selected_challenge != '':
-        challenge = Challenge.objects.get(title=selected_challenge, coursechallengerelation__course=course)
+        challenge = Challenge.objects.get(title=selected_challenge, course=course)
         elaborations = Elaboration.get_awesome_challenge(course, challenge)
     else:
         elaborations = Elaboration.get_awesome(course)
@@ -507,7 +502,7 @@ def submit_evaluation(request, course_short_title=None):
 
     elaboration = Elaboration.objects.get(pk=elaboration_id)
     user = RequestContext(request)['user']
-    course = CourseChallengeRelation.objects.filter(challenge=elaboration.challenge)[0].course
+    course = elaboration.challenge.course
 
     if Evaluation.objects.filter(submission=elaboration):
         evaluation = Evaluation.objects.get(submission=elaboration)
@@ -538,7 +533,7 @@ def reopen_evaluation(request, course_short_title=None):
     elaboration_id = request.POST['elaboration_id']
     elaboration = Elaboration.objects.get(pk=elaboration_id)
     evaluation = Evaluation.objects.get(submission=elaboration)
-    course = CourseChallengeRelation.objects.filter(challenge=evaluation.submission.challenge)[0].course
+    course = evaluation.submission.challenge.course
 
     evaluation.submission_time = None
     evaluation.tutor = RequestContext(request)['user']
@@ -581,10 +576,10 @@ def select_challenge(request, course_short_title=None):
     selected_challenge = request.POST['selected_challenge'][:(request.POST['selected_challenge'].rindex('(') - 1)]
 
     elaborations = []
-    challenges = Challenge.objects.filter(title=selected_challenge, coursechallengerelation__course=course)
+    challenges = Challenge.objects.filter(title=selected_challenge, course=course)
     for challenge in challenges:
-        if Elaboration.get_course_sel_challenge_elaborations(challenge, course):
-            for elaboration in Elaboration.get_course_sel_challenge_elaborations(challenge, course):
+        if Elaboration.get_course_sel_challenge_elaborations(challenge):
+            for elaboration in Elaboration.get_course_sel_challenge_elaborations(challenge):
                 elaborations.append(elaboration)
 
     html = render_to_response('overview.html', {'elaborations': elaborations, 'search': True, 'course': course}, RequestContext(request))
@@ -623,7 +618,7 @@ def select_user(request, course_short_title=None):
 def autocomplete_challenge(request, course_short_title=None):
     course = Course.get_or_raise_404(short_title=course_short_title)
     term = request.GET.get('term', '')
-    challenges = Challenge.objects.all().filter(title__istartswith=term, coursechallengerelation__course=course)
+    challenges = Challenge.objects.all().filter(title__istartswith=term, course=course)
     titles = [challenge.title + ' (' + str(challenge.get_sub_elab_count()) + '/' + str(challenge.get_elab_count()) + ')'
               for challenge in challenges]
     response_data = json.dumps(titles, ensure_ascii=False)

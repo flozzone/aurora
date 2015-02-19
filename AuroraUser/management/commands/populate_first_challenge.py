@@ -138,7 +138,8 @@ def init_data():
                                         ' Nickname keine anderen persönlichen Daten zu sehen sind.<br/><br/>'
                                         'Anmerkung: so ein Screenshot muss nicht ihren ganzen Bildschirm zeigen. Es genügt, wenn man den für den Task jeweils wesentlichen '
                                         'Ausschnitt sieht.',
-                            accepted_files='image/*'
+                            accepted_files='image/*',
+                            course=gsi,
     )
     challenge_1.image.save('1.png', File(open(os.path.join(STATIC_ROOT, 'img', '1.png'), 'rb')))
     challenge_1.save()
@@ -158,7 +159,8 @@ def init_data():
                                         'Herabwürdigung, Beschimpfung etc.) nicht überschritten werden.<br/><br/>'
                                         'Machen sie dann einen Screenshot ihres Kommentars, laden sieh ihn für diesen Task hoch und geben sie ihn ab. Geben sie ausserdem '
                                         'den Titel der Folie an, zu der sie den Kommentar gepostet haben.',
-                            accepted_files='image/*'
+                            accepted_files='image/*',
+                            course=gsi,
     )
     challenge_2.image.save('2.png', File(open(os.path.join(STATIC_ROOT, 'img', '2.png'), 'rb')))
     challenge_2.save()
@@ -179,7 +181,8 @@ def init_data():
                                         'Markieren sie aus der ersten Vorlesung jeweils mindestens eine Folie als [??], [!] und [*]. Öffnen sie dann die drei '
                                         '»Lesezeichen«-Seiten (direkt im Slides-Bereich, zweite Zeile) und machen sie drei Screenshots, die die so markierten Folien zeigen.<br/>'
                                         'Geben sie diese drei Screenshots ab.',
-                            accepted_files='image/*'
+                            accepted_files='image/*',
+                            course=gsi,
     )
     challenge_3.image.save('3.png', File(open(os.path.join(STATIC_ROOT, 'img', '3.png'), 'rb')))
     challenge_3.save()
@@ -194,7 +197,8 @@ def init_data():
                             description='Bewerten sie einen oder mehrere Kommentare in den Slides mit Hilfe der Bewertungspfeile rechts oben im Kommentar. '
                                         'Setzen sie diese Funktion ein, um auszudrücken, ob sie den Kommentar inhaltlich lesenswert finden - oder eben nicht.<br/><br/>'
                                         'Machen sie einen Screenshot von einem Kommentar, den sie bewertet haben, und geben sie diesen ab.',
-                            accepted_files='image/*'
+                            accepted_files='image/*',
+                            course=gsi,
     )
     challenge_4.image.save('4.png', File(open(os.path.join(STATIC_ROOT, 'img', '4.png'), 'rb')))
     challenge_4.save()
@@ -211,7 +215,8 @@ def init_data():
                                         ' wo es Kommentare gibt) mit Hilfe der »BOOKMARK«-Funktion links unter dem Kommentar.<br/><br/>'
                                         'Öffnen sie dann die »Bookmarks«-Seite (Hauptnavigation), und machen sie einen Screenshot von der Sammlung vorgemerkter '
                                         'Kommentare. Geben sie diesen Screenshot ab.',
-                            accepted_files='image/*'
+                            accepted_files='image/*',
+                            course=gsi,
     )
     challenge_5.image.save('5.png', File(open(os.path.join(STATIC_ROOT, 'img', '5.png'), 'rb')))
     challenge_5.save()
@@ -226,7 +231,8 @@ def init_data():
                             description='Was erwarten Sie sich von dieser Lehrveranstaltung? Was, meinen sie, werden sie hier lernen? Schreiben sie etwa einen Absatz'
                                         ' Text über ihre <b>inhaltlichen</b> Erwartungen an diese LVA.  Schreiben sie als Abschluss einen Satz zu anderen Erwartungen'
                                         ' zu dieser Lehrveranstaltung (Organisation, Experience, Unterhaltungswert, etc.).',
-                            accepted_files=''
+                            accepted_files='',
+                            course=gsi,
     )
     challenge_6.image.save('6.png', File(open(os.path.join(STATIC_ROOT, 'img', '6.png'), 'rb')))
     challenge_6.save()
@@ -242,7 +248,8 @@ def init_data():
                                         ' Nickname keine anderen persönlichen Daten zu sehen sind.<br/><br/>'
                                         'Anmerkung: so ein Screenshot muss nicht ihren ganzen Bildschirm zeigen. Es genügt, wenn man den für den Task jeweils wesentlichen '
                                         'Ausschnitt sieht.',
-                            accepted_files='image/*'
+                            accepted_files='image/*',
+                            course=hci,
     )
     challenge_7.image.save('1.png', File(open(os.path.join(STATIC_ROOT, 'img', '1.png'), 'rb')))
     challenge_7.save()
@@ -262,7 +269,8 @@ def init_data():
                                         'Herabwürdigung, Beschimpfung etc.) nicht überschritten werden.<br/><br/>'
                                         'Machen sie dann einen Screenshot ihres Kommentars, laden sieh ihn für diesen Task hoch und geben sie ihn ab. Geben sie ausserdem '
                                         'den Titel der Folie an, zu der sie den Kommentar gepostet haben.',
-                            accepted_files='image/*'
+                            accepted_files='image/*',
+                            course=hci,
     )
     challenge_8.image.save('2.png', File(open(os.path.join(STATIC_ROOT, 'img', '2.png'), 'rb')))
     challenge_8.save()
@@ -283,7 +291,8 @@ def init_data():
                                         'Markieren sie aus der ersten Vorlesung jeweils mindestens eine Folie als [??], [!] und [*]. Öffnen sie dann die drei '
                                         '»Lesezeichen«-Seiten (direkt im Slides-Bereich, zweite Zeile) und machen sie drei Screenshots, die die so markierten Folien zeigen.<br/>'
                                         'Geben sie diese drei Screenshots ab.',
-                            accepted_files='image/*'
+                            accepted_files='image/*',
+                            course=hci,
     )
     challenge_9.image.save('3.png', File(open(os.path.join(STATIC_ROOT, 'img', '3.png'), 'rb')))
     challenge_9.save()
@@ -298,7 +307,8 @@ def init_data():
                             description='Bewerten sie einen oder mehrere Kommentare in den Slides mit Hilfe der Bewertungspfeile rechts oben im Kommentar. '
                                         'Setzen sie diese Funktion ein, um auszudrücken, ob sie den Kommentar inhaltlich lesenswert finden - oder eben nicht.<br/><br/>'
                                         'Machen sie einen Screenshot von einem Kommentar, den sie bewertet haben, und geben sie diesen ab.',
-                            accepted_files='image/*'
+                            accepted_files='image/*',
+                            course=hci,
     )
     challenge_10.image.save('4.png', File(open(os.path.join(STATIC_ROOT, 'img', '4.png'), 'rb')))
     challenge_10.save()
@@ -315,7 +325,8 @@ def init_data():
                                         ' wo es Kommentare gibt) mit Hilfe der »BOOKMARK«-Funktion links unter dem Kommentar.<br/><br/>'
                                         'Öffnen sie dann die »Bookmarks«-Seite (Hauptnavigation), und machen sie einen Screenshot von der Sammlung vorgemerkter '
                                         'Kommentare. Geben sie diesen Screenshot ab.',
-                            accepted_files='image/*'
+                            accepted_files='image/*',
+                            course=hci,
     )
     challenge_11.image.save('5.png', File(open(os.path.join(STATIC_ROOT, 'img', '5.png'), 'rb')))
     challenge_11.save()
@@ -330,27 +341,11 @@ def init_data():
                             description='Was erwarten Sie sich von dieser Lehrveranstaltung? Was, meinen sie, werden sie hier lernen? Schreiben sie etwa einen Absatz'
                                         ' Text über ihre <b>inhaltlichen</b> Erwartungen an diese LVA.  Schreiben sie als Abschluss einen Satz zu anderen Erwartungen'
                                         ' zu dieser Lehrveranstaltung (Organisation, Experience, Unterhaltungswert, etc.).',
-                            accepted_files=''
+                            accepted_files='',
+                            course=hci,
     )
     challenge_12.image.save('6.png', File(open(os.path.join(STATIC_ROOT, 'img', '6.png'), 'rb')))
     challenge_12.save()
-
-
-    # create course-challenge relations
-    print('adding course-challenge relations')
-    CourseChallengeRelation(course=gsi, challenge_id=1).save()
-    CourseChallengeRelation(course=gsi, challenge_id=2).save()
-    CourseChallengeRelation(course=gsi, challenge_id=3).save()
-    CourseChallengeRelation(course=gsi, challenge_id=4).save()
-    CourseChallengeRelation(course=gsi, challenge_id=5).save()
-    CourseChallengeRelation(course=gsi, challenge_id=6).save()
-
-    CourseChallengeRelation(course=hci, challenge_id=7).save()
-    CourseChallengeRelation(course=hci, challenge_id=8).save()
-    CourseChallengeRelation(course=hci, challenge_id=9).save()
-    CourseChallengeRelation(course=hci, challenge_id=10).save()
-    CourseChallengeRelation(course=hci, challenge_id=11).save()
-    CourseChallengeRelation(course=hci, challenge_id=12).save()
 
 
     # create stacks

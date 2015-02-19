@@ -804,23 +804,38 @@ td.diff_header {
 }
 
 .tag_input {
+	box-sizing: border-box;
+    height:1.85em;
+    padding:3px 0 0 4px;
     float:left;
-    width:300px;
-    height:1.75em;
-    background:white;
+    width:75px;
+    white-space: nowrap;
+	overflow:hidden;
     border:1px solid gray;
     margin-top:5px;
-    padding-top:2px;
-    border-radius:3px;
+    border-radius:3px 0 0 3px;
+    background-color: #F8F8F8;
+	box-shadow: inset 0 1px 3px rgba(0,0,0,0.4);
+}
+
+.tag_input:focus {
+    outline-color: transparent;
+    outline-style: none;
 }
 
 .add_tags_btn {
+	box-sizing: border-box;
+    height:1.85em;
+    padding:2px;
     float:left;
     font-weight: bold;
-    margin: 5px 0 0 5px;
+	width:1.65em;
+    margin: 5px 0 0 0;
     background-color: #C5FFB6;
     border: 1px solid #359440;
+	border-left:0;
     color: black;
+    border-radius:0 3px 3px 0;
 }
 
 .tags, .tag_list {
@@ -833,19 +848,14 @@ td.diff_header {
     background-color: #F0F0F0;
     border: 1px solid #A5A5A5;
     color: black;
-    height:1.75em;
     margin: 5px 5px 0 0;
     text-align: center;
-    -moz-box-sizing: border-box;
     border-radius: 3px;
-    padding: 2px 0 0 5px;
+	box-sizing: border-box;
+    height:1.85em;
+    padding:3px 3px 0 4px;
 }
 
 .tag_remove {
-    float:right;
-    color: black;
-	cursor:pointer;
-    color:#FF0000;
-    font-weight:bold;
-    padding:0 5px 0 3px;
+	cursor:not-allowed;
 }

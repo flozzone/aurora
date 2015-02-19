@@ -84,10 +84,10 @@ class Elaboration(models.Model):
         return elaborations
 
     @staticmethod
-    def get_course_sel_challenge_elaborations(challenge, course):
+    def get_course_sel_challenge_elaborations(challenge):
         elaborations = (
             Elaboration.objects
-            .filter(challenge=challenge, challenge__coursechallengerelation__course=course, submission_time__isnull=False)
+            .filter(challenge=challenge, submission_time__isnull=False)
         )
         return elaborations
 
@@ -99,7 +99,7 @@ class Elaboration(models.Model):
         missing_reviews = (
             Elaboration.objects
             .filter(submission_time__lte=datetime.now() - timedelta(days=1), user__is_staff=False,
-                    challenge__coursechallengerelation__course=course)
+                    challenge__course=course)
             .annotate(num_reviews=Count('review'))
             .exclude(challenge__id__in=final_challenge_ids)
         )
@@ -138,7 +138,7 @@ class Elaboration(models.Model):
         non_adequate_elaborations = (
             Elaboration.objects
             .filter(id__in=nothing_reviews, submission_time__isnull=False, user__is_staff=False,
-                    challenge__coursechallengerelation__course=course)
+                    challenge__course=course)
         )
         return non_adequate_elaborations
 
@@ -263,8 +263,9 @@ class Elaboration(models.Model):
         return not self.get_nothing_reviews().exists()
 
     @staticmethod
-    def get_complaints(context):
+    def get_complaints(context, course):
         result1 = Elaboration.objects.filter(
+            challenge__course=course,
             comments__parent=None,
             comments__seen=False,
         ).exclude(
@@ -290,8 +291,7 @@ class Elaboration(models.Model):
         multiple_awesome_review_ids = ([k for k,v in Counter(awesome_review_ids).items() if v>1])
         awesome_elaborations = (
             Elaboration.objects
-            .filter(id__in=multiple_awesome_review_ids, challenge__coursechallengerelation__course=course,
-                    user__is_staff=False)
+            .filter(id__in=multiple_awesome_review_ids, challenge__course=course, user__is_staff=False)
         )
         return awesome_elaborations
 
@@ -305,7 +305,7 @@ class Elaboration(models.Model):
         multiple_awesome_review_ids = ([k for k,v in Counter(awesome_review_ids).items() if v>1])
         awesome_elaborations = (
             Elaboration.objects
-            .filter(id__in=multiple_awesome_review_ids, challenge=challenge, challenge__coursechallengerelation__course=course,
+            .filter(id__in=multiple_awesome_review_ids, challenge=challenge, challenge__course=course,
                     user__is_staff=False)
         )
         return awesome_elaborations

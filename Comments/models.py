@@ -208,17 +208,10 @@ class Comment(models.Model):
 
     @staticmethod
     def query_top_level_sorted(ref_object_id, ref_type_id, requester):
-        if requester.is_staff:
-            queryset_all = Comment.objects.filter(
-                parent=None,
-                seen=False,
-                content_type__pk=ref_type_id,
-                object_id=ref_object_id)
-        else:
-            queryset_all = Comment.objects.filter(
-                parent=None,
-                content_type__pk=ref_type_id,
-                object_id=ref_object_id)
+        queryset_all = Comment.objects.filter(
+            parent=None,
+            content_type__pk=ref_type_id,
+            object_id=ref_object_id)
 
         visible = Comment.filter_visible(queryset_all, requester)
         visible = Comment.filter_deleted_trees(visible)

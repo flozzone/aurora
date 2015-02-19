@@ -1,14 +1,14 @@
 from datetime import datetime, timedelta
+from django.db.models import ManyToManyField
 import os
 
 from django.db import models
 
 from Comments.models import Comment
 from Stack.models import StackChallengeRelation
-from ReviewQuestion.models import ReviewQuestion
 from Review.models import Review
 from Elaboration.models import Elaboration
-from Course.models import CourseChallengeRelation, Course
+from Course.models import Course
 
 
 def challenge_image_path(instance, filename):
@@ -29,6 +29,7 @@ class Challenge(models.Model):
     image = models.ImageField(upload_to=challenge_image_path, null=True, blank=True)
     # This is a comma separated list of mime types or file extensions. Eg.: image/*,application/pdf,.psd.
     accepted_files = models.CharField(max_length=100, default="image/*,application/pdf", blank=True)
+    course = models.ForeignKey(Course)
 
     NOT_ENABLED = -1
     NOT_STARTED = 0
@@ -68,7 +69,7 @@ class Challenge(models.Model):
         return str(self.title)
 
     def get_course(self):
-        return CourseChallengeRelation.objects.filter(challenge=self)[0].course
+        return self.course
 
     def get_next(self):
         next_challenges = Challenge.objects.filter(prerequisite=self)
@@ -112,9 +113,7 @@ class Challenge(models.Model):
             Challenge.objects
             .filter(prerequisite__isnull=False).values_list('prerequisite', flat=True)
         )
-        non_course_challenges = []
-        for course in course.get_non_course_challenges():
-            non_course_challenges.append(course.id)
+        non_course_challenges = [challenge.id for challenge in Challenge.objects.exclude(course=course)]
         knockout_list = non_course_challenges + list(peer_review_challenges)
         final_challenge_ids = (
             Challenge.objects
@@ -170,8 +169,7 @@ class Challenge(models.Model):
     def is_enabled_for_user(self, user):
         # if user is not enlisted for the course the challenge is in,
         # the challenge can not be enabled for the user
-        course = CourseChallengeRelation.objects.filter(challenge=self)[0].course
-        if not course.user_is_enlisted(user):
+        if not self.course.user_is_enlisted(user):
             return False
 
         # first challenge is always enabled
