@@ -16,6 +16,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.db.models import CharField
 from django.db.models import Q
 from django.db import models
+from taggit.models import Tag, TaggedItem
+from django.views.generic import DetailView, ListView
 
 from Challenge.models import Challenge
 from Comments.models import Comment
@@ -573,14 +575,37 @@ def set_appraisal(request, course_short_title=None):
 @staff_member_required
 def select_challenge(request, course_short_title=None):
     course = Course.get_or_raise_404(short_title=course_short_title)
+
     selected_challenge = request.POST['selected_challenge'][:(request.POST['selected_challenge'].rindex('(') - 1)]
+    selected_user = request.POST['selected_user'].split()[0]
+    selected_tag = request.POST['selected_tag']
+
+    challenges = []
+    if(selected_challenge != 'challenge...'):
+        challenges = Challenge.objects.filter(title=selected_challenge, course=course)
+    else:
+        challenges = Challenge.objects.all(course=course)
+
+    user = []
+    if(selected_user != 'user...'):
+        user = AuroraUser.objects.filter(username=selected_user)
+    else:
+        user = AuroraUser.objects.all()
+
+    if(selected_tag != 'tag...'):
+        aurorauser_ct = ContentType.objects.get_for_model(AuroraUser)
+        tagged_items = TaggedItem.objects.filter(content_type=aurorauser_ct, tag__name=selected_tag)
+        tagged_user_ids = []
+        for ti in tagged_items:
+            if not tagged_user_ids.__contains__(ti.content_object):
+                tagged_user_ids.append(ti.content_object.id)
+
+        tagged_user = AuroraUser.objects.filter(id__in=tagged_user_ids)
+        user = user & tagged_user
 
     elaborations = []
-    challenges = Challenge.objects.filter(title=selected_challenge, course=course)
-    for challenge in challenges:
-        if Elaboration.get_course_sel_challenge_elaborations(challenge):
-            for elaboration in Elaboration.get_course_sel_challenge_elaborations(challenge):
-                elaborations.append(elaboration)
+    if Elaboration.search(challenges, user):
+        elaborations = list(Elaboration.search(challenges, user))
 
     html = render_to_response('overview.html', {'elaborations': elaborations, 'search': True, 'course': course}, RequestContext(request))
 

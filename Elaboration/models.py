@@ -92,6 +92,22 @@ class Elaboration(models.Model):
         return elaborations
 
     @staticmethod
+    def get_course_sel_challenge_user_elaborations(challenge, user):
+        elaborations = (
+            Elaboration.objects
+            .filter(challenge=challenge, user=user, submission_time__isnull=False)
+        )
+        return elaborations
+
+    @staticmethod
+    def search(challenges, user):
+        elaborations = (
+            Elaboration.objects
+            .filter(challenge__in=challenges, user__in=user, submission_time__isnull=False)
+        )
+        return elaborations
+
+    @staticmethod
     def get_missing_reviews(course):
         from Challenge.models import Challenge
 

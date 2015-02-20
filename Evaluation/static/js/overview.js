@@ -81,18 +81,20 @@ $(function() {
     $("#search_challenge").autocomplete({
         source: "./autocomplete_challenge/",
         select: function (event, ui) {
-           var data = {
-                selected_challenge: ui.item.value     // select value from autocomplete box
-           };
-           var args = { type: "POST", url: "./select_challenge/", data: data,
+            var data = {
+                selected_challenge: ui.item.value,     // select value from autocomplete box
+                selected_user: $('.search_user').text(),
+                selected_tag: $('.search_tag').text()
+            };
+            var args = { type: "POST", url: "./select_challenge/", data: data,
                 error: function () {
                     alert('challenge not found');
                 },
                 success: function(data) {
                     $('#overview').html(data);
                 }
-           };
-           $.ajax(args);
+            };
+            $.ajax(args);
         },
         minLength: 0
     });
@@ -123,7 +125,7 @@ $(function() {
     $("#search_tag").autocomplete({
         source: "./autocomplete_tag/",
         select: function (event, ui) {
-           alert("todo: query");
+           // alert("todo: query");
         },
         minLength: 0
     });
