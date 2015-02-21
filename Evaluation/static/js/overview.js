@@ -104,18 +104,20 @@ $(function() {
     $("#search_user").autocomplete({
         source: "./autocomplete_user/",
         select: function (event, ui) {
-           var data = {
-                selected_user: ui.item.value     // select value from autocomplete box
-           };
-           var args = { type: "POST", url: "./select_user/", data: data,
+            var data = {
+                selected_challenge: $('.search_challenge').text(),
+                selected_user: ui.item.value,     // select value from autocomplete box
+                selected_tag: $('.search_tag').text()
+            };
+            var args = { type: "POST", url: "./select_user/", data: data,
                 error: function () {
                     alert('user not found');
                 },
                 success: function(data) {
                     $('#overview').html(data);
                 }
-           };
-           $.ajax(args);
+            };
+            $.ajax(args);
         },
         minLength: 2
     });
@@ -125,7 +127,20 @@ $(function() {
     $("#search_tag").autocomplete({
         source: "./autocomplete_tag/",
         select: function (event, ui) {
-           // alert("todo: query");
+            var data = {
+                selected_challenge: $('.search_challenge').text(),
+                selected_user: $('.search_user').text(),
+                selected_tag: ui.item.value     // select value from autocomplete box
+            };
+            var args = { type: "POST", url: "./select_tag/", data: data,
+                error: function () {
+                    alert('tag not found');
+                },
+                success: function(data) {
+                    $('#overview').html(data);
+                }
+            };
+            $.ajax(args);
         },
         minLength: 0
     });

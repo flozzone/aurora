@@ -573,7 +573,7 @@ def set_appraisal(request, course_short_title=None):
 @csrf_exempt
 @login_required()
 @staff_member_required
-def select_challenge(request, course_short_title=None):
+def search(request, course_short_title=None):
     course = Course.get_or_raise_404(short_title=course_short_title)
 
     selected_challenge = request.POST['selected_challenge'][:(request.POST['selected_challenge'].rindex('(') - 1)]
@@ -581,10 +581,10 @@ def select_challenge(request, course_short_title=None):
     selected_tag = request.POST['selected_tag']
 
     challenges = []
-    if(selected_challenge != 'challenge...'):
+    if(selected_challenge != 'task...'):
         challenges = Challenge.objects.filter(title=selected_challenge, course=course)
     else:
-        challenges = Challenge.objects.all(course=course)
+        challenges = Challenge.objects.filter(course=course)
 
     user = []
     if(selected_user != 'user...'):
