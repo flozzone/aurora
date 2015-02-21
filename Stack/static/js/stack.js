@@ -26,7 +26,7 @@ function stack_loaded() {
 
 function challenge_clicked(event) {
     event.stopPropagation();
-    var challenge = $(event.target);
+    var challenge = $(event.target).closest(".one_challenge");
     var challenge_id = challenge.attr('challenge_id');
     window.location.href = './challenge?id=' + challenge_id
 }
