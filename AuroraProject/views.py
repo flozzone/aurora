@@ -19,6 +19,9 @@ from Challenge.models import Challenge
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
 
+def course_selection(request):
+    data = {'courses': Course.objects.all()}
+    return render_to_response('course_selection.html', data)
 
 def home(request, course_short_title=None):
     if not request.user.is_authenticated():
