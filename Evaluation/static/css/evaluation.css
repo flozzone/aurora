@@ -392,16 +392,37 @@ th {
 	-webkit-transform:rotate(45deg); /* Opera, Chrome, and Safari */
 }
 
+.search_container {
+	clear:both;
+	height:1.80em;
+	margin-top:10px;
+}
 
 .search_user, .search_challenge, .search_tag {
-    border: 1px solid #666666;
+    float:left;
+	border: 1px solid #666666;
     border-radius: 3px;
     background-color: #E9F3D9;
     height:1.75em;
-    margin-top: 5px;
     color: #666666;
     padding: 2px 0 0 5px;
     -moz-box-sizing: border-box;
+	width:85%;
+}
+
+.remove_selection_btn {
+    float: right;
+    border: 1px solid #e47a82;
+    border-radius: 3px;
+    background-color: #e48e9a;
+    height:1.50em;
+    margin-left:5px;
+    color: white;
+    text-align: center;
+    padding: 6px 0 0 0;
+    -moz-box-sizing: border-box;
+	cursor:pointer;
+	width:10%;
 }
 
 .add_tags_btn {

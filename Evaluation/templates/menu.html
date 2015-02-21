@@ -13,8 +13,8 @@
     <a href="{% url 'Evaluation:evaluated_non_adequate_work' course.short_title %}"><div class="mitem {{ stabilosiert_evaluated_non_adequate_work }} evaluated_non_adequate_work" id="m6">evaluted non-adequate work {% if stabilosiert_evaluated_non_adequate_work %}({{ count_evaluated_non_adequate_work }}){% endif %}</div></a>
     <a href="{% url 'Evaluation:awesome' course.short_title %}"><div class="mitem {{ stabilosiert_awesome }} awesome" id="m7">awesome {% if selected_challenge %} [{{ selected_challenge }}] {% endif %} {% if stabilosiert_awesome %}({{ count_awesome }}){% endif %}</div></a>
 
-    <div class="mfield search_challenge" id="search_challenge" contenteditable="true">task...</div>
-    <div class="mfield search_user" id="search_user" contenteditable="true">user...</div>
-    <div class="mfield search_tag" id="search_tag" contenteditable="true">tag...</div>
+    <div class="search_container"><div class="mfield search_challenge" id="search_challenge" contenteditable="true">task...</div><div class="remove_selection_btn"><i class="fa fa-minus"></i></div></div>
+    <div class="search_container"><div class="mfield search_user" id="search_user" contenteditable="true">user...</div><div class="remove_selection_btn"><i class="fa fa-minus"></i></div></div>
+    <div class="search_container"><div class="mfield search_tag" id="search_tag" contenteditable="true">tag...</div><div class="remove_selection_btn"><i class="fa fa-minus"></i></div></div>
 
 {% endblock %}
