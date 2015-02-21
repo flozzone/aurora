@@ -410,7 +410,7 @@ th {
 	width:85%;
 }
 
-.remove_selection_btn {
+.remove_sel_challenge_btn, .remove_sel_user_btn, .remove_sel_tag_btn {
     float: right;
     border: 1px solid #e47a82;
     border-radius: 3px;

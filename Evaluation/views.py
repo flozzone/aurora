@@ -576,12 +576,13 @@ def set_appraisal(request, course_short_title=None):
 def search(request, course_short_title=None):
     course = Course.get_or_raise_404(short_title=course_short_title)
 
-    selected_challenge = request.POST['selected_challenge'][:(request.POST['selected_challenge'].rindex('(') - 1)]
+    selected_challenge = request.POST['selected_challenge']
     selected_user = request.POST['selected_user'].split()[0]
     selected_tag = request.POST['selected_tag']
 
     challenges = []
     if(selected_challenge != 'task...'):
+        selected_challenge = selected_challenge[:(request.POST['selected_challenge'].rindex('(') - 1)]
         challenges = Challenge.objects.filter(title=selected_challenge, course=course)
     else:
         challenges = Challenge.objects.filter(course=course)

@@ -35,7 +35,7 @@ $(function() {
 $(function() {
    $(".search_challenge").focusout(function(event) {
        if($('.search_challenge').text() == "")
-          $(".search_challenge").html("challenge...");
+          $(".search_challenge").html("task...");
    });
 });
 
@@ -66,6 +66,49 @@ $(function() {
           $(".search_tag").html("tag...");
    });
 });
+
+$(function() {
+   $(".remove_sel_challenge_btn").click(function(event) {
+        $(".search_challenge").html("task...");
+        search();
+   });
+});
+
+$(function() {
+   $(".remove_sel_user_btn").click(function(event) {
+        $(".search_user").html("user...");
+        search();
+   });
+});
+
+$(function() {
+   $(".remove_sel_tag_btn").click(function(event) {
+        $(".search_tag").html("tag...");
+        search();
+   });
+});
+
+function search() {
+    selected_challenge = $('.search_challenge').text();
+    selected_user = $('.search_user').text();
+    selected_tag = $('.search_tag').text();
+
+    if((selected_challenge=="task...") && (selected_user=="user...") && (selected_tag="tag")) {
+        $('#overview').html("");
+    } else {
+        var data = {
+            selected_challenge: selected_challenge,
+            selected_user: selected_user,
+            selected_tag: selected_tag
+        };
+        var args = { type: "POST", url: "./select_challenge/", data: data,
+            success: function(data) {
+                $('#overview').html(data);
+            }
+        };
+        $.ajax(args);
+    }
+}
 
 function loadWait() {
 	$('.loading_animation').show();
