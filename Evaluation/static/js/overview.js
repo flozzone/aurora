@@ -34,8 +34,10 @@ $(function() {
 
 $(function() {
    $(".search_challenge").focusout(function(event) {
-       if($('.search_challenge').text() == "")
-          $(".search_challenge").html("task...");
+       if($('.search_challenge').text() == "") {
+           $(".search_challenge").html("task...");
+           search();
+       }
    });
 });
 
@@ -48,8 +50,10 @@ $(function() {
 
 $(function() {
    $(".search_user").focusout(function(event) {
-       if($('.search_user').text() == "")
-          $(".search_user").html("user...");
+       if($('.search_user').text() == "") {
+           $(".search_user").html("user...");
+           search();
+       }
    });
 });
 
@@ -62,8 +66,10 @@ $(function() {
 
 $(function() {
    $(".search_tag").focusout(function(event) {
-       if($('.search_tag').text() == "")
-          $(".search_tag").html("tag...");
+       if($('.search_tag').text() == "") {
+           $(".search_tag").html("tag...");
+           search();
+       }
    });
 });
 
