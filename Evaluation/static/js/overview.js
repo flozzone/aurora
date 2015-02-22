@@ -94,20 +94,25 @@ $(function() {
    });
 });
 
-function search() {
-    selected_challenge = $('.search_challenge').text();
-    selected_user = $('.search_user').text();
-    selected_tag = $('.search_tag').text();
+function search(challenge, user, tag) {
+    if (typeof(challenge)==='undefined') challenge = $('.search_challenge').text();
+    if (typeof(user)==='undefined') user = $('.search_user').text();
+    if (typeof(tag)==='undefined') tag = $('.search_tag').text();
 
-    if((selected_challenge=="task...") && (selected_user=="user...") && (selected_tag="tag")) {
+    if((challenge=="task...") && (user=="user...") && (tag=="tag...")) {
         $('#overview').html("");
     } else {
+        var url = "./search/";
+        // fetch points if only 1 user selected
+        if((challenge=="task...") && (user!="user...") && (tag=="tag...")) {
+            url = "./select_user/";
+        }
         var data = {
-            selected_challenge: selected_challenge,
-            selected_user: selected_user,
-            selected_tag: selected_tag
+                selected_challenge: challenge,
+                selected_user: user,
+                selected_tag: tag
         };
-        var args = { type: "POST", url: "./select_challenge/", data: data,
+        var args = { type: "POST", url: url, data: data,
             success: function(data) {
                 $('#overview').html(data);
             }
@@ -130,20 +135,7 @@ $(function() {
     $("#search_challenge").autocomplete({
         source: "./autocomplete_challenge/",
         select: function (event, ui) {
-            var data = {
-                selected_challenge: ui.item.value,     // select value from autocomplete box
-                selected_user: $('.search_user').text(),
-                selected_tag: $('.search_tag').text()
-            };
-            var args = { type: "POST", url: "./select_challenge/", data: data,
-                error: function () {
-                    alert('challenge not found');
-                },
-                success: function(data) {
-                    $('#overview').html(data);
-                }
-            };
-            $.ajax(args);
+            search(ui.item.value, undefined, undefined);
         },
         minLength: 0
     });
@@ -153,20 +145,7 @@ $(function() {
     $("#search_user").autocomplete({
         source: "./autocomplete_user/",
         select: function (event, ui) {
-            var data = {
-                selected_challenge: $('.search_challenge').text(),
-                selected_user: ui.item.value,     // select value from autocomplete box
-                selected_tag: $('.search_tag').text()
-            };
-            var args = { type: "POST", url: "./select_user/", data: data,
-                error: function () {
-                    alert('user not found');
-                },
-                success: function(data) {
-                    $('#overview').html(data);
-                }
-            };
-            $.ajax(args);
+            search(undefined, ui.item.value, undefined);
         },
         minLength: 2
     });
@@ -176,20 +155,7 @@ $(function() {
     $("#search_tag").autocomplete({
         source: "./autocomplete_tag/",
         select: function (event, ui) {
-            var data = {
-                selected_challenge: $('.search_challenge').text(),
-                selected_user: $('.search_user').text(),
-                selected_tag: ui.item.value     // select value from autocomplete box
-            };
-            var args = { type: "POST", url: "./select_tag/", data: data,
-                error: function () {
-                    alert('tag not found');
-                },
-                success: function(data) {
-                    $('#overview').html(data);
-                }
-            };
-            $.ajax(args);
+            search(undefined, undefined, ui.item.value);
         },
         minLength: 0
     });
