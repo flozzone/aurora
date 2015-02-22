@@ -44,10 +44,8 @@
 	border-radius:3px;
 }
 
-.upload_title {
-    -moz-box-sizing: border-box;
-    margin: 0px;
-    padding: 6px;
+.fig {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 14px;
+    text-align: left;
 }
