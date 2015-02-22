@@ -1,13 +1,4 @@
-.uploadzone {
-    margin-top: 15px;
-    margin-bottom: 15px;
-    min-height: 10px;
-    background-color: rgb(255, 255, 255);
-    box-shadow: inset 0px 2px 5px  rgba(0,0,0,0.8), inset 0px 70px 70px -70px rgba(0,0,0,0.2), inset 0px -70px 70px -70px rgba(0,0,0,0.1);
-}
-
 .uploadzone .upload_preview {
-    background: none repeat scroll 0% rgba(255, 255, 255, 0.8);
     position: relative;
     display: inline-block;
     margin: 17px;
@@ -19,17 +10,22 @@
 }
 
 .uploadzone .upload_preview .upload_details {
+    position: relative;
     width: 100px;
     height: 100px;
-    position: relative;
+    overflow: hidden;
 }
 
 .uploadzone .upload_preview .upload_details img {
     position: absolute;
-    top: 0px;
-    left: 0px;
-    width: 100px;
-    height: 100px;
+    left: 50%;
+    top: 50%;
+    height: 101%;
+    width: auto;
+    -webkit-transform: translate(-50%,-50%);
+      -ms-transform: translate(-50%,-50%);
+          transform: translate(-50%,-50%);
+
 }
 
 .upload_size {
@@ -48,10 +44,8 @@
 	border-radius:3px;
 }
 
-.upload_title {
-    -mow-box-sizing: border:box;
-    margin: 0px;
-    padding: 6px;
+.fig {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 14px;
+    text-align: left;
 }

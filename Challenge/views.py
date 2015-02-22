@@ -107,6 +107,9 @@ def create_context_challenge(request, course_short_title):
         for review_question in ReviewQuestion.objects.filter(challenge=challenge, visible_to_author=True).order_by("order"):
             data['review_questions'].append(review_question.text)
 
+        # Create the elaboration to be able to upload files immediately
+        Elaboration.objects.get_or_create(challenge=challenge, user=user)
+
         if Elaboration.objects.filter(challenge=challenge, user=user).exists():
             elaboration = Elaboration.objects.get(challenge=challenge, user=user)
             data['elaboration'] = elaboration

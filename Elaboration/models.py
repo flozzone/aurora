@@ -16,7 +16,7 @@ class Elaboration(models.Model):
     challenge = models.ForeignKey('Challenge.Challenge')
     user = models.ForeignKey('AuroraUser.AuroraUser')
     creation_time = models.DateTimeField(auto_now_add=True)
-    elaboration_text = models.TextField(null=True)
+    elaboration_text = models.TextField(default='')
     submission_time = models.DateTimeField(null=True)
     tags = TaggableManager()
     comments = GenericRelation(Comment)

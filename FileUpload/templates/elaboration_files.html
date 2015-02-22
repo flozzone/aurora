@@ -1,0 +1,34 @@
+{% block additional_headers %}
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/elaboration_files.css" type="text/css" media="screen"/>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/elaboration_files.js"></script>
+{% endblock %}
+
+{% for file in files %}
+    {% if forloop.first %}
+    <div class="file_upload" style="">
+        <div class="uploadzone">
+    {% endif %}
+            <div class="upload_preview">
+                <div class="upload_details">
+                    {% if 'pdf' in file.accepted_files %}
+                        <a title="{{ file.name }}" href="{{ file.path }}" target="_blank">
+                            <img alt="{{ file.name }}" src="{{ STATIC_URL }}img/pdf_icon.jpg"/>
+                        </a>
+                    {% else %}
+                        <a title="{{ file.name }}" data-lightbox="preview" href="{{ file.path }}">
+                            <img alt="{{ file.name }}" src="{{ file.name }}"/>
+                        </a>
+                    {% endif %}
+                </div>
+                <div class="upload_size">
+                    <strong>{{ file.size }}MB</strong>
+                </div>
+                {% if file.fig %}
+                    <div class="fig">{{ file.fig }}</div>
+                {% endif %}
+            </div>
+    {% if forloop.last %}
+        </div>
+    </div>
+    {% endif %}
+{% endfor %}
