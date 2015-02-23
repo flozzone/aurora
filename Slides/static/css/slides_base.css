@@ -570,3 +570,7 @@ ul.content_navigation_list li {
 	font-size:80%;
 }
 /* END LIVECAST */
+
+.comment_seen {
+	display:none;
+}

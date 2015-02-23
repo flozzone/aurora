@@ -1,5 +1,4 @@
 $(function() {
-	$('.course_selected').addClass('irrelevant');
 	$('#evaluation-li').addClass('uRhere');
 });
 
