@@ -89,19 +89,9 @@
                   Reviews are in:
                 {% endif %}
 
-                {% if challenge_dict.awesome %}
+                {% if challenge_dict.awesome or challenge_dict.success or challenge_dict.fail%}
                 <span class="received_review">
-                  {{ challenge_dict.awesome }} x <span class="review_token">Accepted</span> &nbsp;
-                </span>
-                {% endif %}
-                {% if challenge_dict.success %}
-                <span class="received_review">
-                    {{ challenge_dict.success }} x <span class="review_token">Accepted</span> &nbsp;
-                </span>
-                {% endif %}
-                {% if challenge_dict.fail %}
-                <span class="received_review">
-                  {{ challenge_dict.fail }} x <span class="review_token">Accepted</span> &nbsp;
+                  {{ challenge_dict.awesome | add:challenge_dict.success | add:challenge_dict.fail}} x <span class="review_token">Accepted</span> &nbsp;
                 </span>
                 {% endif %}
                 {% if challenge_dict.nothing %}

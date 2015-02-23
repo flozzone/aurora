@@ -153,7 +153,7 @@
 {% for review_data in reviews %}
       <div class="view_review">
 {% render_review_answers review_data.review_id %}
-        <div class="appraisal Verdict_Success"><i class="fa fa-arrow-right"></i> Review result: <b>
+        <div class="appraisal Verdict_Success"><i class="fa fa-arrow-right"></i> Review conclusion: <b>
 {% if review_data.appraisal == "Awesome" %} Accepted
 {% elif review_data.appraisal == "Success" %} Accepted
 {% elif review_data.appraisal == "Fail" %} Accepted
