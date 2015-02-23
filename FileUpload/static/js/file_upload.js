@@ -17,8 +17,8 @@ function file_upload_loaded() {
         acceptedFiles: $('.file_upload').attr('accepted_files'),
         init: function () {
             this.on("error", function (file, error, xhr) {
-                console.log(error);
-                $(file.previewElement).fadeOut(5000, function () {dropzone_instance.removeFile(file);});
+                dropzone_instance.removeFile(file);
+                alert(error);
             });
             this.on("success", function (file, response) {
                 revert_submit_clicked();
