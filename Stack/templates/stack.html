@@ -91,22 +91,22 @@
 
                 {% if challenge_dict.awesome %}
                 <span class="received_review">
-                  {{ challenge_dict.awesome }} x <span class="review_token green effect6">Great work</span> &nbsp;
+                  {{ challenge_dict.awesome }} x <span class="review_token">Accepted</span> &nbsp;
                 </span>
                 {% endif %}
                 {% if challenge_dict.success %}
                 <span class="received_review">
-                    {{ challenge_dict.success }} x <span class="review_token">Good Work</span> &nbsp;
+                    {{ challenge_dict.success }} x <span class="review_token">Accepted</span> &nbsp;
                 </span>
                 {% endif %}
                 {% if challenge_dict.fail %}
                 <span class="received_review">
-                  {{ challenge_dict.fail }} x <span class="review_token yellow">Barely Acceptable</span> &nbsp;
+                  {{ challenge_dict.fail }} x <span class="review_token">Accepted</span> &nbsp;
                 </span>
                 {% endif %}
                 {% if challenge_dict.nothing %}
                 <span class="received_review">
-                  {{ challenge_dict.nothing }} x <span class="review_token red">Unacceptable</span> &nbsp;
+                  {{ challenge_dict.nothing }} x <span class="review_token red">Plagiarism/Cheated</span> &nbsp;
                 </span>
                 {% endif %}
                 {% if challenge_dict.awesome or challenge_dict.success or challenge_dict.fail or challenge_dict.nothing %}
