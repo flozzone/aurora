@@ -43,9 +43,6 @@
           </li>
         {% endif %}
 
-        <li id="notifications-li" class="unread_notifications{% if unread_notifications|length != 0 %} glow{% endif %}">
-          <a id="unread_notifications"  href="/notifications">{{ unread_notifications|length }}</a>
-        </li>
       </ul>
 
 	  <div class="user_info" style="background-image:url('{{ user.avatar.url }}')" onclick="window.location='{% url 'User:profile' course.short_title %}'">
