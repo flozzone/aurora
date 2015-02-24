@@ -42,10 +42,10 @@
             {% render_review_answers_staff review.id %}
 			
         	<div class="appraisal eval_appraisal">
-            	<input type="radio" id="X1{{forloop.counter}}{{review.id}}" name="reviewgroup{{ stack }}{{ review.id }}" onclick="set_appraisal({{ review.id }}, 'A')" {% if review.appraisal == 'A' %} checked {% endif %}/><label for="X1{{forloop.counter}}{{review.id}}" id="X1t">Great work</label>
-            	<input type="radio" id="X2{{forloop.counter}}{{review.id}}" name="reviewgroup{{ stack }}{{ review.id }}" onclick="set_appraisal({{ review.id }}, 'S')" {% if review.appraisal == 'S' %} checked {% endif %}/><label for="X2{{forloop.counter}}{{review.id}}" id="X2t">Good work</label>
-            	<input type="radio" id="X3{{forloop.counter}}{{review.id}}" name="reviewgroup{{ stack }}{{ review.id }}" onclick="set_appraisal({{ review.id }}, 'F')" {% if review.appraisal == 'F' %} checked {% endif %}/><label for="X3{{forloop.counter}}{{review.id}}" id="X3t">Barely acceptable work</label>
-        		<input type="radio" id="X4{{forloop.counter}}{{review.id}}" name="reviewgroup{{ stack }}{{ review.id }}" onclick="set_appraisal({{ review.id }}, 'N')" {% if review.appraisal == 'N' %} checked {% endif %}/><label for="X4{{forloop.counter}}{{review.id}}" id="X4t">Unacceptable</label>
+            	<input type="radio" id="X1{{forloop.counter}}{{review.id}}" name="reviewgroup{{ stack }}{{ review.id }}" onclick="set_appraisal({{ review.id }}, 'A')" {% if review.appraisal == 'A' %} checked {% endif %}/><label for="X1{{forloop.counter}}{{review.id}}" id="X1t">Better than mine</label>
+            	<input type="radio" id="X2{{forloop.counter}}{{review.id}}" name="reviewgroup{{ stack }}{{ review.id }}" onclick="set_appraisal({{ review.id }}, 'S')" {% if review.appraisal == 'S' %} checked {% endif %}/><label for="X2{{forloop.counter}}{{review.id}}" id="X2t">Acceptable</label>
+            	<input type="radio" id="X3{{forloop.counter}}{{review.id}}" name="reviewgroup{{ stack }}{{ review.id }}" onclick="set_appraisal({{ review.id }}, 'F')" {% if review.appraisal == 'F' %} checked {% endif %}/><label for="X3{{forloop.counter}}{{review.id}}" id="X3t">Requirements missed</label>
+        		<input type="radio" id="X4{{forloop.counter}}{{review.id}}" name="reviewgroup{{ stack }}{{ review.id }}" onclick="set_appraisal({{ review.id }}, 'N')" {% if review.appraisal == 'N' %} checked {% endif %}/><label for="X4{{forloop.counter}}{{review.id}}" id="X4t">Plagiarism/Cheated</label>
         	</div>
 		</div>
 		

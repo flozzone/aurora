@@ -1,5 +1,4 @@
 $(function() {
-	$('.course_selected').removeClass('irrelevant');
 	$('#challenges-li').addClass('uRhere');
 	window.document.title="Aurora: Challenges"
 });

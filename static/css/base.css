@@ -149,12 +149,13 @@ abbr, acronym {
     font-family: 'yanone_kaffeesatzthin';
 	color:rgb(58,201,88);
 	font-size:2.5em;
+	text-shadow: 0 0 5px rgba(0,0,0,0.4);
 	margin-bottom:1em;
 }
 
 .login input{
     font: 1.5em Helvetica Neue, Arial, sans-serif;
-	background:none;
+	background:rgba(0,0,0,0.5);
 	color:rgba(58,201,88,1);
 	box-shadow: 0 0 20px rgba(58,201,88,0.8) inset;
 	width:500px;
@@ -219,13 +220,14 @@ input:-moz-placeholder { color:rgba(58,201,88,0);	text-shadow: 0 0 2px rgba(58,2
 	padding:0.4em;
 	display:block;
 	color:rgba(58,201,88,0.25);
-	text-shadow: 0 0 5px rgba(58,201,88,0.5),0 0 2px rgba(58,201,88,0.5);
+	text-shadow: 0 0 10px rgba(0,0,0,0.4), 0 0 5px rgba(58,201,88,0.5),0 0 2px rgba(58,201,88,0.5);
 }
 
 .login hr {
 	box-shadow: 0 0 5px rgba(58,201,88,0.5),0 0 2px rgba(58,201,88,0.5);
 	border:1px solid rgba(58,201,88,0.25);
 }
+
 .loginButton {
 	text-decoration:none;
 	text-transform:uppercase;
@@ -236,7 +238,7 @@ input:-moz-placeholder { color:rgba(58,201,88,0);	text-shadow: 0 0 2px rgba(58,2
     -moz-appearance:none;
     appearance:none;
 	box-shadow: 0 0 20px rgb(58,201,88);
-	background:none;
+	background:rgba(0,0,0,0.3);
 	border:none;
 	white-space: nowrap;
 	border-radius:0.5em;
@@ -260,6 +262,7 @@ input:-moz-placeholder { color:rgba(58,201,88,0);	text-shadow: 0 0 2px rgba(58,2
 	height:1em;
 	float:left;
 	margin-top:1em;
+	text-shadow: 0 0 10px rgba(0,0,0,0.4);
 }
 
 #checkbox_remember {
