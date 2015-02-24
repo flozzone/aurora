@@ -30,7 +30,6 @@ function isScrolledIntoView(el)
 
 
 $(function() {
-	$('.course_selected').addClass('irrelevant');
 	$('#feed-li').addClass('uRhere');
 	window.document.title="Aurora: Newsfeed"
 	$('.feed_header').click(function(){

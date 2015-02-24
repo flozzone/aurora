@@ -153,11 +153,11 @@
 {% for review_data in reviews %}
       <div class="view_review">
 {% render_review_answers review_data.review_id %}
-        <div class="appraisal Verdict_{{ review_data.appraisal }}"><i class="fa fa-arrow-right"></i> Final verdict: <b>
-{% if review_data.appraisal == "Awesome" %} Great work
-{% elif review_data.appraisal == "Success" %} Good Work
-{% elif review_data.appraisal == "Fail" %} Barely acceptable
-{% elif review_data.appraisal == "Not even trying" %} Unacceptable
+        <div class="appraisal Verdict_Success"><i class="fa fa-arrow-right"></i> Review conclusion: <b>
+{% if review_data.appraisal == "Awesome" %} Accepted
+{% elif review_data.appraisal == "Success" %} Accepted
+{% elif review_data.appraisal == "Fail" %} Accepted
+{% elif review_data.appraisal == "Not even trying" %} Plagiarism or cheated
 {% endif %}
           </b>
         </div>
