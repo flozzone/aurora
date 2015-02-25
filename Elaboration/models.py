@@ -335,20 +335,8 @@ class Elaboration(models.Model):
                 elaborations.append(elaboration)
         return elaborations
 
-    def get_visible_comments(self):
-        comments = []
-        for elaboration in Elaboration.objects.filter(id=self.id):
-            for comment in Comment.objects.filter(visibility=Comment.PUBLIC,
-                                                  content_type=ContentType.objects.get_for_model(Elaboration),
-                                                  object_id=elaboration.id):
-                comments.append(comment)
-        return comments
+    def get_visible_comments_count(self):
+        return self.comments.filter(visibility=Comment.PUBLIC).count()
 
-    def get_invisible_comments(self):
-        comments = []
-        for elaboration in Elaboration.objects.filter(id=self.id):
-            for comment in Comment.objects.filter(visibility=Comment.STAFF,
-                                                  content_type=ContentType.objects.get_for_model(Elaboration),
-                                                  object_id=elaboration.id):
-                comments.append(comment)
-        return comments
+    def get_invisible_comments_count(self):
+        return self.comments.filter(visibility=Comment.STAFF).count()
