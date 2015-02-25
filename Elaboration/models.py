@@ -280,7 +280,7 @@ class Elaboration(models.Model):
 
     @staticmethod
     def get_complaints(context, course):
-        result1 = Elaboration.objects.filter(
+        result = Elaboration.objects.filter(
             challenge__course=course,
             comments__parent=None,
             comments__seen=False,
@@ -288,14 +288,7 @@ class Elaboration(models.Model):
             comments__visibility=Comment.PRIVATE
         ).distinct()
 
-        result2 = Elaboration.objects.filter(
-            review__comments__parent=None,
-            review__comments__seen=False
-        ).exclude(
-            review__comments__visibility=Comment.PRIVATE
-        ).distinct()
-
-        return list(set(result1).union(result2))
+        return result
 
     @staticmethod
     def get_awesome(course):
