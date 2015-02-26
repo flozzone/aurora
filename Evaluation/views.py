@@ -856,7 +856,7 @@ def add_tags(request, course_short_title=None):
     user = AuroraUser.objects.get(pk=user_id)
     user.add_tags_from_text(text)
 
-    return render_to_response('tags.html', {'user': user}, context_instance=RequestContext(request))
+    return render_to_response('tags.html', {'tagged_user': user}, context_instance=RequestContext(request))
 
 @csrf_exempt
 @staff_member_required
@@ -867,4 +867,4 @@ def remove_tag(request, course_short_title=None):
     user = AuroraUser.objects.get(pk=user_id)
     user.remove_tag(tag)
 
-    return render_to_response('tags.html', {'user': user}, context_instance=RequestContext(request))
+    return render_to_response('tags.html', {'tagged_user': user}, context_instance=RequestContext(request))

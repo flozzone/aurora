@@ -51,8 +51,6 @@ $(function() {
             };
        var args = { type: "POST", url: "./remove_tag/", data: data,
            success: function (data) {
-               console.log(tags);
-               console.log(data);
                tags.html(data);
            }
        };
