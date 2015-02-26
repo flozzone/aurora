@@ -18,8 +18,8 @@
            	 	<div title="Acceptable" class="success_reviews indicator">{{ elaboration.get_success_reviews|length }}</div>
             	<div title="Requirements missed acceptable work" class="fail_reviews indicator">{{ elaboration.get_fail_reviews|length }}</div>
             	<div title="Plagiarism/Cheated" class="notry_reviews indicator">{{ elaboration.get_nothing_reviews|length }}</div>
-            	<div title="Public comments" class="visible_comments indicator">{{ elaboration.get_visible_comments|length }}</div>
-            	<div title="Private comments" class="invisible_comments indicator">{{ elaboration.get_invisible_comments|length }}</div></td>
+            	<div title="Public comments" class="visible_comments indicator">{{ elaboration.get_visible_comments_count }}</div>
+            	<div title="Private comments" class="invisible_comments indicator">{{ elaboration.get_invisible_comments_count }}</div></td>
         </tr>
     </table>
 	

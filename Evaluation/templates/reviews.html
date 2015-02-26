@@ -48,15 +48,6 @@
         		<input type="radio" id="X4{{forloop.counter}}{{review.id}}" name="reviewgroup{{ stack }}{{ review.id }}" onclick="set_appraisal({{ review.id }}, 'N')" {% if review.appraisal == 'N' %} checked {% endif %}/><label for="X4{{forloop.counter}}{{review.id}}" id="X4t">Plagiarism/Cheated</label>
         	</div>
 		</div>
-		
-{#        {% for comment in review.get_comments %}#}
-{#            <div class="spacer"></div>#}
-{#            <div class="review_head">Comment</div>#}
-{#            <div>#}
-{#                {{ comment.text }}#}
-{#                <br/>from {{ comment.author }}#}
-{#            </div>#}
-{#        {% endfor %}#}
     {% endfor %}
 
 </div>
