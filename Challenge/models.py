@@ -65,8 +65,8 @@ class Challenge(models.Model):
         7: "Final task evaluated. Points received: "
     }
 
-    def __unicode__(self):
-        return str(self.title)
+    def __str__(self):
+        return u'%s' % self.title
 
     def get_course(self):
         return self.course
