@@ -7,7 +7,7 @@ function notifications_loaded() {
 $(notifications_loaded);
 
 function read_all_button_clicked(event) {
-    $.get("/notifications/read", function (data) {
+    $.get('/' + course_short_title + '/notifications/read', function (data) {
         location.reload();
     });
 }

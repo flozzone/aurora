@@ -11,7 +11,7 @@ function homepage_loaded() {
 function notifications_refresh() {
     (function refresh_worker() {
         $.ajax({
-            url: '/notifications/refresh',
+            url: '/' + course_short_title + '/notifications/refresh',
             success: function (data) {
                 if ($.isNumeric(data)) {
                     $('#unread_notifications').html(data);

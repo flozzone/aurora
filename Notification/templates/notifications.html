@@ -10,7 +10,7 @@
   {% if notifications|length > 0 %}<button id="read_all_button" class="irrelevant">Mark all as read</button>{% else %} <button class="irrelevant" style="color:black">nothing here</button> {% endif %}
   <div class="notificationList">
   {% for notification in notifications %}
-    <a href="/notifications?id={{ notification.id }}{% if notification.link %}&link={{ notification.link }}{% endif %}">
+    <a href="{% url 'Notification:list' course.short_title %}?id={{ notification.id }}{% if notification.link %}&link={{ notification.link }}{% endif %}">
       <div class="notification {% if notification.read %}read{% else %}unread{% endif %} {% cycle 'darkRow' 'lightRow' %}">
 		  {% if notification.read %}{% else %}<script>$('#read_all_button').removeClass('irrelevant');</script>{% endif %}
         <img src="{{ notification.image_url }}"/>
