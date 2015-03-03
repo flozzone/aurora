@@ -723,7 +723,12 @@ def review_answer(request, course_short_title=None):
         else:
             elaborations.order_by('submission_time')
         request.session['elaborations'] = serializers.serialize('json', elaborations)
-    return HttpResponse()
+
+        if(review.elaboration.is_reviewed_2times()):
+            evaluation_url = "./"
+        else:
+            evaluation_url = './detail?elaboration_id=' + str(review.elaboration.id)
+    return HttpResponse(evaluation_url)
 
 
 @login_required()
