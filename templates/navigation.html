@@ -10,18 +10,7 @@
   <div class="pagehead">
     <div class="headline">
       <a href="{% url 'home' course.short_title %}">Aurora</a>
-      {% if available_courses|length > 1 %}
-	  <div class="course_selected" onclick="if(!$(this).hasClass('irrelevant')){$('#course_select').toggle(100);}"> {{course.title}} <i class="fa fa-angle-down"></i>
-        <ul id="course_select">
-          {% for available_course in available_courses %}
-            <li class="ct_menu {% if available_course.id == course.id %}selected{% endif %}" data-shortname="{{ course.short_title }}" >{{course.title}}</li>
-          {% endfor %}
-        </ul>
-	  </div>
-	  {% else %}
-		  <div class="course_selected"> {{course.title}}</div>
-
-      {% endif %}
+	  <div class="course_selected" onclick="location.href='/'">{{course.title}}</div>
     </div>
 
 	<script>
@@ -43,13 +32,9 @@
         <li id="slides-li">
           <a href="{% url 'Slides:start' course.short_title %}">Slides</a>
         </li>
-
-        <li id="bookmarks-li">
-          <a href="/bookmarks">Bookmarks [defunct]</a>
-        </li>
-		
+			
         <li id="bugs-li">
-          <a href="http://titanpad.com/iBHNzbfPb8" target="_blank">Bugs &amp; Feedback</a>
+          <a href="https://titanpad.com/MBP5pgJkGd" target="_blank">Bugs &amp; Feedback</a>
         </li>
 
         {% if user.is_staff %}
@@ -58,9 +43,6 @@
           </li>
         {% endif %}
 
-        <li id="notifications-li" class="unread_notifications{% if unread_notifications|length != 0 %} glow{% endif %}">
-          <a id="unread_notifications"  href="/notifications">{{ unread_notifications|length }}</a>
-        </li>
       </ul>
 
 	  <div class="user_info" style="background-image:url('{{ user.avatar.url }}')" onclick="window.location='{% url 'User:profile' course.short_title %}'">

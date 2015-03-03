@@ -164,7 +164,7 @@ def top_level_tasks(request, course_short_title=None):
 @staff_member_required
 def complaints(request, course_short_title=None):
     course = Course.get_or_raise_404(short_title=course_short_title)
-    elaborations = Elaboration.get_complaints(RequestContext(request), course)
+    elaborations = Elaboration.get_complaints(course)
 
     # sort elaborations by submission time
     if type(elaborations) == list:
@@ -741,7 +741,7 @@ def back(request, course_short_title=None):
     if selection == "non_adequate_work":
         elaborations = Elaboration.get_non_adequate_work()
     if selection == "complaints":
-        elaborations = Elaboration.get_complaints(RequestContext(request))
+        elaborations = Elaboration.get_complaints(course)
     if selection == "awesome":
         elaborations = Elaboration.get_awesome()
     if selection == "evaluated_non_adequate_work":
@@ -856,7 +856,7 @@ def add_tags(request, course_short_title=None):
     user = AuroraUser.objects.get(pk=user_id)
     user.add_tags_from_text(text)
 
-    return render_to_response('tags.html', {'user': user}, context_instance=RequestContext(request))
+    return render_to_response('tags.html', {'tagged_user': user}, context_instance=RequestContext(request))
 
 @csrf_exempt
 @staff_member_required
@@ -867,4 +867,4 @@ def remove_tag(request, course_short_title=None):
     user = AuroraUser.objects.get(pk=user_id)
     user.remove_tag(tag)
 
-    return render_to_response('tags.html', {'user': user}, context_instance=RequestContext(request))
+    return render_to_response('tags.html', {'tagged_user': user}, context_instance=RequestContext(request))

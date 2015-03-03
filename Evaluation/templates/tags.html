@@ -3,9 +3,9 @@
 {% endblock %}
 
 <div class="tag_list">
-{% for tag in user.tags.names %}
-    <div class="tag tag_remove" name="{{ tag }}" user_id="{{ user.id }}">{{ tag }}
+{% for tag in tagged_user.tags.names %}
+    <div class="tag tag_remove" name="{{ tag }}" user_id="{{ tagged_user.id }}">{{ tag }}
     </div>
 {% endfor %}
 </div>
-<div class="tag_input" id="tag_input" user_id="{{ user.id }}" contenteditable="true"></div><div class="add_tags_btn"><i class="fa fa-plus"></i></div>
+<div class="tag_input" id="tag_input" user_id="{{ tagged_user.id }}" contenteditable="true"></div><div class="add_tags_btn"><i class="fa fa-plus"></i></div>

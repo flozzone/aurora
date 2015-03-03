@@ -9,6 +9,7 @@ import AuroraProject.views
 
 urlpatterns = patterns('',
     # TODO: add home without course
+    url(r'^$', 'AuroraProject.views.course_selection', name='course_selection'),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),

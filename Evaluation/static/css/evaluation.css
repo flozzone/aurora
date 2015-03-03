@@ -38,7 +38,6 @@
 }
 
 .comments {
-	border-top:1px dashed silver;
 	border-bottom:1px dashed silver;
 }
 
@@ -407,23 +406,27 @@ th {
     color: #666666;
     padding: 2px 0 0 5px;
     -moz-box-sizing: border-box;
-	width:85%;
+	width:84%;
 }
 
 .remove_sel_challenge_btn, .remove_sel_user_btn, .remove_sel_tag_btn {
-    float: right;
-    border: 1px solid #e47a82;
-    border-radius: 3px;
-    background-color: #e48e9a;
+	float:left;
+    border-radius: 0 30px 30px 0;
+    background-color: #E7FFCF;
     height:1.50em;
-    margin-left:5px;
-    color: white;
+    color: lightgray;
     text-align: center;
     padding: 6px 0 0 0;
     -moz-box-sizing: border-box;
 	cursor:pointer;
 	width:10%;
 }
+
+.remove_sel_challenge_btn:hover, .remove_sel_user_btn:hover, .remove_sel_tag_btn:hover {
+    background-color: #d7eFbF;
+	color:red;
+}
+
 
 .add_tags_btn {
     float: right;

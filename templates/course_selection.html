@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Aurora</title>
+  <link rel="shortcut icon" href="{{ STATIC_URL }}img/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="{{ STATIC_URL }}img/favicon.ico" type="image/x-icon">
+  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-2.0.3.js"></script>
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/base.css" type="text/css" media="screen"/>
+
+</head>
+<body>
+
+{% block content %}
+    <div class="headline">Welcome to Aurora</div>
+    Please select a course:<br>
+    {% for course in courses %}
+        <a href="{% url 'home' course.short_title %}">{{ course.title }}</a><br>
+    {% endfor %}
+{% endblock %}
+
+</body>
+</html>

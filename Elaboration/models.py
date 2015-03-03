@@ -1,6 +1,5 @@
 from datetime import datetime, timedelta
 from django.contrib.contenttypes.fields import GenericRelation
-from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.db.models import Count, Min
 
@@ -12,11 +11,12 @@ from ReviewAnswer.models import ReviewAnswer
 from collections import Counter
 from taggit.managers import TaggableManager
 
+
 class Elaboration(models.Model):
     challenge = models.ForeignKey('Challenge.Challenge')
     user = models.ForeignKey('AuroraUser.AuroraUser')
     creation_time = models.DateTimeField(auto_now_add=True)
-    elaboration_text = models.TextField(null=True)
+    elaboration_text = models.TextField(default='')
     submission_time = models.DateTimeField(null=True)
     tags = TaggableManager()
     comments = GenericRelation(Comment)
@@ -279,8 +279,8 @@ class Elaboration(models.Model):
         return not self.get_nothing_reviews().exists()
 
     @staticmethod
-    def get_complaints(context, course):
-        result1 = Elaboration.objects.filter(
+    def get_complaints(course):
+        result = Elaboration.objects.filter(
             challenge__course=course,
             comments__parent=None,
             comments__seen=False,
@@ -288,14 +288,7 @@ class Elaboration(models.Model):
             comments__visibility=Comment.PRIVATE
         ).distinct()
 
-        result2 = Elaboration.objects.filter(
-            review__comments__parent=None,
-            review__comments__seen=False
-        ).exclude(
-            review__comments__visibility=Comment.PRIVATE
-        ).distinct()
-
-        return list(set(result1).union(result2))
+        return result
 
     @staticmethod
     def get_awesome(course):
@@ -342,30 +335,8 @@ class Elaboration(models.Model):
                 elaborations.append(elaboration)
         return elaborations
 
-    def get_visible_comments(self):
-        comments = []
-        for review in Review.objects.filter(elaboration=self.id):
-            for comment in Comment.objects.filter(visibility=Comment.PUBLIC,
-                                                  content_type=ContentType.objects.get_for_model(Review),
-                                                  object_id=review.id):
-                comments.append(comment)
-        for elaboration in Elaboration.objects.filter(id=self.id):
-            for comment in Comment.objects.filter(visibility=Comment.PUBLIC,
-                                                  content_type=ContentType.objects.get_for_model(Elaboration),
-                                                  object_id=elaboration.id):
-                comments.append(comment)
-        return comments
+    def get_visible_comments_count(self):
+        return self.comments.filter(visibility=Comment.PUBLIC).count()
 
-    def get_invisible_comments(self):
-        comments = []
-        for review in Review.objects.filter(elaboration=self.id):
-            for comment in Comment.objects.filter(visibility=Comment.STAFF,
-                                                  content_type=ContentType.objects.get_for_model(Review),
-                                                  object_id=review.id):
-                comments.append(comment)
-        for elaboration in Elaboration.objects.filter(id=self.id):
-            for comment in Comment.objects.filter(visibility=Comment.STAFF,
-                                                  content_type=ContentType.objects.get_for_model(Elaboration),
-                                                  object_id=elaboration.id):
-                comments.append(comment)
-        return comments
+    def get_invisible_comments_count(self):
+        return self.comments.filter(visibility=Comment.STAFF).count()

@@ -1,8 +1,9 @@
 Dropzone.autoDiscover = false;
 
-
 $(file_upload_loaded);
+
 var dropzone_instance;
+
 function file_upload_loaded() {
     if (!$(".file_upload").length) {
         return;
@@ -15,61 +16,52 @@ function file_upload_loaded() {
         dictRemoveFile: 'REMOVE',
         acceptedFiles: $('.file_upload').attr('accepted_files'),
         init: function () {
-            this.on("drop", function (file, response) {
-                $('#EWfE').addClass('nope');
-            });
-            this.on("sending", function (file, response) {
-                $('#EWfE').addClass('nope');
+            this.on("error", function (file, error, xhr) {
+                dropzone_instance.removeFile(file);
+                alert(error);
             });
             this.on("success", function (file, response) {
-                if (this.getQueuedFiles().length == 0 && this.getAcceptedFiles().length != 0) {
-                    $('#EWfE').removeClass('nope')
-                }
                 revert_submit_clicked();
                 var data = JSON.parse(response);
                 file.id = data.id;
                 var elaboration_id = $('#elaboration_id').val();
                 if (file.type === 'application/pdf') {
+                    console.log('this is a pdf');
+                    dropzone_instance.createThumbnailFromUrl(file, static_url + 'img/pdf_icon.jpg', function(dataURL) {$(file.previewElement).find('img').attr('src', dataURL)}, 'image/png');
                     $(file.previewElement).addClass('dz-image-preview');
+                    $(file.previewElement).addClass('dz-complete');
+                    $(file.previewElement).addClass('dz-success');
                     $(file.previewElement).find('img').show();
-                    $(file.previewElement).find('img').attr('src', static_url + 'img/pdf_icon.jpg');
-                    $(file.previewElement).find('img').attr('alt', data.url);
-                    $(file.previewElement).find('img').wrap(function () {
-                        return "<a href='/" + data.url + "' title='" + file.name + "'></div>";
-                    });
                 } else {
-                    $(file.previewElement).find('img').wrap(function () {
-                        return "<a href='" + data.url + "' data-lightbox='preview' title='" + file.name + "'></div>";
+                    var errors = 0;
+                    dropzone_instance.files.forEach(function (check_file) {
+                        if (check_file.status === "error") {
+                            errors++;
+                        }
+                        if (file === check_file) {
+                            $(file.previewElement).append('<div class="fig">Fig: ' + (dropzone_instance.files.indexOf(file) + 1 - errors) + '</div>');
+                        }
                     });
-                    $(file.previewElement).find('img').attr('src', data.url);
                 }
-                var errors = 0;
-                dropzone_instance.files.forEach(function (check_file) {
-                    if (check_file.status === "error") {
-                        errors++;
-                    }
-                    if (file === check_file) {
-                        $(file.previewElement).append('<div class="fig">Fig: ' + (dropzone_instance.files.indexOf(file) + 1 - errors) + '</div>');
-                    }
+                $(file.previewElement).wrap(function () {
+                    return "<a href='" + data.url + "' target='_blank' title='" + file.name + "'></div>";
                 });
             });
             this.on("removedfile", function (file) {
-                if (this.getQueuedFiles().length == 0) {
-                    $('#EWfE').removeClass('nope')
-                }
                 revert_submit_clicked();
                 if (file.id) {
                     var url = '/fileupload/remove?id=' + file.id;
 
-                    $.get(url, function (data) {
-                    });
-                    var i = 0;
-                    dropzone_instance.files.forEach(function (file) {
-                        if (file.status !== "error") {
-                            i++;
-                        }
-                        $(file.previewElement).find('.fig').replaceWith('<div class="fig">Fig: ' + i + '</div>');
-                    });
+                    $.get(url, function (data) {});
+                    if (file.type !== 'application/pdf') {
+                        var i = 0;
+                        dropzone_instance.files.forEach(function (file) {
+                            if (file.status !== "error") {
+                                i++;
+                            }
+                            $(file.previewElement).find('.fig').replaceWith('<div class="fig">Fig: ' + i + '</div>');
+                        });
+                    }
                 }
             });
         }
@@ -89,17 +81,7 @@ function file_upload_loaded() {
     }
     dropzone_instance = new Dropzone("#dropzone");
     var elaboration_id = $('#elaboration_id').val();
-    if (elaboration_id === '') {
-        var challenge_id = $('.challenge').attr('id');
-        var url = SAVE_URL;
-        $.post(url, {'challenge_id': challenge_id, 'elaboration_text': ''}, function (data) {
-            elaboration_id = data;
-            $('#elaboration_id').val(elaboration_id);
-            load_files(elaboration_id, is_submitted)
-        });
-    } else {
-        load_files(elaboration_id, is_submitted)
-    }
+    load_files(elaboration_id, is_submitted)
 }
 
 function load_files(elaboration_id, is_submitted) {
@@ -118,18 +100,18 @@ function load_files(elaboration_id, is_submitted) {
             var mockFile = { name: file.name, size: file.size, path: file.url, type: 'image/*', status: Dropzone.success};
             dropzone_instance.emit("addedfile", mockFile);
             if (file.url.match(/pdf$/)) {
-                dropzone_instance.emit("thumbnail", mockFile, static_url + 'img/pdf_icon.jpg');
-                $(mockFile.previewElement).find('img').wrap(function () {
-                    return "<a href='/" + file.url + "' title='" + file.name + "'></div>";
-                });
+                console.log('I am a pdf');
+                dropzone_instance.createThumbnailFromUrl(mockFile, static_url + 'img/pdf_icon.jpg', function(dataURL) {$(file.previewElement).find('img').attr('src', dataURL)}, 'image/png');
+                $(mockFile.previewElement).addClass('dz-image-preview');
             } else {
-                dropzone_instance.emit("thumbnail", mockFile, file.url);
-                $(mockFile.previewElement).find('img').wrap(function () {
-                    return "<a href='" + file.url + "' data-lightbox='preview' title='" + file.name + "'></div>";
-                });
+                dropzone_instance.createThumbnailFromUrl(mockFile, file.url, function(dataURL) {$(mockFile.previewElement).find('img').attr('src', dataURL)}, 'image/png');
                 $(mockFile.previewElement).append('<div class="fig">Fig: ' + i + '</div>');
             }
             mockFile.id = file.id;
+            $(mockFile.previewElement).find(".dz-progress").remove();
+            $(mockFile.previewElement).wrap(function () {
+                return "<a href='" + file.url + "' target='_blank' title='" + mockFile.name + "'></div>";
+            });
             dropzone_instance.files.push(mockFile);
         });
     });
