@@ -268,7 +268,7 @@ def questions(request, course_short_title=None):
 
     return render_to_response('evaluation.html',
                               {'challenges': challenges,
-                               'overview': render_to_string('overview.html', {'elaborations': elaborations, 'course': course},
+                               'overview': render_to_string('questions.html', {'challenges': challenges, 'course': course},
                                                             RequestContext(request)),
                                'count_questions': request.session.get('count', '0'),
                                'stabilosiert_questions': 'stabilosiert',
