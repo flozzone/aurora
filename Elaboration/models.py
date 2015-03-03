@@ -1,6 +1,5 @@
 from datetime import datetime, timedelta
 from django.contrib.contenttypes.fields import GenericRelation
-from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.db.models import Count, Min
 
@@ -11,6 +10,7 @@ from FileUpload.models import UploadFile
 from ReviewAnswer.models import ReviewAnswer
 from collections import Counter
 from taggit.managers import TaggableManager
+
 
 class Elaboration(models.Model):
     challenge = models.ForeignKey('Challenge.Challenge')
@@ -279,7 +279,7 @@ class Elaboration(models.Model):
         return not self.get_nothing_reviews().exists()
 
     @staticmethod
-    def get_complaints(context, course):
+    def get_complaints(course):
         result = Elaboration.objects.filter(
             challenge__course=course,
             comments__parent=None,
