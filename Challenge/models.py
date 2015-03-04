@@ -1,8 +1,8 @@
 from datetime import datetime, timedelta
-from django.db.models import ManyToManyField
 import os
 
 from django.db import models
+from django.contrib.contenttypes.fields import GenericRelation
 
 from Comments.models import Comment
 from Stack.models import StackChallengeRelation
@@ -30,6 +30,7 @@ class Challenge(models.Model):
     # This is a comma separated list of mime types or file extensions. Eg.: image/*,application/pdf,.psd.
     accepted_files = models.CharField(max_length=100, default="image/*,application/pdf", blank=True)
     course = models.ForeignKey(Course)
+    comments = GenericRelation(Comment)
 
     NOT_ENABLED = -1
     NOT_STARTED = 0
@@ -248,8 +249,16 @@ class Challenge(models.Model):
                 return self.EVALUATED
 
     @staticmethod
-    def get_questions(context):
-        return Comment.get_ref_objects_with_unanswered_user_comments(Challenge)
+    def get_questions(course):
+        result = Challenge.objects.filter(
+            course=course,
+            comments__parent=None,
+            comments__seen=False,
+        ).exclude(
+            comments__visibility=Comment.PRIVATE
+        ).distinct()
+
+        return result
 
     def is_in_lock_period(self, user, course):
         PERIOD = 8

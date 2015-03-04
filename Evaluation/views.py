@@ -5,6 +5,7 @@ import json
 from django.contrib.contenttypes.models import ContentType
 
 from django.core import serializers
+from django.core.urlresolvers import reverse
 from django.db.models import TextField
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
@@ -254,8 +255,8 @@ def awesome(request, course_short_title=None):
 @login_required()
 @staff_member_required
 def questions(request, course_short_title=None):
-    challenges = Challenge.get_questions(RequestContext(request))
     course = Course.get_or_raise_404(short_title=course_short_title)
+    challenges = Challenge.get_questions(course)
 
     # store selected challenges in session
     request.session['challenges'] = serializers.serialize('json', challenges)
