@@ -164,7 +164,7 @@ def top_level_tasks(request, course_short_title=None):
 @staff_member_required
 def complaints(request, course_short_title=None):
     course = Course.get_or_raise_404(short_title=course_short_title)
-    elaborations = Elaboration.get_complaints(RequestContext(request), course)
+    elaborations = Elaboration.get_complaints(course)
 
     # sort elaborations by submission time
     if type(elaborations) == list:
@@ -268,7 +268,7 @@ def questions(request, course_short_title=None):
 
     return render_to_response('evaluation.html',
                               {'challenges': challenges,
-                               'overview': render_to_string('overview.html', {'elaborations': elaborations, 'course': course},
+                               'overview': render_to_string('questions.html', {'challenges': challenges, 'course': course},
                                                             RequestContext(request)),
                                'count_questions': request.session.get('count', '0'),
                                'stabilosiert_questions': 'stabilosiert',
@@ -723,7 +723,12 @@ def review_answer(request, course_short_title=None):
         else:
             elaborations.order_by('submission_time')
         request.session['elaborations'] = serializers.serialize('json', elaborations)
-    return HttpResponse()
+
+        if(review.elaboration.is_reviewed_2times()):
+            evaluation_url = "./"
+        else:
+            evaluation_url = './detail?elaboration_id=' + str(review.elaboration.id)
+    return HttpResponse(evaluation_url)
 
 
 @login_required()
@@ -741,7 +746,7 @@ def back(request, course_short_title=None):
     if selection == "non_adequate_work":
         elaborations = Elaboration.get_non_adequate_work()
     if selection == "complaints":
-        elaborations = Elaboration.get_complaints(RequestContext(request))
+        elaborations = Elaboration.get_complaints(course)
     if selection == "awesome":
         elaborations = Elaboration.get_awesome()
     if selection == "evaluated_non_adequate_work":

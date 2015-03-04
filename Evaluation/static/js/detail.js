@@ -230,15 +230,13 @@ $(function() {
         error: function (data) {
             alert('error submitting review');
         },
-        success: review_submitted
+        success: function (evaluation_url) {
+            window.location.href = evaluation_url;
+        }
     };
     $.ajax(args);
    });
 });
-
-function review_submitted() {
-    window.location.href = '../evaluation';
-}
 
 $(function() {
    $(".review_list").click(function(event) {

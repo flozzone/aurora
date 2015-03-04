@@ -267,7 +267,13 @@ h1 {
 
 .review_box.active {
     cursor: pointer;
-	background-color:rgba(58,201,88,0.5);
+	color:rgba(58,201,88,1);
+	background-color:white;
+	box-shadow: 0 0 5px rgb(58,201,88);
+}
+
+.review_box.active i {
+	position:relative;
 }
 
 .fig {
