@@ -11,6 +11,7 @@
 </script>
 
 {% for stack_data in stacks %}
+{% if stack_data.course_title == course.title %}
 <div class="points_table">
     <table>
         <tr>
@@ -33,4 +34,5 @@
         </tr>
     </table>
 </div>
+{% endif %}
 {% endfor %} 
