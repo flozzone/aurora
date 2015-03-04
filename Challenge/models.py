@@ -45,7 +45,7 @@ class Challenge(models.Model):
         -1: "Not enabled.",
         0: "Not started (Click the green right-arrow-button).",
         1: "Not submitted.",
-        2: "Reviews missing (Click the green write-review-buttons to the left).",
+        2: "Waiting for you to write a review (click green pen)",
         3: "Bad review. We need to look at this. Please be patient.",
         4: "Done, waiting for reviews by others.",  # can proceed but will be a problem for final challenge
         5: "Done, peer reviewed.",
