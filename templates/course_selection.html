@@ -65,8 +65,13 @@
     font-family: 'yanone_kaffeesatzthin';
 	color:rgb(58,201,88);
 	font-size:2.5em;
-	text-shadow: 0 0 5px rgb(58,201,88);
 	margin-bottom:1em;
+}
+
+.choicetitle {
+	font-family: 'yanone_kaffeesatzlight';
+	color:white;
+	font-size:1.5em;
 }
 
 .choice {
@@ -89,8 +94,8 @@
 	margin:auto;
     position: absolute;
     top: 0; left: 0; bottom: 0; right: 0;
-	width:400px;
-	height:300px;
+	width:500px;
+	height:700px;
 }
 
 .base {
@@ -107,9 +112,10 @@
 </div>
 	<div class="centered">
 		<div class="title">Welcome to Aurora</div>
-		<div class="choice">Choose<br>
+		
+		<div class="choice">
 		{% for course in courses %}
-   			 <a href="{% url 'home' course.short_title %}">{{ course.title }}</a><br>
+   			 &rarr; <a href="{% url 'home' course.short_title %}">{{ course.title }}</a><br>
     	{% endfor %}</div>
 	</div>
 	{% endblock %}
