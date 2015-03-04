@@ -11,7 +11,7 @@ function homepage_loaded() {
 function notifications_refresh() {
     (function refresh_worker() {
         $.ajax({
-            url: '/notifications/refresh',
+            url: NOTIFICATION_REFRESH_URL,
             success: function (data) {
                 if ($.isNumeric(data)) {
                     $('#unread_notifications').html(data);

@@ -5,6 +5,7 @@ import json
 from django.contrib.contenttypes.models import ContentType
 
 from django.core import serializers
+from django.core.urlresolvers import reverse
 from django.db.models import TextField
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
@@ -281,6 +282,7 @@ def questions(request, course_short_title=None):
 @login_required()
 @staff_member_required
 def detail(request, course_short_title=None):
+
     course = Course.get_or_raise_404(short_title=course_short_title)
 
     # get selected elaborations from session
@@ -521,7 +523,7 @@ def submit_evaluation(request, course_short_title=None):
         course=course,
         text=Notification.SUBMISSION_EVALUATED + elaboration.challenge.title,
         image_url=elaboration.challenge.image.url,
-        link="/challenges/stack?id=" + str(elaboration.challenge.get_stack().id)
+        link=reverse('Challenge:stack', args=[course_short_title]) + '?id=' + str(elaboration.challenge.get_stack().id)
     )
 
     obj.read = False
@@ -546,7 +548,7 @@ def reopen_evaluation(request, course_short_title=None):
         course=course,
         text=Notification.SUBMISSION_EVALUATED + evaluation.submission.challenge.title,
         image_url=evaluation.submission.challenge.image.url,
-        link="/challenges/stack?id=" + str(evaluation.submission.challenge.get_stack().id)
+        link=reverse('Challenge:stack', args=[course_short_title]) + '?id=' + str(evaluation.submission.challenge.get_stack().id)
     )
     obj.creation_time = datetime.now()
     obj.read = False
