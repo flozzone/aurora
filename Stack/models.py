@@ -64,6 +64,8 @@ class Stack(models.Model):
                     return False
         return True
 
+    def __str__(self):
+        return u'%s' % self.title
 
 class StackChallengeRelation(models.Model):
     stack = models.ForeignKey('Stack.Stack')

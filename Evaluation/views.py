@@ -5,6 +5,7 @@ import json
 from django.contrib.contenttypes.models import ContentType
 
 from django.core import serializers
+from django.core.urlresolvers import reverse
 from django.db.models import TextField
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
@@ -18,6 +19,7 @@ from django.db.models import Q
 from django.db import models
 from taggit.models import Tag, TaggedItem
 from django.views.generic import DetailView, ListView
+from django.views.decorators.http import require_POST
 
 from Challenge.models import Challenge
 from Comments.models import Comment
@@ -30,7 +32,6 @@ from ReviewAnswer.models import ReviewAnswer
 from ReviewQuestion.models import ReviewQuestion
 from Stack.models import Stack
 from Notification.models import Notification
-
 
 @login_required()
 @staff_member_required
@@ -164,7 +165,7 @@ def top_level_tasks(request, course_short_title=None):
 @staff_member_required
 def complaints(request, course_short_title=None):
     course = Course.get_or_raise_404(short_title=course_short_title)
-    elaborations = Elaboration.get_complaints(RequestContext(request), course)
+    elaborations = Elaboration.get_complaints(course)
 
     # sort elaborations by submission time
     if type(elaborations) == list:
@@ -254,8 +255,8 @@ def awesome(request, course_short_title=None):
 @login_required()
 @staff_member_required
 def questions(request, course_short_title=None):
-    challenges = Challenge.get_questions(RequestContext(request))
     course = Course.get_or_raise_404(short_title=course_short_title)
+    challenges = Challenge.get_questions(course)
 
     # store selected challenges in session
     request.session['challenges'] = serializers.serialize('json', challenges)
@@ -268,7 +269,7 @@ def questions(request, course_short_title=None):
 
     return render_to_response('evaluation.html',
                               {'challenges': challenges,
-                               'overview': render_to_string('overview.html', {'elaborations': elaborations, 'course': course},
+                               'overview': render_to_string('questions.html', {'challenges': challenges, 'course': course},
                                                             RequestContext(request)),
                                'count_questions': request.session.get('count', '0'),
                                'stabilosiert_questions': 'stabilosiert',
@@ -281,6 +282,7 @@ def questions(request, course_short_title=None):
 @login_required()
 @staff_member_required
 def detail(request, course_short_title=None):
+
     course = Course.get_or_raise_404(short_title=course_short_title)
 
     # get selected elaborations from session
@@ -521,7 +523,7 @@ def submit_evaluation(request, course_short_title=None):
         course=course,
         text=Notification.SUBMISSION_EVALUATED + elaboration.challenge.title,
         image_url=elaboration.challenge.image.url,
-        link="/challenges/stack?id=" + str(elaboration.challenge.get_stack().id)
+        link=reverse('Challenge:stack', args=[course_short_title]) + '?id=' + str(elaboration.challenge.get_stack().id)
     )
 
     obj.read = False
@@ -546,7 +548,7 @@ def reopen_evaluation(request, course_short_title=None):
         course=course,
         text=Notification.SUBMISSION_EVALUATED + evaluation.submission.challenge.title,
         image_url=evaluation.submission.challenge.image.url,
-        link="/challenges/stack?id=" + str(evaluation.submission.challenge.get_stack().id)
+        link=reverse('Challenge:stack', args=[course_short_title]) + '?id=' + str(evaluation.submission.challenge.get_stack().id)
     )
     obj.creation_time = datetime.now()
     obj.read = False
@@ -689,41 +691,48 @@ def load_reviews(request, course_short_title=None):
                               RequestContext(request))
 
 
+@require_POST
 @csrf_exempt
 @login_required()
 @staff_member_required
 def review_answer(request, course_short_title=None):
-    if request.POST:
-        course = Course.get_or_raise_404(short_title=course_short_title)
+    course = Course.get_or_raise_404(short_title=course_short_title)
 
-        data = request.body.decode(encoding='UTF-8')
-        data = json.loads(data)
+    data = request.body.decode(encoding='UTF-8')
+    data = json.loads(data)
 
-        user = RequestContext(request)['user']
-        answers = data['answers']
+    user = RequestContext(request)['user']
+    answers = data['answers']
 
-        review = Review.objects.create(elaboration_id=request.session.get('elaboration_id', ''), reviewer_id=user.id)
+    review = Review.objects.create(elaboration_id=request.session.get('elaboration_id', ''), reviewer_id=user.id)
 
-        review.appraisal = data['appraisal']
-        review.submission_time = datetime.now()
-        review.save()
-        for answer in answers:
-            question_id = answer['question_id']
-            text = answer['answer']
-            review_question = ReviewQuestion.objects.get(pk=question_id)
-            ReviewAnswer(review=review, review_question=review_question, text=text).save()
-        if review.appraisal == review.NOTHING:
-            Notification.bad_review(review)
-        else:
-            Notification.enough_peer_reviews(review)
-        # update overview
-        elaborations = Elaboration.get_missing_reviews(course)
-        if type(elaborations) == list:
-            elaborations.sort(key=lambda elaboration: elaboration.submission_time)
-        else:
-            elaborations.order_by('submission_time')
-        request.session['elaborations'] = serializers.serialize('json', elaborations)
-    return HttpResponse()
+    review.appraisal = data['appraisal']
+    review.submission_time = datetime.now()
+    review.save()
+    for answer in answers:
+        question_id = answer['question_id']
+        text = answer['answer']
+        review_question = ReviewQuestion.objects.get(pk=question_id)
+        ReviewAnswer(review=review, review_question=review_question, text=text).save()
+    if review.appraisal == review.NOTHING:
+        Notification.bad_review(review)
+    else:
+        Notification.enough_peer_reviews(review)
+    # update overview
+    elaborations = Elaboration.get_missing_reviews(course)
+    if type(elaborations) == list:
+        elaborations.sort(key=lambda elaboration: elaboration.submission_time)
+    else:
+        elaborations.order_by('submission_time')
+    request.session['elaborations'] = serializers.serialize('json', elaborations)
+
+    if review.elaboration.is_reviewed_2times():
+        evaluation_url = reverse('Evaluation:home', args=[course_short_title])
+    else:
+        evaluation_url = reverse('Evaluation:detail', args=[course_short_title])\
+            + "?elaboration_id=" + str(review.elaboration.id)
+
+    return HttpResponse(evaluation_url)
 
 
 @login_required()
@@ -741,7 +750,7 @@ def back(request, course_short_title=None):
     if selection == "non_adequate_work":
         elaborations = Elaboration.get_non_adequate_work()
     if selection == "complaints":
-        elaborations = Elaboration.get_complaints(RequestContext(request))
+        elaborations = Elaboration.get_complaints(course)
     if selection == "awesome":
         elaborations = Elaboration.get_awesome()
     if selection == "evaluated_non_adequate_work":

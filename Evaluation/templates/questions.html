@@ -2,8 +2,9 @@
 {% load comments %}
 
 {% block content %}
+    {% comments_boilerplate %}
 
-    {% paginate 1 challenges with "/evaluation/" %}
+    {% paginate 1 challenges %}
 
     {% get_pages %}
     {{ pages.previous }} {{ pages.next }}
@@ -19,7 +20,7 @@
             </div>
         </div>
         <div>
-            {% render_comment_list for challenge %}
+            {% render_multi_comment_list for challenge %}
         </div>
     {% endfor %}
 

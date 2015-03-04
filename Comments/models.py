@@ -134,77 +134,8 @@ class Comment(models.Model):
         return Comment.objects.filter(tags__name__in=tags)
 
     @staticmethod
-    def query_comments_without_responses(ref_object, requester):
-        ref_id, ref_type = Comment.ref_obj_to_id_type(ref_object)
-
-        queryset = Comment.objects.annotate(num_children=Count('children')).filter(
-            parent=None,
-            num_children=0,
-            content_type__pk=ref_type,
-            object_id=ref_id
-        )
-
-        visible = Comment.filter_visible(queryset, requester)
-        Comment.filter_deleted_trees(visible)
-        visible = visible.order_by('-post_date')
-
-        Comment.set_flags(visible, requester)
-        return visible
-
-    @staticmethod
     def get_points_for_user(user):
         return Comment.objects.filter(author=user, promoted=True).count()
-
-    @staticmethod
-    def query_comments_not_answered_by_staff(ref_object):
-        # TODO guess this wont be needed => delete or finish
-        ref_id, ref_type = Comment.ref_obj_to_id_type(ref_object)
-
-        return Comment.objects.filter(content_type__pk=ref_type,
-                                      object_id=ref_id)\
-            .exclude(visibility=Comment.PRIVATE)\
-            .latest('post_date')\
-            .exclude(author__is_staff=True)\
-            .exists()
-
-    @staticmethod
-    def get_ref_objects_with_unanswered_user_comments(ref_model):
-        # TODO finish this
-        content_type = ContentType.objects.get_for_model(ref_model)
-
-        # queryset = Comment.objects.filter(content_type__pk=content_type.id)\
-        #     .exclude(visibility=Comment.PRIVATE) \
-        #     .prefetch_related('content_object')
-
-            # .annotate(Max('post_date')) \
-            # .exclude(author__is_staff=True)\
-
-        #queryset = Comment.objects.filter(content_type__pk=content_type.id) \
-        #    .exclude(visibility=Comment.PRIVATE)\
-        #    .values('object_id')
-        #queryset = Review.objects.annotate(Max('comments__post_date'))
-
-        # ref_objects = list()
-        # for comment in queryset:
-        #     ref_object = comment.content_object
-        #     if ref_object not in ref_objects:
-        #         ref_objects.append(ref_object)
-        #
-        # return ref_objects
-
-        ### another try:
-        max_dates_queryset = Comment.objects.filter(content_type__pk=content_type.id)\
-            .exclude(visibility=Comment.PRIVATE) \
-            .prefetch_related('content_object') \
-            .values('object_id').annotate(Max('post_date'))
-
-        ref_objects = []
-        for max_date_comment in max_dates_queryset:
-            c = Comment.objects.filter(post_date=max_date_comment['post_date__max'], object_id=max_date_comment['object_id']).prefetch_related('author', 'content_object')[0]
-            if not c.author.is_staff:
-                ref_objects.append(c.content_object)
-
-        return ref_objects
 
     @staticmethod
     def query_top_level_sorted(ref_object_id, ref_type_id, requester):
