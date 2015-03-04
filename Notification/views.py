@@ -1,3 +1,4 @@
+from django.core import urlresolvers
 from django.http import HttpResponse, Http404
 from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
@@ -10,10 +11,10 @@ from Course.models import Course, CourseUserRelation
 
 
 @login_required()
-def notifications(request):
+def notifications(request, course_short_title=None):
     data = {}
     user = RequestContext(request)['user']
-    course = RequestContext(request)['course']
+    course = Course.get_or_raise_404(course_short_title)
 
     if 'id' in request.GET:
         try:
@@ -29,15 +30,16 @@ def notifications(request):
         if 'link' in request.GET:
             return redirect(request.GET['link'])
 
-        return redirect('/notifications')
+        return redirect('Notification:list', course_short_title=course_short_title)
     notifications = Notification.objects.filter(user=user, course=course).order_by('-creation_time')
     data['notifications'] = notifications
+    data['course'] = course
     return render_to_response('notifications.html', data, context_instance=RequestContext(request))
 
 
 @login_required()
 @staff_member_required
-def write_notification(request):
+def write_notification(request, course_short_title=None):
     if not 'user' in request.GET:
         raise Http404
     data = {
@@ -48,7 +50,7 @@ def write_notification(request):
 
 @login_required()
 @staff_member_required
-def send_notification(request):
+def send_notification(request, course_short_title=None):
     if not 'user_id' in request.POST:
         raise Http404
     if not 'message' in request.POST:
@@ -68,9 +70,9 @@ def send_notification(request):
 
 
 @login_required()
-def read(request):
+def read(request, course_short_title=None):
     user = RequestContext(request)['user']
-    course = RequestContext(request)['last_selected_course']
+    course = Course.get_or_raise_404(course_short_title)
     notifications = Notification.objects.filter(user=user, course=course)
     for notification in notifications:
         if not notification.user == user:

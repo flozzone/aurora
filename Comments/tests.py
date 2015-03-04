@@ -127,14 +127,6 @@ class ModelMethodTests(TestCase):
         self.t10 = "text10"
         self.c10 = create_comment(self.t10, self.s1, self.ref_object4)
 
-    def test_query_comments_without_responses(self):
-        queryset = Comment.query_comments_without_responses(self.ref_object1, self.u2)
-        self.assertTrue(list(queryset) == [self.c4, self.c2])
-
-    def test_query_ref_objects_with_unanswered_user_comments(self):
-        objects = Comment.get_ref_objects_with_unanswered_user_comments(CommentReferenceObject)
-        self.assertTrue(objects == [self.ref_object1, self.ref_object2])
-
     def test_single_tag(self):
         t11 = 'hello #Tag this is #comment #comment'
         c11 = create_comment(t11, self.s1, self.ref_object3)

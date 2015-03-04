@@ -5,6 +5,8 @@
 <script>
   var static_url = "{{ STATIC_URL }}";
   var media_url = "{{ MEDIA_URL }}";
+  var course_short_title = "{{ course.short_title }}";
+  var NOTIFICATION_REFRESH_URL = "{% url 'Notification:refresh' course.short_title %}";
 </script>
 <div>
   <div class="pagehead">
@@ -42,7 +44,9 @@
             <a href="{% url 'Evaluation:home' course.short_title %}">Evaluation</a>
           </li>
         {% endif %}
-
+        <li id="notifications-li" class="unread_notifications{% if unread_notifications|length != 0 %} glow{% endif %}">
+          <a id="unread_notifications"  href="{% url 'Notification:list' course.short_title %}">{{ unread_notifications|length }}</a>
+        </li>
       </ul>
 
 	  <div class="user_info" style="background-image:url('{{ user.avatar.url }}')" onclick="window.location='{% url 'User:profile' course.short_title %}'">

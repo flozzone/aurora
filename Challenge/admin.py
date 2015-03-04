@@ -21,3 +21,17 @@ class ChallengeAdmin(admin.ModelAdmin):
 
 admin.site.register(Challenge, ChallengeAdmin)
 
+class StackChallengeRelationAdmin(admin.ModelAdmin):
+    fieldsets = [
+        (
+            None, {
+                'fields': [
+                    'stack',
+                    'challenge'
+                ]
+            }
+        ),
+    ]
+    list_display = ('id', 'stack', 'challenge', )
+
+admin.site.register(StackChallengeRelation, StackChallengeRelationAdmin)

@@ -2,6 +2,7 @@
 {% load comments %}
 
 {% block content %}
+    {% comments_boilerplate %}
 
     {% paginate 1 challenges %}
 
@@ -19,7 +20,7 @@
             </div>
         </div>
         <div>
-            {% render_comment_list for challenge %}
+            {% render_multi_comment_list for challenge %}
         </div>
     {% endfor %}
 

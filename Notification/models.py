@@ -1,5 +1,6 @@
 import os
 
+from django.core.urlresolvers import reverse
 from django.db import models
 
 from AuroraProject.settings import STATIC_URL
@@ -22,12 +23,14 @@ class Notification(models.Model):
     @staticmethod
     def bad_review(review):
         text = Notification.truncate_text(Notification.BAD_REVIEW + review.elaboration.challenge.title)
+        course = review.elaboration.challenge.get_course()
         Notification(
             user=review.elaboration.user,
-            course=review.elaboration.challenge.get_course(),
+            course=course,
             text=text,
             image_url=review.elaboration.challenge.image.url,
-            link="/challenges/challenge?id=" + str(review.elaboration.challenge.id)
+            link=reverse('Challenge:challenge', kwargs={'course_short_title': course.short_title}) + "?id=" + str(
+                review.elaboration.challenge.id)
         ).save()
 
     @staticmethod
@@ -35,12 +38,14 @@ class Notification(models.Model):
         final_challenge = review.elaboration.challenge.get_final_challenge()
         if final_challenge.is_enabled_for_user(review.elaboration.user) and not final_challenge.get_elaboration(review.elaboration.user):
             text = Notification.truncate_text(Notification.ENOUGH_PEER_REVIEWS + final_challenge.title)
+            course = review.elaboration.challenge.get_course()
             obj, created = Notification.objects.get_or_create(
                 user=review.elaboration.user,
-                course=review.elaboration.challenge.get_course(),
+                course=course,
                 text=text,
                 image_url=final_challenge.image.url,
-                link="/challenges/stack?id=" + str(review.elaboration.challenge.get_stack().id)
+                link=reverse('Challenge:stack', kwargs={'course_short_title': course.short_title}) + "?id=" + str(
+                    review.elaboration.challenge.get_stack().id)
             )
 
     @staticmethod
