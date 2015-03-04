@@ -5,18 +5,114 @@
   <link rel="shortcut icon" href="{{ STATIC_URL }}img/favicon.ico" type="image/x-icon">
   <link rel="icon" href="{{ STATIC_URL }}img/favicon.ico" type="image/x-icon">
   <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-2.0.3.js"></script>
-  <link rel="stylesheet" href="{{ STATIC_URL }}css/base.css" type="text/css" media="screen"/>
 
+
+<style>
+
+.course_selection_background {
+	background: url("../static/img/aurora@2x.jpg");
+	background-size:cover;
+	background-repeat:no-repeat;
+	background-color:black;
+	background-position:bottom;
+	
+	position:fixed;
+	top:0px;
+	left:0px;
+	width:100%;
+	height:100%;
+    filter: blur(5px) opacity(0.4);
+	
+}
+
+@font-face {
+    font-family: 'yanone_kaffeesatz_rgregular';
+    src: url('../static/fonts/yanonekaffeesatz-regular-webfont.eot');
+    src: url('../static/fonts/yanonekaffeesatz-regular-webfont.eot?#iefix') format('embedded-opentype'), url('../static/fonts/yanonekaffeesatz-regular-webfont.woff') format('woff'), url('../static/fonts/yanonekaffeesatz-regular-webfont.ttf') format('truetype'), url('../static/fonts/yanonekaffeesatz-regular-webfont.svg#yanone_kaffeesatz_rgregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'yanone_kaffeesatz_rgbold';
+    src: url('../static/fonts/yanonekaffeesatz-bold-webfont.eot');
+    src: url('../static/fonts/yanonekaffeesatz-bold-webfont.eot?#iefix') format('embedded-opentype'), url('../static/fonts/yanonekaffeesatz-bold-webfont.woff') format('woff'), url('../static/fonts/yanonekaffeesatz-bold-webfont.ttf') format('truetype'), url('../static/fonts/yanonekaffeesatz-bold-webfont.svg#yanone_kaffeesatz_rgbold') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'yanone_kaffeesatzlight';
+    src: url('../static/fonts/yanonekaffeesatz-light-webfont.eot');
+    src: url('../static/fonts/yanonekaffeesatz-light-webfont.eot?#iefix') format('embedded-opentype'), url('../static/fonts/yanonekaffeesatz-light-webfont.woff') format('woff'), url('../static/fonts/yanonekaffeesatz-light-webfont.ttf') format('truetype'), url('../static/fonts/yanonekaffeesatz-light-webfont.svg#yanone_kaffeesatzlight') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'yanone_kaffeesatzthin';
+    src: url('../static/fonts/yanonekaffeesatz-thin-webfont.eot');
+    src: url('../static/fonts/yanonekaffeesatz-thin-webfont.eot?#iefix') format('embedded-opentype'), url('../static/fonts/yanonekaffeesatz-thin-webfont.woff') format('woff'), url('../static/fonts/yanonekaffeesatz-thin-webfont.ttf') format('truetype'), url('../static/fonts/yanonekaffeesatz-thin-webfont.svg#yanone_kaffeesatzthin') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+.title {
+    font-family: 'yanone_kaffeesatzthin';
+	color:rgb(58,201,88);
+	font-size:2.5em;
+	text-shadow: 0 0 5px rgb(58,201,88);
+	margin-bottom:1em;
+}
+
+.choice {
+	font-family: 'yanone_kaffeesatz_rgregular';
+	color:white;
+	font-size:1.5em;
+	margin-bottom:1em;
+}
+
+.choice a {
+	color:rgb(58,201,88);
+	text-decoration:none;
+}
+
+.choice a:hover {
+	text-shadow: 0 0 10px rgb(58,201,88);
+}
+
+.centered {
+	margin:auto;
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
+	width:400px;
+	height:300px;
+}
+
+.base {
+	width:100%;
+	height:100%;
+}
+
+</style>
 </head>
-<body>
+<body bgcolor="black">
 
 {% block content %}
-    <div class="headline">Welcome to Aurora</div>
-    Please select a course:<br>
-    {% for course in courses %}
-        <a href="{% url 'home' course.short_title %}">{{ course.title }}</a><br>
-    {% endfor %}
-{% endblock %}
+<div class="course_selection_background">
+</div>
+	<div class="centered">
+		<div class="title">Welcome to Aurora</div>
+		<div class="choice">Choose<br>
+		{% for course in courses %}
+   			 <a href="{% url 'home' course.short_title %}">{{ course.title }}</a><br>
+    	{% endfor %}</div>
+	</div>
+	{% endblock %}
 
 </body>
 </html>

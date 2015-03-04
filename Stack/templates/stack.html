@@ -54,18 +54,18 @@
             {% if review %}
              {% if review.submitted %}
               <div class="review_box done" challenge_id="{{ challenge_dict.challenge.id }}">
-                <i class="fa fa-check-square-o fa-lg"></i>
+                <i class="fa fa-check-square-o fa-lg green"></i>
               </div>
              {% else %}
               <div class="review_box in_progress" challenge_id="{{ challenge_dict.challenge.id }}">
-                <i class="fa fa-pencil-square-o fa-lg"></i>
+                <i class="fa fa-pencil-square fa-lg"></i>
               </div>
              {% endif %}
             {% elif not challenge_dict.submitted %} <!-- if review -->
               <div class="review_box inactive"></div>
             {% else %} <!-- if review -->
               <div class="review_box active" challenge_id="{{ challenge_dict.challenge.id }}">
-                <i class="fa fa-pencil-square-o fa-lg"></i>
+                <i class="fa fa-pencil-square fa-lg"></i>
               </div>
             {% endif %} <!-- if review -->
            {% endfor %} <!-- for review in challenge_dict.reviews -->
@@ -75,8 +75,7 @@
   <!-- status -->
 
             <div class="status_space">
-              <b>Status:</b>
-              <span>{{ challenge_dict.status.status }}</span>
+              <b>Status:</b> <span>{{ challenge_dict.status.status }}</span>
               {% if challenge_dict.points %}You received
                 <span style="font-weight:bold;">{{ challenge_dict.points }}</span> Points.
                 Full evaluation result inside.
