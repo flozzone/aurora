@@ -1,5 +1,6 @@
 import os
 
+from django.core.urlresolvers import reverse
 from django.db import models
 
 from AuroraProject.settings import STATIC_URL
@@ -28,7 +29,8 @@ class Notification(models.Model):
             course=course,
             text=text,
             image_url=review.elaboration.challenge.image.url,
-            link="/" + course.short_title + "/challenge/challenge?id=" + str(review.elaboration.challenge.id)
+            link=reverse('Challenge:challenge', kwargs={'course_short_title': course.short_title}) + "?id=" + str(
+                review.elaboration.challenge.id)
         ).save()
 
     @staticmethod
@@ -42,7 +44,8 @@ class Notification(models.Model):
                 course=course,
                 text=text,
                 image_url=final_challenge.image.url,
-                link="/" + course.short_title + "/challenge/stack?id=" + str(review.elaboration.challenge.get_stack().id)
+                link=reverse('Challenge:stack', kwargs={'course_short_title': course.short_title}) + "?id=" + str(
+                    review.elaboration.challenge.get_stack().id)
             )
 
     @staticmethod
