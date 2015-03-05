@@ -67,8 +67,6 @@ def evaluation(request, course_short_title=None):
 
     return render_to_response('evaluation.html',
                               {'challenges': challenges,
-                               'count_' + request.session.get('selection', ''): request.session.get('count', ''),
-                               'stabilosiert_' + request.session.get('selection', ''): 'stabilosiert',
                                'overview': overview,
                                'count_' + request.session.get('selection', ''): count,
                                'stabilosiert_' + request.session.get('selection', ''): 'stabilosiert',
@@ -137,7 +135,7 @@ def non_adequate_work(request, course_short_title=None):
 @staff_member_required
 def top_level_tasks(request, course_short_title=None):
     course = Course.get_or_raise_404(short_title=course_short_title)
-    elaborations = Elaboration.get_top_level_challenges(course)
+    elaborations = Elaboration.get_top_level_tasks(course)
 
     # sort elaborations by submission time
     if type(elaborations) == list:
@@ -147,7 +145,7 @@ def top_level_tasks(request, course_short_title=None):
 
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
-    request.session['selection'] = 'top_level_challenges'
+    request.session['selection'] = 'top_level_tasks'
     request.session['count'] = len(elaborations)
 
     return render_to_response('evaluation.html',
@@ -302,7 +300,7 @@ def detail(request, course_short_title=None):
     if selection == "missing_reviews":
         questions = ReviewQuestion.objects.filter(challenge=elaboration.challenge).order_by("order")
         params = {'questions': questions, 'selection': 'missing reviews'}
-    if selection == "top_level_challenges":
+    if selection == "top_level_tasks":
         evaluation = None
         user = RequestContext(request)['user']
         lock = False
@@ -745,16 +743,16 @@ def back(request, course_short_title=None):
         return HttpResponse()
     if selection == "missing_reviews":
         elaborations = Elaboration.get_missing_reviews(course)
-    if selection == "top_level_challenges":
-        elaborations = Elaboration.get_top_level_challenges()
+    if selection == "top_level_tasks":
+        elaborations = Elaboration.get_top_level_tasks(course)
     if selection == "non_adequate_work":
-        elaborations = Elaboration.get_non_adequate_work()
+        elaborations = Elaboration.get_non_adequate_work(course)
     if selection == "complaints":
         elaborations = Elaboration.get_complaints(course)
     if selection == "awesome":
-        elaborations = Elaboration.get_awesome()
+        elaborations = Elaboration.get_awesome(course)
     if selection == "evaluated_non_adequate_work":
-        elaborations = Elaboration.get_evaluated_non_adequate_work()
+        elaborations = Elaboration.get_evaluated_non_adequate_work(course)
 
     # update overview
     if type(elaborations) == list:
@@ -763,7 +761,7 @@ def back(request, course_short_title=None):
         elaborations.order_by('submission_time')
     request.session['elaborations'] = serializers.serialize('json', elaborations)
 
-    return HttpResponse()
+    return evaluation(request, course_short_title)
 
 
 @login_required()
