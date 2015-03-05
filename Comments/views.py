@@ -30,6 +30,7 @@ class ReplyForm(forms.Form):
     reference_type_id = forms.IntegerField(widget=forms.HiddenInput)
     reference_id = forms.IntegerField(widget=forms.HiddenInput)
     parent_comment = forms.IntegerField(widget=forms.HiddenInput)
+    course_short_title = forms.CharField(widget=forms.HiddenInput(attrs={'id': 'replyCourseShortTitle'}))
     uri = forms.CharField(widget=forms.HiddenInput, max_length=200)
     text = forms.CharField(widget=forms.Textarea(attrs={'id': 'replyTextarea'}), label='')
     visibility = forms.ChoiceField(choices=Comment.VISIBILITY_CHOICES)
@@ -152,14 +153,6 @@ def create_comment(form, request):
 
     comment_list.increment()
 
-    # TODO extremely borken fix, remove this ASAP
-    # TODO FIXME remove or replace or something
-    course = None
-    # course = context['last_selected_course']
-    if course is None:
-        course = Course.objects.get(short_title='gsi')
-    # TODO endof extremely borken fix
-
     if parent_comment is None:
         return
 
@@ -172,12 +165,27 @@ def create_comment(form, request):
     if comment.visibility == Comment.STAFF and not parent_comment.author.is_staff:
         return
 
+    course_short_title = form.cleaned_data['course_short_title']
+
+    if course_short_title != "":
+        course = Course.get_or_raise_404(course_short_title)
+        link = comment_list.uri + '#comment_' + str(parent_comment.id)
+    else:
+        course = None
+        link = ""
+
+    text = comment.author.nickname[:15] + ': '
+    if len(comment.text) > 50:
+        text += comment.text[:47] + "..."
+    else:
+        text += comment.text[:50]
+
     obj, created = Notification.objects.get_or_create(
         user=parent_comment.author,
         course=course,
-        text="You've received a reply to one of your comments",
+        text=text,
         image_url=comment.author.avatar.url,
-        link=comment_list.uri + '#comment_' + str(parent_comment.id)
+        link=link
     )
 
     if not created:

@@ -418,6 +418,8 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         $button_post_reply.click(function (event) {
             event.preventDefault();
 
+            $('#replyCourseShortTitle').val(course_short_title || '');
+
             var $replyForm = $('#replyForm');
             var $newComment = $('#comment_new');
             var $replyTextarea = $('#replyTextarea');
