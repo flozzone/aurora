@@ -276,6 +276,12 @@ h1 {
 	position:relative;
 }
 
+@-moz-document url-prefix() {
+	.review_box.active i {
+		vertical-align:0;
+	}
+}
+
 .fig {
     margin-top:5px;
 	font-size:80%;
