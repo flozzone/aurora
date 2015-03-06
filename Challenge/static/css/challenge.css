@@ -6,6 +6,14 @@
 	opacity:0.1;
 }
 
+.nonsubmit {
+	color:lightgray !important;
+}
+
+.nonsubmit:hover {
+	color:lightgray !important;
+}
+
 #tinymce p { 
 	font-family: Helvetica Neue, Arial, sans-serif !important; 
 	font-size:13px;

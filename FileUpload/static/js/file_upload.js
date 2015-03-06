@@ -20,6 +20,12 @@ function file_upload_loaded() {
                 dropzone_instance.removeFile(file);
                 alert(error);
             });
+			this.on("queuecomplete",function(){
+				$('#EWfE').prop('disabled', false).addClass('submit').removeClass('nonsubmit');
+			});
+			this.on("drop",function(){
+				$('#EWfE').prop('disabled', true).removeClass('submit').addClass('nonsubmit');
+			});
             this.on("success", function (file, response) {
                 revert_submit_clicked();
                 var data = JSON.parse(response);
