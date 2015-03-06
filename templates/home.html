@@ -39,8 +39,11 @@
 	        <p><b>Video-Streams:</b></p>
 	        <br>
 	        <p>Die Video-Streams &uuml;bertragen w&auml;hrend der Vorlesungszeit die Vorlesung live: <br><br>
-				&nbsp;&nbsp;&nbsp;<i class="fa fa-angle-double-right"></i><a href="https://tuwel.tuwien.ac.at/mod/rssplayer/view.php?id=178748">BHCI</a><br>
-				&nbsp;&nbsp;&nbsp;<i class="fa fa-angle-double-right"></i><a href="https://tuwel.tuwien.ac.at/mod/rssplayer/view.php?id=178741">GSI</a></p><br>
+				{% if course.short_title == "gsi" %}
+				&nbsp;&nbsp;&nbsp;<i class="fa fa-angle-double-right"></i><a href="https://tuwel.tuwien.ac.at/mod/rssplayer/view.php?id=178741">GSI live stream</a></p><br>
+				{% else %}
+				&nbsp;&nbsp;&nbsp;<i class="fa fa-angle-double-right"></i><a href="https://tuwel.tuwien.ac.at/mod/rssplayer/view.php?id=178748">BHCI live stream</a></p><br>
+				{% endif %}
 			<p>Ausserdem zeichnen wir diese Streams auf, und werden sie in den n&auml;chsten Wochen dann auch mit den Slides synchronisieren. Stay tuned!</p>
 	        <br><br>
 
@@ -52,9 +55,12 @@
 			<p>- Wenn sie Fragen zu einem Task haben, dann nutzen sie bitte die M&ouml;glichkeit, bei den Beschreibungen der Tasks mit dem LVA-Team zu diskutieren. </p>
 			<p>- Wenn sie mit einem Review oder einer Bewertung nicht zufrieden sind, dann nutzen sie bitte die dort angegliederten Kommentare, um mit uns dar&uuml;ber zu reden.</p>
 			<p>- Wenn sie eine andere Frage haben, die im allgemeinen Interesse ist, dann posten sie diese hier im Newsfeed.</p>
-			<p>- Sollten sie eine Frage haben, die nur sie betrifft, dann schreiben sie uns bitte eine email:</p>
-	        <p><i>gsi: <a href="mailto:gsi@igw.tuwien.ac.at">gsi@igw.tuwien.ac.at</a></i></p>
-	        <p><i>bhci: <a href="mailto:bhci@igw.tuwien.ac.at">bhci@igw.tuwien.ac.at</a></i></p>
+			<p>- Sollten sie eine Frage haben, die nur sie betrifft, dann schreiben sie uns bitte eine email:</p><br>
+			{% if course.short_title == "gsi" %}
+	        <p><i><a href="mailto:gsi@igw.tuwien.ac.at">gsi@igw.tuwien.ac.at</a></i></p>
+			{% else %}
+	        <p><i><a href="mailto:bhci@igw.tuwien.ac.at">bhci@igw.tuwien.ac.at</a></i></p>
+			{% endif %}
 	        <br><br>
 		</div>
         <div class="feed_header" id="part_2">
@@ -62,23 +68,32 @@
 		</div>
         <div class="feed_column" id="content_part_2">
 	        <p><i>Q: Wie unterscheidet sich der Modus zu dem des Vorjahres?</i></p>
-			<p>A: So gut wie gar nicht. Aurora wurde &uuml;berarbeitet, viele Bugs wurden behoben, und es wurden einige kleine Verbesserungen implementiert. Wir haben aber noch Pl&auml;ne, &uuml;ber das Semester hinweg ein paar neue Dinge zu versuchen. 
+			<p>A: So gut wie gar nicht. Aurora wurde &uuml;berarbeitet, viele Bugs wurden behoben, und es wurden einige kleine Verbesserungen implementiert. Wir haben aber noch Pl&auml;ne, &uuml;ber das Semester hinweg ein paar neue Dinge zu versuchen. </p>
 	        <br>
 			<p><i>Q: Kann ich einfach irgendwelche Challenges machen, bis ich genug Punkte habe?</i></p>
-			<p>A: Nein. Sie <b>m&uuml;ssen</b> f&uuml;r eine positive Note aus jedem der 4 Kapitel (BHCI) bzw. aus jeder der vier verschiedenen Kategorien (GSI) mindestens eine Challenge absolvieren. Ansonsten steht Ihnen frei, was sie wann machen.</p> 
+			<p>A: Nein. Sie <b>m&uuml;ssen</b> f&uuml;r eine positive Note aus jeder der vier Kategorien (s.u.) mindestens eine Challenge absolvieren. Ansonsten steht Ihnen frei, was sie wann machen.</p> 
 			<br>
-			<p><i>Q: Was sind die 4 Kapitel in BHCI?</i></p> 
-			- Kapitel 1: User-centered design + design basics<br>
-			- Kapitel 2: Methoden<br>
-			- Kapitel 3: psycholog. Grundlagen, Evaluation<br>
-			- Kapitel 4: Prototyping, Beyond the desktop<br>
+			{% if course.short_title == "hci" %}
+			<p><i>Q: Was sind die 4 Kategorien in BHCI?</i></p> 
+			<p>- Kategorie 1: User-centered design + design basics<br>
+			- Kategorie 2: Methoden<br>
+			- Kategorie 3: psycholog. Grundlagen, Evaluation<br>
+			- Kategorie 4: Prototyping, Beyond the desktop<br>
 			</p>
 			<br>
+			{% endif %}
+			{% if course.short_title == "gsi" %}
 			<p><i>Q: Was sind die 4 Kategorien in GSI?</i></p> 
-			Diese werden zu VO-beginn hier aktualisiert.<br></p>
+			<p>Das sind Platzhalter-Kategorien. Diese werden zu VO-beginn hier aktualisiert.<br></p>
+			<p>- Kategorie 1: Nachdenken<br>
+			- Kategorie 2: Reden<br>
+			- Kategorie 3: Machen<br>
+			- Kategorie 4: Reflexion<br>
+			</p>
 			<br>
+			{% endif %}
 	        <p><i>Q: Wann ist die Deadline f&uuml;r (eine/diese/alle) Challenges?</i></p>
-	        <p>A: F&uuml;r eine positive Note m&uuml;ssen sie bis Ende des Semesters (Di 30.6.., 23:59)ausreichend Punkte gesammelt haben, und aus jedem Kapitel/jeder Kategorie (s.o.) mindestens eine Challenge geschafft haben. Punkte bekommen sie f&uuml;r fertiggestellte Challenges, aber zB. auch f&uuml;r ausgezeichnete Kommentare bei den Folien.  Beachten sie jedoch, dass sie nach dem Abgeben einer Challenge (also des Final Tasks) etwa zwei Wochen (genau: 13 Tage) warten m&uuml;ssen, bevor sie wieder einen Final Task einreichen können!</p>
+	        <p>A: F&uuml;r eine positive Note m&uuml;ssen sie bis Ende des Semesters (Di 30.6.., 23:59)ausreichend Punkte gesammelt haben, und aus jeder Kategorie (s.o.) mindestens eine Challenge geschafft haben. Punkte bekommen sie f&uuml;r fertiggestellte Challenges, aber zB. auch f&uuml;r ausgezeichnete Kommentare bei den Folien.  Beachten sie jedoch, dass sie nach dem Abgeben einer Challenge (also des Final Tasks) etwa zwei Wochen (genau: 13 Tage) warten m&uuml;ssen, bevor sie wieder einen Final Task einreichen können!</p>
 	        <br>
 	        <p><i>Q: Was kann ich machen, wenn die Bewertung meiner Arbeit nicht meinen Erwartungen entspricht?</i></p>
 	        <p>A: Sie k&ouml;nnen einen Kommentar zu ihrer Arbeit formulieren, in dem sie zb. eine Frage stellen, oder ihre
@@ -88,13 +103,6 @@
 	        <p><i>Q: Ab wann werde ich bewertet?</i></p>
 	        <p>A: Sobald sie eine Challenge abgeschlossen haben, wird f&uuml;r sie am Ende des Semesters ein Zeugnis 
 				ausgestellt. </p>
-	        <br>
-	        <p><i>Q: Wie war das nochmal mit dem Buch und dem Podcast?</i></p>
-	        <p>A: Wenn sie an »Gesellschaftliche Spannungsfelder der Informatik« teilnehmen, lesen sie bitte bis nach Ostern 
-				folgendes Buch: <a href="http://craphound.com/littlebrother">Cory Doctorow: Little Brother</a><br>
-			    Darüberhinaus steht zur Vertiefung einzelner Inhalte ein Podcast zur Verfügung: 
-				<a href="http://lex.iguw.tuwien.ac.at/groups/gespraeche/">Peter Purgathofer spricht mit...</a> (freiwillig)
-			</p>
 	        <br>
 	        <p><i>Q: Wie sind die Bewertungskategorien am Ende jedes Reviews zu verstehen?</i></p>
 	        <p>A: Siehe <a href="http://igw.tuwien.ac.at/aurora/aurora_reviews.pdf">Zum Schreiben von Reviews</a></p>
@@ -116,6 +124,7 @@
 			<i class="fa fa-toggle-down half"></i> <b>Vorlesungskalender</b>
 		</div>
         <div class="feed_column" id="content_part_3">
+			{% if course.short_title == "hci" %}
 			<table>
 				<tr><td colspan=5><b>BHCI</b></td></tr>
 				<tr><td class="month">m&auml;rz</td><td class="day">4</td>
@@ -137,6 +146,7 @@
 					<td class="day"><a href="https://tuwel.tuwien.ac.at/mod/rssplayer/view.php?id=186154">3</a></td>
 					<td class="day not">10</td><td class="day">17</td><td class="day maybe">24*</td></tr>
 			</table><br>
+			{% else %}
 			<table>
 				<tr><td colspan=5><b>GSI</b></td></tr>
 				<tr><td class="month">m&auml;rz</td><td class="day not">5</td>
@@ -160,6 +170,7 @@
 					<td class="day">18</td>
 					<td class="day maybe">25*</td></tr>
 			</table>
+			{% endif %}
 			<br><br>
 			<span class="maybe" style="font-size:90%">* diese termine sind als reserve geplant. nach momentanen planungsstand findet da keine vorlesung statt. </span>
 		</div>

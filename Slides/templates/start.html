@@ -16,7 +16,7 @@
 	        {% for lect in lectures %}
 					<div class="lectureFront vo_bookmark" onclick="window.location.href='{% url 'Slides:studio_lecture' course.short_title lect.id %}'"><a>Lecture: {{lect.start.day}}.{{lect.start.month}}</a> </div>
 	        {% endfor %}
-			<script> $('.lectureFront').css("background-image", "url(../static/img/vo_bookmark_{{course.id}}.png)"); </script> 
+			<script> $('.lectureFront').css("background-image", "url({{STATIC_URL}}/img/vo_bookmark_{{course.id}}.png)"); </script> 
 			{% comment %}
 			
 			<div class="lectureFront" title="show slides which had comments in the last 24 hours" onclick="ajax_request_with_feedback('studio', '{# {% url slidecasting.views.ajax_render_special_studio 'new_comments_since' course.id 24 %}?page=1&mode={{mode}}' #})"> active last 24h

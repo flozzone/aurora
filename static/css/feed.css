@@ -40,9 +40,6 @@
 		margin-top:2em;
 		margin-left:1em;
 	}
-	.eventually {
-		display:none;
-	}
 }
 
 @media all and (max-width: 961px) {
