@@ -48,6 +48,7 @@ function challenge_loaded() {
         toolbar1: "undo redo | bold italic | fontsizeselect | alignleft aligncenter | bullist numlist indent outdent | hr",
         autoresize_min_height: 200,
         autoresize_max_height: 800,
+		paste_data_images: false,
         setup: function (editor) {
             editor.on('change', function (e) {
                 elaboration_autosave(e, challenge_id);
