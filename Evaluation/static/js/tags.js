@@ -2,7 +2,7 @@ $(function() {
 	$(".tag_input").keydown(function(event) {
 		e = event.which;
 		if(e==13||e==188) {
-			$(".add_tags_btn").click();setTimeout (function(){x.focus()},1000);}
+			$(".add_tags_btn").click();setTimeout (function(){$('tag_input').focus()},50);}
 	});
 });
 
