@@ -131,7 +131,7 @@ class Elaboration(models.Model):
         return missing_reviews
 
     @staticmethod
-    def get_top_level_challenges(course):
+    def get_top_level_tasks(course):
         from Challenge.models import Challenge
 
         final_challenge_ids = Challenge.get_course_final_challenge_ids(course)
