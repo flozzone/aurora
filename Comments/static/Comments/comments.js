@@ -331,12 +331,13 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
             } else {
                 new_text = $replyTextarea.val();
             }
-            new_text = new_text.replace(/(@[^ ]+\s|^)/, '@' + user + ' ');
+            new_text = new_text.replace(/(@[^ ]+\s|^)/, '@' + user + ' -');
             $replyTextarea.val(new_text);
 
             $(this).after($replyForm);
             my.hideCommentForm();
             $replyForm.show();
+			var focusTimer = setTimeout (function(){$('#replyTextarea').focus();$('#replyTextarea').val($('#replyTextarea').val() + ' ');},10);
             return false;
         });
     };
