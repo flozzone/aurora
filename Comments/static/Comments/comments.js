@@ -184,6 +184,7 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
                 $commentForm.find('textarea').val(reply_text);
             }
             $commentForm.show();
+			var focusTimer = setTimeout (function(){$('#commentTextarea').focus()},10);
             $(this).hide();
 
             return false;
