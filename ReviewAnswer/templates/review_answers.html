@@ -6,7 +6,7 @@
 {{ review_answer.review_question.text }}
 
 {% if review_answer.review_question.boolean_answer %}
-    <input type="radio" value="yes" {% if review_answer.text == 'True' %}checked{% endif %} disabled> Yes<br>
+    <br><input type="radio" value="yes" {% if review_answer.text == 'True' %}checked{% endif %} disabled> Yes<br>
     <input type="radio" value="no" {% if review_answer.text == 'False' %}checked{% endif %} disabled> No
 {% else %}
     <textarea class="review_answer" readonly>{{ review_answer.text }}</textarea>
