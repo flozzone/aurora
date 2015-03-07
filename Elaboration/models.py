@@ -192,21 +192,7 @@ class Elaboration(models.Model):
                 .values_list('id', flat=True)
             )
 
-        return_value = []
-        for elaboration in non_adequate_elaborations:
-            if not elaboration.id in exclude_elaboration_ids:
-                return_value.append(elaboration)
-
-        # TODO: !!!!!!! please Django gods tell me why following line does not work!!!!!!
-        # this is probably used causing a lot of bugs in a lot of other places
-        # and it did work previously
-        # non_adequate_elaborations.exclude(id__in=exclude_elaboration_ids)
-
-        non_adequate_elaboration_ids = []
-        for elaboration in return_value:
-            non_adequate_elaboration_ids.append(elaboration.id)
-
-        return return_value
+        return non_adequate_elaborations.exclude(id__in=exclude_elaboration_ids)
 
     @staticmethod
     def get_evaluated_non_adequate_work(course):
