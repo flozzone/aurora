@@ -104,6 +104,7 @@ class ChallengeTest(TestCase):
             title='test_title',
             subtitle='test_subtitle',
             description='test_description',
+            course=self.course
         )
         challenge.save()
         assert challenge.get_stack() is None
