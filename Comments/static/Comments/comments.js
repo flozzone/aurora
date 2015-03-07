@@ -426,19 +426,18 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
             var text = $replyTextarea.val();
             $replyTextarea.val(text);
 
+            $replyForm.hide();
+            $("#replyTextarea").val('');
+
+            $replyForm.after($newComment);
+            $newComment.find(".comment_text").text(text);
+            $newComment.show();
             $.ajax({
                 url: my.REPLY_URL,
                 data: $(this).closest('form').serialize(),
                 type: 'POST',
                 dataType: 'html',
                 success: function () {
-                    $replyForm.hide();
-                    $("#replyTextarea").val('');
-
-                    $replyForm.after($newComment);
-                    $newComment.find(".comment_text").html(text);
-                    $newComment.show();
-
                     my.startPolling();
                     my.state.posting = false;
                 }
@@ -492,6 +491,11 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
 
             var $newComment = $("#comment_new");
 
+            my.hideCommentForm();
+            $commentForm.after($newComment);
+            $newComment.find(".comment_text").text(text);
+            $newComment.show();
+
             $.ajax({
                 url: my.POST_URL,
                 data: $commentForm.serialize(),
@@ -499,10 +503,6 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
                 // the type of data we expect back
                 dataType: 'html',
                 success: function () {
-                    my.hideCommentForm();
-                    $commentForm.after($newComment);
-                    $newComment.find(".comment_text").html(text);
-                    $newComment.show();
                     my.startPolling();
                 },
                 error: function (xhr, status) {
