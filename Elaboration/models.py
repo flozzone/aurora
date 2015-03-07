@@ -177,14 +177,15 @@ class Elaboration(models.Model):
             .values_list('submission__user', 'submission__challenge__stackchallengerelation__stack__id')
         )
 
-        stack_loockup = {}
+
+        stack_lookup = {}
         for user, stack in submitted_evaluations:
-            if not stack in stack_loockup:
-                stack_loockup[stack] = [user]
-            elif not user in stack_loockup[stack]:
-                stack_loockup[stack].append(user)
+            if not stack in stack_lookup:
+                stack_lookup[stack] = [user]
+            elif not user in stack_lookup[stack]:
+                stack_lookup[stack].append(user)
         exclude_elaboration_ids = []
-        for stack, users in stack_loockup.items():
+        for stack, users in stack_lookup.items():
             exclude_elaboration_ids = exclude_elaboration_ids + list(
                 Elaboration.objects
                 .filter(challenge__stackchallengerelation__stack__id=stack, user_id__in=users)
