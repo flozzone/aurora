@@ -19,6 +19,8 @@ from Course.models import Course
 from Notification.models import Notification
 from Comments.tests import CommentReferenceObject
 from Slides.models import Slide
+from AuroraProject.settings import SECRET_KEY, LECTURER_USERNAME
+from local_settings import LECTURER_SECRET
 
 
 class CommentForm(forms.Form):
@@ -111,11 +113,10 @@ def edit_comment(request):
 @require_POST
 def lecturer_post(request):
     data = request.POST
-    print(data)
-    if data['secret'] != "kalimero":
+    if data['secret'] != LECTURER_SECRET:
         return HttpResponseForbidden('You shall not pass!')
 
-    user = AuroraUser.objects.get(username='amanaman')
+    user = AuroraUser.objects.get(username=LECTURER_USERNAME)
     ref_obj = Slide.objects.get(filename=data['filename'])
 
     Comment.objects.create(text=data['text'],
