@@ -99,8 +99,6 @@ class Comment(models.Model):
                                   choices=VISIBILITY_CHOICES,
                                   default=PUBLIC)
 
-    bookmarked_by = models.ManyToManyField('AuroraUser.AuroraUser', related_name='bookmarked_comments_set')
-
     def save(self, *args, **kwargs):
         super(Comment, self).save(*args, **kwargs)
         self.set_tags_from_text()

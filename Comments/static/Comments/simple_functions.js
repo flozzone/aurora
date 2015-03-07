@@ -77,64 +77,6 @@ var COMMENTS = (function (my, $) {
         }
     };
 
-    my.registerBookmarkLinksForCommentList = function($comment_list) {
-        $comment_list.find('.comment_bookmark').click(function(event) {
-            var $this = $(this);
-            bookmark($this, event);
-        });
-
-        $comment_list.find('.comment_unbookmark').click(function(event) {
-            var $this = $(this);
-            unbookmark($this, event);
-        });
-
-        var url = my.BOOKMARK_URL;
-
-        function bookmark($this, event) {
-            event.preventDefault();
-
-            if(typeof my.POLLING !== 'undefined') {
-                my.POLLING.resetTimer();
-            }
-
-            var comment_number = $this.data('comment_number');
-            var data = {
-                comment_id: comment_number,
-                bookmark: true
-            };
-            my.post(url, data);
-
-            $this.off();
-            $this.click(unbookmark);
-            $this.toggleClass('comment_unbookmark comment_bookmark');
-            $this.text('unbookmark');
-
-            return false;
-        }
-
-        function unbookmark($this, event) {
-            event.preventDefault();
-
-            if(typeof my.POLLING !== 'undefined') {
-                my.POLLING.resetTimer();
-            }
-
-            var comment_number = $this.data('comment_number');
-            var data = {
-                comment_id: comment_number,
-                bookmark: false
-            };
-            my.post(url, data);
-
-            $this.off();
-            $this.click(bookmark);
-            $this.toggleClass('comment_unbookmark comment_bookmark');
-            $this.text('bookmark');
-
-            return false;
-        }
-    };
-
     my.registerSeenLinksForCommentList = function($comment_list) {
         $comment_list.find('.comment_seen').click(function(event) {
             var $this = $(this);
