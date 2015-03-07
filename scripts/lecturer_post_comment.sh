@@ -7,10 +7,10 @@ then
   echo 'post_comment.sh <credentials_file> <slide_filename> [comment_text_file]'
   echo
   echo '<redentials_file> has to look like this:'
-  echo "USERNAME='...'"
-  echo "PASSWORD='...'"
+  echo "SECRET='...'"
   echo
-  echo '<comment_text_file> contains the text to post as a comment'
+  echo '<comment_text_file> contains the text to post as a comment. If not given,'
+  echo 'text is read from stdin'
   echo
   exit
 fi
@@ -37,7 +37,7 @@ URI=${HOST}/slides/
 
 # post content of ${COMMENT_TEXT_FILE} as a comment
 curl --referer ${REFERER} -X POST -v \
-  -d "secret=kalimero" \
+  -d "secret=${SECRET}" \
   -d "filename=${SLIDE_ID}" \
   --data-urlencode "${CONTENT}" \
   --data-urlencode uri=${URI} \
