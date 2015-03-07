@@ -846,9 +846,9 @@ def get_points(request, user):
         for stack in course_stacks:
             stack_data['course_stacks'].append({
                 'stack': stack,
-                'points': stack.get_points(user)
+                'points': stack.get_points_earned(user)
             })
-            points_sum += stack.get_points(user)
+            points_sum += stack.get_points_earned(user)
         stack_data['sum'] = points_sum
         data['stacks'].append(stack_data)
 
