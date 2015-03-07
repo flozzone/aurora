@@ -61,16 +61,6 @@
     </div>
 
     <div class="comment_actions">
-        {% if comment.bookmarked %}
-            <a href='#' class="comment_unbookmark" data-comment_number="{{ comment.id }}" title="Remove this comment from Bookmarks">
-				unbookmark
-            </a>
-        {% else %}
-            <a href='#' class="comment_bookmark" data-comment_number="{{ comment.id }}" title="Bookmark this comment">
-				bookmark
-            </a>
-        {% endif %}
-
         {% if comment.deleter != None %}
             <p class="comment_deleter">
                 deleted {{ comment.delete_date | naturaltime }} by {{ comment.deleter.display_name }}

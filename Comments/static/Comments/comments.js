@@ -45,7 +45,6 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         my.registerDeleteLinksForCommentList($comment_list);
         my.registerVoteForCommentList($comment_list);
         my.registerPromoteLinksForCommentList($comment_list);
-        my.registerBookmarkLinksForCommentList($comment_list);
         my.registerSeenLinksForCommentList($comment_list);
     };
 
@@ -420,25 +419,26 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         $button_post_reply.click(function (event) {
             event.preventDefault();
 
+            $('#replyCourseShortTitle').val(course_short_title || '');
+
             var $replyForm = $('#replyForm');
             var $newComment = $('#comment_new');
             var $replyTextarea = $('#replyTextarea');
             var text = $replyTextarea.val();
             $replyTextarea.val(text);
 
+            $replyForm.hide();
+            $("#replyTextarea").val('');
+
+            $replyForm.after($newComment);
+            $newComment.find(".comment_text").text(text);
+            $newComment.show();
             $.ajax({
                 url: my.REPLY_URL,
                 data: $(this).closest('form').serialize(),
                 type: 'POST',
                 dataType: 'html',
                 success: function () {
-                    $replyForm.hide();
-                    $("#replyTextarea").val('');
-
-                    $replyForm.after($newComment);
-                    $newComment.find(".comment_text").html(text);
-                    $newComment.show();
-
                     my.startPolling();
                     my.state.posting = false;
                 }
@@ -492,6 +492,11 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
 
             var $newComment = $("#comment_new");
 
+            my.hideCommentForm();
+            $commentForm.after($newComment);
+            $newComment.find(".comment_text").text(text);
+            $newComment.show();
+
             $.ajax({
                 url: my.POST_URL,
                 data: $commentForm.serialize(),
@@ -499,10 +504,6 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
                 // the type of data we expect back
                 dataType: 'html',
                 success: function () {
-                    my.hideCommentForm();
-                    $commentForm.after($newComment);
-                    $newComment.find(".comment_text").html(text);
-                    $newComment.show();
                     my.startPolling();
                 },
                 error: function (xhr, status) {
