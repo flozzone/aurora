@@ -1,7 +1,25 @@
 $(function() {
 	$(".tag_input").keydown(function(event) {
-		e = event.which;
-		if(e==13||e==188) {$(".add_tags_btn").click()}
+        e = event.which;
+		if((e==13)||(e==188)) {
+            event.stopPropagation();
+            event.preventDefault();
+            var tag_input = $(this);
+            var text = tag_input.text();
+            var user_id = tag_input.attr('user_id');
+            var tags = $(".tags." + user_id);
+            var data = {
+                    text: text,
+                    user_id: user_id
+                };
+            var args = { type: "POST", url: "./add_tags/", data: data,
+               success: function (data) {
+                   tags.html(data);
+                   tag_input.text("");
+               }
+            };
+            $.ajax(args);
+        }
 	});
 });
 
