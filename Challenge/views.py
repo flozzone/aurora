@@ -86,7 +86,7 @@ def challenges(request, course_short_title=None):
         data['course_stacks'].append({
             'stack': stack,
             'status': stack.get_status_text(user),
-            'points': stack.get_points(user)
+            'points': stack.get_points_earned(user)
         })
     return render_to_response('challenges.html', data, context_instance=RequestContext(request))
 

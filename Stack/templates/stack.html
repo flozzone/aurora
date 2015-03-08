@@ -42,6 +42,9 @@
                 <div class="challenge-headline">{{ challenge_dict.challenge.title|safe }}</div>
                 <div class="challenge-text">{{ challenge_dict.challenge.description|safe}}</div>
           </div>
+          <div class="challenge-points">
+            Points: {{ challenge_dict.challenge.points }}
+          </div>
         <a href="{% url 'Challenge:challenge' course_short_title=course.short_title %}?id={{ challenge_dict.challenge.id }}" class="go_challenge button XL active" onclick="event.stopPropagation();">
           <i class="fa fa-chevron-circle-right no_clicksed" onclick="event.stopPropagation();" style="z-index:10000;position:relative;"></i>
         </a>
@@ -148,14 +151,6 @@
     </div> <!-- challenge list -->
     <div>&nbsp;</div>
    {% if not user.is_staff %}
-	
-    {% if challenges_inactive %}
-<!--    <div class="divider">&nbsp;
-      <i class="fa fa-scissors" style="position:relative;top:-9px;left:200px;"></i>
-    </div>
--->
-    {% endif %}
-
 
     <div class="challenge_list inactive">
       {% for challenge in challenges_inactive %}
@@ -164,11 +159,13 @@
           <div class="challenge_image_container">
               <img class="challenge_image active" src="{{ challenge.image.url }}">
           </div>
-            <div class="challenge-description cd-full">
-                <div class="challenge-headline" >{{ challenge.title|safe }}</div>
-				<div class="challenge-text-full">{{ challenge.description|safe}}</div>
-				
-            </div>
+          <div class="challenge-description cd-full">
+            <div class="challenge-headline" >{{ challenge.title|safe }}</div>
+            <div class="challenge-text-full">{{ challenge.description|safe}}</div>
+          </div>
+          <div class="challenge-points">
+            Points: {{ challenge.points }}
+          </div>
         </div>
       {% endfor %}
 

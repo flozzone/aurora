@@ -96,7 +96,7 @@ class StackTest(TestCase):
         tutor = self.users[1]
         tutor.staff = True
         tutor.save()
-        assert self.stack.get_points(user) == 0
+        assert self.stack.get_points_earned(user) == 0
         elaboration = Elaboration(challenge=self.challenge, user=user, elaboration_text="test elaboration",
                                   submission_time=datetime.now())
         elaboration.save()
@@ -105,7 +105,7 @@ class StackTest(TestCase):
         for points in range(10):
             evaluation.evaluation_points = points
             evaluation.save()
-            assert self.stack.get_points(user) == points
+            assert self.stack.get_points_earned(user) == points
 
     def test_last_available_challenge(self):
         challenge1 = self.challenge

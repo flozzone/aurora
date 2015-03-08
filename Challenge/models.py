@@ -26,6 +26,7 @@ class Challenge(models.Model):
     subtitle = models.CharField(max_length=100)
     prerequisite = models.ForeignKey('self', null=True, blank=True)
     description = models.TextField()
+    points = models.IntegerField(null=True)
     image = models.ImageField(upload_to=challenge_image_path, null=True, blank=True)
     # This is a comma separated list of mime types or file extensions. Eg.: image/*,application/pdf,.psd.
     accepted_files = models.CharField(max_length=100, default="image/*,application/pdf", blank=True)
