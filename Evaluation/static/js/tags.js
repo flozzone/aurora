@@ -1,11 +1,4 @@
 $(function() {
-	$(".tag_input").keydown(function(event) {
-		e = event.which;
-		if(e==13||e==188) {$(".add_tags_btn").click()}
-	});
-});
-
-$(function() {
    $(".tag_input").click(function(event) {
        event.stopPropagation();
        $(".tag_input").autocomplete( "search", "" );
