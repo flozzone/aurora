@@ -241,6 +241,29 @@ def vote_down_on(comment, voter):
 
 @require_POST
 @login_required
+def bookmark_comment(request):
+    data = request.POST
+
+    requester = RequestContext(request)['user']
+
+    try:
+        comment = Comment.objects.get(id=data['comment_id'])
+    except Comment.DoesNotExist:
+        return HttpResponse('')
+
+    if data['bookmark'] == 'true':
+        comment.bookmarked_by.add(requester)
+    else:
+        comment.bookmarked_by.remove(requester)
+
+    comment.save()
+    CommentList.get_by_comment(comment).increment()
+
+    return HttpResponse('')
+
+
+@require_POST
+@login_required
 def mark_seen(request):
     requester = RequestContext(request)['user']
 
@@ -376,3 +399,10 @@ def feed(request):
         o2 = CommentReferenceObject.objects.get(id=2)
     return render(request, 'Comments/feed.html', {'object': o, 'object2': o2})
 
+
+@login_required
+def bookmarks(request):
+    requester = RequestContext(request)['user']
+    comment_list = Comment.query_bookmarks(requester)
+    template = 'Comments/bookmarks_list.html'
+    return render_to_response(template, {'comment_list': comment_list}, context_instance=RequestContext(request))
