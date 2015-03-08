@@ -50,9 +50,10 @@ def home(request, course_short_title=None):
         for stack in course_stacks:
             stack_data['course_stacks'].append({
                 'stack': stack,
-                'points': stack.get_points(user)
+                'points_earned': stack.get_points_earned(user),
+                'points_submitted': stack.get_points_submitted(user)
             })
-            points_sum += stack.get_points(user)
+            points_sum += stack.get_points_earned(user)
         stack_data['sum'] = points_sum
         data['stacks'].append(stack_data)
 

@@ -5,48 +5,61 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.template import RequestContext
 from django.core.files import File
-from io import StringIO
 from tempfile import NamedTemporaryFile
 from PIL import ImageFile, Image, ImageOps
 from Elaboration.models import Elaboration
 from FileUpload.models import UploadFile
 from django.http import Http404
+from django.conf import settings
 
 @login_required()
 def file_upload(request):
     user = RequestContext(request)['user']
+    file = request.FILES['file']
     if 'elaboration_id' in request.POST:
         elaboration_id = request.POST.get('elaboration_id')
         try:
             elaboration = Elaboration.objects.get(pk=elaboration_id)
             if not elaboration.user == user:
                 return file_upload_failed_response()
-            upload_file = UploadFile(user=user, elaboration_id=elaboration_id, upload_file=request.FILES['file'])
-            upload_file.save()
+            upload_file = UploadFile(user=user, elaboration_id=elaboration_id, upload_file=file)
         except Exception as e:
             return file_upload_failed_response(str(e))
-    if 'user_id' in request.POST:
-        request.FILES['file'].name = 'avatar_' + str(user.id)
+        if file.name.endswith('.pdf'):
+            with open(settings.STATIC_ROOT + '/img/pdf_icon.jpg', 'rb') as pdf_icon:
+                create_thumbnail(File(pdf_icon), file.name, upload_file.thumbnail.save)
+        else:
+            try:
+                create_thumbnail(file, file.name, upload_file.thumbnail.save)
+            except Exception:
+                with open(settings.STATIC_ROOT + '/img/info.jpg', 'rb') as pdf_icon:
+                    create_thumbnail(File(pdf_icon), file.name, upload_file.thumbnail.save)
+        upload_file.save()
+    elif 'user_id' in request.POST:
         if not request.POST.get('user_id') == str(user.id):
             raise Http404
-        parser = ImageFile.Parser()
-        while 1:
-            chunk = request.FILES['file'].read(1024)
-            if not chunk:
-                break
-            parser.feed(chunk)
-        image = parser.close()
-        THUMBNAIL_SIZE = (192, 192)
-        image = ImageOps.fit(image, THUMBNAIL_SIZE, Image.ANTIALIAS, centering=(0.5, 0.5))
-        with NamedTemporaryFile() as tmp:
-            image.save(tmp, 'png')
-            tmp_file = File(tmp)
-            tmp_file.path = request.FILES['file'].name
-            user.avatar.save(request.FILES['file'].name, tmp_file, False)
+        filename = 'avatar_' + str(user.id)
+        create_thumbnail(file, filename, user.avatar.save)
         user.save()
         return HttpResponse(user.avatar.name)
-    response = {'id': upload_file.id, 'url': upload_file.upload_file.url}
+    response = {'id': upload_file.id, 'url': upload_file.upload_file.url, 'thumbnail_url': upload_file.thumbnail.url}
     return HttpResponse(json.dumps(response))
+
+def create_thumbnail(file, filename, save_function):
+    parser = ImageFile.Parser()
+    while 1:
+        chunk = file.read(1024)
+        if not chunk:
+            break
+        parser.feed(chunk)
+    image = parser.close()
+    size = (120, 120)
+    image = ImageOps.fit(image, size, Image.ANTIALIAS, centering=(0.5, 0.5))
+    with NamedTemporaryFile() as tmp:
+        image.save(tmp, 'png')
+        tmp_file = File(tmp)
+        tmp_file.path = filename
+        save_function(filename, tmp_file, False)
 
 
 @login_required()
@@ -80,6 +93,7 @@ def all_files(request):
                 'name': os.path.basename(upload_file.upload_file.name),
                 'size': upload_file.upload_file.size,
                 'url': upload_file.upload_file.url,
+                'thumbnail_url': upload_file.thumbnail.url,
                 'id': upload_file.id,
             })
     return HttpResponse(json.dumps(data))
