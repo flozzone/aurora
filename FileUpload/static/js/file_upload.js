@@ -26,7 +26,6 @@ function file_upload_loaded() {
                 file.id = data.id;
                 var elaboration_id = $('#elaboration_id').val();
                 if (file.type === 'application/pdf') {
-                    console.log('this is a pdf');
                     dropzone_instance.createThumbnailFromUrl(file, static_url + 'img/pdf_icon.jpg', function(dataURL) {$(file.previewElement).find('img').attr('src', dataURL)}, 'image/png');
                     $(file.previewElement).addClass('dz-image-preview');
                     $(file.previewElement).addClass('dz-complete');
@@ -99,14 +98,11 @@ function load_files(elaboration_id, is_submitted) {
             // Create the mock file:
             var mockFile = { name: file.name, size: file.size, path: file.url, type: 'image/*', status: Dropzone.success};
             dropzone_instance.emit("addedfile", mockFile);
-            if (file.url.match(/pdf$/)) {
-                console.log('I am a pdf');
-                dropzone_instance.createThumbnailFromUrl(mockFile, static_url + 'img/pdf_icon.jpg', function(dataURL) {$(file.previewElement).find('img').attr('src', dataURL)}, 'image/png');
-                $(mockFile.previewElement).addClass('dz-image-preview');
-            } else {
-                dropzone_instance.createThumbnailFromUrl(mockFile, file.url, function(dataURL) {$(mockFile.previewElement).find('img').attr('src', dataURL)}, 'image/png');
-                $(mockFile.previewElement).append('<div class="fig">Fig: ' + i + '</div>');
-            }
+            dropzone_instance.emit("thumbnail", mockFile, file.thumbnail_url);
+            $(mockFile.previewElement).find('img').wrap(function () {
+                return "<a href='" + file.url + "' data-lightbox='preview' title='" + file.name + "'></div>";
+            });
+            $(mockFile.previewElement).append('<div class="fig">Fig: ' + i + '</div>');
             mockFile.id = file.id;
             $(mockFile.previewElement).find(".dz-progress").remove();
             $(mockFile.previewElement).wrap(function () {

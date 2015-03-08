@@ -130,9 +130,9 @@ class ModelMethodTests(TestCase):
     def test_single_tag(self):
         t11 = 'hello #Tag this is #comment #comment'
         c11 = create_comment(t11, self.s1, self.ref_object3)
-
         objects = Comment.objects.filter(tags__name__in=['#tag'])
-        self.assertTrue(objects == [c11])
+        self.assertEquals(objects[0].id, c11.id)
+        self.assertEquals(objects[0].text, c11.text)
 
 
 class TemplateTagTests(TestCase):

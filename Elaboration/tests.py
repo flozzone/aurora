@@ -698,26 +698,26 @@ class ElaborationTest(TestCase):
                                    submission_time=old)
         elaboration6.save()
 
-        assert dummy_elaboration1 not in Elaboration.get_missing_reviews()  # is staff
-        assert elaboration1 in Elaboration.get_missing_reviews()  # 2 reviews missing
-        assert elaboration2 not in Elaboration.get_missing_reviews()  # not 3 days old
-        assert elaboration3 in Elaboration.get_missing_reviews()  # 2 reviews missing
-        assert elaboration4 not in Elaboration.get_missing_reviews()  # unsubmitted
-        assert elaboration5 in Elaboration.get_missing_reviews()  # 2 reviews missing
-        assert elaboration6 not in Elaboration.get_missing_reviews()  # final challenge
+        assert dummy_elaboration1 not in Elaboration.get_missing_reviews(self.course)  # is staff
+        assert elaboration1 in Elaboration.get_missing_reviews(self.course)  # 2 reviews missing
+        assert elaboration2 not in Elaboration.get_missing_reviews(self.course)  # not 3 days old
+        assert elaboration3 in Elaboration.get_missing_reviews(self.course)  # 2 reviews missing
+        assert elaboration4 not in Elaboration.get_missing_reviews(self.course)  # unsubmitted
+        assert elaboration5 in Elaboration.get_missing_reviews(self.course)  # 2 reviews missing
+        assert elaboration6 not in Elaboration.get_missing_reviews(self.course)  # final challenge
 
         Review(elaboration=elaboration1, reviewer=user2, appraisal='S', submission_time=new).save()
         Review(elaboration=elaboration1, reviewer=user3, appraisal='S', submission_time=new).save()
         Review(elaboration=elaboration2, reviewer=user1, appraisal='S', submission_time=new).save()
         Review(elaboration=elaboration5, reviewer=user1, appraisal='S', submission_time=new).save()
 
-        assert dummy_elaboration1 not in Elaboration.get_missing_reviews()  # is staff
-        assert elaboration1 not in Elaboration.get_missing_reviews()  # already 2 reviews
-        assert elaboration2 not in Elaboration.get_missing_reviews()  # not 3 days old
-        assert elaboration3 in Elaboration.get_missing_reviews()  # 2 reviews missing
-        assert elaboration4 not in Elaboration.get_missing_reviews()  # unsubmitted
-        assert elaboration5 in Elaboration.get_missing_reviews()  # 1 review missing
-        assert elaboration6 not in Elaboration.get_missing_reviews()  # final challenge
+        assert dummy_elaboration1 not in Elaboration.get_missing_reviews(self.course)  # is staff
+        assert elaboration1 not in Elaboration.get_missing_reviews(self.course)  # already 2 reviews
+        assert elaboration2 not in Elaboration.get_missing_reviews(self.course)  # not 3 days old
+        assert elaboration3 in Elaboration.get_missing_reviews(self.course)  # 2 reviews missing
+        assert elaboration4 not in Elaboration.get_missing_reviews(self.course)  # unsubmitted
+        assert elaboration5 in Elaboration.get_missing_reviews(self.course)  # 1 review missing
+        assert elaboration6 not in Elaboration.get_missing_reviews(self.course)  # final challenge
 
         elaboration2.submission_time = old
         elaboration2.save()
@@ -728,13 +728,13 @@ class ElaborationTest(TestCase):
         Review(elaboration=elaboration3, reviewer=user2, appraisal='S').save()
         Review(elaboration=elaboration5, reviewer=user2, appraisal='S', submission_time=new).save()
 
-        assert dummy_elaboration1 not in Elaboration.get_missing_reviews()  # is staff
-        assert elaboration1 not in Elaboration.get_missing_reviews()  # already 2 reviews
-        assert elaboration2 in Elaboration.get_missing_reviews()  # not 3 days old
-        assert elaboration3 in Elaboration.get_missing_reviews()  # 2 reviews missing because reviews are unsubmitted
-        assert elaboration4 in Elaboration.get_missing_reviews()  # 2 reviews missing
-        assert elaboration5 not in Elaboration.get_missing_reviews()  # already 2 reviews
-        assert elaboration6 not in Elaboration.get_missing_reviews()  # final challenge
+        assert dummy_elaboration1 not in Elaboration.get_missing_reviews(self.course)  # is staff
+        assert elaboration1 not in Elaboration.get_missing_reviews(self.course)  # already 2 reviews
+        assert elaboration2 in Elaboration.get_missing_reviews(self.course)  # not 3 days old
+        assert elaboration3 in Elaboration.get_missing_reviews(self.course)  # 2 reviews missing because reviews are unsubmitted
+        assert elaboration4 in Elaboration.get_missing_reviews(self.course)  # 2 reviews missing
+        assert elaboration5 not in Elaboration.get_missing_reviews(self.course)  # already 2 reviews
+        assert elaboration6 not in Elaboration.get_missing_reviews(self.course)  # final challenge
 
     def test_get_missing_reviews_unsubmitted(self):
         challenge1 = self.challenge
@@ -773,7 +773,7 @@ class ElaborationTest(TestCase):
                                    submission_time=old)
         elaboration6.save()
 
-        missing_reviews = Elaboration.get_missing_reviews().values_list('id', flat=True)
+        missing_reviews = Elaboration.get_missing_reviews(self.course).values_list('id', flat=True)
         assert dummy_elaboration1.id not in missing_reviews  # is staff
         assert elaboration1.id in missing_reviews  # 2 reviews missing
         assert elaboration2.id in missing_reviews  # 2 reviews missing
@@ -802,7 +802,7 @@ class ElaborationTest(TestCase):
         for review in reviews:
             review.save()
 
-        missing_reviews = Elaboration.get_missing_reviews().values_list('id', flat=True)
+        missing_reviews = Elaboration.get_missing_reviews(self.course).values_list('id', flat=True)
         assert dummy_elaboration1 not in missing_reviews  # is staff
         assert elaboration1.id in missing_reviews  # 1 review missing (not submitted)
         assert elaboration2.id in missing_reviews  # 2 reviews missing (not submitted)
@@ -815,15 +815,15 @@ class ElaborationTest(TestCase):
             review.submission_time = old
             review.save()
 
-        assert dummy_elaboration1 not in Elaboration.get_missing_reviews()  # is staff
-        assert elaboration1 in Elaboration.get_missing_reviews()  # 1 reviews missing
-        assert elaboration2 not in Elaboration.get_missing_reviews()  # 2 reviews
-        assert elaboration3 not in Elaboration.get_missing_reviews()  # 2 reviews
-        assert elaboration4 not in Elaboration.get_missing_reviews()  # 2 reviews
-        assert elaboration5 not in Elaboration.get_missing_reviews()  # 2 reviews
-        assert elaboration6 not in Elaboration.get_missing_reviews()  # final challenge
+        assert dummy_elaboration1 not in Elaboration.get_missing_reviews(self.course)  # is staff
+        assert elaboration1 in Elaboration.get_missing_reviews(self.course)  # 1 reviews missing
+        assert elaboration2 not in Elaboration.get_missing_reviews(self.course)  # 2 reviews
+        assert elaboration3 not in Elaboration.get_missing_reviews(self.course)  # 2 reviews
+        assert elaboration4 not in Elaboration.get_missing_reviews(self.course)  # 2 reviews
+        assert elaboration5 not in Elaboration.get_missing_reviews(self.course)  # 2 reviews
+        assert elaboration6 not in Elaboration.get_missing_reviews(self.course)  # final challenge
 
-    def test_get_top_level_challenges(self):
+    def test_get_top_level_tasks(self):
         challenge1 = self.challenge
         self.create_challenge()
         challenge2 = self.challenge
@@ -866,24 +866,24 @@ class ElaborationTest(TestCase):
                                  evaluation_points=1)
         evaluation2.save()
 
-        assert elaboration1 not in Elaboration.get_top_level_challenges()  # not a final challenge
-        assert elaboration2 not in Elaboration.get_top_level_challenges()  # elaboration not submitted
-        assert elaboration3 not in Elaboration.get_top_level_challenges()  # already evaluated
-        assert elaboration4 in Elaboration.get_top_level_challenges()  # evaluated but evaluation not submitted
-        assert elaboration5 not in Elaboration.get_top_level_challenges()  # author is staff
-        assert elaboration6 in Elaboration.get_top_level_challenges()  # normal top level
+        assert elaboration1 not in Elaboration.get_top_level_tasks(self.course)  # not a final challenge
+        assert elaboration2 not in Elaboration.get_top_level_tasks(self.course)  # elaboration not submitted
+        assert elaboration3 not in Elaboration.get_top_level_tasks(self.course)  # already evaluated
+        assert elaboration4 in Elaboration.get_top_level_tasks(self.course)  # evaluated but evaluation not submitted
+        assert elaboration5 not in Elaboration.get_top_level_tasks(self.course)  # author is staff
+        assert elaboration6 in Elaboration.get_top_level_tasks(self.course)  # normal top level
 
         elaboration2.submission_time = datetime.now()
         elaboration2.save()
         evaluation2.submission_time = datetime.now()
         evaluation2.save()
 
-        assert elaboration1 not in Elaboration.get_top_level_challenges()  # not a final challenge
-        assert elaboration2 in Elaboration.get_top_level_challenges()  # normal top level
-        assert elaboration3 not in Elaboration.get_top_level_challenges()  # already evaluated
-        assert elaboration4 not in Elaboration.get_top_level_challenges()  # already evaluated
-        assert elaboration5 not in Elaboration.get_top_level_challenges()  # author is staff
-        assert elaboration6 in Elaboration.get_top_level_challenges()  # normal top level
+        assert elaboration1 not in Elaboration.get_top_level_tasks(self.course)  # not a final challenge
+        assert elaboration2 in Elaboration.get_top_level_tasks(self.course)  # normal top level
+        assert elaboration3 not in Elaboration.get_top_level_tasks(self.course)  # already evaluated
+        assert elaboration4 not in Elaboration.get_top_level_tasks(self.course)  # already evaluated
+        assert elaboration5 not in Elaboration.get_top_level_tasks(self.course)  # author is staff
+        assert elaboration6 in Elaboration.get_top_level_tasks(self.course)  # normal top level
 
     def test_get_non_adequate_work(self):
         challenge1 = self.challenge
@@ -919,13 +919,13 @@ class ElaborationTest(TestCase):
                                    submission_time=datetime.now())
         elaboration6.save()
 
-        assert dummy_elaboration1 not in Elaboration.get_non_adequate_work()  # author is staff
-        assert elaboration1 not in Elaboration.get_non_adequate_work()  # no reviews yet
-        assert elaboration2 not in Elaboration.get_non_adequate_work()  # no reviews yet
-        assert elaboration3 not in Elaboration.get_non_adequate_work()  # no reviews yet
-        assert elaboration4 not in Elaboration.get_non_adequate_work()  # no reviews yet
-        assert elaboration5 not in Elaboration.get_non_adequate_work()  # no reviews yet
-        assert elaboration6 not in Elaboration.get_non_adequate_work()  # no reviews yet
+        assert dummy_elaboration1 not in Elaboration.get_non_adequate_work(self.course)  # author is staff
+        assert elaboration1 not in Elaboration.get_non_adequate_work(self.course)  # no reviews yet
+        assert elaboration2 not in Elaboration.get_non_adequate_work(self.course)  # no reviews yet
+        assert elaboration3 not in Elaboration.get_non_adequate_work(self.course)  # no reviews yet
+        assert elaboration4 not in Elaboration.get_non_adequate_work(self.course)  # no reviews yet
+        assert elaboration5 not in Elaboration.get_non_adequate_work(self.course)  # no reviews yet
+        assert elaboration6 not in Elaboration.get_non_adequate_work(self.course)  # no reviews yet
 
         review1 = Review(elaboration=elaboration2, reviewer=user3, appraisal='N')
         review1.save()
@@ -939,32 +939,32 @@ class ElaborationTest(TestCase):
         Review(elaboration=elaboration6, reviewer=user2, appraisal='N', submission_time=datetime.now()).save()
         Review(elaboration=elaboration6, reviewer=user3, appraisal='F', submission_time=datetime.now()).save()
 
-        ids = list(elaboration.id for elaboration in Elaboration.get_non_adequate_work())
+        ids = list(elaboration.id for elaboration in Elaboration.get_non_adequate_work(self.course))
         ids.sort()
         assert ids == list(set(ids))  # no duplicates
-        assert dummy_elaboration1 not in Elaboration.get_non_adequate_work()  # author is staff
-        assert elaboration1 not in Elaboration.get_non_adequate_work()  # appraisal not N
-        assert elaboration2 not in Elaboration.get_non_adequate_work()  # review not submitted yet
-        assert elaboration3 not in Elaboration.get_non_adequate_work()  # no reviews yet
-        assert elaboration4 not in Elaboration.get_non_adequate_work()  # final challenge
-        assert elaboration5 in Elaboration.get_non_adequate_work()  # normal non adequate
-        assert elaboration6 in Elaboration.get_non_adequate_work()  # normal non adequate
+        assert dummy_elaboration1 not in Elaboration.get_non_adequate_work(self.course)  # author is staff
+        assert elaboration1 not in Elaboration.get_non_adequate_work(self.course)  # appraisal not N
+        assert elaboration2 not in Elaboration.get_non_adequate_work(self.course)  # review not submitted yet
+        assert elaboration3 not in Elaboration.get_non_adequate_work(self.course)  # no reviews yet
+        assert elaboration4 not in Elaboration.get_non_adequate_work(self.course)  # final challenge
+        assert elaboration5 in Elaboration.get_non_adequate_work(self.course)  # normal non adequate
+        assert elaboration6 in Elaboration.get_non_adequate_work(self.course)  # normal non adequate
 
         review1.submission_time = datetime.now()
         review1.save()
         Review(elaboration=elaboration1, reviewer=user5, appraisal='N', submission_time=datetime.now()).save()
         Review(elaboration=elaboration3, reviewer=user1, appraisal='N', submission_time=datetime.now()).save()
 
-        ids = list(elaboration.id for elaboration in Elaboration.get_non_adequate_work())
+        ids = list(elaboration.id for elaboration in Elaboration.get_non_adequate_work(self.course))
         ids.sort()
         assert ids == list(set(ids))  # no duplicates
-        assert dummy_elaboration1 not in Elaboration.get_non_adequate_work()  # author is staff
-        assert elaboration1 in Elaboration.get_non_adequate_work()  # normal non adequate
-        assert elaboration2 in Elaboration.get_non_adequate_work()  # normal non adequate
-        assert elaboration3 in Elaboration.get_non_adequate_work()  # normal non adequate
-        assert elaboration4 not in Elaboration.get_non_adequate_work()  # final challenge
-        assert elaboration5 in Elaboration.get_non_adequate_work()  # normal non adequate
-        assert elaboration6 in Elaboration.get_non_adequate_work()  # normal non adequate
+        assert dummy_elaboration1 not in Elaboration.get_non_adequate_work(self.course)  # author is staff
+        assert elaboration1 in Elaboration.get_non_adequate_work(self.course)  # normal non adequate
+        assert elaboration2 in Elaboration.get_non_adequate_work(self.course)  # normal non adequate
+        assert elaboration3 in Elaboration.get_non_adequate_work(self.course)  # normal non adequate
+        assert elaboration4 not in Elaboration.get_non_adequate_work(self.course)  # final challenge
+        assert elaboration5 in Elaboration.get_non_adequate_work(self.course)  # normal non adequate
+        assert elaboration6 in Elaboration.get_non_adequate_work(self.course)  # normal non adequate
 
     def test_get_non_adequate_work2(self):
         challenge1 = self.challenge
@@ -1002,13 +1002,13 @@ class ElaborationTest(TestCase):
                                    submission_time=datetime.now())
         elaboration6.save()
 
-        dummy_elaboration1 not in Elaboration.get_non_adequate_work()  # author staff
-        assert elaboration1 not in Elaboration.get_non_adequate_work()  # no reviews yet
-        assert elaboration2 not in Elaboration.get_non_adequate_work()  # final challenge
-        assert elaboration3 not in Elaboration.get_non_adequate_work()  # no reviews yet
-        assert elaboration4 not in Elaboration.get_non_adequate_work()  # final challenge
-        assert elaboration5 not in Elaboration.get_non_adequate_work()  # no reviews yet
-        assert elaboration6 not in Elaboration.get_non_adequate_work()  # final challenge
+        dummy_elaboration1 not in Elaboration.get_non_adequate_work(self.course)  # author staff
+        assert elaboration1 not in Elaboration.get_non_adequate_work(self.course)  # no reviews yet
+        assert elaboration2 not in Elaboration.get_non_adequate_work(self.course)  # final challenge
+        assert elaboration3 not in Elaboration.get_non_adequate_work(self.course)  # no reviews yet
+        assert elaboration4 not in Elaboration.get_non_adequate_work(self.course)  # final challenge
+        assert elaboration5 not in Elaboration.get_non_adequate_work(self.course)  # no reviews yet
+        assert elaboration6 not in Elaboration.get_non_adequate_work(self.course)  # final challenge
 
         evaluation1 = Evaluation(submission=elaboration4, tutor=dummy_user1, evaluation_text="test",
                                  evaluation_points=1)
@@ -1022,13 +1022,13 @@ class ElaborationTest(TestCase):
         Review(elaboration=elaboration3, reviewer=user1, appraisal='N', submission_time=datetime.now()).save()
         Review(elaboration=elaboration5, reviewer=user1, appraisal='N', submission_time=datetime.now()).save()
 
-        dummy_elaboration1 not in Elaboration.get_non_adequate_work()  # author staff
-        assert elaboration1 not in Elaboration.get_non_adequate_work()  # review not submitted
-        assert elaboration2 not in Elaboration.get_non_adequate_work()  # final challenge
-        assert elaboration3 in Elaboration.get_non_adequate_work()  # non adequate
-        assert elaboration4 not in Elaboration.get_non_adequate_work()  # final challenge
-        assert elaboration5 not in Elaboration.get_non_adequate_work()  # final challenge evaluated
-        assert elaboration6 not in Elaboration.get_non_adequate_work()  # final challenge
+        dummy_elaboration1 not in Elaboration.get_non_adequate_work(self.course)  # author staff
+        assert elaboration1 not in Elaboration.get_non_adequate_work(self.course)  # review not submitted
+        assert elaboration2 not in Elaboration.get_non_adequate_work(self.course)  # final challenge
+        assert elaboration3 in Elaboration.get_non_adequate_work(self.course)  # non adequate
+        assert elaboration4 not in Elaboration.get_non_adequate_work(self.course)  # final challenge
+        assert elaboration5 not in Elaboration.get_non_adequate_work(self.course)  # final challenge evaluated
+        assert elaboration6 not in Elaboration.get_non_adequate_work(self.course)  # final challenge
 
         evaluation3 = Evaluation(submission=elaboration2, tutor=dummy_user1, evaluation_text="test",
                                  evaluation_points=1, submission_time=datetime.now())
@@ -1036,26 +1036,26 @@ class ElaborationTest(TestCase):
         evaluation1.submission_time = datetime.now()
         evaluation1.save()
 
-        dummy_elaboration1 not in Elaboration.get_non_adequate_work()  # author staff
-        assert elaboration1 not in Elaboration.get_non_adequate_work()  # review not submitted
-        assert elaboration2 not in Elaboration.get_non_adequate_work()  # final challenge
-        assert elaboration3 not in Elaboration.get_non_adequate_work()  # final challenge evaluated
-        assert elaboration4 not in Elaboration.get_non_adequate_work()  # final challenge
-        assert elaboration5 not in Elaboration.get_non_adequate_work()  # final challenge evaluated
-        assert elaboration6 not in Elaboration.get_non_adequate_work()  # final challenge
+        dummy_elaboration1 not in Elaboration.get_non_adequate_work(self.course)  # author staff
+        assert elaboration1 not in Elaboration.get_non_adequate_work(self.course)  # review not submitted
+        assert elaboration2 not in Elaboration.get_non_adequate_work(self.course)  # final challenge
+        assert elaboration3 not in Elaboration.get_non_adequate_work(self.course)  # final challenge evaluated
+        assert elaboration4 not in Elaboration.get_non_adequate_work(self.course)  # final challenge
+        assert elaboration5 not in Elaboration.get_non_adequate_work(self.course)  # final challenge evaluated
+        assert elaboration6 not in Elaboration.get_non_adequate_work(self.course)  # final challenge
 
         review1.submission_time = datetime.now()
         review1.save()
         Review(elaboration=elaboration3, reviewer=user3, appraisal='S', submission_time=datetime.now()).save()
         Review(elaboration=elaboration5, reviewer=user2, appraisal='N', submission_time=datetime.now()).save()
 
-        dummy_elaboration1 not in Elaboration.get_non_adequate_work()  # author staff
-        assert elaboration1 not in Elaboration.get_non_adequate_work()  # final challenge evaluated
-        assert elaboration2 not in Elaboration.get_non_adequate_work()  # final challenge
-        assert elaboration3 not in Elaboration.get_non_adequate_work()  # final challenge evaluated
-        assert elaboration4 not in Elaboration.get_non_adequate_work()  # final challenge
-        assert elaboration5 not in Elaboration.get_non_adequate_work()  # final challenge evaluated
-        assert elaboration6 not in Elaboration.get_non_adequate_work()  # final challenge
+        dummy_elaboration1 not in Elaboration.get_non_adequate_work(self.course)  # author staff
+        assert elaboration1 not in Elaboration.get_non_adequate_work(self.course)  # final challenge evaluated
+        assert elaboration2 not in Elaboration.get_non_adequate_work(self.course)  # final challenge
+        assert elaboration3 not in Elaboration.get_non_adequate_work(self.course)  # final challenge evaluated
+        assert elaboration4 not in Elaboration.get_non_adequate_work(self.course)  # final challenge
+        assert elaboration5 not in Elaboration.get_non_adequate_work(self.course)  # final challenge evaluated
+        assert elaboration6 not in Elaboration.get_non_adequate_work(self.course)  # final challenge
 
         evaluation1.submission_time = None
         evaluation1.save()
@@ -1064,13 +1064,13 @@ class ElaborationTest(TestCase):
         evaluation3.submission_time = None
         evaluation3.save()
 
-        dummy_elaboration1 not in Elaboration.get_non_adequate_work()  # author staff
-        assert elaboration1 in Elaboration.get_non_adequate_work()  # non adequate
-        assert elaboration2 not in Elaboration.get_non_adequate_work()  # final challenge
-        assert elaboration3 in Elaboration.get_non_adequate_work()  # non adequate
-        assert elaboration4 not in Elaboration.get_non_adequate_work()  # final challenge
-        assert elaboration5 in Elaboration.get_non_adequate_work()  # non adequate
-        assert elaboration6 not in Elaboration.get_non_adequate_work()  # final challenge
+        dummy_elaboration1 not in Elaboration.get_non_adequate_work(self.course)  # author staff
+        assert elaboration1 in Elaboration.get_non_adequate_work(self.course)  # non adequate
+        assert elaboration2 not in Elaboration.get_non_adequate_work(self.course)  # final challenge
+        assert elaboration3 in Elaboration.get_non_adequate_work(self.course)  # non adequate
+        assert elaboration4 not in Elaboration.get_non_adequate_work(self.course)  # final challenge
+        assert elaboration5 in Elaboration.get_non_adequate_work(self.course)  # non adequate
+        assert elaboration6 not in Elaboration.get_non_adequate_work(self.course)  # final challenge
 
     def test_get_evaluated_non_adequate_work(self):
         challenge1 = self.challenge
@@ -1108,13 +1108,13 @@ class ElaborationTest(TestCase):
                                    submission_time=datetime.now())
         elaboration6.save()
 
-        dummy_elaboration1 not in Elaboration.get_evaluated_non_adequate_work()  # author staff
-        assert elaboration1 not in Elaboration.get_evaluated_non_adequate_work()  # no reviews yet
-        assert elaboration2 not in Elaboration.get_evaluated_non_adequate_work()  # final challenge
-        assert elaboration3 not in Elaboration.get_evaluated_non_adequate_work()  # no reviews yet
-        assert elaboration4 not in Elaboration.get_evaluated_non_adequate_work()  # final challenge
-        assert elaboration5 not in Elaboration.get_evaluated_non_adequate_work()  # no reviews yet
-        assert elaboration6 not in Elaboration.get_evaluated_non_adequate_work()  # final challenge
+        dummy_elaboration1 not in Elaboration.get_evaluated_non_adequate_work(self.course)  # author staff
+        assert elaboration1 not in Elaboration.get_evaluated_non_adequate_work(self.course)  # no reviews yet
+        assert elaboration2 not in Elaboration.get_evaluated_non_adequate_work(self.course)  # final challenge
+        assert elaboration3 not in Elaboration.get_evaluated_non_adequate_work(self.course)  # no reviews yet
+        assert elaboration4 not in Elaboration.get_evaluated_non_adequate_work(self.course)  # final challenge
+        assert elaboration5 not in Elaboration.get_evaluated_non_adequate_work(self.course)  # no reviews yet
+        assert elaboration6 not in Elaboration.get_evaluated_non_adequate_work(self.course)  # final challenge
 
         evaluation1 = Evaluation(submission=elaboration4, tutor=dummy_user1, evaluation_text="test",
                                  evaluation_points=1)
@@ -1128,36 +1128,36 @@ class ElaborationTest(TestCase):
         Review(elaboration=elaboration3, reviewer=user1, appraisal='N', submission_time=datetime.now()).save()
         Review(elaboration=elaboration5, reviewer=user1, appraisal='N', submission_time=datetime.now()).save()
 
-        dummy_elaboration1 not in Elaboration.get_evaluated_non_adequate_work()  # author staff
-        assert elaboration1 not in Elaboration.get_evaluated_non_adequate_work()  # no evaluation
-        assert elaboration2 not in Elaboration.get_evaluated_non_adequate_work()  # final challenge
-        assert elaboration3 not in Elaboration.get_evaluated_non_adequate_work()  # evaluation not submitted
-        assert elaboration4 not in Elaboration.get_evaluated_non_adequate_work()  # final challenge
-        assert elaboration5 in Elaboration.get_evaluated_non_adequate_work()  # non adequate
-        assert elaboration6 not in Elaboration.get_evaluated_non_adequate_work()  # final challenge
+        dummy_elaboration1 not in Elaboration.get_evaluated_non_adequate_work(self.course)  # author staff
+        assert elaboration1 not in Elaboration.get_evaluated_non_adequate_work(self.course)  # no evaluation
+        assert elaboration2 not in Elaboration.get_evaluated_non_adequate_work(self.course)  # final challenge
+        assert elaboration3 not in Elaboration.get_evaluated_non_adequate_work(self.course)  # evaluation not submitted
+        assert elaboration4 not in Elaboration.get_evaluated_non_adequate_work(self.course)  # final challenge
+        assert elaboration5 in Elaboration.get_evaluated_non_adequate_work(self.course)  # non adequate
+        assert elaboration6 not in Elaboration.get_evaluated_non_adequate_work(self.course)  # final challenge
 
         Evaluation(submission=elaboration2, tutor=dummy_user1, evaluation_text="test", evaluation_points=1,
                    submission_time=datetime.now()).save()
         evaluation1.submission_time = datetime.now()
         evaluation1.save()
 
-        dummy_elaboration1 not in Elaboration.get_evaluated_non_adequate_work()  # author staff
-        assert elaboration1 not in Elaboration.get_evaluated_non_adequate_work()  # review not submitted
-        assert elaboration2 not in Elaboration.get_evaluated_non_adequate_work()  # final challenge
-        assert elaboration3 in Elaboration.get_evaluated_non_adequate_work()  # non adequate
-        assert elaboration4 not in Elaboration.get_evaluated_non_adequate_work()  # final challenge
-        assert elaboration5 in Elaboration.get_evaluated_non_adequate_work()  # non adequate
-        assert elaboration6 not in Elaboration.get_evaluated_non_adequate_work()  # final challenge
+        dummy_elaboration1 not in Elaboration.get_evaluated_non_adequate_work(self.course)  # author staff
+        assert elaboration1 not in Elaboration.get_evaluated_non_adequate_work(self.course)  # review not submitted
+        assert elaboration2 not in Elaboration.get_evaluated_non_adequate_work(self.course)  # final challenge
+        assert elaboration3 in Elaboration.get_evaluated_non_adequate_work(self.course)  # non adequate
+        assert elaboration4 not in Elaboration.get_evaluated_non_adequate_work(self.course)  # final challenge
+        assert elaboration5 in Elaboration.get_evaluated_non_adequate_work(self.course)  # non adequate
+        assert elaboration6 not in Elaboration.get_evaluated_non_adequate_work(self.course)  # final challenge
 
         review1.submission_time = datetime.now()
         review1.save()
         Review(elaboration=elaboration3, reviewer=user3, appraisal='S', submission_time=datetime.now()).save()
         Review(elaboration=elaboration5, reviewer=user2, appraisal='N', submission_time=datetime.now()).save()
 
-        dummy_elaboration1 not in Elaboration.get_evaluated_non_adequate_work()  # author staff
-        assert elaboration1 in Elaboration.get_evaluated_non_adequate_work()  # non adequate
-        assert elaboration2 not in Elaboration.get_evaluated_non_adequate_work()  # final challenge
-        assert elaboration3 in Elaboration.get_evaluated_non_adequate_work()  # non adequate
-        assert elaboration4 not in Elaboration.get_evaluated_non_adequate_work()  # final challenge
-        assert elaboration5 in Elaboration.get_evaluated_non_adequate_work()  # non adequate
-        assert elaboration6 not in Elaboration.get_evaluated_non_adequate_work()  # final challenge
+        dummy_elaboration1 not in Elaboration.get_evaluated_non_adequate_work(self.course)  # author staff
+        assert elaboration1 in Elaboration.get_evaluated_non_adequate_work(self.course)  # non adequate
+        assert elaboration2 not in Elaboration.get_evaluated_non_adequate_work(self.course)  # final challenge
+        assert elaboration3 in Elaboration.get_evaluated_non_adequate_work(self.course)  # non adequate
+        assert elaboration4 not in Elaboration.get_evaluated_non_adequate_work(self.course)  # final challenge
+        assert elaboration5 in Elaboration.get_evaluated_non_adequate_work(self.course)  # non adequate
+        assert elaboration6 not in Elaboration.get_evaluated_non_adequate_work(self.course)  # final challenge

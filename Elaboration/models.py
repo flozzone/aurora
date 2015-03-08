@@ -177,22 +177,36 @@ class Elaboration(models.Model):
             .values_list('submission__user', 'submission__challenge__stackchallengerelation__stack__id')
         )
 
-        stack_loockup = {}
+
+        stack_lookup = {}
         for user, stack in submitted_evaluations:
-            if not stack in stack_loockup:
-                stack_loockup[stack] = [user]
-            elif not user in stack_loockup[stack]:
-                stack_loockup[stack].append(user)
+            if not stack in stack_lookup:
+                stack_lookup[stack] = [user]
+            elif not user in stack_lookup[stack]:
+                stack_lookup[stack].append(user)
         exclude_elaboration_ids = []
-        for stack, users in stack_loockup.items():
+        for stack, users in stack_lookup.items():
             exclude_elaboration_ids = exclude_elaboration_ids + list(
                 Elaboration.objects
                 .filter(challenge__stackchallengerelation__stack__id=stack, user_id__in=users)
                 .values_list('id', flat=True)
             )
 
-        non_adequate_elaborations.exclude(id__in=exclude_elaboration_ids)
-        return non_adequate_elaborations
+        return_value = []
+        for elaboration in non_adequate_elaborations:
+            if not elaboration.id in exclude_elaboration_ids:
+                return_value.append(elaboration)
+
+        # TODO: !!!!!!! please Django gods tell me why following line does not work!!!!!!
+        # this is probably used causing a lot of bugs in a lot of other places
+        # and it did work previously
+        # non_adequate_elaborations.exclude(id__in=exclude_elaboration_ids)
+
+        non_adequate_elaboration_ids = []
+        for elaboration in return_value:
+            non_adequate_elaboration_ids.append(elaboration.id)
+
+        return return_value
 
     @staticmethod
     def get_evaluated_non_adequate_work(course):

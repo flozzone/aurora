@@ -39,6 +39,7 @@
 {% endif %}
     {{ challenge.title|safe }}
     </div>
+    Points: {{ challenge.points }}
     <div class="challenge_description{% if elaboration.is_submitted %} nothere{% endif %}" >
       {{ challenge.description|safe|urlize }}
       <div class="qa_section">
