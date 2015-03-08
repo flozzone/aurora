@@ -222,6 +222,11 @@
 	opacity:0.35;*/
 }
 
+.comment_unbookmark, .comment_bookmark {
+	display:inline-block;
+	float:left;
+}
+
 .comment_actions > a, .response_actions > a, .comment_bottom > a, .response_bottom > a {
 	text-decoration:none;
 	text-transform:uppercase;

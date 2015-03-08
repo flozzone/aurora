@@ -4,9 +4,11 @@ from Comments import views
 urlpatterns = patterns(
     '',
     url(r'^feed/$', views.feed, name='feed'),
+    url(r'^bookmarks/$', views.bookmarks, name='bookmarks'),
     url(r'^post/$', views.post_comment, name='post'),
     url(r'^delete/$', views.delete_comment, name='delete'),
     url(r'^promote/$', views.promote_comment, name='promote'),
+    url(r'^bookmark/$', views.bookmark_comment, name='bookmark'),
     url(r'^edit/$', views.edit_comment, name='edit'),
     url(r'^reply/$', views.post_reply, name='reply'),
     url(r'^vote/$', views.vote_on_comment, name='vote'),
