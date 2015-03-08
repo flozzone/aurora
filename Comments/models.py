@@ -170,19 +170,6 @@ class Comment(models.Model):
         return queryset.filter(deleter=None).count()
 
     @staticmethod
-    def query_bookmarks(requester):
-        result = requester.bookmarked_comments_set.all().order_by('-post_date')
-        Comment.filter_visible(result, requester)
-        Comment.set_flags(result, requester)
-        return result
-
-    # @staticmethod
-    # def set_bookmark_flags(comment_set, requester):
-    #     for comment in comment_set:
-    #         comment.bookmarked = True if comment.bookmarked_by.filter(pk=requester.id).exists() else False
-    #         comment.requester = requester
-
-    @staticmethod
     def set_flags(comment_set, requester):
         for comment in comment_set:
             comment.requester = requester
