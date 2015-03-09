@@ -426,20 +426,19 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
             var $newComment = $('#comment_new');
             var $replyTextarea = $('#replyTextarea');
             var text = $replyTextarea.val();
-            $replyTextarea.val(text);
-
-            $replyForm.hide();
-            $("#replyTextarea").val('');
 
             $replyForm.after($newComment);
             $newComment.find(".comment_text").text(text);
+            $replyForm.hide();
             $newComment.show();
+
             $.ajax({
                 url: my.REPLY_URL,
                 data: $(this).closest('form').serialize(),
                 type: 'POST',
                 dataType: 'html',
                 success: function () {
+                    $("#replyTextarea").val('');
                     my.startPolling();
                     my.state.posting = false;
                 }
@@ -489,22 +488,21 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
             var $commentTextarea = $("#commentTextarea");
             var text = $commentTextarea.val();
             var $commentForm = $("#commentForm");
-            $commentTextarea.val(text);
-
             var $newComment = $("#comment_new");
 
-            my.hideCommentForm();
             $commentForm.after($newComment);
-            $newComment.find(".comment_text").text(text);
+            $newComment.find(".comment_text").html(text);
+
+            $commentForm.hide();
             $newComment.show();
 
             $.ajax({
                 url: my.POST_URL,
                 data: $commentForm.serialize(),
                 type: "POST",
-                // the type of data we expect back
                 dataType: 'html',
                 success: function () {
+                    $commentTextarea.val('');
                     my.startPolling();
                 },
                 error: function (xhr, status) {

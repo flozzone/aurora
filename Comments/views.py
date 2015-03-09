@@ -42,7 +42,8 @@ def post_comment(request):
     form = CommentForm(request.POST)
     try:
         create_comment(form, request)
-    except ValidationError:
+    except ValidationError as error:
+        raise error
         return HttpResponseBadRequest('The submitted form seems to be borken')
     return HttpResponse('')
 
@@ -107,7 +108,7 @@ def edit_comment(request):
 
 def create_comment(form, request):
     if not form.is_valid():
-        raise ValidationError
+        raise ValidationError('The submitted form was not valid')
 
     context = RequestContext(request)
     user = context['user']
