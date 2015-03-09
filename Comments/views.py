@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.template.loader import render_to_string
+from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST, require_GET
 
 from django.contrib.auth.decorators import login_required
@@ -11,11 +12,15 @@ from django.utils import timezone
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden, HttpResponseBadRequest
 from django.contrib.contenttypes.models import ContentType
 import json
+from AuroraUser.models import AuroraUser
 
 from Comments.models import Comment, CommentsConfig, CommentList, Vote
 from Course.models import Course
 from Notification.models import Notification
 from Comments.tests import CommentReferenceObject
+from Slides.models import Slide
+from AuroraProject.settings import SECRET_KEY, LECTURER_USERNAME
+from local_settings import LECTURER_SECRET
 
 
 class CommentForm(forms.Form):
@@ -101,6 +106,26 @@ def edit_comment(request):
     comment.edited_date = timezone.now()
     comment.save()
     CommentList.get_by_comment(comment).increment()
+
+    return HttpResponse('')
+
+
+@csrf_exempt
+@require_POST
+def lecturer_post(request):
+    data = request.POST
+    if data['secret'] != LECTURER_SECRET:
+        return HttpResponseForbidden('You shall not pass!')
+
+    user = AuroraUser.objects.get(username=LECTURER_USERNAME)
+    ref_obj = Slide.objects.get(filename=data['filename'])
+
+    Comment.objects.create(text=data['text'],
+                           author=user,
+                           content_object=ref_obj,
+                           parent=None,
+                           post_date=timezone.now(),
+                           visibility=Comment.PUBLIC)
 
     return HttpResponse('')
 
