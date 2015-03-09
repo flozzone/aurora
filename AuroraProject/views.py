@@ -20,6 +20,14 @@ from django.core.urlresolvers import reverse
 
 
 def course_selection(request):
+    if not request.user.is_authenticated():
+        if 'sKey' in request.GET:
+            from AuroraUser.views import sso_auth_callback
+
+            return sso_auth_callback(request)
+        else:
+            return redirect(reverse('course_selection'))
+
     data = {'courses': Course.objects.all()}
     return render_to_response('course_selection.html', data)
 
