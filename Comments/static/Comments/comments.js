@@ -168,6 +168,7 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
             var ref_id = $(this).data('ref_id');
             var ref_type = $(this).data('ref_type');
             var $commentForm = $('#commentForm');
+            var $commentTextarea = $('#commentTextarea');
             $commentForm.find('#id_reference_id').val(ref_id);
             $commentForm.find('#id_reference_type_id').val(ref_type);
 
@@ -178,13 +179,14 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
                 $commentForm.prev().show();
             }
             $(this).after($commentForm);
+            $commentForm.show();
+            $commentTextarea.focus();
+
             var reply_text = $replyForm.find('textarea').val();
             if (reply_text !== '') {
                 reply_text = reply_text.replace(/(@[^ ]+\s|^)/, '');
-                $commentForm.find('textarea').val(reply_text);
+                $commentTextarea.val(reply_text);
             }
-            $commentForm.show();
-			var focusTimer = setTimeout (function(){$('#commentTextarea').focus()},10);
             $(this).hide();
 
             return false;
@@ -326,18 +328,20 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
 
             var $commentTextarea = $('#commentTextarea');
             var $replyTextarea = $('#replyTextarea');
+
+            $(this).after($replyForm);
+            $replyForm.show();
+            $replyTextarea.focus();
+
             if ($commentTextarea.val() !== '') {
                 new_text = $commentTextarea.val();
             } else {
                 new_text = $replyTextarea.val();
             }
-            new_text = new_text.replace(/(@[^ ]+\s|^)/, '@' + user + ' -');
+            new_text = new_text.replace(/(@[^ ]+\s|^)/, '@' + user + ' - ');
             $replyTextarea.val(new_text);
 
-            $(this).after($replyForm);
             my.hideCommentForm();
-            $replyForm.show();
-			var focusTimer = setTimeout (function(){$('#replyTextarea').focus();$('#replyTextarea').val($('#replyTextarea').val() + ' ');},10);
             return false;
         });
     };
