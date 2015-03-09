@@ -47,7 +47,8 @@ def post_comment(request):
     form = CommentForm(request.POST)
     try:
         create_comment(form, request)
-    except ValidationError:
+    except ValidationError as error:
+        raise error
         return HttpResponseBadRequest('The submitted form seems to be borken')
     return HttpResponse('')
 
@@ -132,7 +133,7 @@ def lecturer_post(request):
 
 def create_comment(form, request):
     if not form.is_valid():
-        raise ValidationError
+        raise ValidationError('The submitted form was not valid')
 
     context = RequestContext(request)
     user = context['user']
@@ -262,6 +263,29 @@ def vote_down_on(comment, voter):
     except Vote.DoesNotExist:
         Vote.objects.create(direction=Vote.DOWN, voter=voter, comment=comment)
         CommentList.get_by_comment(comment).increment()
+
+
+@require_POST
+@login_required
+def bookmark_comment(request):
+    data = request.POST
+
+    requester = RequestContext(request)['user']
+
+    try:
+        comment = Comment.objects.get(id=data['comment_id'])
+    except Comment.DoesNotExist:
+        return HttpResponse('')
+
+    if data['bookmark'] == 'true':
+        comment.bookmarked_by.add(requester)
+    else:
+        comment.bookmarked_by.remove(requester)
+
+    comment.save()
+    CommentList.get_by_comment(comment).increment()
+
+    return HttpResponse('')
 
 
 @require_POST
@@ -401,3 +425,10 @@ def feed(request):
         o2 = CommentReferenceObject.objects.get(id=2)
     return render(request, 'Comments/feed.html', {'object': o, 'object2': o2})
 
+
+@login_required
+def bookmarks(request):
+    requester = RequestContext(request)['user']
+    comment_list = Comment.query_bookmarks(requester)
+    template = 'Comments/bookmarks_list.html'
+    return render_to_response(template, {'comment_list': comment_list}, context_instance=RequestContext(request))

@@ -1,5 +1,5 @@
 """
-PortfolioUser model method tests
+AuroraUser model method tests
 """
 
 from datetime import datetime
@@ -18,7 +18,7 @@ from hashlib import sha1
 from hmac import new as hmac_new
 
 
-class PortfolioUserTest(TestCase):
+class AuroraUserTest(TestCase):
     def setUp(self):
         self.create_test_users(4)
         self.create_course()
