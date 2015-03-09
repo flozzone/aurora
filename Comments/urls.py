@@ -15,4 +15,5 @@ urlpatterns = patterns(
     url(r'^update/$', views.update_comments, name='update'),
     url(r'^list_page/$', views.comment_list_page, name='list_page'),
     url(r'^mark_seen/$', views.mark_seen, name='mark_seen'),
+    url(r'^lecturer_post/$', views.lecturer_post, name='lecturer_post'),
 )
