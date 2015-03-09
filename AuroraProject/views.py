@@ -66,13 +66,7 @@ def home(request, course_short_title=None):
         stack_data['sum'] = points_sum
         data['stacks'].append(stack_data)
 
-    try:
-        o = CommentReferenceObject.objects.get(name='newsfeed')
-    except CommentReferenceObject.DoesNotExist:
-        o = CommentReferenceObject(name='newsfeed')
-        o.save()
-
-    context = RequestContext(request, {'newsfeed': o})
+    context = RequestContext(request, {'newsfeed': data['course']})
 
     return render_to_response('home.html', data, context)
 
