@@ -45,6 +45,7 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
         my.registerDeleteLinksForCommentList($comment_list);
         my.registerVoteForCommentList($comment_list);
         my.registerPromoteLinksForCommentList($comment_list);
+        my.registerBookmarkLinksForCommentList($comment_list);
         my.registerSeenLinksForCommentList($comment_list);
     };
 
@@ -167,6 +168,7 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
             var ref_id = $(this).data('ref_id');
             var ref_type = $(this).data('ref_type');
             var $commentForm = $('#commentForm');
+            var $commentTextarea = $('#commentTextarea');
             $commentForm.find('#id_reference_id').val(ref_id);
             $commentForm.find('#id_reference_type_id').val(ref_type);
 
@@ -177,13 +179,14 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
                 $commentForm.prev().show();
             }
             $(this).after($commentForm);
+            $commentForm.show();
+            $commentTextarea.focus();
+
             var reply_text = $replyForm.find('textarea').val();
             if (reply_text !== '') {
                 reply_text = reply_text.replace(/(@[^ ]+\s|^)/, '');
-                $commentForm.find('textarea').val(reply_text);
+                $commentTextarea.val(reply_text);
             }
-            $commentForm.show();
-			var focusTimer = setTimeout (function(){$('#commentTextarea').focus()},10);
             $(this).hide();
 
             return false;
@@ -325,18 +328,20 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
 
             var $commentTextarea = $('#commentTextarea');
             var $replyTextarea = $('#replyTextarea');
+
+            $(this).after($replyForm);
+            $replyForm.show();
+            $replyTextarea.focus();
+
             if ($commentTextarea.val() !== '') {
                 new_text = $commentTextarea.val();
             } else {
                 new_text = $replyTextarea.val();
             }
-            new_text = new_text.replace(/(@[^ ]+\s|^)/, '@' + user + ' -');
+            new_text = new_text.replace(/(@[^ ]+\s|^)/, '@' + user + ' - ');
             $replyTextarea.val(new_text);
 
-            $(this).after($replyForm);
             my.hideCommentForm();
-            $replyForm.show();
-			var focusTimer = setTimeout (function(){$('#replyTextarea').focus();$('#replyTextarea').val($('#replyTextarea').val() + ' ');},10);
             return false;
         });
     };
@@ -425,20 +430,19 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
             var $newComment = $('#comment_new');
             var $replyTextarea = $('#replyTextarea');
             var text = $replyTextarea.val();
-            $replyTextarea.val(text);
-
-            $replyForm.hide();
-            $("#replyTextarea").val('');
 
             $replyForm.after($newComment);
             $newComment.find(".comment_text").text(text);
+            $replyForm.hide();
             $newComment.show();
+
             $.ajax({
                 url: my.REPLY_URL,
                 data: $(this).closest('form').serialize(),
                 type: 'POST',
                 dataType: 'html',
                 success: function () {
+                    $("#replyTextarea").val('');
                     my.startPolling();
                     my.state.posting = false;
                 }
@@ -488,22 +492,21 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
             var $commentTextarea = $("#commentTextarea");
             var text = $commentTextarea.val();
             var $commentForm = $("#commentForm");
-            $commentTextarea.val(text);
-
             var $newComment = $("#comment_new");
 
-            my.hideCommentForm();
             $commentForm.after($newComment);
-            $newComment.find(".comment_text").text(text);
+            $newComment.find(".comment_text").html(text);
+
+            $commentForm.hide();
             $newComment.show();
 
             $.ajax({
                 url: my.POST_URL,
                 data: $commentForm.serialize(),
                 type: "POST",
-                // the type of data we expect back
                 dataType: 'html',
                 success: function () {
+                    $commentTextarea.val('');
                     my.startPolling();
                 },
                 error: function (xhr, status) {
