@@ -495,7 +495,7 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
             var $newComment = $("#comment_new");
 
             $commentForm.after($newComment);
-            $newComment.find(".comment_text").html(text);
+            $newComment.find(".comment_text").text(text);
 
             $commentForm.hide();
             $newComment.show();
