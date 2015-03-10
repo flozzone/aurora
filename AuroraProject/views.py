@@ -7,7 +7,6 @@ from django.contrib.admin.views.decorators import staff_member_required
 
 from datetime import datetime
 
-from Comments.models import CommentReferenceObject
 from Stack.models import Stack
 from Course.models import Course, CourseUserRelation
 from AuroraUser.models import AuroraUser
@@ -23,10 +22,7 @@ def course_selection(request):
     if not request.user.is_authenticated():
         if 'sKey' in request.GET:
             from AuroraUser.views import sso_auth_callback
-
             return sso_auth_callback(request)
-        else:
-            return redirect(reverse('course_selection'))
 
     data = {'courses': Course.objects.all()}
     return render_to_response('course_selection.html', data)
@@ -34,12 +30,7 @@ def course_selection(request):
 
 def home(request, course_short_title=None):
     if not request.user.is_authenticated():
-        if 'sKey' in request.GET:
-            from AuroraUser.views import sso_auth_callback
-
-            return sso_auth_callback(request)
-        else:
-            return redirect(reverse('User:login', args=(course_short_title, )))
+        return redirect(reverse('User:login', args=(course_short_title, )))
 
     data = {}
     user = RequestContext(request)['user']

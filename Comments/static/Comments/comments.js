@@ -442,7 +442,7 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
                 type: 'POST',
                 dataType: 'html',
                 success: function () {
-                    $("#replyTextarea").val('');
+                    $replyTextarea.val('');
                     my.startPolling();
                     my.state.posting = false;
                 }
@@ -495,7 +495,7 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
             var $newComment = $("#comment_new");
 
             $commentForm.after($newComment);
-            $newComment.find(".comment_text").html(text);
+            $newComment.find(".comment_text").text(text);
 
             $commentForm.hide();
             $newComment.show();
@@ -508,6 +508,8 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
                 success: function () {
                     $commentTextarea.val('');
                     my.startPolling();
+                    // TODO remove next line and make "Add Comment" appear again after commenting
+                    location.reload();
                 },
                 error: function (xhr, status) {
                 },

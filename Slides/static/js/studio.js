@@ -17,7 +17,10 @@ function checkSlidesInView() {
         var slide, slide_id;
         //var render_slides_url = base_url + "slidecasting/ajax_render_comments/";
 
-        COMMENTS.setActivePollingObjects(first_slide + 1, last_slide + 1);
+        //COMMENTS.setActivePollingObjects(first_slide + 1, last_slide + 1);
+        // TODO replace this hotfix by disabling polling for comments or fixing it
+        COMMENTS.POLLING.active_interval = 3600000;
+        COMMENTS.POLLING.idle_interval = 3600000;
 //        for (var i=first_slide; i<=last_slide; i++ ) {
             /* TODO: insert loading of comments here.
                      * ich hab den alten code da gelassen. das erste ist eine abfrage obs schon 
