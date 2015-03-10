@@ -508,6 +508,8 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
                 success: function () {
                     $commentTextarea.val('');
                     my.startPolling();
+                    // TODO remove next line and make "Add Comment" appear again after commenting
+                    location.reload();
                 },
                 error: function (xhr, status) {
                 },
