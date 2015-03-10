@@ -442,7 +442,7 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
                 type: 'POST',
                 dataType: 'html',
                 success: function () {
-                    $("#replyTextarea").val('');
+                    $replyTextarea.val('');
                     my.startPolling();
                     my.state.posting = false;
                 }
