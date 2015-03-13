@@ -23,7 +23,7 @@ class Stack(models.Model):
             challenge_image_urls.append(challenge.image.url)
         return challenge_image_urls
 
-    def get_points(self, user):
+    def get_points_earned(self, user):
         final_challenge = self.get_final_challenge()
         elaboration = final_challenge.get_elaboration(user)
         if not elaboration:
@@ -32,6 +32,14 @@ class Stack(models.Model):
         if not evaluation:
             return 0
         return evaluation.evaluation_points
+
+    def get_points_submitted(self, user):
+        points = 0
+        for challenge in self.get_challenges():
+            elaboration = challenge.get_elaboration(user)
+            if elaboration is not None and elaboration.is_submitted():
+                points = points + challenge.points
+        return points
 
     def get_last_available_challenge(self, user):
         available_challenge = None

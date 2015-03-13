@@ -1,6 +1,5 @@
 {% block additional_headers %}
     <link rel="stylesheet" href="{{ STATIC_URL }}css/elaboration_files.css" type="text/css" media="screen"/>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/elaboration_files.js"></script>
 {% endblock %}
 
 {% for file in files %}
@@ -11,12 +10,12 @@
             <div class="upload_preview">
                 <div class="upload_details">
                     {% if 'pdf' in file.accepted_files %}
-                        <a title="{{ file.name }}" href="{{ file.path }}" target="_blank">
-                            <img alt="{{ file.name }}" src="{{ STATIC_URL }}img/pdf_icon.jpg"/>
+                        <a title="{{ file.name }}" href="{{ file.url }}" target="_blank">
+                            <img alt="{{ file.name }}" src="{{ file.thumbnail_url }}"/>
                         </a>
                     {% else %}
-                        <a title="{{ file.name }}" data-lightbox="preview" href="{{ file.path }}">
-                            <img alt="{{ file.name }}" src="{{ file.name }}"/>
+                        <a title="{{ file.name }}" data-lightbox="preview" href="{{ file.url }}">
+                            <img alt="{{ file.name }}" src="{{ file.thumbnail_url }}"/>
                         </a>
                     {% endif %}
                 </div>

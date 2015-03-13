@@ -141,6 +141,8 @@ INSTALLED_APPS = (
     'taggit'
 )
 
+TEST_RUNNER = 'django.test.runner.DiscoverRunner'
+
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 
 # A sample logging configuration. The only tangible logging
@@ -172,7 +174,7 @@ LOGGING = {
     }
 }
 
-LOGIN_URL='/login'
+LOGIN_URL = '/'
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.auth.context_processors.auth",

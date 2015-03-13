@@ -1,12 +1,4 @@
 $(function() {
-	$(".tag_input").keydown(function(event) {
-		e = event.which;
-		if(e==13||e==188) {
-			$(".add_tags_btn").click();setTimeout (function(){$('tag_input').focus()},50);}
-	});
-});
-
-$(function() {
    $(".tag_input").click(function(event) {
        event.stopPropagation();
        $(".tag_input").autocomplete( "search", "" );

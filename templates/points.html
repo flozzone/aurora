@@ -20,7 +20,7 @@
         {% for stack in stack_data.course_stacks %}
             <tr class="pZeile{{forloop.parentloop.counter}}">
                 <td class="stack_name">{{ stack.stack.title }}</td>
-                <td class="punkte">{{ stack.points }}</td>
+                <td class="punkte">{{ stack.points_earned }} / {{ stack.points_submitted }}</td>
             </tr>
         {% endfor %}
 

@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.template.loader import render_to_string
+from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST, require_GET
 
 from django.contrib.auth.decorators import login_required
@@ -11,11 +12,15 @@ from django.utils import timezone
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden, HttpResponseBadRequest
 from django.contrib.contenttypes.models import ContentType
 import json
+from AuroraUser.models import AuroraUser
 
 from Comments.models import Comment, CommentsConfig, CommentList, Vote
 from Course.models import Course
 from Notification.models import Notification
 from Comments.tests import CommentReferenceObject
+from Slides.models import Slide
+from AuroraProject.settings import SECRET_KEY, LECTURER_USERNAME
+from local_settings import LECTURER_SECRET
 
 
 class CommentForm(forms.Form):
@@ -30,6 +35,7 @@ class ReplyForm(forms.Form):
     reference_type_id = forms.IntegerField(widget=forms.HiddenInput)
     reference_id = forms.IntegerField(widget=forms.HiddenInput)
     parent_comment = forms.IntegerField(widget=forms.HiddenInput)
+    course_short_title = forms.CharField(widget=forms.HiddenInput(attrs={'id': 'replyCourseShortTitle'}))
     uri = forms.CharField(widget=forms.HiddenInput, max_length=200)
     text = forms.CharField(widget=forms.Textarea(attrs={'id': 'replyTextarea'}), label='')
     visibility = forms.ChoiceField(choices=Comment.VISIBILITY_CHOICES)
@@ -41,7 +47,8 @@ def post_comment(request):
     form = CommentForm(request.POST)
     try:
         create_comment(form, request)
-    except ValidationError:
+    except ValidationError as error:
+        raise error
         return HttpResponseBadRequest('The submitted form seems to be borken')
     return HttpResponse('')
 
@@ -104,9 +111,29 @@ def edit_comment(request):
     return HttpResponse('')
 
 
+@csrf_exempt
+@require_POST
+def lecturer_post(request):
+    data = request.POST
+    if data['secret'] != LECTURER_SECRET:
+        return HttpResponseForbidden('You shall not pass!')
+
+    user = AuroraUser.objects.get(username=LECTURER_USERNAME)
+    ref_obj = Slide.objects.get(filename=data['filename'])
+
+    Comment.objects.create(text=data['text'],
+                           author=user,
+                           content_object=ref_obj,
+                           parent=None,
+                           post_date=timezone.now(),
+                           visibility=Comment.PUBLIC)
+
+    return HttpResponse('')
+
+
 def create_comment(form, request):
     if not form.is_valid():
-        raise ValidationError
+        raise ValidationError('The submitted form was not valid')
 
     context = RequestContext(request)
     user = context['user']
@@ -152,14 +179,6 @@ def create_comment(form, request):
 
     comment_list.increment()
 
-    # TODO extremely borken fix, remove this ASAP
-    # TODO FIXME remove or replace or something
-    course = None
-    # course = context['last_selected_course']
-    if course is None:
-        course = Course.objects.get(short_title='gsi')
-    # TODO endof extremely borken fix
-
     if parent_comment is None:
         return
 
@@ -172,12 +191,27 @@ def create_comment(form, request):
     if comment.visibility == Comment.STAFF and not parent_comment.author.is_staff:
         return
 
+    course_short_title = form.cleaned_data['course_short_title']
+
+    if course_short_title != "":
+        course = Course.get_or_raise_404(course_short_title)
+        link = comment_list.uri + '#comment_' + str(parent_comment.id)
+    else:
+        course = None
+        link = ""
+
+    text = comment.author.nickname[:15] + ': '
+    if len(comment.text) > 50:
+        text += comment.text[:47] + "..."
+    else:
+        text += comment.text[:50]
+
     obj, created = Notification.objects.get_or_create(
         user=parent_comment.author,
         course=course,
-        text="You've received a reply to one of your comments",
+        text=text,
         image_url=comment.author.avatar.url,
-        link=comment_list.uri + '#comment_' + str(parent_comment.id)
+        link=link
     )
 
     if not created:

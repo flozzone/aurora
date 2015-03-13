@@ -84,11 +84,11 @@ def sso_auth_callback(request):
     user = authenticate(params=values)
 
     if user is None:
-        return redirect('login/')
+        return redirect(reverse('course_selection'))
         # return render_to_response('login.html', {'error_message': 'Your user is not enrolled with this system'}, context_instance=RequestContext(request))
 
     if not user.is_active:
-        return redirect('login/')
+        return redirect(reverse('course_selection'))
         # return render_to_response('login.html', {'error_message': 'Your user has been deactivated'}, context_instance=RequestContext(request))
 
     django_login(request, user)
@@ -96,7 +96,7 @@ def sso_auth_callback(request):
     if not user.avatar:
         user.get_gravatar()
 
-    return redirect('/')
+    return redirect(reverse('course_selection'))
 
 
 class ZidSSOBackend():
