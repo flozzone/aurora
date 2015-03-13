@@ -42,7 +42,7 @@
 				{% if course.short_title == "gsi" %}
 				&nbsp;&nbsp;&nbsp;<i class="fa fa-angle-double-right"></i><a href="https://tuwel.tuwien.ac.at/mod/rssplayer/view.php?id=178741">GSI live stream</a></p><br>
 				{% else %}
-				&nbsp;&nbsp;&nbsp;<i class="fa fa-angle-double-right"></i><a href="https://tuwel.tuwien.ac.at/mod/rssplayer/view.php?id=178748">BHCI live stream</a></p><br>
+				&nbsp;&nbsp;&nbsp;<i class="fa fa-angle-double-right"></i><a href="https://tuwel.tuwien.ac.at/mod/rssplayer/view.php?id=216701">BHCI live stream</a></p><br>
 				{% endif %}
 			<p>Ausserdem zeichnen wir diese Streams auf, und werden sie mit dem VO-Kalender verkn&uuml;pfen!</p>
 	        <br><br>
@@ -121,9 +121,16 @@
 	        <br><br>
 		</div>
         <div class="feed_header" id="part_3">
-			<i class="fa fa-toggle-down half"></i> <b>Vorlesungskalender</b>
+			<i class="fa fa-toggle-down half"></i> <b>Vorlesungskalender
+			{% if course.short_title == "hci" %}
+			BHCI
+			{% else %}
+			GSI
+			{% endif %}
+			</b>
 		</div>
         <div class="feed_column" id="content_part_3">
+			<table width="100%">
 			{% if course.short_title == "hci" %}
 			<table>
 				<tr><td colspan=5><b>BHCI</b></td></tr>
@@ -133,7 +140,8 @@
 				<tr><td colspan=5><b>GSI</b></td></tr>
 			</table>
 			{% endif %}
-			<br><br>
+			</table>
+			<br>
 			<span class="maybe" style="font-size:90%">* diese termine sind als reserve geplant. nach momentanen planungsstand findet da keine vorlesung statt. </span>
 		</div>
 		<br><br><br><br><br>
