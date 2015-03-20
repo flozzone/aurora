@@ -148,8 +148,8 @@ function updateNew() {
 	if (y<2) {y = ''}
 	else if (y<10) {y = '(0:0' + y + ')'}
 	else if (y<60) {y = '(0:' + y + ')'}
-	else if (y<1440) {y = '(' + Math.round(y/60) + ' h)'}
-	else {y = '(' + Math.round(y/1440) + ' d)'}
+	else if (y<1440) {y = '(' + Math.round(y/60) + 'h)'}
+	else {y = '(' + Math.round(y/1440) + 'd)'}
 	$('#new_date').text(y);
 	updateNew_Timer = setTimeout(function(){updateNew()},60000);
 }
