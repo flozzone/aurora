@@ -372,7 +372,8 @@ class ChallengeTest(TestCase):
         assert challenge2.is_enabled_for_user(user1)
         Review(elaboration=elaboration1, submission_time=datetime.now(), reviewer=user2,
                appraisal=Review.NOTHING).save()
-        assert not challenge2.is_enabled_for_user(user1)
+        # nothing should not block a user from working
+        assert challenge2.is_enabled_for_user(user1)
 
     def test_final_challenge_enabled(self):
         challenge1 = self.challenge
@@ -572,8 +573,8 @@ class ChallengeTest(TestCase):
         assert challenge2.get_status(user1) == Challenge.NOT_STARTED
         bad_review.appraisal = Review.NOTHING
         bad_review.save()
-        assert not challenge2.is_enabled_for_user(user1)
-        assert challenge2.get_status(user1) == Challenge.NOT_ENABLED
+        assert challenge2.is_enabled_for_user(user1)
+        assert challenge2.get_status(user1) == Challenge.NOT_STARTED
 
     def test_status_user_review_missing(self):
         challenge1 = self.challenge
