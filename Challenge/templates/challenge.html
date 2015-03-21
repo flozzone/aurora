@@ -110,7 +110,7 @@
     <form method="post">
       <textarea id="editor">{{ elaboration.elaboration_text }}</textarea>
     </form>
-
+      {% if not blocked %}
       <button id="EWfE" class="{% if not lock %} submit {% endif %}XL R" {% if lock %}disabled="disabled" style="color:darkred;"{% endif %}>
           {% if lock %}Enter this work for Evaluation on {{ lock }} or later
           {% else %}Enter work for Evaluation
@@ -127,6 +127,7 @@
         </div>
 
       </div>
+      {% endif %}
     </div>
 {% else %}
 {% if challenge.accepted_files %}
