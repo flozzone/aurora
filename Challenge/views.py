@@ -39,9 +39,8 @@ def create_context_stack(request, course_short_title):
         challenge = stack_challenge.challenge
         # challenges are not enabled for the user should be inactive
         if not challenge.is_enabled_for_user(user):
-            # except final challenges where the stack has enough peer reviews and
-            # the previous challenge has enough user reviews
-            if not (challenge.is_final_challenge() and context_stack.has_enough_peer_reviews(user) and
+            # except final challenges where the previous challenge has enough user reviews
+            if not (challenge.is_final_challenge() and
                     challenge.prerequisite.has_enough_user_reviews(user)):
                 challenges_inactive.append(challenge)
                 continue
