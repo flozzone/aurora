@@ -59,11 +59,29 @@ def delete_comment(request):
     comment_id = request.POST['comment_id']
     deleter = RequestContext(request)['user']
 
-    comment = Comment.objects.get(id=comment_id)
+    comment = Comment.objects.filter(id=comment_id).select_related('parent__children')[0]
 
     if comment.author != deleter and not deleter.is_staff:
         return HttpResponseForbidden('You shall not delete!')
 
+    if comment.parent is None:
+        comment.seen = True
+    elif not comment.parent.seen:
+        unseen_child = False
+
+        for child in comment.parent.children:
+            if child.visibility == Comment.PRIVATE or \
+               child.visibility == Comment.STAFF or \
+               child.seen or \
+               child.deleter is not None:
+                continue
+            unseen_child = True
+
+        if not unseen_child:
+            comment.parent.seen = True
+
+
+    # TODO use transaction for deletion
     comment.deleter = deleter
     comment.delete_date = timezone.now()
     comment.promoted = False
