@@ -159,9 +159,6 @@ def create_comment(form, request):
                                      post_date=timezone.now(),
                                      visibility=visibility)
 
-    if user.is_staff:
-        mark_thread_seen(comment)
-        # TODO avoid race condition by sending a list of comments to be marked as seen with the post_comment request
     if comment.visibility == Comment.PRIVATE:
         comment.seen = True
         comment.save()
@@ -213,28 +210,6 @@ def create_comment(form, request):
         obj.creation_time = timezone.now()
         obj.read = False
         obj.save()
-
-
-def mark_thread_seen(comment):
-    """
-    Marks the thread given comment belongs to as seen.
-    :param comment: comment belonging to the thread that should be marked as seen
-    """
-
-    if comment is None:
-        return
-
-    parent_comment = comment if comment.parent is None else comment.parent
-
-    parent_comment.seen = True
-    parent_comment.save()
-
-    if parent_comment.children is None:
-        return
-
-    for comment in parent_comment.children.all():
-        comment.seen = True
-        comment.save()
 
 
 @require_POST

@@ -76,31 +76,6 @@ def dummy_user_generator():
         yield user
 
 
-class ViewMethodTests(TestCase):
-    def test_mark_thread_seen_parent(self):
-        setup = TestSetup(comment_no=1)
-        parent = setup.comments[0]
-        parent.seen = False
-        parent.save()
-
-        views.mark_thread_seen(parent)
-        self.assertTrue(parent.seen)
-
-    def test_mark_thread_seen_child(self):
-        setup = TestSetup()
-        parent = setup.comments[0]
-        parent.seen = False
-        parent.save()
-        for comment in setup.comments[1:]:
-            comment.parent = parent
-            comment.seen = False
-            comment.save()
-
-        views.mark_thread_seen(setup.comments[3])
-        for comment in setup.comments:
-            self.assertTrue(comment.seen)
-
-
 class ModelMethodTests(TestCase):
     def setUp(self):
         self.user_generator = dummy_user_generator()
