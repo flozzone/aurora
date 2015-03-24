@@ -14,10 +14,9 @@ from django.contrib.contenttypes.models import ContentType
 import json
 from AuroraUser.models import AuroraUser
 
-from Comments.models import Comment, CommentsConfig, CommentList, Vote
+from Comments.models import Comment, CommentsConfig, CommentList, Vote, CommentReferenceObject
 from Course.models import Course
 from Notification.models import Notification
-from Comments.tests import CommentReferenceObject
 from Slides.models import Slide
 from AuroraProject.settings import SECRET_KEY, LECTURER_USERNAME
 from local_settings import LECTURER_SECRET
@@ -64,27 +63,10 @@ def delete_comment(request):
     if comment.author != deleter and not deleter.is_staff:
         return HttpResponseForbidden('You shall not delete!')
 
-    if comment.parent is None:
-        comment.seen = True
-    elif not comment.parent.seen:
-        unseen_child = False
-
-        for child in comment.parent.children:
-            if child.visibility == Comment.PRIVATE or \
-               child.visibility == Comment.STAFF or \
-               child.seen or \
-               child.deleter is not None:
-                continue
-            unseen_child = True
-
-        if not unseen_child:
-            comment.parent.seen = True
-
-
-    # TODO use transaction for deletion
     comment.deleter = deleter
     comment.delete_date = timezone.now()
     comment.promoted = False
+    comment.seen = True
     comment.save()
     CommentList.get_by_comment(comment).increment()
 
@@ -165,10 +147,6 @@ def create_comment(form, request):
     if parent_comment_id is not None:
         try:
             parent_comment = Comment.objects.get(id=parent_comment_id)
-
-            # if the created comment has a parent, it is a new reply which should mark the thread as unseen
-            parent_comment.seen = False
-            parent_comment.save()
         except ObjectDoesNotExist:
             parent_comment = None
     else:
@@ -182,12 +160,11 @@ def create_comment(form, request):
                                      visibility=visibility)
 
     if user.is_staff:
+        mark_thread_seen(comment)
+        # TODO avoid race condition by sending a list of comments to be marked as seen with the post_comment request
+    if comment.visibility == Comment.PRIVATE:
         comment.seen = True
-        if parent_comment is not None:
-            parent_comment.seen = True
-            parent_comment.save()
-
-    comment.save()
+        comment.save()
 
     comment_list = CommentList.get_by_comment(comment)
 
@@ -197,10 +174,10 @@ def create_comment(form, request):
 
     comment_list.increment()
 
-    if parent_comment is None:
+    if comment.visibility == Comment.PRIVATE:
         return
 
-    if comment.visibility is Comment.PRIVATE:
+    if parent_comment is None:
         return
 
     if parent_comment.author == comment.author:
@@ -236,6 +213,28 @@ def create_comment(form, request):
         obj.creation_time = timezone.now()
         obj.read = False
         obj.save()
+
+
+def mark_thread_seen(comment):
+    """
+    Marks the thread given comment belongs to as seen.
+    :param comment: comment belonging to the thread that should be marked as seen
+    """
+
+    if comment is None:
+        return
+
+    parent_comment = comment if comment.parent is None else comment.parent
+
+    parent_comment.seen = True
+    parent_comment.save()
+
+    if parent_comment.children is None:
+        return
+
+    for comment in parent_comment.children.all():
+        comment.seen = True
+        comment.save()
 
 
 @require_POST

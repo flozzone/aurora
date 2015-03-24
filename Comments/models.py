@@ -129,6 +129,14 @@ class Comment(models.Model):
         tags = [tag.lower() for tag in tags]
         self.tags.add(*tags)
 
+    def thread_seen(self):
+        if not self.seen:
+            return False
+        for child in self.children.all():
+            if not child.seen:
+                return False
+        return True
+
     @staticmethod
     def query_tagged(tags):
         return Comment.objects.filter(tags__name__in=tags)
