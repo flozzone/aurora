@@ -159,7 +159,7 @@ def create_comment(form, request):
                                      post_date=timezone.now(),
                                      visibility=visibility)
 
-    if comment.visibility == Comment.PRIVATE:
+    if comment.author.is_staff or comment.visibility == Comment.PRIVATE:
         comment.seen = True
         comment.save()
 
