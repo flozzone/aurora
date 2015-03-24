@@ -136,7 +136,7 @@ var COMMENTS = (function (my, $) {
     };
 
     my.registerSeenLinksForCommentList = function($comment_list) {
-        $comment_list.find('.comment_seen').click(function(event) {
+        $comment_list.find('.mark_seen_link').click(function(event) {
             var $this = $(this);
             markSeen($this, event);
         });
@@ -163,7 +163,7 @@ var COMMENTS = (function (my, $) {
             my.post(url, data);
 
             $this.off();
-            $this.toggleClass('comment_unseen comment_seen');
+            $this.removeClass('mark_seen_link').addClass('seen_link');
             $this.text('seen');
 
             return false;

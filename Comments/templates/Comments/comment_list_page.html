@@ -11,7 +11,8 @@
         </div>
 
         {% if requester.is_staff %}
-            <a href='#' class="comment_seen" title="What has been seen, cannot be unseen!">
+            <a href='#' class="{% if comment.thread_seen %} seen_link {% else %} mark_seen_link {% endif %}"
+               title="What has been seen, cannot be unseen!">
                 {% if comment.thread_seen %} seen {% else %} Mark seen {% endif %}
             </a>
         {% endif %}
