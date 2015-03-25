@@ -18,7 +18,7 @@ def save_elaboration(request, course_short_title):
     elaboration_text = request.POST['elaboration_text']
     challenge = Challenge.objects.get(id=challenge_id)
     user = RequestContext(request)['user']
-    if not challenge.is_enabled_for_user(user):
+    if not challenge.is_enabled_for_user(user) and not challenge.is_final_challenge():
         raise Http404
 
     # check if elaboration exists

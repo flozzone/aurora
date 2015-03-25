@@ -36,12 +36,17 @@ def create_context_stack(request, course_short_title):
     challenges_active = []
     challenges_inactive = []
     for stack_challenge in stack_challenges:
-        if not stack_challenge.challenge.is_enabled_for_user(user):
-            challenges_inactive.append(stack_challenge.challenge)
-            continue
+        challenge = stack_challenge.challenge
+        # challenges are not enabled for the user should be inactive
+        if not challenge.is_enabled_for_user(user):
+            # except final challenges where the previous challenge has enough user reviews
+            if not (challenge.is_final_challenge() and
+                    challenge.prerequisite.has_enough_user_reviews(user)):
+                challenges_inactive.append(challenge)
+                continue
 
         reviews = []
-        for review in stack_challenge.challenge.get_reviews_written_by_user(user):
+        for review in challenge.get_reviews_written_by_user(user):
             reviews.append({
                 'review': review,
                 'submitted': review.submission_time is not None
@@ -49,12 +54,12 @@ def create_context_stack(request, course_short_title):
         for i in range(Challenge.reviews_per_challenge - len(reviews)):
             reviews.append({})
         challenge_active = {
-            'challenge': stack_challenge.challenge,
-            'submitted': stack_challenge.challenge.submitted_by_user(user),
+            'challenge': challenge,
+            'submitted': challenge.submitted_by_user(user),
             'reviews': reviews,
-            'status': stack_challenge.challenge.get_status_text(user)
+            'status': challenge.get_status_text(user)
         }
-        elaboration = Elaboration.objects.filter(challenge=stack_challenge.challenge, user=user)
+        elaboration = Elaboration.objects.filter(challenge=challenge, user=user)
         if elaboration:
             elaboration = elaboration[0]
             challenge_active['success'] = len(elaboration.get_success_reviews())
@@ -121,6 +126,7 @@ def create_context_challenge(request, course_short_title):
                 data['evaluation'] = Evaluation.objects.filter(submission=elaboration)[0]
 
         if challenge.is_final_challenge():
+            data['blocked'] = not challenge.is_enabled_for_user(user)
             if challenge.is_in_lock_period(RequestContext(request)['user'], course):
                 data['lock'] = challenge.is_in_lock_period(RequestContext(request)['user'], course)
     return data
@@ -130,7 +136,7 @@ def create_context_challenge(request, course_short_title):
 def challenge(request, course_short_title=None):
     data = create_context_challenge(request, course_short_title)
     user = RequestContext(request)['user']
-    if not data['challenge'].is_enabled_for_user(user) and not user.is_staff:
+    if not data['challenge'].is_enabled_for_user(user) and not user.is_staff and not data['challenge'].is_final_challenge():
         return render_to_response('challenge_inactive.html', data, context_instance=RequestContext(request))
     if 'elaboration' in data:
         data = create_context_view_review(request, data)
