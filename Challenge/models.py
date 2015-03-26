@@ -252,10 +252,7 @@ class Challenge(models.Model):
     def get_questions(course):
         result = Challenge.objects.filter(
             course=course,
-            comments__parent=None,
-            comments__seen=False,
-        ).exclude(
-            comments__visibility=Comment.PRIVATE
+            comments__seen=False
         ).distinct()
 
         return result

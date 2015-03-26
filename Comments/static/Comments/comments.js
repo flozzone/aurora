@@ -431,6 +431,11 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
             var $replyTextarea = $('#replyTextarea');
             var text = $replyTextarea.val();
 
+            var $seen_button = $button_post_reply.closest('div.comment_with_responses').find('.mark_seen_link');
+            if (typeof $seen_button !== 'undefined') {
+                $seen_button.click();
+            }
+
             $replyForm.after($newComment);
             $newComment.find(".comment_text").text(text);
             $replyForm.hide();

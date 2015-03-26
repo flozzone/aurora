@@ -282,10 +282,7 @@ class Elaboration(models.Model):
     def get_complaints(course):
         result = Elaboration.objects.filter(
             challenge__course=course,
-            comments__parent=None,
-            comments__seen=False,
-        ).exclude(
-            comments__visibility=Comment.PRIVATE
+            comments__seen=False
         ).distinct()
 
         return result
