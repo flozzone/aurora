@@ -32,35 +32,61 @@ def create_comment(text, author, reference_object, parent=None, visibility=Comme
 
 
 class TestSetup():
-    def __init__(self, users=5, comment_no=5, ref_object=None):
+    def __init__(self, users=5, comment_no=5, thread_size=5, ref_object=None):
         if ref_object is None:
             self.ref_object = CommentReferenceObject.objects.create
         else:
             self.ref_object = ref_object
 
+        self.ref_object = ref_object
         self.user_generator = dummy_user_generator()
-        self.comment_generator = self.create_comment_generator()
-        self.comments = []
+        self.parents = []
+        self.replies = []
         self.users = []
-        self.texts = ['apfel', 'baum', 'schlauch']
+        self.texts = []
+        self.texts.append("Actually, I think I'm beating it back with sheer willpower. (grows another lump) Oh, my.")
+        self.texts.append("I wasn't scared! I was singing! I was singing my scream song. Wooaah! Wooaaooh!")
+        self.texts.append("Who wants to play video games?")
+        self.texts.append("If I push this button, you will both be dangerously transported into my main brain game "
+                          "frame, where it is very dangerous.")
+        self.texts.append("When bad things happen, I know you want to believe they are a joke, but sometimes life is \n"
+                          "scary and dark. That is why we must find the light.")
+        self.texts.append("BMO (phonetically spelled Beemo) is Finn and Jake's living video game console, portable\n"
+                          "electrical outlet, music player, roommate, camera, alarm clock, toaster, flashlight,\n"
+                          "strobe light, skateboarder, friend, soccer player, video editor, video player, tape player\n"
+                          "and Chef. It makes its appearance in the title scene of the Theme Song of every episode of\n"
+                          "Adventure Time, just as Finn and Jake pound their fists together. BMO is characterized as\n"
+                          "a loyal, trusting, and helpful friend who is protective of Finn and Jake.")
+
         self.current_ref_object = self.ref_object
+        self.thread_size = thread_size
 
         for _ in range(users):
             self.users.append(next(self.user_generator))
 
-        for _ in range(comment_no):
-            next(self.comment_generator)
+        self.comment_generator = create_comment_generator(self.texts, self.users, ref_object)
 
-    def create_comment_generator(self):
-        user_index = 0
-        text_index = 0
+        for i in range(comment_no):
+            comment = next(self.comment_generator)
+            if i % thread_size == 0:
+                print('adding new parent: ' + str(comment))
+                self.parents.append(comment)
+            else:
+                print('adding new reply: ' + str(comment) + " to " + str(comment))
+                comment.parent = self.parents[-1]
+                comment.save()
+                self.replies.append(comment)
 
-        while True:
-            comment = create_comment(self.texts[text_index], self.users[user_index], self.current_ref_object)
-            self.comments.append(comment)
-            user_index = (user_index + 1) % len(self.users)
-            text_index = (text_index + 1) % len(self.texts)
-            yield comment
+
+def create_comment_generator(texts, users, ref_object):
+    user_index = 0
+    text_index = 0
+
+    while True:
+        comment = create_comment(texts[text_index], users[user_index], ref_object)
+        user_index = (user_index + 1) % len(users)
+        text_index = (text_index + 1) % len(texts)
+        yield comment
 
 
 def dummy_user_generator():
