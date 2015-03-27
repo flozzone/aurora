@@ -246,7 +246,7 @@ class Comment(models.Model):
         # for every deleted parent
         for comment in comment_set.exclude(deleter=None):
             # if not deleted responses <= 0
-            if comment.children.all().filter(deleter=None).count() <= 0:
+            if comment.children.filter(deleter=None).count() <= 0:
                 # remove parent from queryset
                 comment_set = comment_set.exclude(id=comment.id)
 
