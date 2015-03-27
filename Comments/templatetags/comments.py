@@ -12,19 +12,20 @@ register = template.Library()
 
 
 class CommentListNode(template.Node):
-    def __init__(self, reference):
+    def __init__(self, reference, options=[]):
         self.reference_var = template.Variable(reference)
         self.template = 'Comments/comments_with_forms.html'
+        self.newest_last = False
+        self.options = []
 
     def render(self, context):
         try:
             ref_object = self.reference_var.resolve(context)
             ref_type = ContentType.objects.get_for_model(ref_object)
 
-            # user = AuroraUser.objects.get(id=context['user'].id)
             user = context['user']
 
-            queryset = Comment.query_top_level_sorted(ref_object.id, ref_type.id, user)
+            queryset = Comment.query_top_level_sorted(ref_object.id, ref_type.id, user, newest_last=self.newest_last)
             revision = CommentList.get_or_create(ref_object).revision
 
             form = CommentForm()
@@ -53,14 +54,16 @@ class CommentListNode(template.Node):
 
 
 class AdditionalCommentListNode(CommentListNode):
-    def __init__(self, reference):
+    def __init__(self, reference, options=[]):
         self.reference_var = template.Variable(reference)
+        self.newest_last = 'newest_last' in options
         self.template = 'Comments/additional_comments.html'
 
 
 class MultiCommentListNode(CommentListNode):
-    def __init__(self, reference):
+    def __init__(self, reference, options=[]):
         self.reference_var = template.Variable(reference)
+        self.newest_last = 'newest_last' in options
         self.template = 'Comments/multi_comment.html'
 
 
@@ -91,8 +94,8 @@ def render_multi_comment_list(parser, token):
     Comment List with JS but without forms. Use this for comment lists that are loaded dynamically and not during
     document load time. Use this in conjunction with comments_boilerplate to make the this tags comment_list work.
     """
-    ref_token = handle_tokens(token)
-    return MultiCommentListNode(ref_token)
+    ref_token, options = handle_tokens(token)
+    return MultiCommentListNode(ref_token, options)
 
 
 @register.simple_tag(takes_context=True)
@@ -105,15 +108,18 @@ def comments_count(context, for_string, ref_obj):
 def handle_tokens(token):
     tokens = token.split_contents()
     usage = 'template tag has to look like this: {% ' \
-            + tokens[0] + ' for <reference> %}'
+            + tokens[0] + ' for <reference> [options] %}'
 
-    if len(tokens) != 3:
+    if len(tokens) < 3:
         raise template.TemplateSyntaxError(usage)
 
     if tokens[1] != 'for':
         raise template.TemplateSyntaxError(usage)
 
-    return tokens[2]
+    if len(tokens) <= 3:
+        return tokens[2], []
+    else:
+        return tokens[2], tokens[3:]
 
 
 def token_to_ref_id_type(token, context):

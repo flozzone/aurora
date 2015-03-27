@@ -146,7 +146,7 @@ class Comment(models.Model):
         return Comment.objects.filter(author=user, promoted=True).count()
 
     @staticmethod
-    def query_top_level_sorted(ref_object_id, ref_type_id, requester):
+    def query_top_level_sorted(ref_object_id, ref_type_id, requester, newest_last=False):
         queryset_all = Comment.objects.filter(
             parent=None,
             content_type__pk=ref_type_id,
@@ -154,7 +154,11 @@ class Comment(models.Model):
 
         visible = Comment.filter_visible(queryset_all, requester)
         visible = Comment.filter_deleted_trees(visible)
-        visible = visible.order_by('-post_date')
+        if newest_last:
+            visible = visible.order_by('post_date')
+        else:
+            visible = visible.order_by('-post_date')
+
 
         # Only when all query actions are done we can set custom properties to
         # the objects in the queryset. If another query method is called (even if
