@@ -658,7 +658,7 @@ def autocomplete_user(request, course_short_title=None):
     studies = AuroraUser.objects.all().filter(
         Q(username__istartswith=term) | Q(first_name__istartswith=term) | Q(last_name__istartswith=term) | Q(
             nickname__istartswith=term))
-    names = [(studi.username + ' ' + studi.nickname + ' ' + studi.last_name) for studi in studies]
+    names = [(studi.username + ' ' + studi.nickname + ' ' + studi.first_name + ' ' + studi.last_name) for studi in studies]
     response_data = json.dumps(names, ensure_ascii=False)
     return HttpResponse(response_data, content_type='application/json; charset=utf-8')
 
