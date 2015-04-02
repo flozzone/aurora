@@ -2,8 +2,10 @@
 from datetime import datetime
 
 import random
+import traceback
 from django.contrib.contenttypes.models import ContentType
 from django.core.management.base import BaseCommand
+from django.db import transaction
 
 from AuroraUser.models import AuroraUser
 from Course.models import *
@@ -24,10 +26,23 @@ class Command(BaseCommand):
     help = 'Populates database with demo data'
 
     def handle(self, *args, **options):
-        init_data()
+        populate_demo_data()
 
 
-def init_data():
+def populate_demo_data():
+    try:
+        with transaction.atomic():
+            print("Starting transaction...")
+            import_data()
+
+    except Exception as e:
+        traceback.print_exc()
+        print("Caught error during transaction: %s" % e)
+        print("Database has rolled back the transaction!")
+    print("All Done!")
+
+
+def import_data():
     CommentsConfig.setup()
 
     number_of_users = 50
@@ -62,7 +77,7 @@ def init_data():
         dummy_user.first_name = 'Firstname_%s' % username
         dummy_user.last_name = 'Lastname_%s' % username
         dummy_user.nickname = 'Nickname_%s' % username
-        dummy_user.is_staff = False
+        dummy_user.is_staff = True
         dummy_user.is_superuser = False
         password = username
         dummy_user.set_password(password)
@@ -573,4 +588,4 @@ def init_data():
             user.get_gravatar()
 
 if __name__ == '__main__':
-    init_data()
+    populate_demo_data()

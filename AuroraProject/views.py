@@ -1,36 +1,36 @@
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.shortcuts import redirect
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 
 from datetime import datetime
 
-from Comments.models import CommentReferenceObject
 from Stack.models import Stack
 from Course.models import Course, CourseUserRelation
-from AuroraUser.models import  AuroraUser
+from AuroraUser.models import AuroraUser
 from Evaluation.models import Evaluation
 from Review.models import Review
 from ReviewAnswer.models import ReviewAnswer
 from Elaboration.models import Elaboration
 from Challenge.models import Challenge
 from django.core.urlresolvers import reverse
-from django.core.exceptions import ObjectDoesNotExist
+
 
 def course_selection(request):
-    data = {'courses': Course.objects.all()}
-    return render_to_response('course_selection.html', data)
-
-def home(request, course_short_title=None):
     if not request.user.is_authenticated():
         if 'sKey' in request.GET:
             from AuroraUser.views import sso_auth_callback
-
             return sso_auth_callback(request)
-        else:
-            return redirect(reverse('User:login', args=(course_short_title, )))
+
+    data = {'courses': Course.objects.all()}
+    return render_to_response('course_selection.html', data)
+
+
+def home(request, course_short_title=None):
+    if not request.user.is_authenticated():
+        return redirect(reverse('User:login', args=(course_short_title, )))
 
     data = {}
     user = RequestContext(request)['user']
@@ -57,13 +57,7 @@ def home(request, course_short_title=None):
         stack_data['sum'] = points_sum
         data['stacks'].append(stack_data)
 
-    try:
-        o = CommentReferenceObject.objects.get(name='newsfeed')
-    except CommentReferenceObject.DoesNotExist:
-        o = CommentReferenceObject(name='newsfeed')
-        o.save()
-
-    context = RequestContext(request, {'newsfeed': o})
+    context = RequestContext(request, {'newsfeed': data['course']})
 
     return render_to_response('home.html', data, context)
 
@@ -78,18 +72,19 @@ def time_to_unix_string(time):
     seconds += delta.seconds
     return str(seconds)
 
+
 @login_required()
 @staff_member_required
 def result_users(request):
     s = ""
     for user in AuroraUser.objects.filter(is_staff=False):
         s += "\t".join(["{}"] * 7).format(user.matriculation_number,
-                                         user.nickname,
-                                         user.first_name,
-                                         user.last_name,
-                                         user.study_code,
-                                         time_to_unix_string(user.last_activity),
-                                         user.statement)
+                                          user.nickname,
+                                          user.first_name,
+                                          user.last_name,
+                                          user.study_code,
+                                          time_to_unix_string(user.last_activity),
+                                          user.statement)
         s += "\n"
 
     return HttpResponse(s, mimetype="text/plain; charset=utf-8")
@@ -140,8 +135,8 @@ def result_elabs_final(request):
     evals = Evaluation.objects.all().prefetch_related()
 
     s = ""
-    for eval in evals:
-        elab = eval.submission
+    for evaluation in evals:
+        elab = evaluation.submission
         s += "\t".join(["{}"] * 11).format(
             str(elab.user.matriculation_number),
             str(elab.id),
@@ -149,11 +144,11 @@ def result_elabs_final(request):
             str(elab.challenge.id),
             time_to_unix_string(elab.creation_time),
             time_to_unix_string(elab.submission_time),
-            eval.id,
-            eval.tutor.display_name,
-            time_to_unix_string(eval.creation_date),
-            time_to_unix_string(eval.submission_time),
-            str(eval.evaluation_points)
+            evaluation.id,
+            evaluation.tutor.display_name,
+            time_to_unix_string(evaluation.creation_date),
+            time_to_unix_string(evaluation.submission_time),
+            str(evaluation.evaluation_points)
         )
 
         s += "\n"
@@ -194,6 +189,7 @@ def get_result_reviews():
         result += "\n"
 
     return result
+
 
 @login_required()
 @staff_member_required

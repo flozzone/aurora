@@ -2,11 +2,11 @@ from django.test import TestCase
 from Comments.models import Comment, CommentReferenceObject
 from AuroraUser.models import AuroraUser
 from django.utils import timezone
-from django.template import Context, Template
-from django import template
+import Comments.views as views
 
 
-def create_comment(text, author, reference_object, parent=None, days=0, minutes=0, seconds=0):
+def create_comment(text, author, reference_object, parent=None, visibility=Comment.PUBLIC,
+                   days=0, minutes=0, seconds=0):
     """
     creates and returns a new Comment Model object that is not being persisted
     with text by author attached to reference_object
@@ -27,8 +27,40 @@ def create_comment(text, author, reference_object, parent=None, days=0, minutes=
     delta = timezone.timedelta(days=-days, seconds=-(minutes*60) + seconds)
     post_date = timezone.now() + delta
     comment = Comment.objects.create(text=text, author=author, parent=parent, post_date=post_date,
-                                     content_object=reference_object)
+                                     content_object=reference_object, visibility=visibility)
     return comment
+
+
+class TestSetup():
+    def __init__(self, users=5, comment_no=5, ref_object=None):
+        if ref_object is None:
+            self.ref_object = CommentReferenceObject.objects.create
+        else:
+            self.ref_object = ref_object
+
+        self.user_generator = dummy_user_generator()
+        self.comment_generator = self.create_comment_generator()
+        self.comments = []
+        self.users = []
+        self.texts = ['apfel', 'baum', 'schlauch']
+        self.current_ref_object = self.ref_object
+
+        for _ in range(users):
+            self.users.append(next(self.user_generator))
+
+        for _ in range(comment_no):
+            next(self.comment_generator)
+
+    def create_comment_generator(self):
+        user_index = 0
+        text_index = 0
+
+        while True:
+            comment = create_comment(self.texts[text_index], self.users[user_index], self.current_ref_object)
+            self.comments.append(comment)
+            user_index = (user_index + 1) % len(self.users)
+            text_index = (text_index + 1) % len(self.texts)
+            yield comment
 
 
 def dummy_user_generator():
@@ -36,27 +68,12 @@ def dummy_user_generator():
     while True:
         i += 1
         n = str(i)
-        user = AuroraUser(username='du'+n, first_name='first'+n,
-                             last_name='last'+n, email='du'+n+'@foo.bar')
+        user = AuroraUser.objects.create(username='du'+n, first_name='first'+n,
+                                         last_name='last'+n, email='du'+n+'@foo.bar')
         user.nickname = 'duni' + n
         user.password = 'dupa' + n
 
         yield user
-
-
-def dummy_comment_generator():
-    # TODO implement
-    pass
-
-# class CommentMethodTests(TestCase):
-#     user_generator = dummy_user_generator()
-#
-#     def test_post_date_relative_days_ago(self):
-#         u = self.user_generator.next()
-#         u.save()
-#         c = create_comment("helo und so", u, days=2, minutes=8)
-#         c.save()
-#         self.assertEqual(c.post_date_relative, "2 days ago")
 
 
 class ModelMethodTests(TestCase):

@@ -99,6 +99,8 @@ class Comment(models.Model):
                                   choices=VISIBILITY_CHOICES,
                                   default=PUBLIC)
 
+    bookmarked_by = models.ManyToManyField('AuroraUser.AuroraUser', related_name='bookmarked_comments_set')
+
     def save(self, *args, **kwargs):
         super(Comment, self).save(*args, **kwargs)
         self.set_tags_from_text()
@@ -126,6 +128,14 @@ class Comment(models.Model):
         tags = re.findall(tag_pattern, self.text)
         tags = [tag.lower() for tag in tags]
         self.tags.add(*tags)
+
+    def thread_seen(self):
+        if not self.seen:
+            return False
+        for child in self.children.all():
+            if not child.seen:
+                return False
+        return True
 
     @staticmethod
     def query_tagged(tags):

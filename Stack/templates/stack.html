@@ -42,7 +42,7 @@
                 <div class="challenge-headline">{{ challenge_dict.challenge.title|safe }}</div>
                 <div class="challenge-text">{{ challenge_dict.challenge.description|safe}}</div>
           </div>
-          <div class="challenge-points">
+          <div class="challenge-points" style="display:none">
             Points: {{ challenge_dict.challenge.points }}
           </div>
         <a href="{% url 'Challenge:challenge' course_short_title=course.short_title %}?id={{ challenge_dict.challenge.id }}" class="go_challenge button XL active" onclick="event.stopPropagation();">
@@ -52,7 +52,7 @@
         <div class="challenge_footer">
           <div class="review_space">
           {% if not challenge_dict.challenge.is_final_challenge %}
-          {% if not stack_blocked %}
+
            {% for review in challenge_dict.reviews %}
             {% if review %}
              {% if review.submitted %}
@@ -72,7 +72,7 @@
               </div>
             {% endif %} <!-- if review -->
            {% endfor %} <!-- for review in challenge_dict.reviews -->
-          {% endif %} <!-- not stack_blocked -->
+
          {% endif %} <!-- if not challenge_dict.challenge.is_final_challenge -->
 
   <!-- status -->
@@ -163,7 +163,7 @@
             <div class="challenge-headline" >{{ challenge.title|safe }}</div>
             <div class="challenge-text-full">{{ challenge.description|safe}}</div>
           </div>
-          <div class="challenge-points">
+          <div class="challenge-points" style="display:none">
             Points: {{ challenge.points }}
           </div>
         </div>

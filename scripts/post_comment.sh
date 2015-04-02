@@ -1,17 +1,10 @@
 #! /bin/bash
 
-# Synopsis:
-# ./post_comment.sh <credentials_file> <slide_id>
-#
-# <credentials_file> has to look like this:
-# USERNAME='...'
-# PASSWORD='...'
-
 if [ -z $1 ]
 then
   echo 'Synopsis:'
   echo
-  echo 'post_comment.sh <credentials_file> <slide_id> <comment_text_file>'
+  echo 'post_comment.sh <credentials_file> <slide_id> [comment_text_file]'
   echo
   echo '<redentials_file> has to look like this:'
   echo "USERNAME='...'"
@@ -25,13 +18,20 @@ fi
 . $1
 # test slide_id is 263
 SLIDE_ID=$2
-COMMENT_TEXT_FILE=$3
+
+if [ "$3" = "" ]
+then
+  CONTENT="text=$(cat)"
+else
+  CONTENT="text@$3"
+fi
 
 # filename to use for stored cookies
 COOKIES=cookies.txt
 
 # where to post the comment
-HOST=https://nova.iguw.tuwien.ac.at
+#HOST=https://nova.iguw.tuwien.ac.at
+HOST=http://localhost:8000
 
 # server configuration requires a valid (i.e. not malicious) referer
 REFERER=${HOST}/
@@ -43,7 +43,7 @@ CERTS=certs
 URI=${HOST}/slides/
 
 # go to login page to fetch csrf token
-curl --cacert ${CERTS} --referer ${REFERER} -v -c ${COOKIES} -b ${COOKIES} ${HOST}/login/
+curl --cacert ${CERTS} --referer ${REFERER} -v -c ${COOKIES} -b ${COOKIES} ${HOST}/gsi/login/
 
 # extract csrftoken from cookie
 CSRFTOKEN=$(grep csrftoke ${COOKIES} | awk '{print $7}')
@@ -51,15 +51,18 @@ CSRFTOKEN=$(grep csrftoke ${COOKIES} | awk '{print $7}')
 # login to get a session id
 curl --cacert ${CERTS} --referer ${REFERER} -X POST -v -c ${COOKIES} -b ${COOKIES} \
   -d "username=${USERNAME}&password=${PASSWORD}&remember=false&csrfmiddlewaretoken=${CSRFTOKEN}" \
-  ${HOST}/signin/ 
+  ${HOST}/gsi/signin/ 
 
-SLIDE_TYPE=27
+# extract csrftoken from cookie
+CSRFTOKEN=$(grep csrftoke ${COOKIES} | awk '{print $7}')
+
+SLIDE_TYPE=25
 
 # post content of ${COMMENT_TEXT_FILE} as a comment
 curl --cacert ${CERTS} --referer ${REFERER} -X POST -v -c ${COOKIES} -b ${COOKIES} \
+  -d "reference_type_id=${SLIDE_TYPE}&reference_id=${SLIDE_ID}&visibility=public" \
   -d "csrfmiddlewaretoken=${CSRFTOKEN}&reference_type_id=${SLIDE_TYPE}&reference_id=${SLIDE_ID}&visibility=public" \
-  --data-urlencode text@${COMMENT_TEXT_FILE} \
+  --data-urlencode "${CONTENT}" \
   --data-urlencode uri=${URI} \
-  ${HOST}/post_comment/
+  ${HOST}/comment/post/
 
-rm ${COOKIES}

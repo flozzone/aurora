@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.template.loader import render_to_string
+from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST, require_GET
 
 from django.contrib.auth.decorators import login_required
@@ -11,11 +12,14 @@ from django.utils import timezone
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden, HttpResponseBadRequest
 from django.contrib.contenttypes.models import ContentType
 import json
+from AuroraUser.models import AuroraUser
 
-from Comments.models import Comment, CommentsConfig, CommentList, Vote
+from Comments.models import Comment, CommentsConfig, CommentList, Vote, CommentReferenceObject
 from Course.models import Course
 from Notification.models import Notification
-from Comments.tests import CommentReferenceObject
+from Slides.models import Slide
+from AuroraProject.settings import SECRET_KEY, LECTURER_USERNAME
+from local_settings import LECTURER_SECRET
 
 
 class CommentForm(forms.Form):
@@ -42,7 +46,8 @@ def post_comment(request):
     form = CommentForm(request.POST)
     try:
         create_comment(form, request)
-    except ValidationError:
+    except ValidationError as error:
+        raise error
         return HttpResponseBadRequest('The submitted form seems to be borken')
     return HttpResponse('')
 
@@ -53,7 +58,7 @@ def delete_comment(request):
     comment_id = request.POST['comment_id']
     deleter = RequestContext(request)['user']
 
-    comment = Comment.objects.get(id=comment_id)
+    comment = Comment.objects.filter(id=comment_id).select_related('parent__children')[0]
 
     if comment.author != deleter and not deleter.is_staff:
         return HttpResponseForbidden('You shall not delete!')
@@ -61,6 +66,7 @@ def delete_comment(request):
     comment.deleter = deleter
     comment.delete_date = timezone.now()
     comment.promoted = False
+    comment.seen = True
     comment.save()
     CommentList.get_by_comment(comment).increment()
 
@@ -105,9 +111,29 @@ def edit_comment(request):
     return HttpResponse('')
 
 
+@csrf_exempt
+@require_POST
+def lecturer_post(request):
+    data = request.POST
+    if data['secret'] != LECTURER_SECRET:
+        return HttpResponseForbidden('You shall not pass!')
+
+    user = AuroraUser.objects.get(username=LECTURER_USERNAME)
+    ref_obj = Slide.objects.get(filename=data['filename'])
+
+    Comment.objects.create(text=data['text'],
+                           author=user,
+                           content_object=ref_obj,
+                           parent=None,
+                           post_date=timezone.now(),
+                           visibility=Comment.PUBLIC)
+
+    return HttpResponse('')
+
+
 def create_comment(form, request):
     if not form.is_valid():
-        raise ValidationError
+        raise ValidationError('The submitted form was not valid')
 
     context = RequestContext(request)
     user = context['user']
@@ -121,10 +147,6 @@ def create_comment(form, request):
     if parent_comment_id is not None:
         try:
             parent_comment = Comment.objects.get(id=parent_comment_id)
-
-            # if the created comment has a parent, it is a new reply which should mark the thread as unseen
-            parent_comment.seen = False
-            parent_comment.save()
         except ObjectDoesNotExist:
             parent_comment = None
     else:
@@ -137,13 +159,9 @@ def create_comment(form, request):
                                      post_date=timezone.now(),
                                      visibility=visibility)
 
-    if user.is_staff:
+    if comment.author.is_staff or comment.visibility == Comment.PRIVATE:
         comment.seen = True
-        if parent_comment is not None:
-            parent_comment.seen = True
-            parent_comment.save()
-
-    comment.save()
+        comment.save()
 
     comment_list = CommentList.get_by_comment(comment)
 
@@ -153,10 +171,10 @@ def create_comment(form, request):
 
     comment_list.increment()
 
-    if parent_comment is None:
+    if comment.visibility == Comment.PRIVATE:
         return
 
-    if comment.visibility is Comment.PRIVATE:
+    if parent_comment is None:
         return
 
     if parent_comment.author == comment.author:
@@ -237,6 +255,29 @@ def vote_down_on(comment, voter):
     except Vote.DoesNotExist:
         Vote.objects.create(direction=Vote.DOWN, voter=voter, comment=comment)
         CommentList.get_by_comment(comment).increment()
+
+
+@require_POST
+@login_required
+def bookmark_comment(request):
+    data = request.POST
+
+    requester = RequestContext(request)['user']
+
+    try:
+        comment = Comment.objects.get(id=data['comment_id'])
+    except Comment.DoesNotExist:
+        return HttpResponse('')
+
+    if data['bookmark'] == 'true':
+        comment.bookmarked_by.add(requester)
+    else:
+        comment.bookmarked_by.remove(requester)
+
+    comment.save()
+    CommentList.get_by_comment(comment).increment()
+
+    return HttpResponse('')
 
 
 @require_POST
@@ -376,3 +417,10 @@ def feed(request):
         o2 = CommentReferenceObject.objects.get(id=2)
     return render(request, 'Comments/feed.html', {'object': o, 'object2': o2})
 
+
+@login_required
+def bookmarks(request):
+    requester = RequestContext(request)['user']
+    comment_list = Comment.query_bookmarks(requester)
+    template = 'Comments/bookmarks_list.html'
+    return render_to_response(template, {'comment_list': comment_list}, context_instance=RequestContext(request))

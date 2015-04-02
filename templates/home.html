@@ -42,9 +42,9 @@
 				{% if course.short_title == "gsi" %}
 				&nbsp;&nbsp;&nbsp;<i class="fa fa-angle-double-right"></i><a href="https://tuwel.tuwien.ac.at/mod/rssplayer/view.php?id=178741">GSI live stream</a></p><br>
 				{% else %}
-				&nbsp;&nbsp;&nbsp;<i class="fa fa-angle-double-right"></i><a href="https://tuwel.tuwien.ac.at/mod/rssplayer/view.php?id=178748">BHCI live stream</a></p><br>
+				&nbsp;&nbsp;&nbsp;<i class="fa fa-angle-double-right"></i><a href="https://tuwel.tuwien.ac.at/mod/rssplayer/view.php?id=216701">BHCI live stream</a></p><br>
 				{% endif %}
-			<p>Ausserdem zeichnen wir diese Streams auf, und werden sie in den n&auml;chsten Wochen dann auch mit den Slides synchronisieren. Stay tuned!</p>
+			<p>Ausserdem zeichnen wir diese Streams auf, und werden sie mit dem VO-Kalender verkn&uuml;pfen!</p>
 	        <br><br>
 
 	        <p><b>Support:</b></p>
@@ -121,60 +121,70 @@
 	        <br><br>
 		</div>
         <div class="feed_header" id="part_3">
-			<i class="fa fa-toggle-down half"></i> <b>Vorlesungskalender</b>
+			<i class="fa fa-toggle-down half"></i> <b>Vorlesungskalender
+			{% if course.short_title == "hci" %}
+			BHCI
+			{% else %}
+			GSI
+			{% endif %}
+			</b>
 		</div>
         <div class="feed_column" id="content_part_3">
+			<table width="100%">
 			{% if course.short_title == "hci" %}
-			<table>
-				<tr><td colspan=5><b>BHCI</b></td></tr>
-				<tr><td class="month">m&auml;rz</td><td class="day">4</td>
-					<td class="day"><a href="https://tuwel.tuwien.ac.at/mod/rssplayer/view.php?id=182821">11</a></td>
-					<td class="day"><a href="https://tuwel.tuwien.ac.at/mod/rssplayer/view.php?id=182822">18</a></td>
-					<td class="day"><a href="https://tuwel.tuwien.ac.at/mod/rssplayer/view.php?id=182823">25</a></td>
-				</tr>
-				<tr><td>april</td>
-					<td class="day"><a href="https://tuwel.tuwien.ac.at/mod/rssplayer/view.php?id=182824">1</a></td>
-					<td class="day"><a href="https://tuwel.tuwien.ac.at/mod/rssplayer/view.php?id=183455">8</a></td>
-					<td class="day not">15</td><td class="day not">22</td>
-					<td class="day"><a href="https://tuwel.tuwien.ac.at/mod/rssplayer/view.php?id=184634">29</a></td></tr>
-				<tr><td>mai</td>
-					<td class="day"><a href="https://tuwel.tuwien.ac.at/mod/rssplayer/view.php?id=184635">6</a></td>
-					<td class="day"><a href="https://tuwel.tuwien.ac.at/mod/rssplayer/view.php?id=185080">13</a></td>
-					<td class="day"><a href="https://tuwel.tuwien.ac.at/mod/rssplayer/view.php?id=186152">20</a></td>
-					<td class="day not">27</td></tr>
-				<tr><td>juni</td>
-					<td class="day"><a href="https://tuwel.tuwien.ac.at/mod/rssplayer/view.php?id=186154">3</a></td>
-					<td class="day not">10</td><td class="day">17</td><td class="day maybe">24*</td></tr>
-			</table><br>
+				<tr bgcolor="#EEE"><td width="10%">M&auml;rz</td>
+					<td width="18%">
+					<td width="11%" align="right">10</td>
+					<td width="7%" align="right">11</td>
+					<td width="11%" align="right">17</td>
+					<td width="7%" align="right">18</td>
+					<td width="18%" align="right">24</td></tr>
+				<tr><td>April</td>
+					<td></td>
+					<td colspan=2 align="right">14</td>
+					<td colspan=2 align="right">21</td>
+					<td align="right">28</td></tr>
+				<tr bgcolor="#EEE"><td>Mai</td>
+					<td align="right">5</td>
+					<td colspan=2 align="right">12</td>
+					<td colspan=2 align="right">19</td>
+					<td></td></tr>
+				<tr><td>Juni</td>
+					<td align="right">*2</td>
+					<td colspan=2 align="right">*9</td>
+					<td colspan=2 align="right">*16</td>
+					<td align="right">*23</td></tr>
 			{% else %}
-			<table>
-				<tr><td colspan=5><b>GSI</b></td></tr>
-				<tr><td class="month">m&auml;rz</td><td class="day not">5</td>
-					<td class="day"><a href="https://tuwel.tuwien.ac.at/mod/rssplayer/view.php?id=182818">12</a></td>
-					<td class="day"><a href="https://tuwel.tuwien.ac.at/mod/rssplayer/view.php?id=182825">19</a></td>
-					<td class="day"><a href="https://tuwel.tuwien.ac.at/mod/rssplayer/view.php?id=182826">26</a></td></tr>
-				<tr><td>april</td>
-					<td class="day"><a href="https://tuwel.tuwien.ac.at/mod/rssplayer/view.php?id=183007">2</a></td>
-					<td class="day"><a href="https://tuwel.tuwien.ac.at/mod/rssplayer/view.php?id=183577">9</a></td>
-					<td class="day not">15</td><td class="day not">22</td>
-					<td class="day"><a href="https://tuwel.tuwien.ac.at/mod/rssplayer/view.php?id=183667">30</a></td></tr>
-				<tr><td>mai</td>
-					<td class="day"><a href="https://tuwel.tuwien.ac.at/mod/rssplayer/view.php?id=183668">7</a></td>
-					<td class="day"><a href="https://tuwel.tuwien.ac.at/mod/rssplayer/view.php?id=183669">14</a></td>
-					<td class="day"><a href="https://tuwel.tuwien.ac.at/mod/rssplayer/view.php?id=186156">21</a></td>
-					<td class="day"><a href="https://tuwel.tuwien.ac.at/mod/rssplayer/view.php?id=186157">28</a></td>
-				</tr>
-				<tr><td>juni</td>
-					<td class="day"><a href="https://tuwel.tuwien.ac.at/mod/rssplayer/view.php?id=186158">4</a></td>
-					<td class="day">11</td>
-					<td class="day">18</td>
-					<td class="day maybe">25*</td></tr>
-			</table>
+				<tr bgcolor="#EEE"><td width="10%">M&auml;rz</td>
+					<td width="22%" align="right"></td>
+					<td width="22%" align="right"></td>
+					<td width="22%" align="right"></td>
+					<td width="22%" align="right">25</td>
+					<td witdh="2%"></td></tr>
+				<tr><td>April</td>
+					<td></td>
+					<td align="right">15</td>
+					<td align="right">22</td>
+					<td align="right">29</td>
+					<td witdh="2%"></td></tr>
+				<tr bgcolor="#EEE"><td>Mai</td>
+					<td align="right">6</td>
+					<td align="right">13</td>
+					<td align="right">20</td>
+					<td align="right">27</td>
+					<td witdh="2%"></td></tr>
+				<tr><td>Juni</td>
+					<td align="right">3</td>
+					<td align="right">10</td>
+					<td align="right">*17</td>
+					<td align="right">*24</td>
+					<td witdh="2%"></td></tr>
 			{% endif %}
-			<br><br>
+			</table>
+			<br>
 			<span class="maybe" style="font-size:90%">* diese termine sind als reserve geplant. nach momentanen planungsstand findet da keine vorlesung statt. </span>
 		</div>
 		<br><br><br><br><br>
     </div>
-
+	
 {% endblock %}
