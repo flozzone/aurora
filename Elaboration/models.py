@@ -140,6 +140,7 @@ class Elaboration(models.Model):
             .filter(challenge__id__in=final_challenge_ids, submission_time__isnull=False, user__is_staff=False)
             .annotate(evaluated=Min('evaluation__submission_time'))
             .filter(evaluated=None)
+            .order_by('-submission_time')
         )
         return top_level_challenges
 
