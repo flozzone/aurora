@@ -16,7 +16,6 @@ urlpatterns = patterns('',
     url(r'^top_level_tasks$', Evaluation.views.top_level_tasks, name='top_level_tasks'),
     url(r'^complaints$', Evaluation.views.complaints, name='complaints'),
     url(r'^questions/$', Evaluation.views.questions, name='questions'),
-    url(r'^evaluated_non_adequate_work$', Evaluation.views.evaluated_non_adequate_work, name='evaluated_non_adequate_work'),
     url(r'^awesome$', Evaluation.views.awesome, name='awesome'),
     url(r'^user$', Evaluation.views.search_user, name='search_user'),
 

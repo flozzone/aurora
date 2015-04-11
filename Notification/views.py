@@ -44,6 +44,7 @@ def write_notification(request, course_short_title=None):
         raise Http404
     data = {
         'user_id': request.GET['user'],
+        'course_short_title': course_short_title,
     }
     return render_to_response('send_notification.html', data, context_instance=RequestContext(request))
 
