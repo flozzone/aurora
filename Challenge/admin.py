@@ -1,6 +1,7 @@
 from django.contrib import admin
 from Challenge.models import *
 
+
 class ChallengeAdmin(admin.ModelAdmin):
     fieldsets = [
         (
@@ -12,12 +13,23 @@ class ChallengeAdmin(admin.ModelAdmin):
                     'description',
                     'image',
                     'accepted_files',
-                    'course'
+                    'course',
+                    'points'
                 ]
             }
         ),
     ]
-    list_display = ('id', 'title', 'subtitle', 'prerequisite', 'description', 'image', 'accepted_files', )
+    list_display = (
+        'id',
+        'title',
+        'subtitle',
+        'prerequisite',
+        'description',
+        'image',
+        'accepted_files',
+        'course',
+        'points'
+    )
 
 admin.site.register(Challenge, ChallengeAdmin)
 
