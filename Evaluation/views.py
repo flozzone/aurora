@@ -189,34 +189,6 @@ def complaints(request, course_short_title=None):
 
 @login_required()
 @staff_member_required
-def evaluated_non_adequate_work(request, course_short_title=None):
-    course = Course.get_or_raise_404(short_title=course_short_title)
-    elaborations = Elaboration.get_evaluated_non_adequate_work(course)
-
-    # sort elaborations by submission time
-    if type(elaborations) == list:
-        elaborations.sort(key=lambda elaboration: elaboration.submission_time)
-    else:
-        elaborations.order_by('submission_time')
-
-    # store selected elaborations in session
-    request.session['elaborations'] = serializers.serialize('json', elaborations)
-    request.session['selection'] = 'evaluated_non_adequate_work'
-    request.session['count'] = len(elaborations)
-
-    return render_to_response('evaluation.html',
-                              {'overview': render_to_string('overview.html', {'elaborations': elaborations, 'course': course},
-                                                            RequestContext(request)),
-                               'count_evaluated_non_adequate_work': request.session.get('count', '0'),
-                               'stabilosiert_evaluated_non_adequate_work': 'stabilosiert',
-                               'selection': request.session['selection'],
-                               'course': course
-                              },
-                              context_instance=RequestContext(request))
-
-
-@login_required()
-@staff_member_required
 def awesome(request, course_short_title=None):
     course = Course.get_or_raise_404(short_title=course_short_title)
     selected_challenge = request.session.get('selected_challenge', default='')
@@ -658,7 +630,7 @@ def autocomplete_user(request, course_short_title=None):
     studies = AuroraUser.objects.all().filter(
         Q(username__istartswith=term) | Q(first_name__istartswith=term) | Q(last_name__istartswith=term) | Q(
             nickname__istartswith=term))
-    names = [(studi.username + ' ' + studi.nickname + ' ' + studi.last_name) for studi in studies]
+    names = [(studi.username + ' ' + studi.nickname + ' ' + studi.first_name + ' ' + studi.last_name) for studi in studies]
     response_data = json.dumps(names, ensure_ascii=False)
     return HttpResponse(response_data, content_type='application/json; charset=utf-8')
 

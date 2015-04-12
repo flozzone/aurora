@@ -55,6 +55,7 @@ def home(request, course_short_title=None):
             })
             points_sum += stack.get_points_earned(user)
         stack_data['sum'] = points_sum
+        stack_data['lock_period'] = stack.get_final_challenge().is_in_lock_period(user, course)
         data['stacks'].append(stack_data)
 
     context = RequestContext(request, {'newsfeed': data['course']})
