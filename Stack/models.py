@@ -38,7 +38,13 @@ class Stack(models.Model):
         for challenge in self.get_challenges():
             elaboration = challenge.get_elaboration(user)
             if elaboration is not None and elaboration.is_submitted():
-                points = points + challenge.points
+                points += challenge.points
+        return points
+
+    def get_points_available(self):
+        points = 0
+        for challenge in self.get_challenges():
+            points += challenge.points
         return points
 
     def get_last_available_challenge(self, user):

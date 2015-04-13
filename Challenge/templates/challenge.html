@@ -53,7 +53,7 @@
           </div>
         </div>
       </div>
-	  {% if not reviews %}
+	  {% if not reviews and not challenge.is_final_challenge %}
 	  
 	  <div class="review_section">
 		<div onclick="$('.review_questions').slideToggle('fast');">
