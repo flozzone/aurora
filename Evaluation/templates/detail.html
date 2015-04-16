@@ -24,7 +24,7 @@
 	 </div>
      <div class="spacer"></div>
 	 <div class="elab_title">{{elaboration.challenge.title|safe}}</div>
-        <img class="gravatar" src="{{ elaboration.user.avatar.url }}" style="vertical-align:middle" onclick="$('#top_detail').toggleClass('hidden_detail')">
+        <img class="gravatar" src="{{ elaboration.user.avatar.url }}" style="vertical-align:middle" onclick="$('.author_detail').addClass('hidden_detail');$('#top_detail').toggleClass('hidden_detail')">
         {{ elaboration.user.nickname }} ({{ elaboration.user.first_name }} {{ elaboration.user.last_name }}/{{ elaboration.user.username }}) @ <span title="{{elaboration.submission_time}}">{{elaboration.submission_time|naturaltime}}</span>:
 		 <div class="author_detail staff_detail" id="top_detail" style="overflow:auto; height:auto;">
 			 <img src='{{elaboration.user.avatar.url}}'>
