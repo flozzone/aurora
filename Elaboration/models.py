@@ -230,7 +230,7 @@ class Elaboration(models.Model):
         )
         # number of hours needed to pass until elaboration is applicable as candidate
         offset = randint(1, 5)
-        threshold = datetime.date(datetime.now() - timedelta(hours=offset))
+        threshold = datetime.now() - timedelta(hours=offset)
         candidates = (
             Elaboration.objects
             .filter(challenge=challenge, submission_time__lt=threshold, user__is_staff=False)
