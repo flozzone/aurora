@@ -15,7 +15,37 @@ $(function () {
 $(challenge_loaded);
 
 function challenge_loaded() {
-    var challenge_id = $('.challenge').attr('id');
+    if ($('.elaboration_block').length) {
+        var challenge_id = $('.challenge').attr('id');
+        init_tinymce();
+        $('.submit').click(submit_clicked);
+        $('.real_submit').click(real_submit_clicked);
+    } else {
+        init_tinymce_read_only();
+    }
+}
+
+function init_tinymce_read_only() {
+    tinymce.init({
+        // selector: "textarea#editor",
+        mode: "exact",
+        elements: "editor_challenge",
+        menubar: false,
+        statusbar: false,
+        toolbar: false,
+        height: 300,
+//        plugins: "autoresize",
+        autoresize_min_height: 300,
+        autoresize_max_height: 800,
+        readonly: 1,
+        oninit: function () {
+            var height = $('#editor_challenge_ifr').height() + 25;
+            $('#editor_challenge_ifr').height(height);
+        }
+    });
+}
+
+function init_tinymce() {
     tinymce.init({
 		paste_as_text:true,
         selector: "textarea#editor",
@@ -55,27 +85,6 @@ function challenge_loaded() {
             });
         }
     });
-
-    tinymce.init({
-        // selector: "textarea#editor",
-        mode: "exact",
-        elements: "editor_challenge",
-        menubar: false,
-        statusbar: false,
-        toolbar: false,
-        height: 300,
-//        plugins: "autoresize",
-        autoresize_min_height: 300,
-        autoresize_max_height: 800,
-        readonly: 1,
-        oninit: function () {
-            var height = $('#editor_challenge_ifr').height() + 25;
-            $('#editor_challenge_ifr').height(height);
-        }
-    });
-
-    $('.submit').click(submit_clicked);
-    $('.real_submit').click(real_submit_clicked);
 }
 
 function elaboration_autosave(e, challenge_id) {
