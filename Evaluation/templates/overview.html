@@ -21,7 +21,7 @@
             <th class="indicator_field" >reviews</th>
         </tr>
 
-        {% paginate elaborations with "" %}
+        {% paginate elaborations %}
         {% for elaboration in elaborations %}
             <tr class="{% cycle 'darkRow' 'lightRow' %}" onclick="document.location = '{% url 'Evaluation:detail' course_short_title=course.short_title %}?elaboration_id={{elaboration.id}}'">&nbsp;
                 <td><img class="gravatar" src="{{ elaboration.user.avatar.url }}" style="vertical-align:middle"> {{ elaboration.user.nickname }}</td>
