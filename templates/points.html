@@ -31,15 +31,8 @@
             <td>Slide Special Points</td>
             <td class="punkte">(inactive)</td>
         </tr>
-        <tr class="letztezeile sum">
-            <td>Total</td>
-            <td class="letztezeile punkte">{{ stack_data.sum }}</td>
-        <tr class="slides pZeile{{forloop.counter}}">
-            <td>Lock Period</td>
-            <td class="punkte">{% if not stack_data.lock_period %}go for it{% else %}{{ stack_data.lock_period }}{% endif %}</td>
-        </tr>
         <tr class="sum">
-            <td class="letztezeile">Total</td>
+            <td class="letztezeile sum">Total</td>
             <td class="letztezeile punkte">{{ stack_data.earned_total }} / {{ stack_data.submitted_total }}</td>
         </tr>
         <tr>
