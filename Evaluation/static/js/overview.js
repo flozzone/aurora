@@ -6,6 +6,7 @@ function update_overview(data) {
     data = JSON.parse(data);
     $('#menu').html(data['menu_html']);
     $('#overview').html(data['overview_html']);
+    window.location.href = "./";
 }
 
 $(function() {
