@@ -21,7 +21,11 @@ function challenge_loaded() {
         $('.submit').click(submit_clicked);
         $('.real_submit').click(real_submit_clicked);
     } else {
-        init_tinymce_read_only();
+        try {
+            init_tinymce_read_only();
+        } catch (err) {
+            // TODO: improve!
+        }
     }
 }
 
