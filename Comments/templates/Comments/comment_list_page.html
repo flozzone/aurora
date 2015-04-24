@@ -12,10 +12,17 @@
 
         {% if requester.is_staff %}
             <a href='#' class="{% if comment.thread_seen %} seen_link {% else %} mark_seen_link {% endif %}"
-               title="What has been seen, cannot be unseen!">
-                {% if comment.thread_seen %} seen {% else %} Mark seen {% endif %}
+               title="What has been seen, cannot be unseen!" style="position:relative;top:-25px;text-decoration:none;font-size:70%;">
+                {% if comment.thread_seen %} 
+					(seen)
+				{% else %}
+				<span class="fa-stack" style="color:green">
+					MARK&nbsp;SEEN
+				</span>
+				{% endif %}
             </a>
         {% endif %}
     </div>
 {% endfor %}
 {% show_more %}
+
