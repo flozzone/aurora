@@ -15,8 +15,8 @@ $(function () {
 $(challenge_loaded);
 
 function challenge_loaded() {
+    var challenge_id = $('.challenge').attr('id');
     if ($('.elaboration_block').length) {
-        var challenge_id = $('.challenge').attr('id');
         init_tinymce();
         $('.submit').click(submit_clicked);
         $('.real_submit').click(real_submit_clicked);
