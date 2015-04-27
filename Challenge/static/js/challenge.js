@@ -15,7 +15,6 @@ $(function () {
 $(challenge_loaded);
 
 function challenge_loaded() {
-    var challenge_id = $('.challenge').attr('id');
     if ($('.elaboration_block').length) {
         init_tinymce();
         $('.submit').click(submit_clicked);
@@ -85,6 +84,8 @@ function init_tinymce() {
 		paste_data_images: false,
         setup: function (editor) {
             editor.on('change', function (e) {
+                var challenge = $('.challenge');
+                var challenge_id = challenge.attr('id');
                 elaboration_autosave(e, challenge_id);
             });
         }
