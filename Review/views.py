@@ -14,9 +14,8 @@ from ReviewAnswer.models import ReviewAnswer
 from Notification.models import Notification
 
 
-def create_context_review(request, course_short_title):
+def create_context_review(request):
     data = {}
-    data['course'] = Course.get_or_raise_404(course_short_title)
     if 'id' in request.GET:
         user = RequestContext(request)['user']
         challenge = Challenge.objects.get(pk=request.GET.get('id'))
@@ -33,7 +32,7 @@ def create_context_review(request, course_short_title):
                 review = Review(elaboration=review_candidate, reviewer=user)
                 review.save()
             else:
-                return render_to_response('review.html', data, context_instance=RequestContext(request))
+                return data
         data['review'] = review
         data['stack_id'] = challenge.get_stack().id
         review_questions = ReviewQuestion.objects.filter(challenge=challenge).order_by("order")
@@ -42,7 +41,8 @@ def create_context_review(request, course_short_title):
 
 @login_required()
 def review(request, course_short_title):
-    data = create_context_review(request, course_short_title)
+    data = create_context_review(request)
+    data['course'] = Course.get_or_raise_404(course_short_title)
     return render_to_response('review.html', data, context_instance=RequestContext(request))
 
 
