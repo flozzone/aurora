@@ -34,10 +34,10 @@
 <div id="detail_area">
   <div id="{{ challenge.id }}" class="challenge" stack="{{ challenge.get_stack.id }}">
     <div class="challenge_title" style="cursor:pointer;" {% if elaboration.is_submitted %}onclick="$('.challenge_description').slideToggle('fast');"{% endif %}>
-{% if elaboration.is_submitted %}
-    <i class="fa fa-toggle-down"></i>
-{% endif %}
     {{ challenge.title|safe }}
+	{% if elaboration.is_submitted %}
+		<button style="font-size:16px" class="R"> toggle details </button>
+	{% endif %}
     </div>
     <div style="display:none">Points: {{ challenge.points }}</div>
     <div class="challenge_description{% if elaboration.is_submitted %} nothere{% endif %}" >
