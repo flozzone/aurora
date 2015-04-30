@@ -53,7 +53,7 @@
 
         <div class="comment_text">
             {% if comment.deleter == None %}
-                {{ comment.text | linebreaksbr | urlizetrunc:40  }}
+                {{ comment.text | linebreaksbr  }}
             {% else %}
                 [deleted]
             {% endif %}

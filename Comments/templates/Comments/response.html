@@ -55,7 +55,7 @@
 
         <div class="response_text">
             {% if response.deleter == None %}
-                {{ response.text | linebreaksbr | urlizetrunc:17 }}
+                {{ response.text | linebreaksbr }}
             {% else %}
                 [deleted]
             {% endif %}
