@@ -4,7 +4,7 @@
 	 data-date="{{ comment.post_date|date:'U' }}"
      id="comment_{{ comment.id }}" data-comment_number="{{ comment.id }}"
      data-comment_author="{{ comment.author.display_name }}">
-	 <div class="comment_top" onclick="headClick(this.parentNode)">
+	 <div class="comment_top" onclick="headClick(this.parentNode);$('#detail_{{comment.id}}').hide();">
 		 <div class="comment_author">{{ comment.author.display_name }}</div>
 		 <div class="comment_time" title="{{ comment.post_date|date:'D j.n.y, G:i:s'}}">({{ comment.post_date | naturaltime }})</div>
 		 <div class="comment_numreplies">&mdash; {{ comment.responses | length }} repl{{ comment.responses|length|pluralize:"y,ies"}}</div>
@@ -37,7 +37,7 @@
 	 <div id="detail_{{comment.id}}" class="author_detail hidden_detail" onClick="$(this).slideUp('fast')">
 		 <img src='{{comment.author.avatar.url}}'>
 		 <span class="nick">{{comment.author.display_name}}</span><br>
-		 &quot;{{comment.author.statement|urlizetrunc:50}}&quot;<br>
+		 <div style="width:82%">&quot;{{comment.author.statement|urlizetrunc:50}}&quot;</div>
 		 {% if requester.is_staff %}
        {{comment.author.matriculation_number}} - {{comment.author.first_name}} {{comment.author.last_name}}<br>
 		   <a href="mailto:{{comment.author.email}}">{{comment.author.email}}</a> &mdash; 
