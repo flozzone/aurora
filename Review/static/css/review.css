@@ -173,10 +173,11 @@
 
 .question_container > .answer > textarea {
 	width:100%;
-	height:5em;
-	font-size:13px;
+	min-height:55px;
+	font-size:14px;
 	border:1px solid silver;
-	padding: 0.5em 0;
+	padding: 0.5em;
+	box-sizing: border-box;
 }
 
 .finalBlock {
