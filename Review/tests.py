@@ -1,9 +1,10 @@
 from datetime import datetime
 from django.test import TestCase
+
 from AuroraUser.models import AuroraUser
 from Course.models import Course, CourseUserRelation
 from Challenge.models import Challenge
-from Review.models import Review
+from Review.models import Review, ReviewConfig
 from ReviewQuestion.models import ReviewQuestion
 from Elaboration.models import Elaboration
 
@@ -133,3 +134,10 @@ class SimpleTest(TestCase):
                 review_amount = Review.get_review_amount(elaboration)
                 # the review amount should not increase without submission_time
                 assert review_amount == 0
+
+    def test_review_config_offset(self):
+        assert ReviewConfig.get_candidate_offset_min() == 0
+        assert ReviewConfig.get_candidate_offset_max() == 0
+        ReviewConfig(candidate_offset_min=1, candidate_offset_max=2).save()
+        assert ReviewConfig.get_candidate_offset_min() == 1
+        assert ReviewConfig.get_candidate_offset_max() == 2

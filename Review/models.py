@@ -1,6 +1,6 @@
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
+
 from Comments.models import Comment
 
 
@@ -30,7 +30,8 @@ class Review(models.Model):
 
     @staticmethod
     def get_open_review(challenge, user):
-        open_reviews = Review.objects.filter(elaboration__challenge=challenge, submission_time__isnull=True, reviewer=user)
+        open_reviews = Review.objects.filter(elaboration__challenge=challenge, submission_time__isnull=True,
+                                             reviewer=user)
         if open_reviews:
             return open_reviews[0]
         else:
@@ -49,3 +50,25 @@ class Review(models.Model):
     def query_reviews_with_questions():
         content_type = ContentType.objects.get_for_model(Review)
         # Review.objects.annotate()
+
+
+class ReviewConfig(models.Model):
+    # in hours
+    candidate_offset_min = models.IntegerField(default=0)
+    candidate_offset_max = models.IntegerField(default=0)
+
+    @staticmethod
+    def get_candidate_offset_min():
+        config = ReviewConfig.objects.all()
+        if config.count() == 0:
+            return 0
+        else:
+            return config[0].candidate_offset_min
+
+    @staticmethod
+    def get_candidate_offset_max():
+        config = ReviewConfig.objects.all()
+        if config.count() == 0:
+            return 0
+        else:
+            return config[0].candidate_offset_max
