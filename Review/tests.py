@@ -1,11 +1,13 @@
 from datetime import datetime
 from django.test import TestCase
+
 from AuroraUser.models import AuroraUser
 from Course.models import Course, CourseUserRelation
 from Challenge.models import Challenge
-from Review.models import Review
+from Review.models import Review, ReviewConfig
 from ReviewQuestion.models import ReviewQuestion
 from Elaboration.models import Elaboration
+from Stack.models import Stack, StackChallengeRelation
 
 
 class SimpleTest(TestCase):
@@ -30,13 +32,11 @@ class SimpleTest(TestCase):
         return user
 
     def create_test_users(self, amount):
-        print("create test users")
         self.users = []
         for i in range(amount):
             self.users.append(self.create_test_user("s%s" % i))
 
     def create_course(self):
-        print("create test course")
         self.course = Course(
             title='test_title',
             short_title='test_short_title',
@@ -48,7 +48,6 @@ class SimpleTest(TestCase):
             CourseUserRelation(course=self.course, user=user).save()
 
     def create_challenge(self):
-        print("create test challenge")
         self.challenge = Challenge(
             title='test_title',
             subtitle='test_subtitle',
@@ -58,7 +57,6 @@ class SimpleTest(TestCase):
         self.challenge.save()
 
     def create_review_question(self):
-        print("create test review question")
         self.review_question = ReviewQuestion(
             challenge=self.challenge,
             order=1,
@@ -67,7 +65,6 @@ class SimpleTest(TestCase):
         self.review_question.save()
 
     def create_elaborations(self):
-        print("create test elaborations")
         self.elaborations = []
         for user in self.users:
             elaboration = Elaboration(challenge=self.challenge, user=user, elaboration_text="test_text",
@@ -115,21 +112,38 @@ class SimpleTest(TestCase):
         assert review2.reviewer == user2
         assert review1.elaboration == elaboration and review2.elaboration == elaboration
 
-    def test_get_review_amount(self):
-        for elaboration in self.elaborations:
-            i = 0
-            for user in self.users:
-                i += 1
-                self.create_review(elaboration=elaboration, reviewer=user)
-                review_amount = Review.get_review_amount(elaboration)
-                # each iteration, the amount of reviews should be + 1
-                assert review_amount == i
+    def test_review_config_offset(self):
+        assert ReviewConfig.get_candidate_offset_min() == 0
+        assert ReviewConfig.get_candidate_offset_max() == 0
+        ReviewConfig(candidate_offset_min=1, candidate_offset_max=2).save()
+        assert ReviewConfig.get_candidate_offset_min() == 1
+        assert ReviewConfig.get_candidate_offset_max() == 2
 
-    # TODO: enable this test if we decide that the review amount only counts submitted reviews
-    def get_review_amount_without_submission(self):
-        for elaboration in self.elaborations:
-            for user in self.users:
-                self.create_review_without_submission_date(elaboration=elaboration, reviewer=user)
-                review_amount = Review.get_review_amount(elaboration)
-                # the review amount should not increase without submission_time
-                assert review_amount == 0
+    def test_notification_too_soon(self):
+        challenge1 = self.challenge
+        challenge2 = Challenge(
+            course=self.course,
+            prerequisite=challenge1,
+        )
+        challenge2.save()
+
+        challenge3 = Challenge(
+            course=self.course,
+            prerequisite=challenge2,
+        )
+        challenge3.save()
+        stack = Stack(course=self.course)
+        stack.save()
+        StackChallengeRelation(stack=stack, challenge=challenge1).save()
+        StackChallengeRelation(stack=stack, challenge=challenge2).save()
+        StackChallengeRelation(stack=stack, challenge=challenge3).save()
+        elab1 = challenge1.get_elaboration(self.users[0])
+        elab2 = Elaboration(challenge=challenge2, user=self.users[0])
+        elab2.save()
+        assert stack.has_enough_peer_reviews(self.users[0]) is False
+        Review(elaboration=elab2, reviewer=self.users[1], appraisal='S', submission_time=datetime.now()).save()
+        Review(elaboration=elab2, reviewer=self.users[2], appraisal='S', submission_time=datetime.now()).save()
+        assert stack.has_enough_peer_reviews(self.users[0]) is False
+        Review(elaboration=elab1, reviewer=self.users[1], appraisal='S', submission_time=datetime.now()).save()
+        Review(elaboration=elab1, reviewer=self.users[2], appraisal='S', submission_time=datetime.now()).save()
+        assert stack.has_enough_peer_reviews(self.users[0]) is True

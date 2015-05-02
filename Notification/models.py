@@ -1,5 +1,4 @@
 import os
-
 from django.core.urlresolvers import reverse
 from django.db import models
 
@@ -37,10 +36,11 @@ class Notification(models.Model):
     def enough_peer_reviews(review):
         final_challenge = review.elaboration.challenge.get_final_challenge()
         stack = final_challenge.get_stack()
-        if stack.has_enough_peer_reviews(review.elaboration.user) and not final_challenge.get_elaboration(review.elaboration.user):
+        if stack.has_enough_peer_reviews(review.elaboration.user) and not final_challenge.get_elaboration(
+                review.elaboration.user):
             text = Notification.truncate_text(Notification.ENOUGH_PEER_REVIEWS + final_challenge.title)
             course = review.elaboration.challenge.get_course()
-            obj, created = Notification.objects.get_or_create(
+            Notification.objects.get_or_create(
                 user=review.elaboration.user,
                 course=course,
                 text=text,

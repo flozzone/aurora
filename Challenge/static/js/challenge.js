@@ -16,12 +16,15 @@ $(challenge_loaded);
 
 function challenge_loaded() {
     if ($('.elaboration_block').length) {
-        var challenge_id = $('.challenge').attr('id');
         init_tinymce();
         $('.submit').click(submit_clicked);
         $('.real_submit').click(real_submit_clicked);
     } else {
-        init_tinymce_read_only();
+        try {
+            init_tinymce_read_only();
+        } catch (err) {
+            // TODO: improve!
+        }
     }
 }
 
@@ -81,6 +84,8 @@ function init_tinymce() {
 		paste_data_images: false,
         setup: function (editor) {
             editor.on('change', function (e) {
+                var challenge = $('.challenge');
+                var challenge_id = challenge.attr('id');
                 elaboration_autosave(e, challenge_id);
             });
         }
