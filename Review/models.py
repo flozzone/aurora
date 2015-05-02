@@ -32,6 +32,22 @@ class Review(models.Model):
             return None
 
 
+class ReviewEvaluation(models.Model):
+    review = models.ForeignKey('Review.Review')
+    creation_time = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey('AuroraUser.AuroraUser')
+
+    DEFAULT = 'D'
+    NEGATIVE = 'N'
+    POSITIVE = 'P'
+    APPRAISAL_CHOICES = (
+        (DEFAULT, 'Default'),
+        (NEGATIVE, 'Negative'),
+        (POSITIVE, 'Positive'),
+    )
+    appraisal = models.CharField(max_length=1, choices=APPRAISAL_CHOICES, default='D')
+
+
 class ReviewConfig(models.Model):
     # in hours
     candidate_offset_min = models.IntegerField(default=0)

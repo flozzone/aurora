@@ -7,7 +7,7 @@ from Course.models import Course
 
 from Stack.models import Stack, StackChallengeRelation
 from Evaluation.models import Evaluation
-from Review.models import Review
+from Review.models import Review, ReviewEvaluation
 from Elaboration.models import Elaboration
 from Challenge.models import Challenge
 from ReviewQuestion.models import ReviewQuestion
@@ -170,5 +170,9 @@ def create_context_view_review(request, data):
                 question_data['question'] = review_question.text
                 question_data['answer'] = review_answer.text
                 review_data['questions'].append(question_data)
+            evaluation = ReviewEvaluation.objects.filter(review=review)
+            review_data['evaluation'] = 'D'
+            if evaluation:
+                review_data['evaluation'] = evaluation[0].appraisal
             data['reviews'].append(review_data)
     return data

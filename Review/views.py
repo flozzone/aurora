@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, Http404
 
 from Course.models import Course
-from Review.models import Review
+from Review.models import Review, ReviewEvaluation
 from Elaboration.models import Elaboration
 from Challenge.models import Challenge
 from ReviewQuestion.models import ReviewQuestion
@@ -86,4 +86,21 @@ def review_answer(request, course_short_title):
         except:
             print('Could not send Notification')
 
+    return HttpResponse()
+
+@login_required()
+def evaluate(request, course_short_title):
+    user = RequestContext(request)['user']
+    if not request.GET:
+        raise Http404
+    if not 'appraisal' in request.GET:
+        raise Http404
+    appraisal = request.GET['appraisal']
+    if not 'review_id' in request.GET:
+        raise Http404
+    review_id = request.GET['review_id']
+    review = Review.objects.get(id=review_id)
+    review_evaluation, created = ReviewEvaluation.objects.get_or_create(user=user, review=review)
+    review_evaluation.appraisal = appraisal
+    review_evaluation.save()
     return HttpResponse()

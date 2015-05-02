@@ -211,5 +211,11 @@ input[type=submit] {
 	visibility:hidden!important;
 }
 
+.review_evaluation.active {
+    color: green;
+}
 
+.review_evaluation.waiting {
+    color: orange;
+}
 
