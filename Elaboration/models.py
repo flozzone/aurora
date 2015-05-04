@@ -115,8 +115,7 @@ class Elaboration(models.Model):
         final_challenge_ids = Challenge.get_course_final_challenge_ids(course)
         missing_reviews = (
             Elaboration.objects
-            .filter(submission_time__lte=datetime.now() - timedelta(days=1), user__is_staff=False,
-                    challenge__course=course)
+            .filter(challenge__course=course)
             .annotate(num_reviews=Count('review'))
             .exclude(challenge__id__in=final_challenge_ids)
         )
@@ -138,7 +137,7 @@ class Elaboration(models.Model):
         final_challenge_ids = Challenge.get_course_final_challenge_ids(course)
         top_level_challenges = (
             Elaboration.objects
-            .filter(challenge__id__in=final_challenge_ids, submission_time__isnull=False, user__is_staff=False)
+            .filter(challenge__id__in=final_challenge_ids, submission_time__isnull=False)
             .annotate(evaluated=Min('evaluation__submission_time'))
             .filter(evaluated=None)
             .order_by('-submission_time')

@@ -46,7 +46,7 @@ def evaluation(request, course_short_title=None):
             elaborations.append(serialized_elaboration.object)
         if selection == 'search':
             if 'id' in request.GET:
-                points = get_points(request, AuroraUser.objects.get(pk=request.GET['id']))
+                points = get_points(request, AuroraUser.objects.get(pk=request.GET['id']), course)
                 data = {'elaborations': elaborations, 'search': True, 'stacks': points['stacks'],
                         'courses': points['courses'], 'course': course}
             else:
@@ -600,7 +600,7 @@ def select_user(request, course_short_title=None):
     user = AuroraUser.objects.get(username=selected_user)
     elaborations = user.get_course_elaborations(course)
 
-    points = get_points(request, user)
+    points = get_points(request, user, course)
     html = render_to_response('overview.html',
                               {'elaborations': elaborations, 'search': True, 'stacks': points['stacks'],
                                'courses': points['courses'], 'course': course}, RequestContext(request))
@@ -803,8 +803,10 @@ def sort(request, course_short_title=None):
 
 @login_required()
 @staff_member_required
-def get_points(request, user):
+def get_points(request, user, course):
     data = {}
+    data['course'] = course
+
     course_ids = CourseUserRelation.objects.filter(user=user).values_list('course', flat=True)
     courses = Course.objects.filter(id__in=course_ids)
     data['courses'] = courses
@@ -814,14 +816,22 @@ def get_points(request, user):
         course_stacks = Stack.objects.all().filter(course=course)
         stack_data['course_title'] = course.title
         stack_data['course_stacks'] = []
-        points_sum = 0
+        earned_total = 0
+        submitted_total = 0
         for stack in course_stacks:
+            is_submitted = stack.get_final_challenge().submitted_by_user(user)
             stack_data['course_stacks'].append({
                 'stack': stack,
-                'points': stack.get_points_earned(user)
+                'is_submitted': is_submitted,
+                'points_earned': stack.get_points_earned(user),
+                'points_available': stack.get_points_available(),
             })
-            points_sum += stack.get_points_earned(user)
-        stack_data['sum'] = points_sum
+            if is_submitted:
+                earned_total += stack.get_points_earned(user)
+                submitted_total += stack.get_points_available()
+        stack_data['earned_total'] = earned_total
+        stack_data['submitted_total'] = submitted_total
+        stack_data['lock_period'] = stack.get_final_challenge().is_in_lock_period(user, course)
         data['stacks'].append(stack_data)
 
     return data
