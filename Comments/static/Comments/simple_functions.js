@@ -164,7 +164,7 @@ var COMMENTS = (function (my, $) {
 
             $this.off();
             $this.removeClass('mark_seen_link').addClass('seen_link');
-            $this.text('seen');
+            $this.text('(seen)');
 
             return false;
         }

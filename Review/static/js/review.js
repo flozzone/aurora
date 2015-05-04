@@ -1,6 +1,14 @@
 $(function() {
 	$('#challenges-li').addClass('uRhere');
-	window.document.title="Aurora: Challenges"
+	window.document.title="Aurora: Challenges";
+	$('textarea').keyup(function() {
+	    $(this).height( 0 );
+	    $(this).height( this.scrollHeight );
+	});
+	$('textarea').each(function() {
+	    $(this).height( 0 );
+	    $(this).height( this.scrollHeight );
+	});
 });
 
 

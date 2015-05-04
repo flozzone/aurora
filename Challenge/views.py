@@ -1,20 +1,18 @@
-import os
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
-from Challenge.models import Challenge
+from django.http import Http404
+
 from Course.models import Course
-from Elaboration.models import Elaboration
-from AuroraUser.models import AuroraUser
+
 from Stack.models import Stack, StackChallengeRelation
 from Evaluation.models import Evaluation
-from FileUpload.models import UploadFile
 from Review.models import Review
 from Elaboration.models import Elaboration
 from Challenge.models import Challenge
 from ReviewQuestion.models import ReviewQuestion
 from ReviewAnswer.models import ReviewAnswer
-from django.http import Http404
+
 
 @login_required()
 def stack(request, course_short_title=None):
@@ -136,7 +134,16 @@ def create_context_challenge(request, course_short_title):
 def challenge(request, course_short_title=None):
     data = create_context_challenge(request, course_short_title)
     user = RequestContext(request)['user']
-    if not data['challenge'].is_enabled_for_user(user) and not user.is_staff and not data['challenge'].is_final_challenge():
+    challenge = data['challenge']
+
+    # conditions for an inactive challenge
+    # challenge is not enabled for this user
+    challenge_condition = not challenge.is_enabled_for_user(user)
+    # user is not staff
+    user_condition = not user.is_staff
+    # challenge is not final challenge or the previous challenge has not enough user reviews
+    final_challenge_condition = not challenge.is_final_challenge() or not challenge.prerequisite.has_enough_user_reviews(user)
+    if challenge_condition and user_condition and final_challenge_condition:
         return render_to_response('challenge_inactive.html', data, context_instance=RequestContext(request))
     if 'elaboration' in data:
         data = create_context_view_review(request, data)

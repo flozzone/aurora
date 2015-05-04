@@ -18,23 +18,26 @@
           <th colspan=2 class="course_title"></i> {{ stack_data.course_title }}</th>
         </tr>
         {% for stack in stack_data.course_stacks %}
+            <tr>
+            {% if stack.is_submitted %}
             <tr class="pZeile{{forloop.parentloop.counter}}">
-                <td class="stack_name">{{ stack.stack.title }}</td>
-                <td class="punkte">{{ stack.points_earned }} / {{ stack.points_submitted }}</td>
+                <td class="stack_name"><a style="text-decoration:none; color:black;" href="/{{course.short_title}}/challenge/stack?id={{stack.stack.id}}"><i style="color:#3AC958" class="fa fa-angle-right"></i> {{ stack.stack.title }}</a></td>
+                <td class="punkte">{{ stack.points_earned }} / {{ stack.points_available }}</td>
             </tr>
+            {% endif %}
         {% endfor %}
 
-        <tr class="slides pZeile{{forloop.counter}}">
+        <tr>
             <td>Slide Special Points</td>
             <td class="punkte">(inactive)</td>
         </tr>
-        <tr class="slides pZeile{{forloop.counter}}">
-            <td>Lock Period</td>
-            <td class="punkte">{% if not stack_data.lock_period %}go for it{% else %}{{ stack_data.lock_period }}{% endif %}</td>
-        </tr>
         <tr class="sum">
-            <td class="letztezeile">Total</td>
-            <td class="letztezeile punkte">{{ stack_data.sum }}</td>
+            <td class="letztezeile sum">Total</td>
+            <td class="letztezeile punkte">{{ stack_data.earned_total }} / {{ stack_data.submitted_total }}</td>
+        </tr>
+        <tr>
+            <td colspan=2>Next hand-in after 
+            <span class="punkte">{% if not stack_data.lock_period %}now{% else %}{{ stack_data.lock_period|date:"d. M Y,H:i" }}{% endif %}</span>
         </tr>
     </table>
 </div>

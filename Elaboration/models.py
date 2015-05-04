@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.db.models import Count, Min
+from random import randint
 
 from Comments.models import Comment
 from Evaluation.models import Evaluation
@@ -227,9 +228,12 @@ class Elaboration(models.Model):
             .filter(reviewer=user, elaboration__challenge=challenge)
             .values_list('elaboration__id', flat=True)
         )
+        # number of hours needed to pass until elaboration is applicable as candidate
+        offset = randint(1, 5)
+        threshold = datetime.now() - timedelta(hours=offset)
         candidates = (
             Elaboration.objects
-            .filter(challenge=challenge, submission_time__isnull=False, user__is_staff=False)
+            .filter(challenge=challenge, submission_time__lt=threshold, user__is_staff=False)
             .exclude(user=user)
             .annotate(num_reviews=Count('review'))
             .exclude(id__in=already_submitted_reviews_ids)
