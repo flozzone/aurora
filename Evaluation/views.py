@@ -83,9 +83,9 @@ def missing_reviews(request, course_short_title=None):
 
     # sort elaborations by submission time
     if type(elaborations) == list:
-        elaborations.sort(key=lambda elaboration: elaboration.submission_time)
+        elaborations.sort(key=lambda elaboration: elaboration.submission_time, reverse=True)
     else:
-        elaborations.order_by('submission_time')
+        elaborations = elaborations.order_by('submission_time')
 
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
@@ -113,7 +113,7 @@ def non_adequate_work(request, course_short_title=None):
     if type(elaborations) == list:
         elaborations.sort(key=lambda elaboration: elaboration.submission_time)
     else:
-        elaborations.order_by('submission_time')
+        elaborations = elaborations.order_by('submission_time')
 
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
@@ -141,7 +141,7 @@ def top_level_tasks(request, course_short_title=None):
     if type(elaborations) == list:
         elaborations.sort(key=lambda elaboration: elaboration.submission_time)
     else:
-        elaborations.order_by('submission_time')
+        elaborations = elaborations.order_by('submission_time')
 
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
@@ -169,7 +169,7 @@ def complaints(request, course_short_title=None):
     if type(elaborations) == list:
         elaborations.sort(key=lambda elaboration: elaboration.submission_time)
     else:
-        elaborations.order_by('submission_time')
+        elaborations = elaborations.order_by('submission_time')
 
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
@@ -202,7 +202,7 @@ def awesome(request, course_short_title=None):
     if type(elaborations) == list:
         elaborations.sort(key=lambda elaboration: elaboration.submission_time)
     else:
-        elaborations.order_by('submission_time')
+        elaborations = elaborations.order_by('submission_time')
 
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
@@ -323,7 +323,7 @@ def detail(request, course_short_title=None):
     if type(stack_elaborations) == list:
         stack_elaborations.sort(key=lambda stack_elaboration: stack_elaboration.submission_time)
     else:
-        stack_elaborations.order_by('submission_time')
+        stack_elaborations = stack_elaborations.order_by('submission_time')
 
     params['elaboration'] = elaboration
     params['stack_elaborations'] = stack_elaborations
@@ -693,7 +693,7 @@ def review_answer(request, course_short_title=None):
     if type(elaborations) == list:
         elaborations.sort(key=lambda elaboration: elaboration.submission_time)
     else:
-        elaborations.order_by('submission_time')
+        elaborations = elaborations.order_by('submission_time')
     request.session['elaborations'] = serializers.serialize('json', elaborations)
 
     if review.elaboration.is_reviewed_2times():
@@ -730,7 +730,7 @@ def back(request, course_short_title=None):
     if type(elaborations) == list:
         elaborations.sort(key=lambda elaboration: elaboration.submission_time)
     else:
-        elaborations.order_by('submission_time')
+        elaborations = elaborations.order_by('submission_time')
     request.session['elaborations'] = serializers.serialize('json', elaborations)
 
     return evaluation(request, course_short_title)
@@ -758,7 +758,7 @@ def search_user(request, course_short_title=None):
         if type(elaborations) == list:
             elaborations.sort(key=lambda elaboration: elaboration.submission_time)
         else:
-            elaborations.order_by('submission_time')
+            elaborations = elaborations.order_by('submission_time')
 
         # store selected elaborations in session
         request.session['elaborations'] = serializers.serialize('json', elaborations)
