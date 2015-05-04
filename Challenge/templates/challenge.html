@@ -171,15 +171,15 @@
 		<div class="review_evaluation_text">How would you rate this review? </div>
         <div id="{{ review_data.review_id }}" class="review_evaluation_container">
             <div review_id="{{ review_data.review_id }}" appraisal="P"
-                 class="review_evaluation{% if review_data.evaluation == "P" %} active{% endif %}">
+                 class="review_evaluation positive {% if review_data.evaluation == "P" %} active{% endif %}">
                 helpful
             </div>
             <div review_id="{{ review_data.review_id }}" appraisal="D"
-                 class="review_evaluation{% if review_data.evaluation == "D" %} active{% endif %}">
+                 class="review_evaluation neutral {% if review_data.evaluation == "D" %} active{% endif %}">
                 average
             </div>
             <div review_id="{{ review_data.review_id }}" appraisal="N"
-                 class="review_evaluation{% if review_data.evaluation == "N" %} active{% endif %}">
+                 class="review_evaluation negative{% if review_data.evaluation == "N" %} active{% endif %}">
                 meaningless or offensive
             </div>
         </div>

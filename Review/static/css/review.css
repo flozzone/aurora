@@ -215,8 +215,30 @@ input[type=submit] {
 
 
 .review_evaluation.active {
-    color: rgb(52,180,79);
 	text-shadow:0 1px 3px rgba(255,255,255,0.8), 0 -1px 2px rgba(0,0,0,0.2);
+}
+
+.review_evaluation.positive.active {
+    color: rgb(47,162,71);
+}
+
+.review_evaluation.active::before {
+		content:'\25b8 ';
+		color:black;
+}
+
+.review_evaluation:not(active)::before {
+	content:'\25b8 ';
+	color:lightgray;
+}
+
+
+.review_evaluation.neutral.active {
+	color: rgba(39,135,60,1);
+}
+
+.review_evaluation.negative.active {
+    color: red;
 }
 
 .review_evaluation.waiting {
