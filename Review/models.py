@@ -41,9 +41,9 @@ class ReviewEvaluation(models.Model):
     NEGATIVE = 'N'
     POSITIVE = 'P'
     APPRAISAL_CHOICES = (
-        (DEFAULT, 'Default'),
-        (NEGATIVE, 'Negative'),
-        (POSITIVE, 'Positive'),
+        (DEFAULT, 'Average Review'),
+        (NEGATIVE, 'Flag this review as meaningless or offensive'),
+        (POSITIVE, 'This review was helpful'),
     )
     appraisal = models.CharField(max_length=1, choices=APPRAISAL_CHOICES, default='D')
 

@@ -166,21 +166,24 @@
 {% endif %}
           </b>
         </div>
+      </div>
+	  <div class="review_evaluation_drawer">
+		<div class="review_evaluation_text">How would you rate this review? </div>
         <div id="{{ review_data.review_id }}" class="review_evaluation_container">
             <div review_id="{{ review_data.review_id }}" appraisal="P"
                  class="review_evaluation{% if review_data.evaluation == "P" %} active{% endif %}">
-                Positive
+                helpful
             </div>
             <div review_id="{{ review_data.review_id }}" appraisal="D"
                  class="review_evaluation{% if review_data.evaluation == "D" %} active{% endif %}">
-                Default
+                average
             </div>
             <div review_id="{{ review_data.review_id }}" appraisal="N"
                  class="review_evaluation{% if review_data.evaluation == "N" %} active{% endif %}">
-                Negative
+                meaningless or offensive
             </div>
         </div>
-      </div>
+	</div>
       <div>&nbsp;</div>
 {% endfor %}
     </div>

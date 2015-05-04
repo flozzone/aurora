@@ -211,11 +211,38 @@ input[type=submit] {
 	visibility:hidden!important;
 }
 
+
+
+
 .review_evaluation.active {
-    color: green;
+    color: rgb(52,180,79);
+	text-shadow:0 1px 3px rgba(255,255,255,0.8), 0 -1px 2px rgba(0,0,0,0.2);
 }
 
 .review_evaluation.waiting {
     color: orange;
 }
 
+.review_evaluation_container {
+	float:left;
+}
+
+.review_evaluation_text {
+	float:left;
+}
+.review_evaluation_drawer {
+	min-height:46px;
+	border:1px solid rgba(255,255,255,0.3);
+	background: lightgray;
+	box-shadow: 0 1px 2px rgba(0,0,0,0.7);
+	padding:6px;
+	border-radius: 0 0 6px 6px;
+	margin: 0 200px;
+}
+
+.review_evaluation {
+	text-transform:uppercase;
+	font-size:13px;
+	cursor:pointer;
+	padding:1px 1em 1px 1em;
+}
