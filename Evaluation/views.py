@@ -83,7 +83,7 @@ def missing_reviews(request, course_short_title=None):
 
     # sort elaborations by submission time
     if type(elaborations) == list:
-        elaborations.sort(key=lambda elaboration: elaboration.submission_time, reverse=True)
+        elaborations.sort(key=lambda elaboration: elaboration.submission_time)
     else:
         elaborations = elaborations.order_by('submission_time')
 
