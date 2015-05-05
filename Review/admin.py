@@ -40,3 +40,23 @@ class ReviewConfigAdmin(admin.ModelAdmin):
 
 
 admin.site.register(ReviewConfig, ReviewConfigAdmin)
+
+
+class ReviewEvaluationAdmin(admin.ModelAdmin):
+    fieldsets = [
+        (
+            None, {
+                'fields': [
+                    'id',
+                    'review',
+                    'creation_time',
+                    'user',
+                    'appraisal',
+                ]
+            }
+        ),
+    ]
+    list_display = ('id', 'review', 'creation_time', 'user', 'appraisal', )
+
+
+admin.site.register(ReviewEvaluation, ReviewEvaluationAdmin)
