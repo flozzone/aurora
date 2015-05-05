@@ -220,7 +220,7 @@ class Elaboration(models.Model):
             )
         return Elaboration.objects.filter(id__in=include_elaboration_ids).filter(id__in=non_adequate_elaborations)
 
-    # offset is the number of ours needed to pass until elaboration is applicable as candidate
+    # offset is the number of hours needed to pass until elaboration is applicable as candidate
     @staticmethod
     def get_review_candidate(challenge, user, offset=0):
         already_submitted_reviews_ids = (
