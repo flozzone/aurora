@@ -219,9 +219,10 @@ input[type=submit] {
 }
 
 .review_evaluation.positive.active::before {
-	content:'\25CF ';
-	font-size:16px;
+		content:'\25CF ';
+		font-size:16px;
 		color:green;
+		text-shadow:0 1px 3px rgba(255,255,255,0.8), 0 -1px 2px rgba(0,0,0,0.2), 0 0 5px rgb(0,255,0);
 		line-height:16px;
 }
 
@@ -229,13 +230,15 @@ input[type=submit] {
 		content:'\25CF ';
 		font-size:16px;
 		color:yellow;
+		text-shadow:0 1px 3px rgba(255,255,255,0.8), 0 -1px 2px rgba(0,0,0,0.2), 0 0 5px rgb(255,255,0), 0 0 5px rgb(255,255,0);
 		line-height:16px;
 }
 
 .review_evaluation.negative.active::before {
-	content:'\25CF ';
-	font-size:16px;
+		content:'\25CF ';
+		font-size:16px;
 		color:red;
+		text-shadow:0 1px 3px rgba(255,255,255,0.8), 0 -1px 2px rgba(0,0,0,0.2), 0 0 3px rgb(255,0,0);
 		line-height:16px;
 }
 
