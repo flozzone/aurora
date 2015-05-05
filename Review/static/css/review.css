@@ -218,23 +218,41 @@ input[type=submit] {
 	text-shadow:0 1px 3px rgba(255,255,255,0.8), 0 -1px 2px rgba(0,0,0,0.2);
 }
 
+.review_evaluation.positive.active::before {
+	content:'\25CF ';
+	font-size:16px;
+		color:green;
+		line-height:16px;
+}
+
+.review_evaluation.neutral.active::before {
+		content:'\25CF ';
+		font-size:16px;
+		color:yellow;
+		line-height:16px;
+}
+
+.review_evaluation.negative.active::before {
+	content:'\25CF ';
+	font-size:16px;
+		color:red;
+		line-height:16px;
+}
+
+.review_evaluation:not(.active)::before {
+	content:'\25CF ';
+	font-size:16px;
+	visibility:hidden;
+	line-height:16px;
+}
+
+
 .review_evaluation.positive.active {
     color: rgb(47,162,71);
 }
 
-.review_evaluation.active::before {
-		content:'\25b8 ';
-		color:black;
-}
-
-.review_evaluation:not(active)::before {
-	content:'\25b8 ';
-	color:lightgray;
-}
-
-
 .review_evaluation.neutral.active {
-	color: rgba(39,135,60,1);
+	color: rgba(24,81,35,1);
 }
 
 .review_evaluation.negative.active {
@@ -247,13 +265,15 @@ input[type=submit] {
 
 .review_evaluation_container {
 	float:left;
+	position:relative;
+	top:-2px;
 }
 
 .review_evaluation_text {
 	float:left;
 }
 .review_evaluation_drawer {
-	min-height:46px;
+	min-height:52px;
 	border:1px solid rgba(255,255,255,0.3);
 	background: lightgray;
 	box-shadow: 0 1px 2px rgba(0,0,0,0.7);
