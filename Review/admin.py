@@ -31,7 +31,8 @@ class ReviewConfigAdmin(admin.ModelAdmin):
                 'fields': [
                     'candidate_offset_min',
                     'candidate_offset_max',
-                ]
+                ],
+                'description': 'The offset is defined as passed time since the submission in hours.'
             }
         ),
     ]
