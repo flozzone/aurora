@@ -232,7 +232,7 @@ class Challenge(models.Model):
                 return self.USER_REVIEW_MISSING
 
             # user is done but needs peer reviews for final challenge
-            if not elaboration.is_reviewed_2times():
+            if not self.get_stack().has_enough_peer_reviews(user):
                 return self.DONE_MISSING_PEER_REVIEW
 
             # user is done and passed at least 2 peer reviews

@@ -2,7 +2,6 @@ from datetime import datetime, timedelta
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.db.models import Count, Min
-from random import randint
 
 from Comments.models import Comment
 from Evaluation.models import Evaluation
@@ -221,15 +220,14 @@ class Elaboration(models.Model):
             )
         return Elaboration.objects.filter(id__in=include_elaboration_ids).filter(id__in=non_adequate_elaborations)
 
+    # offset is the number of hours needed to pass until elaboration is applicable as candidate
     @staticmethod
-    def get_review_candidate(challenge, user):
+    def get_review_candidate(challenge, user, offset=0):
         already_submitted_reviews_ids = (
             Review.objects
             .filter(reviewer=user, elaboration__challenge=challenge)
             .values_list('elaboration__id', flat=True)
         )
-        # number of hours needed to pass until elaboration is applicable as candidate
-        offset = randint(1, 5)
         threshold = datetime.now() - timedelta(hours=offset)
         candidates = (
             Elaboration.objects

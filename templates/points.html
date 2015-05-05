@@ -21,8 +21,11 @@
             <tr>
             {% if stack.is_submitted %}
             <tr class="pZeile{{forloop.parentloop.counter}}">
-                <td class="stack_name"><a style="text-decoration:none; color:black;" href="/{{course.short_title}}/challenge/stack?id={{stack.stack.id}}"><i style="color:#3AC958" class="fa fa-angle-right"></i> {{ stack.stack.title }}</a></td>
-                <td class="punkte">{{ stack.points_earned }} / {{ stack.points_available }}</td>
+                <td class="stack_name">
+					<a style="text-decoration:none; color:black;" href="/{{course.short_title}}/challenge/stack?id={{stack.stack.id}}">
+						{% if stack.points_earned != 0 %} <i class="fa fa-check-circle" style="color:gray"></i> {% else %} <i style="color:#3AC958" class="fa fa-circle-o"></i>{% endif %}
+						{{ stack.stack.title }}</a></td>
+                <td class="punkte" style="vertical-align:bottom;">{{ stack.points_earned }}/{{ stack.points_available }}</td>
             </tr>
             {% endif %}
         {% endfor %}

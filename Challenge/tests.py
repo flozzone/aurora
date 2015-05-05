@@ -663,7 +663,7 @@ class ChallengeTest(TestCase):
         assert challenge1.get_status(user1) == Challenge.DONE_MISSING_PEER_REVIEW
         Review(elaboration=elaboration1, submission_time=datetime.now(), reviewer=user3,
                appraisal=Review.SUCCESS).save()
-        assert challenge1.get_status(user1) == Challenge.DONE_PEER_REVIEWED
+        assert challenge1.get_status(user1) == Challenge.DONE_MISSING_PEER_REVIEW
 
     def test_status_final_challenge(self):
         challenge1 = self.challenge
