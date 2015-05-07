@@ -31,7 +31,8 @@ class ReviewConfigAdmin(admin.ModelAdmin):
                 'fields': [
                     'candidate_offset_min',
                     'candidate_offset_max',
-                ]
+                ],
+                'description': 'The offset is defined as passed time since the submission in hours.'
             }
         ),
     ]
@@ -39,3 +40,23 @@ class ReviewConfigAdmin(admin.ModelAdmin):
 
 
 admin.site.register(ReviewConfig, ReviewConfigAdmin)
+
+
+class ReviewEvaluationAdmin(admin.ModelAdmin):
+    fieldsets = [
+        (
+            None, {
+                'fields': [
+                    'id',
+                    'review',
+                    'creation_time',
+                    'user',
+                    'appraisal',
+                ]
+            }
+        ),
+    ]
+    list_display = ('id', 'review', 'creation_time', 'user', 'appraisal', )
+
+
+admin.site.register(ReviewEvaluation, ReviewEvaluationAdmin)
