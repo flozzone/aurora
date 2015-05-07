@@ -3,12 +3,6 @@
   <link rel="stylesheet" href="{{ STATIC_URL }}css/points.css" type="text/css" media="screen"/>
 {% endblock %}
 
-<script>
-	var position = Math.round(({% for stack_data in stacks %}{{ stack_data.sum }}+{% endfor %}0) / (0.1+60 * {{stack_data|length}} * 100));
-	if (position > 100) position=100;
-    document.cookie = "AuroraP=" + position + "; expires=Tue, 18 Jan 2038 03:14:06 GMT";
-    $('.pagehead').css('background-position', '0 ' + position + '%');
-</script>
 
 {% for stack_data in stacks %}
 {% if stack_data.course_title == course.title %}
