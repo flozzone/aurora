@@ -57,8 +57,10 @@ def home(request, course_short_title=None):
                 'points_available': stack.get_points_available(),
             })
             if is_submitted:
-                earned_total += stack.get_points_earned(user)
-                submitted_total += stack.get_points_available()
+                earned_points = stack.get_points_earned(user)
+                earned_total += earned_points
+                if earned_points != 0:
+                    submitted_total += stack.get_points_available()
         stack_data['earned_total'] = earned_total
         stack_data['submitted_total'] = submitted_total
         stack_data['lock_period'] = stack.get_final_challenge().is_in_lock_period(user, course)
