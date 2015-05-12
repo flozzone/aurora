@@ -3,26 +3,20 @@ from difflib import SequenceMatcher
 import difflib
 import json
 from django.contrib.contenttypes.models import ContentType
-
 from django.core import serializers
 from django.core.urlresolvers import reverse
-from django.db.models import TextField
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
-from django.db.models import CharField
 from django.db.models import Q
-from django.db import models
-from taggit.models import Tag, TaggedItem
-from django.views.generic import DetailView, ListView
+from taggit.models import TaggedItem
 from django.views.decorators.http import require_POST
 
 from Challenge.models import Challenge
-from Comments.models import Comment
 from Course.models import Course, CourseUserRelation
 from Elaboration.models import Elaboration
 from Evaluation.models import Evaluation
@@ -32,6 +26,7 @@ from ReviewAnswer.models import ReviewAnswer
 from ReviewQuestion.models import ReviewQuestion
 from Stack.models import Stack
 from Notification.models import Notification
+
 
 @login_required()
 @staff_member_required
@@ -802,11 +797,17 @@ def sort(request, course_short_title=None):
 
 
 @login_required()
-@staff_member_required
 def get_points(request, user, course):
+    is_correct_user_request = RequestContext(request)['user'].id is user.id
+    is_staff_request = RequestContext(request)['user'].is_staff
+    print(is_correct_user_request)
+    print(is_staff_request)
+    if not (is_correct_user_request or is_staff_request):
+        raise Http404
     data = {}
+    print(course)
     data['course'] = course
-
+    print(data['course'])
     course_ids = CourseUserRelation.objects.filter(user=user).values_list('course', flat=True)
     courses = Course.objects.filter(id__in=course_ids)
     data['courses'] = courses
@@ -825,10 +826,13 @@ def get_points(request, user, course):
                 'is_submitted': is_submitted,
                 'points_earned': stack.get_points_earned(user),
                 'points_available': stack.get_points_available(),
+                'status': stack.get_status_text(user),
             })
             if is_submitted:
-                earned_total += stack.get_points_earned(user)
-                submitted_total += stack.get_points_available()
+                earned_points = stack.get_points_earned(user)
+                earned_total += earned_points
+                if earned_points != 0:
+                    submitted_total += stack.get_points_available()
         stack_data['earned_total'] = earned_total
         stack_data['submitted_total'] = submitted_total
         stack_data['lock_period'] = stack.get_final_challenge().is_in_lock_period(user, course)
