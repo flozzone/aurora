@@ -15,11 +15,13 @@
             <tr>
             {% if stack.is_submitted %}
             <tr class="pZeile{{forloop.parentloop.counter}}">
+
                 <td class="stack_name">
 					<a style="text-decoration:none; color:black;" href="/{{course.short_title}}/challenge/stack?id={{stack.stack.id}}">
 						{% if stack.points_earned != 0 %} <i class="fa fa-check-circle" style="color:gray"></i> {% else %} <i style="color:#3AC958" class="fa fa-circle-o"></i>{% endif %}
-						{{ stack.stack.title }}</a></td>
-                <td class="punkte" style="vertical-align:bottom;">{{ stack.points_earned }}/{{ stack.points_available }}</td>
+						{% if stack.points_earned == 0 %}<s>{% endif %}{{ stack.stack.title }}{% if stack.points_earned == 0 %}</s>{% endif %}</a></td>
+                <td class="punkte" style="vertical-align:bottom;">{% if stack.points_earned == 0 %}<s>{% endif %}{{ stack.points_earned }}/{{ stack.points_available }}{% if stack.points_earned == 0 %}</s>{% endif %}</td>
+
             </tr>
             {% endif %}
         {% endfor %}
@@ -33,7 +35,7 @@
             <td class="letztezeile punkte">{{ stack_data.earned_total }} / {{ stack_data.submitted_total }}</td>
         </tr>
         <tr>
-            <td colspan=2>Next hand-in after 
+            <td colspan=2>Next hand-in after
             <span class="punkte">{% if not stack_data.lock_period %}now{% else %}{{ stack_data.lock_period|date:"d. M Y,H:i" }}{% endif %}</span>
         </tr>
     </table>
