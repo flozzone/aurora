@@ -21,7 +21,7 @@ from Course.models import Course, CourseUserRelation
 from Elaboration.models import Elaboration
 from Evaluation.models import Evaluation
 from AuroraUser.models import AuroraUser
-from Review.models import Review
+from Review.models import Review, ReviewEvaluation
 from ReviewAnswer.models import ReviewAnswer
 from ReviewQuestion.models import ReviewQuestion
 from Stack.models import Stack
@@ -42,8 +42,14 @@ def evaluation(request, course_short_title=None):
         if selection == 'search':
             if 'id' in request.GET:
                 points = get_points(request, AuroraUser.objects.get(pk=request.GET['id']), course)
-                data = {'elaborations': elaborations, 'search': True, 'stacks': points['stacks'],
-                        'courses': points['courses'], 'course': course}
+                data = {
+                    'elaborations': elaborations,
+                    'search': True,
+                    'stacks': points['stacks'],
+                    'courses': points['courses'],
+                    'review_evaluation_data': points['review_evaluation_data'],
+                    'course': course
+                }
             else:
                 data = {'elaborations': elaborations, 'search': True, 'course': course}
         else:
@@ -597,8 +603,15 @@ def select_user(request, course_short_title=None):
 
     points = get_points(request, user, course)
     html = render_to_response('overview.html',
-                              {'elaborations': elaborations, 'search': True, 'stacks': points['stacks'],
-                               'courses': points['courses'], 'course': course}, RequestContext(request))
+                              {
+
+                                  'elaborations': elaborations,
+                                  'search': True,
+                                  'stacks': points['stacks'],
+                                  'courses': points['courses'],
+                                  'review_evaluation_data': points['review_evaluation_data'],
+                                  'course': course
+                              }, RequestContext(request))
 
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
@@ -800,17 +813,19 @@ def sort(request, course_short_title=None):
 def get_points(request, user, course):
     is_correct_user_request = RequestContext(request)['user'].id is user.id
     is_staff_request = RequestContext(request)['user'].is_staff
-    print(is_correct_user_request)
-    print(is_staff_request)
     if not (is_correct_user_request or is_staff_request):
         raise Http404
     data = {}
-    print(course)
     data['course'] = course
-    print(data['course'])
     course_ids = CourseUserRelation.objects.filter(user=user).values_list('course', flat=True)
     courses = Course.objects.filter(id__in=course_ids)
     data['courses'] = courses
+    data['review_evaluation_data'] = {}
+    data['review_evaluation_data']['default_review_evaluations'] = ReviewEvaluation.get_default_review_evaluations(user, course)
+    data['review_evaluation_data']['positive_review_evaluations'] = ReviewEvaluation.get_positive_review_evaluations(user, course)
+    data['review_evaluation_data']['negative_review_evaluations'] = ReviewEvaluation.get_negative_review_evaluations(user, course)
+    data['review_evaluation_data']['review_evaluation_percent'] = ReviewEvaluation.get_review_evaluation_percent(user, course)
+
     data['stacks'] = []
     for course in courses:
         stack_data = {}

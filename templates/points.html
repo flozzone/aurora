@@ -63,6 +63,38 @@
                         </span>
           </td>
         </tr>
+        <tr>
+          <td>
+            No. of your reviews perceived as helpful:
+          </td>
+          <td>
+            {{ review_evaluation_data.positive_review_evaluations }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            No. of your reviews perceived as average:
+          </td>
+          <td>
+            {{ review_evaluation_data.default_review_evaluations }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            No. of your reviews perceived as meaningless or offensive:
+          </td>
+          <td>
+            {{ review_evaluation_data.negative_review_evaluations }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Percentage of reviews you evaluated:
+          </td>
+          <td>
+            {% widthratio review_evaluation_data.review_evaluation_percent 1 100 %} %
+          </td>
+        </tr>
       </table>
     </div>
   {% endif %}

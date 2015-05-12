@@ -47,6 +47,28 @@ class ReviewEvaluation(models.Model):
     )
     appraisal = models.CharField(max_length=1, choices=APPRAISAL_CHOICES, default='D')
 
+    @staticmethod
+    def get_default_review_evaluations(user, course):
+        return ReviewEvaluation.objects.filter(review__reviewer=user, review__elaboration__challenge__course=course,
+                                               appraisal=ReviewEvaluation.DEFAULT).count()
+
+    @staticmethod
+    def get_positive_review_evaluations(user, course):
+        return ReviewEvaluation.objects.filter(review__reviewer=user, review__elaboration__challenge__course=course,
+                                               appraisal=ReviewEvaluation.POSITIVE).count()
+
+    @staticmethod
+    def get_negative_review_evaluations(user, course):
+        return ReviewEvaluation.objects.filter(review__reviewer=user, review__elaboration__challenge__course=course,
+                                               appraisal=ReviewEvaluation.NEGATIVE).count()
+    @staticmethod
+    def get_review_evaluation_percent(user, course):
+        number_of_reviews = Review.objects.filter(elaboration__user=user, elaboration__challenge__course=course).count()
+        number_of_review_evaluations = ReviewEvaluation.objects.filter(user=user, review__elaboration__challenge__course=course).count()
+        if number_of_reviews == 0:
+            return 0
+        else:
+            return number_of_review_evaluations/number_of_reviews
 
 class ReviewConfig(models.Model):
     # in hours
