@@ -31,6 +31,7 @@ function challenge_loaded() {
 function init_tinymce_read_only() {
     tinymce.init({
         // selector: "textarea#editor",
+        mode: "exact",
         elements: "editor_challenge",
         menubar: false,
         statusbar: false,
