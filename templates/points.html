@@ -17,28 +17,32 @@
                 <td class="stack_name">
                   <a style="text-decoration:none; color:black;"
                      href="/{{ course.short_title }}/challenge/stack?id={{ stack.stack.id }}">
-                    {% if stack.points_earned != 0 %}
-                      <i class="fa fa-check-circle" style="color:gray"></i>
+                    {% if stack.status.status == "Evaluated." %}
+						{% if stack.points_earned == 0 %}
+                   	   		<i class="fa fa-exclamation-circle" style="color:gray"></i>
+                    	{% else %}
+                   	   		<i class="fa fa-check-circle" style="color:gray"></i>
+                   	 	{% endif %}
                     {% else %}
                       <i style="color:#3AC958" class="fa fa-circle-o"></i>
                     {% endif %}
                     {% if stack.points_earned == 0 %}
-                      <s>
+                      <span style="color:gray">
                     {% endif %}
                     <abbr title="{{ stack.status.status }}">{{ stack.stack.title }}</abbr>
-                    {% if stack.points_earned == 0 %}
-                      </s>
-                    {% endif %}
+                  {% if stack.points_earned == 0 %}
+                    </span>
+                  {% endif %}
                   </a>
                 </td>
                 <td class="punkte" style="vertical-align:bottom;">
-                  {% if stack.points_earned == 0 %}
-                    <s>
-                  {% endif %}
+                    {% if stack.points_earned == 0 %}
+                      <span style="color:red">
+                    {% endif %}
                   {{ stack.points_earned }}/{{ stack.points_available }}
-                  {% if stack.points_earned == 0 %}
-                    </s>
-                  {% endif %}
+ 			   	{% if stack.points_earned == 0 %}
+   		 			</span>
+ 				{% endif %}
                 </td>
               </tr>
             {% endif %}
@@ -52,47 +56,33 @@
           <td class="letztezeile punkte">{{ stack_data.earned_total }} / {{ stack_data.submitted_total }}</td>
         </tr>
         <tr>
-          <td colspan=2>
-            Next hand-in after
+          <td colspan=2 style="border-bottom:1px solid black">
                         <span class="punkte">
                           {% if not stack_data.lock_period %}
-                            now
+                            Hand-in is possible any time now.
                           {% else %}
-                            {{ stack_data.lock_period|date:"d. M Y, H:i" }}
+				            Next hand-in after {{ stack_data.lock_period|date:"d. M Y, H:i" }}
                           {% endif %}
                         </span>
           </td>
         </tr>
+        <tr >
+		  <td style="font-size:80%">
+			  Your reviews have been rated:
+	 	  </td>
+        </tr>
         <tr>
-          <td>
-            No. of your reviews perceived as helpful:
-          </td>
-          <td>
-            {{ review_evaluation_data.positive_review_evaluations }}
+          <td style="font-size:80%">
+            <span style="color:rgba(0,109,0,{% if review_evaluation_data.positive_review_evaluations == 0 %}0.5{% else %}1{% endif %})">{{ review_evaluation_data.positive_review_evaluations }} as »Helpful«</span><br>
+            <span style="color:rgba(0,50,0,{% if review_evaluation_data.default_review_evaluations == 0 %}0.5{% else %}1{% endif %})">{{ review_evaluation_data.default_review_evaluations }} as »Average« <br>
+           <span style="color:rgba(255,0,0,{% if review_evaluation_data.negative_review_evaluations == 0 %}0.5{% else %}1{% endif %})">{{ review_evaluation_data.negative_review_evaluations }} as »Meaningless or Offensive«
           </td>
         </tr>
         <tr>
-          <td>
-            No. of your reviews perceived as average:
-          </td>
-          <td>
-            {{ review_evaluation_data.default_review_evaluations }}
-          </td>
-        </tr>
-        <tr>
-          <td>
-            No. of your reviews perceived as meaningless or offensive:
-          </td>
-          <td>
-            {{ review_evaluation_data.negative_review_evaluations }}
-          </td>
-        </tr>
-        <tr>
-          <td>
-            Percentage of reviews you evaluated:
-          </td>
-          <td>
-            {% widthratio review_evaluation_data.review_evaluation_percent 1 100 %} %
+          <td colspan=2 style="font-size:80%">
+            You have rated 
+            {% widthratio review_evaluation_data.review_evaluation_percent 1 100 %}% of all reviews you received. <br>
+			{% if review_evaluation_data.review_evaluation_percent > 0.8 %}&rarr; you are currently elegible for an extra-point {%endif%}
           </td>
         </tr>
       </table>
