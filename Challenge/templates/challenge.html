@@ -8,6 +8,7 @@
 <script type="text/javascript" src="{{ STATIC_URL }}tinymce/tinymce.min.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}tinymce/jquery.tinymce.min.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/challenge.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/review_evaluation.js"></script>
 {% if not elaboration.is_submitted %}
 <script type="text/javascript" src="{{ STATIC_URL }}dropzone/dropzone.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/file_upload.js"></script>
@@ -28,6 +29,7 @@
   var SAVE_URL = "{% url 'Elaboration:save' course_short_title=course.short_title %}";
   var SUBMIT_URL = "{% url 'Elaboration:submit' course_short_title=course.short_title %}";
   var STACK_URL = "{% url 'Challenge:stack' course_short_title=course.short_title %}";
+  var REVIEW_EVALUATION_URL = "{% url 'Review:evaluate' course_short_title=course.short_title %}";
 
 </script>
 
@@ -165,6 +167,23 @@
           </b>
         </div>
       </div>
+	  <div class="review_evaluation_drawer">
+		<div class="review_evaluation_text">How would you rate this review? </div>
+        <div id="{{ review_data.review_id }}" class="review_evaluation_container">
+            <div review_id="{{ review_data.review_id }}" appraisal="P"
+                 class="review_evaluation positive {% if review_data.evaluation == "P" %} active{% endif %}">
+                helpful
+            </div>
+            <div review_id="{{ review_data.review_id }}" appraisal="D"
+                 class="review_evaluation neutral {% if review_data.evaluation == "D" %} active{% endif %}">
+                average
+            </div>
+            <div review_id="{{ review_data.review_id }}" appraisal="N"
+                 class="review_evaluation negative{% if review_data.evaluation == "N" %} active{% endif %}">
+                meaningless or offensive
+            </div>
+        </div>
+	</div>
       <div>&nbsp;</div>
 {% endfor %}
     </div>

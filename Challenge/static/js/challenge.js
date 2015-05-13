@@ -78,7 +78,7 @@ function init_tinymce() {
         statusbar: true,
         fontsize_formats: "0.8em 1em 1.2em 1.6em 2em",
         plugins: "autoresize paste wordcount",
-        toolbar1: "undo redo | bold italic | fontsizeselect | alignleft aligncenter | bullist numlist indent outdent | hr",
+        toolbar1: "undo redo | bold italic | fontsizeselect | bullist numlist indent outdent | hr",
         autoresize_min_height: 200,
         autoresize_max_height: 800,
 		paste_data_images: false,

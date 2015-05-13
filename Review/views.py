@@ -1,17 +1,19 @@
 import json
 from datetime import datetime
-
-from django.shortcuts import render, render_to_response
+from random import randint
+from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, Http404
+
 from Course.models import Course
-from Review.models import Review
+from Review.models import Review, ReviewEvaluation
 from Elaboration.models import Elaboration
 from Challenge.models import Challenge
 from ReviewQuestion.models import ReviewQuestion
 from ReviewAnswer.models import ReviewAnswer
 from Notification.models import Notification
+from Review.models import ReviewConfig
 
 
 def create_context_review(request):
@@ -27,7 +29,9 @@ def create_context_review(request):
             raise Http404
         review = Review.get_open_review(challenge, user)
         if not review:
-            review_candidate = Elaboration.get_review_candidate(challenge, user)
+            # number of hours needed to pass until elaboration is applicable as candidate
+            offset = randint(ReviewConfig.get_candidate_offset_min(), ReviewConfig.get_candidate_offset_max())
+            review_candidate = Elaboration.get_review_candidate(challenge, user, offset)
             if review_candidate:
                 review = Review(elaboration=review_candidate, reviewer=user)
                 review.save()
@@ -38,6 +42,7 @@ def create_context_review(request):
         review_questions = ReviewQuestion.objects.filter(challenge=challenge).order_by("order")
         data['questions'] = review_questions
     return data
+
 
 @login_required()
 def review(request, course_short_title):
@@ -81,4 +86,21 @@ def review_answer(request, course_short_title):
         except:
             print('Could not send Notification')
 
+    return HttpResponse()
+
+@login_required()
+def evaluate(request, course_short_title):
+    user = RequestContext(request)['user']
+    if not request.GET:
+        raise Http404
+    if not 'appraisal' in request.GET:
+        raise Http404
+    appraisal = request.GET['appraisal']
+    if not 'review_id' in request.GET:
+        raise Http404
+    review_id = request.GET['review_id']
+    review = Review.objects.get(id=review_id)
+    review_evaluation, created = ReviewEvaluation.objects.get_or_create(user=user, review=review)
+    review_evaluation.appraisal = appraisal
+    review_evaluation.save()
     return HttpResponse()

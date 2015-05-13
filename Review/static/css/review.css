@@ -213,3 +213,81 @@ input[type=submit] {
 
 
 
+
+.review_evaluation.active {
+	text-shadow:0 1px 3px rgba(255,255,255,0.8), 0 -1px 2px rgba(0,0,0,0.2);
+}
+
+.review_evaluation.positive.active::before {
+		content:'\25CF ';
+		font-size:16px;
+		color:green;
+		text-shadow:0 1px 3px rgba(255,255,255,0.8), 0 -1px 2px rgba(0,0,0,0.2), 0 0 5px rgb(0,255,0);
+		line-height:16px;
+}
+
+.review_evaluation.neutral.active::before {
+		content:'\25CF ';
+		font-size:16px;
+		color:yellow;
+		text-shadow:0 1px 3px rgba(255,255,255,0.8), 0 -1px 2px rgba(0,0,0,0.2), 0 0 5px rgb(255,255,0), 0 0 5px rgb(255,255,0);
+		line-height:16px;
+}
+
+.review_evaluation.negative.active::before {
+		content:'\25CF ';
+		font-size:16px;
+		color:red;
+		text-shadow:0 1px 3px rgba(255,255,255,0.8), 0 -1px 2px rgba(0,0,0,0.2), 0 0 3px rgb(255,0,0);
+		line-height:16px;
+}
+
+.review_evaluation:not(.active)::before {
+	content:'\25CF ';
+	font-size:16px;
+	visibility:hidden;
+	line-height:16px;
+}
+
+
+.review_evaluation.positive.active {
+    color: rgb(47,162,71);
+}
+
+.review_evaluation.neutral.active {
+	color: rgba(24,81,35,1);
+}
+
+.review_evaluation.negative.active {
+    color: red;
+}
+
+.review_evaluation.waiting {
+    color: orange;
+}
+
+.review_evaluation_container {
+	float:left;
+	position:relative;
+	top:-2px;
+}
+
+.review_evaluation_text {
+	float:left;
+}
+.review_evaluation_drawer {
+	min-height:52px;
+	border:1px solid rgba(255,255,255,0.3);
+	background: lightgray;
+	box-shadow: 0 1px 2px rgba(0,0,0,0.7);
+	padding:6px;
+	border-radius: 0 0 6px 6px;
+	margin: 0 200px;
+}
+
+.review_evaluation {
+	text-transform:uppercase;
+	font-size:13px;
+	cursor:pointer;
+	padding:1px 1em 1px 1em;
+}

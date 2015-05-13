@@ -15,6 +15,7 @@ function notifications_refresh() {
             success: function (data) {
                 if ($.isNumeric(data)) {
                     $('#unread_notifications').html(data);
+					if (data!='0') {$('#notifications-li').addClass('glow')} else {$('#notifications-li').removeClass('glow')}
                     setTimeout(refresh_worker, 60000);
                 }
             }

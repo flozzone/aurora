@@ -232,7 +232,7 @@ class Challenge(models.Model):
                 return self.USER_REVIEW_MISSING
 
             # user is done but needs peer reviews for final challenge
-            if not elaboration.is_reviewed_2times():
+            if not self.get_stack().has_enough_peer_reviews(user):
                 return self.DONE_MISSING_PEER_REVIEW
 
             # user is done and passed at least 2 peer reviews
@@ -258,7 +258,7 @@ class Challenge(models.Model):
         return result
 
     def is_in_lock_period(self, user, course):
-        PERIOD = 7
+        PERIOD = 11
         START_YEAR = 2015
         START_MONTH = 3
         START_DAY = 1
