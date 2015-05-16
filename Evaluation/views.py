@@ -5,7 +5,7 @@ import json
 from django.contrib.contenttypes.models import ContentType
 from django.core import serializers
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
@@ -15,6 +15,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
 from taggit.models import TaggedItem
 from django.views.decorators.http import require_POST
+from django.http import HttpResponseForbidden
 
 from Challenge.models import Challenge
 from Course.models import Course, CourseUserRelation
@@ -814,7 +815,7 @@ def get_points(request, user, course):
     is_correct_user_request = RequestContext(request)['user'].id is user.id
     is_staff_request = RequestContext(request)['user'].is_staff
     if not (is_correct_user_request or is_staff_request):
-        raise Http404
+        return HttpResponseForbidden()
     data = {}
     data['course'] = course
     course_ids = CourseUserRelation.objects.filter(user=user).values_list('course', flat=True)
