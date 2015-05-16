@@ -54,13 +54,13 @@
         <tr>
           <td colspan=2>
             Next hand-in after
-                        <span class="punkte">
-                          {% if not stack_data.lock_period %}
-                            now
-                          {% else %}
-                            {{ stack_data.lock_period|date:"d. M Y, H:i" }}
-                          {% endif %}
-                        </span>
+            <span class="punkte">
+              {% if not stack_data.lock_period %}
+                now
+              {% else %}
+                {{ stack_data.lock_period|date:"d. M Y, H:i" }}
+              {% endif %}
+            </span>
           </td>
         </tr>
         <tr>
