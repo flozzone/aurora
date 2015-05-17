@@ -56,7 +56,42 @@ class ReviewEvaluationAdmin(admin.ModelAdmin):
             }
         ),
     ]
-    list_display = ('id', 'review', 'creation_time', 'user', 'appraisal', )
+
+    def get_review_id(self, review_evaluation):
+        url = '<a href="/admin/Review/review/{}/">{}</a>'
+        review_id = review_evaluation.review.id
+        return url.format(review_id, review_id)
+
+    get_review_id.short_description = 'Review'
+    get_review_id.allow_tags = True
+
+    def get_review_author_name(self, review_evaluation):
+        url = '<a href="/admin/AuroraUser/aurorauser/{}/">{}</a>'
+        user_id = review_evaluation.review.reviewer.id
+        user_nickname = review_evaluation.review.reviewer.nickname
+        return url.format(user_id, user_nickname)
+
+    get_review_author_name.short_description = 'Review Author'
+    get_review_author_name.allow_tags = True
+
+    def get_review_challenge_name(self, review_evaluation):
+        url = '<a href="/admin/Challenge/challenge/{}/">{}</a>'
+        challenge_id = review_evaluation.review.elaboration.challenge.id
+        challenge_title = review_evaluation.review.elaboration.challenge.title
+        return url.format(challenge_id, challenge_title)
+
+    get_review_challenge_name.short_description = 'Review Challenge'
+    get_review_challenge_name.allow_tags = True
+
+    list_display = (
+        'id',
+        'get_review_id',
+        'get_review_author_name',
+        'get_review_challenge_name',
+        'creation_time',
+        'user',
+        'appraisal',
+    )
 
 
 admin.site.register(ReviewEvaluation, ReviewEvaluationAdmin)

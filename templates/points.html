@@ -1,42 +1,127 @@
-
 {% block additional_headers %}
   <link rel="stylesheet" href="{{ STATIC_URL }}css/points.css" type="text/css" media="screen"/>
 {% endblock %}
 
 
 {% for stack_data in stacks %}
-{% if stack_data.course_title == course.title %}
-<div class="points_table">
-    <table>
+  {% if stack_data.course_title == course.title %}
+    <div class="points_table">
+      <table>
         <tr>
           <th colspan=2 class="course_title"></i> {{ stack_data.course_title }}</th>
         </tr>
         {% for stack in stack_data.course_stacks %}
-            <tr>
+          <tr>
             {% if stack.is_submitted %}
-            <tr class="pZeile{{forloop.parentloop.counter}}">
+              <tr class="pZeile{{ forloop.parentloop.counter }}">
                 <td class="stack_name">
-					<a style="text-decoration:none; color:black;" href="/{{course.short_title}}/challenge/stack?id={{stack.stack.id}}">
-						{% if stack.points_earned != 0 %} <i class="fa fa-check-circle" style="color:gray"></i> {% else %} <i style="color:#3AC958" class="fa fa-circle-o"></i>{% endif %}
-						{{ stack.stack.title }}</a></td>
-                <td class="punkte" style="vertical-align:bottom;">{{ stack.points_earned }}/{{ stack.points_available }}</td>
-            </tr>
+                  <a style="text-decoration:none; color:black;"
+                     href="/{{ course.short_title }}/challenge/stack?id={{ stack.stack.id }}">
+                    {% if stack.status.status == "Evaluated." %}
+                      {% if stack.points_earned == 0 %}
+                        <i class="fa fa-exclamation-circle" style="color:gray"></i>
+                      {% else %}
+                        <i class="fa fa-check-circle" style="color:gray"></i>
+                      {% endif %}
+                    {% else %}
+                      <i style="color:#3AC958" class="fa fa-circle-o"></i>
+                    {% endif %}
+                    {% if stack.points_earned == 0 %}
+                      <span style="color:gray">
+                    {% endif %}
+                    <abbr title="{{ stack.status.status }}">{{ stack.stack.title }}</abbr>
+                    {% if stack.points_earned == 0 %}
+                      </span>
+                    {% endif %}
+                  </a>
+                </td>
+                <td class="punkte" style="vertical-align:bottom;">
+                  {% if stack.points_earned == 0 %}
+                    <span style="color:red">
+                  {% endif %}
+                  {{ stack.points_earned }}/{{ stack.points_available }}
+                  {% if stack.points_earned == 0 %}
+                    </span>
+                  {% endif %}
+                </td>
+              </tr>
             {% endif %}
         {% endfor %}
-
         <tr>
-            <td>Slide Special Points</td>
-            <td class="punkte">(inactive)</td>
+          <td>Slide Special Points</td>
+          <td class="punkte">(inactive)</td>
         </tr>
         <tr class="sum">
-            <td class="letztezeile sum">Total</td>
-            <td class="letztezeile punkte">{{ stack_data.earned_total }} / {{ stack_data.submitted_total }}</td>
+          <td class="letztezeile sum">Total</td>
+          <td class="letztezeile punkte">{{ stack_data.earned_total }} / {{ stack_data.submitted_total }}</td>
         </tr>
         <tr>
-            <td colspan=2>Next hand-in after 
-            <span class="punkte">{% if not stack_data.lock_period %}now{% else %}{{ stack_data.lock_period|date:"d. M Y,H:i" }}{% endif %}</span>
+          <td colspan=2 style="border-bottom:1px solid black">
+                        <span class="punkte">
+                          {% if not stack_data.lock_period %}
+                            Hand-in is possible any time now.
+                          {% else %}
+                            Next hand-in after {{ stack_data.lock_period|date:"d. M Y, H:i" }}
+                          {% endif %}
+                        </span>
+          </td>
         </tr>
-    </table>
-</div>
-{% endif %}
+        <tr>
+          <td style="font-size:80%">
+            Your reviews have been rated:
+          </td>
+        </tr>
+        <tr>
+          <td style="font-size:80%">
+            <span
+                style="color:rgba(0,109,0,
+                    {% if review_evaluation_data.positive_review_evaluations == 0 %}
+                      0.5
+                    {% else %}
+                      1
+                    {% endif %}
+                    )">
+              {{ review_evaluation_data.positive_review_evaluations }}
+              as »Helpful«
+            </span>
+            <br>
+            <span
+                style="color:rgba(0,50,0,
+                    {% if review_evaluation_data.default_review_evaluations == 0 %}
+                      0.5
+                    {% else %}
+                      1
+                    {% endif %}
+                    )">
+              {{ review_evaluation_data.default_review_evaluations }}
+              as »Average«
+            </span>
+            <br>
+            <span
+                style="color:rgba(255,0,0,
+                    {% if review_evaluation_data.negative_review_evaluations == 0 %}
+                      0.5
+                    {% else %}
+                      1
+                    {% endif %}
+                    )">
+              {{ review_evaluation_data.negative_review_evaluations }}
+              as »Meaningless or Offensive«
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <td colspan=2 style="font-size:80%">
+            You have rated
+            {% widthratio review_evaluation_data.review_evaluation_percent 1 100 %}% of all reviews you received.
+            <br>
+            {% if review_evaluation_data.review_evaluation_percent > 0.8 %}
+              &rarr; you are currently elegible for an
+              extra-point
+            {% endif %}
+          </td>
+        </tr>
+      </table>
+    </div>
+  {% endif %}
 {% endfor %} 
