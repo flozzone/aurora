@@ -307,7 +307,14 @@ def detail(request, course_short_title=None):
             evaluation = Evaluation.objects.get(submission=elaboration)
             if evaluation.tutor != user and not evaluation.is_older_15min():
                 lock = True
-        params = {'evaluation': evaluation, 'lock': lock}
+        if elaboration.challenge.is_final_challenge():
+            params = {'evaluation': evaluation, 'lock': lock, 'selection': 'top-level tasks'}
+        else:
+            if elaboration.is_reviewed_2times():
+                params = {'evaluation': evaluation, 'lock': lock}
+            else:
+                questions = ReviewQuestion.objects.filter(challenge=elaboration.challenge).order_by("order")
+                params = {'questions': questions, 'selection': 'missing reviews'}
 
     reviews = Review.objects.filter(elaboration=elaboration, submission_time__isnull=False)
 
