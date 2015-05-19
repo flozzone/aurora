@@ -19,7 +19,7 @@
                      href="/{{ course.short_title }}/challenge/stack?id={{ stack.stack.id }}">
                     {% if stack.status.status == "Evaluated." %}
                       {% if stack.points_earned == 0 %}
-                        <i class="fa fa-exclamation-circle" style="color:gray"></i>
+                        <i class="fa fa-exclamation-circle" style="color:red"></i>
                       {% else %}
                         <i class="fa fa-check-circle" style="color:gray"></i>
                       {% endif %}
@@ -36,9 +36,9 @@
                   </a>
                 </td>
                 <td class="punkte" style="vertical-align:bottom;">
-                  {% if stack.points_earned == 0 %}
-                    <span style="color:red">
-                  {% endif %}
+					{% if stack.points_earned == 0 %}
+						<span style="color:lightgray">
+					{% endif %}
                   {{ stack.points_earned }}/{{ stack.points_available }}
                   {% if stack.points_earned == 0 %}
                     </span>
@@ -52,11 +52,11 @@
           <td class="punkte">(inactive)</td>
         </tr>
         <tr class="sum">
-          <td class="letztezeile sum">Total</td>
+          <td class="letztezeile sum">Total valid points so far</td>
           <td class="letztezeile punkte">{{ stack_data.earned_total }} / {{ stack_data.submitted_total }}</td>
         </tr>
         <tr>
-          <td colspan=2 style="border-bottom:1px solid black">
+          <td colspan=2 >
                         <span class="punkte">
                           {% if not stack_data.lock_period %}
                             Hand-in is possible any time now.
@@ -67,12 +67,12 @@
           </td>
         </tr>
         <tr>
-          <td style="font-size:80%">
+          <td colspan="2"  style="font-size:80%;padding-top:1em;">
             Your reviews have been rated:
           </td>
         </tr>
-        <tr>
-          <td style="font-size:80%">
+        <tr >
+          <td style="font-size:80%" colspan="2">
             <span
                 style="color:rgba(0,109,0,
                     {% if review_evaluation_data.positive_review_evaluations == 0 %}
@@ -110,7 +110,7 @@
             </span>
           </td>
         </tr>
-        <tr>
+        <tr  >
           <td colspan=2 style="font-size:80%">
             You have rated
             {% widthratio review_evaluation_data.review_evaluation_percent 1 100 %}% of all reviews you received.
