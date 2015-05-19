@@ -819,7 +819,7 @@ def sort(request, course_short_title=None):
 
 @login_required()
 def get_points(request, user, course):
-    is_correct_user_request = RequestContext(request)['user'].id is user.id
+    is_correct_user_request = RequestContext(request)['user'].id == user.id
     is_staff_request = RequestContext(request)['user'].is_staff
     if not (is_correct_user_request or is_staff_request):
         return HttpResponseForbidden()
