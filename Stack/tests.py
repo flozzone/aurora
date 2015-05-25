@@ -91,6 +91,18 @@ class StackTest(TestCase):
         assert challenge2 in self.stack.get_challenges()
         assert challenge3 in self.stack.get_challenges()
 
+    def test_final_challenge(self):
+        challenge1 = self.challenge
+        self.create_challenge()
+        challenge2 = self.challenge
+        challenge2.prerequisite = challenge1
+        challenge2.save()
+        self.create_challenge()
+        challenge3 = self.challenge
+        challenge3.prerequisite = challenge2
+        challenge3.save()
+        assert self.stack.get_final_challenge().id is challenge3.id
+
     def test_first_challenge(self):
         challenge1 = self.challenge
         self.create_challenge()
