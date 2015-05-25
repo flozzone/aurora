@@ -65,14 +65,13 @@ class ReviewEvaluationAdmin(admin.ModelAdmin):
     get_review_id.short_description = 'Review'
     get_review_id.allow_tags = True
 
-    def get_review_author_name(self, review_evaluation):
+    def get_review_author_id(self, review_evaluation):
         url = '<a href="/admin/AuroraUser/aurorauser/{}/">{}</a>'
         user_id = review_evaluation.review.reviewer.id
-        user_nickname = review_evaluation.review.reviewer.nickname
-        return url.format(user_id, user_nickname)
+        return url.format(user_id, user_id)
 
-    get_review_author_name.short_description = 'Review Author'
-    get_review_author_name.allow_tags = True
+    get_review_author_id.short_description = 'Review Author'
+    get_review_author_id.allow_tags = True
 
     def get_review_challenge_name(self, review_evaluation):
         url = '<a href="/admin/Challenge/challenge/{}/">{}</a>'
@@ -86,7 +85,7 @@ class ReviewEvaluationAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'get_review_id',
-        'get_review_author_name',
+        'get_review_author_id',
         'get_review_challenge_name',
         'creation_time',
         'user',

@@ -1,5 +1,4 @@
 from datetime import datetime
-
 from django.test import TestCase
 
 from AuroraUser.models import AuroraUser
@@ -90,6 +89,65 @@ class StackTest(TestCase):
         assert challenge1 in self.stack.get_challenges()
         assert challenge2 in self.stack.get_challenges()
         assert challenge3 in self.stack.get_challenges()
+
+    def test_final_challenge(self):
+        challenge1 = self.challenge
+        self.create_challenge()
+        challenge2 = self.challenge
+        challenge2.prerequisite = challenge1
+        challenge2.save()
+        self.create_challenge()
+        challenge3 = self.challenge
+        challenge3.prerequisite = challenge2
+        challenge3.save()
+        assert self.stack.get_final_challenge().id is challenge3.id
+
+    def test_first_challenge(self):
+        challenge1 = self.challenge
+        self.create_challenge()
+        challenge2 = self.challenge
+        challenge2.prerequisite = challenge1
+        challenge2.save()
+        self.create_challenge()
+        challenge3 = self.challenge
+        challenge3.prerequisite = challenge2
+        challenge3.save()
+        assert self.stack.get_first_challenge().id is challenge1.id
+
+    def test_is_started(self):
+        challenge1 = self.challenge
+        self.create_challenge()
+        challenge2 = self.challenge
+        challenge2.prerequisite = challenge1
+        challenge2.save()
+        self.create_challenge()
+        challenge3 = self.challenge
+        challenge3.prerequisite = challenge2
+        challenge3.save()
+        user = self.users[0]
+        elaboration = Elaboration(challenge=challenge1, user=user, elaboration_text="")
+        elaboration.save()
+        assert self.stack.is_started(user) is False
+        elaboration.elaboration_text = "test"
+        elaboration.save()
+        assert self.stack.is_started(user) is True
+
+    def test_is_evaluated(self):
+        user = self.users[0]
+        tutor = self.users[1]
+        tutor.staff = True
+        tutor.save()
+        assert self.stack.is_evaluated(user) is False
+        elaboration = Elaboration(challenge=self.challenge, user=user, elaboration_text="test elaboration",
+                                  submission_time=datetime.now())
+        elaboration.save()
+        evaluation = Evaluation(submission=elaboration, tutor=tutor, evaluation_text="test_evaluation")
+        evaluation.save()
+        assert self.stack.is_evaluated(user) is False
+        evaluation.submission_time = datetime.now()
+        evaluation.evaluation_points = 10
+        evaluation.save()
+        assert self.stack.is_evaluated(user) is True
 
     def test_get_points(self):
         user = self.users[0]
