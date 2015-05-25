@@ -214,7 +214,7 @@ class Challenge(models.Model):
         elaboration = self.get_elaboration(user)
 
         # user did not start to write an elaboration
-        if not elaboration:
+        if not elaboration or not elaboration.is_started():
             return self.NOT_STARTED
 
         # user started to write but did not yet submit an elaboration
