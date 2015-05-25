@@ -6,6 +6,11 @@ class Stack(models.Model):
     description = models.TextField()
     course = models.ForeignKey('Course.Course')
 
+    def get_first_challenge(self):
+        for relation in StackChallengeRelation.objects.filter(stack=self):
+            return relation.challenge.get_first_challenge()
+        return None
+
     def get_final_challenge(self):
         for relation in StackChallengeRelation.objects.filter(stack=self):
             return relation.challenge.get_final_challenge()
