@@ -86,6 +86,12 @@ class Challenge(models.Model):
         except Elaboration.DoesNotExist:
             return None
 
+    def is_started(self, user):
+        elaboration = self.get_elaboration(user)
+        if elaboration is None:
+            return False
+        return elaboration.is_started()
+
     def get_stack(self):
         stack_challenge_relation = StackChallengeRelation.objects.filter(challenge=self)
         if stack_challenge_relation:

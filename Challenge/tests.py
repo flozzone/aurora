@@ -199,6 +199,15 @@ class ChallengeTest(TestCase):
                appraisal=Review.SUCCESS).save()
         assert challenge1.has_enough_user_reviews(user1)
 
+    def test_is_started(self):
+        user = self.users[0]
+        elaboration = Elaboration(challenge=self.challenge, user=user, elaboration_text="")
+        elaboration.save()
+        assert self.challenge.is_started(user) is False
+        elaboration.elaboration_text="test"
+        elaboration.save()
+        assert self.challenge.is_started(user) is True
+
     def test_submitted_by_user(self):
         user = self.users[0]
         elaboration = Elaboration(challenge=self.challenge, user=user, elaboration_text="test")
