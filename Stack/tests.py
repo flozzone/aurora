@@ -103,6 +103,24 @@ class StackTest(TestCase):
         challenge3.save()
         assert self.stack.get_first_challenge().id is challenge1.id
 
+    def test_is_started(self):
+        challenge1 = self.challenge
+        self.create_challenge()
+        challenge2 = self.challenge
+        challenge2.prerequisite = challenge1
+        challenge2.save()
+        self.create_challenge()
+        challenge3 = self.challenge
+        challenge3.prerequisite = challenge2
+        challenge3.save()
+        user = self.users[0]
+        elaboration = Elaboration(challenge=challenge1, user=user, elaboration_text="")
+        elaboration.save()
+        assert self.stack.is_started(user) is False
+        elaboration.elaboration_text = "test"
+        elaboration.save()
+        assert self.stack.is_started(user) is True
+
     def test_get_points(self):
         user = self.users[0]
         tutor = self.users[1]
