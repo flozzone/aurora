@@ -127,6 +127,12 @@ class Challenge(models.Model):
     def is_final_challenge(self):
         return False if self.get_next() else True
 
+    def get_first_challenge(self):
+        first_challenge = self
+        while first_challenge.prerequisite is not None:
+            first_challenge = first_challenge.prerequisite
+        return first_challenge
+
     def get_final_challenge(self):
         next_challenge = self
         while not next_challenge.is_final_challenge():

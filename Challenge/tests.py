@@ -152,6 +152,20 @@ class ChallengeTest(TestCase):
         assert challenge2.get_final_challenge() == challenge3
         assert challenge3.get_final_challenge() == challenge3
 
+    def test_get_first_challenge(self):
+        challenge1 = self.challenge
+        self.create_challenge()
+        challenge2 = self.challenge
+        challenge2.prerequisite = challenge1
+        challenge2.save()
+        self.create_challenge()
+        challenge3 = self.challenge
+        challenge3.prerequisite = challenge2
+        challenge3.save()
+        assert challenge1.get_first_challenge() == challenge1
+        assert challenge2.get_first_challenge() == challenge1
+        assert challenge3.get_first_challenge() == challenge1
+
     def test_has_enough_user_reviews(self):
         challenge1 = self.challenge
         self.create_challenge()
