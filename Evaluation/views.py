@@ -844,9 +844,13 @@ def get_points(request, user, course):
         submitted_total = 0
         for stack in course_stacks:
             is_submitted = stack.get_final_challenge().submitted_by_user(user)
+            is_evaluated = stack.is_evaluated(user)
+            is_started = stack.get_first_challenge().is_started(user)
             stack_data['course_stacks'].append({
                 'stack': stack,
+                'is_started': is_started,
                 'is_submitted': is_submitted,
+                'is_evaluated': is_evaluated,
                 'points_earned': stack.get_points_earned(user),
                 'points_available': stack.get_points_available(),
                 'status': stack.get_status_text(user),
