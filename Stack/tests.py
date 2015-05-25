@@ -121,6 +121,23 @@ class StackTest(TestCase):
         elaboration.save()
         assert self.stack.is_started(user) is True
 
+    def test_is_evaluated(self):
+        user = self.users[0]
+        tutor = self.users[1]
+        tutor.staff = True
+        tutor.save()
+        assert self.stack.is_evaluated(user) is False
+        elaboration = Elaboration(challenge=self.challenge, user=user, elaboration_text="test elaboration",
+                                  submission_time=datetime.now())
+        elaboration.save()
+        evaluation = Evaluation(submission=elaboration, tutor=tutor, evaluation_text="test_evaluation")
+        evaluation.save()
+        assert self.stack.is_evaluated(user) is False
+        evaluation.submission_time = datetime.now()
+        evaluation.evaluation_points = 10
+        evaluation.save()
+        assert self.stack.is_evaluated(user) is True
+
     def test_get_points(self):
         user = self.users[0]
         tutor = self.users[1]

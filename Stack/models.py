@@ -31,6 +31,12 @@ class Stack(models.Model):
     def is_started(self, user):
         return self.get_first_challenge().is_started(user)
 
+    def is_evaluated(self, user):
+        elaboration = self.get_final_challenge().get_elaboration(user)
+        if elaboration is None:
+            return False
+        return elaboration.is_evaluated()
+
     def get_points_earned(self, user):
         final_challenge = self.get_final_challenge()
         elaboration = final_challenge.get_elaboration(user)
