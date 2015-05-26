@@ -859,13 +859,16 @@ def get_points(request, user, course):
                 'points_available': points_available,
                 'status': stack.get_status_text(user),
             })
+            if is_evaluated:
+                # skip adding available points to totals for evaluations with 0 points
+                if points_earned == 0:
+                    continue
+                evaluated_points_earned_total += points_earned
+                evaluated_points_available_total += points_available
             if is_started:
                 started_points_available_total += points_available
             if is_submitted:
                 submitted_points_available_total += points_available
-            if is_evaluated:
-                evaluated_points_earned_total += points_earned
-                evaluated_points_available_total += points_available
 
         stack_data['evaluated_points_earned_total'] = evaluated_points_earned_total
         stack_data['evaluated_points_available_total'] = evaluated_points_available_total
