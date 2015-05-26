@@ -3,10 +3,8 @@ from difflib import SequenceMatcher
 import difflib
 import json
 from django.contrib.contenttypes.models import ContentType
-
 from django.core import serializers
 from django.core.urlresolvers import reverse
-from django.db.models import TextField
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -14,24 +12,22 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
-from django.db.models import CharField
 from django.db.models import Q
-from django.db import models
-from taggit.models import Tag, TaggedItem
-from django.views.generic import DetailView, ListView
+from taggit.models import TaggedItem
 from django.views.decorators.http import require_POST
+from django.http import HttpResponseForbidden
 
 from Challenge.models import Challenge
-from Comments.models import Comment
 from Course.models import Course, CourseUserRelation
 from Elaboration.models import Elaboration
 from Evaluation.models import Evaluation
 from AuroraUser.models import AuroraUser
-from Review.models import Review
+from Review.models import Review, ReviewEvaluation
 from ReviewAnswer.models import ReviewAnswer
 from ReviewQuestion.models import ReviewQuestion
 from Stack.models import Stack
 from Notification.models import Notification
+
 
 @login_required()
 @staff_member_required
@@ -47,8 +43,14 @@ def evaluation(request, course_short_title=None):
         if selection == 'search':
             if 'id' in request.GET:
                 points = get_points(request, AuroraUser.objects.get(pk=request.GET['id']), course)
-                data = {'elaborations': elaborations, 'search': True, 'stacks': points['stacks'],
-                        'courses': points['courses'], 'course': course}
+                data = {
+                    'elaborations': elaborations,
+                    'search': True,
+                    'stacks': points['stacks'],
+                    'courses': points['courses'],
+                    'review_evaluation_data': points['review_evaluation_data'],
+                    'course': course
+                }
             else:
                 data = {'elaborations': elaborations, 'search': True, 'course': course}
         else:
@@ -609,8 +611,15 @@ def select_user(request, course_short_title=None):
 
     points = get_points(request, user, course)
     html = render_to_response('overview.html',
-                              {'elaborations': elaborations, 'search': True, 'stacks': points['stacks'],
-                               'courses': points['courses'], 'course': course}, RequestContext(request))
+                              {
+
+                                  'elaborations': elaborations,
+                                  'search': True,
+                                  'stacks': points['stacks'],
+                                  'courses': points['courses'],
+                                  'review_evaluation_data': points['review_evaluation_data'],
+                                  'course': course
+                              }, RequestContext(request))
 
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
@@ -809,14 +818,22 @@ def sort(request, course_short_title=None):
 
 
 @login_required()
-@staff_member_required
 def get_points(request, user, course):
+    is_correct_user_request = RequestContext(request)['user'].id == user.id
+    is_staff_request = RequestContext(request)['user'].is_staff
+    if not (is_correct_user_request or is_staff_request):
+        return HttpResponseForbidden()
     data = {}
     data['course'] = course
-
     course_ids = CourseUserRelation.objects.filter(user=user).values_list('course', flat=True)
     courses = Course.objects.filter(id__in=course_ids)
     data['courses'] = courses
+    data['review_evaluation_data'] = {}
+    data['review_evaluation_data']['default_review_evaluations'] = ReviewEvaluation.get_default_review_evaluations(user, course)
+    data['review_evaluation_data']['positive_review_evaluations'] = ReviewEvaluation.get_positive_review_evaluations(user, course)
+    data['review_evaluation_data']['negative_review_evaluations'] = ReviewEvaluation.get_negative_review_evaluations(user, course)
+    data['review_evaluation_data']['review_evaluation_percent'] = ReviewEvaluation.get_review_evaluation_percent(user, course)
+
     data['stacks'] = []
     for course in courses:
         stack_data = {}
@@ -832,10 +849,13 @@ def get_points(request, user, course):
                 'is_submitted': is_submitted,
                 'points_earned': stack.get_points_earned(user),
                 'points_available': stack.get_points_available(),
+                'status': stack.get_status_text(user),
             })
             if is_submitted:
-                earned_total += stack.get_points_earned(user)
-                submitted_total += stack.get_points_available()
+                earned_points = stack.get_points_earned(user)
+                earned_total += earned_points
+                if earned_points != 0:
+                    submitted_total += stack.get_points_available()
         stack_data['earned_total'] = earned_total
         stack_data['submitted_total'] = submitted_total
         stack_data['lock_period'] = stack.get_final_challenge().is_in_lock_period(user, course)
