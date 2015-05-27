@@ -340,3 +340,7 @@ class Elaboration(models.Model):
 
     def get_invisible_comments_count(self):
         return self.comments.filter(visibility=Comment.STAFF).count()
+
+    def get_last_post_date(self):
+        comment = self.comments.latest('post_date')
+        return comment.post_date
