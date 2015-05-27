@@ -107,6 +107,8 @@
 }
 
 
+.vote_up_on i,.vote_down_on i {padding:2px 1px;position:relative;top:-1px;}
+.comment_score_value {position:relative;top:-1px;}
 
 .comment_seen {display:none;}
 .seen_link {display:none;}

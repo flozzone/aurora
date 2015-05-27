@@ -47,7 +47,7 @@
 
 .letztezeile {
 	border-bottom:0;
-	border-top:1px solid black !important;
+	border-top:1px solid #ddd !important;
 }
 
 .slides {
@@ -58,6 +58,7 @@
 
 .sum td {
     font-weight: bold;
+	padding-bottom:1em;
 }
 
 .lineD {
