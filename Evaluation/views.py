@@ -840,24 +840,37 @@ def get_points(request, user, course):
         course_stacks = Stack.objects.all().filter(course=course)
         stack_data['course_title'] = course.title
         stack_data['course_stacks'] = []
-        earned_total = 0
-        submitted_total = 0
+        evaluated_points_earned_total = 0
+        evaluated_points_available_total = 0
+        submitted_points_available_total = 0
+        started_points_available_total = 0
         for stack in course_stacks:
             is_submitted = stack.get_final_challenge().submitted_by_user(user)
+            is_evaluated = stack.is_evaluated(user)
+            is_started = stack.get_first_challenge().is_started(user)
+            points_available = stack.get_points_available()
+            points_earned = stack.get_points_earned(user)
             stack_data['course_stacks'].append({
                 'stack': stack,
+                'is_started': is_started,
                 'is_submitted': is_submitted,
-                'points_earned': stack.get_points_earned(user),
-                'points_available': stack.get_points_available(),
+                'is_evaluated': is_evaluated,
+                'points_earned': points_earned,
+                'points_available': points_available,
                 'status': stack.get_status_text(user),
             })
+            if is_started:
+                started_points_available_total += points_available
             if is_submitted:
-                earned_points = stack.get_points_earned(user)
-                earned_total += earned_points
-                if earned_points != 0:
-                    submitted_total += stack.get_points_available()
-        stack_data['earned_total'] = earned_total
-        stack_data['submitted_total'] = submitted_total
+                submitted_points_available_total += points_available
+            if is_evaluated:
+                evaluated_points_earned_total += points_earned
+                evaluated_points_available_total += points_available
+
+        stack_data['evaluated_points_earned_total'] = evaluated_points_earned_total
+        stack_data['evaluated_points_available_total'] = evaluated_points_available_total
+        stack_data['submitted_points_available_total'] = submitted_points_available_total
+        stack_data['started_points_available_total'] = started_points_available_total
         stack_data['lock_period'] = stack.get_final_challenge().is_in_lock_period(user, course)
         data['stacks'].append(stack_data)
 

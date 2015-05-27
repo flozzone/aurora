@@ -126,7 +126,6 @@ class AuroraUserTest(TestCase):
                   'sKey': hmac_calced}
 
         response = c.get('sso_auth_callback', values, follow=True)
-        print(response.redirect_chain)
 
     def test_get_elaborations(self):
         challenge1 = self.challenge

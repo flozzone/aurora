@@ -86,6 +86,12 @@ class Challenge(models.Model):
         except Elaboration.DoesNotExist:
             return None
 
+    def is_started(self, user):
+        elaboration = self.get_elaboration(user)
+        if elaboration is None:
+            return False
+        return elaboration.is_started()
+
     def get_stack(self):
         stack_challenge_relation = StackChallengeRelation.objects.filter(challenge=self)
         if stack_challenge_relation:
@@ -126,6 +132,12 @@ class Challenge(models.Model):
 
     def is_final_challenge(self):
         return False if self.get_next() else True
+
+    def get_first_challenge(self):
+        first_challenge = self
+        while first_challenge.prerequisite is not None:
+            first_challenge = first_challenge.prerequisite
+        return first_challenge
 
     def get_final_challenge(self):
         next_challenge = self
@@ -214,7 +226,7 @@ class Challenge(models.Model):
         elaboration = self.get_elaboration(user)
 
         # user did not start to write an elaboration
-        if not elaboration:
+        if not elaboration or not elaboration.is_started():
             return self.NOT_STARTED
 
         # user started to write but did not yet submit an elaboration

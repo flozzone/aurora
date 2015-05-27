@@ -152,6 +152,20 @@ class ChallengeTest(TestCase):
         assert challenge2.get_final_challenge() == challenge3
         assert challenge3.get_final_challenge() == challenge3
 
+    def test_get_first_challenge(self):
+        challenge1 = self.challenge
+        self.create_challenge()
+        challenge2 = self.challenge
+        challenge2.prerequisite = challenge1
+        challenge2.save()
+        self.create_challenge()
+        challenge3 = self.challenge
+        challenge3.prerequisite = challenge2
+        challenge3.save()
+        assert challenge1.get_first_challenge() == challenge1
+        assert challenge2.get_first_challenge() == challenge1
+        assert challenge3.get_first_challenge() == challenge1
+
     def test_has_enough_user_reviews(self):
         challenge1 = self.challenge
         self.create_challenge()
@@ -184,6 +198,15 @@ class ChallengeTest(TestCase):
         Review(elaboration=elaboration4, submission_time=datetime.now(), reviewer=user1,
                appraisal=Review.SUCCESS).save()
         assert challenge1.has_enough_user_reviews(user1)
+
+    def test_is_started(self):
+        user = self.users[0]
+        elaboration = Elaboration(challenge=self.challenge, user=user, elaboration_text="")
+        elaboration.save()
+        assert self.challenge.is_started(user) is False
+        elaboration.elaboration_text="test"
+        elaboration.save()
+        assert self.challenge.is_started(user) is True
 
     def test_submitted_by_user(self):
         user = self.users[0]
