@@ -53,6 +53,8 @@ def evaluation(request, course_short_title=None):
                 }
             else:
                 data = {'elaborations': elaborations, 'search': True, 'course': course}
+        if selection == 'complaints':
+            data = {'elaborations': elaborations, 'course': course, 'complaints': 'true'}
         else:
             data = {'elaborations': elaborations, 'course': course}
         overview = render_to_string('overview.html', data, RequestContext(request))
@@ -169,9 +171,9 @@ def complaints(request, course_short_title=None):
 
     # sort elaborations by submission time
     if type(elaborations) == list:
-        elaborations.sort(key=lambda elaboration: elaboration.submission_time)
+        elaborations.sort(key=lambda elaboration: elaboration.get_last_post_date(), reverse=True)
     else:
-        elaborations = elaborations.order_by('submission_time')
+        elaborations = elaborations.order_by('-comments__post_date')
 
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
@@ -179,7 +181,7 @@ def complaints(request, course_short_title=None):
     request.session['count'] = len(elaborations)
 
     return render_to_response('evaluation.html',
-                              {'overview': render_to_string('overview.html', {'elaborations': elaborations, 'course': course},
+                              {'overview': render_to_string('overview.html', {'elaborations': elaborations, 'course': course, 'complaints': 'true'},
                                                             RequestContext(request)),
                                'count_complaints': request.session.get('count', '0'),
                                'stabilosiert_complaints': 'stabilosiert',
@@ -800,6 +802,10 @@ def sort(request, course_short_title=None):
         elaborations.sort(key=lambda elaboration: elaboration.challenge.title)
     if request.GET.get('data', '') == "elab_desc":
         elaborations.sort(key=lambda elaboration: elaboration.challenge.title, reverse=True)
+    if request.GET.get('data', '') == "post_asc":
+        elaborations.sort(key=lambda elaboration: elaboration.get_last_post_date())
+    if request.GET.get('data', '') == "post_desc":
+        elaborations.sort(key=lambda elaboration: elaboration.get_last_post_date(), reverse=True)
 
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)

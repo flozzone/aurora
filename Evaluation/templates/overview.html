@@ -13,11 +13,19 @@
                 <i class="fa fa-sort-amount-asc" onclick="sort('elab_asc')" style="cursor:pointer;color:gray"></i>
                 <i class="fa fa-sort-amount-desc" onclick="sort('elab_desc')"  style="cursor:pointer;color:gray"></i>
             </th>
-            <th>
-                hand in
-                <i class="fa fa-sort-amount-asc" onclick="sort('date_desc')"  style="cursor:pointer;color:gray"></i>
-                <i class="fa fa-sort-amount-desc" onclick="sort('date_asc')"  style="cursor:pointer;color:gray"></i>
-            </th>
+            {%  if complaints %}
+                <th>
+                    last comment
+                    <i class="fa fa-sort-amount-asc" onclick="sort('post_desc')"  style="cursor:pointer;color:gray"></i>
+                    <i class="fa fa-sort-amount-desc" onclick="sort('post_asc')"  style="cursor:pointer;color:gray"></i>
+                </th>
+            {% else %}
+                <th>
+                    hand in
+                    <i class="fa fa-sort-amount-asc" onclick="sort('date_desc')"  style="cursor:pointer;color:gray"></i>
+                    <i class="fa fa-sort-amount-desc" onclick="sort('date_asc')"  style="cursor:pointer;color:gray"></i>
+                </th>
+            {% endif %}
             <th class="indicator_field" >reviews</th>
         </tr>
 
@@ -26,7 +34,11 @@
             <tr class="{% cycle 'darkRow' 'lightRow' %}" onclick="document.location = '{% url 'Evaluation:detail' course_short_title=course.short_title %}?elaboration_id={{elaboration.id}}'">&nbsp;
                 <td><img class="gravatar" src="{{ elaboration.user.avatar.url }}" style="vertical-align:middle"> {{ elaboration.user.nickname }}</td>
                 <td>{{ elaboration.challenge.title|safe }}</td>
-                <td class="timestamp" title="{{ elaboration.submission_time }}">{{ elaboration.submission_time|naturaltime}}</td>
+                {% if complaints %}
+                    <td class="timestamp" title="{{ elaboration.get_last_post_date }}">{{ elaboration.get_last_post_date|naturaltime }}</td>
+                {% else %}
+                    <td class="timestamp" title="{{ elaboration.submission_time }}">{{ elaboration.submission_time|naturaltime}}</td>
+                {% endif %}
                 <td>
                     <div title="Better than mine" class="awesome_reviews indicator">{{ elaboration.get_awesome_reviews|length }}</div>
                     <div title="Acceptable" class="success_reviews indicator">{{ elaboration.get_success_reviews|length }}</div>
