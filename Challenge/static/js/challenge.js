@@ -54,7 +54,7 @@ function init_tinymce() {
         selector: "textarea#editor",
         paste_retain_style_properties: "font-size,bold,italic",
         paste_text_linebreaktype: "p",
-        valid_elements: "p,strong,em,span,ul,ol,li,sub,br,sup,table,tbody,tr,td,div,hr",
+        valid_elements: "p,strong,em,span[style],ul,ol,li,sub,br,sup,table,tbody,tr,td,div,hr",
         paste_preprocess: function (plugins, args) { // remove all links
             var content;
             try {
