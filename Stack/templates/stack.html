@@ -106,6 +106,7 @@
                 {% endif %}
 
               </div> <!-- peer reviews -->
+              {% if challenge_dict.submitted %}<div class="submission_time">Submitted on: <b>{{ challenge_dict.submission_time }}</b></div>{% endif %}
             </div> <!-- status space -->
           </div> <!-- review-space -->
         </div> <!-- challenge_footer -->

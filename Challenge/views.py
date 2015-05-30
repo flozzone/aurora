@@ -54,6 +54,7 @@ def create_context_stack(request, course_short_title):
         challenge_active = {
             'challenge': challenge,
             'submitted': challenge.submitted_by_user(user),
+            'submission_time': challenge.get_elaboration(user).submission_time,
             'reviews': reviews,
             'status': challenge.get_status_text(user)
         }
@@ -86,8 +87,14 @@ def challenges(request, course_short_title=None):
     course_stacks = Stack.objects.all().filter(course=course)
     data['course_stacks'] = []
     for stack in course_stacks:
+        submitted = stack.get_final_challenge().submitted_by_user(user)
+        submission_time = None
+        if (submitted):
+            submission_time = stack.get_final_challenge().get_elaboration(user).submission_time
         data['course_stacks'].append({
             'stack': stack,
+            'submitted': submitted,
+            'submission_time': submission_time,
             'status': stack.get_status_text(user),
             'points': stack.get_points_earned(user)
         })
