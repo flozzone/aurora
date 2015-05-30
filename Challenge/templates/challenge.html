@@ -19,6 +19,7 @@
 <script type="text/javascript" src="{{ STATIC_URL }}lightbox/js/lightbox.js"></script>
 <link rel="stylesheet" href="{{ STATIC_URL }}css/challenge.css" type="text/css" media="screen"/>
 <link rel="stylesheet" href="{{ STATIC_URL }}lightbox/css/lightbox.css" type="text/css" media="screen"/>
+{% load humanize %}
 {% endblock %}
 
 {% block content %}
@@ -100,15 +101,15 @@
     	<div class="elaboration_block{% if not accepted %} unstarted{% endif %}">
 			{% if challenge.accepted_files %}
     		<div class="file_upload" accepted_files="{{ challenge.accepted_files }}">
-      		<form action="/fileupload"
-        		class="dropzone dz-clickable{% if elaboration.is_submitted %} is_submitted{% endif %}"
+      			<form action="/fileupload"
+   			 		class="dropzone dz-clickable{% if elaboration.is_submitted %} is_submitted{% endif %}"
     				id="dropzone">
-        		<input id="elaboration_id" type="hidden" name="elaboration_id" value="{{ elaboration.id }}"/>
-				{% csrf_token %}
-      		</form>
-      		<div style="font-size:80%">Note: use »Fig.X« in your text to reference to uploaded images.</div>
-    	</div>
-	{% endif %}
+        			<input id="elaboration_id" type="hidden" name="elaboration_id" value="{{ elaboration.id }}"/>
+					{% csrf_token %}
+      			</form>
+      			<div style="font-size:80%">Note: use »Fig.X« in your text to reference to uploaded images.</div>
+    		</div>
+			{% endif %}
     <form method="post">
       <textarea id="editor">{{ elaboration.elaboration_text }}</textarea>
     </form>
@@ -137,6 +138,7 @@
 {% if challenge.accepted_files %}
 {% render_uploads elaboration %}
 {% endif %}
+Handed in <a style="color:black;text-decoration: none;" href="javascript:$('#wai_t').text('{{ elaboration.submission_time|date:'j. F, H:i' }}');setTimeout(function(){ $('#wai_t').text('{{elaboration.submission_time|naturaltime}}'); }, 3000);void(0);" title="{{ elaboration.submission_time|date:'j. F, H:i' }}"><i class="fa fa-calendar"></i> <span ID="wai_t">{{ elaboration.submission_time|naturaltime }}</span>
     <textarea id="editor_challenge">{{ elaboration.elaboration_text }}</textarea>
 {% if evaluation %}
     <div class="comments">
