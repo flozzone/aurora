@@ -9,7 +9,7 @@
     <div class="points_table">
       <table>
         <tr>
-          <td colspan=2></i> {{ stack_data.course_title }}</th>
+          <td colspan=2></i> {{ stack_data.course_title }}</td>
         </tr>
         {% for stack in stack_data.course_stacks %} <!-- loop 1: evaluated, valid challenges -->
  		   {% if stack.is_submitted and stack.status.status == "Evaluated." and stack.points_earned != 0 %}
