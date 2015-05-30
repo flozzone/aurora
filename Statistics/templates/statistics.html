@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+students with at least one challenge submission: {{ students_with_at_least_one_submission }}/{{ students }}<br>
+<br>
+started tasks: {{ started_challenges }}/{{ elaborations }}<br>
+<br>
+students with 30 points or more: {{ students_with_more_than_30_points }}/{{ students }}<br>
+students with 35 points or more: {{ students_with_more_than_35_points }}/{{ students }}<br>
+students with 40 points or more: {{ students_with_more_than_40_points }}/{{ students }}<br>
+students with 45 points or more: {{ students_with_more_than_45_points }}/{{ students }}<br>
+students with 50 points or more: {{ students_with_more_than_50_points }}/{{ students }}<br>
+students with 55 points or more: {{ students_with_more_than_55_points }}/{{ students }}<br>
+students with 60 points or more: {{ students_with_more_than_60_points }}/{{ students }}<br>
+<br>
+review evaluations: {{ review_evaluations }}/{{ reviews }}<br>
+<br>
+top 20 commenter<br>
+{% for commenter in commenter_top_20 %}
+  {{ forloop.counter }}: {{ commenter.author__nickname }} with {{ commenter.count }} comments<br>
+{% endfor %}
+{% endblock %}

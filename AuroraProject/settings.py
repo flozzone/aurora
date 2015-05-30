@@ -136,6 +136,7 @@ INSTALLED_APPS = (
     'FileUpload',
     'Comments',
     'Slides',
+    'Statistics',
     'Notification',
     'endless_pagination',
     'taggit'
