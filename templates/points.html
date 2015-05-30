@@ -82,9 +82,9 @@
                           {% else %}
                             <script>
                             </script>
-                            Hand-in is possible<a style="color:black;text-decoration: none;"
-                                                  href="javascript:$('#wai_t').text('{{ stack_data.lock_period|date:'j. M, H:i' }}');setTimeout(function(){ $('#wai_t').text('{{ stack_data.lock_period|naturaltime }}'); }, 3000);void(0);"
-                                                  title="{{ stack_data.lock_period|date:'j. M, H:i' }}"><i
+                            Hand-in is possible <a style="color:black;text-decoration: none;"
+                                                   href="javascript:$('#wai_t').text('{{ stack_data.lock_period|date:'j. M, H:i' }}');setTimeout(function(){ $('#wai_t').text('{{ stack_data.lock_period|naturaltime }}'); }, 3000);void(0);"
+                                                   title="{{ stack_data.lock_period|date:'j. M, H:i' }}"><i
                               class="fa fa-calendar"></i>
                             <span ID="wai_t"> {{ stack_data.lock_period|naturaltime }}</span></a>
                           {% endif %}
