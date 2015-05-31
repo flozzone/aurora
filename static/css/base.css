@@ -439,13 +439,14 @@ input:-moz-placeholder { color:rgba(58,201,88,0);	text-shadow: 0 0 2px rgba(58,2
 
 .unread_notifications {
 	border-radius:12px;
-	border: 1px dashed rgba(255,255,255,0.1);
+	background: rgba(0,0,0,0.1);
 	text-align:center;
 }
 
 .glow {
 	box-shadow: 0 0 15px rgba(58,201,88,1),0 0 15px rgba(58,201,88,1);
 	
+	background:none;
 	border:none;
 	color:black;
 }

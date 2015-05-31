@@ -24,7 +24,7 @@
 	 </div>
      <div class="spacer"></div>
 	 <div class="elab_title">{{elaboration.challenge.title|safe}}</div>
-        <img class="gravatar" src="{{ elaboration.user.avatar.url }}" style="vertical-align:middle" onclick="$('#top_detail').toggleClass('hidden_detail')">
+        <img class="gravatar" src="{{ elaboration.user.avatar.url }}" style="vertical-align:middle" onclick="$('.author_detail').addClass('hidden_detail');$('#top_detail').toggleClass('hidden_detail')">
         {{ elaboration.user.nickname }} ({{ elaboration.user.first_name }} {{ elaboration.user.last_name }}/{{ elaboration.user.username }}) @ <span title="{{elaboration.submission_time}}">{{elaboration.submission_time|naturaltime}}</span>:
 		 <div class="author_detail staff_detail" id="top_detail" style="overflow:auto; height:auto;">
 			 <img src='{{elaboration.user.avatar.url}}'>
@@ -32,7 +32,7 @@
 			 &quot;{{elaboration.user.statement|urlizetrunc:50}}&quot;<br>
 			 {{elaboration.user.matriculation_number}} - {{elaboration.user.first_name}} {{elaboration.user.last_name}}<br>
 			 <a href="mailto:{{elaboration.user.email}}">{{elaboration.user.email}}</a> &mdash;
-       	  	{% with notification_user_id=elaboration.user.id %}
+       	  	{% with notification_user_id=elaboration.user.id course_short_title=course.short_title  %}
         	 	{% include "send_notification_button.html" %}
        		 {% endwith %}
   	 		&mdash;   <a href="user?id={{elaboration.user.id}}">{{elaboration.user.nickname}}'s work</a>

@@ -140,6 +140,7 @@ class Elaboration(models.Model):
             .filter(challenge__id__in=final_challenge_ids, submission_time__isnull=False, user__is_staff=False)
             .annotate(evaluated=Min('evaluation__submission_time'))
             .filter(evaluated=None)
+            .order_by('-submission_time')
         )
         return top_level_challenges
 
@@ -219,16 +220,18 @@ class Elaboration(models.Model):
             )
         return Elaboration.objects.filter(id__in=include_elaboration_ids).filter(id__in=non_adequate_elaborations)
 
+    # offset is the number of hours needed to pass until elaboration is applicable as candidate
     @staticmethod
-    def get_review_candidate(challenge, user):
+    def get_review_candidate(challenge, user, offset=0):
         already_submitted_reviews_ids = (
             Review.objects
             .filter(reviewer=user, elaboration__challenge=challenge)
             .values_list('elaboration__id', flat=True)
         )
+        threshold = datetime.now() - timedelta(hours=offset)
         candidates = (
             Elaboration.objects
-            .filter(challenge=challenge, submission_time__isnull=False, user__is_staff=False)
+            .filter(challenge=challenge, submission_time__lt=threshold, user__is_staff=False)
             .exclude(user=user)
             .annotate(num_reviews=Count('review'))
             .exclude(id__in=already_submitted_reviews_ids)
@@ -337,3 +340,7 @@ class Elaboration(models.Model):
 
     def get_invisible_comments_count(self):
         return self.comments.filter(visibility=Comment.STAFF).count()
+
+    def get_last_post_date(self):
+        comment = self.comments.latest('post_date')
+        return comment.post_date

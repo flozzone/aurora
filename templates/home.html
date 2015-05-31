@@ -17,7 +17,8 @@
 		</div>
         <div class="feed_column" id="content_part_X">
 			<p><i style="color:gray" class="fa fa-arrow-right"></i> <a target="_blank" href="https://auri1-gsi.pbworks.com/w/page/77253689/FrontPage">Aurora Wiki</a><br>
-			<i style="color:gray" class="fa fa-arrow-right"></i> TUWEL <a target="_blank" href="https://tuwel.tuwien.ac.at/course/view.php?id=5575">gsi</a> <a target="_blank" href="https://tuwel.tuwien.ac.at/course/view.php?id=5581">bhci</a><br></p><br>
+			<i style="color:gray" class="fa fa-arrow-right"></i> TUWEL <a target="_blank" href="https://tuwel.tuwien.ac.at/course/view.php?id=5575">gsi</a> <a target="_blank" href="https://tuwel.tuwien.ac.at/course/view.php?id=5581">bhci</a><br><br>
+			<i style="color:gray" class="fa fa-arrow-right"></i> <a href="/admin">django admin</a></p><br>
 		</div>
 		{%  endif %}
         <div class="feed_header" id="part_1">
@@ -44,7 +45,7 @@
 				{% else %}
 				&nbsp;&nbsp;&nbsp;<i class="fa fa-angle-double-right"></i><a href="https://tuwel.tuwien.ac.at/mod/rssplayer/view.php?id=216701">BHCI live stream</a></p><br>
 				{% endif %}
-			<p>Ausserdem zeichnen wir diese Streams auf, und werden sie mit dem VO-Kalender verkn&uuml;pfen!</p>
+			<p>Ausserdem zeichnen wir diese Streams auf. Sie finden die Aufzeichnungen in tuwel!</p>
 	        <br><br>
 
 	        <p><b>Support:</b></p>
@@ -75,25 +76,24 @@
 			<br>
 			{% if course.short_title == "hci" %}
 			<p><i>Q: Was sind die 4 Kategorien in BHCI?</i></p> 
-			<p>- Kategorie 1: User-centered design + design basics<br>
-			- Kategorie 2: Methoden<br>
-			- Kategorie 3: psycholog. Grundlagen, Evaluation<br>
-			- Kategorie 4: Prototyping, Beyond the desktop<br>
+			<p>- Kategorie 1: User-centered design + design basics (B1cX)<br>
+			- Kategorie 2: Methoden (B2cX)<br>
+			- Kategorie 3: psycholog. Grundlagen, Evaluation (B3cX)<br>
+			- Kategorie 4: Prototyping, Beyond the desktop (B4cX)<br>
 			</p>
 			<br>
 			{% endif %}
 			{% if course.short_title == "gsi" %}
 			<p><i>Q: Was sind die 4 Kategorien in GSI?</i></p> 
-			<p>Das sind Platzhalter-Kategorien. Diese werden zu VO-beginn hier aktualisiert.<br></p>
-			<p>- Kategorie 1: Nachdenken<br>
-			- Kategorie 2: Reden<br>
-			- Kategorie 3: Machen<br>
-			- Kategorie 4: Reflexion<br>
+			<p>- Kategorie 1: Praxis (G1cX)<br>
+			- Kategorie 2: IT-Branche (G2cX)<br>
+			- Kategorie 3: Ideen (G3cX)<br>
+			- Kategorie 4: Gesellschaft (G4cX)<br>
 			</p>
 			<br>
 			{% endif %}
 	        <p><i>Q: Wann ist die Deadline f&uuml;r (eine/diese/alle) Challenges?</i></p>
-	        <p>A: F&uuml;r eine positive Note m&uuml;ssen sie bis Ende des Semesters (Di 30.6.., 23:59)ausreichend Punkte gesammelt haben, und aus jeder Kategorie (s.o.) mindestens eine Challenge geschafft haben. Punkte bekommen sie f&uuml;r fertiggestellte Challenges, aber zB. auch f&uuml;r ausgezeichnete Kommentare bei den Folien.  Beachten sie jedoch, dass sie nach dem Abgeben einer Challenge (also des Final Tasks) etwa zwei Wochen (genau: 13 Tage) warten m&uuml;ssen, bevor sie wieder einen Final Task einreichen können!</p>
+	        <p>A: F&uuml;r eine positive Note m&uuml;ssen sie bis Ende des Semesters (Di 30.6.., 23:59)ausreichend Punkte gesammelt haben, und aus jeder Kategorie (s.o.) mindestens eine Challenge geschafft haben. Punkte bekommen sie f&uuml;r fertiggestellte Challenges, aber zB. auch f&uuml;r ausgezeichnete Kommentare bei den Folien.  Beachten sie jedoch, dass sie nach dem Abgeben einer Challenge (also des Final Tasks) 11 Tage warten m&uuml;ssen (ab 22.6.: 7  Tage), bevor sie wieder einen Final Task einreichen können!</p>
 	        <br>
 	        <p><i>Q: Was kann ich machen, wenn die Bewertung meiner Arbeit nicht meinen Erwartungen entspricht?</i></p>
 	        <p>A: Sie k&ouml;nnen einen Kommentar zu ihrer Arbeit formulieren, in dem sie zb. eine Frage stellen, oder ihre

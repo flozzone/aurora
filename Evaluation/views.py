@@ -3,10 +3,8 @@ from difflib import SequenceMatcher
 import difflib
 import json
 from django.contrib.contenttypes.models import ContentType
-
 from django.core import serializers
 from django.core.urlresolvers import reverse
-from django.db.models import TextField
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -14,24 +12,22 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
-from django.db.models import CharField
 from django.db.models import Q
-from django.db import models
-from taggit.models import Tag, TaggedItem
-from django.views.generic import DetailView, ListView
+from taggit.models import TaggedItem
 from django.views.decorators.http import require_POST
+from django.http import HttpResponseForbidden
 
 from Challenge.models import Challenge
-from Comments.models import Comment
 from Course.models import Course, CourseUserRelation
 from Elaboration.models import Elaboration
 from Evaluation.models import Evaluation
 from AuroraUser.models import AuroraUser
-from Review.models import Review
+from Review.models import Review, ReviewEvaluation
 from ReviewAnswer.models import ReviewAnswer
 from ReviewQuestion.models import ReviewQuestion
 from Stack.models import Stack
 from Notification.models import Notification
+
 
 @login_required()
 @staff_member_required
@@ -46,11 +42,19 @@ def evaluation(request, course_short_title=None):
             elaborations.append(serialized_elaboration.object)
         if selection == 'search':
             if 'id' in request.GET:
-                points = get_points(request, AuroraUser.objects.get(pk=request.GET['id']))
-                data = {'elaborations': elaborations, 'search': True, 'stacks': points['stacks'],
-                        'courses': points['courses'], 'course': course}
+                points = get_points(request, AuroraUser.objects.get(pk=request.GET['id']), course)
+                data = {
+                    'elaborations': elaborations,
+                    'search': True,
+                    'stacks': points['stacks'],
+                    'courses': points['courses'],
+                    'review_evaluation_data': points['review_evaluation_data'],
+                    'course': course
+                }
             else:
                 data = {'elaborations': elaborations, 'search': True, 'course': course}
+        if selection == 'complaints':
+            data = {'elaborations': elaborations, 'course': course, 'complaints': 'true'}
         else:
             data = {'elaborations': elaborations, 'course': course}
         overview = render_to_string('overview.html', data, RequestContext(request))
@@ -85,7 +89,7 @@ def missing_reviews(request, course_short_title=None):
     if type(elaborations) == list:
         elaborations.sort(key=lambda elaboration: elaboration.submission_time)
     else:
-        elaborations.order_by('submission_time')
+        elaborations = elaborations.order_by('submission_time')
 
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
@@ -113,7 +117,7 @@ def non_adequate_work(request, course_short_title=None):
     if type(elaborations) == list:
         elaborations.sort(key=lambda elaboration: elaboration.submission_time)
     else:
-        elaborations.order_by('submission_time')
+        elaborations = elaborations.order_by('submission_time')
 
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
@@ -141,7 +145,7 @@ def top_level_tasks(request, course_short_title=None):
     if type(elaborations) == list:
         elaborations.sort(key=lambda elaboration: elaboration.submission_time)
     else:
-        elaborations.order_by('submission_time')
+        elaborations = elaborations.order_by('submission_time')
 
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
@@ -167,9 +171,9 @@ def complaints(request, course_short_title=None):
 
     # sort elaborations by submission time
     if type(elaborations) == list:
-        elaborations.sort(key=lambda elaboration: elaboration.submission_time)
+        elaborations.sort(key=lambda elaboration: elaboration.get_last_post_date(), reverse=True)
     else:
-        elaborations.order_by('submission_time')
+        elaborations = elaborations.order_by('-comments__post_date')
 
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
@@ -177,38 +181,10 @@ def complaints(request, course_short_title=None):
     request.session['count'] = len(elaborations)
 
     return render_to_response('evaluation.html',
-                              {'overview': render_to_string('overview.html', {'elaborations': elaborations, 'course': course},
+                              {'overview': render_to_string('overview.html', {'elaborations': elaborations, 'course': course, 'complaints': 'true'},
                                                             RequestContext(request)),
                                'count_complaints': request.session.get('count', '0'),
                                'stabilosiert_complaints': 'stabilosiert',
-                               'selection': request.session['selection'],
-                               'course': course
-                              },
-                              context_instance=RequestContext(request))
-
-
-@login_required()
-@staff_member_required
-def evaluated_non_adequate_work(request, course_short_title=None):
-    course = Course.get_or_raise_404(short_title=course_short_title)
-    elaborations = Elaboration.get_evaluated_non_adequate_work(course)
-
-    # sort elaborations by submission time
-    if type(elaborations) == list:
-        elaborations.sort(key=lambda elaboration: elaboration.submission_time)
-    else:
-        elaborations.order_by('submission_time')
-
-    # store selected elaborations in session
-    request.session['elaborations'] = serializers.serialize('json', elaborations)
-    request.session['selection'] = 'evaluated_non_adequate_work'
-    request.session['count'] = len(elaborations)
-
-    return render_to_response('evaluation.html',
-                              {'overview': render_to_string('overview.html', {'elaborations': elaborations, 'course': course},
-                                                            RequestContext(request)),
-                               'count_evaluated_non_adequate_work': request.session.get('count', '0'),
-                               'stabilosiert_evaluated_non_adequate_work': 'stabilosiert',
                                'selection': request.session['selection'],
                                'course': course
                               },
@@ -230,7 +206,7 @@ def awesome(request, course_short_title=None):
     if type(elaborations) == list:
         elaborations.sort(key=lambda elaboration: elaboration.submission_time)
     else:
-        elaborations.order_by('submission_time')
+        elaborations = elaborations.order_by('submission_time')
 
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
@@ -335,7 +311,14 @@ def detail(request, course_short_title=None):
             evaluation = Evaluation.objects.get(submission=elaboration)
             if evaluation.tutor != user and not evaluation.is_older_15min():
                 lock = True
-        params = {'evaluation': evaluation, 'lock': lock}
+        if elaboration.challenge.is_final_challenge():
+            params = {'evaluation': evaluation, 'lock': lock, 'selection': 'top-level tasks'}
+        else:
+            if elaboration.is_reviewed_2times():
+                params = {'evaluation': evaluation, 'lock': lock}
+            else:
+                questions = ReviewQuestion.objects.filter(challenge=elaboration.challenge).order_by("order")
+                params = {'questions': questions, 'selection': 'missing reviews'}
 
     reviews = Review.objects.filter(elaboration=elaboration, submission_time__isnull=False)
 
@@ -351,7 +334,7 @@ def detail(request, course_short_title=None):
     if type(stack_elaborations) == list:
         stack_elaborations.sort(key=lambda stack_elaboration: stack_elaboration.submission_time)
     else:
-        stack_elaborations.order_by('submission_time')
+        stack_elaborations = stack_elaborations.order_by('submission_time')
 
     params['elaboration'] = elaboration
     params['stack_elaborations'] = stack_elaborations
@@ -628,10 +611,17 @@ def select_user(request, course_short_title=None):
     user = AuroraUser.objects.get(username=selected_user)
     elaborations = user.get_course_elaborations(course)
 
-    points = get_points(request, user)
+    points = get_points(request, user, course)
     html = render_to_response('overview.html',
-                              {'elaborations': elaborations, 'search': True, 'stacks': points['stacks'],
-                               'courses': points['courses'], 'course': course}, RequestContext(request))
+                              {
+
+                                  'elaborations': elaborations,
+                                  'search': True,
+                                  'stacks': points['stacks'],
+                                  'courses': points['courses'],
+                                  'review_evaluation_data': points['review_evaluation_data'],
+                                  'course': course
+                              }, RequestContext(request))
 
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
@@ -658,7 +648,7 @@ def autocomplete_user(request, course_short_title=None):
     studies = AuroraUser.objects.all().filter(
         Q(username__istartswith=term) | Q(first_name__istartswith=term) | Q(last_name__istartswith=term) | Q(
             nickname__istartswith=term))
-    names = [(studi.username + ' ' + studi.nickname + ' ' + studi.last_name) for studi in studies]
+    names = [(studi.username + ' ' + studi.nickname + ' ' + studi.first_name + ' ' + studi.last_name) for studi in studies]
     response_data = json.dumps(names, ensure_ascii=False)
     return HttpResponse(response_data, content_type='application/json; charset=utf-8')
 
@@ -721,7 +711,7 @@ def review_answer(request, course_short_title=None):
     if type(elaborations) == list:
         elaborations.sort(key=lambda elaboration: elaboration.submission_time)
     else:
-        elaborations.order_by('submission_time')
+        elaborations = elaborations.order_by('submission_time')
     request.session['elaborations'] = serializers.serialize('json', elaborations)
 
     if review.elaboration.is_reviewed_2times():
@@ -758,7 +748,7 @@ def back(request, course_short_title=None):
     if type(elaborations) == list:
         elaborations.sort(key=lambda elaboration: elaboration.submission_time)
     else:
-        elaborations.order_by('submission_time')
+        elaborations = elaborations.order_by('submission_time')
     request.session['elaborations'] = serializers.serialize('json', elaborations)
 
     return evaluation(request, course_short_title)
@@ -786,7 +776,7 @@ def search_user(request, course_short_title=None):
         if type(elaborations) == list:
             elaborations.sort(key=lambda elaboration: elaboration.submission_time)
         else:
-            elaborations.order_by('submission_time')
+            elaborations = elaborations.order_by('submission_time')
 
         # store selected elaborations in session
         request.session['elaborations'] = serializers.serialize('json', elaborations)
@@ -812,6 +802,10 @@ def sort(request, course_short_title=None):
         elaborations.sort(key=lambda elaboration: elaboration.challenge.title)
     if request.GET.get('data', '') == "elab_desc":
         elaborations.sort(key=lambda elaboration: elaboration.challenge.title, reverse=True)
+    if request.GET.get('data', '') == "post_asc":
+        elaborations.sort(key=lambda elaboration: elaboration.get_last_post_date())
+    if request.GET.get('data', '') == "post_desc":
+        elaborations.sort(key=lambda elaboration: elaboration.get_last_post_date(), reverse=True)
 
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
@@ -830,26 +824,63 @@ def sort(request, course_short_title=None):
 
 
 @login_required()
-@staff_member_required
-def get_points(request, user):
+def get_points(request, user, course):
+    is_correct_user_request = RequestContext(request)['user'].id == user.id
+    is_staff_request = RequestContext(request)['user'].is_staff
+    if not (is_correct_user_request or is_staff_request):
+        return HttpResponseForbidden()
     data = {}
+    data['course'] = course
     course_ids = CourseUserRelation.objects.filter(user=user).values_list('course', flat=True)
     courses = Course.objects.filter(id__in=course_ids)
     data['courses'] = courses
+    data['review_evaluation_data'] = {}
+    data['review_evaluation_data']['default_review_evaluations'] = ReviewEvaluation.get_default_review_evaluations(user, course)
+    data['review_evaluation_data']['positive_review_evaluations'] = ReviewEvaluation.get_positive_review_evaluations(user, course)
+    data['review_evaluation_data']['negative_review_evaluations'] = ReviewEvaluation.get_negative_review_evaluations(user, course)
+    data['review_evaluation_data']['review_evaluation_percent'] = ReviewEvaluation.get_review_evaluation_percent(user, course)
+
     data['stacks'] = []
     for course in courses:
         stack_data = {}
         course_stacks = Stack.objects.all().filter(course=course)
         stack_data['course_title'] = course.title
         stack_data['course_stacks'] = []
-        points_sum = 0
+        evaluated_points_earned_total = 0
+        evaluated_points_available_total = 0
+        submitted_points_available_total = 0
+        started_points_available_total = 0
         for stack in course_stacks:
+            is_submitted = stack.get_final_challenge().submitted_by_user(user)
+            is_evaluated = stack.is_evaluated(user)
+            is_started = stack.get_first_challenge().is_started(user)
+            points_available = stack.get_points_available()
+            points_earned = stack.get_points_earned(user)
             stack_data['course_stacks'].append({
                 'stack': stack,
-                'points': stack.get_points_earned(user)
+                'is_started': is_started,
+                'is_submitted': is_submitted,
+                'is_evaluated': is_evaluated,
+                'points_earned': points_earned,
+                'points_available': points_available,
+                'status': stack.get_status_text(user),
             })
-            points_sum += stack.get_points_earned(user)
-        stack_data['sum'] = points_sum
+            if is_evaluated:
+                # skip adding available points to totals for evaluations with 0 points
+                if points_earned == 0:
+                    continue
+                evaluated_points_earned_total += points_earned
+                evaluated_points_available_total += points_available
+            if is_started:
+                started_points_available_total += points_available
+            if is_submitted:
+                submitted_points_available_total += points_available
+
+        stack_data['evaluated_points_earned_total'] = evaluated_points_earned_total
+        stack_data['evaluated_points_available_total'] = evaluated_points_available_total
+        stack_data['submitted_points_available_total'] = submitted_points_available_total
+        stack_data['started_points_available_total'] = started_points_available_total
+        stack_data['lock_period'] = stack.get_final_challenge().is_in_lock_period(user, course)
         data['stacks'].append(stack_data)
 
     return data

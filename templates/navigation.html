@@ -11,14 +11,8 @@
 <div>
   <div class="pagehead">
     <div class="headline">
-      <a href="{% url 'home' course.short_title %}">Aurora</a>
-	  <div class="course_selected" onclick="location.href='/'">{{course.title}}</div>
-    </div>
-
-	<script>
-		$('.pagehead').css('background-position','0 '+getCookie("AuroraP")+'%'); 
-	</script>
-	
+	  <div class="course_selected" onclick="location.href='/'"><span style="color:white !important;">Aurora</span> {{course.title}}</div>
+    </div>	
 	
     {% if user.is_authenticated %}
 
@@ -44,7 +38,7 @@
             <a href="{% url 'Evaluation:home' course.short_title %}">Evaluation</a>
           </li>
         {% endif %}
-        <li id="notifications-li" class="unread_notifications{% if unread_notifications|length != 0 %} glow{% endif %}">
+        <li id="notifications-li" class="unread_notifications">
           <a id="unread_notifications"  href="{% url 'Notification:list' course.short_title %}">{{ unread_notifications|length }}</a>
         </li>
       </ul>

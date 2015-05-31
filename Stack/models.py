@@ -6,6 +6,11 @@ class Stack(models.Model):
     description = models.TextField()
     course = models.ForeignKey('Course.Course')
 
+    def get_first_challenge(self):
+        for relation in StackChallengeRelation.objects.filter(stack=self):
+            return relation.challenge.get_first_challenge()
+        return None
+
     def get_final_challenge(self):
         for relation in StackChallengeRelation.objects.filter(stack=self):
             return relation.challenge.get_final_challenge()
@@ -23,6 +28,15 @@ class Stack(models.Model):
             challenge_image_urls.append(challenge.image.url)
         return challenge_image_urls
 
+    def is_started(self, user):
+        return self.get_first_challenge().is_started(user)
+
+    def is_evaluated(self, user):
+        elaboration = self.get_final_challenge().get_elaboration(user)
+        if elaboration is None:
+            return False
+        return elaboration.is_evaluated()
+
     def get_points_earned(self, user):
         final_challenge = self.get_final_challenge()
         elaboration = final_challenge.get_elaboration(user)
@@ -33,12 +47,10 @@ class Stack(models.Model):
             return 0
         return evaluation.evaluation_points
 
-    def get_points_submitted(self, user):
+    def get_points_available(self):
         points = 0
         for challenge in self.get_challenges():
-            elaboration = challenge.get_elaboration(user)
-            if elaboration is not None and elaboration.is_submitted():
-                points = points + challenge.points
+            points += challenge.points
         return points
 
     def get_last_available_challenge(self, user):

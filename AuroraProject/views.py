@@ -4,18 +4,17 @@ from django.shortcuts import redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
-
 from datetime import datetime
+from django.core.urlresolvers import reverse
 
-from Stack.models import Stack
-from Course.models import Course, CourseUserRelation
+from Course.models import Course
 from AuroraUser.models import AuroraUser
 from Evaluation.models import Evaluation
 from Review.models import Review
 from ReviewAnswer.models import ReviewAnswer
 from Elaboration.models import Elaboration
+from Evaluation.views import get_points
 from Challenge.models import Challenge
-from django.core.urlresolvers import reverse
 
 
 def course_selection(request):
@@ -32,31 +31,9 @@ def home(request, course_short_title=None):
     if not request.user.is_authenticated():
         return redirect(reverse('User:login', args=(course_short_title, )))
 
-    data = {}
     user = RequestContext(request)['user']
-
-    data['course'] = Course.get_or_raise_404(course_short_title)
-
-    course_ids = CourseUserRelation.objects.filter(user=user).values_list('course', flat=True)
-    courses = Course.objects.filter(id__in=course_ids)
-    data['courses'] = courses
-    data['stacks'] = []
-    for course in courses:
-        stack_data = {}
-        course_stacks = Stack.objects.all().filter(course=course)
-        stack_data['course_title'] = course.title
-        stack_data['course_stacks'] = []
-        points_sum = 0
-        for stack in course_stacks:
-            stack_data['course_stacks'].append({
-                'stack': stack,
-                'points_earned': stack.get_points_earned(user),
-                'points_submitted': stack.get_points_submitted(user)
-            })
-            points_sum += stack.get_points_earned(user)
-        stack_data['sum'] = points_sum
-        data['stacks'].append(stack_data)
-
+    course = Course.get_or_raise_404(course_short_title)
+    data = get_points(request, user, course)
     context = RequestContext(request, {'newsfeed': data['course']})
 
     return render_to_response('home.html', data, context)

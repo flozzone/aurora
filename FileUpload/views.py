@@ -77,7 +77,6 @@ def file_remove(request):
 
 @login_required()
 def all_files(request):
-    print("requesting all files")
     user = RequestContext(request)['user']
     if 'elaboration_id' in request.GET:
         elaboration_id = request.GET.get('elaboration_id')
@@ -98,9 +97,8 @@ def all_files(request):
             })
     return HttpResponse(json.dumps(data))
 
+
 def file_upload_failed_response(reason):
-    print('upload failed')
     response = HttpResponse('File Upload failed:' + reason)
     response.status_code = 500
-    print(response.status_code)
     return response

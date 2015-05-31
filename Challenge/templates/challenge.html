@@ -8,6 +8,7 @@
 <script type="text/javascript" src="{{ STATIC_URL }}tinymce/tinymce.min.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}tinymce/jquery.tinymce.min.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/challenge.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/review_evaluation.js"></script>
 {% if not elaboration.is_submitted %}
 <script type="text/javascript" src="{{ STATIC_URL }}dropzone/dropzone.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/file_upload.js"></script>
@@ -18,6 +19,7 @@
 <script type="text/javascript" src="{{ STATIC_URL }}lightbox/js/lightbox.js"></script>
 <link rel="stylesheet" href="{{ STATIC_URL }}css/challenge.css" type="text/css" media="screen"/>
 <link rel="stylesheet" href="{{ STATIC_URL }}lightbox/css/lightbox.css" type="text/css" media="screen"/>
+{% load humanize %}
 {% endblock %}
 
 {% block content %}
@@ -28,16 +30,17 @@
   var SAVE_URL = "{% url 'Elaboration:save' course_short_title=course.short_title %}";
   var SUBMIT_URL = "{% url 'Elaboration:submit' course_short_title=course.short_title %}";
   var STACK_URL = "{% url 'Challenge:stack' course_short_title=course.short_title %}";
+  var REVIEW_EVALUATION_URL = "{% url 'Review:evaluate' course_short_title=course.short_title %}";
 
 </script>
 
 <div id="detail_area">
   <div id="{{ challenge.id }}" class="challenge" stack="{{ challenge.get_stack.id }}">
     <div class="challenge_title" style="cursor:pointer;" {% if elaboration.is_submitted %}onclick="$('.challenge_description').slideToggle('fast');"{% endif %}>
-{% if elaboration.is_submitted %}
-    <i class="fa fa-toggle-down"></i>
-{% endif %}
     {{ challenge.title|safe }}
+	{% if elaboration.is_submitted %}
+		<button style="font-size:16px" class="R"> toggle details </button>
+	{% endif %}
     </div>
     <div style="display:none">Points: {{ challenge.points }}</div>
     <div class="challenge_description{% if elaboration.is_submitted %} nothere{% endif %}" >
@@ -53,7 +56,7 @@
           </div>
         </div>
       </div>
-	  {% if not reviews %}
+	  {% if not reviews and not challenge.is_final_challenge %}
 	  
 	  <div class="review_section">
 		<div onclick="$('.review_questions').slideToggle('fast');">
@@ -98,15 +101,15 @@
     	<div class="elaboration_block{% if not accepted %} unstarted{% endif %}">
 			{% if challenge.accepted_files %}
     		<div class="file_upload" accepted_files="{{ challenge.accepted_files }}">
-      		<form action="/fileupload"
-        		class="dropzone dz-clickable{% if elaboration.is_submitted %} is_submitted{% endif %}"
+      			<form action="/fileupload"
+   			 		class="dropzone dz-clickable{% if elaboration.is_submitted %} is_submitted{% endif %}"
     				id="dropzone">
-        		<input id="elaboration_id" type="hidden" name="elaboration_id" value="{{ elaboration.id }}"/>
-				{% csrf_token %}
-      		</form>
-      		<div style="font-size:80%">Note: use »Fig.X« in your text to reference to uploaded images.</div>
-    	</div>
-	{% endif %}
+        			<input id="elaboration_id" type="hidden" name="elaboration_id" value="{{ elaboration.id }}"/>
+					{% csrf_token %}
+      			</form>
+      			<div style="font-size:80%">Note: use »Fig.X« in your text to reference to uploaded images.</div>
+    		</div>
+			{% endif %}
     <form method="post">
       <textarea id="editor">{{ elaboration.elaboration_text }}</textarea>
     </form>
@@ -127,12 +130,15 @@
         </div>
 
       </div>
+	  {% else %}
+	  <div class="XL R" style="color:lightgray;">(your work is saved; waiting for reviews on preparatory tasks before hand-in is possible)</div>
       {% endif %}
     </div>
 {% else %}
-{% if challenge.accepted_files %}
-{% render_uploads elaboration %}
-{% endif %}
+	Handed in <a style="color:black;text-decoration: none;" href="javascript:$('#wai_t').text('{{ elaboration.submission_time|date:'j. F, H:i' }}');setTimeout(function(){ $('#wai_t').text('{{elaboration.submission_time|naturaltime}}'); }, 3000);void(0);" title="{{ elaboration.submission_time|date:'j. F, H:i' }}"><i class="fa fa-calendar"></i> <span ID="wai_t">{{ elaboration.submission_time|naturaltime }}</span>
+	{% if challenge.accepted_files %}
+	{% render_uploads elaboration %}
+	{% endif %}
     <textarea id="editor_challenge">{{ elaboration.elaboration_text }}</textarea>
 {% if evaluation %}
     <div class="comments">
@@ -163,6 +169,23 @@
           </b>
         </div>
       </div>
+	  <div class="review_evaluation_drawer">
+		<div class="review_evaluation_text">How would you rate this review? </div>
+        <div id="{{ review_data.review_id }}" class="review_evaluation_container">
+            <div review_id="{{ review_data.review_id }}" appraisal="P"
+                 class="review_evaluation positive {% if review_data.evaluation == "P" %} active{% endif %}">
+                helpful
+            </div>
+            <div review_id="{{ review_data.review_id }}" appraisal="D"
+                 class="review_evaluation neutral {% if review_data.evaluation == "D" %} active{% endif %}">
+                average
+            </div>
+            <div review_id="{{ review_data.review_id }}" appraisal="N"
+                 class="review_evaluation negative{% if review_data.evaluation == "N" %} active{% endif %}">
+                meaningless or offensive
+            </div>
+        </div>
+	</div>
       <div>&nbsp;</div>
 {% endfor %}
     </div>
