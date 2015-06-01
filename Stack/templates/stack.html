@@ -7,6 +7,7 @@
 <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.ellipsis.min.js"></script>
 <link rel="stylesheet" href="{{ STATIC_URL }}css/challenge.css" type="text/css" media="screen"/>
 <link rel="stylesheet" href="{{ STATIC_URL }}css/stack.css" type="text/css" media="screen"/>
+{% load humanize %}
 {% endblock %}
 
 {% block content %}
@@ -78,7 +79,9 @@
   <!-- status -->
 
             <div class="status_space">
-              <b>Status:</b> <span>{{ challenge_dict.status.status }}</span>
+              <b>Status:</b> <span>{{ challenge_dict.status.status }} </span> 
+              {% if challenge_dict.submitted %}<div class="submission_time" style="display:inline"> (Handed in {{ challenge_dict.submission_time|naturaltime }})</div>{% endif %}
+			  
               {% if challenge_dict.points %}You received
                 <span style="font-weight:bold;">{{ challenge_dict.points }}</span> Points.
                 Full evaluation result inside.
@@ -106,7 +109,6 @@
                 {% endif %}
 
               </div> <!-- peer reviews -->
-              {% if challenge_dict.submitted %}<div class="submission_time">Submitted on: <b>{{ challenge_dict.submission_time }}</b></div>{% endif %}
             </div> <!-- status space -->
           </div> <!-- review-space -->
         </div> <!-- challenge_footer -->
