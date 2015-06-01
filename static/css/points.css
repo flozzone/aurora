@@ -46,8 +46,6 @@
 }
 
 .letztezeile {
-	border-bottom:0;
-	border-top:1px solid #ddd !important;
 }
 
 .slides {
@@ -58,7 +56,6 @@
 
 .sum td {
     font-weight: bold;
-	padding-bottom:1em;
 }
 
 .lineD {
@@ -68,3 +65,17 @@
 .lineH {
 
 }
+
+.final_list,.work_list,.sub_list {
+	display:none;
+	border-radius:0 0 3px 3px;
+	background:#eee;
+	margin-bottom:0.5em;
+	border-top:1px dotted silver;
+	box-shadow: 0 1px 2px rgba(0,0,0,0.1) inset;
+}
+
+
+
+
+
