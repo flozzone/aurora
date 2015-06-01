@@ -715,7 +715,7 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
                 refId = refObj.id.toString(10),
                 refType = refObj.type.toString(10);
             var href = $this.attr('href');
-            var new_link = "/comment_list_page/?ref_id=" + refId + "&ref_type=" + refType + "&";
+            var new_link = COMMENTS.LIST_PAGE_URL + "?ref_id=" + refId + "&ref_type=" + refType + "&";
             var new_href = href.replace(/.*\/\?/, new_link);
             $this.attr('href', new_href);
         });
