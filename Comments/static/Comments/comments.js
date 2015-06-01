@@ -511,10 +511,8 @@ var COMMENTS = (function (my, $, purgsLoadFilter) {
                 type: "POST",
                 dataType: 'html',
                 success: function () {
-                    $commentTextarea.val('');
+                    my.hideCommentForm();
                     my.startPolling();
-                    // TODO remove next line and make "Add Comment" appear again after commenting
-                    location.reload();
                 },
                 error: function (xhr, status) {
                 },

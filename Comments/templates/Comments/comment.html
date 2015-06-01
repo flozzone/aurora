@@ -44,9 +44,12 @@
        {% with notification_user_id=comment.author.id %}
 	         {% include "send_notification_button.html" %}
        {% endwith %}
-	  {% if not comment.author.is_staff %}&mdash;   <a href="/evaluation/user?id={{comment.author.id}}">{{comment.author.display_name}}'s work</a>{% endif %}
+       {% if not comment.author.is_staff %}
+         {% if course %}
+           &mdash;   <a href="{% url 'Evaluation:search_user' course.short_title %}?id={{comment.author.id}}">{{comment.author.display_name}}'s work</a>
+         {% endif %}
+       {% endif %}
      {% endif %}
-
 	 </div>
     <div class="comment_body">
 		<img src="{{ comment.author.avatar.url }}" onClick="$('#detail_{{comment.id}}').slideDown('fast')">
