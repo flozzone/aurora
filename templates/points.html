@@ -88,7 +88,7 @@
 		          <td class="sum punkte">{{ stack_data.started_points_available_total }}</td></tr>
 	</table><table class="work_list">
         {% for stack in stack_data.course_stacks %} <!-- loop 4: challenges started -->
-          {% if stack.is_started %}
+          {% if stack.is_started and not stack.is_submitted %}
             <tr class="pZeile{{ forloop.parentloop.counter }}">
               <td class="stack_name">
                 <a style="text-decoration:none; color:black;"
