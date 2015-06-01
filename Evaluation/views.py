@@ -871,6 +871,7 @@ def get_points(request, user, course):
                     continue
                 evaluated_points_earned_total += points_earned
                 evaluated_points_available_total += points_available
+                continue
             if is_submitted:
                 submitted_points_available_total += points_available
                 continue
