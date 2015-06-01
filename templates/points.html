@@ -17,7 +17,7 @@
           <td class="letztezeile sum">
 			  <a href="javascript:$('.final_list').toggle();void(0);" style="color:black;text-decoration:none">
 				  <i  style="color:#3AC958" class="fa fa-caret-square-o-down"></i> Awarded points so far</a></td>
-          <td class="letztezeile punkte">{{ stack_data.evaluated_points_earned_total }}/{{ stack_data.evaluated_points_available_total }}</td>
+          <td class="letztezeile punkte">{{ stack_data.evaluated_points_earned_total }}<span style="color:gray">/{{ stack_data.evaluated_points_available_total }}</span></td>
         </tr>
 		</table><table class="final_list">
 				{% for stack in stack_data.course_stacks %} <!-- loop 1: evaluated, valid challenges -->
@@ -64,7 +64,7 @@
           <td class="letztezeile sum">
 			  <a href="javascript:$('.sub_list').toggle();void(0);" style="color:black;text-decoration:none">
 			  	<i  style="color:#3AC958" class="fa fa-caret-square-o-down"></i> In Evaluation</td>
-          <td class="letztezeile punkte">{{ stack_data.submitted_points_available_total }}</td>
+          <td class="letztezeile punkte">{{ stack_data.submitted_points_available_total }}<span style="visibility:hidden">/{{ stack_data.evaluated_points_available_total }}</span></td>
         </tr>
 		</table><table class="sub_list">
         {% for stack in stack_data.course_stacks %} <!-- loop 3: challenges in evaluation -->
@@ -78,14 +78,14 @@
                 </a>
               </td>
               <td class="punkte" style="vertical-align:bottom;">
-                {{ stack.points_available }}
+                {{ stack.points_available }}<span style="visibility:hidden">/{{ stack_data.evaluated_points_available_total }}</span>
               </td>
             </tr>
           {% endif %}
         {% endfor %}
 		</table><table>
 		<tr class="sum"><td class="sum"><a href="javascript:$('.work_list').toggle();void(0);" style="color:black;text-decoration:none"><i style="color:#3AC958" class="fa fa-caret-square-o-down"></i> <span>Work in progress</span></a></td>
-		          <td class="sum punkte">{{ stack_data.started_points_available_total }}</td></tr>
+		          <td class="sum punkte">{{ stack_data.started_points_available_total }}<span style="visibility:hidden">/{{ stack_data.evaluated_points_available_total }}</span></td></tr>
 	</table><table class="work_list">
         {% for stack in stack_data.course_stacks %} <!-- loop 4: challenges started -->
           {% if stack.is_started and not stack.is_submitted %}
@@ -98,7 +98,7 @@
                 </a>
               </td>
               <td class="punkte" style="vertical-align:bottom;">
-                {{ stack.points_available }}
+                {{ stack.points_available }}<span style="visibility:hidden">/{{ stack_data.evaluated_points_available_total }}</span>
               </td>
             </tr>
           {% endif %}
@@ -108,7 +108,7 @@
           <td  style="color:gray">
 			 <i style="color:rgba(0,0,0,0);" class="fa fa-caret-square-o-down"></i> Optimistic Sum</td>
           <td class="punkte" style="vertical-align:bottom;color:gray">
-		   {{stack_data.evaluated_points_earned_total|add:stack_data.started_points_available_total|add:stack_data.submitted_points_available_total}}
+		   {{stack_data.evaluated_points_earned_total|add:stack_data.started_points_available_total|add:stack_data.submitted_points_available_total}}<span style="visibility:hidden">/{{ stack_data.evaluated_points_available_total }}</span>
 		  </td>
 	  	</tr>
         <tr>
