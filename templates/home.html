@@ -5,7 +5,7 @@
 
     <div id="info_column">
         {% if not user.is_staff %}
-            <div class="feed_header"  id="part_0"><i class="fa fa-toggle-down half"></i> <b>Ihr Punktestand</b></div>
+            <div class="feed_header"  id="part_0"><i class="fa fa-toggle-down half"></i> <b>Your work</b></div>
 			<div class="feed_column"  id="content_part_0">
             {% include 'points.html' %}
 			</div>
@@ -18,11 +18,12 @@
         <div class="feed_column" id="content_part_X">
 			<p><i style="color:gray" class="fa fa-arrow-right"></i> <a target="_blank" href="https://auri1-gsi.pbworks.com/w/page/77253689/FrontPage">Aurora Wiki</a><br>
 			<i style="color:gray" class="fa fa-arrow-right"></i> TUWEL <a target="_blank" href="https://tuwel.tuwien.ac.at/course/view.php?id=5575">gsi</a> <a target="_blank" href="https://tuwel.tuwien.ac.at/course/view.php?id=5581">bhci</a><br><br>
-			<i style="color:gray" class="fa fa-arrow-right"></i> <a href="/admin">django admin</a></p><br>
+			<i style="color:gray" class="fa fa-arrow-right"></i> <a href="/admin">django admin</a><br>
+			<i style="color:gray" class="fa fa-arrow-right"></i> some <a href="statistics">statistics</a></p><br>
 		</div>
 		{%  endif %}
         <div class="feed_header" id="part_1">
-			<i class="fa fa-toggle-down half"></i> <b>Informationen </b>
+			<i class="fa fa-toggle-down half"></i> <b>General Information </b>
 		</div>
         <div class="feed_column" id="content_part_1">
 			<p><b>Wesentliche Hinweise</b> ...<BR>
@@ -121,7 +122,7 @@
 	        <br><br>
 		</div>
         <div class="feed_header" id="part_3">
-			<i class="fa fa-toggle-down half"></i> <b>Vorlesungskalender
+			<i class="fa fa-toggle-down half"></i> <b>Lecture dates
 			{% if course.short_title == "hci" %}
 			BHCI
 			{% else %}

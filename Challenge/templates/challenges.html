@@ -3,6 +3,7 @@
 {% block additional_headers %}
   <script type="text/javascript" src="{{ STATIC_URL }}js/challenges.js"></script>
   <link rel="stylesheet" href="{{ STATIC_URL }}css/challenge.css" type="text/css" media="screen"/>
+  {% load humanize %}
 {% endblock %}
 
 {% block content %}
@@ -23,10 +24,14 @@
        	 	</div>
 		</div>
         <div class="description">{{ stack.stack.description|safe|urlize }}</div>
-{#       Status: <b>{{ stack.status.status }}.</b>#}
+
 		<div class="stack_status">
 			 <a href="stack?id={{ stack.stack.id }}" class="stack_action button XL" onclick="event.stopPropagation();">ENTER CHALLENGE</a>
-			 <div class="stack_next">Status: <b>{{ stack.status.next }} {% if stack.points != 0 %}{{ stack.points }}{% endif %}</b></div>
+			 <div class="stack_next">Status: <b>{{ stack.status.next }}
+				 {% if stack.points != 0 %}{{ stack.points }}
+				 {% endif %}</b>
+    			 {% if stack.submitted %}<div class="submission_time" style="display:inline"> (Handed in {{ stack.submission_time|naturaltime }})</div>{% endif %}
+			  </div>
 		</div>
 		<div class="stack_done" {% if stack.points != 0 %}style="display:block;"{% endif %}><i class="fa fa-check"></i></div>
  
