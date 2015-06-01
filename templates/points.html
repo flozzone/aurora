@@ -104,6 +104,13 @@
           {% endif %}
         {% endfor %}
 	</table><table>
+        <tr class="sum">
+          <td  style="color:gray">
+			 <i style="color:rgba(0,0,0,0);" class="fa fa-caret-square-o-down"></i> Optimistic Sum</td>
+          <td class="punkte" style="vertical-align:bottom;color:gray">
+		   {{stack_data.evaluated_points_earned_total|add:stack_data.started_points_available_total|add:stack_data.submitted_points_available_total}}
+		  </td>
+	  	</tr>
         <tr>
           <td colspan=2 style="padding-bottom:1em;">
                         <span class="punkte">
