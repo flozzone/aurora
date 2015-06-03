@@ -45,7 +45,7 @@
               <td class="stack_name">
                 <a style="text-decoration:none; color:black;"
                    href="/{{ course.short_title }}/challenge/stack?id={{ stack.stack.id }}">
-                  <i class="fa fa-times" style="color:red"></i>
+                  <i class="fa fa-times" style="color:#D00"></i>
                   <abbr title="{{ stack.status.status }}">{{ stack.stack.title }}</abbr>
                 </a>
               </td>
@@ -83,7 +83,7 @@
 	              <td class="stack_name">
 	                <a style="text-decoration:none; color:black;"
 	                   href="/{{ course.short_title }}/challenge/stack?id={{ stack.stack.id }}">
-	                  <i style="color:#3AC958" class="fa fa-circle-o"></i>
+	                  <i style="color:gray" class="fa fa-circle-o"></i>
 	                  <abbr title="{{ stack.status.status }}">{{ stack.stack.title }}</abbr>
 	                </a>
 	              </td>
@@ -112,9 +112,9 @@
 	                <a style="text-decoration:none; color:black;"
 	                   href="/{{ course.short_title }}/challenge/stack?id={{ stack.stack.id }}">
 					   {% if stack.is_blocked %}
-	                  		<i style="color:red" class="fa fa-times"></i>
+	                  		<i style="color:#D00" class="fa fa-times"></i>
 					   {% else %}
-	                  		<i style="color:#3AC958" class="fa fa-pencil"></i>
+	                  		<i style="color:gray" class="fa fa-pencil"></i>
 					   {% endif %}
 	                  <abbr title="{{ stack.status.status }}">{{ stack.stack.title }}</abbr>
 	                </a>
