@@ -252,6 +252,13 @@ th {
 	color:gray;
 }
 
+.edit-link {
+	text-transform:uppercase;
+	color:rgb(58,201,88)!important;
+	position:absolute;
+	right:0px;
+}
+
 .prev {
     float: left;
 }

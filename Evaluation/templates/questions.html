@@ -18,6 +18,7 @@
               <div class="challenge-headline">{{ challenge.title|safe }}</div>
                 {{ challenge.description|safe }}
             </div>
+			<br><a href="/admin/Challenge/challenge/{{challenge.id}}" class="edit-link" >edit challenge text</a>
         </div>
         <div>
             {% render_multi_comment_list for challenge %}
