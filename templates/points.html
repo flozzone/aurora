@@ -93,12 +93,20 @@
               <td class="stack_name">
                 <a style="text-decoration:none; color:black;"
                    href="/{{ course.short_title }}/challenge/stack?id={{ stack.stack.id }}">
-                  <i style="color:#3AC958" class="fa fa-pencil"></i>
+				   {% if stack.is_blocked %}
+                  		<i style="color:red" class="fa fa-times"></i>
+				   {% else %}
+                  		<i style="color:#3AC958" class="fa fa-pencil"></i>
+				   {% endif %}
                   <abbr title="{{ stack.status.status }}">{{ stack.stack.title }}</abbr>
                 </a>
               </td>
               <td class="punkte" style="vertical-align:bottom;">
-                {{ stack.points_available }}<span style="visibility:hidden">/{{ stack_data.evaluated_points_available_total }}</span>
+				   {% if stack.is_blocked %}
+				   		<span style="color:lightgray">0</span><span style="visibility:hidden">/{{ stack_data.evaluated_points_available_total }}</span>
+				   {% else %}
+						{{ stack.points_available }}<span style="visibility:hidden">/{{ stack_data.evaluated_points_available_total }}</span>
+				   {% endif %}
               </td>
             </tr>
           {% endif %}
