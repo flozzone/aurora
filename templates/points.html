@@ -63,58 +63,74 @@
         </tr>
 		</table></div><table>
 
-        <tr class="sum">
-          <td class="letztezeile sum">
-			  <a href="javascript:tggle('.sub_list');void(0);" style="color:black;text-decoration:none">
-			  	<i  style="color:#3AC958" class="fa fa-caret-square-o-down"></i> In Evaluation</td>
-          <td class="letztezeile punkte">{{ stack_data.submitted_points_available_total }}<span style="visibility:hidden">/{{ stack_data.evaluated_points_available_total }}</span></td>
-        </tr>
-		</table><div class="sub_list" style="display:none"><table>
-        {% for stack in stack_data.course_stacks %} <!-- loop 3: challenges in evaluation -->
-          {% if stack.is_submitted and stack.status.status != "Evaluated." %}
-            <tr class="pZeile{{ forloop.parentloop.counter }}">
-              <td class="stack_name">
-                <a style="text-decoration:none; color:black;"
-                   href="/{{ course.short_title }}/challenge/stack?id={{ stack.stack.id }}">
-                  <i style="color:#3AC958" class="fa fa-circle-o"></i>
-                  <abbr title="{{ stack.status.status }}">{{ stack.stack.title }}</abbr>
-                </a>
-              </td>
-              <td class="punkte" style="vertical-align:bottom;">
-                {{ stack.points_available }}<span style="visibility:hidden">/{{ stack_data.evaluated_points_available_total }}</span>
-              </td>
-            </tr>
-          {% endif %}
-        {% endfor %}
-		</table></div><table>
-		<tr class="sum"><td class="sum"><a href="javascript:tggle('.work_list');void(0);" style="color:black;text-decoration:none"><i style="color:#3AC958" class="fa fa-caret-square-o-down"></i> <span>Work in progress</span></a></td>
-		          <td class="sum punkte">{{ stack_data.started_points_available_total }}<span style="visibility:hidden">/{{ stack_data.evaluated_points_available_total }}</span></td></tr>
-	</table><div class="work_list"  style="display:none"><table>
-        {% for stack in stack_data.course_stacks %} <!-- loop 4: challenges started -->
-          {% if stack.is_started and not stack.is_submitted %}
-            <tr class="pZeile{{ forloop.parentloop.counter }}">
-              <td class="stack_name">
-                <a style="text-decoration:none; color:black;"
-                   href="/{{ course.short_title }}/challenge/stack?id={{ stack.stack.id }}">
-				   {% if stack.is_blocked %}
-                  		<i style="color:red" class="fa fa-times"></i>
-				   {% else %}
-                  		<i style="color:#3AC958" class="fa fa-pencil"></i>
-				   {% endif %}
-                  <abbr title="{{ stack.status.status }}">{{ stack.stack.title }}</abbr>
-                </a>
-              </td>
-              <td class="punkte" style="vertical-align:bottom;">
-				   {% if stack.is_blocked %}
-				   		<span style="color:lightgray">0</span><span style="visibility:hidden">/{{ stack_data.evaluated_points_available_total }}</span>
-				   {% else %}
-						{{ stack.points_available }}<span style="visibility:hidden">/{{ stack_data.evaluated_points_available_total }}</span>
-				   {% endif %}
-              </td>
-            </tr>
-          {% endif %}
-        {% endfor %}
-	</table></div><table>
+		{% if stack_data.submitted_points_available_total == 0 %}
+	        <tr class="sum">
+	          <td class="letztezeile sum" style="color:gray">
+				  	<i  style="visibility:hidden" class="fa fa-caret-square-o-down"></i> In Evaluation</td>
+	          <td class="letztezeile punkte" style="color:gray">&ndash;<span style="visibility:hidden">/{{ stack_data.evaluated_points_available_total }}</span></td>
+	        </tr>
+		{% else %}
+	        <tr class="sum">
+	          <td class="letztezeile sum">
+				  <a href="javascript:tggle('.sub_list');void(0);" style="color:black;text-decoration:none">
+				  	<i  style="color:#3AC958" class="fa fa-caret-square-o-down"></i> In Evaluation</td>
+	          <td class="letztezeile punkte">{{ stack_data.submitted_points_available_total }}<span style="visibility:hidden">/{{ stack_data.evaluated_points_available_total }}</span></td>
+	        </tr>
+			</table><div class="sub_list" style="display:none"><table>
+	        {% for stack in stack_data.course_stacks %} <!-- loop 3: challenges in evaluation -->
+	          {% if stack.is_submitted and stack.status.status != "Evaluated." %}
+	            <tr class="pZeile{{ forloop.parentloop.counter }}">
+	              <td class="stack_name">
+	                <a style="text-decoration:none; color:black;"
+	                   href="/{{ course.short_title }}/challenge/stack?id={{ stack.stack.id }}">
+	                  <i style="color:#3AC958" class="fa fa-circle-o"></i>
+	                  <abbr title="{{ stack.status.status }}">{{ stack.stack.title }}</abbr>
+	                </a>
+	              </td>
+	              <td class="punkte" style="vertical-align:bottom;">
+	                {{ stack.points_available }}<span style="visibility:hidden">/{{ stack_data.evaluated_points_available_total }}</span>
+	              </td>
+	            </tr>
+	          {% endif %}
+	        {% endfor %}
+			</table></div><table>
+		{% endif %}
+		{% if stack_data.started_points_available_total == 0 %}
+	        <tr class="sum">
+	          <td class="letztezeile sum" style="color:gray">
+				  	<i  style="visibility:hidden" class="fa fa-caret-square-o-down"></i> Work in progress</td>
+	          <td class="letztezeile punkte" style="color:gray">&ndash;<span style="visibility:hidden">/{{ stack_data.evaluated_points_available_total }}</span></td>
+	        </tr>
+		{% else %}
+			<tr class="sum"><td class="sum"><a href="javascript:tggle('.work_list');void(0);" style="color:black;text-decoration:none"><i style="color:#3AC958" class="fa fa-caret-square-o-down"></i> <span>Work in progress</span></a></td>
+			          <td class="sum punkte">{{ stack_data.started_points_available_total }}<span style="visibility:hidden">/{{ stack_data.evaluated_points_available_total }}</span></td></tr>
+			</table><div class="work_list"  style="display:none"><table>
+	        {% for stack in stack_data.course_stacks %} <!-- loop 4: challenges started -->
+	          {% if stack.is_started and not stack.is_submitted %}
+	            <tr class="pZeile{{ forloop.parentloop.counter }}">
+	              <td class="stack_name">
+	                <a style="text-decoration:none; color:black;"
+	                   href="/{{ course.short_title }}/challenge/stack?id={{ stack.stack.id }}">
+					   {% if stack.is_blocked %}
+	                  		<i style="color:red" class="fa fa-times"></i>
+					   {% else %}
+	                  		<i style="color:#3AC958" class="fa fa-pencil"></i>
+					   {% endif %}
+	                  <abbr title="{{ stack.status.status }}">{{ stack.stack.title }}</abbr>
+	                </a>
+	              </td>
+	              <td class="punkte" style="vertical-align:bottom;">
+					   {% if stack.is_blocked %}
+					   		<span style="color:lightgray">0</span><span style="visibility:hidden">/{{ stack_data.evaluated_points_available_total }}</span>
+					   {% else %}
+							{{ stack.points_available }}<span style="visibility:hidden">/{{ stack_data.evaluated_points_available_total }}</span>
+					   {% endif %}
+	              </td>
+	            </tr>
+	          {% endif %}
+	        {% endfor %}
+			</table></div><table>
+		{% endif %}
         <tr class="sum">
           <td  style="color:gray">
 			 <i style="color:rgba(0,0,0,0);" class="fa fa-caret-square-o-down"></i> Optimistic Sum</td>
