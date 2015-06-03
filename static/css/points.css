@@ -75,6 +75,18 @@
 	box-shadow: 0 1px 2px rgba(0,0,0,0.1) inset;
 }
 
+.tr_border_L {
+	border-left:3px groove lightgray;
+	border-top:3px groove lightgray;
+	border-top-left-radius:3px;
+}
+
+.tr_border_R {
+	border-right:1px solid lightgray;
+	border-top:1px solid lightgray;
+	border-top-right-radius:3px;
+}
+
 
 
 
