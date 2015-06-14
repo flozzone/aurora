@@ -107,10 +107,24 @@ def commenter_top_x(course, x):
 
 
 def tutor_statistics(course):
-    return (
-        Evaluation.objects
-            .filter(submission__challenge__course=course)
-            .filter(submission_time__isnull=False)
-            .values('tutor__id', 'tutor__nickname')
-            .annotate(evaluations=Count('tutor__id'))
-    )
+    tutors = AuroraUser.objects.filter(is_staff=True).values('id', 'nickname').order_by('id')
+    for tutor in tutors:
+        tutor['evaluations'] = (
+            Evaluation.objects
+                .filter(submission__challenge__course=course)
+                .filter(submission_time__isnull=False)
+                .filter(tutor__id=tutor['id'])
+                .count()
+        )
+        tutor['reviews'] = (
+            Review.objects
+            .filter(elaboration__challenge__course=course)
+            .filter(reviewer__id=tutor['id'])
+            .count()
+        )
+        tutor['comments'] = (
+            Comment.objects
+            .filter(author__id=tutor['id'])
+            .count()
+        )
+    return tutors

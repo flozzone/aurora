@@ -8,5 +8,9 @@ table {
 
 .points-table {
     color: gray;
+}
 
+.tutor-table {
+    color: gray;
+    width: 600px;
 }

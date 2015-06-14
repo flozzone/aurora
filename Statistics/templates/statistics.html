@@ -78,7 +78,7 @@
         </tr>
     </table>
     <br>
-    <table>
+    <table class="tutor-table">
         <tr>
             <th>
                 tutor id
@@ -89,17 +89,29 @@
             <th>
                 evaluations
             </th>
+            <th>
+                reviews
+            </th>
+            <th>
+                comments
+            </th>
         </tr>
     {% for tutor in tutors %}
-      <tr>
+        <tr>
             <td>
-                {{ tutor.tutor__id }}
+                {{ tutor.id }}
             </td>
             <td>
-                {{ tutor.tutor__nickname }}
+                {{ tutor.nickname }}
             </td>
             <td>
                 {{ tutor.evaluations }}
+            </td>
+            <td>
+                {{ tutor.reviews }}
+            </td>
+            <td>
+                {{ tutor.comments }}
             </td>
         </tr>
     {% endfor %}
