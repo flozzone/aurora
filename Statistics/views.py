@@ -29,6 +29,9 @@ def statistics(request, course_short_title=None):
     data['students_with_more_than_55_points'] = students_with_more_than_x_points(course, 55)
     data['students_with_more_than_60_points'] = students_with_more_than_x_points(course, 60)
     data['review_evaluations'] = review_evaluations(course)
+    data['review_evaluations_positive'] = review_evaluations_positive(course)
+    data['review_evaluations_default'] = review_evaluations_default(course)
+    data['review_evaluations_negative'] = review_evaluations_negative(course)
     data['reviews'] = reviews(course)
     data['commenter_top_25'] = commenter_top_x(course, 25)
     data['tutors'] = tutor_statistics(course)
@@ -83,6 +86,33 @@ def review_evaluations(course):
     return (
         ReviewEvaluation.objects
             .filter(review__elaboration__challenge__course=course)
+            .count()
+    )
+
+
+def review_evaluations_positive(course):
+    return (
+        ReviewEvaluation.objects
+            .filter(review__elaboration__challenge__course=course)
+            .filter(appraisal=ReviewEvaluation.POSITIVE)
+            .count()
+    )
+
+
+def review_evaluations_default(course):
+    return (
+        ReviewEvaluation.objects
+            .filter(review__elaboration__challenge__course=course)
+            .filter(appraisal=ReviewEvaluation.DEFAULT)
+            .count()
+    )
+
+
+def review_evaluations_negative(course):
+    return (
+        ReviewEvaluation.objects
+            .filter(review__elaboration__challenge__course=course)
+            .filter(appraisal=ReviewEvaluation.NEGATIVE)
             .count()
     )
 

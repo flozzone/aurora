@@ -22,7 +22,43 @@
     ≥ 55: <span style="color:#888;"><script>for (i=0;i<Math.round(({{ students_with_more_than_55_points }}+4)/10);i++)document.write('█');</script></span> {{ students_with_more_than_55_points }} <br>
     ≥ 60: <span style="color:#888;"><script>for (i=0;i<Math.round(({{ students_with_more_than_60_points }}+4)/10);i++)document.write('█');</script></span> {{ students_with_more_than_60_points }} <br>
     <br>
-    review evaluations: {{ review_evaluations }}/{{ reviews }}<br>
+    review evaluations:<br>
+    <table class="review-evaluation-table">
+        <tr>
+            <th>
+                helpful
+            </th>
+            <th>
+                average
+            </th>
+            <th>
+                meaningless/offensive
+            </th>
+            <th>
+                total
+            </th>
+            <th>
+                no. of reviews
+            </th>
+        </tr>
+        <tr>
+            <td>
+                {{ review_evaluations_positive }}
+            </td>
+            <td>
+                {{ review_evaluations_default }}
+            </td>
+            <td>
+                {{ review_evaluations_negative }}
+            </td>
+            <td>
+                {{ review_evaluations }}
+            </td>
+            <td>
+                {{ reviews }}
+            </td>
+        </tr>
+    </table>
     <br>
 
     top 25 commenter<br>
