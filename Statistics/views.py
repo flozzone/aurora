@@ -31,6 +31,7 @@ def statistics(request, course_short_title=None):
     data['review_evaluations'] = review_evaluations(course)
     data['reviews'] = reviews(course)
     data['commenter_top_25'] = commenter_top_x(course, 25)
+    data['tutors'] = tutor_statistics(course)
     return render_to_response('statistics.html', data, context_instance=RequestContext(request))
 
 
@@ -102,5 +103,14 @@ def commenter_top_x(course, x):
             .order_by('-count')
         [:x]
     )
-    print(commenters)
     return commenters
+
+
+def tutor_statistics(course):
+    return (
+        Evaluation.objects
+            .filter(submission__challenge__course=course)
+            .filter(submission_time__isnull=False)
+            .values('tutor__id', 'tutor__nickname')
+            .annotate(evaluations=Count('tutor__id'))
+    )
