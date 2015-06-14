@@ -24,10 +24,11 @@ students with points<br>
 <br>
 review evaluations: {{ review_evaluations }}/{{ reviews }}<br>
 <br>
-top 20 commenter<br>
-{% for commenter in commenter_top_20 %}
-  {{ forloop.counter }}: {{ commenter.author__nickname }} with {{ commenter.count }} comments<br>
+top 25 commenter<br>
+{% for commenter in commenter_top_25 %}
+  {{ forloop.counter }}: {% if commenter.author__is_staff %}*{% endif %}{{ commenter.author__nickname }} with {{ commenter.count }} comments<br>
 {% endfor %}
+*: staff user
 </p>
 <table style="color:gray;margin-left:1em;width:400px"><tr><td>{{ students_with_more_than_30_points }}</td><td>{{ students_with_more_than_35_points }}</td><td>{{ students_with_more_than_40_points }}</td><td>{{ students_with_more_than_45_points }}</td><td>{{ students_with_more_than_50_points }}</td><td>{{ students_with_more_than_55_points }}</td><td>{{ students_with_more_than_60_points }}</td></tr></table>
 
