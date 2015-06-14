@@ -118,13 +118,13 @@ def tutor_statistics(course):
         )
         tutor['reviews'] = (
             Review.objects
-            .filter(elaboration__challenge__course=course)
-            .filter(reviewer__id=tutor['id'])
-            .count()
+                .filter(elaboration__challenge__course=course)
+                .filter(reviewer__id=tutor['id'])
+                .count()
         )
         tutor['comments'] = (
             Comment.objects
-            .filter(author__id=tutor['id'])
-            .count()
+                .filter(author__id=tutor['id'])
+                .count()
         )
     return tutors
