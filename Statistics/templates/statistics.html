@@ -1,34 +1,137 @@
 {% extends "base.html" %}
 
+{% block additional_headers %}
+  <link rel="stylesheet" href="{{ STATIC_URL }}/css/statistics.css" type="text/css" media="screen"/>
+{% endblock %}
+
 {% block content %}
 
-<style>
-p {padding:1em;}
+<div class="statistics">
+    students admitted: {{ students }}<br>
+    <br>
+    students with at least one challenge submission: {{ students_with_at_least_one_submission }}<br>
+    <br>
+    started tasks: {{ started_challenges }}/{{ elaborations }}<br>
+    <br>
+    <b>students with points</b><br>
+    ≥ 30: <span style="color:#888;"><script>for (i=0;i<Math.round(({{ students_with_more_than_30_points }}+4)/10);i++)document.write('█');</script></span> {{ students_with_more_than_30_points }} <br>
+    ≥ 35: <span style="color:#888;"><script>for (i=0;i<Math.round(({{ students_with_more_than_35_points }}+4)/10);i++)document.write('█');</script></span> {{ students_with_more_than_35_points }} <br>
+    ≥ 40: <span style="color:#888;"><script>for (i=0;i<Math.round(({{ students_with_more_than_40_points }}+4)/10);i++)document.write('█');</script></span> {{ students_with_more_than_40_points }} <br>
+    ≥ 45: <span style="color:#888;"><script>for (i=0;i<Math.round(({{ students_with_more_than_45_points }}+4)/10);i++)document.write('█');</script></span> {{ students_with_more_than_45_points }} <br>
+    ≥ 50: <span style="color:#888;"><script>for (i=0;i<Math.round(({{ students_with_more_than_50_points }}+4)/10);i++)document.write('█');</script></span> {{ students_with_more_than_50_points }} <br>
+    ≥ 55: <span style="color:#888;"><script>for (i=0;i<Math.round(({{ students_with_more_than_55_points }}+4)/10);i++)document.write('█');</script></span> {{ students_with_more_than_55_points }} <br>
+    ≥ 60: <span style="color:#888;"><script>for (i=0;i<Math.round(({{ students_with_more_than_60_points }}+4)/10);i++)document.write('█');</script></span> {{ students_with_more_than_60_points }} <br>
+    <br>
+    <b>review evaluations</b><br>
+    <table >
+        <tr>
+            <td>
+                helpful
+            </td>
+            <td width=75 align="right">
+                {{ review_evaluations_positive }}
+            </td><td></td>
+		</tr>
+		<tr>
+			<td>
+				average
+			</td>
+            <td width=75 align="right">
+                {{ review_evaluations_default }}
+            </td><td></td>
+		</tr>
+		<tr>
+            <td style="border-bottom:1px solid silver">
+                meaningless/offensive
+            </td>
+            <td width=75 align="right" style="border-bottom:1px solid silver">
+                {{ review_evaluations_negative }}
+            </td><td style="border-bottom:1px solid silver"></td>
+		</tr>
+		<tr>
+            <td>
+                total
+            </td>
+            <td width=75 align="right">
+                {{ review_evaluations }} 
+            </td>
+			<td width=100 align="right">
+				of {{ reviews }}
+			</td>
+        </tr>
+    </table>
+    <br>
 
-</style>
-<p>
-students admitted: {{ students }}<br>
 <br>
-students with at least one challenge submission: {{ students_with_at_least_one_submission }}<br>
+    <table>
+		<tr>    
+			<td><b>top 25 commenter</b></td>
+			<td>#comm.</td>
+		</tr>
+    {% for commenter in commenter_top_25 %}
+        <tr>
+            <td {% if commenter.author__is_staff %}style="background:#E5EBFD;"{% endif %}>
+                {{ commenter.author__nickname }}
+            </td>
+            <td align="right" {% if commenter.author__is_staff %}style="background:#E5EBFD;"{% endif %}>
+               {{ commenter.count }}
+            </td>
+        </tr>
+    {% endfor %}
+    </table>
+    <br>
+    <table class="tutor-table">
+        <tr>
+            <td width="">
+                <b>tutor metrics</b></td>
+            <td width="75" align="right">
+               evals</td>
+            <td width="75" align="right">
+               reviews</td>
+            <td width="75" align="right">
+               comm.</td>
+        </tr>
+    {% for tutor in tutors %}
+        <tr style="background:{%cycle '#eee' 'white'%}">
+            <td>
+                {{ tutor.nickname }}
+            </td>
+            <td align="right">
+                {{ tutor.evaluations }}
+            </td>
+            <td align="right">
+                {{ tutor.reviews }}
+            </td>
+            <td align="right">
+                {{ tutor.comments }}
+            </td>
+        </tr>
+    {% endfor %}
+    </table>
 <br>
-started tasks: {{ started_challenges }}/{{ elaborations }}<br>
-<br>
-students with points<br>
-≥ 30: <span style="color:#888;"><script>for (i=0;i<Math.round(({{ students_with_more_than_30_points }}+4)/10);i++)document.write('█');</script></span> {{ students_with_more_than_30_points }} <br>
-≥ 35: <span style="color:#888;"><script>for (i=0;i<Math.round(({{ students_with_more_than_35_points }}+4)/10);i++)document.write('█');</script></span> {{ students_with_more_than_35_points }} <br>
-≥ 40: <span style="color:#888;"><script>for (i=0;i<Math.round(({{ students_with_more_than_40_points }}+4)/10);i++)document.write('█');</script></span> {{ students_with_more_than_40_points }} <br>
-≥ 45: <span style="color:#888;"><script>for (i=0;i<Math.round(({{ students_with_more_than_45_points }}+4)/10);i++)document.write('█');</script></span> {{ students_with_more_than_45_points }} <br>
-≥ 50: <span style="color:#888;"><script>for (i=0;i<Math.round(({{ students_with_more_than_50_points }}+4)/10);i++)document.write('█');</script></span> {{ students_with_more_than_50_points }} <br>
-≥ 55: <span style="color:#888;"><script>for (i=0;i<Math.round(({{ students_with_more_than_55_points }}+4)/10);i++)document.write('█');</script></span> {{ students_with_more_than_55_points }} <br>
-≥ 60: <span style="color:#888;"><script>for (i=0;i<Math.round(({{ students_with_more_than_60_points }}+4)/10);i++)document.write('█');</script></span> {{ students_with_more_than_60_points }} <br>
-<br>
-review evaluations: {{ review_evaluations }}/{{ reviews }}<br>
-<br>
-top 20 commenter<br>
-{% for commenter in commenter_top_20 %}
-  {{ forloop.counter }}: {{ commenter.author__nickname }} with {{ commenter.count }} comments<br>
-{% endfor %}
-</p>
-<table style="color:gray;margin-left:1em;width:400px"><tr><td>{{ students_with_more_than_30_points }}</td><td>{{ students_with_more_than_35_points }}</td><td>{{ students_with_more_than_40_points }}</td><td>{{ students_with_more_than_45_points }}</td><td>{{ students_with_more_than_50_points }}</td><td>{{ students_with_more_than_55_points }}</td><td>{{ students_with_more_than_60_points }}</td></tr></table>
-
+    <table class="points-table" width="600">
+        <tr>
+            <td>
+                {{ students_with_more_than_30_points }}
+            </td>
+            <td>
+                {{ students_with_more_than_35_points }}
+            </td>
+            <td>
+                {{ students_with_more_than_40_points }}
+            </td>
+            <td>{{ students_with_more_than_45_points }}
+            </td>
+            <td>
+                {{ students_with_more_than_50_points }}
+            </td>
+            <td>
+                {{ students_with_more_than_55_points }}
+            </td>
+            <td>
+                {{ students_with_more_than_60_points }}
+            </td>
+        </tr>
+    </table>
+</div>
 {% endblock %}document.write('►')
