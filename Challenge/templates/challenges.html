@@ -13,8 +13,9 @@
 	  <div class="not_stack">
 		  Zur Zeit stehen folgende Challenges zur Verf&uuml;gung. Mehr werden im Laufe des Semesters hinzugef&uuml;gt. Bitte beachten Sie die allgemeinen Regeln, die in <a href="http://igw.tuwien.ac.at/aurora/aurora_challenges.pdf">Arbeiten in Aurora</a> und <a href="http://igw.tuwien.ac.at/aurora/aurora_reviews.pdf">zum Schreiben von Reviews</a> zusammengefasst sind.   
 	  </div>
+	  <div class="stack_action button XL" onClick="javascript:$('.finished_challenge').toggle()">toggle finished challenges</div><br><br>
     {% for stack in course_stacks|dictsort:"stack.title" %}
-      <div class="stack {% cycle 'lineD' 'lineL' %}" id="{{ stack.stack.id }}">
+      <div class="stack {% cycle 'lineD' 'lineL' %}  {% if stack.points != 0 %}finished{% endif %}" id="{{ stack.stack.id }}">
 		<div class="title">
 			<b>{{ stack.stack.title|safe }}:</b> {{ stack.stack.get_challenge_image_urls|length }} Tasks
 			<div class="stack_icons" style="float:right">
@@ -23,9 +24,9 @@
         		{% endfor %}
        	 	</div>
 		</div>
-        <div class="description">{{ stack.stack.description|safe|urlize }}</div>
+        <div class="description  {% if stack.points != 0 %}finished_challenge{% endif %}">{{ stack.stack.description|safe|urlize }}</div>
 
-		<div class="stack_status">
+		<div class="stack_status  {% if stack.points != 0 %}finished_challenge{% endif %}">
 			 <a href="stack?id={{ stack.stack.id }}" class="stack_action button XL" onclick="event.stopPropagation();">ENTER CHALLENGE</a>
 			 <div class="stack_next">Status: <b>{{ stack.status.next }}
 				 {% if stack.points != 0 %}{{ stack.points }}

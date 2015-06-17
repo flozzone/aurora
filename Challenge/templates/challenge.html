@@ -135,7 +135,7 @@
       {% endif %}
     </div>
 {% else %}
-	Handed in <a style="color:black;text-decoration: none;" href="javascript:$('#wai_t').text('{{ elaboration.submission_time|date:'j. F, H:i' }}');setTimeout(function(){ $('#wai_t').text('{{elaboration.submission_time|naturaltime}}'); }, 3000);void(0);" title="{{ elaboration.submission_time|date:'j. F, H:i' }}"><i class="fa fa-calendar"></i> <span ID="wai_t">{{ elaboration.submission_time|naturaltime }}</span>
+	Handed in <a style="color:black;text-decoration: none;" href="javascript:$('#wai_t').text('{{ elaboration.submission_time|date:'j. F, H:i' }}');setTimeout(function(){ $('#wai_t').text('{{elaboration.submission_time|naturaltime}}'); }, 3000);void(0);" title="{{ elaboration.submission_time|date:'j. F, H:i' }}"><i class="fa fa-calendar"></i></a> <span ID="wai_t">{{ elaboration.submission_time|naturaltime }}</span>
 	{% if challenge.accepted_files %}
 	{% render_uploads elaboration %}
 	{% endif %}
