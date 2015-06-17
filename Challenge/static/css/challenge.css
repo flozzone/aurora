@@ -131,6 +131,7 @@
 	clear:both;
 }
 
+
 h1 {
     margin: 10px;
 
@@ -199,11 +200,11 @@ h1 {
 .stack_done {
 	display:none;
 	position:absolute;
-	top:-60px;
-	left:-20px;
+	top:-30px;
+	left:0px;
 	margin-left:10px;
-	font-size:240px;
-	color:white;
+	font-size:140px;
+	color:rgba(58,201,88,0.2);
 	z-index:101;
 	/*color:rgb(58,201,88);*/
 }
@@ -232,6 +233,12 @@ h1 {
 	box-shadow:0px 2px 7px rgba(0,0,0,0.1);
 	border-top:1px solid #e8e8e8;
 	border-top:1px solid #e8e8e8;
+}
+
+.finished {
+	background:rgba(252,252,252,1)!important;
+	box-shadow:0px 1px 3px rgba(0,0,0,0.1)!important;
+
 }
 
 .stack .description {
