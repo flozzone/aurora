@@ -27,8 +27,8 @@
 		<div id="content_all_the_news">
 		<ul class="toolbar">
 			<li class="button filterbtn" id="1" title="Show all comments" onclick="filterClick(this.id,'{{user.username}}');"><i class="fa fa-eye"></i> All</li>
+			<li class="button filterbtn" id="3" title="Show only top-level comments from the course team" onclick="filterClick(this.id,'{{user.username}}');"><i class="fa fa-eye"></i> Announcements</li>
 			<li class="button filterbtn" id="2" title="Show only comments posted by lecturers, tutors or yourself" onclick="filterClick(this.id,'{{user.username}}');"><i class="fa fa-eye"></i> Lecturer Comments</li>
-			<li class="button filterbtn" id="3" title="Show only comments rated higher than 3, plus your own comments" onclick="filterClick(this.id,'{{user.username}}');"><i class="fa fa-eye"></i> good comments</li>
 			<li class="button filterbtn" id="4" title="Show only top-level comments, hide all replies." onclick="filterClick(this.id,'{{user.username}}');"><i class="fa fa-eye"></i> no replies</li>
 			<li class="button filterbtn" id="0" title="Show only comments posted after you activate this filter" onclick="markT('{{user.username}}');filterClick(this.id,'{{user.username}}')"><i class="fa fa-eye"></i> new <span id="new_date"></span></li>
 			{% if user.is_staff %}

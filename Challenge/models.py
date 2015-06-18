@@ -64,7 +64,7 @@ class Challenge(models.Model):
         4: "Waiting for more reviews.",
         5: "All reviews are in, you can start the final task.",
         6: "Still waiting for evaluation of final task.",
-        7: "Final task evaluated. Points received: "
+        7: "Challenge evaluated. Points received: "
     }
 
     def __str__(self):
