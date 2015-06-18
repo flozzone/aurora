@@ -92,10 +92,9 @@ function filter(fx,usr) {
             $('.response:not(.staff_author):not(.author_author),.comment:not(.staff_author):not(.author_author)').addClass('hided');
             $('#' + $('.response.staff_author').parent().attr('class').split(' ')[0].slice(2)).removeClass('hided');
             break;
-        case 3: // good comments 
-            $('.response,.comment,.r_list').removeClass('hided');
-            $('.r_list').show();
-            $('.not3:not(.author_author)').addClass('hided');
+        case 3: // lecturer top level 
+            $('.response,.comment,.r_list').addClass('hided');
+            $('.comment.staff_author').removeClass('hided');
             break;
 		case 4:  // top-level comments, no replies
             $('.response,.comment,.r_list').removeClass('hided');

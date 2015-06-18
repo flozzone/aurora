@@ -3,7 +3,6 @@
 }
 
 table {
-    width: 400px;
 }
 
 .points-table {
@@ -11,8 +10,6 @@ table {
 }
 
 .tutor-table {
-    color: gray;
-    width: 600px;
 }
 
 .review-evaluation-table {
