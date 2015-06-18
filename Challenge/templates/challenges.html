@@ -15,7 +15,7 @@
 	  </div>
 	  <div class="stack_action button XL" onClick="javascript:$('.finished_challenge').toggle()">toggle finished challenges</div><br><br>
     {% for stack in course_stacks|dictsort:"stack.title" %}
-      <div class="stack {% cycle 'lineD' 'lineL' %}  {% if stack.points != 0 %}finished{% endif %}" id="{{ stack.stack.id }}">
+      <div class="stack {% cycle 'lineD' 'lineL' %}  {% if stack.submitted %}finished{% endif %}" id="{{ stack.stack.id }}">
 		<div class="title">
 			<b>{{ stack.stack.title|safe }}:</b> {{ stack.stack.get_challenge_image_urls|length }} Tasks
 			<div class="stack_icons" style="float:right">
@@ -24,12 +24,12 @@
         		{% endfor %}
        	 	</div>
 		</div>
-        <div class="description  {% if stack.points != 0 %}finished_challenge{% endif %}">{{ stack.stack.description|safe|urlize }}</div>
+        <div class="description  {% if stack.submitted %}finished_challenge{% endif %}">{{ stack.stack.description|safe|urlize }}</div>
 
-		<div class="stack_status  {% if stack.points != 0 %}finished_challenge{% endif %}">
+		<div class="stack_status  {% if stack.submitted %}finished_challenge{% endif %}">
 			 <a href="stack?id={{ stack.stack.id }}" class="stack_action button XL" onclick="event.stopPropagation();">ENTER CHALLENGE</a>
 			 <div class="stack_next">Status: <b>{{ stack.status.next }}
-				 {% if stack.points != 0 %}{{ stack.points }}
+				 {% if stack.points != 0 %}{{ stack.points }} {% else %} {% if stack.submitted %} 0 {% endif %}
 				 {% endif %}</b>
     			 {% if stack.submitted %}<div class="submission_time" style="display:inline"> (Handed in {{ stack.submission_time|naturaltime }})</div>{% endif %}
 			  </div>
