@@ -94,7 +94,6 @@ function filter(fx,usr) {
             break;
         case 3: // lecturer top level 
             $('.response,.comment,.r_list').addClass('hided');
-            $('.r_list').show();
             $('.comment.staff_author').removeClass('hided');
             break;
 		case 4:  // top-level comments, no replies
