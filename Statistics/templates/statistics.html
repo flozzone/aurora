@@ -134,5 +134,28 @@
             </td>
         </tr>
     </table>
+
+    <br>
+
+    <table>
+		<tr>
+			<td><b>top 10 review evaluating students</b></td>
+			<td>#review evaluations</td>
+            <td>% of total</td>
+		</tr>
+    {% for student in review_evaluating_students_top_10 %}
+        <tr>
+            <td>
+                {{ student.nickname }}
+            </td>
+            <td align="right">
+               {{ student.count }}
+            </td>
+            <td align="right">
+               {{ student.percent }}
+            </td>
+        </tr>
+    {% endfor %}
+    </table>
 </div>
 {% endblock %}document.write('►')

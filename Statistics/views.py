@@ -35,6 +35,7 @@ def statistics(request, course_short_title=None):
     data['reviews'] = reviews(course)
     data['commenter_top_25'] = commenter_top_x(course, 25)
     data['tutors'] = tutor_statistics(course)
+    data['review_evaluating_students_top_10'] = review_evaluating_students_top_x(course, 10)
     return render_to_response('statistics.html', data, context_instance=RequestContext(request))
 
 
@@ -158,3 +159,29 @@ def tutor_statistics(course):
                 .count()
         )
     return tutors
+
+
+def review_evaluating_students_top_x(course, x):
+    students = (
+        ReviewEvaluation.objects
+            .values('user__id', 'user__nickname')
+            .annotate(count=Count('user'))
+            .order_by('-count')
+        [:x]
+    )
+    result = []
+    for student in students:
+        data = {
+            'id': student['user__id'],
+            'nickname': student['user__nickname'],
+            'count': student['count']
+        }
+
+        total = (
+            Review.objects
+                .filter(elaboration__user__id=student['user__id'])
+                .count()
+            )
+        data['percent'] = int((data['count'] / total) * 100)
+        result.append(data)
+    return result
