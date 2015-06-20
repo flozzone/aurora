@@ -164,6 +164,7 @@ def tutor_statistics(course):
 def review_evaluating_students_top_x(course, x):
     students = (
         ReviewEvaluation.objects
+            .filter(review__elaboration__challenge__course=course)
             .values('user__id', 'user__nickname')
             .annotate(count=Count('user'))
             .order_by('-count')
@@ -179,6 +180,7 @@ def review_evaluating_students_top_x(course, x):
 
         total = (
             Review.objects
+                .filter(elaboration__challenge__course=course)
                 .filter(elaboration__user__id=student['user__id'])
                 .count()
             )
