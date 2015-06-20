@@ -161,5 +161,32 @@
         </tr>
     {% endfor %}
     </table>
+
+    <br>
+    evaluated top level tasks: {{ evaluated_final_tasks }}<br>
+    <br>
+    top level tasks that still need evaluation: {{ not_evaluated_final_tasks }}<br>
+    <br>
+
+    <table>
+        <tr>
+			<td><b>top level tasks</b></td>
+			<td>evaluated</td>
+            <td>need evaluation</td>
+		</tr>
+    {% for task in final_tasks %}
+        <tr>
+            <td>
+                {{ task.id }} {{ task.title }}
+            </td>
+            <td align="right">
+               {{ task.evaluated }}
+            </td>
+            <td align="right">
+               {{ task.not_evaluated }}
+            </td>
+        </tr>
+    {% endfor %}
+    </table>
 </div>
 {% endblock %}document.write('►')
