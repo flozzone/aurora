@@ -35,6 +35,10 @@ def statistics(request, course_short_title=None):
     data['reviews'] = reviews(course)
     data['commenter_top_25'] = commenter_top_x(course, 25)
     data['tutors'] = tutor_statistics(course)
+    data['review_evaluating_students_top_10'] = review_evaluating_students_top_x(course, 10)
+    data['evaluated_final_tasks'] = evaluated_final_tasks(course)
+    data['not_evaluated_final_tasks'] = not_evaluated_final_tasks(course)
+    data['final_tasks'] = final_tasks(course)
     return render_to_response('statistics.html', data, context_instance=RequestContext(request))
 
 
@@ -158,3 +162,70 @@ def tutor_statistics(course):
                 .count()
         )
     return tutors
+
+
+def review_evaluating_students_top_x(course, x):
+    students = (
+        ReviewEvaluation.objects
+            .filter(review__elaboration__challenge__course=course)
+            .values('user__id', 'user__nickname')
+            .annotate(count=Count('user'))
+            .order_by('-count')
+        [:x]
+    )
+    result = []
+    for student in students:
+        data = {
+            'id': student['user__id'],
+            'nickname': student['user__nickname'],
+            'count': student['count']
+        }
+
+        total = (
+            Review.objects
+                .filter(elaboration__challenge__course=course)
+                .filter(elaboration__user__id=student['user__id'])
+                .count()
+        )
+        data['percent'] = int((data['count'] / total) * 100)
+        result.append(data)
+    return result
+
+
+def evaluated_final_tasks(course):
+    return (
+        Evaluation.objects
+            .filter(submission__challenge__course=course)
+            .filter(submission_time__isnull=False)
+            .count()
+    )
+
+
+def not_evaluated_final_tasks(course):
+    return Elaboration.get_top_level_tasks(course).count()
+
+
+def final_tasks(course):
+    final_task_ids = Challenge.get_course_final_challenge_ids(course)
+
+    result = []
+    for id in final_task_ids:
+        data = {}
+        data['id'] = id
+        data['title'] = (
+            Challenge.objects.get(pk=id).title
+        )
+        data['evaluated'] = (
+            Evaluation.objects
+                .filter(submission__challenge__course=course)
+                .filter(submission_time__isnull=False)
+                .filter(submission__challenge__id=id)
+                .count()
+        )
+        data['not_evaluated'] = (
+            Elaboration.get_top_level_tasks(course)
+                .filter(challenge__id=id)
+                .count()
+        )
+        result.append(data)
+    return result

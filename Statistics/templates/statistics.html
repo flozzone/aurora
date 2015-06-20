@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load cycle from future %}
 
 {% block additional_headers %}
   <link rel="stylesheet" href="{{ STATIC_URL }}/css/statistics.css" type="text/css" media="screen"/>
@@ -60,9 +61,11 @@
 			</td>
         </tr>
     </table>
+
     <br>
 
-<br>
+    <br>
+
     <table>
 		<tr>    
 			<td><b>top 25 commenter</b></td>
@@ -79,7 +82,9 @@
         </tr>
     {% endfor %}
     </table>
+
     <br>
+
     <table class="tutor-table">
         <tr>
             <td width="">
@@ -108,7 +113,7 @@
         </tr>
     {% endfor %}
     </table>
-<br>
+    <br>
     <table class="points-table" width="600">
         <tr>
             <td>
@@ -132,6 +137,56 @@
                 {{ students_with_more_than_60_points }}
             </td>
         </tr>
+    </table>
+
+    <br>
+
+    <table>
+		<tr>
+			<td><b>top 10 review evaluating students</b></td>
+			<td>#review evaluations</td>
+            <td>% of total</td>
+		</tr>
+    {% for student in review_evaluating_students_top_10 %}
+        <tr>
+            <td>
+                {{ student.nickname }}
+            </td>
+            <td align="right">
+               {{ student.count }}
+            </td>
+            <td align="right">
+               {{ student.percent }}
+            </td>
+        </tr>
+    {% endfor %}
+    </table>
+
+    <br>
+    evaluated top level tasks: {{ evaluated_final_tasks }}<br>
+    <br>
+    top level tasks that still need evaluation: {{ not_evaluated_final_tasks }}<br>
+    <br>
+
+    <table>
+        <tr>
+			<td><b>top level tasks</b></td>
+			<td>evaluated</td>
+            <td>need evaluation</td>
+		</tr>
+    {% for task in final_tasks %}
+        <tr>
+            <td>
+                {{ task.id }} {{ task.title }}
+            </td>
+            <td align="right">
+               {{ task.evaluated }}
+            </td>
+            <td align="right">
+               {{ task.not_evaluated }}
+            </td>
+        </tr>
+    {% endfor %}
     </table>
 </div>
 {% endblock %}document.write('►')
