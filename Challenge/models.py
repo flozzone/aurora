@@ -270,7 +270,7 @@ class Challenge(models.Model):
         return result
 
     def is_in_lock_period(self, user, course):
-        PERIOD = 11
+        PERIOD = 7
         START_YEAR = 2015
         START_MONTH = 3
         START_DAY = 1
