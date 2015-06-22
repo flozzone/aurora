@@ -141,7 +141,7 @@ def commenter_top_x(course, x):
 
 
 def tutor_statistics(course):
-    tutors = AuroraUser.objects.filter(is_staff=True).values('id', 'nickname').order_by('id')
+    tutors = AuroraUser.objects.filter(is_staff=True).values('id', 'nickname', 'first_name', 'last_name').order_by('id')
     for tutor in tutors:
         tutor['evaluations'] = (
             Evaluation.objects

@@ -8,17 +8,13 @@
 {% block content %}
 
 <div class="statistics">
-	<table style="font-size:85%;"><tr><td  width=33 valign=top  style="padding:1em">
-	    students admitted: {{ students }}<br>
-	    <br>
-	    students with at least one challenge submission: {{ students_with_at_least_one_submission }}<br>
-	    <br>
-	    started tasks: {{ started_challenges }}/{{ elaborations }}<br>
-	    <br>
-	    evaluated top level tasks: {{ evaluated_final_tasks }}<br>
-	    <br>
-	    top level tasks that still need evaluation: {{ not_evaluated_final_tasks }}<br>
-		<br>
+	<table style="font-size:85%;" width=100%><tr><td  width=33 valign=top  style="padding:1em">
+		<table width=100%><tr><td>
+			students admitted</td><td>{{ students }}</td></tr><tr><td>
+		    students with certificates</td><td>{{ students_with_at_least_one_submission }}</td></tr><tr><td>
+	    	total tasks started (with/without content)</td><td>{{ started_challenges }}/{{ elaborations }}</td></tr><tr><td>
+			top level tasks</td><td><i class="fa fa-check-circle">{{ evaluated_final_tasks }}/<i class="fa fa-circle-o">{{ not_evaluated_final_tasks }}</td></tr>
+		</table><br><br>
 	    <table  width=100%>
 			<tr>    
 				<td><b>top 25 commenter</b></td>
@@ -118,10 +114,10 @@
 	               comm.</td>
 	        </tr>
 	    {% for tutor in tutors %}
-			{% if tutor.id > 790 and tutor.id < 808 %}
+			{% if tutor.id > 0 and tutor.id < 808 %}
 		        <tr style="background:{%cycle '#eee' 'white'%}">
 		            <td>
-		                {{ tutor.nickname }}
+		                {{ tutor.first_name }} {{tutor.last_name}}
 		            </td>
 		            <td align="right">
 		                {{ tutor.evaluations }}
