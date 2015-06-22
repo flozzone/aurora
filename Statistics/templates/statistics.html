@@ -8,7 +8,7 @@
 {% block content %}
 
 <div class="statistics">
-	<table style="font-size:85%"><tr><td  width=33 valign=top>
+	<table style="font-size:85%;"><tr><td  width=33 valign=top  style="padding:1em">
 	    students admitted: {{ students }}<br>
 	    <br>
 	    students with at least one challenge submission: {{ students_with_at_least_one_submission }}<br>
@@ -19,10 +19,10 @@
 	    <br>
 	    top level tasks that still need evaluation: {{ not_evaluated_final_tasks }}<br>
 		<br>
-	    <table>
+	    <table  width=100%>
 			<tr>    
 				<td><b>top 25 commenter</b></td>
-				<td>#comm.</td>
+				<td align=right>#comm.</td>
 			</tr>
 	    {% for commenter in commenter_top_25 %}
 	        <tr>
@@ -36,7 +36,7 @@
 	    {% endfor %}
 	    </table>
 		
-	</td><td  width=33%  valign=top>
+	</td><td  width=33%  valign=top  style="padding:1em">
 	    <b>students with points</b><br>
 	    ≥ 30: <span style="color:#888;"><script>for (i=0;i<Math.round(({{ students_with_more_than_30_points }}+4)/20);i++)document.write('█');</script></span> {{ students_with_more_than_30_points }} <br>
 	    ≥ 35: <span style="color:#888;"><script>for (i=0;i<Math.round(({{ students_with_more_than_35_points }}+4)/20);i++)document.write('█');</script></span> {{ students_with_more_than_35_points }} <br>
@@ -46,7 +46,7 @@
 	    ≥ 55: <span style="color:#888;"><script>for (i=0;i<Math.round(({{ students_with_more_than_55_points }}+4)/20);i++)document.write('█');</script></span> {{ students_with_more_than_55_points }} <br>
 	    ≥ 60: <span style="color:#888;"><script>for (i=0;i<Math.round(({{ students_with_more_than_60_points }}+4)/20);i++)document.write('█');</script></span> {{ students_with_more_than_60_points }} <br><br>
     <b>review evaluations</b><br>
-		<table >
+		<table  width=100%>
 			<tr>
 				<td>
 					helpful
@@ -78,17 +78,18 @@
 				<td width=75 align="right">
 					{{ review_evaluations }} 
 				</td>
-				<td width=100 align="right">
-					of {{ reviews }}
+				<td width=75 align="left">
+					&nbsp;of {{ reviews }}
 				</td>
 			</tr>
 		</table>
-		<table>
+		<br><br>
+		<table  width=100%>
 			<tr>
 				<td colspan=3><b>top 10 review evaluating students</b></td></tr><tr>
 				<td></td>
-				<td>#evals</td>
-				<td>%</td>
+				<td align=right>#evals</td>
+				<td align=right>%</td>
 			</tr>
 			{% for student in review_evaluating_students_top_10 %}
 			<tr  style="background:{%cycle '#eee' 'white'%}">
@@ -104,8 +105,8 @@
 			</tr>
 			{% endfor %}
 		</table>
-	</td><td  width=33%  valign=top>
-	    <table class="tutor-table">
+	</td><td  width=33%  valign=top  style="padding:1em">
+	    <table class="tutor-table" width=100%>
 	        <tr>
 	            <td width="">
 	                <b>tutor metrics</b></td>
@@ -136,14 +137,14 @@
 	    {% endfor %}
 	    </table>
 		<br><br>
-	    <table>
+	    <table width=100%>
 	        <tr>
 				<td><b>top level tasks</b></td>
 				<td width=10% align="right"><i class="fa fa-check-circle"></i></td>
 	            <td width=10% align="right"><i class="fa fa-circle-o"></i></td>
 			</tr>
 	    {% for task in final_tasks %}
-	        <tr>
+		    <tr style="background:{%cycle '#eee' 'white'%}">
 	            <td>
 	                {{ task.title|truncatechars:55}}
 	            </td>
