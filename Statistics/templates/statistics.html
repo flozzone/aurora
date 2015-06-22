@@ -8,7 +8,7 @@
 {% block content %}
 
 <div class="statistics">
-	<table style="font-size:80%"><tr><td  width=33 valign=top>
+	<table style="font-size:85%"><tr><td  width=33 valign=top>
 	    students admitted: {{ students }}<br>
 	    <br>
 	    students with at least one challenge submission: {{ students_with_at_least_one_submission }}<br>
@@ -117,20 +117,22 @@
 	               comm.</td>
 	        </tr>
 	    {% for tutor in tutors %}
-	        <tr style="background:{%cycle '#eee' 'white'%}">
-	            <td>
-	                {{tutor.id}}{{ tutor.nickname }}
-	            </td>
-	            <td align="right">
-	                {{ tutor.evaluations }}
-	            </td>
-	            <td align="right">
-	                {{ tutor.reviews }}
-	            </td>
-	            <td align="right">
-	                {{ tutor.comments }}
-	            </td>
-	        </tr>
+			{% if tutor.id > 790 and tutor.id < 808 %}
+		        <tr style="background:{%cycle '#eee' 'white'%}">
+		            <td>
+		                {{tutor.id}}{{ tutor.nickname }}
+		            </td>
+		            <td align="right">
+		                {{ tutor.evaluations }}
+		            </td>
+		            <td align="right">
+		                {{ tutor.reviews }}
+		            </td>
+		            <td align="right">
+		                {{ tutor.comments }}
+		            </td>
+		        </tr>
+			{% endif %}
 	    {% endfor %}
 	    </table>
 		<br><br>
