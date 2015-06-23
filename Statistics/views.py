@@ -132,7 +132,7 @@ def reviews(course):
 def commenter_top_x(course, x):
     commenters = (
         Comment.objects
-            .values('author', 'author__nickname', 'author__is_staff')
+            .values('author', 'author__nickname', 'author__id', 'author__is_staff')
             .annotate(count=Count('author'))
             .order_by('-count')
         [:x]
