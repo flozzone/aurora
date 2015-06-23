@@ -10,10 +10,8 @@
 <div class="statistics">
 	<table style="font-size:85%;" width=100%><tr><td  width=33 valign=top  style="padding:1em">
 		<table width=100%><tr><td>
-			students admitted</td><td>{{ students }}</td></tr><tr><td>
-		    students with certificates</td><td>{{ students_with_at_least_one_submission }}</td></tr><tr><td>
+			students admitted/with certificates</td><td>{{ students }}/{{ students_with_at_least_one_submission }}</td></tr><tr><td>
 	    	total tasks started (with/without content)</td><td>{{ started_challenges }}/{{ elaborations }}</td></tr><tr><td>
-			top level tasks</td><td><i class="fa fa-check-circle"></i>{{ evaluated_final_tasks }}/<i class="fa fa-circle-o"></i>{{ not_evaluated_final_tasks }}</td></tr>
 		</table><br><br>
 	    <table  width=100%>
 			<tr>    
@@ -23,7 +21,7 @@
 	    {% for commenter in commenter_top_25 %}
 	        <tr>
 	            <td {% if commenter.author__is_staff %}style="background:#E5EBFD;"{% endif %}>
-	                {{ commenter.author__nickname }}
+	                <a href="/{{course.short_title}}/evaluation/user?id={{commenter.author__id}}" style="text-decoration:none;color:black">{{ commenter.author__nickname }}</a>
 	            </td>
 	            <td align="right" {% if commenter.author__is_staff %}style="background:#E5EBFD;"{% endif %}>
 	               {{ commenter.count }}
@@ -90,7 +88,7 @@
 			{% for student in review_evaluating_students_top_10 %}
 			<tr  style="background:{%cycle '#eee' 'white'%}">
 				<td>
-					{{ student.nickname }}
+					<a href="/{{course.short_title}}/evaluation/user?id={{ student.id }}" style="text-decoration:none;color:black">{{ student.nickname }}</a>
 				</td>
 				<td align="right">
 					{{ student.count }}
@@ -138,6 +136,7 @@
 				<td><b>top level tasks</b></td>
 				<td width=10% align="right"><i class="fa fa-check-circle"></i></td>
 	            <td width=10% align="right"><i class="fa fa-circle-o"></i></td>
+	            <td width=10% align="right">&sum;</td>
 			</tr>
 	    {% for task in final_tasks %}
 		    <tr style="background:{%cycle '#eee' 'white'%}">
@@ -150,8 +149,24 @@
 	            <td align="right">
 	               {{ task.not_evaluated }}
 	            </td>
+				<td align="right">
+					{{ task.evaluated|add:task.not_evaluated }}
+				</td>
 	        </tr>
 	    {% endfor %}
+			<tr style="border-top:1px solid silver">
+				<td>Total</td>
+				<td align="right">
+					{{ evaluated_final_tasks }}
+				</td>
+				<td align="right">
+					{{ not_evaluated_final_tasks }}
+				</td>
+				<td align="right">
+					{{ not_evaluated_final_tasks|add:evaluated_final_tasks }}
+				</td>
+			</tr>
+
 	    </table>
 		
 	</td></tr></table>
