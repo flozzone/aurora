@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block additional_headers %}
+<title>write review</title>
 <link rel="stylesheet" href="{{ STATIC_URL }}css/review.css" type="text/css" media="screen"/>
 <script type="text/javascript" src="{{ STATIC_URL }}tinymce/tinymce.min.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}tinymce/jquery.tinymce.min.js"></script>
@@ -15,6 +16,11 @@
 
   var REVIEW_ANSWER_URL = "{% url 'Review:review_answer' course_short_title=course.short_title %}";
   var STACK_URL = "{% url 'Challenge:stack' course_short_title=course.short_title %}";
+
+  history.pushState(null, null, 'write review');
+  window.addEventListener('popstate', function(event) {
+  history.pushState(null, null, 'write review');
+  });
 
 </script>
 
