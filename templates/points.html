@@ -162,9 +162,9 @@
 			  	var a = {{ review_evaluation_data.positive_review_evaluations }} ;
 		 	  	var b= {{ review_evaluation_data.default_review_evaluations }} ;
 		  		var c = {{ review_evaluation_data.negative_review_evaluations }} ; 
-				var ar = Math.round(a/(a+b+c)*100);
-				var br = Math.round(b/(a+b+c)*100);
-				var cr = Math.round(c/(a+b+c)*100);
+				var ar = a==0?0:Math.round(a/(a+b+c)*100); 
+				var br = b==0?0:Math.round(b/(a+b+c)*100);
+				var cr = c==0?0:Math.round(c/(a+b+c)*100);
 		  </script>
           <td colspan="2" style="font-size:80%;padding-top:1em;">
             <script>document.write(a+b+c)</script> of your reviews have been rated:
