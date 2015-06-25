@@ -16,6 +16,10 @@ from Comments.models import Comment
 def statistics(request, course_short_title=None):
     data = {}
     course = Course.get_or_raise_404(course_short_title)
+    data = create_stat_data(course,data)
+    return render_to_response('statistics.html', data, context_instance=RequestContext(request))
+
+def create_stat_data(course, data):
     data['course'] = course
     data['students'] = AuroraUser.objects.filter(is_staff=False, is_superuser=False).count()
     data['students_with_at_least_one_submission'] = students_with_at_least_one_submission(course)
@@ -32,6 +36,9 @@ def statistics(request, course_short_title=None):
     data['review_evaluations_positive'] = review_evaluations_positive(course)
     data['review_evaluations_default'] = review_evaluations_default(course)
     data['review_evaluations_negative'] = review_evaluations_negative(course)
+    data['review_evaluations_positive_ratio'] = data['review_evaluations_positive']/data['review_evaluations']*100
+    data['review_evaluations_default_ratio'] = data['review_evaluations_default']/data['review_evaluations']*100
+    data['review_evaluations_negative_ratio'] = data['review_evaluations_negative']/data['review_evaluations']*100
     data['reviews'] = reviews(course)
     data['commenter_top_25'] = commenter_top_x(course, 25)
     data['tutors'] = tutor_statistics(course)
@@ -39,8 +46,7 @@ def statistics(request, course_short_title=None):
     data['evaluated_final_tasks'] = evaluated_final_tasks(course)
     data['not_evaluated_final_tasks'] = not_evaluated_final_tasks(course)
     data['final_tasks'] = final_tasks(course)
-    return render_to_response('statistics.html', data, context_instance=RequestContext(request))
-
+    return data
 
 def students_with_at_least_one_submission(course):
     final_challenge_ids = Challenge.get_final_challenge_ids()
