@@ -156,7 +156,7 @@
           </td>
         </tr>
 
-
+	{% if not user.is_staff %}
         <tr>
 		  <script>
 			  	var a = {{ review_evaluation_data.positive_review_evaluations }} ;
@@ -209,6 +209,7 @@
             </span>
           </td>
         </tr>
+	{% endif %}
         <tr>
           <td colspan=2 style="font-size:80%">
             You have rated
