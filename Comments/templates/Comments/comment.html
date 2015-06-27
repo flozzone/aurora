@@ -8,7 +8,7 @@
 		 <div class="comment_author">{{ comment.author.display_name }}</div>
 		 <div class="comment_time" title="{{ comment.post_date|date:'D j.n.y, G:i:s'}}">({{ comment.post_date | naturaltime }})</div>
 		 <div class="comment_numreplies">&mdash; {{ comment.responses | length }} repl{{ comment.responses|length|pluralize:"y,ies"}}</div>
-         {% if comment.deleter != None %}
+         {% if comment.deleter == None %}
 			 <div class="comment_award">
 				 {% if comment.promoted %}
 					 {% if requester.is_staff %}
