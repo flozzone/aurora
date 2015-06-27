@@ -10,6 +10,11 @@
             {% include 'points.html' %}
             {% include 'public_stats.html' %}
 			</div>
+		{% else %}
+            <div class="feed_header"  id="part_0"><i class="fa fa-toggle-down half"></i> <b>Your work</b></div>
+			<div class="feed_column"  id="content_part_0">
+            {% include 'admin_points.html' %}
+            {% include 'public_stats.html' %}
         {% endif %}
 
 		{% if user.is_staff %}

@@ -1,0 +1,69 @@
+{% load staticfiles %}
+
+{% block additional_headers %}
+    <script type="text/javascript" src="{% static "js/points.js" %}"></script>
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/points.css" type="text/css" media="screen"/>
+  {% load humanize %}
+{% endblock %}
+
+
+{% for stack_data in stacks %}
+  {% if stack_data.course_title == course.title %}
+  <div class="points_table">
+      <table>
+        <tr>
+		  <script>
+			  	var a = {{ review_evaluation_data.positive_review_evaluations }} ;
+		 	  	var b= {{ review_evaluation_data.default_review_evaluations }} ;
+		  		var c = {{ review_evaluation_data.negative_review_evaluations }} ; 
+				var ar = a==0?0:Math.round(a/(a+b+c)*100); 
+				var br = b==0?0:Math.round(b/(a+b+c)*100);
+				var cr = c==0?0:Math.round(c/(a+b+c)*100);
+		  </script>
+          <td colspan="2">
+            <script>document.write(a+b+c)</script> of your reviews have been rated:
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <span
+                style="color:rgba(0,109,0,
+                    {% if review_evaluation_data.positive_review_evaluations == 0 %}
+                      0.5
+                    {% else %}
+                      1
+                    {% endif %}
+                    )">
+              <script>document.write(ar)</script>% 
+              as »Helpful« (&empty; is {{review_evaluations_positive_ratio|floatformat:"0"}}%)
+            </span>
+            <br>
+            <span
+                style="color:rgba(0,50,0,
+                    {% if review_evaluation_data.default_review_evaluations == 0 %}
+                      0.5
+                    {% else %}
+                      1
+                    {% endif %}
+                    )">
+              <script>document.write(br)</script>% 
+              as »Average« (&empty; is {{review_evaluations_default_ratio|floatformat:"0"}}%)
+            </span>
+            <br>
+            <span
+                style="color:rgba(255,0,0,
+                    {% if review_evaluation_data.negative_review_evaluations == 0 %}
+                      0.5
+                    {% else %}
+                      1
+                    {% endif %}
+                    )">
+              <script>document.write(cr)</script>% 
+              as »Meaningless or Offensive« (&empty; is {{review_evaluations_negative_ratio|floatformat:"0"}}%)
+            </span>
+          </td>
+        </tr>
+      </table>
+    </div>
+  {% endif %}
+{% endfor %} 
