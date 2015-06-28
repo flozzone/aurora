@@ -1,0 +1,10 @@
+.stats {
+    font-size: 14px;
+	padding:4px 9px;
+}
+    
+	
+.stats p {
+	margin-bottom:6px;
+    font-size: 14px!important;
+}

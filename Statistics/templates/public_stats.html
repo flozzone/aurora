@@ -1,0 +1,29 @@
+{% load cycle from future %}
+
+
+{% block additional_headers %}
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/public_stats.css" type="text/css" media="screen"/>
+  {% load humanize %}
+{% endblock %}
+
+<div class="stats">
+{% for stack_data in stacks %}
+	  {% if stack_data.course_title == course.title %}
+		 <p><b>Some (experimental) course stats</b></p>
+		 <p>This course will issue certificates for {{ students_with_at_least_one_submission }} students</p>
+		 <p>So far, {{ evaluated_final_tasks }} challenges have been evaluated, 
+		 and {{ not_evaluated_final_tasks }} challenges are currently awaiting final evaluation </p>
+		 {% if stack_data.evaluated_points_earned_total > 30 %}<p>You are one of <script> x = {{stack_data.evaluated_points_earned_total}};x=Math.round((x-2.5)/5)*5;
+		 if(x>55) document.write({{ students_with_more_than_60_points }})
+		 else if(x>50) document.write({{ students_with_more_than_55_points }})
+		 else if(x>45) document.write({{ students_with_more_than_50_points }})
+		 else if(x>40) document.write({{ students_with_more_than_45_points }})
+		 else if(x>35) document.write({{ students_with_more_than_40_points }})
+		 else if(x>30) document.write({{ students_with_more_than_35_points }})
+		 else if(x>25) document.write({{ students_with_more_than_30_points }})</script> participants with more than <script>document.write(x)</script>
+			  points</p>
+		 {% endif %}
+		 <br>
+	{% endif %}
+{% endfor %}
+</div>
