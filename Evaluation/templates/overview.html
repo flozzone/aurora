@@ -1,5 +1,6 @@
 {% load humanize %}
 {% load endless %}
+{% load filter %}
 
 {% block content %}
 	<div class="loading_animation">
@@ -52,7 +53,8 @@
         {% endfor %}
 
         {% get_pages %}
-        {{ pages.previous }} {{ pages.next }}
+        {{ pages.previous }} {% if pages.previous %}<div class="prev">({{ pages.current_start_index|add:"-1" }})</div>{% endif %}
+        {% if pages.next %}<div class="next">({{ pages.total_count|subtract:pages.current_end_index }})</div>{% endif %} {{ pages.next }}
 
     </table>
 
