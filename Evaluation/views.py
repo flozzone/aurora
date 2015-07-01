@@ -605,28 +605,38 @@ def search(request, course_short_title=None):
 @staff_member_required
 def select_user(request, course_short_title=None):
     course = Course.get_or_raise_404(short_title=course_short_title)
-    selected_user = request.POST['selected_user'].split()[0]
+
+    if 'selected_user' in request.POST:
+        selected_user = request.POST['selected_user'].split()[0]
+    else:
+        selected_user = request.session['selected_user']
+    user = AuroraUser.objects.get(username=selected_user)
 
     elaborations = []
-    user = AuroraUser.objects.get(username=selected_user)
     elaborations = user.get_course_elaborations(course)
 
     points = get_points(request, user, course)
-    html = render_to_response('overview.html',
-                              {
-
-                                  'elaborations': elaborations,
-                                  'search': True,
-                                  'stacks': points['stacks'],
-                                  'courses': points['courses'],
-                                  'review_evaluation_data': points['review_evaluation_data'],
-                                  'course': course
-                              }, RequestContext(request))
 
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
     request.session['selection'] = 'search'
-    return html
+    request.session['selected_user'] = user.username
+
+
+    return render_to_response('evaluation.html',
+                              {'overview': render_to_string('overview.html',
+                                    {
+                                          'elaborations': elaborations,
+                                          'search': True,
+                                          'stacks': points['stacks'],
+                                          'courses': points['courses'],
+                                          'review_evaluation_data': points['review_evaluation_data'],
+                                          'course': course
+                                    }, RequestContext(request)),
+                               'selection': request.session['selection'],
+                               'course': course
+                              },
+                              context_instance=RequestContext(request))
 
 
 @login_required()

@@ -105,7 +105,7 @@ function search(challenge, user, tag) {
         var url = "./search/";
         // fetch points if only 1 user selected
         if((challenge=="task...") && (user!="user...") && (tag=="tag...")) {
-            url = "./select_user/";
+            url = "./select_user";
         }
         var data = {
                 selected_challenge: challenge,
@@ -114,7 +114,7 @@ function search(challenge, user, tag) {
         };
         var args = { type: "POST", url: url, data: data,
             success: function(data) {
-                $('#overview').html(data);
+                window.location.href="./";
             }
         };
         $.ajax(args);
