@@ -171,9 +171,9 @@ def complaints(request, course_short_title=None):
 
     # sort elaborations by submission time
     if type(elaborations) == list:
-        elaborations.sort(key=lambda elaboration: elaboration.get_last_post_date(), reverse=True)
+        elaborations.sort(key=lambda elaboration: elaboration.get_last_post_date())
     else:
-        elaborations = elaborations.order_by('-comments__post_date')
+        elaborations = elaborations.order_by('comments__post_date')
 
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
