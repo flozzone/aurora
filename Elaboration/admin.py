@@ -6,7 +6,7 @@ def export_csv(modeladmin, request, queryset):
     import csv
     from django.utils.encoding import smart_str
     response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename=elaboratoin.csv'
+    response['Content-Disposition'] = 'attachment; filename=elaboration.csv'
     writer = csv.writer(response, csv.excel)
     response.write(u'\ufeff'.encode('utf8'))
     writer.writerow([
@@ -14,7 +14,7 @@ def export_csv(modeladmin, request, queryset):
         smart_str(u"challenge"),
         smart_str(u"user"),
         smart_str(u"creation_time"),
-        smart_str(u"elaboration_text"),
+        #smart_str(u"elaboration_text"),
         smart_str(u"submission_time"),
     ])
     for obj in modeladmin.model.objects.all():
@@ -22,7 +22,7 @@ def export_csv(modeladmin, request, queryset):
             smart_str(obj.pk),
             smart_str(obj.challenge),
             smart_str(obj.user),
-            smart_str(obj.elaboration_text),
+            #smart_str(obj.elaboration_text),
             smart_str(obj.creation_time),
         ])
     return response
