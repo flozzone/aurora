@@ -22,8 +22,9 @@ def export_csv(modeladmin, request, queryset):
             smart_str(obj.pk),
             smart_str(obj.challenge),
             smart_str(obj.user),
-            #smart_str(obj.elaboration_text),
             smart_str(obj.creation_time),
+            #smart_str(obj.elaboration_text),
+            smart_str(obj.submission_time),
         ])
     return response
 export_csv.short_description = u"Export CSV"
