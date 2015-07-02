@@ -53,8 +53,11 @@
         {% endfor %}
 
         {% get_pages %}
-        {{ pages.previous }} {% if pages.previous %}<div class="prev">({{ pages.current_start_index|add:"-1" }})</div>{% endif %}
-        {% if pages.next %}<div class="next">({{ pages.total_count|subtract:pages.current_end_index }})</div>{% endif %} {{ pages.next }}
+        {% with total_pages=pages|length %}
+            {% show_current_number as actual_page %}
+            {{ pages.previous }} {% if pages.previous %}<div class="prev">({{ actual_page|add:"-1" }})</div>{% endif %}
+            {% if pages.next %}<div class="next">({{ total_pages|subtract:actual_page }})</div>{% endif %} {{ pages.next }}
+        {% endwith %}
 
     </table>
 
