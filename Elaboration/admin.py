@@ -17,7 +17,7 @@ def export_csv(modeladmin, request, queryset):
         smart_str(u"elaboration_text"),
         smart_str(u"submission_time"),
     ])
-    for obj in queryset:
+    for obj in modeladmin.model.objects.all():
         writer.writerow([
             smart_str(obj.pk),
             smart_str(obj.challenge),
