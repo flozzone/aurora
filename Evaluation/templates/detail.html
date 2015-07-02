@@ -1,7 +1,7 @@
 {% load humanize %}
 {% load comments %}
 {% load render_uploads %}
-{% comments_boilerplate %}
+{#{% comments_boilerplate %}#}
 
 {% block additional_headers %}
   <script type="text/javascript" src="{{ STATIC_URL }}tinymce/tinymce.min.js"></script>
@@ -19,8 +19,8 @@
 
   <div class="detail_left">
 	  <div class="pagination">
-	     {% if prev %}<a href="{% url 'Evaluation:detail' course_short_title=course.short_title %}?elaboration_id={{ prev }}"><div class="paginator prev"><i class="fa fa-angle-double-left"></i> prev</div></a>{% else %}<div class="no-paginator prev">no prev</div>{% endif %}
-	     {% if next %}<a href="{% url 'Evaluation:detail' course_short_title=course.short_title %}?elaboration_id={{ next }}"><div class="paginator next">next <i class="fa fa-angle-double-right"></i></div></a>{% else %}<div class="no-paginator next">no next</div>{% endif %}
+	     {% if prev %}<a href="{% url 'Evaluation:detail' course_short_title=course.short_title %}?elaboration_id={{ prev }}"><div class="paginator prev"><i class="fa fa-angle-double-left"></i> prev ({{ count_prev }})</div></a>{% else %}<div class="no-paginator prev">no prev</div>{% endif %}
+	     {% if next %}<a href="{% url 'Evaluation:detail' course_short_title=course.short_title %}?elaboration_id={{ next }}"><div class="paginator next">({{ count_next }}) next <i class="fa fa-angle-double-right"></i></div></a>{% else %}<div class="no-paginator next">no next</div>{% endif %}
 	 </div>
      <div class="spacer"></div>
 	 <div class="elab_title">{{elaboration.challenge.title|safe}}</div>

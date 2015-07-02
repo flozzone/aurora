@@ -328,6 +328,8 @@ def detail(request, course_short_title=None):
         next = elaborations[index + 1].id
     if not index == 0:
         prev = elaborations[index - 1].id
+    count_next = len(elaborations) - index -1
+    count_prev = index
 
     stack_elaborations = elaboration.user.get_stack_elaborations(elaboration.challenge.get_stack())
     # sort stack_elaborations by submission time
@@ -341,6 +343,8 @@ def detail(request, course_short_title=None):
     params['reviews'] = reviews
     params['next'] = next
     params['prev'] = prev
+    params['count_next'] = count_next
+    params['count_prev'] = count_prev
     params['course'] = course
 
     detail_html = render_to_string('detail.html', params, RequestContext(request))
