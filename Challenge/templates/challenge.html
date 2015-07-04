@@ -87,10 +87,12 @@
 {% else %}
 	{% if not elaboration.is_submitted %}
 		{% if not accepted %}
+{% comment %}
             <div id="Caccept" class="button XL"
     			onclick="$('.elaboration_block').slideDown('fast');$('#Caccept').slideUp('fast');$('#qa').slideUp('fast');">
     			start this task
     		</div>
+{% endcomment %}
 
         {% comment %}
             <div class="button XL">
@@ -114,6 +116,8 @@
       <textarea id="editor">{{ elaboration.elaboration_text }}</textarea>
     </form>
       {% if not blocked %}
+{% comment %}
+
       <button id="EWfE" class="{% if not lock %} submit {% endif %}XL R" {% if lock %}disabled="disabled" style="color:darkred;"{% endif %}>
           {% if lock %}Enter this work for Evaluation on {{ lock }} or later
           {% else %}Enter work for Evaluation
@@ -128,6 +132,7 @@
         <div>
           <button class="real_submit XL R" id="{{ challenge.id }}">Submit work</button>
         </div>
+{% endcomment %}
 
       </div>
 	  {% else %}
