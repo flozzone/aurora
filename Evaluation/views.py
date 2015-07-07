@@ -328,7 +328,7 @@ def detail(request, course_short_title=None):
         next = elaborations[index + 1].id
     if not index == 0:
         prev = elaborations[index - 1].id
-    count_next = len(elaborations) - index -1
+    count_next = len(elaborations) - index - 1
     count_prev = index
 
     stack_elaborations = elaboration.user.get_stack_elaborations(elaboration.challenge.get_stack())
