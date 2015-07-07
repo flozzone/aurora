@@ -190,7 +190,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 ENDLESS_PAGINATION_PER_PAGE = (
-    2
+    20
 )
 ENDLESS_PAGINATION_PREVIOUS_LABEL = (
     '<div class="paginator prev"><i class="fa fa-angle-double-left"></i> prev</div>'
