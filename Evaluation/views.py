@@ -167,13 +167,10 @@ def top_level_tasks(request, course_short_title=None):
 @staff_member_required
 def complaints(request, course_short_title=None):
     course = Course.get_or_raise_404(short_title=course_short_title)
-    elaborations = Elaboration.get_complaints(course)
+    elaborations = list(Elaboration.get_complaints(course))
 
-    # sort elaborations by submission time
-    if type(elaborations) == list:
-        elaborations.sort(key=lambda elaboration: elaboration.get_last_post_date())
-    else:
-        elaborations = elaborations.order_by('comments__post_date')
+    # sort elaborations by last comment time
+    elaborations.sort(key=lambda elaboration: elaboration.get_last_post_date())
 
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
