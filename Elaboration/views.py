@@ -36,20 +36,20 @@ def save_elaboration(request, course_short_title):
 
     return HttpResponse()
 
-@login_required()
-def submit_elaboration(request, course_short_title):
-    if not 'challenge_id' in request.POST:
-        raise Http404
-    challenge = Challenge.objects.get(id=request.POST['challenge_id'])
-    user = RequestContext(request)['user']
-    course = Course.get_or_raise_404(short_title=course_short_title)
-    if not challenge.is_enabled_for_user(user):
-        raise Http404
-    if challenge.is_final_challenge() and challenge.is_in_lock_period(user, course):
-        raise Http404
-    elaboration, created = Elaboration.objects.get_or_create(challenge=challenge, user=user)
-    elaboration.elaboration_text = request.POST['elaboration_text']
-    if elaboration.elaboration_text or UploadFile.objects.filter(elaboration=elaboration).exists():
-        elaboration.submission_time = datetime.now()
-        elaboration.save()
-        return HttpResponse()
+#@login_required()
+#def submit_elaboration(request, course_short_title):
+#    if not 'challenge_id' in request.POST:
+#        raise Http404
+#    challenge = Challenge.objects.get(id=request.POST['challenge_id'])
+#    user = RequestContext(request)['user']
+#    course = Course.get_or_raise_404(short_title=course_short_title)
+#    if not challenge.is_enabled_for_user(user):
+#        raise Http404
+#    if challenge.is_final_challenge() and challenge.is_in_lock_period(user, course):
+#        raise Http404
+#    elaboration, created = Elaboration.objects.get_or_create(challenge=challenge, user=user)
+#    elaboration.elaboration_text = request.POST['elaboration_text']
+#    if elaboration.elaboration_text or UploadFile.objects.filter(elaboration=elaboration).exists():
+#        elaboration.submission_time = datetime.now()
+#        elaboration.save()
+#        return HttpResponse()
