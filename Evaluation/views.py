@@ -171,9 +171,9 @@ def complaints(request, course_short_title=None):
 
     # sort elaborations by submission time
     if type(elaborations) == list:
-        elaborations.sort(key=lambda elaboration: elaboration.get_last_post_date(), reverse=True)
+        elaborations.sort(key=lambda elaboration: elaboration.get_last_post_date())
     else:
-        elaborations = elaborations.order_by('-comments__post_date')
+        elaborations = elaborations.order_by('comments__post_date')
 
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
@@ -328,6 +328,8 @@ def detail(request, course_short_title=None):
         next = elaborations[index + 1].id
     if not index == 0:
         prev = elaborations[index - 1].id
+    count_next = len(elaborations) - index - 1
+    count_prev = index
 
     stack_elaborations = elaboration.user.get_stack_elaborations(elaboration.challenge.get_stack())
     # sort stack_elaborations by submission time
@@ -341,6 +343,8 @@ def detail(request, course_short_title=None):
     params['reviews'] = reviews
     params['next'] = next
     params['prev'] = prev
+    params['count_next'] = count_next
+    params['count_prev'] = count_prev
     params['course'] = course
 
     detail_html = render_to_string('detail.html', params, RequestContext(request))
@@ -605,28 +609,40 @@ def search(request, course_short_title=None):
 @staff_member_required
 def select_user(request, course_short_title=None):
     course = Course.get_or_raise_404(short_title=course_short_title)
-    selected_user = request.POST['selected_user'].split()[0]
+
+    if 'selected_user' in request.POST:
+        selected_user = request.POST['selected_user'].split()[0]
+    else:
+        selected_user = request.session['selected_user']
+    user = AuroraUser.objects.get(username=selected_user)
 
     elaborations = []
-    user = AuroraUser.objects.get(username=selected_user)
     elaborations = user.get_course_elaborations(course)
 
     points = get_points(request, user, course)
-    html = render_to_response('overview.html',
-                              {
-
-                                  'elaborations': elaborations,
-                                  'search': True,
-                                  'stacks': points['stacks'],
-                                  'courses': points['courses'],
-                                  'review_evaluation_data': points['review_evaluation_data'],
-                                  'course': course
-                              }, RequestContext(request))
 
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
     request.session['selection'] = 'search'
-    return html
+    request.session['selected_user'] = user.username
+
+    overview_rendered = render_to_string('overview.html',
+                            {
+                                'elaborations': elaborations,
+                                'search': True,
+                                'stacks': points['stacks'],
+                                'courses': points['courses'],
+                                'review_evaluation_data': points['review_evaluation_data'],
+                                'course': course
+                            }, RequestContext(request))
+
+    return render_to_response('evaluation.html',
+                              {
+                                'overview': overview_rendered,
+                                'selection': request.session['selection'],
+                                'course': course
+                              },
+                              context_instance=RequestContext(request))
 
 
 @login_required()

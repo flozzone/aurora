@@ -114,7 +114,7 @@ function search(challenge, user, tag) {
         };
         var args = { type: "POST", url: url, data: data,
             success: function(data) {
-                $('#overview').html(data);
+                window.location.href="./";
             }
         };
         $.ajax(args);
