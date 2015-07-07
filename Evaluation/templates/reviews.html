@@ -18,9 +18,10 @@
 
 		<div class="review_body{% if review.reviewer.is_staff %} review_staff{% endif %}">
 			<div class="review_author{% if review.reviewer.is_staff %} review_staff{% endif %}">
-				{{ forloop.counter }}<img class="gravatar" src="{{ review.reviewer.avatar.url }}" style="vertical-align:middle" onclick="$('.author_detail').addClass('hidden_detail');$('#r_detail{{forloop.counter}}{{review.id}}').toggleClass('hidden_detail')">
+				<img class="gravatar" src="{{ review.reviewer.avatar.url }}" style="vertical-align:middle" onclick="$('.author_detail').addClass('hidden_detail');$('#r_detail{{forloop.counter}}{{review.id}}').toggleClass('hidden_detail')">
     			{{ review.reviewer.username }}  
         		({{ review.reviewer.first_name }} {{ review.reviewer.last_name }}) @ <span title="{{review.submission_time}}">{{review.submission_time|naturaltime}}</span>:
+				<div style="display:inline-block;float:right;margin-top:1.5px;background:#c0c0c0;color:white;position:relative;right:-8px;padding:3px 6px;">Review {{ forloop.counter }}</div>
 			</div>
 	   		 <div class="author_detail hidden_detail" id="r_detail{{forloop.counter}}{{review.id}}" onclick="$('.author_detail').addClass('hidden_detail');$('#r_detail{{forloop.counter}}{{review.id}}').addClass('hidden_detail')">
 	   			 <img src='{{review.reviewer.avatar.url}}'>
