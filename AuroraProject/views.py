@@ -35,7 +35,7 @@ def home(request, course_short_title=None):
     user = RequestContext(request)['user']
     course = Course.get_or_raise_404(course_short_title)
     data = get_points(request, user, course)
-    data = create_stat_data(course,data)
+    #data = create_stat_data(course,data)
     context = RequestContext(request, {'newsfeed': data['course']})
 
     return render_to_response('home.html', data, context)
