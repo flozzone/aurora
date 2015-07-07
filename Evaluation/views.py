@@ -626,19 +626,21 @@ def select_user(request, course_short_title=None):
     request.session['selection'] = 'search'
     request.session['selected_user'] = user.username
 
+    overview_rendered = render_to_string('overview.html',
+                            {
+                                'elaborations': elaborations,
+                                'search': True,
+                                'stacks': points['stacks'],
+                                'courses': points['courses'],
+                                'review_evaluation_data': points['review_evaluation_data'],
+                                'course': course
+                            }, RequestContext(request))
 
     return render_to_response('evaluation.html',
-                              {'overview': render_to_string('overview.html',
-                                    {
-                                          'elaborations': elaborations,
-                                          'search': True,
-                                          'stacks': points['stacks'],
-                                          'courses': points['courses'],
-                                          'review_evaluation_data': points['review_evaluation_data'],
-                                          'course': course
-                                    }, RequestContext(request)),
-                               'selection': request.session['selection'],
-                               'course': course
+                              {
+                                'overview': overview_rendered,
+                                'selection': request.session['selection'],
+                                'course': course
                               },
                               context_instance=RequestContext(request))
 
