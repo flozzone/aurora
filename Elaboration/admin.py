@@ -14,7 +14,6 @@ def export_csv(modeladmin, request, queryset):
         smart_str(u"challenge"),
         smart_str(u"user"),
         smart_str(u"creation_time"),
-        #smart_str(u"elaboration_text"),
         smart_str(u"submission_time"),
     ])
     for obj in modeladmin.model.objects.all():
@@ -23,7 +22,6 @@ def export_csv(modeladmin, request, queryset):
             smart_str(obj.challenge),
             smart_str(obj.user),
             smart_str(obj.creation_time),
-            #smart_str(obj.elaboration_text),
             smart_str(obj.submission_time),
         ])
     return response
