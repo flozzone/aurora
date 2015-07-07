@@ -32,6 +32,7 @@ from Notification.models import Notification
 @login_required()
 @staff_member_required
 def evaluation(request, course_short_title=None):
+    print("in evaluation")
     course = Course.get_or_raise_404(short_title=course_short_title)
     overview = ""
     elaborations = []
@@ -41,8 +42,10 @@ def evaluation(request, course_short_title=None):
         for serialized_elaboration in serializers.deserialize('json', request.session.get('elaborations', {})):
             elaborations.append(serialized_elaboration.object)
         if selection == 'search':
-            if 'id' in request.GET:
-                points = get_points(request, AuroraUser.objects.get(pk=request.GET['id']), course)
+            selected_user = request.session.get('selected_user', 'error')
+            if selected_user not in ('error'):
+                user = AuroraUser.objects.get(username=selected_user)
+                points = get_points(request, user, course)
                 data = {
                     'elaborations': elaborations,
                     'search': True,
