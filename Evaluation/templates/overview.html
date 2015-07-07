@@ -57,12 +57,12 @@
             {% show_current_number as actual_page %}
             {{ pages.previous }}
             {% if pages.previous %}
-                <div class="prev">({{ actual_page|add:"-1" }})</div>
-            {% endif %}
-            {% if pages.next %}
-                <div class="next">({{ total_pages|subtract:actual_page }})</div>
+                <div class="prev" style="color:gray">&nbsp; ({{ actual_page|add:"-1" }})</div>
             {% endif %}
             {{ pages.next }}
+            {% if pages.next %}
+                <div class="next" style="color:gray">({{ total_pages|subtract:actual_page }}) &nbsp; </div>
+            {% endif %}
         {% endwith %}
 
     </table>
