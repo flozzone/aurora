@@ -1,3 +1,13 @@
-<i class="fa fa-external-link"></i> <a href="#" onClick="window.open('/{{ course_short_title }}/notifications/write?user={{ notification_user_id }}','notification','resizable,height=240,width=480'); return false;" class="notification_link" title="send a notification to this user">Send Notification</a>
+<i class="fa fa-external-link"></i>
 
+{% url "Notification:write" course_short_title as notify_url %}
 
+<a href='{{ notify_url }}?user={{ notification_user_id }}'
+   onClick="window.open(
+       '{{ notify_url }}?user={{ notification_user_id }}',
+       'notification', 'resizable,height=240,width=480'
+       );
+       return false;"
+   class="notification_link" title="send a notification to this user">
+  Send Notification
+</a>
