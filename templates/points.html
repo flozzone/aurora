@@ -135,6 +135,13 @@
           <td  style="color:gray">
 			 <i style="color:rgba(0,0,0,0);" class="fa fa-caret-square-o-down"></i> Optimistic Sum</td>
           <td class="punkte" style="vertical-align:bottom;color:gray">
+		   {{stack_data.evaluated_points_earned_total|add:stack_data.submitted_points_available_total}}<span>/{{ stack_data.evaluated_points_available_total }}</span>
+		  </td>
+	  	</tr>
+        <tr>
+          <td  style="color:gray;padding:0px 9px">
+			 <i style="color:rgba(0,0,0,0);" class="fa fa-caret-square-o-down"></i> Overly Optimistic Sum</td>
+          <td class="punkte" style="vertical-align:bottom;color:gray;padding:0px 9px">
 		   {{stack_data.evaluated_points_earned_total|add:stack_data.started_points_available_total|add:stack_data.submitted_points_available_total}}<span style="visibility:hidden">/{{ stack_data.evaluated_points_available_total }}</span>
 		  </td>
 	  	</tr>
