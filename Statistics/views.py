@@ -25,13 +25,13 @@ def create_stat_data(course, data):
     data['students_with_at_least_one_submission'] = students_with_at_least_one_submission(course)
     data['started_challenges'] = started_challenges(course)
     data['elaborations'] = elaborations(course)
-    data['students_with_more_than_30_points'] = students_with_more_than_x_points(course, 30)
-    data['students_with_more_than_35_points'] = students_with_more_than_x_points(course, 35)
-    data['students_with_more_than_40_points'] = students_with_more_than_x_points(course, 40)
-    data['students_with_more_than_45_points'] = students_with_more_than_x_points(course, 45)
-    data['students_with_more_than_50_points'] = students_with_more_than_x_points(course, 50)
-    data['students_with_more_than_55_points'] = students_with_more_than_x_points(course, 55)
-    data['students_with_more_than_60_points'] = students_with_more_than_x_points(course, 60)
+    data['students_with_more_than_10_points'] = students_with_x_or_more_points(course, 10)
+    data['students_with_more_than_20_points'] = students_with_x_or_more_points(course, 20)
+    data['students_with_more_than_30_points'] = students_with_x_or_more_points(course, 30)
+    data['students_with_more_than_40_points'] = students_with_x_or_more_points(course, 40)
+    data['students_with_more_than_47_points'] = students_with_x_or_more_points(course, 47)
+    data['students_with_more_than_53_points'] = students_with_x_or_more_points(course, 53)
+    data['students_with_more_than_60_points'] = students_with_x_or_more_points(course, 60)
     data['review_evaluations'] = review_evaluations(course)
     data['review_evaluations_positive'] = review_evaluations_positive(course)
     data['review_evaluations_default'] = review_evaluations_default(course)
@@ -79,7 +79,7 @@ def elaborations(course):
     )
 
 
-def students_with_more_than_x_points(course, x):
+def students_with_x_or_more_points(course, x):
     users = (
         Evaluation.objects
             .filter(submission__challenge__course=course)
