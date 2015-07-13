@@ -32,7 +32,6 @@ from Notification.models import Notification
 @login_required()
 @staff_member_required
 def evaluation(request, course_short_title=None):
-    print("in evaluation")
     course = Course.get_or_raise_404(short_title=course_short_title)
     overview = ""
     elaborations = []
@@ -41,7 +40,7 @@ def evaluation(request, course_short_title=None):
     if selection not in ('error', 'questions'):
         for serialized_elaboration in serializers.deserialize('json', request.session.get('elaborations', {})):
             elaborations.append(serialized_elaboration.object)
-        if selection == 'search':
+        if selection == 'search_user':
             selected_user = request.session.get('selected_user', 'error')
             if selected_user not in ('error'):
                 user = AuroraUser.objects.get(username=selected_user)
@@ -54,9 +53,9 @@ def evaluation(request, course_short_title=None):
                     'review_evaluation_data': points['review_evaluation_data'],
                     'course': course
                 }
-            else:
+        elif selection == 'search':
                 data = {'elaborations': elaborations, 'search': True, 'course': course}
-        if selection == 'complaints':
+        elif selection == 'complaints':
             data = {'elaborations': elaborations, 'course': course, 'complaints': 'true'}
         else:
             data = {'elaborations': elaborations, 'course': course}
@@ -626,7 +625,7 @@ def select_user(request, course_short_title=None):
 
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
-    request.session['selection'] = 'search'
+    request.session['selection'] = 'search_user'
     request.session['selected_user'] = user.username
 
     overview_rendered = render_to_string('overview.html',
