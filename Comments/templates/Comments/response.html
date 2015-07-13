@@ -1,4 +1,5 @@
 {% load humanize %}
+{% load notification %}
 
 <div class="response{% if response.author.is_staff %} staff_author{% endif %} {{ response.visibility }}_visibility {% if response.author == requester %} author_author{% endif %} comment_{{comment.id}} {% if response.score < 0 %}neg0{% endif %} {% if response.score < 3 %}not3{% endif %} {% if response.seen and requester.is_staff %}hided{% endif %}"
 	 data-Cdate="{{ comment.post_date|date:'U' }}"
@@ -44,9 +45,7 @@
 		 {% if requester.is_staff %}
        {{response.author.matriculation_number}} - {{response.author.first_name}} {{response.author.last_name}}<br>
 		   <a href="mailto:{{response.author.email}}">{{response.author.email}}</a> &mdash;
-       {% with notification_user_id=response.author.id %}
-         {% include "send_notification_button.html" %}
-       {% endwith %}
+       {% send_notification_button course.short_title response.author.id%}
        {% if not response.author.is_staff %}
          {% if course %}
            &mdash;   <a href="{% url 'Evaluation:search_user' course.short_title %}?id={{response.author.id}}">{{response.author.display_name}}'s work</a>
