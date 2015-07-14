@@ -12,14 +12,14 @@ def export_csv(modeladmin, request, queryset):
     response.write(u'\ufeff'.encode('utf8'))
     writer.writerow([
         smart_str(u"id"),
-        smart_str(u"tutor"),
+        smart_str(u"tutor_nickname"),
         smart_str(u"submission_time"),
         smart_str(u"evaluation_text"),
     ])
     for obj in modeladmin.model.objects.all():
         writer.writerow([
             smart_str(obj.pk),
-            smart_str(obj.get_tutor),
+            smart_str(obj.tutor.nickname),
             smart_str(obj.submission_time),
             smart_str(obj.evaluation_text),
         ])
@@ -70,5 +70,6 @@ class EvaluationAdmin(admin.ModelAdmin):
     get_tutor.allow_tags = True
 
     search_fields = ['tutor__nickname']
+    actions = [export_csv]
 
 admin.site.register(Evaluation, EvaluationAdmin)
