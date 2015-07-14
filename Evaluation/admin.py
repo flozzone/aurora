@@ -19,7 +19,7 @@ def export_csv(modeladmin, request, queryset):
     for obj in modeladmin.model.objects.all():
         writer.writerow([
             smart_str(obj.pk),
-            smart_str(obj.tutor),
+            smart_str(obj.get_tutor),
             smart_str(obj.submission_time),
             smart_str(obj.evaluation_text),
         ])
