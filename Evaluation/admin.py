@@ -1,5 +1,31 @@
 from django.contrib import admin
+from django.http import HttpResponse
 from Evaluation.models import *
+
+
+def export_csv(modeladmin, request, queryset):
+    import csv
+    from django.utils.encoding import smart_str
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename=evaluation.csv'
+    writer = csv.writer(response, csv.excel)
+    response.write(u'\ufeff'.encode('utf8'))
+    writer.writerow([
+        smart_str(u"id"),
+        smart_str(u"tutor"),
+        smart_str(u"submission_time"),
+        smart_str(u"evaluation_text"),
+    ])
+    for obj in modeladmin.model.objects.all():
+        writer.writerow([
+            smart_str(obj.pk),
+            smart_str(obj.get_tutor),
+            smart_str(obj.submission_time),
+            smart_str(obj.evaluation_text),
+        ])
+    return response
+export_csv.short_description = u"Export CSV"
+
 
 class EvaluationAdmin(admin.ModelAdmin):
     fieldsets = [
