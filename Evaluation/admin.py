@@ -14,14 +14,12 @@ def export_csv(modeladmin, request, queryset):
         smart_str(u"id"),
         smart_str(u"tutor_nickname"),
         smart_str(u"submission_time"),
-        smart_str(u"evaluation_text"),
     ])
     for obj in modeladmin.model.objects.all():
         writer.writerow([
             smart_str(obj.pk),
             smart_str(obj.tutor.nickname),
             smart_str(obj.submission_time),
-            smart_str(obj.evaluation_text),
         ])
     return response
 export_csv.short_description = u"Export CSV"
