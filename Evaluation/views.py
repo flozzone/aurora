@@ -569,11 +569,6 @@ def search(request, course_short_title=None):
     selected_user = request.POST['selected_user'].split()[0]
     selected_tag = request.POST['selected_tag']
 
-    data =  {
-                'search': True,
-                'course': course,
-            }
-
     challenges = []
     if(selected_challenge != 'task...'):
         challenges = Challenge.objects.filter(title=selected_challenge[:(request.POST['selected_challenge'].rindex('(') - 1)], course=course)
@@ -583,10 +578,6 @@ def search(request, course_short_title=None):
     user = []
     if(selected_user != 'user...'):
         user = AuroraUser.objects.filter(username=selected_user)
-        points = get_points(request, user[0], course)
-        data['stacks'] =  points['stacks']
-        data['courses'] = points['courses'],
-        data['review_evaluation_data'] = points['review_evaluation_data']
         request.session['points'] = "true"
     else:
         user = AuroraUser.objects.all()
@@ -607,29 +598,12 @@ def search(request, course_short_title=None):
     if Elaboration.search(challenges, user):
         elaborations = list(Elaboration.search(challenges, user))
 
-    data['elaborations'] =  elaborations
-
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
     request.session['selection'] = 'search'
     request.session['selected_challenge'] = selected_challenge
     request.session['selected_user'] = selected_user
     request.session['selected_tag'] = selected_tag
-
-    # overview_rendered = render_to_string('overview.html',
-    #                         data,
-    #                         RequestContext(request))
-    #
-    # return render_to_response('evaluation.html',
-    #                           {
-    #                             'overview': overview_rendered,
-    #                             'selection': request.session['selection'],
-    #                             'course': course,
-    #                             'selected_challenge': selected_challenge,
-    #                             'selected_user': selected_user,
-    #                             'selected_tag': selected_tag
-    #                           },
-    #                           context_instance=RequestContext(request))
 
     return evaluation(request, course_short_title)
 
