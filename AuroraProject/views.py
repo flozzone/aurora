@@ -147,10 +147,7 @@ def get_result_reviews():
     """
     reviews = Review.objects.all().prefetch_related()
     result = ""
-    i = 0
     for review in reviews:
-        print('{} of {}'.format(i, len(reviews)))
-
         fulltext = ''
         public_chars = 0
         lva_team_chars = 0
@@ -181,9 +178,7 @@ def get_result_reviews():
             review_evaluation,
             fulltext
         )
-
         result += "\n"
-        i += 1
     return result
 
 
