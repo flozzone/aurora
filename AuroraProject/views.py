@@ -136,7 +136,7 @@ def result_elabs_final(request):
     return HttpResponse(s, mimetype="text/plain; charset=utf-8")
 
 
-def get_result_reviews():
+def get_result_reviews(course_short_title):
     """
     Since this is so slow (and can be too slow for a application server response, this is also being used
     as a command in Review.
@@ -145,6 +145,7 @@ def get_result_reviews():
         wobei FullText = ReviewFrage1_ID+':'+Answer1_Text+'¶'+ReviewFrage2_ID+':'+Answer2_Text+'¶'+usw.
         und alle CR in <br> und alle TAB in <tab>
     """
+    course = Course.get_or_raise_404(course_short_title)
     reviews = Review.objects.all().prefetch_related()
     result = ""
     for review in reviews:
