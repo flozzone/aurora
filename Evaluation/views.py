@@ -199,7 +199,8 @@ def awesome(request, course_short_title=None):
     course = Course.get_or_raise_404(short_title=course_short_title)
     selected_challenge = request.session.get('selected_challenge', 'task...')
     if selected_challenge != 'task...' and selected_challenge != '':
-        challenge = Challenge.objects.get(title=selected_challenge[:(selected_challenge.rindex('(') - 1)], course=course)
+        selected_challenge = selected_challenge[:(selected_challenge.rindex('(') - 1)]
+        challenge = Challenge.objects.get(title=selected_challenge, course=course)
         elaborations = Elaboration.get_awesome_challenge(course, challenge)
     else:
         elaborations = Elaboration.get_awesome(course)
