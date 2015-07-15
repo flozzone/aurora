@@ -11,7 +11,6 @@ class Command(BaseCommand):
             wobei FullText = ReviewFrage1_ID+':'+Answer1_Text+'¶'+ReviewFrage2_ID+':'+Answer2_Text+'¶'+usw.
             und alle CR in <br> und alle TAB in <tab>
         """
-        print(args)
         if len(args) is not 1:
             print(help)
             exit()
