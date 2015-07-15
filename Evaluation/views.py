@@ -41,8 +41,8 @@ def evaluation(request, course_short_title=None):
         for serialized_elaboration in serializers.deserialize('json', request.session.get('elaborations', {})):
             elaborations.append(serialized_elaboration.object)
         if selection == 'search':
-            points = request.session.get('points', 'error')
-            if points == "true":
+            display_points = request.session.get('display_points', 'error')
+            if display_points == "true":
                 user = AuroraUser.objects.get(username=request.session.get('selected_user'))
                 points = get_points(request, user, course)
                 data = {
@@ -578,7 +578,7 @@ def search(request, course_short_title=None):
     user = []
     if(selected_user != 'user...'):
         user = AuroraUser.objects.filter(username=selected_user)
-        request.session['points'] = "true"
+        request.session['display_points'] = "true"
     else:
         user = AuroraUser.objects.all()
         request.session['points'] = "false"
