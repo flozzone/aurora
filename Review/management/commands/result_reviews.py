@@ -20,12 +20,9 @@ def time_to_unix_string(time):
 class Command(NoArgsCommand):
     def handle_noargs(self, **options):
         """
-        review-autor (MNr) TAB
-        reviewed-elab-autor (MNr) TAB
-        reviewed-elab-challenge-ID TAB
-        review-creation-date TAB
-        review-submission-date TAB
-        länge des reviews (number of chars of all fields summiert)
+        ReviewID Task_ID AuthorOfReviewedElab_MNr ReviewedElab_ID ReviewAuthor_MNr ReviewPublicFields_∑chars ReviewLVAteamFields_∑chars ReviewEvaluation_value  FullText
+            wobei FullText = ReviewFrage1_ID+':'+Answer1_Text+'¶'+ReviewFrage2_ID+':'+Answer2_Text+'¶'+usw.
+            und alle CR in <br> und alle TAB in <tab>
         """
 
         result = get_result_reviews()
