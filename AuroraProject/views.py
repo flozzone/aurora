@@ -169,7 +169,7 @@ def get_result_reviews(course_short_title):
                 public_chars += len(answer_text)
             else:
                 lva_team_chars += len(answer_text)
-            formatted_text = answer_text.replace('/n', '<br>').replace('/t', '<tab>')
+            formatted_text = answer_text.replace('\n', '<br>').replace('\t', '<tab>')
             fulltext += '{}:{}¶'.format(question.id, formatted_text)
 
         result += "\t".join(["{}"] * 9).format(
