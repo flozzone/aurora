@@ -197,9 +197,9 @@ def complaints(request, course_short_title=None):
 @staff_member_required
 def awesome(request, course_short_title=None):
     course = Course.get_or_raise_404(short_title=course_short_title)
-    selected_challenge = request.session.get('selected_challenge', default='')
-    if selected_challenge != '':
-        challenge = Challenge.objects.get(title=selected_challenge, course=course)
+    selected_challenge = request.session.get('selected_challenge', 'task...')
+    if selected_challenge != 'task...' and selected_challenge != '':
+        challenge = Challenge.objects.get(title=selected_challenge[:(selected_challenge.rindex('(') - 1)], course=course)
         elaborations = Elaboration.get_awesome_challenge(course, challenge)
     else:
         elaborations = Elaboration.get_awesome(course)
@@ -220,7 +220,7 @@ def awesome(request, course_short_title=None):
                               {'overview': render_to_string('overview.html', {'elaborations': elaborations, 'course': course},
                                                             RequestContext(request)),
                                'count_awesome': request.session.get('count', '0'),
-                               'selected_challenge': selected_challenge,
+                               'selected_task': selected_challenge,
                                'stabilosiert_awesome': 'stabilosiert',
                                'selection': request.session['selection'],
                                'course': course
@@ -581,7 +581,7 @@ def search(request, course_short_title=None):
         request.session['display_points'] = "true"
     else:
         user = AuroraUser.objects.all()
-        request.session['points'] = "false"
+        request.session['display_points'] = "false"
 
     if(selected_tag != 'tag...'):
         aurorauser_ct = ContentType.objects.get_for_model(AuroraUser)
