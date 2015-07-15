@@ -161,7 +161,7 @@ def get_result_reviews():
         for question in questions:
             answer_text = ''
             try:
-                answer_text = ReviewAnswer.objects.filter(review=review.id, review_question=question)[0].text
+                answer_text = ReviewAnswer.objects.filter(review=review, review_question=question)[0].text
             except:
                 pass
             if question.visible_to_author:
