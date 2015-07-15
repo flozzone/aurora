@@ -159,12 +159,16 @@ def get_result_reviews():
             # no review evaluation for this review
             pass
         for question in questions:
-            answer = ReviewAnswer.objects.filter(review=review.id, review_question=question)[0]
+            answer_text = ''
+            try:
+                answer_text = ReviewAnswer.objects.filter(review=review.id, review_question=question)[0].text
+            except:
+                pass
             if question.visible_to_author:
-                public_chars += len(answer.text)
+                public_chars += len(answer_text)
             else:
-                lva_team_chars += len(answer.text)
-            formatted_text = answer.text.replace('/n', '<br>').replace('/t', '<tab>')
+                lva_team_chars += len(answer_text)
+            formatted_text = answer_text.replace('/n', '<br>').replace('/t', '<tab>')
             fulltext += '{}:{}¶'.format(question.id, formatted_text)
 
         result += "\t".join(["{}"] * 9).format(
