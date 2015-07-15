@@ -40,10 +40,10 @@ def evaluation(request, course_short_title=None):
     if selection not in ('error', 'questions'):
         for serialized_elaboration in serializers.deserialize('json', request.session.get('elaborations', {})):
             elaborations.append(serialized_elaboration.object)
-        if selection == 'search_user':
-            selected_user = request.session.get('selected_user', 'error')
-            if selected_user not in ('error'):
-                user = AuroraUser.objects.get(username=selected_user)
+        if selection == 'search':
+            points = request.session.get('points', 'error')
+            if points == "true":
+                user = AuroraUser.objects.get(username=request.session.get('selected_user'))
                 points = get_points(request, user, course)
                 data = {
                     'elaborations': elaborations,
@@ -53,7 +53,7 @@ def evaluation(request, course_short_title=None):
                     'review_evaluation_data': points['review_evaluation_data'],
                     'course': course
                 }
-        elif selection == 'search':
+            else:
                 data = {'elaborations': elaborations, 'search': True, 'course': course}
         elif selection == 'complaints':
             data = {'elaborations': elaborations, 'course': course, 'complaints': 'true'}
@@ -76,7 +76,10 @@ def evaluation(request, course_short_title=None):
                                'overview': overview,
                                'count_' + request.session.get('selection', ''): count,
                                'stabilosiert_' + request.session.get('selection', ''): 'stabilosiert',
-                               'course': course
+                               'course': course,
+                               'selected_challenge': request.session.get('selected_challenge'),
+                               'selected_user': request.session.get('selected_user'),
+                               'selected_task': request.session.get('selected_task'),
                               },
                               context_instance=RequestContext(request))
 
@@ -566,18 +569,28 @@ def search(request, course_short_title=None):
     selected_user = request.POST['selected_user'].split()[0]
     selected_tag = request.POST['selected_tag']
 
+    data =  {
+                'search': True,
+                'course': course,
+            }
+
     challenges = []
     if(selected_challenge != 'task...'):
-        selected_challenge = selected_challenge[:(request.POST['selected_challenge'].rindex('(') - 1)]
-        challenges = Challenge.objects.filter(title=selected_challenge, course=course)
+        challenges = Challenge.objects.filter(title=selected_challenge[:(request.POST['selected_challenge'].rindex('(') - 1)], course=course)
     else:
         challenges = Challenge.objects.filter(course=course)
 
     user = []
     if(selected_user != 'user...'):
         user = AuroraUser.objects.filter(username=selected_user)
+        points = get_points(request, user[0], course)
+        data['stacks'] =  points['stacks']
+        data['courses'] = points['courses'],
+        data['review_evaluation_data'] = points['review_evaluation_data']
+        request.session['points'] = "true"
     else:
         user = AuroraUser.objects.all()
+        request.session['points'] = "false"
 
     if(selected_tag != 'tag...'):
         aurorauser_ct = ContentType.objects.get_for_model(AuroraUser)
@@ -594,54 +607,31 @@ def search(request, course_short_title=None):
     if Elaboration.search(challenges, user):
         elaborations = list(Elaboration.search(challenges, user))
 
-    html = render_to_response('overview.html', {'elaborations': elaborations, 'search': True, 'course': course}, RequestContext(request))
+    data['elaborations'] =  elaborations
 
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
     request.session['selection'] = 'search'
     request.session['selected_challenge'] = selected_challenge
-    return html
+    request.session['selected_user'] = selected_user
+    request.session['selected_tag'] = selected_tag
 
+    # overview_rendered = render_to_string('overview.html',
+    #                         data,
+    #                         RequestContext(request))
+    #
+    # return render_to_response('evaluation.html',
+    #                           {
+    #                             'overview': overview_rendered,
+    #                             'selection': request.session['selection'],
+    #                             'course': course,
+    #                             'selected_challenge': selected_challenge,
+    #                             'selected_user': selected_user,
+    #                             'selected_tag': selected_tag
+    #                           },
+    #                           context_instance=RequestContext(request))
 
-@csrf_exempt
-@login_required()
-@staff_member_required
-def select_user(request, course_short_title=None):
-    course = Course.get_or_raise_404(short_title=course_short_title)
-
-    if 'selected_user' in request.POST:
-        selected_user = request.POST['selected_user'].split()[0]
-    else:
-        selected_user = request.session['selected_user']
-    user = AuroraUser.objects.get(username=selected_user)
-
-    elaborations = []
-    elaborations = user.get_course_elaborations(course)
-
-    points = get_points(request, user, course)
-
-    # store selected elaborations in session
-    request.session['elaborations'] = serializers.serialize('json', elaborations)
-    request.session['selection'] = 'search_user'
-    request.session['selected_user'] = user.username
-
-    overview_rendered = render_to_string('overview.html',
-                            {
-                                'elaborations': elaborations,
-                                'search': True,
-                                'stacks': points['stacks'],
-                                'courses': points['courses'],
-                                'review_evaluation_data': points['review_evaluation_data'],
-                                'course': course
-                            }, RequestContext(request))
-
-    return render_to_response('evaluation.html',
-                              {
-                                'overview': overview_rendered,
-                                'selection': request.session['selection'],
-                                'course': course
-                              },
-                              context_instance=RequestContext(request))
+    return evaluation(request, course_short_title)
 
 
 @login_required()
