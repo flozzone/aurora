@@ -146,7 +146,7 @@ def get_result_reviews(course_short_title):
         und alle CR in <br> und alle TAB in <tab>
     """
     course = Course.get_or_raise_404(course_short_title)
-    reviews = Review.objects.all().prefetch_related()
+    reviews = Review.objects.filter(elaboration__challenge__course=course).prefetch_related()
     result = ""
     for review in reviews:
         fulltext = ''
