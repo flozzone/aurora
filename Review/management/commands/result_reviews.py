@@ -1,21 +1,5 @@
-__author__ = 'dan'
-
-from Review.models import Review
-from ReviewAnswer.models import ReviewAnswer
 from django.core.management.base import NoArgsCommand
-from datetime import datetime
-
 from AuroraProject.views import get_result_reviews
-
-def time_to_unix_string(time):
-    if time is None:
-        return str(None)
-
-    delta = time - datetime(1970, 1, 1)
-    hours = delta.days * 24
-    seconds = hours * 3600
-    seconds += delta.seconds
-    return str(seconds)
 
 class Command(NoArgsCommand):
     def handle_noargs(self, **options):
