@@ -7,7 +7,7 @@ next generation of the portfolio
 - Install [Vagrant](https://www.vagrantup.com/) and [VirtualBox](https://www.virtualbox.org/)
 - Clone the project `git clone git@github.com:martflu/aurora.git`
 - cd to your project folder `cd aurora`
-- start the vagrant box `vagrant up`
+- start the vagrant box `vagrant up` (this will take quite a while and download a lot of data)
 - ssh to it `vagrant ssh`
 - you should now be in the project folder with active virtualenv: `(py3env)vagrant@vagrant-ubuntu-trusty-64:/vagrant$`
 - create the database schema `python manage.py migrate`
