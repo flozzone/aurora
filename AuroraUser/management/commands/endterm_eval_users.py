@@ -12,7 +12,11 @@ class Command(BaseCommand):
         user_MNr user_nickname user_vorname user_nachname user_studienkennzahl userLastActivity_date ReviewEvaluationsDone_percent user_statement TAGS_liste
             wobei TAGS_liste = tag1|tag2|tag3|tag4|tag5... (also tag1+’|’+tag2+’|’+usw)
         """
-        course_short_title = args[0]
+        try:
+            course_short_title = args[0]
+        except IndexError:
+            print(self.help)
+            exit(1)
         course = Course.get_or_raise_404(course_short_title)
 
         for relation in CourseUserRelation.objects.filter(user__is_staff=False, course=course):
