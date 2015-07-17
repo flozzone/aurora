@@ -198,7 +198,7 @@ def complaints(request, course_short_title=None):
 def awesome(request, course_short_title=None):
     course = Course.get_or_raise_404(short_title=course_short_title)
     selected_challenge = request.session.get('selected_challenge', 'task...')
-    if selected_challenge != 'task...' and selected_challenge != '':
+    if selected_challenge != 'task...':
         selected_challenge = selected_challenge[:(selected_challenge.rindex('(') - 1)]
         challenge = Challenge.objects.get(title=selected_challenge, course=course)
         elaborations = Elaboration.get_awesome_challenge(course, challenge)
@@ -214,7 +214,7 @@ def awesome(request, course_short_title=None):
     # store selected elaborations in session
     request.session['elaborations'] = serializers.serialize('json', elaborations)
     request.session['selection'] = 'awesome'
-    request.session['selected_challenge'] = ''
+    request.session['selected_challenge'] = 'task...'
     request.session['count'] = len(elaborations)
 
     return render_to_response('evaluation.html',
