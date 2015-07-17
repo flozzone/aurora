@@ -5,7 +5,7 @@ from django.core.management.base import BaseCommand
 
 class Command(BaseCommand):
 
-    help = 'Prints review data for given course short title e.g.: python manage.py result_reviews gsi'
+    help = 'Prints user result data for given course short title e.g.: python manage.py endterm_eval_users gsi'
 
     def handle(self, *args, **options):
         """
