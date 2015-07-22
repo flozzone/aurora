@@ -10,10 +10,10 @@
     <a href="{% url 'Evaluation:top_level_tasks' course.short_title %}"><div class="mitem {{ stabilosiert_top_level_tasks }} top_level_tasks" id="m3">top-level tasks {% if stabilosiert_top_level_tasks %}({{ count_top_level_tasks }}){% endif %}</div></a>
     <a href="{% url 'Evaluation:complaints' course.short_title %}"><div class="mitem {{ stabilosiert_complaints }} complaints" id="m4">elaboration comments {% if stabilosiert_complaints %}({{ count_complaints }}){% endif %}</div></a>
     <a href="{% url 'Evaluation:questions' course.short_title %}"><div class="mitem {{ stabilosiert_questions }} questions" id="m5">questions {% if stabilosiert_questions %}({{ count_questions }}){% endif %}</div></a>
-    <a href="{% url 'Evaluation:awesome' course.short_title %}"><div class="mitem {{ stabilosiert_awesome }} awesome" id="m7">awesome {% if selected_challenge %} [{{ selected_challenge }}] {% endif %} {% if stabilosiert_awesome %}({{ count_awesome }}){% endif %}</div></a>
+    <a href="{% url 'Evaluation:awesome' course.short_title %}"><div class="mitem {{ stabilosiert_awesome }} awesome" id="m7">awesome {% if selected_task and selected_task != "task..." %} [{{ selected_task }}] {% endif %} {% if stabilosiert_awesome %}({{ count_awesome }}){% endif %}</div></a>
 
-    <div class="search_container"><div class="mfield search_challenge" id="search_challenge" contenteditable="true">task...</div><div class="remove_sel_challenge_btn"><i class="fa fa-times"></i></div></div>
-    <div class="search_container"><div class="mfield search_user" id="search_user" contenteditable="true">user...</div><div class="remove_sel_user_btn"><i class="fa fa-times"></i></div></div>
-    <div class="search_container"><div class="mfield search_tag" id="search_tag" contenteditable="true">tag...</div><div class="remove_sel_tag_btn"><i class="fa fa-times"></i></div></div>
+    <div class="search_container"><div class="mfield search_challenge" id="search_challenge" contenteditable="true">{% if selected_challenge %}{{ selected_challenge }}{% else %}task...{% endif %}</div><div class="remove_sel_challenge_btn"><i class="fa fa-times"></i></div></div>
+    <div class="search_container"><div class="mfield search_user" id="search_user" contenteditable="true">{% if selected_user %}{{ selected_user }}{% else %}user...{% endif %}</div><div class="remove_sel_user_btn"><i class="fa fa-times"></i></div></div>
+    <div class="search_container"><div class="mfield search_tag" id="search_tag" contenteditable="true">{% if selected_tag %}{{ selected_tag }}{% else %}tag...{% endif %}</div><div class="remove_sel_tag_btn"><i class="fa fa-times"></i></div></div>
 
 {% endblock %}

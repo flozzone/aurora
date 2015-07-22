@@ -103,10 +103,6 @@ function search(challenge, user, tag) {
         $('#overview').html("");
     } else {
         var url = "./search/";
-        // fetch points if only 1 user selected
-        if((challenge=="task...") && (user!="user...") && (tag=="tag...")) {
-            url = "./select_user/";
-        }
         var data = {
                 selected_challenge: challenge,
                 selected_user: user,
