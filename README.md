@@ -9,7 +9,9 @@ next generation of the portfolio
 - cd to your project folder `cd aurora`
 - start the vagrant box `vagrant up` (this will take quite a while and download a lot of data)
 - ssh to it `vagrant ssh`
-- you should now be in the project folder with active virtualenv: `(py3env)vagrant@vagrant-ubuntu-trusty-64:/vagrant$`
+- you should now be in the project folder with active virtualenv:
+
+  `(py3env)vagrant@vagrant-ubuntu-trusty-64:/vagrant$`
 - create the database schema `python manage.py migrate`
 - populate the database with some test data `python manage.py populate_demo_data`
 - start the dev server `python manage.py runserver 0.0.0.0:8000`
