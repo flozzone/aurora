@@ -12,6 +12,21 @@ next generation of the portfolio
 - you should now be in the project folder with active virtualenv:
 
   `(py3env)vagrant@vagrant-ubuntu-trusty-64:/vagrant$`
+- you'll need a `local_settings.py` overwriting some settings from `AuroraProject/local_config.py` with your local needs. e.g.:
+
+```python
+MEDIA_ROOT = '/vagrant/aurora/media'
+STATIC_ROOT = '/vagrant/aurora/static'
+
+MEDIA_URL = '/media/'
+
+SSO_URI = '/temporary_uri/'
+
+LECTURER_USERNAME = 'lecturer'
+LECTURER_SECRET = 'lecturersecret'
+
+SSO_SHARED_SECRET = 'ssosecret'
+```
 - create the database schema `python manage.py migrate`
 - populate the database with some test data `python manage.py populate_demo_data`
 - start the dev server `python manage.py runserver 0.0.0.0:8000`
