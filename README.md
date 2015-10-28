@@ -12,7 +12,7 @@ next generation of the portfolio
 - you should now be in the project folder with active virtualenv:
 
   `(py3env)vagrant@vagrant-ubuntu-trusty-64:/vagrant$`
-- you'll need a `local_settings.py` overwriting some settings from `AuroraProject/local_config.py` with your local needs. e.g.:
+- you'll need a `local_settings.py` overwriting some settings from `AuroraProject/config.py` with your local needs. e.g.:
 
 ```python
 MEDIA_ROOT = '/vagrant/aurora/media'
@@ -26,6 +26,13 @@ LECTURER_USERNAME = 'lecturer'
 LECTURER_SECRET = 'lecturersecret'
 
 SSO_SHARED_SECRET = 'ssosecret'
+```
+
+- and you'll need an extra config for the `Slides` app: `Slides/settings.py` with two parameters set:
+
+```
+LIVECAST_START = 30
+SLIDE_SECRET = “somesecret”
 ```
 - create the database schema `python manage.py migrate`
 - populate the database with some test data `python manage.py populate_demo_data`
