@@ -873,20 +873,24 @@ def get_points(request, user, course):
 @staff_member_required
 def add_tags(request, course_short_title=None):
     text = request.POST['text']
-    user_id = request.POST['user_id']
+    object_id = request.POST['object_id']
+    content_type_id = request.POST['content_type_id']
 
-    user = AuroraUser.objects.get(pk=user_id)
-    user.add_tags_from_text(text)
+    content_type = ContentType.objects.get_for_id(content_type_id)
+    taggable_object = content_type.get_object_for_this_type(pk=object_id)
+    taggable_object.add_tags_from_text(text)
 
-    return render_to_response('tags.html', {'tagged_user': user}, context_instance=RequestContext(request))
+    return render_to_response('tags.html', {'tagged_object': taggable_object}, context_instance=RequestContext(request))
 
 @csrf_exempt
 @staff_member_required
 def remove_tag(request, course_short_title=None):
     tag = request.POST['tag']
-    user_id = request.POST['user_id']
+    object_id = request.POST['object_id']
+    content_type_id = request.POST['content_type_id']
 
-    user = AuroraUser.objects.get(pk=user_id)
-    user.remove_tag(tag)
+    content_type = ContentType.objects.get_for_id(content_type_id)
+    taggable_object = content_type.get_object_for_this_type(pk=object_id)
+    taggable_object.remove_tag(tag)
 
-    return render_to_response('tags.html', {'tagged_user': user}, context_instance=RequestContext(request))
+    return render_to_response('tags.html', {'tagged_object': taggable_object}, context_instance=RequestContext(request))

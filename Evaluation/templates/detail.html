@@ -49,7 +49,7 @@
        		 {% endwith %}
   	 		&mdash;   <a href="user?id={{elaboration.user.id}}">{{elaboration.user.nickname}}'s work</a>
             <div class="tags {{ elaboration.user.id }}">
-                {% include 'tags.html' with tagged_user=elaboration.user %}
+                {% include 'tags.html' with tagged_object=elaboration.user %}
             </div>
 		 </div>
         <div class="spacer"></div>
