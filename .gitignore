@@ -16,7 +16,9 @@ current_working_version_on_aurora
 current_working_version_on_unchained
 
 /aurora/static
-/aurora/media
+
+# /aurora/media
+media/
 
 static/slides/gsi/jpg/vo_10_02_13_2.jpg
 
