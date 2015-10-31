@@ -93,12 +93,12 @@ def students_with_x_or_more_points(course, x):
 
 
 def review_evaluations(course):
-    return (
-        ReviewEvaluation.objects
-            .filter(review__elaboration__challenge__course=course)
-            .count()
+    review_evaluations = ( ReviewEvaluation.objects
+        .filter(review__elaboration__challenge__course=course)
+        .count()
     )
-
+    review_evaluations += 1 if review_evaluations == 0 else 0
+    return review_evaluations
 
 def review_evaluations_positive(course):
     return (
