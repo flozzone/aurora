@@ -1,11 +1,12 @@
 from django.db import models
-
+from taggit.managers import TaggableManager
 
 class Review(models.Model):
     elaboration = models.ForeignKey('Elaboration.Elaboration')
     creation_time = models.DateTimeField(auto_now_add=True)
     submission_time = models.DateTimeField(null=True)
     reviewer = models.ForeignKey('AuroraUser.AuroraUser')
+    tags = TaggableManager()
 
     NOTHING = 'N'
     FAIL = 'F'
