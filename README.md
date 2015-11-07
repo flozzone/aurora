@@ -32,9 +32,10 @@ SSO_SHARED_SECRET = 'ssosecret'
 
 ```
 LIVECAST_START = 30
-SLIDE_SECRET = “somesecret”
+SLIDE_SECRET = 'somesecret'
 ```
 - create the database schema `python manage.py migrate`
+- collect all static files in one place `python manage.py collectstatic`
 - populate the database with some test data `python manage.py populate_demo_data`
 - start the dev server `python manage.py runserver 0.0.0.0:8000`
 - go to `http://localhost:8000` in your browser (find credentials in `AuroraUser/management/commands/populate_demo_data.py`)
