@@ -18,13 +18,42 @@ from Challenge.models import Challenge
 from Statistics.views import create_stat_data
 
 
+def get_next_url(request):
+    if 'next' in request.GET:
+        return request.GET['next']
+    elif 'param' in request.GET:
+        return request.GET['param']
+    return None
+
+
+def course_from_next_url(next):
+    course = None
+    try:
+        course = next.split('/')[1]
+    except IndexError:
+        pass
+    finally:
+        return course
+
+
 def course_selection(request):
+
+    # store next_url if available inside the session
+    next_url = get_next_url(request)
+    if next_url:
+        request.session['next_url'] = next_url
+
     if not request.user.is_authenticated():
         if 'sKey' in request.GET:
             from AuroraUser.views import sso_auth_callback
             return sso_auth_callback(request)
 
-    data = {'courses': Course.objects.all()}
+    # automatically redirect the user to its course login page
+    # if a next_url is defined.
+    if next_url and course_from_next_url(next_url):
+        return redirect(reverse("User:login", args=(course_from_next_url(next_url), )))
+
+    data = {'courses': Course.objects.all(), 'next': next}
     return render_to_response('course_selection.html', data)
 
 
