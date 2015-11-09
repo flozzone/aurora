@@ -56,23 +56,29 @@ def signout(request, course_short_title=None):
 
 @ensure_csrf_cookie
 def login(request, course_short_title=None):
+    next_url = ""
+    if 'next_url' in request.session and request.session['next_url'] is not None:
+        next_url = request.session['next_url']
+    else:
+        next_url = reverse('home', args=(course_short_title, ))
+
+    sso_uri = settings.SSO_URI.replace("%%NEXT_URL%%", next_url)
+
     data = {
         'course': Course.get_or_raise_404(course_short_title),
         'signin_url': reverse('User:signin', args=(course_short_title, )),
-        'next': reverse('home', args=(course_short_title, )),
-        'sso_uri': settings.SSO_URI
+        'next': next_url,
+        'sso_uri': sso_uri
     }
 
-    if 'next' in request.GET:
-        # TODO: add next functionality
-        return render_to_response('login.html', data, context_instance=RequestContext(request))
-    elif 'error_message' in request.GET:
+    if 'error_message' in request.GET:
         data.update({'error_message': request.GET['error_message']})
         return render_to_response('login.html', data, context_instance=RequestContext(request))
     else:
         return render_to_response('login.html', data, context_instance=RequestContext(request))
 
 
+@DeprecationWarning
 def sso_auth_redirect():
     return redirect(settings.SSO_URI)
 
