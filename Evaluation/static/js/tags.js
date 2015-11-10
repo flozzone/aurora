@@ -1,3 +1,7 @@
+$(document).ready(function(){
+    $(".tag_input").autocomplete();
+});
+
 $(function() {
    $(".tag_input").click(function(event) {
        event.stopPropagation();
@@ -40,7 +44,7 @@ $(function() {
        event.stopPropagation();
        var tag = $(this).attr('name');
        var object_id = $(this).attr('object_id');
-      var content_type_id = $(this).attr('content_type_id');
+       var content_type_id = $(this).attr('content_type_id');
        var tags = $(".tags." + object_id);
        var data = {
                 tag: tag,
@@ -57,16 +61,23 @@ $(function() {
 });
 
 $(function() {
-    $("#tag_input").autocomplete({
-        source: "./autocomplete_tag/",
+    $(".tag_input").autocomplete({
+        //source: "./autocomplete_tag/",
+        source: function(request, response) {
+          $.get('./autocomplete_tag/', { term: request.term, content_type_id: this.element.attr('content_type_id') }, function(data) {
+            response(data);
+          });
+         },
         select: function (event, ui) {
             var tag_input = $(this);
             var text = ui.item.value     // select value from autocomplete box
             var object_id = $(this).attr('object_id');
+            var content_type_id = $(this).attr('content_type_id');
             var tags = $(".tags." + object_id);
             var data = {
                 text: text,
-                object_id: object_id
+                object_id: object_id,
+                content_type_id: content_type_id
             };
             var args = { type: "POST", url: "./add_tags/", data: data,
                 success: function (data) {

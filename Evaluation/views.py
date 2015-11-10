@@ -637,7 +637,11 @@ def autocomplete_user(request, course_short_title=None):
 @staff_member_required
 def autocomplete_tag(request, course_short_title=None):
     term = request.GET.get('term', '')
-    tags = AuroraUser.tags.all().filter(
+    content_type_id = request.GET['content_type_id']
+
+    content_type = ContentType.objects.get_for_id(content_type_id)
+    taggable_model = content_type.model_class()
+    tags = taggable_model.tags.all().filter(
         Q(name__istartswith=term)
     )
     names = [tag.name for tag in tags]

@@ -58,7 +58,10 @@
 
         {% if elaboration.elaboration_text|length != 0 %}
             <textarea id="editor_detail">{{ elaboration.elaboration_text}}</textarea>
-        {% endif %}<br><br>
+        {% endif %}<br>
+        <div class="tags elaboration">
+          {% include 'tags.html' with tagged_object=elaboration %}
+        </div><br><br>
         <div class="spacer"></div>
 
         {% if evaluation %}

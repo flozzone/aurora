@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.db.models import Count, Min
+from django.contrib.contenttypes.models import ContentType
 
 from Comments.models import Comment
 from Evaluation.models import Evaluation
@@ -74,6 +75,17 @@ class Elaboration(models.Model):
             .exclude(pk=self.id)
         )
         return elaborations
+
+    def get_content_type_id(self):
+        return ContentType.objects.get_for_model(self).id
+
+    def add_tags_from_text(self, text):
+        tags = text.split(',');
+        tags = [tag.lower().strip() for tag in tags]
+        self.tags.add(*tags)
+
+    def remove_tag(self, tag):
+        self.tags.remove(tag)
 
     @staticmethod
     def get_sel_challenge_elaborations(challenge):
