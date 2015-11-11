@@ -16,7 +16,7 @@ $(function() {
        var text = tag_input.text();
        var object_id = tag_input.attr('object_id');
        var content_type_id = tag_input.attr('content_type_id');
-       var tags = $(".tags." + object_id);
+       var tags = $(".tags.tags-" + content_type_id + '-' + object_id);
        var data = {
                 text: text,
                 object_id: object_id,
@@ -45,7 +45,7 @@ $(function() {
        var tag = $(this).attr('name');
        var object_id = $(this).attr('object_id');
        var content_type_id = $(this).attr('content_type_id');
-       var tags = $(".tags." + object_id);
+       var tags = $(".tags.tags-" + content_type_id + '-' + object_id);
        var data = {
                 tag: tag,
                 object_id: object_id,

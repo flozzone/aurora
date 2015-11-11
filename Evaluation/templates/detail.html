@@ -48,7 +48,7 @@
         	 	{% include "send_notification_button.html" %}
        		 {% endwith %}
   	 		&mdash;   <a href="user?id={{elaboration.user.id}}">{{elaboration.user.nickname}}'s work</a>
-            <div class="tags {{ elaboration.user.id }}">
+            <div class="tags tags-{{ elaboration.user.get_content_type_id }}-{{ elaboration.user.id }}">
                 {% include 'tags.html' with tagged_object=elaboration.user %}
             </div>
 		 </div>
@@ -59,7 +59,7 @@
         {% if elaboration.elaboration_text|length != 0 %}
             <textarea id="editor_detail">{{ elaboration.elaboration_text}}</textarea>
         {% endif %}<br>
-        <div class="tags elaboration">
+        <div class="tags tags-{{ elaboration.get_content_type_id }}-{{ elaboration.id }}">
           {% include 'tags.html' with tagged_object=elaboration %}
         </div><br><br>
         <div class="spacer"></div>

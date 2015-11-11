@@ -33,7 +33,7 @@
              		{% include "send_notification_button.html" %}
           	 	{% endwith %}
 	  	 		&mdash;   <a href="/evaluation/user?id={{review.reviewer.id}}">{{review.reviewer.nickname}}'s work</a>
-                <div class="tags tags-reviewer">
+                <div class="tags tags-{{ review.reviewer.get_content_type_id }}-{{ review.reviewer.id }}">
                     {% include 'tags.html' with tagged_object=review.reviewer %}
                 </div>
 	   		 </div>
@@ -48,7 +48,7 @@
         		<input type="radio" id="X4{{forloop.counter}}{{review.id}}" name="reviewgroup{{ stack }}{{ review.id }}" onclick="set_appraisal({{ review.id }}, 'N')" {% if review.appraisal == 'N' %} checked {% endif %}/><label for="X4{{forloop.counter}}{{review.id}}" id="X4t">Plagiarism/Cheated</label>
         	</div>
 
-          <div class="tags tags-review">
+          <div class="tags tags-{{ review.get_content_type_id }}-{{ review.id }}">
               {% include 'tags.html' with tagged_object=review %}
           </div>
           <br><br>
