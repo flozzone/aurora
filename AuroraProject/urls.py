@@ -2,7 +2,7 @@ from django.conf.urls import patterns, include, url
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
-from AuroraProject.settings import MEDIA_ROOT
+from AuroraProject.settings import MEDIA_ROOT, DEBUG
 admin.autodiscover()
 
 import AuroraProject.views
@@ -41,3 +41,10 @@ urlpatterns = patterns('',
 
     url(r'', include('FileUpload.urls')),
 )
+
+if DEBUG:
+    import debug_toolbar
+    urlpatterns += patterns('',
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+    )
+
