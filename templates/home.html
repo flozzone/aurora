@@ -76,57 +76,7 @@
 			<i class="fa fa-toggle-down half"></i> <b>Frequently Asked Questions</b>
 		</div>
         <div class="feed_column" id="content_part_2">
-	        <p><i>Q: Wie unterscheidet sich der Modus zu dem des Vorjahres?</i></p>
-			<p>A: So gut wie gar nicht. Aurora wurde &uuml;berarbeitet, viele Bugs wurden behoben, und es wurden einige kleine Verbesserungen implementiert. Wir haben aber noch Pl&auml;ne, &uuml;ber das Semester hinweg ein paar neue Dinge zu versuchen. </p>
-	        <br>
-			<p><i>Q: Kann ich einfach irgendwelche Challenges machen, bis ich genug Punkte habe?</i></p>
-			<p>A: Nein. Sie <b>m&uuml;ssen</b> f&uuml;r eine positive Note aus jeder der vier Kategorien (s.u.) mindestens eine Challenge absolvieren. Ansonsten steht Ihnen frei, was sie wann machen.</p> 
-			<br>
-			{% if course.short_title == "hci" %}
-			<p><i>Q: Was sind die 4 Kategorien in BHCI?</i></p> 
-			<p>- Kategorie 1: User-centered design + design basics (B1cX)<br>
-			- Kategorie 2: Methoden (B2cX)<br>
-			- Kategorie 3: psycholog. Grundlagen, Evaluation (B3cX)<br>
-			- Kategorie 4: Prototyping, Beyond the desktop (B4cX)<br>
-			</p>
-			<br>
-			{% endif %}
-			{% if course.short_title == "gsi" %}
-			<p><i>Q: Was sind die 4 Kategorien in GSI?</i></p> 
-			<p>- Kategorie 1: Praxis (G1cX)<br>
-			- Kategorie 2: IT-Branche (G2cX)<br>
-			- Kategorie 3: Ideen (G3cX)<br>
-			- Kategorie 4: Gesellschaft (G4cX)<br>
-			</p>
-			<br>
-			{% endif %}
-	        <p><i>Q: Wann ist die Deadline f&uuml;r (eine/diese/alle) Challenges?</i></p>
-	        <p>A: F&uuml;r eine positive Note m&uuml;ssen sie bis Ende des Semesters (Fr 3.7., 23:59) ausreichend Punkte gesammelt haben, und aus jeder Kategorie (s.o.) mindestens eine Challenge geschafft haben. Punkte bekommen sie f&uuml;r fertiggestellte Challenges, aber zB. auch f&uuml;r ausgezeichnete Kommentare bei den Folien.  Beachten sie jedoch, dass sie nach dem Abgeben einer Challenge (also des Final Tasks) 11 Tage warten m&uuml;ssen (ab 22.6.: 7  Tage), bevor sie wieder einen Final Task einreichen können!</p>
-	        <br>
-	        <p><i>Q: Was kann ich machen, wenn die Bewertung meiner Arbeit nicht meinen Erwartungen entspricht?</i></p>
-	        <p>A: Sie k&ouml;nnen einen Kommentar zu ihrer Arbeit formulieren, in dem sie zb. eine Frage stellen, oder ihre
-	            Arbeit noch einmal besser erkl&auml;ren. Damit wird ihre Arbeit intern markiert und f&uuml;r uns noch einmal 
-				sichtbar. Ihr Kommentar wird jedenfalls beantwortet werden, auch wenn es manchmal etwas dauert.</p>
-	        <br>
-	        <p><i>Q: Ab wann werde ich bewertet?</i></p>
-	        <p>A: Sobald sie eine Challenge abgeschlossen haben, wird f&uuml;r sie am Ende des Semesters ein Zeugnis 
-				ausgestellt. </p>
-	        <br>
-	        <p><i>Q: Wie sind die Bewertungskategorien am Ende jedes Reviews zu verstehen?</i></p>
-	        <p>A: Siehe <a href="http://igw.tuwien.ac.at/aurora/aurora_reviews.pdf">Zum Schreiben von Reviews</a></p>
-	        <br>
-	        <p><i>Q: Wie ist das jetzt mit den Punkten?</i></p>
-	        <p>A: <i class="fa fa-arrow-right"></i> Sie <b>m&uuml;ssen</b> Challenges im Umfang von mind. 60 Punkten komplett 
-				abarbeiten. Die Punkte sind bei der Beschreibung 
-				von Challenges explizit angef&uuml;hrt (zB. &raquo;Sie k&ouml;nnen f&uuml;r Ihre Arbeit hier bis zu 10 Punkten 
-				bekommen&laquo;)<br>
-				<i class="fa fa-arrow-right"></i> Wir bewerten eine Challenge, wenn der final Task abgegeben wurde. F&uuml;r 
-				M&auml;ngel bei einzelnen Tasks ziehen wir Punkte vom 
-				erreichbaren Maximum ab, wobei die relative Wertigkeit der Tasks in der Taskbeschreibung in % angegeben ist. Diese Bewertung 
-				erfolgt unabh&auml;ngig von den Review-Ergebnissen, die Sie bekommen haben.<br> 
-				<i class="fa fa-arrow-right"></i> Die Summe der Punkte, die Sie f&uuml;r alle Challenges bekommen, bestimmt Ihre Note nach dem oben angegebenen Notenspiegel.
-			</p>
-	        <br><br>
+            {% include "faq.html" %}
 		</div>
         <div class="feed_header" id="part_3">
 			<i class="fa fa-toggle-down half"></i> <b>Lecture dates

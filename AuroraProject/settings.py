@@ -139,7 +139,8 @@ INSTALLED_APPS = (
     'Statistics',
     'Notification',
     'endless_pagination',
-    'taggit'
+    'taggit',
+    'Faq'
 )
 
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
