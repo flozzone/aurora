@@ -3,9 +3,12 @@
 {% endblock %}
 
 <div class="tag_list">
-{% for tag in tagged_user.tags.names %}
-    <div class="tag tag_remove" name="{{ tag }}" user_id="{{ tagged_user.id }}">{{ tag }}
-    </div>
+{% for tag in tagged_object.tags.names %}
+    <div class="tag tag_remove" name="{{ tag }}" object_id="{{ tagged_object.id }}"
+      content_type_id="{{ tagged_object.get_content_type_id }}">{{ tag }}</div>
 {% endfor %}
 </div>
-<div class="tag_input" id="tag_input" user_id="{{ tagged_user.id }}" contenteditable="true"></div><div class="add_tags_btn"><i class="fa fa-plus"></i></div>
+
+<div class="tag_input" object_id="{{ tagged_object.id }}"
+  content_type_id="{{ tagged_object.get_content_type_id }}" contenteditable="true"></div>
+<div class="add_tags_btn"><i class="fa fa-plus"></i></div>

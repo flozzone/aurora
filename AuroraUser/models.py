@@ -6,6 +6,7 @@ from urllib.parse import urlparse
 import urllib.request
 from django.db import models
 from django.contrib.auth.models import User, UserManager
+from django.contrib.contenttypes.models import ContentType
 from AuroraProject.settings import STATIC_ROOT, MEDIA_ROOT
 from Elaboration.models import Elaboration
 from django.core.files import File
@@ -69,6 +70,9 @@ class AuroraUser(User):
             copyfile(os.path.join(STATIC_ROOT, 'img', 'default_gravatar.png'), os.path.join(self.upload_path, filename))
         self.avatar = os.path.join(self.upload_path, filename)
         self.save()
+
+    def get_content_type_id(self):
+        return ContentType.objects.get_for_model(self).id
 
     def add_tags_from_text(self, text):
         tags = text.split(',');
