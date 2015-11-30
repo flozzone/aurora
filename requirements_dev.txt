@@ -4,3 +4,4 @@ coverage==3.7.1
 django-endless-pagination==2.0
 django-debug-toolbar
 django-taggit==0.12.2
+django-admin-sortable==2.0.7
