@@ -1,12 +1,18 @@
 from django.db import models
+#from adminsortable.models import SortableMixin
 
 from Course.models import Course
 
 
 class Faq(models.Model):
+
+    #class Meta:
+    #    ordering = ['order']
+
     course = models.ManyToManyField(Course)
     question = models.TextField(null=False)
     answer = models.TextField(null=False)
+    order = models.PositiveIntegerField()
 
     @staticmethod
     def get_faqs(course_short_title):
