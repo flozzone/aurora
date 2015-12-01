@@ -11,8 +11,7 @@ class FaqAdmin(SortableModelAdmin):
                 'fields': [
                     'course',
                     'question',
-                    'answer',
-                    'order'
+                    'answer'
                 ]
             }
         ),
