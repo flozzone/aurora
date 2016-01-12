@@ -1,8 +1,8 @@
 {% block faq_module %}
     {% for faq in faq_list %}
         <div>
-            <p><i>Q: {{ faq.question }}</i></p>
-			<p>A: {{ faq.answer }}</p>
+            <p><i>Q: {{ faq.question | safe }}</i></p>
+			<p>A: {{ faq.answer | safe }}</p>
             <br />
         </div>
     {% endfor %}
